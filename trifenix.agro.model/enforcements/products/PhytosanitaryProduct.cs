@@ -1,10 +1,19 @@
-﻿namespace trifenix.agro.model.enforcements.products
+﻿using Cosmonaut;
+using Cosmonaut.Attributes;
+
+namespace trifenix.agro.db.model.enforcements.products
 {
-    public class PhytosanitaryProduct {
-        public string Id { get; set; }
+
+    [SharedCosmosCollection("agro", "PhytosanitaryProduct")]
+    public class PhytosanitaryProduct : DocumentBase, ISharedCosmosEntity
+    {
+        public override string Id { get; set; }
         public string CommercialName { get; set; }
 
         public ActiveIngredient ActiveIngredient { get; set; }
+
+        public string PicturePath { get; set; }
+
 
     }
 

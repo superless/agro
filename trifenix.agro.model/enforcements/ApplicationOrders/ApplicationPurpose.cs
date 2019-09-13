@@ -1,12 +1,19 @@
-﻿using System;
+﻿using Cosmonaut;
+using Cosmonaut.Attributes;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace trifenix.agro.model.enforcements.ApplicationOrders
+namespace trifenix.agro.db.model.enforcements.ApplicationOrders
 {
-    public class ApplicationPurpose
+    [SharedCosmosCollection("agro", "ApplicationPurpose")]
+    public class ApplicationPurpose : DocumentBase, ISharedCosmosEntity
     {
-        public string Id { get; set; }
+
+        
+        public override string Id { get; set; }
+      
         public string Name { get; set; }
     }
 }

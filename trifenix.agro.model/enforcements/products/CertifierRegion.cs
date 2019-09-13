@@ -1,10 +1,15 @@
-﻿namespace trifenix.agro.model.enforcements.products
+﻿using Cosmonaut;
+using Cosmonaut.Attributes;
+
+namespace trifenix.agro.db.model.enforcements.products
 {
     /// <summary>
     /// Region where will be import the fruits.
     /// </summary>
-    public class CertifierRegion {
-        public string Id { get; set; }
+    [SharedCosmosCollection("agro", "CertifierRegion")]
+    public class CertifierRegion : DocumentBase, ISharedCosmosEntity
+    {
+        public override string Id { get; set; }
 
         /// <summary>
         /// Name of Certified Region
