@@ -19,17 +19,6 @@ variables:
 
 steps:
 
-- task: replacetokens@0
-  inputs:
-    targetFiles: '**/local.settings.json'
-    encoding: 'auto'
-    writeBOM: true
-    actionOnMissing: 'warn'
-    keepToken: false
-    tokenPrefix: '#{'
-    tokenSuffix: '}#'
-  displayName: 'reemplazando configuración'
-
 - task: NuGetToolInstaller@1
 
 - task: NuGetCommand@2
