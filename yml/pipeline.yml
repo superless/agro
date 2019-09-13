@@ -18,17 +18,7 @@ variables:
   
 
 steps:
-- task: replacetokens@3
-  inputs:
-    targetFiles: '**/local.settings.json'
-    encoding: 'auto'
-    writeBOM: true
-    actionOnMissing: 'warn'
-    keepToken: false
-    escapeType: 'none'
-    tokenPrefix: '#{'
-    tokenSuffix: '}#'
-  displayName: 'reemplazando configuración'
+
 
 
 - task: CmdLine@2
