@@ -51,7 +51,7 @@ steps:
   inputs:
     command: 'publish'
     publishWebProjects: false
-    projects: '**/*HubspotAppFunc.csproj'    
+    projects: '**/*trifenix.agro.functions.csproj'    
     arguments: '--no-restore --configuration Release --output $(Build.ArtifactStagingDirectory)'
 
 - task: PublishBuildArtifacts@1
