@@ -1,0 +1,16 @@
+D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.model.external.interfaces\bin\Debug\netstandard2.0\trifenix.agro.model.external.interfaces.deps.json
+D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.model.external.interfaces\bin\Debug\netstandard2.0\trifenix.agro.model.external.interfaces.dll
+D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.model.external.interfaces\bin\Debug\netstandard2.0\trifenix.agro.model.external.interfaces.pdb
+D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.model.external.interfaces\bin\Debug\netstandard2.0\trifenix.agro.db.model.dll
+D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.model.external.interfaces\bin\Debug\netstandard2.0\trifenix.agro.model.external.dll
+D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.model.external.interfaces\bin\Debug\netstandard2.0\trifenix.agro.model.external.pdb
+D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.model.external.interfaces\bin\Debug\netstandard2.0\trifenix.agro.db.model.pdb
+D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.model.external.interfaces\obj\Debug\netstandard2.0\trifenix.agro.model.external.interfaces.csprojAssemblyReference.cache
+D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.model.external.interfaces\obj\Debug\netstandard2.0\trifenix.agro.model.external.interfaces.csproj.CoreCompileInputs.cache
+D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.model.external.interfaces\obj\Debug\netstandard2.0\trifenix.agro.model.external.interfaces.AssemblyInfoInputs.cache
+D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.model.external.interfaces\obj\Debug\netstandard2.0\trifenix.agro.model.external.interfaces.AssemblyInfo.cs
+D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.model.external.interfaces\obj\Debug\netstandard2.0\trifenix.agro.model.external.interfaces.csproj.CopyComplete
+D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.model.external.interfaces\obj\Debug\netstandard2.0\trifenix.agro.model.external.interfaces.dll
+D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.model.external.interfaces\obj\Debug\netstandard2.0\trifenix.agro.model.external.interfaces.pdb
+D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.model.external.interfaces\bin\Debug\netstandard2.0\trifenix.agro.db.dll
+D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.model.external.interfaces\bin\Debug\netstandard2.0\trifenix.agro.db.pdb

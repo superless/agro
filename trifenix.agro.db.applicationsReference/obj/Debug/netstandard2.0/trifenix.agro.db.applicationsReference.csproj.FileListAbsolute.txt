@@ -1,0 +1,16 @@
+D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.db.applicationsReference\bin\Debug\netstandard2.0\trifenix.agro.db.applicationsReference.deps.json
+D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.db.applicationsReference\bin\Debug\netstandard2.0\trifenix.agro.db.applicationsReference.dll
+D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.db.applicationsReference\bin\Debug\netstandard2.0\trifenix.agro.db.applicationsReference.pdb
+D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.db.applicationsReference\obj\Debug\netstandard2.0\trifenix.agro.db.applicationsReference.csprojAssemblyReference.cache
+D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.db.applicationsReference\obj\Debug\netstandard2.0\trifenix.agro.db.applicationsReference.csproj.CoreCompileInputs.cache
+D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.db.applicationsReference\obj\Debug\netstandard2.0\trifenix.agro.db.applicationsReference.AssemblyInfoInputs.cache
+D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.db.applicationsReference\obj\Debug\netstandard2.0\trifenix.agro.db.applicationsReference.AssemblyInfo.cs
+D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.db.applicationsReference\obj\Debug\netstandard2.0\trifenix.agro.db.applicationsReference.dll
+D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.db.applicationsReference\obj\Debug\netstandard2.0\trifenix.agro.db.applicationsReference.pdb
+D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.db.applicationsReference\bin\Debug\netstandard2.0\trifenix.agro.db.dll
+D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.db.applicationsReference\bin\Debug\netstandard2.0\trifenix.agro.db.interfaces.dll
+D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.db.applicationsReference\bin\Debug\netstandard2.0\trifenix.agro.db.model.dll
+D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.db.applicationsReference\bin\Debug\netstandard2.0\trifenix.agro.db.interfaces.pdb
+D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.db.applicationsReference\bin\Debug\netstandard2.0\trifenix.agro.db.pdb
+D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.db.applicationsReference\bin\Debug\netstandard2.0\trifenix.agro.db.model.pdb
+D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.db.applicationsReference\obj\Debug\netstandard2.0\trifenix.agro.db.applicationsReference.csproj.CopyComplete

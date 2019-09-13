@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="trifenix.agro.model.external.applications.ExtReferenceApplication">
+    <Position X="11.5" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAACAAAABAAAAAAAAAwAAACAAAAAgAAAQAA=</HashCode>
+      <FileName>applications\orderApplications\ExtReferenceApplication.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="trifenix.agro.model.external.applications.ExtContinuedApplication">
+    <Position X="11.5" Y="12.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>applications\orderApplications\ExtContinuedApplication.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="trifenix.agro.model.external.applications.ExtDateApplication">
+    <Position X="7" Y="12.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAA=</HashCode>
+      <FileName>applications\orderApplications\ExtDateApplication.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="trifenix.agro.model.external.applications.ExtApplicationPurpose">
+    <Position X="10" Y="4.25" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAABAAAAAAAAAgAAAAAACEAAAAAQAA=</HashCode>
+      <FileName>applications\ExtApplicationPurpose.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="SubTasks" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="trifenix.agro.model.external.applications.ExtPhenologicalEventApplication">
+    <Position X="15.5" Y="12" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>applications\orderApplications\ExtPhenologicalEventApplication.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="trifenix.agro.model.external.applications.ExtPhenologicalEvent">
+    <Position X="10" Y="1" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAABAAAAAAAAAgAAAAAACEAAEAAQAA=</HashCode>
+      <FileName>applications\ExtPhenologicalEvent.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="SubTasks" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="trifenix.agro.model.external.@base.ExtSeason">
+    <Position X="6" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAQBAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAEA=</HashCode>
+      <FileName>base\ExtSeason.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="DateOrder" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="PhenologicalEvents" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="trifenix.agro.model.external.@base.DateOrder">
+    <Position X="7" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAABAAAAAAAAAgAAAAAACEAAAAAQAA=</HashCode>
+      <FileName>base\ExtSeason.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="SubTasks" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
