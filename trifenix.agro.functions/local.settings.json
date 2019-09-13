@@ -1,0 +1,14 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+    "CosmosDbUri": "#{cosmosdb_uri}#",
+    "CosmosDbPrimaryKey": "#{cosmosdb_primarykey}#",
+    "CosmosDbName": "#{cosmosdb_dbname}#"
+
+  },
+  "Host": {
+    "CORS": "*"
+  }
+}
