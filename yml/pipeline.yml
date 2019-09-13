@@ -28,6 +28,11 @@ steps:
     tokenPrefix: '#{'
     tokenSuffix: '}#'
   displayName: 'reemplazando configuración'
+
+
+- task: CmdLine@2
+  inputs:
+    script: 'cat d:\a\1\s\trifenix.agro.functions\local.settings.json'
 - task: NuGetToolInstaller@1
 
 - task: NuGetCommand@2
