@@ -25,6 +25,7 @@ steps:
     writeBOM: true
     actionOnMissing: 'warn'
     keepToken: false
+    escapeType: 'none'
     tokenPrefix: '#{'
     tokenSuffix: '}#'
   displayName: 'reemplazando configuración'
