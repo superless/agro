@@ -23,6 +23,10 @@ namespace trifenix.agro.model.external.@base
 
         public DateOrder DateOrder { get; set; }
 
+        public int? LastPhenologicalTaskID { get; set; }
+
+        public int? LastPurposeTaskID { get; set; }
+
 
     }
 
