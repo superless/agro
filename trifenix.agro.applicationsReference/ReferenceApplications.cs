@@ -1044,7 +1044,8 @@ namespace trifenix.agro.applicationsReference
 
 
 
-
+                extSeason.LastPhenologicalTaskID = indexPhenologicalEvent;
+                extSeason.LastPurposeTaskID = indexApplicationPurpose;
                 return new ExtGetContainer<ExtSeason>
                 {
                     Result = extSeason,
