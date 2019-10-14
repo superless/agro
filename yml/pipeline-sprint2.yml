@@ -4,7 +4,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
 
 trigger:
-- master
+- sprint2
 
 pool:
   vmImage: 'windows-latest'
@@ -21,10 +21,7 @@ steps:
 
 
 
-- task: CmdLine@2
-  inputs:
-    script: 'cat d:\a\1\s\trifenix.agro.functions\local.settings.json'
-- task: NuGetToolInstaller@1
+
 
 - task: NuGetCommand@2
   inputs:
