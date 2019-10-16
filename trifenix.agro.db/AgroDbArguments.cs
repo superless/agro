@@ -28,5 +28,12 @@ namespace trifenix.agro.db
         /// The name database.
         /// </value>
         public string NameDb { get; set; }
+
+
+        //TODO: esto no debería ir acá, debería ir independiente porque esto corresponde a azure search
+
+        public string AzureSearchName { get; set; }
+
+        public string AzureSearchKey { get; set; }
     }
 }

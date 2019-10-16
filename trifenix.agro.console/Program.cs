@@ -35,11 +35,19 @@ namespace trifenix.agro.console
             }).ToListAsync();
 
 
-
+            
            
 
             Console.WriteLine(JsonConvert.SerializeObject(resultTask));
             Console.ReadLine();
+        }
+
+
+        public class AplicacionesTesting {
+
+            public void 
+
+
         }
 
 

@@ -12,4 +12,8 @@
     <ProjectReference Include="..\trifenix.agro.db\trifenix.agro.db.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="NewFolder\" />
+  </ItemGroup>
+
 </Project>

@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using trifenix.agro.functions.Helper;
-using trifenix.agro.model.external;
 using trifenix.util.extensions;
 using trifenix.agro.model.external.Helper;
 
@@ -136,6 +135,8 @@ namespace trifenix.agro.functions
             var db = ContainerMethods.ContainerDbApplication;
             if (req.Method.ToLower().Equals("post"))
             {
+
+                
                 var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
 
                 dynamic result = JsonConvert.DeserializeObject(requestBody);
@@ -144,11 +145,11 @@ namespace trifenix.agro.functions
 
                 var initDate = (DateTime)result.startDate;
 
+                var savePhenological = db.SavePhenologicalEvent(taskName, initDate);
                 
+                var resultDb = await savePhenological;
 
-
-                var resultDb = await db.SavePhenologicalEvent(taskName, initDate);
-
+                
                 return ContainerMethods.GetJsonPostContainer(resultDb, log);
 
 
