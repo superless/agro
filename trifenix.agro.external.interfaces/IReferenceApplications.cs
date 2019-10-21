@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using trifenix.agro.db.model.enforcements;
 using trifenix.agro.db.model.enforcements.ApplicationOrders;
 using trifenix.agro.db.model.enforcements.Fields;
 using trifenix.agro.db.model.enforcements.products;
 using trifenix.agro.db.model.enforcements.stages;
+using trifenix.agro.model.external;
 using trifenix.agro.model.external.@base;
 using trifenix.agro.model.external.Helper;
 
-namespace trifenix.agro.model.external.interfaces
+namespace trifenix.agro.external.interfaces
 {
     public interface IReferenceApplications
     {

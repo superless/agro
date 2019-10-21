@@ -1,7 +1,7 @@
 ﻿using Cosmonaut;
 using Cosmonaut.Attributes;
 
-namespace trifenix.agro.db.model.enforcements.Fields
+namespace trifenix.agro.db.model.enforcements
 {
 
     [SharedCosmosCollection("agro", "AgroVariety")]

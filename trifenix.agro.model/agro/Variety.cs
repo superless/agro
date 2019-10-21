@@ -1,0 +1,22 @@
+﻿using Cosmonaut;
+using Cosmonaut.Attributes;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace trifenix.agro.db.model.agro
+{
+    [SharedCosmosCollection("agro", "Variety")]
+    public class Variety : DocumentBase, ISharedCosmosEntity
+    {
+    
+        public override string Id { get; set; }
+
+        public string Name { get; set; }
+
+        public string Abbreviation { get; set; }
+
+        public Specie Specie { get; set; }
+
+    }
+}

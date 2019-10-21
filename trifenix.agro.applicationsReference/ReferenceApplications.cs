@@ -5,7 +5,7 @@ using trifenix.agro.db.interfaces;
 using trifenix.agro.db.model.enforcements.ApplicationOrders;
 using trifenix.agro.db.model.enforcements.stages;
 using trifenix.agro.model.external;
-using trifenix.agro.model.external.interfaces;
+
 using Cosmonaut.Extensions;
 using System.Linq;
 using System.Collections.Generic;
@@ -16,6 +16,8 @@ using trifenix.agro.model.external.Helper;
 using trifenix.agro.db.model.enforcements.Applications;
 using trifenix.agro.model.external.@base;
 using trifenix.agro.model.external.applications;
+using trifenix.agro.external.interfaces;
+using trifenix.agro.db.model.enforcements;
 
 namespace trifenix.agro.applicationsReference
 {
@@ -26,6 +28,10 @@ namespace trifenix.agro.applicationsReference
         public ReferenceApplications(IBaseContainer baseContainer)
         {  
             _baseContainer = baseContainer;
+        }
+
+        public ReferenceApplications()
+        {
         }
 
         public async Task<ExtGetContainer<List<ApplicationPurpose>>> GetApplicationPurposes()

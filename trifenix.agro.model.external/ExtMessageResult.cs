@@ -5,6 +5,7 @@
         Error,
         Warning,
         ElementAlreadyExists,
-        ChildRequiredDoesNotExists
+        ChildRequiredDoesNotExists,
+        ElementToEditDoesNotExists
     }
 }

@@ -1,8 +1,6 @@
 ﻿using Cosmonaut;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using trifenix.agro.db.exceptions;
 
@@ -35,10 +33,13 @@ namespace trifenix.agro.db
 
         protected async Task<T> GetEntity(string uniqueId) {
             var entity = (T)Activator.CreateInstance(typeof(T));
+
             return await Store.FindAsync(uniqueId, entity.CosmosEntityName);
         }
 
         protected  IQueryable<T> GetEntities() {
+
+            
             return Store.Query();
         }
     }

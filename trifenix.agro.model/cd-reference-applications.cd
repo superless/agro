@@ -14,9 +14,6 @@
       <HashCode>BAAAAAAAAABABAAAAAAAAAAAAAAAAAgAAIAAAAAAgAA=</HashCode>
       <FileName>enforcements\Applications\ApplicationInField.cs</FileName>
     </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="Field" />
-    </ShowAsAssociation>
     <ShowAsCollectionAssociation>
       <Property Name="IngredientInstances" />
       <Property Name="CategoryInstance" />
@@ -25,30 +22,25 @@
   <Class Name="trifenix.agro.db.model.enforcements.Fields.AgroField">
     <Position X="2.25" Y="8.25" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAACAABAAQCAAAAAAAAAAAQAAAAAQAAAAAAAAAAEAIA=</HashCode>
+      <HashCode>AAACAABAAQCAAAAAAAAAAAQAAAAAQEAAAAAAAAAEAAA=</HashCode>
       <FileName>enforcements\Fields\AgroField.cs</FileName>
     </TypeIdentifier>
-    <ShowAsCollectionAssociation>
-      <Property Name="Varieties" />
-    </ShowAsCollectionAssociation>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="trifenix.agro.db.model.enforcements.Fields.AgroSpecie">
+  <Class Name="trifenix.agro.db.model.enforcements.AgroSpecie">
     <Position X="2.5" Y="14" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAACAABAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>enforcements\Fields\AgroSpecie.cs</FileName>
     </TypeIdentifier>
+    <Lollipop Position="0.2" />
   </Class>
-  <Class Name="trifenix.agro.db.model.enforcements.Fields.AgroVariety">
+  <Class Name="trifenix.agro.db.model.enforcements.AgroVariety">
     <Position X="2.5" Y="11.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAACAABAAAAAAAAAAAAAAAQAAAAAAAAAIAAAAAAAAAA=</HashCode>
+      <HashCode>AAACAABAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAIAAAA=</HashCode>
       <FileName>enforcements\Fields\AgroVariety.cs</FileName>
     </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="AgroSpecie" />
-    </ShowAsAssociation>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="trifenix.agro.db.model.enforcements.products.ActiveIngredient">
@@ -170,23 +162,15 @@
   <Class Name="trifenix.agro.db.model.enforcements.stages.PhenologicalEvent" Collapsed="true">
     <Position X="15" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAACAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAEA=</HashCode>
-      <FileName>enforcements\stages\PhenologicalEvent.cs</FileName>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAQgAAAAAAAAAAAAAAAAAEA=</HashCode>
+      <FileName>enforcements\stages\phenologicalEvent.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="trifenix.agro.db.model.enforcements.ApplicationOrders.ReferenceApplicationOrder">
     <Position X="8" Y="1.25" Width="1.5" />
-    <AssociationLine Name="Applications" Type="trifenix.agro.db.model.enforcements.Applications.ApplicationInField" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="8.589" Y="3.511" />
-        <Point X="8.589" Y="4.875" />
-        <Point X="2.938" Y="4.875" />
-        <Point X="2.938" Y="5.25" />
-      </Path>
-    </AssociationLine>
     <TypeIdentifier>
-      <HashCode>QAACAAAAABAGAAAAAAACAAAAAAAAAAAAAAAAgAAAAAA=</HashCode>
+      <HashCode>QAACAAAAABAGAAAAAAACAAAAAAgAAAAAAAAAgAAAAAA=</HashCode>
       <FileName>enforcements\ApplicationOrders\ReferenceApplicationOrder.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using trifenix.agro.model.external.applications;
 
 namespace trifenix.agro.model.external.applications
 {
