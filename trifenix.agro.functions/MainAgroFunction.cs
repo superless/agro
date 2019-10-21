@@ -84,6 +84,66 @@ namespace trifenix.agro.functions
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
 
+        [FunctionName("SpecieV2")]
+        public static async Task<IActionResult> SpecieV2(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "v2/species")] HttpRequest req,
+            ILogger log)
+        {
+            if (req.Method.ToLower().Equals("post"))
+            {
+                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                {
+                    var name = (string)model["name"];
+                    return await db.Species.SaveNewSpecie(name);
+                });
+            }
+
+            if (req.Method.ToLower().Equals("put"))
+            {
+                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                {
+                    var id = (string)model["id"];
+
+                    var name = (string)model["name"];
+
+                    return await db.Species.SaveEditSpecie(id, name);
+                });
+            }
+
+            var result = await ContainerMethods.AgroManager.Species.GetSpecies();
+            return ContainerMethods.GetJsonGetContainer(result, log);
+        }
+
+        [FunctionName("CategoryIngredientsV2")]
+        public static async Task<IActionResult> CategoryIngredientsV2(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "v2/ingredient_categories")] HttpRequest req,
+            ILogger log)
+        {
+            if (req.Method.ToLower().Equals("post"))
+            {
+                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                {
+                    var name = (string)model["name"];
+                    return await db.IngredientCategories.SaveNewIngredientCategory(name);
+                });
+            }
+
+            if (req.Method.ToLower().Equals("put"))
+            {
+                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                {
+                    var id = (string)model["id"];
+
+                    var name = (string)model["name"];
+
+                    return await db.IngredientCategories.SaveEditIngredientCategory(id, name);
+                });
+            }
+
+            var result = await ContainerMethods.AgroManager.IngredientCategories.GetIngredientCategories();
+            return ContainerMethods.GetJsonGetContainer(result, log);
+        }
+
 
 
     }
