@@ -142,7 +142,7 @@ namespace trifenix.agro.functions
 
                 dynamic result = JsonConvert.DeserializeObject(requestBody);
 
-                var taskName = (string)result.name;
+                var taskName = (string)result["name"];
 
                 var initDate = (DateTime)result.startDate;
 

@@ -39,7 +39,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "storage", "storage", "{EE7E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.external.interfaces", "trifenix.agro.external.interfaces\trifenix.agro.external.interfaces.csproj", "{1490B1C3-C9DB-4D83-B2FA-C39E75BB35BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "trifenix.agro.external.operations", "trifenix.agro.external.operations\trifenix.agro.external.operations.csproj", "{E6E114EA-5642-4577-92E2-B13E52C711C2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.external.operations", "trifenix.agro.external.operations\trifenix.agro.external.operations.csproj", "{E6E114EA-5642-4577-92E2-B13E52C711C2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -116,7 +116,7 @@ Global
 		{31A4A9F0-DF40-42AC-B091-DC1D6434F039} = {23EE7E3F-8A26-4F35-8C77-0B2E727B3079}
 		{55021BD1-AF91-42BD-A049-ED1874F5081A} = {23EE7E3F-8A26-4F35-8C77-0B2E727B3079}
 		{1490B1C3-C9DB-4D83-B2FA-C39E75BB35BB} = {6682B4F0-4790-44E0-8DF9-A33F62A01634}
-		{E6E114EA-5642-4577-92E2-B13E52C711C2} = {AA188391-3994-421D-A7CE-2A0622569EE1}
+		{E6E114EA-5642-4577-92E2-B13E52C711C2} = {6682B4F0-4790-44E0-8DF9-A33F62A01634}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2C0C9D82-464E-4741-8541-CDC460278FEC}

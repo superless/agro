@@ -18,6 +18,7 @@ namespace trifenix.agro.db.interfaces.agro
 
         ISpecieRepository SpecieRepository { get; }
 
+        ISeasonRepository Seasons { get; }
         
 
 

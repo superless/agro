@@ -23,6 +23,8 @@ namespace trifenix.agro.db.applicationsReference.agro
 
         public ISpecieRepository SpecieRepository => new SpecieRepository(_dbArguments);
 
-         
+        public ISeasonRepository Seasons => new SeasonRepository(_dbArguments);
+
+
     }
 }

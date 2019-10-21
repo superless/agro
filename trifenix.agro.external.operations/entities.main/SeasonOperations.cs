@@ -44,7 +44,7 @@ namespace trifenix.agro.external.operations.entities.main
             }
         }
 
-        public async Task<ExtPostContainer<Season>> SaveEditSeason(string id, string name)
+        public async Task<ExtPostContainer<Season>> SaveEditSeason(string id, DateTime init, DateTime end, bool current)
         {
             try
             {
@@ -60,11 +60,14 @@ namespace trifenix.agro.external.operations.entities.main
                 }
 
 
-                season.Name = name;
+                season.Current = current;
+                season.Start = init;
+                season.End = end;
 
-                await _repo.CreateUpdateTargetApp(season);
 
-                return new ExtPostContainer<ApplicationTarget>
+                await _repo.CreateUpdateSeason(season);
+
+                return new ExtPostContainer<Season>
                 {
                     Result = season,
                     IdRelated = id,
@@ -73,7 +76,7 @@ namespace trifenix.agro.external.operations.entities.main
             }
             catch (Exception ex)
             {
-                return new ExtPostContainer<ApplicationTarget>
+                return new ExtPostContainer<Season>
                 {
                     IdRelated = id,
                     MessageResult = ExtMessageResult.Error,
@@ -83,9 +86,35 @@ namespace trifenix.agro.external.operations.entities.main
             }
         }
 
-        public Task<ExtPostContainer<string>> SaveNewSeason(string name)
+        public async Task<ExtPostContainer<string>> SaveNewSeason(DateTime init, DateTime end)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var idResult = await _repo.CreateUpdateSeason(new Season
+                {
+                    Id = Guid.NewGuid().ToString("N"),
+                    Start = init,
+                    End = end
+                    
+                });
+                return new ExtPostContainer<string>
+                {
+                    IdRelated = idResult,
+                    Result = idResult,
+                    MessageResult = ExtMessageResult.Ok
+                };
+
+
+            }
+            catch (Exception ex)
+            {
+                return new ExtPostErrorContainer<string>
+                {
+                    InternalException = ex,
+                    Message = ex.Message,
+                    MessageResult = ExtMessageResult.Error
+                };
+            }
         }
     }
 }

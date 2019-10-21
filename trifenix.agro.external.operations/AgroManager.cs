@@ -28,6 +28,6 @@ namespace trifenix.agro.external.operations
 
         public IIngredientsOperations Ingredients => new IngredientOperations(_repository.Ingredients, _repository.Categories);
 
-        public ISeasonOperations Seasons => new 
+        public ISeasonOperations Seasons => new SeasonOperations(_repository.Seasons);
     }
 }
