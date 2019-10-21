@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces.Field;
+using trifenix.agro.db.model.enforcements;
 using trifenix.agro.db.model.enforcements.Fields;
 
 namespace trifenix.agro.db.applicationsReference.Field

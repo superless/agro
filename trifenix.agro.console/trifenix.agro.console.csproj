@@ -6,8 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\trifenix.agro.applicationsReference\trifenix.agro.applicationsReference.csproj" />
-    <ProjectReference Include="..\trifenix.agro.db.applicationsReference\trifenix.agro.db.applicationsReference.csproj" />
+   
   </ItemGroup>
 
   <ItemGroup>

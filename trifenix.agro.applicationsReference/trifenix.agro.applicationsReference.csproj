@@ -5,8 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Reference Include="netstandard" />
     <ProjectReference Include="..\trifenix.agro.db.interfaces\trifenix.agro.db.interfaces.csproj" />
-    <ProjectReference Include="..\trifenix.agro.model.external.interfaces\trifenix.agro.model.external.interfaces.csproj" />
+    <ProjectReference Include="..\trifenix.agro.external.interfaces\trifenix.agro.external.interfaces.csproj" />
   </ItemGroup>
 
 </Project>

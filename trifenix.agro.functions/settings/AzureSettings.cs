@@ -12,6 +12,11 @@ namespace trifenix.agro.functions.settings
 
         public string CosmosDbName { get; set; }
 
+        public string AzureSearchName { get; set; }
+
+        public string AzureSearchKey { get; set; }
+
+
 
     }
 }

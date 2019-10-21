@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="trifenix.agro.db.model.agro.Sector">
+    <Position X="2" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACIAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>agro\Sector.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="trifenix.agro.db.model.agro.PlotLand">
+    <Position X="5.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACIAAACAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>agro\PlotLand.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Sector" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="trifenix.agro.db.model.agro.Barracks">
+    <Position X="3.75" Y="6" Width="1.5" />
+    <AssociationLine Name="PlotLand" Type="trifenix.agro.db.model.agro.PlotLand" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="4.5" Y="6" />
+        <Point X="4.5" Y="4.125" />
+        <Point X="5.5" Y="4.125" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="Pollinator" Type="trifenix.agro.db.model.agro.Variety" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="5.25" Y="8.062" />
+        <Point X="7.875" Y="8.062" />
+        <Point X="7.875" Y="6.691" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAACICAAAAAIAAAAAAAQAAQAAAAAAMAACAAAAAAAAAE=</HashCode>
+      <FileName>agro\Barracks.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="PlotLand" />
+      <Property Name="Variety" />
+      <Property Name="Pollinator" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="GeoPoints" />
+    </ShowAsCollectionAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="trifenix.agro.db.model.agro.Variety" Collapsed="true">
+    <Position X="7.25" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAABAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAIAAAA=</HashCode>
+      <FileName>agro\Variety.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="trifenix.agro.db.model.agro.GeographicalPoint">
+    <Position X="0.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>agro\GeographicalPoint.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
