@@ -11,7 +11,7 @@
         "dependencies": {
           "NETStandard.Library": "2.0.3",
           "trifenix.agro.db.interfaces": "1.0.0",
-          "trifenix.agro.model.external.interfaces": "1.0.0"
+          "trifenix.agro.external.interfaces": "1.0.0"
         },
         "runtime": {
           "trifenix.agro.applicationsReference.dll": {}
@@ -1136,20 +1136,20 @@
           "trifenix.agro.db.model.dll": {}
         }
       },
+      "trifenix.agro.external.interfaces/1.0.0": {
+        "dependencies": {
+          "trifenix.agro.model.external": "1.0.0"
+        },
+        "runtime": {
+          "trifenix.agro.external.interfaces.dll": {}
+        }
+      },
       "trifenix.agro.model.external/1.0.0": {
         "dependencies": {
           "trifenix.agro.db.model": "1.0.0"
         },
         "runtime": {
           "trifenix.agro.model.external.dll": {}
-        }
-      },
-      "trifenix.agro.model.external.interfaces/1.0.0": {
-        "dependencies": {
-          "trifenix.agro.model.external": "1.0.0"
-        },
-        "runtime": {
-          "trifenix.agro.model.external.interfaces.dll": {}
         }
       }
     }
@@ -1812,12 +1812,12 @@
       "serviceable": false,
       "sha512": ""
     },
-    "trifenix.agro.model.external/1.0.0": {
+    "trifenix.agro.external.interfaces/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
     },
-    "trifenix.agro.model.external.interfaces/1.0.0": {
+    "trifenix.agro.model.external/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

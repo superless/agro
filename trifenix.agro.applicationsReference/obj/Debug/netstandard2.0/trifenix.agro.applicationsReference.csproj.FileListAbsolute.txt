@@ -4,10 +4,10 @@ D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.applicationsReferenc
 D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.applicationsReference\bin\Debug\netstandard2.0\trifenix.agro.db.dll
 D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.applicationsReference\bin\Debug\netstandard2.0\trifenix.agro.db.interfaces.dll
 D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.applicationsReference\bin\Debug\netstandard2.0\trifenix.agro.db.model.dll
+D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.applicationsReference\bin\Debug\netstandard2.0\trifenix.agro.external.interfaces.dll
 D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.applicationsReference\bin\Debug\netstandard2.0\trifenix.agro.model.external.dll
-D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.applicationsReference\bin\Debug\netstandard2.0\trifenix.agro.model.external.interfaces.dll
 D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.applicationsReference\bin\Debug\netstandard2.0\trifenix.agro.db.interfaces.pdb
-D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.applicationsReference\bin\Debug\netstandard2.0\trifenix.agro.model.external.interfaces.pdb
+D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.applicationsReference\bin\Debug\netstandard2.0\trifenix.agro.external.interfaces.pdb
 D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.applicationsReference\bin\Debug\netstandard2.0\trifenix.agro.db.pdb
 D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.applicationsReference\bin\Debug\netstandard2.0\trifenix.agro.db.model.pdb
 D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.applicationsReference\bin\Debug\netstandard2.0\trifenix.agro.model.external.pdb

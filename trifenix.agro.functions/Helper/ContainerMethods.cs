@@ -6,9 +6,9 @@ using System.Collections.Generic;
 using System.Text;
 using trifenix.agro.applicationsReference;
 using trifenix.agro.db.applicationsReference;
+using trifenix.agro.external.interfaces;
 using trifenix.agro.functions.settings;
 using trifenix.agro.model.external;
-using trifenix.agro.model.external.interfaces;
 
 namespace trifenix.agro.functions.Helper
 {

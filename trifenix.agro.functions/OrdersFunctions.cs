@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using trifenix.agro.functions.Helper;
 using trifenix.util.extensions;
 using trifenix.agro.model.external.Helper;
+using trifenix.agro.model.external;
 
 namespace trifenix.agro.functions
 {
@@ -117,7 +118,7 @@ namespace trifenix.agro.functions
                 var abbreviation = (string)result.abbreviation;
 
                 var resultDb = await db.SaveSpecie(name, abbreviation);
-
+                
                 return ContainerMethods.GetJsonPostContainer(resultDb, log);
             }
 

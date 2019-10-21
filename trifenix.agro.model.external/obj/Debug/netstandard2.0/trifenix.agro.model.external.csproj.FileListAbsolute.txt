@@ -1,8 +1,10 @@
 D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.model.external\bin\Debug\netstandard2.0\trifenix.agro.model.external.deps.json
 D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.model.external\bin\Debug\netstandard2.0\trifenix.agro.model.external.dll
 D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.model.external\bin\Debug\netstandard2.0\trifenix.agro.model.external.pdb
+D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.model.external\bin\Debug\netstandard2.0\trifenix.agro.db.dll
 D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.model.external\bin\Debug\netstandard2.0\trifenix.agro.db.model.dll
 D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.model.external\bin\Debug\netstandard2.0\trifenix.agro.db.model.pdb
+D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.model.external\bin\Debug\netstandard2.0\trifenix.agro.db.pdb
 D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.model.external\obj\Debug\netstandard2.0\trifenix.agro.model.external.csprojAssemblyReference.cache
 D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.model.external\obj\Debug\netstandard2.0\trifenix.agro.model.external.csproj.CoreCompileInputs.cache
 D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.model.external\obj\Debug\netstandard2.0\trifenix.agro.model.external.AssemblyInfoInputs.cache
@@ -10,5 +12,3 @@ D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.model.external\obj\D
 D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.model.external\obj\Debug\netstandard2.0\trifenix.agro.model.external.csproj.CopyComplete
 D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.model.external\obj\Debug\netstandard2.0\trifenix.agro.model.external.dll
 D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.model.external\obj\Debug\netstandard2.0\trifenix.agro.model.external.pdb
-D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.model.external\bin\Debug\netstandard2.0\trifenix.agro.db.dll
-D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.model.external\bin\Debug\netstandard2.0\trifenix.agro.db.pdb

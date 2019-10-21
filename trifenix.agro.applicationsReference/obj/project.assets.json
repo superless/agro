@@ -1645,6 +1645,19 @@
           "bin/placeholder/trifenix.agro.db.model.dll": {}
         }
       },
+      "trifenix.agro.external.interfaces/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "dependencies": {
+          "trifenix.agro.model.external": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/trifenix.agro.external.interfaces.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/trifenix.agro.external.interfaces.dll": {}
+        }
+      },
       "trifenix.agro.model.external/1.0.0": {
         "type": "project",
         "framework": ".NETStandard,Version=v2.0",
@@ -1656,19 +1669,6 @@
         },
         "runtime": {
           "bin/placeholder/trifenix.agro.model.external.dll": {}
-        }
-      },
-      "trifenix.agro.model.external.interfaces/1.0.0": {
-        "type": "project",
-        "framework": ".NETStandard,Version=v2.0",
-        "dependencies": {
-          "trifenix.agro.model.external": "1.0.0"
-        },
-        "compile": {
-          "bin/placeholder/trifenix.agro.model.external.interfaces.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/trifenix.agro.model.external.interfaces.dll": {}
         }
       }
     }
@@ -5666,22 +5666,22 @@
       "path": "../trifenix.agro.model/trifenix.agro.db.model.csproj",
       "msbuildProject": "../trifenix.agro.model/trifenix.agro.db.model.csproj"
     },
+    "trifenix.agro.external.interfaces/1.0.0": {
+      "type": "project",
+      "path": "../trifenix.agro.external.interfaces/trifenix.agro.external.interfaces.csproj",
+      "msbuildProject": "../trifenix.agro.external.interfaces/trifenix.agro.external.interfaces.csproj"
+    },
     "trifenix.agro.model.external/1.0.0": {
       "type": "project",
       "path": "../trifenix.agro.model.external/trifenix.agro.model.external.csproj",
       "msbuildProject": "../trifenix.agro.model.external/trifenix.agro.model.external.csproj"
-    },
-    "trifenix.agro.model.external.interfaces/1.0.0": {
-      "type": "project",
-      "path": "../trifenix.agro.model.external.interfaces/trifenix.agro.model.external.interfaces.csproj",
-      "msbuildProject": "../trifenix.agro.model.external.interfaces/trifenix.agro.model.external.interfaces.csproj"
     }
   },
   "projectFileDependencyGroups": {
     ".NETStandard,Version=v2.0": [
       "NETStandard.Library >= 2.0.3",
       "trifenix.agro.db.interfaces >= 1.0.0",
-      "trifenix.agro.model.external.interfaces >= 1.0.0"
+      "trifenix.agro.external.interfaces >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -5717,8 +5717,8 @@
             "D:\\aresa\\source code\\server_app\\trifenix.agro\\trifenix.agro.db.interfaces\\trifenix.agro.db.interfaces.csproj": {
               "projectPath": "D:\\aresa\\source code\\server_app\\trifenix.agro\\trifenix.agro.db.interfaces\\trifenix.agro.db.interfaces.csproj"
             },
-            "D:\\aresa\\source code\\server_app\\trifenix.agro\\trifenix.agro.model.external.interfaces\\trifenix.agro.model.external.interfaces.csproj": {
-              "projectPath": "D:\\aresa\\source code\\server_app\\trifenix.agro\\trifenix.agro.model.external.interfaces\\trifenix.agro.model.external.interfaces.csproj"
+            "D:\\aresa\\source code\\server_app\\trifenix.agro\\trifenix.agro.external.interfaces\\trifenix.agro.external.interfaces.csproj": {
+              "projectPath": "D:\\aresa\\source code\\server_app\\trifenix.agro\\trifenix.agro.external.interfaces\\trifenix.agro.external.interfaces.csproj"
             }
           }
         }

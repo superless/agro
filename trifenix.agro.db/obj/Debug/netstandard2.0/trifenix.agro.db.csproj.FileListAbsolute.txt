@@ -1,7 +1,6 @@
 D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.db\bin\Debug\netstandard2.0\trifenix.agro.db.deps.json
 D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.db\bin\Debug\netstandard2.0\trifenix.agro.db.dll
 D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.db\bin\Debug\netstandard2.0\trifenix.agro.db.pdb
-D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.db\obj\Debug\netstandard2.0\trifenix.agro.db.csprojAssemblyReference.cache
 D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.db\obj\Debug\netstandard2.0\trifenix.agro.db.csproj.CoreCompileInputs.cache
 D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.db\obj\Debug\netstandard2.0\trifenix.agro.db.AssemblyInfoInputs.cache
 D:\aresa\source code\server_app\trifenix.agro\trifenix.agro.db\obj\Debug\netstandard2.0\trifenix.agro.db.AssemblyInfo.cs
