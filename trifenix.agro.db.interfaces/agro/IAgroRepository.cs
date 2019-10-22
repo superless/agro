@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using trifenix.agro.db.interfaces.agro.events;
+using trifenix.agro.db.interfaces.agro.fields;
 using trifenix.agro.db.interfaces.agro.orders;
 
 namespace trifenix.agro.db.interfaces.agro
@@ -21,9 +23,20 @@ namespace trifenix.agro.db.interfaces.agro
 
         ISeasonRepository Seasons { get; }
 
+
+        IVarietyRepository Varieties { get; }
+
         IOrderFolderRepository OrderFolder { get; }
         
+        IPhenologicalPreOrderRepository PhenologicalPreOrders { get; }
 
+        INotificationEventRepository NotificationEvents { get; }
+
+        IBarrackRepository Barracks { get; }
+
+        IPlotLandRepository PlotLands { get; }
+
+        ISectorRepository Sectors { get; }
 
 
 

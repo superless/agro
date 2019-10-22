@@ -43,8 +43,8 @@ namespace trifenix.agro.functions
                     return await db.PhenologicalEvents.SaveEditPhenologicalEvent(id, name, initDate, endDate);
                 });
             }
-
-            var result = await ContainerMethods.AgroManager.PhenologicalEvents.GetPhenologicalEvents();
+            var manager = await ContainerMethods.AgroManager();
+            var result = await manager.PhenologicalEvents.GetPhenologicalEvents();
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
 
@@ -80,7 +80,8 @@ namespace trifenix.agro.functions
                 });
             }
 
-            var result = await ContainerMethods.AgroManager.Seasons.GetSeasons();
+            var manager = await ContainerMethods.AgroManager();
+            var result = await manager.Seasons.GetSeasons();
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
 
@@ -111,7 +112,8 @@ namespace trifenix.agro.functions
                 });
             }
 
-            var result = await ContainerMethods.AgroManager.Species.GetSpecies();
+            var manager = await ContainerMethods.AgroManager();
+            var result = await manager.Species.GetSpecies();
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
 
@@ -141,7 +143,8 @@ namespace trifenix.agro.functions
                 });
             }
 
-            var result = await ContainerMethods.AgroManager.IngredientCategories.GetIngredientCategories();
+            var manager = await ContainerMethods.AgroManager();
+            var result = await manager.IngredientCategories.GetIngredientCategories();
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
 
@@ -174,7 +177,8 @@ namespace trifenix.agro.functions
                 });
             }
 
-            var result = await ContainerMethods.AgroManager.Ingredients.GetIngredients();
+            var manager = await ContainerMethods.AgroManager();
+            var result = await manager.Ingredients.GetIngredients();
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
 
@@ -207,7 +211,8 @@ namespace trifenix.agro.functions
                 });
             }
 
-            var result = await ContainerMethods.AgroManager.ApplicationTargets.GetAplicationsTarget();
+            var manager = await ContainerMethods.AgroManager();
+            var result = await manager.ApplicationTargets.GetAplicationsTarget();
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
 
@@ -239,23 +244,22 @@ namespace trifenix.agro.functions
                     var idCategory = (string)model["idCategory"];
                     var idSpecie = (string)model["idSpecie"];
                     var idIngredient = (string)model["idIngredient"];
-                    var idSeason = (string)model["idSeason"];
-                    var isStage = int.TryParse((string)model["stage"], out var intStage);
-
-                    var stage = isStage?(PhenologicalStage)intStage:PhenologicalStage.Waiting;
+                    
 
 
-                    return await db.OrderFolder.SaveEditOrderFolder(id, idSeason, stage, idPhenologicalEvent, idApplicationTarget, idCategory, idSpecie, idIngredient);
+                    return await db.OrderFolder.SaveEditOrderFolder(id, idPhenologicalEvent, idApplicationTarget, idCategory, idSpecie, idIngredient);
                 });
             }
 
             if (!string.IsNullOrWhiteSpace(parameter)) {
-                var resultLocal = await ContainerMethods.AgroManager.OrderFolder.GetOrderFolder(parameter);
+                var managerLocal = await ContainerMethods.AgroManager();
+                var resultLocal = await managerLocal.OrderFolder.GetOrderFolder(parameter);
                 return ContainerMethods.GetJsonGetContainer(resultLocal, log);
 
             }
 
-            var result = await ContainerMethods.AgroManager.OrderFolder.GetOrderFolders();
+            var manager = await ContainerMethods.AgroManager();
+            var result = await manager.OrderFolder.GetOrderFolders();
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
 

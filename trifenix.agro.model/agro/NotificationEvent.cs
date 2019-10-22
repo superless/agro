@@ -22,6 +22,8 @@ namespace trifenix.agro.db.model.agro
 
         public DateTime Created { get; set; }
 
+        
+
 
 
 

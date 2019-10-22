@@ -1,5 +1,7 @@
-﻿using trifenix.agro.external.interfaces.entities;
+﻿using trifenix.agro.external.interfaces.entities.events;
+using trifenix.agro.external.interfaces.entities.fields;
 using trifenix.agro.external.interfaces.entities.main;
+using trifenix.agro.external.interfaces.entities.orders;
 
 namespace trifenix.agro.external.interfaces
 {
@@ -19,9 +21,22 @@ namespace trifenix.agro.external.interfaces
 
         IOrderFolderOperations OrderFolder { get; }
 
-        
+        ISectorOperations Sectors { get; }
 
- 
+        IPlotLandOperations PlotLands { get; }
+
+        IBarrackOperations Barracks { get; }
+
+        IPhenologicalPreOrderOperations PhenologicalPreOrders { get; }
+
+        INotificatonEventOperations NotificationEvents { get; }
+
+        IVarietyOperations Varieties { get; }
+
+
+
+
+
 
     }
 }

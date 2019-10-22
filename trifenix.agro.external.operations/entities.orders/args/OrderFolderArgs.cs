@@ -5,7 +5,7 @@ using trifenix.agro.db.applicationsReference.agro;
 using trifenix.agro.db.interfaces.agro;
 using trifenix.agro.db.interfaces.agro.orders;
 
-namespace trifenix.agro.external.operations.entities.args
+namespace trifenix.agro.external.operations.entities.orders.args
 {
     public class OrderFolderArgs
     {
@@ -22,7 +22,9 @@ namespace trifenix.agro.external.operations.entities.args
 
         public IOrderFolderRepository OrderFolder { get; set; }
 
-        public ISeasonRepository Season { get; set; }
+        public string IdSeason { get; set; }
+
+
 
 
     }

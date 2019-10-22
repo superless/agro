@@ -32,7 +32,7 @@
       <Path>
         <Point X="5.25" Y="8.062" />
         <Point X="7.875" Y="8.062" />
-        <Point X="7.875" Y="6.691" />
+        <Point X="7.875" Y="7.809" />
       </Path>
     </AssociationLine>
     <TypeIdentifier>
@@ -49,7 +49,7 @@
     </ShowAsCollectionAssociation>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="trifenix.agro.db.model.agro.Variety" Collapsed="true">
+  <Class Name="trifenix.agro.db.model.agro.Variety">
     <Position X="7.25" Y="6" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAACAABAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAIAAAA=</HashCode>

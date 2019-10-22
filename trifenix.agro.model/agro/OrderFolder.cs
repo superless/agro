@@ -6,7 +6,7 @@ using trifenix.agro.db.model.agro.local;
 namespace trifenix.agro.db.model.agro
 {
 
-    [SharedCosmosCollection("agro", "AgroFolder")]
+    [SharedCosmosCollection("agro", "OrderFolder")]
     public class OrderFolder : DocumentBase, ISharedCosmosEntity
     {
         public override string Id { get; set; }

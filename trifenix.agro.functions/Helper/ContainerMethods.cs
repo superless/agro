@@ -22,7 +22,14 @@ namespace trifenix.agro.functions.Helper
     {
         public static IReferenceApplications ContainerDbApplication => new ReferenceApplications(new BaseContainers(ConfigManager.GetDbArguments));
 
-        public static IAgroManager AgroManager => new AgroManager(new AgroRepository(ConfigManager.GetDbArguments));
+        public static async Task<IAgroManager> AgroManager(){
+           
+           var agroDb = new AgroRepository(ConfigManager.GetDbArguments);
+            var season = await agroDb.Seasons.GetCurrentSeason();
+
+           return new AgroManager(agroDb, season.Id); 
+        
+        }
 
 
         public static async Task<JsonResult> ApiPostOperations<T>(Stream body, ILogger log, Func<IAgroManager, dynamic, Task<ExtPostContainer<T>>> create) 
@@ -31,7 +38,9 @@ namespace trifenix.agro.functions.Helper
             {
                 var requestBody = await new StreamReader(body).ReadToEndAsync();
                 dynamic result = JsonConvert.DeserializeObject(requestBody);
-                var resultDb = await create(AgroManager, result);
+
+                var manager = await AgroManager();
+                var resultDb = await create(manager, result);
                 return ContainerMethods.GetJsonPostContainer(resultDb, log);
             }
             catch (Exception ex)

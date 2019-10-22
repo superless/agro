@@ -21,7 +21,7 @@ namespace trifenix.agro.db.applicationsReference.agro
 
         public async Task<Ingredient> GetIngredient(string id)
         {
-            return await GetIngredient(id);
+            return await GetEntity(id);
         }
 
         public IQueryable<Ingredient> GetIngredients()

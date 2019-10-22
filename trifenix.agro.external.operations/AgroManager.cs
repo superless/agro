@@ -1,13 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using trifenix.agro.db.interfaces.agro;
+﻿using trifenix.agro.db.interfaces.agro;
 using trifenix.agro.external.interfaces;
-using trifenix.agro.external.interfaces.entities;
+using trifenix.agro.external.interfaces.entities.events;
+using trifenix.agro.external.interfaces.entities.fields;
 using trifenix.agro.external.interfaces.entities.main;
-using trifenix.agro.external.operations.entities;
-using trifenix.agro.external.operations.entities.args;
+using trifenix.agro.external.interfaces.entities.orders;
+using trifenix.agro.external.operations.entities.events;
+using trifenix.agro.external.operations.entities.fields;
 using trifenix.agro.external.operations.entities.main;
+using trifenix.agro.external.operations.entities.orders;
+using trifenix.agro.external.operations.entities.orders.args;
+using trifenix.agro.storage.interfaces;
 
 namespace trifenix.agro.external.operations
 {
@@ -15,10 +17,14 @@ namespace trifenix.agro.external.operations
     {
 
         private readonly IAgroRepository _repository;
+        private readonly string _idSeason;
+        private readonly IUploadImage _uploadImage;
 
-        public AgroManager(IAgroRepository repository)
+        public AgroManager(IAgroRepository repository, string idSeason, IUploadImage uploadImage = null)
         {
             _repository = repository;
+            _idSeason = idSeason;
+            _uploadImage = uploadImage;
         }
 
         public IPhenologicalOperations PhenologicalEvents => new PhenologicalEventOperations(_repository.PhenologicalEvents);
@@ -38,9 +44,21 @@ namespace trifenix.agro.external.operations
             IngredientCategory = _repository.Categories,
             OrderFolder = _repository.OrderFolder,
             PhenologicalEvent = _repository.PhenologicalEvents,
-            Season = _repository.Seasons,
             Specie = _repository.Species,
-            Target = _repository.Targets
+            Target = _repository.Targets,
+            IdSeason = _idSeason
         });
+
+        public ISectorOperations Sectors => new SectorOperations(_repository.Sectors, _idSeason);
+
+        public IPlotLandOperations PlotLands => new PlotLandOperations(_repository.PlotLands, _repository.Sectors, _idSeason);
+
+        public IBarrackOperations Barracks => new BarrackOperations(_repository.Barracks, _repository.Varieties, _repository.PlotLands, _idSeason);
+
+        public IPhenologicalPreOrderOperations PhenologicalPreOrders => throw new System.NotImplementedException();
+
+        public INotificatonEventOperations NotificationEvents => new NotificationEventOperations(_repository.NotificationEvents, _repository.Barracks, _repository.PhenologicalEvents, _uploadImage);
+
+        public IVarietyOperations Varieties => new VarietyOperations(_repository.Varieties, _repository.Species);
     }
 }
