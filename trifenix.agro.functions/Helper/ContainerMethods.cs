@@ -15,6 +15,7 @@ using trifenix.agro.external.interfaces;
 using trifenix.agro.external.operations;
 using trifenix.agro.functions.settings;
 using trifenix.agro.model.external;
+using trifenix.agro.storage.operations;
 
 namespace trifenix.agro.functions.Helper
 {
@@ -24,10 +25,10 @@ namespace trifenix.agro.functions.Helper
 
         public static async Task<IAgroManager> AgroManager(){
            
-           var agroDb = new AgroRepository(ConfigManager.GetDbArguments);
+            var agroDb = new AgroRepository(ConfigManager.GetDbArguments);
             var season = await agroDb.Seasons.GetCurrentSeason();
-
-           return new AgroManager(agroDb, season.Id); 
+            var uploadImage = new UploadImage(Environment.GetEnvironmentVariable("StorageConnectionStrings", EnvironmentVariableTarget.Process));
+            return new AgroManager(agroDb, season.Id,uploadImage); 
         
         }
 
