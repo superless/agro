@@ -218,7 +218,7 @@ namespace trifenix.agro.functions
 
         [FunctionName("OrderFolder")]
         public static async Task<IActionResult> OrderFolder(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/order_folder/{parameter?}")] HttpRequest req, string parameter,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/order_folders/{parameter?}")] HttpRequest req, string parameter,
             ILogger log)
         {
             if (req.Method.ToLower().Equals("post"))
@@ -227,7 +227,7 @@ namespace trifenix.agro.functions
                 {
                     var idPhenologicalEvent = (string)model["idPhenologicalEvent"];
                     var idApplicationTarget = (string)model["idApplicationTarget"];
-                    var categoryId = (string)model["categoryId"];
+                    var categoryId = (string)model["idCategory"];
                     var idSpecie = (string)model["idSpecie"];
                     var idIngredient = (string)model["idIngredient"];
                     return await db.OrderFolder.SaveNewOrderFolder(idPhenologicalEvent, idApplicationTarget, categoryId, idSpecie, idIngredient);
@@ -262,6 +262,230 @@ namespace trifenix.agro.functions
             var result = await manager.OrderFolder.GetOrderFolders();
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
+
+        [FunctionName("UploadEvent")]
+        public static async Task<IActionResult> UploadEvent(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "v2/notification_events/{parameter?}")] HttpRequest req, string parameter,
+            ILogger log)
+        {
+            if (req.Method.ToLower().Equals("post"))
+            {
+                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                {
+
+                    var newModel = model["_parts"][0][1];
+                    var idPhenologicalEvent = (string)newModel["idPhenologicalEvent"];
+                    var description = (string)newModel["description"];
+                    var base64 = (string)newModel["base64"];
+                    var barrack = (string)newModel["idBarrack"];
+
+
+                    return await db.NotificationEvents.SaveNewNotificationEvent(barrack, idPhenologicalEvent, base64, description);
+                });
+            }
+
+            return new OkObjectResult("");
+
+            //if (!string.IsNullOrWhiteSpace(parameter))
+            //{
+            //    var managerLocal = await ContainerMethods.AgroManager();
+            //    var resultLocal = await managerLocal.OrderFolder.GetOrderFolder(parameter);
+            //    return ContainerMethods.GetJsonGetContainer(resultLocal, log);
+
+            //}
+
+            //var manager = await ContainerMethods.AgroManager();
+            //var result = await manager.OrderFolder.GetOrderFolders();
+            //return ContainerMethods.GetJsonGetContainer(result, log);
+        }
+
+
+        [FunctionName("SectorV2")]
+        public static async Task<IActionResult> Sector(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/sectors/{parameter?}")] HttpRequest req, string parameter,
+            ILogger log)
+        {
+            if (req.Method.ToLower().Equals("post"))
+            {
+                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                {
+                   
+                    var name = (string)model["name"];
+                    return await db.Sectors.SaveNewSector(name);
+                });
+            }
+
+            if (req.Method.ToLower().Equals("put"))
+            {
+                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                {
+                    var id = (string)model["id"];
+                    var name = (string)model["name"];
+
+
+
+
+                    return await db.Sectors.SaveEditSector(id, name);
+                });
+            }
+
+            if (!string.IsNullOrWhiteSpace(parameter))
+            {
+                var managerLocal = await ContainerMethods.AgroManager();
+                var resultLocal = await managerLocal.Sectors.GetSector(parameter);
+                return ContainerMethods.GetJsonGetContainer(resultLocal, log);
+
+            }
+
+            var manager = await ContainerMethods.AgroManager();
+            var result = await manager.Sectors.GetSectors();
+            return ContainerMethods.GetJsonGetContainer(result, log);
+        }
+
+        [FunctionName("PlotLandsV2")]
+        public static async Task<IActionResult> PlotLandsV2(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/plotlands/{parameter?}")] HttpRequest req, string parameter,
+            ILogger log)
+        {
+            if (req.Method.ToLower().Equals("post"))
+            {
+                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                {
+
+                    var name = (string)model["name"];
+                    var idSector = (string)model["idSector"];
+                    return await db.PlotLands.SaveNewPlotLand(name, idSector);
+                });
+            }
+
+            if (req.Method.ToLower().Equals("put"))
+            {
+                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                {
+                    var id = (string)model["id"];
+                    var name = (string)model["name"];
+                    var idSector = (string)model["idSector"];
+
+
+
+                    return await db.PlotLands.SaveEditPlotLand(id, name, idSector);
+                });
+            }
+
+            if (!string.IsNullOrWhiteSpace(parameter))
+            {
+                var managerLocal = await ContainerMethods.AgroManager();
+                var resultLocal = await managerLocal.PlotLands.GetPlotLand(parameter);
+                return ContainerMethods.GetJsonGetContainer(resultLocal, log);
+
+            }
+
+            var manager = await ContainerMethods.AgroManager();
+            var result = await manager.PlotLands.GetPlotLands();
+            return ContainerMethods.GetJsonGetContainer(result, log);
+        }
+
+        [FunctionName("VarietiesV2")]
+        public static async Task<IActionResult> VarietiesV2(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/varieties/{parameter?}")] HttpRequest req, string parameter,
+            ILogger log)
+        {
+            if (req.Method.ToLower().Equals("post"))
+            {
+                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                {
+
+                    var name = (string)model["name"];
+                    var idSpecie = (string)model["idSpecie"];
+                    var abbreviation = (string)model["abbreviation"];
+                    return await db.Varieties.SaveNewVariety(name, abbreviation, idSpecie);
+                });
+            }
+
+            if (req.Method.ToLower().Equals("put"))
+            {
+                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                {
+                    var id = (string)model["id"];
+                    var name = (string)model["name"];
+                    var idSpecie = (string)model["idSpecie"];
+                    var abbreviation = (string)model["abbreviation"];
+
+
+
+                    return await db.Varieties.SaveEditVariety(id, name, abbreviation, idSpecie);
+                });
+            }
+
+            if (!string.IsNullOrWhiteSpace(parameter))
+            {
+                var managerLocal = await ContainerMethods.AgroManager();
+                var resultLocal = await managerLocal.Varieties.GetVariety(parameter);
+                return ContainerMethods.GetJsonGetContainer(resultLocal, log);
+
+            }
+
+            var manager = await ContainerMethods.AgroManager();
+            var result = await manager.Varieties.GetVarieties();
+            return ContainerMethods.GetJsonGetContainer(result, log);
+        }
+
+        [FunctionName("BarracksV2")]
+        public static async Task<IActionResult> BarracksV2(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/barracks/{parameter?}")] HttpRequest req, string parameter,
+            ILogger log)
+        {
+            if (req.Method.ToLower().Equals("post"))
+            {
+                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                {
+
+                    var name = (string)model["name"];
+                    var numberOfPlants = (int)model["numberOfPlants"];
+                    var plantingYear = (int)model["plantingYear"];
+                    var hectares = float.Parse((string)model["hectares"]);
+                    var idPlotland = (string)model["idPlotland"];
+                    var idVariety = (string)model["idVariety"];
+                    var idPollinator = (string)model["idPollinator"];
+                    return await db.Barracks.SaveNewBarrack(name, idPlotland, hectares, plantingYear, idVariety, numberOfPlants, idPollinator);
+                });
+            }
+
+            if (req.Method.ToLower().Equals("put"))
+            {
+                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                {
+                    var id = (string)model["id"];
+                    var name = (string)model["name"];
+                    var numberOfPlants = (int)model["numberOfPlants"];
+                    var plantingYear = (int)model["plantingYear"];
+                    var hectares = float.Parse((string)model["hectares"]);
+                    var idPlotland = (string)model["idPlotland"];
+                    var idVariety = (string)model["idVariety"];
+                    var idPollinator = (string)model["idPollinator"];
+
+
+
+                    return await db.Barracks.SaveEditBarrack(id, name, idPlotland, hectares, plantingYear, idVariety, numberOfPlants, idPollinator);
+                });
+            }
+
+            if (!string.IsNullOrWhiteSpace(parameter))
+            {
+                var managerLocal = await ContainerMethods.AgroManager();
+                var resultLocal = await managerLocal.Barracks.GetBarrack(parameter);
+                return ContainerMethods.GetJsonGetContainer(resultLocal, log);
+
+            }
+
+            var manager = await ContainerMethods.AgroManager();
+            var result = await manager.Barracks.GetBarracks();
+            return ContainerMethods.GetJsonGetContainer(result, log);
+        }
+
+
+
+
 
 
 
