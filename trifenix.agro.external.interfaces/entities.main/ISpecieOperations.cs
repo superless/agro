@@ -9,9 +9,9 @@ namespace trifenix.agro.external.interfaces.entities.main
 {
     public interface ISpecieOperations
     {
-        Task<ExtPostContainer<string>> SaveNewSpecie(string name);
+        Task<ExtPostContainer<string>> SaveNewSpecie(string name, string abbreviation);
 
-        Task<ExtPostContainer<Specie>> SaveEditSpecie(string id, string name);
+        Task<ExtPostContainer<Specie>> SaveEditSpecie(string id, string name, string abbreviation);
 
         Task<ExtGetContainer<List<Specie>>> GetSpecies();
         

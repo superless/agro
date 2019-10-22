@@ -10,4 +10,8 @@
     <ProjectReference Include="..\trifenix.agro.model.external\trifenix.agro.model.external.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="entities.fields\" />
+  </ItemGroup>
+
 </Project>

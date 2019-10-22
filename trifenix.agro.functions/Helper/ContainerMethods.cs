@@ -27,10 +27,22 @@ namespace trifenix.agro.functions.Helper
 
         public static async Task<JsonResult> ApiPostOperations<T>(Stream body, ILogger log, Func<IAgroManager, dynamic, Task<ExtPostContainer<T>>> create) 
         {
-            var requestBody = await new StreamReader(body).ReadToEndAsync();
-            dynamic result = JsonConvert.DeserializeObject(requestBody);
-            var resultDb = await create(AgroManager, result);
-            return ContainerMethods.GetJsonPostContainer(resultDb, log);
+            try
+            {
+                var requestBody = await new StreamReader(body).ReadToEndAsync();
+                dynamic result = JsonConvert.DeserializeObject(requestBody);
+                var resultDb = await create(AgroManager, result);
+                return ContainerMethods.GetJsonPostContainer(resultDb, log);
+            }
+            catch (Exception ex)
+            {
+                return GetJsonPostContainer(new ExtPostErrorContainer<string>
+                {
+                    InternalException = ex,
+                    Message = ex.Message,
+                    MessageResult = ExtMessageResult.Error
+                }, log);
+            }
            
         }
 
@@ -39,7 +51,7 @@ namespace trifenix.agro.functions.Helper
             if (containerResponse.GetType() == typeof(ExtPostErrorContainer<T>))
             {
                 var resultError = (ExtPostErrorContainer<T>)containerResponse;
-                log.LogError(resultError.InternalException, resultError.Message, JsonConvert.SerializeObject(resultError));
+                log.LogError(resultError.InternalException, resultError.Message);
                 return new JsonResult(resultError.GetBase);
 
             }
@@ -52,7 +64,7 @@ namespace trifenix.agro.functions.Helper
             if (containerResponse.GetType() == typeof(ExtGetErrorContainer<T>))
             {
                 var resultError = (ExtGetErrorContainer<T>)containerResponse;
-                log.LogError(resultError.InternalException, resultError.ErrorMessage, JsonConvert.SerializeObject(resultError));
+                log.LogError(resultError.InternalException, resultError.ErrorMessage);
                 return new JsonResult(resultError.GetBase);
 
             }
