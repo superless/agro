@@ -11,7 +11,7 @@ namespace trifenix.agro.external.interfaces.entities.orders
     {
         Task<ExtPostContainer<string>> SaveNewPhenologicalPreOrder(string name, string idOrderFolder, List<string> idBarracks);
 
-        Task<ExtPostContainer<PhenologicalPreOrder>> SaveEditPhenologicalPreOrder(string id, string idSeason, string name, string idOrderFolder, List<string> idBarracks);
+        Task<ExtPostContainer<PhenologicalPreOrder>> SaveEditPhenologicalPreOrder(string id, string name, string idOrderFolder, List<string> idBarracks);
 
 
         Task<ExtGetContainer<List<PhenologicalPreOrder>>> GetPhenologicalPreOrders();

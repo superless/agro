@@ -46,7 +46,8 @@ namespace trifenix.agro.external.operations
             PhenologicalEvent = _repository.PhenologicalEvents,
             Specie = _repository.Species,
             Target = _repository.Targets,
-            IdSeason = _idSeason
+            IdSeason = _idSeason,
+            NotificationEvent = _repository.NotificationEvents
         });
 
         public ISectorOperations Sectors => new SectorOperations(_repository.Sectors, _idSeason);
@@ -55,7 +56,7 @@ namespace trifenix.agro.external.operations
 
         public IBarrackOperations Barracks => new BarrackOperations(_repository.Barracks, _repository.Varieties, _repository.PlotLands, _idSeason);
 
-        public IPhenologicalPreOrderOperations PhenologicalPreOrders => throw new System.NotImplementedException();
+        public IPhenologicalPreOrderOperations PhenologicalPreOrders => new PhenologicalPreOrdersOperations(_repository.PhenologicalPreOrders, _idSeason);
 
         public INotificatonEventOperations NotificationEvents => new NotificationEventOperations(_repository.NotificationEvents, _repository.Barracks, _repository.PhenologicalEvents, _uploadImage);
 
