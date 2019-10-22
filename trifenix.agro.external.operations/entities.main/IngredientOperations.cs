@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using trifenix.agro.db.interfaces.agro;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.external.interfaces.entities.main;
+using trifenix.agro.external.operations.helper;
 using trifenix.agro.model.external;
 
 namespace trifenix.agro.external.operations.entities.main
@@ -23,26 +24,8 @@ namespace trifenix.agro.external.operations.entities.main
         }
         public async Task<ExtGetContainer<List<Ingredient>>> GetIngredients()
         {
-            try
-            {
-                var elements = await _repo.GetIngredients().ToListAsync();
-
-                return new ExtGetContainer<List<Ingredient>>
-                {
-                    Result = elements,
-                    StatusResult = elements.Any() ? ExtGetDataResult.Success : ExtGetDataResult.EmptyResults
-                };
-
-            }
-            catch (Exception exception)
-            {
-                return new ExtGetErrorContainer<List<Ingredient>>
-                {
-                    StatusResult = ExtGetDataResult.Error,
-                    ErrorMessage = exception.Message,
-                    InternalException = exception
-                };
-            }
+            var elements = await _repo.GetIngredients().ToListAsync();
+            return OperationHelper.GetElements(elements);
         }
 
         public async Task<ExtPostContainer<Ingredient>> SaveEditIngredient(string id, string name, string categoryId)

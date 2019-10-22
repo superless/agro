@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using trifenix.agro.db.interfaces.agro;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.external.interfaces.entities.main;
+using trifenix.agro.external.operations.helper;
 using trifenix.agro.model.external;
 
 namespace trifenix.agro.external.operations.entities.main
@@ -25,11 +26,7 @@ namespace trifenix.agro.external.operations.entities.main
             try
             {
                 var elements = await _repo.GetIngredientCategories().ToListAsync();
-                return new ExtGetContainer<List<IngredientCategory>>
-                {
-                    Result = elements,
-                    StatusResult = elements.Any() ? ExtGetDataResult.Success : ExtGetDataResult.EmptyResults
-                };
+                return OperationHelper.GetElements(elements);
             }
             catch (Exception ex)
             {
@@ -45,72 +42,30 @@ namespace trifenix.agro.external.operations.entities.main
 
         public async Task<ExtPostContainer<IngredientCategory>> SaveEditIngredientCategory(string id, string name)
         {
-            try
-            {
-                var category = await _repo.GetIngredientCategory(id);
-
-                if (category == null)
-                {
-                    return new ExtPostErrorContainer<IngredientCategory>
-                    {
-                        Message = $"No existe categoria de ingredientes con id : {id}",
-                        MessageResult = ExtMessageResult.ElementToEditDoesNotExists,
-                        IdRelated = id
-                    };
-                }
-
-                category.Name = name;
-
-                await _repo.CreateUpdateIngredientCategory(category);
-
-                return new ExtPostContainer<IngredientCategory>
-                {
-                    Result = category,
-                    IdRelated = id,
-                    MessageResult = ExtMessageResult.Ok
-                };
-
-            }
-            catch (Exception ex)
-            {
-
-                return new ExtPostContainer<IngredientCategory>
-                {
-                    IdRelated = id,
-                    MessageResult = ExtMessageResult.Error,
-                    Message = ex.Message
-                };
-            }
+            var element = await _repo.GetIngredientCategory(id);
+            return await OperationHelper.EditElement(id,
+                element,
+                s => {
+                    s.Name = name;
+                    return s;
+                },
+                _repo.CreateUpdateIngredientCategory,
+                 $"No existe categoria con id : {id}"
+            );
         }
 
         public async Task<ExtPostContainer<string>> SaveNewIngredientCategory(string name)
         {
-            try
-            {
-                var idResult = await _repo.CreateUpdateIngredientCategory(new IngredientCategory
+            return await OperationHelper.CreateElement(_repo.GetIngredientCategories(),
+                async s => await _repo.CreateUpdateIngredientCategory(new IngredientCategory
                 {
-                    Id = Guid.NewGuid().ToString("N"),
+                    Id = s,
                     Name = name
-                });
+                }),
+                s => s.Name.Equals(name),
+                $"ya existe categoria con nombre {name} "
 
-                return new ExtPostContainer<string>
-                {
-                    IdRelated = idResult,
-                    Result = idResult,
-                    MessageResult = ExtMessageResult.Ok
-                };
-
-            }
-            catch (Exception ex)
-            {
-
-                return new ExtPostErrorContainer<string>
-                {
-                    InternalException = ex,
-                    Message = ex.Message,
-                    MessageResult = ExtMessageResult.Error
-                };
-            }
+            );
         }
     }
 }

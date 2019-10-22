@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using trifenix.agro.db.interfaces.agro;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.external.interfaces.entities.main;
+using trifenix.agro.external.operations.helper;
 using trifenix.agro.model.external;
 
 namespace trifenix.agro.external.operations.entities.main
@@ -23,89 +24,37 @@ namespace trifenix.agro.external.operations.entities.main
 
         public async Task<ExtGetContainer<List<PhenologicalEvent>>> GetPhenologicalEvents()
         {
-            try
-            {
-                var elements = await _repo.GetPhenologicalEvents().ToListAsync();
-
-                return new ExtGetContainer<List<PhenologicalEvent>>
-                {
-                    Result = elements,
-                    StatusResult = elements.Any() ? ExtGetDataResult.Success : ExtGetDataResult.EmptyResults
-                };
-            }
-            catch (Exception ex)
-            {
-
-                return new ExtGetErrorContainer<List<PhenologicalEvent>>
-                {
-                    ErrorMessage = ex.Message,
-                    StatusResult = ExtGetDataResult.Error
-                };
-            }
+            var elements = await _repo.GetPhenologicalEvents().ToListAsync();
+            return OperationHelper.GetElements(elements);
         }
 
         public async Task<ExtPostContainer<PhenologicalEvent>> SaveEditPhenologicalEvent(string currentId, string name, DateTime startDate, DateTime endDate)
         {
-            try
-            {
-                var phenological = await _repo.GetPhenologicalEvent(currentId);
-                if (phenological == null)
-                {
-                    return new ExtPostErrorContainer<PhenologicalEvent>
-                    {
-                        Message = $"No existe evento fenológico con id : {currentId}",
-                        MessageResult = ExtMessageResult.ElementToEditDoesNotExists,
-                        IdRelated = currentId
-                    };
-                }
-                await _repo.CreateUpdatePhenologicalEvent(phenological);
-
-                return new ExtPostContainer<PhenologicalEvent>
-                {
-                    IdRelated = currentId,
-                    Result = phenological,
-                    MessageResult = ExtMessageResult.Ok
-                };
-
-            }
-            catch (Exception ex)
-            {
-                return new ExtPostContainer<PhenologicalEvent>
-                {
-                    IdRelated = currentId,
-                    MessageResult = ExtMessageResult.Error,
-                    Message = ex.Message
-                };
-            }
+            var element = await _repo.GetPhenologicalEvent(currentId);
+            return await OperationHelper.EditElement(currentId,
+                element,
+                s => {
+                    s.Name = name;
+                    return s;
+                },
+                _repo.CreateUpdatePhenologicalEvent,
+                 $"No existe especie con id : {currentId}"
+            );
         }
 
         public async Task<ExtPostContainer<string>> SaveNewPhenologicalEvent(string name, DateTime startDate, DateTime endDate)
         {
-            try
-            {
-                var idResult = await _repo.CreateUpdatePhenologicalEvent(new PhenologicalEvent {
-                    Id = Guid.NewGuid().ToString("N"),
+            return await OperationHelper.CreateElement(_repo.GetPhenologicalEvents(),
+                async s => await _repo.CreateUpdatePhenologicalEvent(new PhenologicalEvent {
+                    Id = s,
                     Name = name,
                     InitDate = startDate,
                     EndDate = endDate
-                });
-                return new ExtPostContainer<string>
-                {
-                    IdRelated = idResult,
-                    MessageResult = ExtMessageResult.Ok,
-                    Result = idResult
-                };
-            }
-            catch (Exception ex)
-            {
-                return new ExtPostErrorContainer<string>
-                {
-                    Message = ex.Message,
-                    MessageResult = ExtMessageResult.Error,
-                    InternalException = ex
+                }),
+                s => s.Name.Equals(name),
+                $"ya existe Evento fenológico con nombre {name} "
 
-                };
-            }
+            );
         }
 
         

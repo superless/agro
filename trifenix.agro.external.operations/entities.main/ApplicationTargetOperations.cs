@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using trifenix.agro.db.interfaces.agro;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.external.interfaces.entities.main;
+using trifenix.agro.external.operations.helper;
 using trifenix.agro.model.external;
 
 namespace trifenix.agro.external.operations.entities.main
@@ -20,95 +21,37 @@ namespace trifenix.agro.external.operations.entities.main
         }
         public async Task<ExtGetContainer<List<ApplicationTarget>>> GetAplicationsTarget()
         {
-            try
-            {
-                var elements = await _repo.GetTargets().ToListAsync();
-
-                return new ExtGetContainer<List<ApplicationTarget>>
-                {
-                    Result = elements,
-                    StatusResult = elements.Any() ? ExtGetDataResult.Success : ExtGetDataResult.EmptyResults
-                };
-
-            }
-            catch (Exception exception)
-            {
-                return new ExtGetErrorContainer<List<ApplicationTarget>>
-                {
-                    StatusResult = ExtGetDataResult.Error,
-                    ErrorMessage = exception.Message,
-                    InternalException = exception
-                };
-            }
+            var elements = await _repo.GetTargets().ToListAsync();
+            return OperationHelper.GetElements(elements);
         }
 
         public async Task<ExtPostContainer<ApplicationTarget>> SaveEditApplicationTarget(string id, string name)
         {
-            try
-            {
-                var appTarget = await _repo.GetTarget(id);
-                if (appTarget == null)
-                {
-                    return new ExtPostErrorContainer<ApplicationTarget>
-                    {
-                        Message = $"No existe propósito de aplicación con id : {id}",
-                        MessageResult = ExtMessageResult.ElementToEditDoesNotExists,
-                        IdRelated = id
-                    };
-                }
-
-
-                appTarget.Name = name;
-
-                await _repo.CreateUpdateTargetApp(appTarget);
-
-                return new ExtPostContainer<ApplicationTarget>
-                {
-                    Result = appTarget,
-                    IdRelated = id,
-                    MessageResult = ExtMessageResult.Ok
-                };
-            }
-            catch (Exception ex)
-            {
-                return new ExtPostContainer<ApplicationTarget>
-                {
-                    IdRelated = id,
-                    MessageResult = ExtMessageResult.Error,
-                    Message = ex.Message
-                };
-                
-            }
+            var element = await _repo.GetTarget(id);
+            return await OperationHelper.EditElement(id,
+                element,
+                s => {
+                    s.Name = name;
+                    return s;
+                },
+                _repo.CreateUpdateTargetApp,
+                 $"No existe objetivo aplicación con id : {id}"
+            );
 
         }
 
         public async Task<ExtPostContainer<string>> SaveNewApplicationTarget(string name)
         {
-            try
-            {
-                var idResult = await _repo.CreateUpdateTargetApp(new ApplicationTarget
+            return await OperationHelper.CreateElement(_repo.GetTargets(),
+                async s => await _repo.CreateUpdateTargetApp(new ApplicationTarget
                 {
-                    Id = Guid.NewGuid().ToString("N"),
+                    Id = s,
                     Name = name
-                });
-                return new ExtPostContainer<string>
-                {
-                    IdRelated = idResult,
-                    Result = idResult,
-                    MessageResult = ExtMessageResult.Ok
-                };
+                }),
+                s => s.Name.Equals(name),
+                $"ya existe especie con nombre {name} "
 
-                    
-            }
-            catch (Exception ex)
-            {
-                return new ExtPostErrorContainer<string>
-                {
-                    InternalException = ex,
-                    Message = ex.Message,
-                    MessageResult = ExtMessageResult.Error
-                };
-            }
+            );
         }
     }
 }

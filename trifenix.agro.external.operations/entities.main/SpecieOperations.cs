@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using trifenix.agro.db.interfaces.agro;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.external.interfaces.entities.main;
+using trifenix.agro.external.operations.helper;
 using trifenix.agro.model.external;
 
 namespace trifenix.agro.external.operations.entities.main
@@ -22,94 +23,42 @@ namespace trifenix.agro.external.operations.entities.main
 
         public async Task<ExtGetContainer<List<Specie>>> GetSpecies()
         {
-            try
-            {
-                var elements = await _repo.GetSpecies().ToListAsync();
+            var elements = await _repo.GetSpecies().ToListAsync();
+            return OperationHelper.GetElements(elements);
 
-                return new ExtGetContainer<List<Specie>>
-                {
-                    Result = elements,
-                    StatusResult = elements.Any() ? ExtGetDataResult.Success : ExtGetDataResult.EmptyResults
-                };
-
-            }
-            catch (Exception exception)
-            {
-                return new ExtGetErrorContainer<List<Specie>>
-                {
-                    StatusResult = ExtGetDataResult.Error,
-                    ErrorMessage = exception.Message,
-                    InternalException = exception
-                };
-            }
         }
 
-        public async Task<ExtPostContainer<Specie>> SaveEditSpecie(string id, string name)
+        public async Task<ExtPostContainer<Specie>> SaveEditSpecie(string id, string name, string abbreviation)
         {
-            try
-            {
-                var specie = await _repo.GetSpecie(id);
-                if (specie == null)
-                {
-                    return new ExtPostErrorContainer<Specie>
-                    {
-                        Message = $"No existe especie con id : {id}",
-                        MessageResult = ExtMessageResult.ElementToEditDoesNotExists,
-                        IdRelated = id
-                    };
-                }
+            var element = await _repo.GetSpecie(id);
+            return await OperationHelper.EditElement(id, 
+                element, 
+                s => {
+                    s.Name = name;
+                    s.Abbreviation = abbreviation;
+                    return s;
+                },
+                _repo.CreateUpdateSpecie,
+                 $"No existe especie con id : {id}"
+            );
 
-
-                specie.Name = name;
-
-                await _repo.CreateUpdateSpecie(specie);
-
-                return new ExtPostContainer<Specie>
-                {
-                    Result = specie,
-                    IdRelated = id,
-                    MessageResult = ExtMessageResult.Ok
-                };
-            }
-            catch (Exception ex)
-            {
-                return new ExtPostContainer<Specie>
-                {
-                    IdRelated = id,
-                    MessageResult = ExtMessageResult.Error,
-                    Message = ex.Message
-                };
-
-            }
         }
 
-        public async Task<ExtPostContainer<string>> SaveNewSpecie(string name)
+        public async Task<ExtPostContainer<string>> SaveNewSpecie(string name, string abbreviation)
         {
-            try
-            {
-                var idResult = await _repo.CreateUpdateSpecie(new Specie
+            
+            return await OperationHelper.CreateElement(_repo.GetSpecies(), 
+                async s => await _repo.CreateUpdateSpecie(new Specie
                 {
-                    Id = Guid.NewGuid().ToString("N"),
-                    Name = name
-                });
-                return new ExtPostContainer<string>
-                {
-                    IdRelated = idResult,
-                    Result = idResult,
-                    MessageResult = ExtMessageResult.Ok
-                };
+                    Id = s,
+                    Name = name,
+                    Abbreviation = abbreviation
+                }),
+                s => s.Name.Equals(name),
+                $"ya existe especie con nombre {name} "
 
-
-            }
-            catch (Exception ex)
-            {
-                return new ExtPostErrorContainer<string>
-                {
-                    InternalException = ex,
-                    Message = ex.Message,
-                    MessageResult = ExtMessageResult.Error
-                };
-            }
+            );
+            
         }
     }
 }

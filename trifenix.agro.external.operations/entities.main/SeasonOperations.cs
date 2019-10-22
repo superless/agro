@@ -8,6 +8,7 @@ using trifenix.agro.model.external;
 using Cosmonaut.Extensions;
 using trifenix.agro.db.interfaces.agro;
 using System.Linq;
+using trifenix.agro.external.operations.helper;
 
 namespace trifenix.agro.external.operations.entities.main
 {
@@ -22,99 +23,43 @@ namespace trifenix.agro.external.operations.entities.main
         }
         public async Task<ExtGetContainer<List<Season>>> GetSeasons()
         {
-            try
-            {
-                var elements = await _repo.GetSeasons().ToListAsync();
-
-                return new ExtGetContainer<List<Season>>
-                {
-                    Result = elements,
-                    StatusResult = elements.Any() ? ExtGetDataResult.Success : ExtGetDataResult.EmptyResults
-                };
-
-            }
-            catch (Exception exception)
-            {
-                return new ExtGetErrorContainer<List<Season>>
-                {
-                    StatusResult = ExtGetDataResult.Error,
-                    ErrorMessage = exception.Message,
-                    InternalException = exception
-                };
-            }
+            var elements = await _repo.GetSeasons().ToListAsync();
+            return OperationHelper.GetElements(elements);
         }
 
         public async Task<ExtPostContainer<Season>> SaveEditSeason(string id, DateTime init, DateTime end, bool current)
         {
-            try
-            {
-                var season = await _repo.GetSeason(id);
-                if (season == null)
-                {
-                    return new ExtPostErrorContainer<Season>
-                    {
-                        Message = $"No existe temporada con id : {id}",
-                        MessageResult = ExtMessageResult.ElementToEditDoesNotExists,
-                        IdRelated = id
-                    };
-                }
+            var element = await _repo.GetSeason(id);
 
-
-                season.Current = current;
-                season.Start = init;
-                season.End = end;
-
-
-                await _repo.CreateUpdateSeason(season);
-
-                return new ExtPostContainer<Season>
-                {
-                    Result = season,
-                    IdRelated = id,
-                    MessageResult = ExtMessageResult.Ok
-                };
-            }
-            catch (Exception ex)
-            {
-                return new ExtPostContainer<Season>
-                {
-                    IdRelated = id,
-                    MessageResult = ExtMessageResult.Error,
-                    Message = ex.Message
-                };
-
-            }
+            return await OperationHelper.EditElement(id,
+                element,
+                s => {
+                    s.Start = init;
+                    s.End = end;
+                    s.Current = current;
+                    return s;
+                },
+                _repo.CreateUpdateSeason,
+                 $"No existe temporada con id : {id}"
+            );
         }
 
         public async Task<ExtPostContainer<string>> SaveNewSeason(DateTime init, DateTime end)
         {
-            try
-            {
-                var idResult = await _repo.CreateUpdateSeason(new Season
+
+            //TODO: validar que no se pueda sobreponer fechas.
+            return await OperationHelper.CreateElement(_repo.GetSeasons(),
+                async s => await _repo.CreateUpdateSeason(new Season
                 {
-                    Id = Guid.NewGuid().ToString("N"),
+                    Id = s,
                     Start = init,
-                    End = end
-                    
-                });
-                return new ExtPostContainer<string>
-                {
-                    IdRelated = idResult,
-                    Result = idResult,
-                    MessageResult = ExtMessageResult.Ok
-                };
+                    End = end,
+                    Current = true
+                }),
+                s => false,
+                $""
 
-
-            }
-            catch (Exception ex)
-            {
-                return new ExtPostErrorContainer<string>
-                {
-                    InternalException = ex,
-                    Message = ex.Message,
-                    MessageResult = ExtMessageResult.Error
-                };
-            }
+            );
         }
     }
 }
