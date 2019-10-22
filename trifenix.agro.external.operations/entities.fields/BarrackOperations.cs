@@ -39,7 +39,7 @@ namespace trifenix.agro.external.operations.entities.fields
             return OperationHelper.GetElements(barracks);
         }
 
-        public async Task<ExtPostContainer<Barrack>> SaveEditBarrack(string id, string name, string idPlotLand, string seasonId, float hectares, int plantingYear, string idVariety, int numberOfPlants, string idPollinator)
+        public async Task<ExtPostContainer<Barrack>> SaveEditBarrack(string id, string name, string idPlotLand, float hectares, int plantingYear, string idVariety, int numberOfPlants, string idPollinator)
         {
             var elements = await GetElementToBarracks(idPlotLand, idVariety, idPollinator);
 

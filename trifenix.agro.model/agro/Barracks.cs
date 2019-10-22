@@ -7,7 +7,7 @@ using System.Text;
 namespace trifenix.agro.db.model.agro
 {
 
-    [SharedCosmosCollection("agro", "Barracks")]
+    [SharedCosmosCollection("agro", "Barrack")]
     public class Barrack : DocumentBase, ISharedCosmosEntity
     {
         public override string Id { get; set; }
