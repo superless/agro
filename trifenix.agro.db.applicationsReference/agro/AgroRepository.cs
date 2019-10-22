@@ -19,11 +19,13 @@ namespace trifenix.agro.db.applicationsReference.agro
 
         public IIngredientRepository Ingredients => new IngredientRepository(_dbArguments);
 
-        public IPhenologicalEventRepositoy PhenologicalEvents => new PhenologicalEventRepository(_dbArguments);
+        public IPhenologicalEventRepository PhenologicalEvents => new PhenologicalEventRepository(_dbArguments);
 
-        public ISpecieRepository SpecieRepository => new SpecieRepository(_dbArguments);
+        public ISpecieRepository Species => new SpecieRepository(_dbArguments);
 
         public ISeasonRepository Seasons => new SeasonRepository(_dbArguments);
+
+        public IOrderFolderRepository OrderFolder => new OrderFolderRepository(_dbArguments);
 
 
     }

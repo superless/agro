@@ -14,9 +14,9 @@ namespace trifenix.agro.external.operations.entities.main
 {
     public class PhenologicalEventOperations : IPhenologicalOperations
     {
-        private readonly IPhenologicalEventRepositoy _repo;
+        private readonly IPhenologicalEventRepository _repo;
 
-        public PhenologicalEventOperations(IPhenologicalEventRepositoy repo)
+        public PhenologicalEventOperations(IPhenologicalEventRepository repo)
         {
             _repo = repo;
         }

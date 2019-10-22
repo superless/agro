@@ -5,7 +5,7 @@ using trifenix.agro.db.model.agro;
 
 namespace trifenix.agro.db.applicationsReference.agro
 {
-    public class PhenologicalEventRepository : MainDb<PhenologicalEvent>, IPhenologicalEventRepositoy
+    public class PhenologicalEventRepository : MainDb<PhenologicalEvent>, IPhenologicalEventRepository
     {
         public PhenologicalEventRepository(AgroDbArguments args) : base(args)
         {

@@ -33,6 +33,7 @@ namespace trifenix.agro.external.operations.entities.main
             try
             {
                 var ingredient = await _repo.GetIngredient(id);
+
                 if (ingredient == null)
                 {
                     return new ExtPostErrorContainer<Ingredient>

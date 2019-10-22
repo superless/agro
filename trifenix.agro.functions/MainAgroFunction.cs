@@ -156,7 +156,7 @@ namespace trifenix.agro.functions
                 return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
                 {
                     var name = (string)model["name"];
-                    var idCategory = (string)model["categoryId"];
+                    var idCategory = (string)model["idCategory"];
                     return await db.Ingredients.SaveNewIngredient(name, idCategory);
                 });
             }
@@ -168,7 +168,7 @@ namespace trifenix.agro.functions
                     var id = (string)model["id"];
 
                     var name = (string)model["name"];
-                    var idCategory = (string)model["categoryId"];
+                    var idCategory = (string)model["idCategory"];
 
                     return await db.Ingredients.SaveEditIngredient(id, name, idCategory);
                 });
@@ -208,6 +208,54 @@ namespace trifenix.agro.functions
             }
 
             var result = await ContainerMethods.AgroManager.ApplicationTargets.GetAplicationsTarget();
+            return ContainerMethods.GetJsonGetContainer(result, log);
+        }
+
+        [FunctionName("OrderFolder")]
+        public static async Task<IActionResult> OrderFolder(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/order_folder/{parameter?}")] HttpRequest req, string parameter,
+            ILogger log)
+        {
+            if (req.Method.ToLower().Equals("post"))
+            {
+                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                {
+                    var idPhenologicalEvent = (string)model["idPhenologicalEvent"];
+                    var idApplicationTarget = (string)model["idApplicationTarget"];
+                    var categoryId = (string)model["categoryId"];
+                    var idSpecie = (string)model["idSpecie"];
+                    var idIngredient = (string)model["idIngredient"];
+                    return await db.OrderFolder.SaveNewOrderFolder(idPhenologicalEvent, idApplicationTarget, categoryId, idSpecie, idIngredient);
+                });
+            }
+
+            if (req.Method.ToLower().Equals("put"))
+            {
+                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                {
+                    var id = (string)model["id"];
+                    var idPhenologicalEvent = (string)model["idPhenologicalEvent"];
+                    var idApplicationTarget = (string)model["idApplicationTarget"];
+                    var idCategory = (string)model["idCategory"];
+                    var idSpecie = (string)model["idSpecie"];
+                    var idIngredient = (string)model["idIngredient"];
+                    var idSeason = (string)model["idSeason"];
+                    var isStage = int.TryParse((string)model["stage"], out var intStage);
+
+                    var stage = isStage?(PhenologicalStage)intStage:PhenologicalStage.Waiting;
+
+
+                    return await db.OrderFolder.SaveEditOrderFolder(id, idSeason, stage, idPhenologicalEvent, idApplicationTarget, idCategory, idSpecie, idIngredient);
+                });
+            }
+
+            if (!string.IsNullOrWhiteSpace(parameter)) {
+                var resultLocal = await ContainerMethods.AgroManager.OrderFolder.GetOrderFolder(parameter);
+                return ContainerMethods.GetJsonGetContainer(resultLocal, log);
+
+            }
+
+            var result = await ContainerMethods.AgroManager.OrderFolder.GetOrderFolders();
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
 

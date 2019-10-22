@@ -14,11 +14,13 @@ namespace trifenix.agro.db.interfaces.agro
 
         IIngredientRepository Ingredients { get; }
 
-        IPhenologicalEventRepositoy PhenologicalEvents { get; }
+        IPhenologicalEventRepository PhenologicalEvents { get; }
 
-        ISpecieRepository SpecieRepository { get; }
+        ISpecieRepository Species{ get; }
 
         ISeasonRepository Seasons { get; }
+
+        IOrderFolderRepository OrderFolder { get; }
         
 
 
