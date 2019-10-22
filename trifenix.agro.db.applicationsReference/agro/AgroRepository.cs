@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using trifenix.agro.db.applicationsReference.agro.events;
+using trifenix.agro.db.applicationsReference.agro.fields;
 using trifenix.agro.db.applicationsReference.agro.orders;
 using trifenix.agro.db.interfaces.agro;
+using trifenix.agro.db.interfaces.agro.events;
+using trifenix.agro.db.interfaces.agro.fields;
 using trifenix.agro.db.interfaces.agro.orders;
 
 namespace trifenix.agro.db.applicationsReference.agro
@@ -29,6 +33,16 @@ namespace trifenix.agro.db.applicationsReference.agro
 
         public IOrderFolderRepository OrderFolder => new OrderFolderRepository(_dbArguments);
 
+        public IPhenologicalPreOrderRepository PhenologicalPreOrders => new PhenologicalPreOrderRepository(_dbArguments);
 
+        public INotificationEventRepository NotificationEvents => new NotificationEventRepository(_dbArguments);
+
+        public IBarrackRepository Barracks => new BarrackRepository(_dbArguments);
+
+        public IPlotLandRepository PlotLands => new PlotLandRepository(_dbArguments);
+
+        public ISectorRepository Sectors => new SectorRepository(_dbArguments);
+
+        public IVarietyRepository Varieties => new VarietyRepository(_dbArguments);
     }
 }

@@ -27,6 +27,10 @@ namespace trifenix.agro.db.model.agro
             set { _barracksId = value; }
         }
 
+        public DateTime Created { get; set; }
+
+
+
 
 
     }

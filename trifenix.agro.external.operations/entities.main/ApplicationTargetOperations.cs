@@ -12,6 +12,8 @@ using trifenix.agro.model.external;
 
 namespace trifenix.agro.external.operations.entities.main
 {
+
+
     public class ApplicationTargetOperations : IApplicationTargetOperations
     {
         private readonly IApplicationTargetRepository _repo;

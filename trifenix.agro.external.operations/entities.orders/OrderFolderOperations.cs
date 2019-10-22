@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.db.model.agro.local;
 using trifenix.agro.external.interfaces.entities;
-using trifenix.agro.external.operations.entities.args;
+using trifenix.agro.external.interfaces.entities.orders;
+using trifenix.agro.external.operations.entities.orders.args;
 using trifenix.agro.external.operations.helper;
 using trifenix.agro.model.external;
 
-namespace trifenix.agro.external.operations.entities
+namespace trifenix.agro.external.operations.entities.orders
 {
     public class OrderFolderOperations : IOrderFolderOperations
     {
@@ -35,12 +36,12 @@ namespace trifenix.agro.external.operations.entities
             return OperationHelper.GetElements(elements);
         }
 
-        public async Task<ExtPostContainer<OrderFolder>> SaveEditOrderFolder(string id, string seasonId, PhenologicalStage stage, 
+        public async Task<ExtPostContainer<OrderFolder>> SaveEditOrderFolder(string id,  
             string idPhenologicalEvent, string idApplicationTarget, string categoryId, string idSpecie, string idIngredient)
         {
             try
             {
-                var elements = await GetElementsToFolder(idPhenologicalEvent, idApplicationTarget, categoryId, idSpecie, idIngredient, seasonId);
+                var elements = await GetElementsToFolder(idPhenologicalEvent, idApplicationTarget, categoryId, idSpecie, idIngredient);
                 if (!elements.Success)
                 {
                     return OperationHelper.PostNotFoundElementException<OrderFolder>(elements.Message, elements.IdNotfound);
@@ -51,9 +52,9 @@ namespace trifenix.agro.external.operations.entities
                 {
                     return OperationHelper.PostNotFoundElementException<OrderFolder>($"orden con id {id} no encontrada", id);
                 }
-                order.SeasonId = elements.Season.Id;
-                order.Stage = stage;
-                order.SeasonId = seasonId;
+                
+                order.Stage = PhenologicalStage.Waiting;
+                order.SeasonId = _args.IdSeason;
                 order.PhenologicalEvent = elements.PhenologicalEvent;
                 order.Specie = elements.Specie;
                 order.Ingredient = elements.Ingredient != null ? new LocalIngredient { Id = idIngredient, Name = elements.Ingredient.Name } : null;
@@ -97,7 +98,7 @@ namespace trifenix.agro.external.operations.entities
                     Category = elements.Category,
                     Ingredient = elements.Ingredient != null ? new LocalIngredient { Id = idIngredient, Name = elements.Ingredient.Name } : null,
                     PhenologicalEvent = elements.PhenologicalEvent,
-                    SeasonId = elements.Season.Id,
+                    SeasonId = _args.IdSeason,
                     Specie = elements.Specie,
                     Stage = PhenologicalStage.Waiting
                 };
@@ -162,18 +163,7 @@ namespace trifenix.agro.external.operations.entities
                 return elementFolder;
             }
 
-            if (string.IsNullOrWhiteSpace(idSeason))
-                elementFolder.Season = await _args.Season.GetCurrentSeason();
-            else
-                elementFolder.Season = await _args.Season.GetSeason(idSeason);
-
-            if (elementFolder.Season == null)
-            {
-                elementFolder.IdNotfound = idSeason;
-                elementFolder.Message = $"No se encontró temporada";
-                elementFolder.Success = false;
-                return elementFolder;
-            }
+            
             elementFolder.Success = true;
             if (string.IsNullOrWhiteSpace(idIngredient))
             {
@@ -206,7 +196,7 @@ namespace trifenix.agro.external.operations.entities
 
         public Ingredient Ingredient { get; set; }
 
-        public Season Season { get; set; }
+        
 
         public string Message { get; set; }
 
