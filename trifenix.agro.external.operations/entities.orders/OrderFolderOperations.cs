@@ -1,6 +1,7 @@
 ﻿using Cosmonaut.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using trifenix.agro.db.model.agro;
@@ -18,14 +19,22 @@ namespace trifenix.agro.external.operations.entities.orders
 
         private readonly OrderFolderArgs _args;
 
+        private int minDaysToWarning = 30;
+
         public OrderFolderOperations(OrderFolderArgs args)
         {
             _args = args;
         }
 
+        
+
         public async Task<ExtGetContainer<OrderFolder>> GetOrderFolder(string id)
         {
             var order = await _args.OrderFolder.GetOrderFolder(id);
+            
+
+            
+
             return OperationHelper.GetElement(order);
 
         }
@@ -33,7 +42,15 @@ namespace trifenix.agro.external.operations.entities.orders
         public async Task<ExtGetContainer<List<OrderFolder>>> GetOrderFolders()
         {
             var elements = await _args.OrderFolder.GetOrderFolders().ToListAsync();
-            return OperationHelper.GetElements(elements);
+            var notifications = await _args.NotificationEvent.GetNotificationEvents().Where(s => s.Barrack.SeasonId == _args.IdSeason).ToListAsync();
+            var orders = elements.Select(s =>
+            {
+                var days = s.PhenologicalEvent.InitDate > DateTime.Now ? (s.PhenologicalEvent.InitDate - DateTime.Now).TotalDays : (DateTime.Now - s.PhenologicalEvent.InitDate).TotalDays;
+                var stage = notifications.Any(a => a.PhenologicalEvent.Id.Equals(s.PhenologicalEvent.Id)) ? PhenologicalStage.Success : days > minDaysToWarning ? PhenologicalStage.Warning : PhenologicalStage.Waiting;
+                s.Stage = stage;
+                return s;
+            }).ToList();
+            return OperationHelper.GetElements(orders);
         }
 
         public async Task<ExtPostContainer<OrderFolder>> SaveEditOrderFolder(string id,  

@@ -1,42 +1,74 @@
-﻿using System;
+﻿using Cosmonaut.Extensions;
+using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces.agro.orders;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.external.interfaces.entities.orders;
+using trifenix.agro.external.operations.helper;
 using trifenix.agro.model.external;
 
 namespace trifenix.agro.external.operations.entities.orders
 {
-    public class PhenologicalPreOrders : IPhenologicalPreOrderOperations
+    public class PhenologicalPreOrdersOperations : IPhenologicalPreOrderOperations
     {
 
         private readonly IPhenologicalPreOrderRepository _repo;
-        private readonly string idSeason;
-        public PhenologicalPreOrders()
+        private readonly string _idSeason;
+        public PhenologicalPreOrdersOperations(IPhenologicalPreOrderRepository repo, string idSeason)
         {
+            _repo = repo;
+            _idSeason = idSeason;
 
         }
 
-        public Task<ExtGetContainer<PhenologicalPreOrder>> GetPhenologicalPreOrder(string id)
+        public async Task<ExtGetContainer<PhenologicalPreOrder>> GetPhenologicalPreOrder(string id)
         {
-            throw new NotImplementedException();
+            var preorder = await _repo.GetPhenologicalPreOrder(id);
+            return OperationHelper.GetElement(preorder);
         }
 
-        public Task<ExtGetContainer<List<PhenologicalPreOrder>>> GetPhenologicalPreOrders()
+        public async Task<ExtGetContainer<List<PhenologicalPreOrder>>> GetPhenologicalPreOrders()
         {
-            throw new NotImplementedException();
+            var preorders = await _repo.GetPhenologicalPreOrders().ToListAsync();
+            return OperationHelper.GetElements(preorders);
         }
 
-        public Task<ExtPostContainer<PhenologicalPreOrder>> SaveEditPhenologicalPreOrder(string id, string idSeason, string name, string idOrderFolder, List<string> idBarracks)
+        public async Task<ExtPostContainer<PhenologicalPreOrder>> SaveEditPhenologicalPreOrder(string id, string name, string idOrderFolder, List<string> idBarracks)
         {
-            throw new NotImplementedException();
+            var element = await _repo.GetPhenologicalPreOrder(id);
+
+            return await OperationHelper.EditElement(id,
+                element,
+                s => {
+                    s.Name = name;
+                    s.SeasonId = _idSeason;
+                    s.BarracksId = idBarracks;
+                    s.OrderFolderId = idOrderFolder;
+                    s.Created = DateTime.Now;
+                    return s;
+                },
+                _repo.CreateUpdatePhenologicalPreOrder,
+                 $"No existe PreOrden Fenológica con id : {id}"
+            );
         }
 
-        public Task<ExtPostContainer<string>> SaveNewPhenologicalPreOrder(string name, string idOrderFolder, List<string> idBarracks)
+        public async Task<ExtPostContainer<string>> SaveNewPhenologicalPreOrder(string name, string idOrderFolder, List<string> idBarracks)
         {
-            throw new NotImplementedException();
+            return await OperationHelper.CreateElement(_repo.GetPhenologicalPreOrders(),
+               async s => await _repo.CreateUpdatePhenologicalPreOrder(new PhenologicalPreOrder
+               {
+                   Id = s,
+                   Name = name,
+                   SeasonId = _idSeason,
+                   BarracksId = idBarracks,
+                   Created = DateTime.Now,
+                   OrderFolderId = idOrderFolder
+               }),
+               s => s.Name.Equals(name),
+               $"ya existe Cuartel con nombre {name} "
+
+           ); 
         }
     }
 }

@@ -91,7 +91,7 @@ namespace trifenix.agro.external.operations.entities.fields
                 s => s.Name.Equals(name),
                 $"ya existe Cuartel con nombre {name} "
 
-            );;
+            );
 
         }
 

@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using trifenix.agro.functions.Helper;
 using trifenix.agro.db.model.agro;
+using System.Linq;
 
 namespace trifenix.agro.functions
 {
@@ -284,19 +285,19 @@ namespace trifenix.agro.functions
                 });
             }
 
-            return new OkObjectResult("");
+            
 
-            //if (!string.IsNullOrWhiteSpace(parameter))
-            //{
-            //    var managerLocal = await ContainerMethods.AgroManager();
-            //    var resultLocal = await managerLocal.OrderFolder.GetOrderFolder(parameter);
-            //    return ContainerMethods.GetJsonGetContainer(resultLocal, log);
+            if (!string.IsNullOrWhiteSpace(parameter))
+            {
+                var managerLocal = await ContainerMethods.AgroManager();
+                var resultLocal = await managerLocal.NotificationEvents.GetEvent(parameter);
+                return ContainerMethods.GetJsonGetContainer(resultLocal, log);
 
-            //}
+            }
 
-            //var manager = await ContainerMethods.AgroManager();
-            //var result = await manager.OrderFolder.GetOrderFolders();
-            //return ContainerMethods.GetJsonGetContainer(result, log);
+            var manager = await ContainerMethods.AgroManager();
+            var result = await manager.NotificationEvents.GetEvents();
+            return ContainerMethods.GetJsonGetContainer(result, log);
         }
 
 
@@ -483,6 +484,51 @@ namespace trifenix.agro.functions
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
 
+        [FunctionName("PhenologicalPreOrders")]
+        public static async Task<IActionResult> PhenologicalPreOrders(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/phenological_preorders/{parameter?}")] HttpRequest req, string parameter,
+            ILogger log)
+        {
+            if (req.Method.ToLower().Equals("post"))
+            {
+                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                {
+
+                    var name = (string)model["name"];
+                    var idFolder = (string)model["idFolder"];
+                    var idBarracks = (string[])model["idBarracks"];
+
+                    return await db.PhenologicalPreOrders.SaveNewPhenologicalPreOrder(name, idFolder, idBarracks.ToList());
+                });
+            }
+
+            if (req.Method.ToLower().Equals("put"))
+            {
+                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                {
+                    var id = (string)model["id"];
+                    var name = (string)model["name"];
+                    var idFolder = (string)model["idFolder"];
+                    var idBarracks = (string[])model["idBarracks"];
+
+
+
+                    return await db.PhenologicalPreOrders.SaveEditPhenologicalPreOrder(id, name, idFolder, idBarracks.ToList());
+                });
+            }
+
+            if (!string.IsNullOrWhiteSpace(parameter))
+            {
+                var managerLocal = await ContainerMethods.AgroManager();
+                var resultLocal = await managerLocal.PhenologicalPreOrders.GetPhenologicalPreOrder(parameter);
+                return ContainerMethods.GetJsonGetContainer(resultLocal, log);
+
+            }
+
+            var manager = await ContainerMethods.AgroManager();
+            var result = await manager.PhenologicalPreOrders.GetPhenologicalPreOrders();
+            return ContainerMethods.GetJsonGetContainer(result, log);
+        }
 
 
 
