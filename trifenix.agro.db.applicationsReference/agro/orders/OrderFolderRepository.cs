@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces.agro;
+using trifenix.agro.db.interfaces.agro.orders;
 using trifenix.agro.db.model.agro;
 
-namespace trifenix.agro.db.applicationsReference.agro
+namespace trifenix.agro.db.applicationsReference.agro.orders
 {
     public class OrderFolderRepository : MainDb<OrderFolder>, IOrderFolderRepository
     {

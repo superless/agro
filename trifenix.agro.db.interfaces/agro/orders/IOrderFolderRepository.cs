@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using trifenix.agro.db.model.agro;
 
-namespace trifenix.agro.db.interfaces.agro
+namespace trifenix.agro.db.interfaces.agro.orders
 {
     public interface IOrderFolderRepository
     {

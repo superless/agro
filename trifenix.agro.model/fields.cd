@@ -19,7 +19,7 @@
     </ShowAsAssociation>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="trifenix.agro.db.model.agro.Barracks">
+  <Class Name="trifenix.agro.db.model.agro.Barrack">
     <Position X="3.75" Y="6" Width="1.5" />
     <AssociationLine Name="PlotLand" Type="trifenix.agro.db.model.agro.PlotLand" FixedFromPoint="true" FixedToPoint="true">
       <Path>
