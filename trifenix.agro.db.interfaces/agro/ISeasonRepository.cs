@@ -16,5 +16,7 @@ namespace trifenix.agro.db.interfaces.agro
 
         IQueryable<Season> GetSeasons();
 
+        Task<Season> GetCurrentSeason();
+
     }
 }

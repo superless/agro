@@ -12,6 +12,37 @@ namespace trifenix.agro.external.operations.helper
 {
     public static class OperationHelper
     {
+
+
+        public static ExtGetContainer<T> GetElement<T>(T element) {
+            try
+            {
+                if (element == null)
+                {
+                    return new ExtGetContainer<T>
+                    {
+                        Result = element,
+                        StatusResult = ExtGetDataResult.EmptyResults
+                    };
+                }
+
+                return new ExtGetContainer<T>
+                {
+                    Result = element,
+                    StatusResult = ExtGetDataResult.Success
+                };
+            }
+            catch (Exception exception)
+            {
+                return new ExtGetErrorContainer<T>
+                {
+                    StatusResult = ExtGetDataResult.Error,
+                    ErrorMessage = exception.Message,
+                    InternalException = exception
+                };
+            }
+        }
+
         public static ExtGetContainer<List<T>> GetElements<T>(List<T> elements)
         {
             try
@@ -107,6 +138,26 @@ namespace trifenix.agro.external.operations.helper
                     MessageResult = ExtMessageResult.Error
                 };
             }
+        }
+
+        public static ExtPostErrorContainer<T> PostNotFoundElementException<T>(string message, string id = null) {
+            return new ExtPostErrorContainer<T>
+            {
+                Message = message,
+                InternalException = new Exception(message),
+                IdRelated = id,
+                MessageResult = ExtMessageResult.ElementToEditDoesNotExists
+            };
+        }
+
+        public static ExtPostErrorContainer<T> GetException<T>(Exception exc)
+        {
+            return new ExtPostErrorContainer<T>
+            {
+                Message = exc.Message,
+                InternalException = exc,
+                MessageResult = ExtMessageResult.Error
+            };
         }
     }
 }

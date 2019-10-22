@@ -1,4 +1,5 @@
-﻿using trifenix.agro.external.interfaces.entities.main;
+﻿using trifenix.agro.external.interfaces.entities;
+using trifenix.agro.external.interfaces.entities.main;
 
 namespace trifenix.agro.external.interfaces
 {
@@ -15,6 +16,8 @@ namespace trifenix.agro.external.interfaces
         IIngredientsOperations Ingredients { get; }
 
         ISeasonOperations Seasons { get; }
+
+        IOrderFolderOperations OrderFolder { get; }
 
         
 

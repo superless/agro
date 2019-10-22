@@ -1,8 +1,8 @@
 ﻿namespace trifenix.agro.db.model.agro
 {
     public enum PhenologicalStage {
-        Waiting,
-        Success,
-        Warning
+        Waiting = 0,
+        Success = 1,
+        Warning = 2
     }
 }

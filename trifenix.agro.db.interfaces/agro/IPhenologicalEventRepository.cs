@@ -7,7 +7,7 @@ using trifenix.agro.db.model.agro;
 
 namespace trifenix.agro.db.interfaces.agro
 {
-    public  interface IPhenologicalEventRepositoy
+    public  interface IPhenologicalEventRepository
     {
         Task<string> CreateUpdatePhenologicalEvent(PhenologicalEvent phenologicalEvent);
 
