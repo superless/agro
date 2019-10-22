@@ -35,6 +35,8 @@ namespace trifenix.agro.external.operations.entities.main
                 element,
                 s => {
                     s.Name = name;
+                    s.InitDate = startDate;
+                    s.EndDate = endDate;
                     return s;
                 },
                 _repo.CreateUpdatePhenologicalEvent,
