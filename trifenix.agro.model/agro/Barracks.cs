@@ -8,7 +8,7 @@ namespace trifenix.agro.db.model.agro
 {
 
     [SharedCosmosCollection("agro", "Barracks")]
-    public class Barracks : DocumentBase, ISharedCosmosEntity
+    public class Barrack : DocumentBase, ISharedCosmosEntity
     {
         public override string Id { get; set; }
 

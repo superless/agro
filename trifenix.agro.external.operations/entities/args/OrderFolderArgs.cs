@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using trifenix.agro.db.applicationsReference.agro;
 using trifenix.agro.db.interfaces.agro;
+using trifenix.agro.db.interfaces.agro.orders;
 
 namespace trifenix.agro.external.operations.entities.args
 {
