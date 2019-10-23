@@ -63,6 +63,7 @@ namespace trifenix.agro.external.operations.entities.main
                 {
                     Id = s,
                     Name = name,
+                    Abbreviation = abbreviation,
                     Specie = specie
                 }),
                 s => s.Name.Equals(name),
