@@ -28,7 +28,7 @@ namespace trifenix.agro.functions.Helper
             var agroDb = new AgroRepository(ConfigManager.GetDbArguments);
             var season = await agroDb.Seasons.GetCurrentSeason();
             var uploadImage = new UploadImage(Environment.GetEnvironmentVariable("StorageConnectionStrings", EnvironmentVariableTarget.Process));
-            return new AgroManager(agroDb, season.Id,uploadImage); 
+            return new AgroManager(agroDb, season?.Id,uploadImage); 
         
         }
 
