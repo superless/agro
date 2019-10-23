@@ -495,8 +495,9 @@ namespace trifenix.agro.functions
                 {
 
                     var name = (string)model["name"];
-                    var idFolder = (string)model["idFolder"];
-                    var idBarracks = (string[])model["idBarracks"];
+                    var idFolder = (string)model["idOrderFolder"];
+                    var arr = (string)model["idBarracks"].ToString();
+                    var idBarracks = JsonConvert.DeserializeObject<string[]>(arr);
 
                     return await db.PhenologicalPreOrders.SaveNewPhenologicalPreOrder(name, idFolder, idBarracks.ToList());
                 });
@@ -508,8 +509,9 @@ namespace trifenix.agro.functions
                 {
                     var id = (string)model["id"];
                     var name = (string)model["name"];
-                    var idFolder = (string)model["idFolder"];
-                    var idBarracks = (string[])model["idBarracks"];
+                    var idFolder = (string)model["idOrderFolder"];
+                    var arr = (string)model["idBarracks"].ToString();
+                    var idBarracks = JsonConvert.DeserializeObject<string[]>(arr);
 
 
 
