@@ -19,7 +19,8 @@ namespace trifenix.agro.external.operations.entities.orders
 
         private readonly OrderFolderArgs _args;
 
-        private int minDaysToWarning = 30;
+        
+        private int minDaysToWarning = 20;
 
         public OrderFolderOperations(OrderFolderArgs args)
         {
@@ -45,8 +46,8 @@ namespace trifenix.agro.external.operations.entities.orders
             var notifications = await _args.NotificationEvent.GetNotificationEvents().Where(s => s.Barrack.SeasonId == _args.IdSeason).ToListAsync();
             var orders = elements.Select(s =>
             {
-                var days = s.PhenologicalEvent.InitDate > DateTime.Now ? (s.PhenologicalEvent.InitDate - DateTime.Now).TotalDays : (DateTime.Now - s.PhenologicalEvent.InitDate).TotalDays;
-                var stage = notifications.Any(a => a.PhenologicalEvent.Id.Equals(s.PhenologicalEvent.Id)) ? PhenologicalStage.Success : days > minDaysToWarning ? PhenologicalStage.Warning : PhenologicalStage.Waiting;
+                var nw = DateTime.Now;
+                var stage = notifications.Any(a => a.PhenologicalEvent.Id.Equals(s.PhenologicalEvent.Id)) ? PhenologicalStage.Success : nw > s.PhenologicalEvent.InitDate ? PhenologicalStage.Warning : PhenologicalStage.Waiting;
                 s.Stage = stage;
                 return s;
             }).ToList();
