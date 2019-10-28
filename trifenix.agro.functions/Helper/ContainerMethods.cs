@@ -21,7 +21,7 @@ namespace trifenix.agro.functions.Helper
 {
     public static class ContainerMethods
     {
-        public static IReferenceApplications ContainerDbApplication => new ReferenceApplications(new BaseContainers(ConfigManager.GetDbArguments));
+        
 
         public static async Task<IAgroManager> AgroManager(){
            

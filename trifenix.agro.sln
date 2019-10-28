@@ -17,8 +17,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.db", "trifeni
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.db.interfaces", "trifenix.agro.db.interfaces\trifenix.agro.db.interfaces.csproj", "{89B3FD08-DE30-47D1-B62A-BC520750DF09}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.applicationsReference", "trifenix.agro.applicationsReference\trifenix.agro.applicationsReference.csproj", "{20CBA27C-C83A-438D-A709-6FE831E41F60}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.util.extensions", "trifenix.util.extensions\trifenix.util.extensions.csproj", "{29B4CFDF-7E42-4BB4-8FCE-EF6024C65963}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.search", "trifenix.agro.search\trifenix.agro.search.csproj", "{31A4A9F0-DF40-42AC-B091-DC1D6434F039}"
@@ -41,9 +39,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.external.inte
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.external.operations", "trifenix.agro.external.operations\trifenix.agro.external.operations.csproj", "{E6E114EA-5642-4577-92E2-B13E52C711C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "trifenix.agro.storage.interfaces", "trifenix.agro.storage.interfaces\trifenix.agro.storage.interfaces.csproj", "{CFED2B34-BF8C-4DF6-9E56-4C3DD28E18F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.storage.interfaces", "trifenix.agro.storage.interfaces\trifenix.agro.storage.interfaces.csproj", "{CFED2B34-BF8C-4DF6-9E56-4C3DD28E18F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "trifenix.agro.storage.operations", "trifenix.agro.storage.operations\trifenix.agro.storage.operations.csproj", "{C3DFF7BF-CC0C-40B9-8B8B-296F9B62EE56}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.storage.operations", "trifenix.agro.storage.operations\trifenix.agro.storage.operations.csproj", "{C3DFF7BF-CC0C-40B9-8B8B-296F9B62EE56}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.db.test", "1.db.test", "{C50EE339-7192-4DA7-A24F-A84A17D5016A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "trifenix.agro.db.applicationsReference.test", "trifenix.agro.db.applicationsReference.test\trifenix.agro.db.applicationsReference.test.csproj", "{ED6AAECA-E00F-4855-ADAA-2304F1B41A8A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common.tests", "common.tests", "{763FDFA9-24FA-4CB3-A7C4-A233F27A227C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Fakes", "Fakes", "{F1ECE31B-0D63-4978-A544-46ED6B4FD1E2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "trifenix.agro.common.tests.fakes", "trifenix.agro.common.tests.fakes\trifenix.agro.common.tests.fakes.csproj", "{8295F4DE-85DA-48A8-B0EC-B11C16BE88D2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -79,10 +87,6 @@ Global
 		{89B3FD08-DE30-47D1-B62A-BC520750DF09}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{89B3FD08-DE30-47D1-B62A-BC520750DF09}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{89B3FD08-DE30-47D1-B62A-BC520750DF09}.Release|Any CPU.Build.0 = Release|Any CPU
-		{20CBA27C-C83A-438D-A709-6FE831E41F60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{20CBA27C-C83A-438D-A709-6FE831E41F60}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{20CBA27C-C83A-438D-A709-6FE831E41F60}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{20CBA27C-C83A-438D-A709-6FE831E41F60}.Release|Any CPU.Build.0 = Release|Any CPU
 		{29B4CFDF-7E42-4BB4-8FCE-EF6024C65963}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{29B4CFDF-7E42-4BB4-8FCE-EF6024C65963}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29B4CFDF-7E42-4BB4-8FCE-EF6024C65963}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -111,6 +115,14 @@ Global
 		{C3DFF7BF-CC0C-40B9-8B8B-296F9B62EE56}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C3DFF7BF-CC0C-40B9-8B8B-296F9B62EE56}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C3DFF7BF-CC0C-40B9-8B8B-296F9B62EE56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED6AAECA-E00F-4855-ADAA-2304F1B41A8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED6AAECA-E00F-4855-ADAA-2304F1B41A8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED6AAECA-E00F-4855-ADAA-2304F1B41A8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED6AAECA-E00F-4855-ADAA-2304F1B41A8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8295F4DE-85DA-48A8-B0EC-B11C16BE88D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8295F4DE-85DA-48A8-B0EC-B11C16BE88D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8295F4DE-85DA-48A8-B0EC-B11C16BE88D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8295F4DE-85DA-48A8-B0EC-B11C16BE88D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -123,7 +135,6 @@ Global
 		{7AC20D7C-A9EE-4E9F-B4AD-A75310423BD8} = {AA188391-3994-421D-A7CE-2A0622569EE1}
 		{20102C52-DADD-458A-8771-6313919A807F} = {AA188391-3994-421D-A7CE-2A0622569EE1}
 		{89B3FD08-DE30-47D1-B62A-BC520750DF09} = {AA188391-3994-421D-A7CE-2A0622569EE1}
-		{20CBA27C-C83A-438D-A709-6FE831E41F60} = {6682B4F0-4790-44E0-8DF9-A33F62A01634}
 		{29B4CFDF-7E42-4BB4-8FCE-EF6024C65963} = {8425A92F-85CA-4E30-95F9-272CC5A1EDD9}
 		{31A4A9F0-DF40-42AC-B091-DC1D6434F039} = {23EE7E3F-8A26-4F35-8C77-0B2E727B3079}
 		{55021BD1-AF91-42BD-A049-ED1874F5081A} = {23EE7E3F-8A26-4F35-8C77-0B2E727B3079}
@@ -131,6 +142,9 @@ Global
 		{E6E114EA-5642-4577-92E2-B13E52C711C2} = {6682B4F0-4790-44E0-8DF9-A33F62A01634}
 		{CFED2B34-BF8C-4DF6-9E56-4C3DD28E18F2} = {EE7EE3F6-BC9A-44DF-B961-7FEADCABB83D}
 		{C3DFF7BF-CC0C-40B9-8B8B-296F9B62EE56} = {EE7EE3F6-BC9A-44DF-B961-7FEADCABB83D}
+		{ED6AAECA-E00F-4855-ADAA-2304F1B41A8A} = {C50EE339-7192-4DA7-A24F-A84A17D5016A}
+		{F1ECE31B-0D63-4978-A544-46ED6B4FD1E2} = {763FDFA9-24FA-4CB3-A7C4-A233F27A227C}
+		{8295F4DE-85DA-48A8-B0EC-B11C16BE88D2} = {F1ECE31B-0D63-4978-A544-46ED6B4FD1E2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2C0C9D82-464E-4741-8541-CDC460278FEC}

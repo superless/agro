@@ -6,6 +6,8 @@ using trifenix.agro.db.model.agro;
 
 namespace trifenix.agro.db.applicationsReference.agro.events
 {
+
+
     public class NotificationEventRepository : INotificationEventRepository
     {
 
