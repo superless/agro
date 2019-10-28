@@ -3,10 +3,11 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using trifenix.agro.db.exceptions;
+using trifenix.agro.db.interfaces;
 
-namespace trifenix.agro.db
+namespace trifenix.agro.db.applicationsReference
 {
-    public abstract class MainDb<T> where T:DocumentBase
+    public class MainDb<T> : IMainDb<T> where T:DocumentBase 
     {
 
         protected readonly CosmosStoreSettings StoreSettings;
@@ -21,7 +22,7 @@ namespace trifenix.agro.db
             
         }
 
-        protected async Task<string> CreateUpdate(T entity) {
+        public async Task<string> CreateUpdate(T entity) {
             if (string.IsNullOrWhiteSpace(entity.Id)) throw new NonIdException<DocumentBase>(entity);
 
             var result = await Store.UpsertAsync(entity);
@@ -31,16 +32,19 @@ namespace trifenix.agro.db
             return result.Entity.Id;
         }
 
-        protected async Task<T> GetEntity(string uniqueId) {
+        public async Task<T> GetEntity(string uniqueId) {
             var entity = (T)Activator.CreateInstance(typeof(T));
 
             return await Store.FindAsync(uniqueId, entity.CosmosEntityName);
         }
 
-        protected  IQueryable<T> GetEntities() {
+        public  IQueryable<T> GetEntities() {
 
             
             return Store.Query();
         }
     }
+
+
+
 }
