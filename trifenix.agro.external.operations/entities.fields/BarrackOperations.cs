@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces.agro;
 using trifenix.agro.db.interfaces.agro.fields;
+using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.external.interfaces.entities.fields;
 using trifenix.agro.external.operations.helper;
@@ -18,13 +19,14 @@ namespace trifenix.agro.external.operations.entities.fields
         private readonly string _idSeason;
         private readonly IBarrackRepository _repo;
         private readonly IVarietyRepository _repoVariety;
-
-        public BarrackOperations(IBarrackRepository repo, IVarietyRepository repoVariety,IPlotLandRepository repoPlotLand, string idSeason)
+        private readonly ICommonDbOperations<Barrack> _commonDb;
+        public BarrackOperations(IBarrackRepository repo, IVarietyRepository repoVariety,IPlotLandRepository repoPlotLand, ICommonDbOperations<Barrack> commonDb, string idSeason)
         {
             _repo = repo;
             _repoPlotLand = repoPlotLand;
             _idSeason = idSeason;
             _repoVariety = repoVariety;
+            _commonDb = commonDb;
         }
 
         public async Task<ExtGetContainer<Barrack>> GetBarrack(string id)
@@ -35,7 +37,8 @@ namespace trifenix.agro.external.operations.entities.fields
 
         public async Task<ExtGetContainer<List<Barrack>>> GetBarracks()
         {
-            var barracks = await _repo.GetBarracks().ToListAsync();
+            var queryBarracks = _repo.GetBarracks();
+            var barracks = await _commonDb.TolistAsync(queryBarracks);
             return OperationHelper.GetElements(barracks);
         }
 
@@ -75,7 +78,7 @@ namespace trifenix.agro.external.operations.entities.fields
 
             if (!elements.Success) return OperationHelper.PostNotFoundElementException<string>(elements.Message, elements.IdNotfound);
 
-            return await OperationHelper.CreateElement(_repo.GetBarracks(),
+            return await OperationHelper.CreateElement(_commonDb,_repo.GetBarracks(),
                 async s => await _repo.CreateUpdateBarrack(new Barrack
                 {
                     Id = s,

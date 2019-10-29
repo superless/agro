@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.db.model.agro.local;
 using trifenix.agro.external.interfaces.entities;
@@ -20,7 +21,8 @@ namespace trifenix.agro.external.operations.entities.orders
         private readonly OrderFolderArgs _args;
 
         
-        private int minDaysToWarning = 20;
+        
+        
 
         public OrderFolderOperations(OrderFolderArgs args)
         {
@@ -32,9 +34,6 @@ namespace trifenix.agro.external.operations.entities.orders
         public async Task<ExtGetContainer<OrderFolder>> GetOrderFolder(string id)
         {
             var order = await _args.OrderFolder.GetOrderFolder(id);
-            
-
-            
 
             return OperationHelper.GetElement(order);
 
@@ -42,9 +41,15 @@ namespace trifenix.agro.external.operations.entities.orders
 
         public async Task<ExtGetContainer<List<OrderFolder>>> GetOrderFolders()
         {
-            var elements = await _args.OrderFolder.GetOrderFolders().ToListAsync();
-            var notifications = await _args.NotificationEvent.GetNotificationEvents().Where(s => s.Barrack.SeasonId == _args.IdSeason).ToListAsync();
-            var orders = elements.Select(s =>
+            var orderFoldersQuery = _args.OrderFolder.GetOrderFolders();
+
+            var orderFolders = await _args.CommonDb.TolistAsync(orderFoldersQuery);
+
+            var notificationsQuery = _args.NotificationEvent.GetNotificationEvents();
+
+            var notifications = await _args.CommonDbNotifications.TolistAsync(notificationsQuery.Where(s => s.Barrack.SeasonId == _args.IdSeason));
+
+            var orders = orderFolders.Select(s =>
             {
                 var nw = DateTime.Now;
                 var stage = notifications.Any(a => a.PhenologicalEvent.Id.Equals(s.PhenologicalEvent.Id)) ? PhenologicalStage.Success : nw > s.PhenologicalEvent.InitDate ? PhenologicalStage.Warning : PhenologicalStage.Waiting;
@@ -90,7 +95,7 @@ namespace trifenix.agro.external.operations.entities.orders
             }
             catch (Exception exc)
             {
-                return OperationHelper.GetException<OrderFolder>(exc);
+                return OperationHelper.GetPostException<OrderFolder>(exc);
             }
 
 
@@ -132,7 +137,7 @@ namespace trifenix.agro.external.operations.entities.orders
             }
             catch (Exception exc)
             {
-                return OperationHelper.GetException<string>(exc);
+                return OperationHelper.GetPostException<string>(exc);
             }
 
             
@@ -203,6 +208,8 @@ namespace trifenix.agro.external.operations.entities.orders
 
     public class ElementsFolder {
 
+
+        
         public bool Success { get; set; }
 
         public PhenologicalEvent PhenologicalEvent { get; set; }

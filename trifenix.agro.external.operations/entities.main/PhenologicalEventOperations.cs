@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces.agro;
+using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.external.interfaces.entities.main;
 using trifenix.agro.external.operations.helper;
@@ -15,17 +16,20 @@ namespace trifenix.agro.external.operations.entities.main
     public class PhenologicalEventOperations : IPhenologicalOperations
     {
         private readonly IPhenologicalEventRepository _repo;
+        private readonly ICommonDbOperations<PhenologicalEvent> _commonDb;
 
-        public PhenologicalEventOperations(IPhenologicalEventRepository repo)
+        public PhenologicalEventOperations(IPhenologicalEventRepository repo, ICommonDbOperations<PhenologicalEvent> commonDb)
         {
             _repo = repo;
+            _commonDb = commonDb;
         }
 
 
         public async Task<ExtGetContainer<List<PhenologicalEvent>>> GetPhenologicalEvents()
         {
-            var elements = await _repo.GetPhenologicalEvents().ToListAsync();
-            return OperationHelper.GetElements(elements);
+            var phenologicalsQuery = _repo.GetPhenologicalEvents();
+            var phenologicalEvents = await _commonDb.TolistAsync(phenologicalsQuery);
+            return OperationHelper.GetElements(phenologicalEvents);
         }
 
         public async Task<ExtPostContainer<PhenologicalEvent>> SaveEditPhenologicalEvent(string currentId, string name, DateTime startDate, DateTime endDate)
@@ -46,7 +50,7 @@ namespace trifenix.agro.external.operations.entities.main
 
         public async Task<ExtPostContainer<string>> SaveNewPhenologicalEvent(string name, DateTime startDate, DateTime endDate)
         {
-            return await OperationHelper.CreateElement(_repo.GetPhenologicalEvents(),
+            return await OperationHelper.CreateElement(_commonDb, _repo.GetPhenologicalEvents(),
                 async s => await _repo.CreateUpdatePhenologicalEvent(new PhenologicalEvent {
                     Id = s,
                     Name = name,

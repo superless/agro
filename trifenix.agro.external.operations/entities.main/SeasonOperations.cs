@@ -9,6 +9,7 @@ using Cosmonaut.Extensions;
 using trifenix.agro.db.interfaces.agro;
 using System.Linq;
 using trifenix.agro.external.operations.helper;
+using trifenix.agro.db.interfaces.common;
 
 namespace trifenix.agro.external.operations.entities.main
 {
@@ -16,15 +17,18 @@ namespace trifenix.agro.external.operations.entities.main
     {
 
         private readonly ISeasonRepository _repo;
+        private readonly ICommonDbOperations<Season> _commonDb;
 
-        public SeasonOperations(ISeasonRepository repo)
+        public SeasonOperations(ISeasonRepository repo, ICommonDbOperations<Season> commonDb)
         {
             _repo = repo;
+            _commonDb = commonDb;
         }
         public async Task<ExtGetContainer<List<Season>>> GetSeasons()
         {
-            var elements = await _repo.GetSeasons().ToListAsync();
-            return OperationHelper.GetElements(elements);
+            var seasonsQuery = _repo.GetSeasons();
+            var seasons = await _commonDb.TolistAsync(seasonsQuery);
+            return OperationHelper.GetElements(seasons);
         }
 
         public async Task<ExtPostContainer<Season>> SaveEditSeason(string id, DateTime init, DateTime end, bool current)
@@ -48,7 +52,7 @@ namespace trifenix.agro.external.operations.entities.main
         {
 
             //TODO: validar que no se pueda sobreponer fechas.
-            return await OperationHelper.CreateElement(_repo.GetSeasons(),
+            return await OperationHelper.CreateElement(_commonDb, _repo.GetSeasons(),
                 async s => await _repo.CreateUpdateSeason(new Season
                 {
                     Id = s,
