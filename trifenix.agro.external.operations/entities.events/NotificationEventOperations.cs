@@ -80,6 +80,7 @@ namespace trifenix.agro.external.operations.entities.events
                     var message = "La base de datos retorna nulo para eventos";
                     return OperationHelper.GetException<List<NotificationEvent>>(new Exception(message), message);
                 }
+                
                 var notEvents = await _commonDb.TolistAsync(result);
                 return OperationHelper.GetElements(notEvents);
             }
@@ -98,7 +99,7 @@ namespace trifenix.agro.external.operations.entities.events
         /// <param name="idPhenologicalEvent">identificador del evento fenológico</param>
         /// <param name="base64">string de la imagen subida</param>
         /// <param name="description">descripción del evento notificado</param>
-        /// <returns>contenedor con el string</returns>
+        /// <returns>contenedor con el identificador de la notificación</returns>
         public async Task<ExtPostContainer<string>> SaveNewNotificationEvent(string idBarrack, string idPhenologicalEvent, string base64, string description)
         {
             if (string.IsNullOrWhiteSpace(idBarrack) || string.IsNullOrWhiteSpace(idPhenologicalEvent) || string.IsNullOrWhiteSpace(base64))
@@ -139,5 +140,9 @@ namespace trifenix.agro.external.operations.entities.events
             }
 
         }
+
+        
+
+        
     }
 }

@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\trifenix.agro.common.tests.fakes\trifenix.agro.common.tests.fakes.csproj" />
+    <ProjectReference Include="..\trifenix.agro.common.tests.interfaces\trifenix.agro.common.tests.interfaces.csproj" />
     <ProjectReference Include="..\trifenix.agro.db.interfaces\trifenix.agro.db.interfaces.csproj" />
     <ProjectReference Include="..\trifenix.agro.external.operations\trifenix.agro.external.operations.csproj" />
     <ProjectReference Include="..\trifenix.agro.storage.interfaces\trifenix.agro.storage.interfaces.csproj" />
