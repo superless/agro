@@ -25,6 +25,8 @@ steps:
   inputs:
     restoreSolution: '$(solution)'
 
+
+
 - task: VSBuild@1
   inputs:
     solution: '$(solution)'
@@ -32,12 +34,15 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
+  
 - task: VSTest@2
   inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
-  
-
+    testSelector: 'testAssemblies'
+    testAssemblyVer2: '**\*operations.tests.dll'
+    searchFolder: '$(System.DefaultWorkingDirectory)'
+    uiTests: true
+    vsTestVersion: '16.0'
+    diagnosticsEnabled: true
 - task : DotNetCoreCLI@0
   inputs:
     command: 'publish'
