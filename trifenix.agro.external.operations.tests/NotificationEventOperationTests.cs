@@ -1,9 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using trifenix.agro.common.tests.interfaces;
 using trifenix.agro.db.model.agro;
-using trifenix.agro.external.operations.entities.events;
-using trifenix.agro.external.operations.tests.helper;
 using trifenix.agro.external.operations.tests.helper.Instances;
 using trifenix.agro.model.external;
 using Xunit;
