@@ -25,7 +25,11 @@ steps:
   inputs:
     restoreSolution: '$(solution)'
 
-
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'test'
+    projects: '**/*.operations.tests.csproj'
+    testRunTitle: 'testing'
 
 - task: VSBuild@1
   inputs:
@@ -38,11 +42,13 @@ steps:
 - task: VSTest@2
   inputs:
     testSelector: 'testAssemblies'
-    testAssemblyVer2: '**\*operations.tests.dll'
+    testAssemblyVer2: '**\*tests*'
     searchFolder: '$(System.DefaultWorkingDirectory)'
     uiTests: true
     vsTestVersion: '16.0'
     diagnosticsEnabled: true
+
+
 - task : DotNetCoreCLI@0
   inputs:
     command: 'publish'
