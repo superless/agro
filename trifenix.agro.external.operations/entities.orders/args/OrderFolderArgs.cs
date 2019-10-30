@@ -5,6 +5,8 @@ using trifenix.agro.db.applicationsReference.agro;
 using trifenix.agro.db.interfaces.agro;
 using trifenix.agro.db.interfaces.agro.events;
 using trifenix.agro.db.interfaces.agro.orders;
+using trifenix.agro.db.interfaces.common;
+using trifenix.agro.db.model.agro;
 
 namespace trifenix.agro.external.operations.entities.orders.args
 {
@@ -24,6 +26,8 @@ namespace trifenix.agro.external.operations.entities.orders.args
         public IOrderFolderRepository OrderFolder { get; set; }
         public INotificationEventRepository NotificationEvent { get; set; }
         public string IdSeason { get; set; }
+        public ICommonDbOperations<OrderFolder> CommonDb { get; set; }
+        public ICommonDbOperations<NotificationEvent> CommonDbNotifications { get; set; }
 
 
 

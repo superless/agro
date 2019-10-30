@@ -1,29 +1,33 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro;
 using trifenix.agro.db.model.agro;
 
 namespace trifenix.agro.db.applicationsReference.agro
 {
-    public class PhenologicalEventRepository : MainDb<PhenologicalEvent>, IPhenologicalEventRepository
+    public class PhenologicalEventRepository : IPhenologicalEventRepository
     {
-        public PhenologicalEventRepository(AgroDbArguments args) : base(args)
+
+        private readonly IMainDb<PhenologicalEvent> _db;
+        public PhenologicalEventRepository(IMainDb<PhenologicalEvent> db)
         {
+            _db = db;
         }
 
         public async Task<string> CreateUpdatePhenologicalEvent(PhenologicalEvent phenologicalEvent)
         {
-            return await CreateUpdate(phenologicalEvent);
+            return await _db.CreateUpdate(phenologicalEvent);
         }
 
         public async Task<PhenologicalEvent> GetPhenologicalEvent(string uniqueId)
         {
-            return await GetEntity(uniqueId);
+            return await _db.GetEntity(uniqueId);
         }
 
         public IQueryable<PhenologicalEvent> GetPhenologicalEvents()
         {
-            return GetEntities();
+            return _db.GetEntities();
         }
     }
 }

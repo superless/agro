@@ -1,4 +1,6 @@
-﻿using trifenix.agro.db.interfaces.agro;
+﻿using trifenix.agro.db.applicationsReference.common;
+using trifenix.agro.db.interfaces.agro;
+using trifenix.agro.db.model.agro;
 using trifenix.agro.external.interfaces;
 using trifenix.agro.external.interfaces.entities.events;
 using trifenix.agro.external.interfaces.entities.fields;
@@ -25,19 +27,21 @@ namespace trifenix.agro.external.operations
             _repository = repository;
             _idSeason = idSeason;
             _uploadImage = uploadImage;
+
+            
         }
 
-        public IPhenologicalOperations PhenologicalEvents => new PhenologicalEventOperations(_repository.PhenologicalEvents);
+        public IPhenologicalOperations PhenologicalEvents => new PhenologicalEventOperations(_repository.PhenologicalEvents, new CommonDbOperations<PhenologicalEvent>());
 
-        public IApplicationTargetOperations ApplicationTargets => new ApplicationTargetOperations(_repository.Targets);
+        public IApplicationTargetOperations ApplicationTargets => new ApplicationTargetOperations(_repository.Targets, new CommonDbOperations<ApplicationTarget>());
 
-        public ISpecieOperations Species => new SpecieOperations(_repository.Species);
+        public ISpecieOperations Species => new SpecieOperations(_repository.Species, new CommonDbOperations<Specie>());
 
-        public IIngredientCategoryOperations IngredientCategories => new IngredientCategoryOperations(_repository.Categories);
+        public IIngredientCategoryOperations IngredientCategories => new IngredientCategoryOperations(_repository.Categories, new CommonDbOperations<IngredientCategory>());
 
-        public IIngredientsOperations Ingredients => new IngredientOperations(_repository.Ingredients, _repository.Categories);
+        public IIngredientsOperations Ingredients => new IngredientOperations(_repository.Ingredients, _repository.Categories, new CommonDbOperations<Ingredient>());
 
-        public ISeasonOperations Seasons => new SeasonOperations(_repository.Seasons);
+        public ISeasonOperations Seasons => new SeasonOperations(_repository.Seasons, new CommonDbOperations<Season>());
 
         public IOrderFolderOperations OrderFolder => new OrderFolderOperations(new OrderFolderArgs {
             Ingredient = _repository.Ingredients,
@@ -47,19 +51,21 @@ namespace trifenix.agro.external.operations
             Specie = _repository.Species,
             Target = _repository.Targets,
             IdSeason = _idSeason,
-            NotificationEvent = _repository.NotificationEvents
+            NotificationEvent = _repository.NotificationEvents,
+            CommonDb= new CommonDbOperations<OrderFolder>(),
+            CommonDbNotifications = new CommonDbOperations<NotificationEvent>()
         });
 
-        public ISectorOperations Sectors => new SectorOperations(_repository.Sectors, _idSeason);
+        public ISectorOperations Sectors => new SectorOperations(_repository.Sectors, new CommonDbOperations<Sector>(), _idSeason);
 
-        public IPlotLandOperations PlotLands => new PlotLandOperations(_repository.PlotLands, _repository.Sectors, _idSeason);
+        public IPlotLandOperations PlotLands => new PlotLandOperations(_repository.PlotLands, _repository.Sectors, new CommonDbOperations<PlotLand>(), _idSeason);
 
-        public IBarrackOperations Barracks => new BarrackOperations(_repository.Barracks, _repository.Varieties, _repository.PlotLands, _idSeason);
+        public IBarrackOperations Barracks => new BarrackOperations(_repository.Barracks, _repository.Varieties, _repository.PlotLands, new CommonDbOperations<Barrack>(), _idSeason);
 
-        public IPhenologicalPreOrderOperations PhenologicalPreOrders => new PhenologicalPreOrdersOperations(_repository.PhenologicalPreOrders, _idSeason);
+        public IPhenologicalPreOrderOperations PhenologicalPreOrders => new PhenologicalPreOrdersOperations(_repository.PhenologicalPreOrders, new CommonDbOperations<PhenologicalPreOrder>(), _idSeason);
 
-        public INotificatonEventOperations NotificationEvents => new NotificationEventOperations(_repository.NotificationEvents, _repository.Barracks, _repository.PhenologicalEvents, _uploadImage);
+        public INotificatonEventOperations NotificationEvents => new NotificationEventOperations(_repository.NotificationEvents, _repository.Barracks, _repository.PhenologicalEvents, new CommonDbOperations<NotificationEvent>(), _uploadImage);
 
-        public IVarietyOperations Varieties => new VarietyOperations(_repository.Varieties, _repository.Species);
+        public IVarietyOperations Varieties => new VarietyOperations(_repository.Varieties, _repository.Species, new CommonDbOperations<Variety>());
     }
 }

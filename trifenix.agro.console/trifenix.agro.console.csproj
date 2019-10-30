@@ -6,13 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-   
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\newtonsoft.json\9.0.1\lib\netstandard1.0\Newtonsoft.Json.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\trifenix.agro.common.tests.fakes\trifenix.agro.common.tests.fakes.csproj" />
   </ItemGroup>
 
 </Project>

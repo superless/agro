@@ -3,30 +3,34 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.orders;
 using trifenix.agro.db.model.agro;
 
 namespace trifenix.agro.db.applicationsReference.agro.orders
 {
-    public class PhenologicalPreOrderRepository : MainDb<PhenologicalPreOrder>, IPhenologicalPreOrderRepository
+    public class PhenologicalPreOrderRepository : IPhenologicalPreOrderRepository
     {
-        public PhenologicalPreOrderRepository(AgroDbArguments args) : base(args)
+
+        private readonly IMainDb<PhenologicalPreOrder> _db;
+        public PhenologicalPreOrderRepository(IMainDb<PhenologicalPreOrder> db) 
         {
+            _db = db;
         }
 
         public async Task<string> CreateUpdatePhenologicalPreOrder(PhenologicalPreOrder preOrder)
         {
-            return await CreateUpdate(preOrder);
+            return await _db.CreateUpdate(preOrder);
         }
 
         public async Task<PhenologicalPreOrder> GetPhenologicalPreOrder(string id)
         {
-            return await GetEntity(id);
+            return await _db.GetEntity(id);
         }
 
         public IQueryable<PhenologicalPreOrder> GetPhenologicalPreOrders()
         {
-            return GetEntities();
+            return _db.GetEntities();
         }
     }
 }

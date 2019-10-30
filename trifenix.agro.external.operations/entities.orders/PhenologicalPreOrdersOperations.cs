@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces.agro.orders;
+using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.external.interfaces.entities.orders;
 using trifenix.agro.external.operations.helper;
@@ -15,10 +16,12 @@ namespace trifenix.agro.external.operations.entities.orders
 
         private readonly IPhenologicalPreOrderRepository _repo;
         private readonly string _idSeason;
-        public PhenologicalPreOrdersOperations(IPhenologicalPreOrderRepository repo, string idSeason)
+        private readonly ICommonDbOperations<PhenologicalPreOrder> _commonDb;
+        public PhenologicalPreOrdersOperations(IPhenologicalPreOrderRepository repo, ICommonDbOperations<PhenologicalPreOrder> commonDb, string idSeason )
         {
             _repo = repo;
             _idSeason = idSeason;
+            _commonDb = commonDb;
 
         }
 
@@ -30,7 +33,8 @@ namespace trifenix.agro.external.operations.entities.orders
 
         public async Task<ExtGetContainer<List<PhenologicalPreOrder>>> GetPhenologicalPreOrders()
         {
-            var preorders = await _repo.GetPhenologicalPreOrders().ToListAsync();
+            var preordersQuery = _repo.GetPhenologicalPreOrders();
+            var preorders = await _commonDb.TolistAsync(preordersQuery);
             return OperationHelper.GetElements(preorders);
         }
 
@@ -55,7 +59,7 @@ namespace trifenix.agro.external.operations.entities.orders
 
         public async Task<ExtPostContainer<string>> SaveNewPhenologicalPreOrder(string name, string idOrderFolder, List<string> idBarracks)
         {
-            return await OperationHelper.CreateElement(_repo.GetPhenologicalPreOrders(),
+            return await OperationHelper.CreateElement(_commonDb,_repo.GetPhenologicalPreOrders(),
                async s => await _repo.CreateUpdatePhenologicalPreOrder(new PhenologicalPreOrder
                {
                    Id = s,

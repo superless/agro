@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces.agro;
+using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.external.interfaces.entities.main;
 using trifenix.agro.external.operations.helper;
@@ -16,17 +17,20 @@ namespace trifenix.agro.external.operations.entities.main
     {
 
         private readonly IIngredientCategoryRepository _repo;
-        public IngredientCategoryOperations(IIngredientCategoryRepository repo)
+        private readonly ICommonDbOperations<IngredientCategory> _commonDb;
+        public IngredientCategoryOperations(IIngredientCategoryRepository repo, ICommonDbOperations<IngredientCategory> commonDb)
         {
             _repo = repo;
+            _commonDb = commonDb;
         }
 
         public async Task<ExtGetContainer<List<IngredientCategory>>> GetIngredientCategories()
         {
             try
             {
-                var elements = await _repo.GetIngredientCategories().ToListAsync();
-                return OperationHelper.GetElements(elements);
+                var categoriesQuery = _repo.GetIngredientCategories();
+                var categories = await _commonDb.TolistAsync(categoriesQuery);
+                return OperationHelper.GetElements(categories);
             }
             catch (Exception ex)
             {
@@ -56,7 +60,7 @@ namespace trifenix.agro.external.operations.entities.main
 
         public async Task<ExtPostContainer<string>> SaveNewIngredientCategory(string name)
         {
-            return await OperationHelper.CreateElement(_repo.GetIngredientCategories(),
+            return await OperationHelper.CreateElement(_commonDb, _repo.GetIngredientCategories(),
                 async s => await _repo.CreateUpdateIngredientCategory(new IngredientCategory
                 {
                     Id = s,

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces.agro;
+using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.external.interfaces.entities.main;
 using trifenix.agro.external.operations.helper;
@@ -15,16 +16,18 @@ namespace trifenix.agro.external.operations.entities.main
     public class SpecieOperations : ISpecieOperations
     {
         private readonly ISpecieRepository _repo;
-
-        public SpecieOperations(ISpecieRepository repo)
+        private readonly ICommonDbOperations<Specie> _commonDb;
+        public SpecieOperations(ISpecieRepository repo, ICommonDbOperations<Specie> commonDb)
         {
             _repo = repo;
+            _commonDb = commonDb;
         }
 
         public async Task<ExtGetContainer<List<Specie>>> GetSpecies()
         {
-            var elements = await _repo.GetSpecies().ToListAsync();
-            return OperationHelper.GetElements(elements);
+            var speciesQuery = _repo.GetSpecies();
+            var species = await _commonDb.TolistAsync(speciesQuery);
+            return OperationHelper.GetElements(species);
 
         }
 
@@ -47,7 +50,7 @@ namespace trifenix.agro.external.operations.entities.main
         public async Task<ExtPostContainer<string>> SaveNewSpecie(string name, string abbreviation)
         {
             
-            return await OperationHelper.CreateElement(_repo.GetSpecies(), 
+            return await OperationHelper.CreateElement(_commonDb, _repo.GetSpecies(), 
                 async s => await _repo.CreateUpdateSpecie(new Specie
                 {
                     Id = s,

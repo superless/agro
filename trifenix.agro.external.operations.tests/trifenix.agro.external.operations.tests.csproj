@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.3.0" />
+    <PackageReference Include="Moq" Version="4.13.1" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\trifenix.agro.common.tests.fakes\trifenix.agro.common.tests.fakes.csproj" />
+    <ProjectReference Include="..\trifenix.agro.common.tests.interfaces\trifenix.agro.common.tests.interfaces.csproj" />
+    <ProjectReference Include="..\trifenix.agro.db.interfaces\trifenix.agro.db.interfaces.csproj" />
+    <ProjectReference Include="..\trifenix.agro.external.operations\trifenix.agro.external.operations.csproj" />
+    <ProjectReference Include="..\trifenix.agro.storage.interfaces\trifenix.agro.storage.interfaces.csproj" />
+  </ItemGroup>
+
+</Project>

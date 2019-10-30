@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces.agro.fields;
+using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.external.interfaces.entities.fields;
 using trifenix.agro.external.operations.helper;
@@ -17,12 +18,13 @@ namespace trifenix.agro.external.operations.entities.fields
         private readonly IPlotLandRepository _repo;
         private readonly ISectorRepository _repoSector;
         private readonly string _idSeason;
-
-        public PlotLandOperations(IPlotLandRepository repoPlotLand, ISectorRepository repoSector, string idSeason  )
+        private readonly ICommonDbOperations<PlotLand> _commonDb;
+        public PlotLandOperations(IPlotLandRepository repoPlotLand, ISectorRepository repoSector, ICommonDbOperations<PlotLand> commonDb, string idSeason  )
         {
             _repo = repoPlotLand;
             _repoSector = repoSector;
             _idSeason = idSeason;
+            _commonDb = commonDb;
         }
         public async Task<ExtGetContainer<PlotLand>> GetPlotLand(string id)
         {
@@ -32,7 +34,8 @@ namespace trifenix.agro.external.operations.entities.fields
 
         public async Task<ExtGetContainer<List<PlotLand>>> GetPlotLands()
         {
-            var plotLands = await _repo.GetPlotLands().ToListAsync();
+            var queryPlotands = _repo.GetPlotLands();
+            var plotLands = await _commonDb.TolistAsync(queryPlotands);
             return OperationHelper.GetElements(plotLands);
 
         }
@@ -60,6 +63,8 @@ namespace trifenix.agro.external.operations.entities.fields
             );
         }
 
+
+        
         public async Task<ExtPostContainer<string>> SaveNewPlotLand(string name, string idSector)
         {
             var sector = await _repoSector.GetSector(idSector);
@@ -67,7 +72,7 @@ namespace trifenix.agro.external.operations.entities.fields
             {
                 return OperationHelper.PostNotFoundElementException<string>($"no existe sector con id {idSector}", idSector);
             }
-            return await OperationHelper.CreateElement(_repo.GetPlotLands(),
+            return await OperationHelper.CreateElement(_commonDb,_repo.GetPlotLands(),
                 async s => await _repo.CreateUpdateSector(new PlotLand
                 {
                     Id = s,

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces.agro;
+using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.external.interfaces.entities.main;
 using trifenix.agro.external.operations.helper;
@@ -14,17 +15,20 @@ namespace trifenix.agro.external.operations.entities.main
 
         private readonly IVarietyRepository _repo;
         private readonly ISpecieRepository _repoSpecie;
-        public VarietyOperations(IVarietyRepository repo, ISpecieRepository repoSpecie)
+        private readonly ICommonDbOperations<Variety> _commonDb;
+        public VarietyOperations(IVarietyRepository repo, ISpecieRepository repoSpecie, ICommonDbOperations<Variety> commonDb)
         {
             _repo = repo;
             _repoSpecie = repoSpecie;
+            _commonDb = commonDb;
         }
 
 
         public async Task<ExtGetContainer<List<Variety>>> GetVarieties()
         {
-            var elements = await _repo.GetVarieties().ToListAsync();
-            return OperationHelper.GetElements(elements);
+            var varietiesQuery = _repo.GetVarieties();
+            var varieties = await _commonDb.TolistAsync(varietiesQuery);
+            return OperationHelper.GetElements(varieties);
         }
 
         public async Task<ExtGetContainer<Variety>> GetVariety(string id)
@@ -58,7 +62,7 @@ namespace trifenix.agro.external.operations.entities.main
         {
             var specie = await _repoSpecie.GetSpecie(idSpecie);
             if (specie == null) return OperationHelper.PostNotFoundElementException<string>($"no se encontró especie con id {idSpecie}", idSpecie);
-            return await OperationHelper.CreateElement(_repo.GetVarieties(),
+            return await OperationHelper.CreateElement(_commonDb, _repo.GetVarieties(),
                 async s => await _repo.CreateUpdateVariety(new Variety
                 {
                     Id = s,
