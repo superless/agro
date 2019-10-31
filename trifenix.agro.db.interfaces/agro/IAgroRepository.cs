@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using trifenix.agro.db.interfaces.agro.events;
+﻿using trifenix.agro.db.interfaces.agro.events;
 using trifenix.agro.db.interfaces.agro.fields;
 using trifenix.agro.db.interfaces.agro.orders;
 
