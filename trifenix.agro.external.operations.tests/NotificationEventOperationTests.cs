@@ -181,7 +181,7 @@ namespace trifenix.agro.external.operations.tests
         public async Task SaveNewNotificationEvent_differentParameters_returnExceptionOnElementExists(string idBarrick, string idPhenologicalEvent, string base64, string description)
         {
             //Arrange            
-            var repo = NotificationEventsInstances.GetInstance(KindOfInstance.ReturnElementFromCommonDb);
+            var repo = NotificationEventsInstances.GetInstance(KindOfInstance.DefaultReturnValues);
 
             //Action
             var result = await repo.SaveNewNotificationEvent(idBarrick, idPhenologicalEvent, base64, description);
