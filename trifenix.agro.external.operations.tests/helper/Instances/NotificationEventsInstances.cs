@@ -72,9 +72,18 @@ namespace trifenix.agro.external.operations.tests.helper.Instances
                     return new NotificationEventOperations(
                         AgroMoq.NotificationEvent.GetMoqRepo(Results.Values).Object,
                         AgroMoq.Barrack.GetMoqRepo(Results.Values).Object,
-                        AgroMoq.PhenologicalEvent.GetMoqRepo(Results.Nullables).Object,
+                        AgroMoq.PhenologicalEvent.GetMoqRepo(Results.Values).Object,
+                        AgroMoq.CommonDb<NotificationEvent>().GetMoqRepo(Results.Values).Object,
+                        AgroMoq.UploadImage.GetMoqRepo(Results.Values).Object);
+                case KindOfInstance.NullDb:
+                    return new NotificationEventOperations(
+                        AgroMoq.NotificationEvent.GetMoqRepo(Results.Nullables).Object,
+                        AgroMoq.Barrack.GetMoqRepo(Results.Values).Object,
+                        AgroMoq.PhenologicalEvent.GetMoqRepo(Results.Values).Object,
                         AgroMoq.CommonDb<NotificationEvent>().GetMoqRepo(Results.Nullables).Object,
                         AgroMoq.UploadImage.GetMoqRepo(Results.Values).Object);
+   
+
             }
             throw new Exception("bad parameters");
         }
@@ -82,7 +91,7 @@ namespace trifenix.agro.external.operations.tests.helper.Instances
 
     public enum KindOfInstance
     {
-        DefaultReturnValues,
+        DefaultReturnValues ,
         DefaultReturnNull,
         DefaultReturnException,
         DefaultReturnEmpty,
@@ -90,7 +99,7 @@ namespace trifenix.agro.external.operations.tests.helper.Instances
         DefaultReturnValuesOkCommonDb,
         DefaultReturnExceptionOnBarracksEmpty,
         DefaultReturnExceptionOnPhenologicalEmpty,
-        ReturnElementFromCommonDb
-        
+        ReturnElementFromCommonDb,
+        NullDb,
     }
 }

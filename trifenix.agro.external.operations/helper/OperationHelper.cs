@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using trifenix.agro.model.external;
-using Cosmonaut.Extensions;
 using trifenix.agro.db;
 using System.Linq.Expressions;
 using trifenix.agro.db.interfaces.common;
@@ -42,6 +40,8 @@ namespace trifenix.agro.external.operations.helper
                 StatusResult = ExtGetDataResult.Success
             };
         }
+
+
         /// <summary>
         /// Retorna un contenedor con una lista de elementos
         /// </summary>

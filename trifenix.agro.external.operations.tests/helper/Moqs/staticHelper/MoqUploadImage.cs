@@ -12,7 +12,7 @@ namespace trifenix.agro.external.operations.tests.helper.staticHelper
 
         public static Mock<IUploadImage> GetUploadImageReturnResult() {
             var mockUpload = new Mock<IUploadImage>();
-            mockUpload.Setup(s => s.UploadImageBase64(It.IsAny<string>())).ReturnsAsync(FakeGenerator.UploadImageBase64());
+            mockUpload.Setup(s => s.UploadImageBase64(It.IsAny<string>())).ReturnsAsync(FakeGenerator.CreateString());
             return mockUpload;
         }
 

@@ -21,5 +21,9 @@ namespace trifenix.agro.external.operations.tests.helper
         public static IMoqRepo<IUploadImage> UploadImage => new MoqUploadImageRepo();
 
         public static IMoqRepo<IPhenologicalEventRepository> PhenologicalEvent => new MoqPhenologicalEventRepo();
+
+        public static IMoqRepo<IIngredientRepository> Ingredient => new MoqIngredientRepo();
+
+        
     }
 }
