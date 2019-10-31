@@ -104,6 +104,19 @@ namespace trifenix.agro.external.operations.tests
             //Assertt
             Assert.True(result.GetType() == typeof(ExtGetErrorContainer<List<NotificationEvent>>));
         }
+
+        [Fact]
+        public async Task GetNotificationEvents_ReturnExceptionWhenListIsNull()
+        {
+            //Arrange            
+            var repo = NotificationEventsInstances.GetInstance(KindOfInstance.DefaultReturnNull);
+
+            //Action
+            var result = await repo.GetEvents();
+
+            //Assertt
+            Assert.True(result.GetType() == typeof(ExtGetErrorContainer<List<NotificationEvent>>));
+        }
         #endregion
 
         #region SaveNewNotificationEvent
@@ -175,6 +188,27 @@ namespace trifenix.agro.external.operations.tests
             //Assert
             Assert.True(result.GetType() == typeof(ExtPostErrorContainer<string>));
         }
+
+        [Theory]
+        [InlineData("a", "s", "d", "f")]
+        public async Task SaveNewNotificationEvent_differentParameters_returnExceptionOnDbException(string idBarrick, string idPhenologicalEvent, string base64, string description)
+        {
+            //Arrange            
+            var repo = NotificationEventsInstances.GetInstance(KindOfInstance.DefaultReturnException);
+
+            //Action
+            var result = await repo.SaveNewNotificationEvent(idBarrick, idPhenologicalEvent, base64, description);
+            //Assert
+            Assert.True(result.GetType() == typeof(ExtPostErrorContainer<string>));
+        }
+
+
+
+
+
+
+
+
 
 
 

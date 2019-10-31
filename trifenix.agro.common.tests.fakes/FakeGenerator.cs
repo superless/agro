@@ -6,63 +6,29 @@ namespace trifenix.agro.common.tests.fakes
 {
     public static class FakeGenerator
     {
-        public static IQueryable<NotificationEvent> GetNotificationEvents()
+       
+
+
+        public static IQueryable<T> GetElements<T>() where T:class
         {
-            var list = AutoFaker.Create().Generate<NotificationEvent>(10);
+            var list = AutoFaker.Create().Generate<T>(10);
             return list.AsQueryable();
         }
 
-        public static NotificationEvent GetNotificationEvent()
+        public static T GetElement<T>() where T : class
         {
-            return AutoFaker.Create().Generate<NotificationEvent>();
-            
+            return AutoFaker.Create().Generate<T>();
+
         }
 
-        public static string CreateUpdateNotificationEvent()
-        {
-            return AutoFaker.Create().Generate<string>();
-        }
-
-
-
-        public static string CreateUpdateBarrack()
+        public static string CreateString()
         {
             return AutoFaker.Create().Generate<string>();
         }
 
-        public static Barrack GetBarrack()
-        {
-            return AutoFaker.Create().Generate<Barrack>();
-        }
-
-        public static IQueryable<Barrack> GetBarracks()
-        {
-            return AutoFaker.Create().Generate<Barrack>(10).AsQueryable();
-        }
 
 
-
-        public static string CreateUpdatePhenologicalEvent()
-        {
-            return AutoFaker.Create().Generate<string>();
-        }
-
-        public static PhenologicalEvent GetPhenologicalEvent()
-        {
-            return AutoFaker.Create().Generate<PhenologicalEvent>();
-        }
-
-        public static IQueryable<PhenologicalEvent> GetPhenologicalEvents()
-        {
-            return AutoFaker.Create().Generate<PhenologicalEvent>(10).AsQueryable();
-        }
-
-
-
-        public static string UploadImageBase64()
-        {
-            return AutoFaker.Create().Generate<string>();
-        }
+        
 
     }
 }

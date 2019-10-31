@@ -13,9 +13,9 @@ namespace trifenix.agro.external.operations.tests.helper.staticHelper
         
         public static Mock<IPhenologicalEventRepository> GetPhenologicalEventReturnResult() {
             var mockPhenological = new Mock<IPhenologicalEventRepository>();
-            mockPhenological.Setup(s => s.CreateUpdatePhenologicalEvent(It.IsAny<PhenologicalEvent>())).ReturnsAsync(FakeGenerator.CreateUpdatePhenologicalEvent());
-            mockPhenological.Setup(s => s.GetPhenologicalEvent(It.IsAny<string>())).ReturnsAsync(FakeGenerator.GetPhenologicalEvent());
-            mockPhenological.Setup(s => s.GetPhenologicalEvents()).Returns(FakeGenerator.GetPhenologicalEvents());
+            mockPhenological.Setup(s => s.CreateUpdatePhenologicalEvent(It.IsAny<PhenologicalEvent>())).ReturnsAsync(FakeGenerator.CreateString());
+            mockPhenological.Setup(s => s.GetPhenologicalEvent(It.IsAny<string>())).ReturnsAsync(FakeGenerator.GetElement<PhenologicalEvent>());
+            mockPhenological.Setup(s => s.GetPhenologicalEvents()).Returns(FakeGenerator.GetElements<PhenologicalEvent>());
             return mockPhenological;
         }
 

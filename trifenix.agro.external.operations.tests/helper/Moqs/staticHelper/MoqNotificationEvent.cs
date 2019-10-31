@@ -22,9 +22,9 @@ namespace trifenix.agro.external.operations.tests.helper.staticHelper
         public static Mock<INotificationEventRepository> GetNotificationEventReturnResults()
         {
             var mockNotification = new Mock<INotificationEventRepository>();
-            mockNotification.Setup(s => s.GetNotificationEvent(It.IsAny<string>())).ReturnsAsync(FakeGenerator.GetNotificationEvent());
-            mockNotification.Setup(s => s.GetNotificationEvents()).Returns(FakeGenerator.GetNotificationEvents());
-            mockNotification.Setup(s => s.CreateUpdateNotificationEvent(It.IsAny<NotificationEvent>())).ReturnsAsync(FakeGenerator.CreateUpdateNotificationEvent());
+            mockNotification.Setup(s => s.GetNotificationEvent(It.IsAny<string>())).ReturnsAsync(FakeGenerator.GetElement<NotificationEvent>());
+            mockNotification.Setup(s => s.GetNotificationEvents()).Returns(FakeGenerator.GetElements<NotificationEvent>());
+            mockNotification.Setup(s => s.CreateUpdateNotificationEvent(It.IsAny<NotificationEvent>())).ReturnsAsync(FakeGenerator.CreateString());
             return mockNotification;
         }
 

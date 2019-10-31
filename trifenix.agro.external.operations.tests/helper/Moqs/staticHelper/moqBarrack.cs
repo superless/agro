@@ -40,9 +40,9 @@ namespace trifenix.agro.external.operations.tests.helper.staticHelper
 
         public static Mock<IBarrackRepository> GetBarrackWithResults() {
             var mockBarrack = new Mock<IBarrackRepository>();
-            mockBarrack.Setup(s => s.CreateUpdateBarrack(It.IsAny<Barrack>())).ReturnsAsync(FakeGenerator.CreateUpdateBarrack());
-            mockBarrack.Setup(s => s.GetBarrack(It.IsAny<string>())).ReturnsAsync(FakeGenerator.GetBarrack());
-            mockBarrack.Setup(s => s.GetBarracks()).Returns(FakeGenerator.GetBarracks());
+            mockBarrack.Setup(s => s.CreateUpdateBarrack(It.IsAny<Barrack>())).ReturnsAsync(FakeGenerator.CreateString());
+            mockBarrack.Setup(s => s.GetBarrack(It.IsAny<string>())).ReturnsAsync(FakeGenerator.GetElement<Barrack>());
+            mockBarrack.Setup(s => s.GetBarracks()).Returns(FakeGenerator.GetElements<Barrack>());
             return mockBarrack;
         }
 
