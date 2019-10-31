@@ -1,87 +1,105 @@
-﻿using System;
-using trifenix.agro.common.tests.interfaces;
+﻿using Moq;
+using System;
+using trifenix.agro.db.interfaces.agro.events;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.external.operations.entities.events;
+using trifenix.agro.external.operations.tests.helper.Moqs;
 
 namespace trifenix.agro.external.operations.tests.helper.Instances
 {
+
     public static class NotificationEventsInstances
     {
+
+        public static Mock<INotificationEventRepository> GetInstance(Results result) =>
+            MoqGenerator.GetMoqResult<INotificationEventRepository, NotificationEvent>(result, 
+                (s) => s.CreateUpdateNotificationEvent(It.IsAny<NotificationEvent>()), 
+                (s) => s.GetNotificationEvent(It.IsAny<string>()), 
+                s => s.GetNotificationEvents());
+
         public static NotificationEventOperations GetInstance(KindOfInstance kindOfInstance)
         {
             switch (kindOfInstance)
             {
                 case KindOfInstance.DefaultReturnValues:
                     return new NotificationEventOperations(
-                        AgroMoq.NotificationEvent.GetMoqRepo(Results.Values).Object,
-                        AgroMoq.Barrack.GetMoqRepo(Results.Values).Object,
-                        AgroMoq.PhenologicalEvent.GetMoqRepo(Results.Values).Object,
-                        AgroMoq.CommonDb<NotificationEvent>().GetMoqRepo(Results.Values).Object,
-                        AgroMoq.UploadImage.GetMoqRepo(Results.Values).Object);
+                        GetInstance(Results.Values).Object,
+                        BarrackInstances.GetInstance(Results.Values).Object,
+                        PhenologicalEventsInstances.GetInstance(Results.Values).Object,
+                        CommonDbInstances<NotificationEvent>.GetInstance(Results.Values).Object,
+                        UploadImageInstance.GetInstance(Results.Values).Object
+                    );
+
                 case KindOfInstance.DefaultReturnNull:
                     return new NotificationEventOperations(
-                        AgroMoq.NotificationEvent.GetMoqRepo(Results.Nullables).Object,
-                        AgroMoq.Barrack.GetMoqRepo(Results.Values).Object,
-                        AgroMoq.PhenologicalEvent.GetMoqRepo(Results.Values).Object,
-                        AgroMoq.CommonDb<NotificationEvent>().GetMoqRepo(Results.Values).Object,
-                        AgroMoq.UploadImage.GetMoqRepo(Results.Values).Object);
+                        GetInstance(Results.Nullables).Object,
+                        BarrackInstances.GetInstance(Results.Values).Object,
+                        PhenologicalEventsInstances.GetInstance(Results.Values).Object,
+                        CommonDbInstances<NotificationEvent>.GetInstance(Results.Values).Object,
+                        UploadImageInstance.GetInstance(Results.Values).Object
+                    );
                 case KindOfInstance.DefaultReturnException:
                     return new NotificationEventOperations(
-                        AgroMoq.NotificationEvent.GetMoqRepo(Results.Errors).Object,
-                        AgroMoq.Barrack.GetMoqRepo(Results.Values).Object,
-                        AgroMoq.PhenologicalEvent.GetMoqRepo(Results.Values).Object,
-                        AgroMoq.CommonDb<NotificationEvent>().GetMoqRepo(Results.Values).Object,
-                        AgroMoq.UploadImage.GetMoqRepo(Results.Values).Object);
+                       GetInstance(Results.Errors).Object,
+                       BarrackInstances.GetInstance(Results.Values).Object,
+                       PhenologicalEventsInstances.GetInstance(Results.Values).Object,
+                       CommonDbInstances<NotificationEvent>.GetInstance(Results.Values).Object,
+                       UploadImageInstance.GetInstance(Results.Values).Object
+                   );
+
                 case KindOfInstance.DefaultReturnEmpty:
                     return new NotificationEventOperations(
-                        AgroMoq.NotificationEvent.GetMoqRepo(Results.Empty).Object,
-                        AgroMoq.Barrack.GetMoqRepo(Results.Values).Object,
-                        AgroMoq.PhenologicalEvent.GetMoqRepo(Results.Values).Object,
-                        AgroMoq.CommonDb<NotificationEvent>().GetMoqRepo(Results.Values).Object,
-                        AgroMoq.UploadImage.GetMoqRepo(Results.Values).Object);
+                       GetInstance(Results.Empty).Object,
+                       BarrackInstances.GetInstance(Results.Values).Object,
+                       PhenologicalEventsInstances.GetInstance(Results.Values).Object,
+                       CommonDbInstances<NotificationEvent>.GetInstance(Results.Values).Object,
+                       UploadImageInstance.GetInstance(Results.Values).Object
+                   );
+
                 case KindOfInstance.DefaultReturnValuesNullCommonDb:
                     return new NotificationEventOperations(
-                        AgroMoq.NotificationEvent.GetMoqRepo(Results.Values).Object,
-                        AgroMoq.Barrack.GetMoqRepo(Results.Values).Object,
-                        AgroMoq.PhenologicalEvent.GetMoqRepo(Results.Values).Object,
-                        AgroMoq.CommonDb<NotificationEvent>().GetMoqRepo(Results.Nullables).Object,
-                        AgroMoq.UploadImage.GetMoqRepo(Results.Values).Object);
+                       GetInstance(Results.Values).Object,
+                       BarrackInstances.GetInstance(Results.Values).Object,
+                       PhenologicalEventsInstances.GetInstance(Results.Values).Object,
+                       CommonDbInstances<NotificationEvent>.GetInstance(Results.Nullables).Object,
+                       UploadImageInstance.GetInstance(Results.Values).Object
+                   );
+
                 case KindOfInstance.DefaultReturnValuesOkCommonDb:
                     return new NotificationEventOperations(
-                        AgroMoq.NotificationEvent.GetMoqRepo(Results.Values).Object,
-                        AgroMoq.Barrack.GetMoqRepo(Results.Values).Object,
-                        AgroMoq.PhenologicalEvent.GetMoqRepo(Results.Values).Object,
-                        AgroMoq.CommonDb<NotificationEvent>().GetMoqRepo(Results.Nullables).Object,
-                        AgroMoq.UploadImage.GetMoqRepo(Results.Values).Object);
+                       GetInstance(Results.Values).Object,
+                       BarrackInstances.GetInstance(Results.Values).Object,
+                       PhenologicalEventsInstances.GetInstance(Results.Values).Object,
+                       CommonDbInstances<NotificationEvent>.GetInstance(Results.Nullables).Object,
+                       UploadImageInstance.GetInstance(Results.Values).Object
+                   );
                 case KindOfInstance.DefaultReturnExceptionOnBarracksEmpty:
                     return new NotificationEventOperations(
-                        AgroMoq.NotificationEvent.GetMoqRepo(Results.Values).Object,
-                        AgroMoq.Barrack.GetMoqRepo(Results.Nullables).Object,
-                        AgroMoq.PhenologicalEvent.GetMoqRepo(Results.Values).Object,
-                        AgroMoq.CommonDb<NotificationEvent>().GetMoqRepo(Results.Nullables).Object,
-                        AgroMoq.UploadImage.GetMoqRepo(Results.Values).Object);
+                       GetInstance(Results.Values).Object,
+                       BarrackInstances.GetInstance(Results.Nullables).Object,
+                       PhenologicalEventsInstances.GetInstance(Results.Values).Object,
+                       CommonDbInstances<NotificationEvent>.GetInstance(Results.Values).Object,
+                       UploadImageInstance.GetInstance(Results.Values).Object
+                   );
+
                 case KindOfInstance.DefaultReturnExceptionOnPhenologicalEmpty:
                     return new NotificationEventOperations(
-                        AgroMoq.NotificationEvent.GetMoqRepo(Results.Values).Object,
-                        AgroMoq.Barrack.GetMoqRepo(Results.Values).Object,
-                        AgroMoq.PhenologicalEvent.GetMoqRepo(Results.Nullables).Object,
-                        AgroMoq.CommonDb<NotificationEvent>().GetMoqRepo(Results.Nullables).Object,
-                        AgroMoq.UploadImage.GetMoqRepo(Results.Values).Object);
+                       GetInstance(Results.Values).Object,
+                       BarrackInstances.GetInstance(Results.Values).Object,
+                       PhenologicalEventsInstances.GetInstance(Results.Nullables).Object,
+                       CommonDbInstances<NotificationEvent>.GetInstance(Results.Values).Object,
+                       UploadImageInstance.GetInstance(Results.Values).Object
+                   );
 
-                case KindOfInstance.ReturnElementFromCommonDb:
-                    return new NotificationEventOperations(
-                        AgroMoq.NotificationEvent.GetMoqRepo(Results.Values).Object,
-                        AgroMoq.Barrack.GetMoqRepo(Results.Values).Object,
-                        AgroMoq.PhenologicalEvent.GetMoqRepo(Results.Values).Object,
-                        AgroMoq.CommonDb<NotificationEvent>().GetMoqRepo(Results.Values).Object,
-                        AgroMoq.UploadImage.GetMoqRepo(Results.Values).Object);
+                
                 case KindOfInstance.NullDb:
                     return new NotificationEventOperations(
-                        AgroMoq.NotificationEvent.GetMoqRepo(Results.Nullables).Object,
-                        AgroMoq.Barrack.GetMoqRepo(Results.Values).Object,
-                        AgroMoq.PhenologicalEvent.GetMoqRepo(Results.Values).Object,
-                        AgroMoq.CommonDb<NotificationEvent>().GetMoqRepo(Results.Nullables).Object,
-                        AgroMoq.UploadImage.GetMoqRepo(Results.Values).Object);
+                       GetInstance(Results.Values).Object,
+                       BarrackInstances.GetInstance(Results.Nullables).Object,
+                       PhenologicalEventsInstances.GetInstance(Results.Nullables).Object,
+                       CommonDbInstances<NotificationEvent>.GetInstance(Results.Nullables).Object,
+                       UploadImageInstance.GetInstance(Results.Values).Object
+                   );
    
 
             }
@@ -98,8 +116,7 @@ namespace trifenix.agro.external.operations.tests.helper.Instances
         DefaultReturnValuesNullCommonDb,
         DefaultReturnValuesOkCommonDb,
         DefaultReturnExceptionOnBarracksEmpty,
-        DefaultReturnExceptionOnPhenologicalEmpty,
-        ReturnElementFromCommonDb,
+        DefaultReturnExceptionOnPhenologicalEmpty,        
         NullDb,
     }
 }
