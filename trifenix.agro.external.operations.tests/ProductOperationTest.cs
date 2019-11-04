@@ -15,11 +15,11 @@ namespace trifenix.agro.external.operations.tests
 
         [Theory]
         [InlineData("atlas43", "gfdhgfghkh","marcaX", null, MeasureType.KL,100, KindOfProductContainer.Bottle)]
-        public async Task SaveProduct_allParameters_success(string commercialName, string idActiveIngredient, string brand, DosesInput[] idDoses, MeasureType measureType, int quantity, KindOfProductContainer kindOfProduct) {
+        public async Task SaveProduct_allParameters_success(string commercialName, string idActiveIngredient, string brand, DosesInput[] doses, MeasureType measureType, int quantity, KindOfProductContainer kindOfProduct) {
 
             var repo = ProductInstances.GetProductOperations(ProductEnumIntances.DefaultInstance);
 
-            var action = await repo.CreateProduct(commercialName, idActiveIngredient, brand, idDoses, measureType, quantity, kindOfProduct);
+            var action = await repo.CreateProduct(commercialName, idActiveIngredient, brand, doses, measureType, quantity, kindOfProduct);
 
             Assert.True(action.MessageResult == ExtMessageResult.Ok);
         }

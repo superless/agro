@@ -27,14 +27,14 @@ namespace trifenix.agro.db.model.agro.local
         /// </summary>
         public Specie Specie { get; set; }
 
-        private List<Sickness> _sicknesses;
+        private List<ApplicationTarget> _target;
 
-        public List<Sickness> Sicknesses
+        public List<ApplicationTarget> Targets
         {
             get {
-                _sicknesses = _sicknesses ?? new List<Sickness>();
-                return _sicknesses; }
-            set { _sicknesses = value; }
+                _target = _target ?? new List<ApplicationTarget>();
+                return _target; }
+            set { _target = value; }
         }
 
 
@@ -75,17 +75,27 @@ namespace trifenix.agro.db.model.agro.local
         /// <summary>
         /// Mojamiento recomendado por hectarea
         /// </summary>
-        public int WettingRecommended { get; set; }
+        public int WettingRecommendedByHectares { get; set; }
 
 
+        public int DosesQuantity { get; set; }
 
+        public DosesApplicatedTo DosesApplicatedTo { get; set; }
 
+        public int idSeason
+        {
+            get => default;
+            set
+            {
+            }
+        }
+    }
 
-
-
-
-
-
+    public enum DosesApplicatedTo {
+        L100,
+        L1000
 
     }
+
+
 }

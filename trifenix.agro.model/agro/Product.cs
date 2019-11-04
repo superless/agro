@@ -34,8 +34,6 @@ namespace trifenix.agro.db.model.agro
         /// </summary>
         public string Brand { get; set; }
 
-
-        
         private List<Doses> _doses;
 
         /// <summary>
@@ -43,11 +41,15 @@ namespace trifenix.agro.db.model.agro
         /// </summary>
         public List<Doses> Doses
         {
-            get {
+            get
+            {
                 _doses = _doses ?? new List<Doses>();
-                return _doses; }
+                return _doses;
+            }
             set { _doses = value; }
         }
+
+
 
         private List<string> _idsCertifiedEntities;
 
@@ -65,20 +67,20 @@ namespace trifenix.agro.db.model.agro
         }
 
 
-        private List<string> _idsSickenesses;
+        private List<string> _idsTargets;
 
 
         /// <summary>
         /// Ids de las enfermedades dentro de las dosis
         /// </summary>
-        public List<string> IdsSickenesses
+        public List<string> IdsTargets
         {
             get
             {
-                _idsSickenesses = _idsSickenesses ?? new List<string>();
-                return _idsSickenesses;
+                _idsTargets = _idsTargets ?? new List<string>();
+                return _idsTargets;
             }
-            set { _idsSickenesses = value; }
+            set { _idsTargets = value; }
         }
 
         private List<string> _idVarieties;
