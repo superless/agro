@@ -8,7 +8,7 @@ namespace trifenix.agro.model.external.Input
 
         public string IdSpecie { get; set; }
 
-        public string[] IdsSickness { get; set; }
+        public string[] idsApplicationTarget { get; set; }
 
         public int DaysToReEntryToBarrack { get; set; }
 

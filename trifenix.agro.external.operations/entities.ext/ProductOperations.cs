@@ -19,17 +19,17 @@ namespace trifenix.agro.external.operations.entities.ext
     {
         private readonly IIngredientRepository ingredientRepository;
         private readonly IProductRepository productRepository;
-        private readonly ISicknessRepository sicknessRepository;
+        private readonly IApplicationTargetRepository targetRepository;
         private readonly ICertifiedEntityRepository certifiedEntityRepository;
         private readonly IVarietyRepository varietyRepository;
         private readonly ISpecieRepository specieRepository;
         private readonly ICommonDbOperations<Product> commonDb;
 
-        public ProductOperations(IIngredientRepository ingredientRepository, IProductRepository productRepository, ISicknessRepository sicknessRepository, ICertifiedEntityRepository certifiedEntityRepository, IVarietyRepository varietyRepository, ISpecieRepository specieRepository, ICommonDbOperations<Product> commonDb)
+        public ProductOperations(IIngredientRepository ingredientRepository, IProductRepository productRepository, IApplicationTargetRepository targetRepository, ICertifiedEntityRepository certifiedEntityRepository, IVarietyRepository varietyRepository, ISpecieRepository specieRepository, ICommonDbOperations<Product> commonDb)
         {
             this.ingredientRepository = ingredientRepository;
             this.productRepository = productRepository;
-            this.sicknessRepository = sicknessRepository;
+            this.targetRepository = targetRepository;
             this.certifiedEntityRepository = certifiedEntityRepository;
             this.varietyRepository = varietyRepository;
             this.specieRepository = specieRepository;
@@ -56,7 +56,7 @@ namespace trifenix.agro.external.operations.entities.ext
             if (doses != null && doses.Any())
             {
                 varietyIds = doses.SelectMany(s => s.IdVarieties).Distinct();
-                sicknessIds = doses.SelectMany(s => s.IdsSickness).Distinct();
+                sicknessIds = doses.SelectMany(s => s.idsApplicationTarget).Distinct();
                 speciesIds = doses.Select(s => s.IdSpecie).Distinct();
                 certifiedEntitiesIds = doses.SelectMany(s => s.WaitingToHarvest.Select(a => a.IdCertifiedEntity)).Distinct();
 
@@ -74,7 +74,7 @@ namespace trifenix.agro.external.operations.entities.ext
                        CommercialName = commercialName,
                        Doses = localDoses,
                        IdsCertifiedEntities = certifiedEntitiesIds?.ToList(),
-                       IdsSickenesses = sicknessIds?.ToList(),
+                       IdsTargets = sicknessIds?.ToList(),
                        IdsSpecies = speciesIds?.ToList(),
                        IdVarieties = varietyIds?.ToList()
 
@@ -86,17 +86,17 @@ namespace trifenix.agro.external.operations.entities.ext
         }
 
 
-        private async Task<List<Doses>> GetDoses(DosesInput[] input, IEnumerable<string> varietyIds, IEnumerable<string> sicknessIds, IEnumerable<string> speciesIds, IEnumerable<string> certifiedEntitiesIds) {
+        private async Task<List<Doses>> GetDoses(DosesInput[] input, IEnumerable<string> varietyIds, IEnumerable<string> targetsId, IEnumerable<string> speciesIds, IEnumerable<string> certifiedEntitiesIds) {
 
             
 
             var varietyTasks = varietyIds.Select(varietyRepository.GetVariety);
-            var sicknessTasks = sicknessIds.Select(sicknessRepository.GetSickness);
+            var targetsTasks = targetsId.Select(targetRepository.GetTarget);
             var speciesTasks = speciesIds.Select(specieRepository.GetSpecie);
             var certifiedTasks = certifiedEntitiesIds.Select(certifiedEntityRepository.GetCertifiedEntity);
 
             var varieties = await Task.WhenAll(varietyTasks);
-            var sickness = await Task.WhenAll(sicknessTasks);
+            var targets = await Task.WhenAll(targetsTasks);
             var species = await Task.WhenAll(speciesTasks);
             var certifiedEntities = await Task.WhenAll(certifiedTasks);
 
@@ -104,10 +104,10 @@ namespace trifenix.agro.external.operations.entities.ext
                 ApplicationDaysInterval = i.ApplicationDaysInterval,
                 DaysToReEntryToBarrack = i.DaysToReEntryToBarrack,
                 NumberOfSecuencialAppication = i.NumberOfSecuencialAppication,
-                Sicknesses = i.IdsSickness.Select(s=>sickness.First(a=>a.Id.Equals(s))).ToList(),
+                Targets = i.idsApplicationTarget.Select(s=>targets.First(a=>a.Id.Equals(s))).ToList(),
                 Varieties = i.IdVarieties.Select(s => varieties.First(a => a.Id.Equals(s))).ToList(),
                 Specie = species.First(s=>s.Id.Equals(i.IdSpecie)),
-                WettingRecommended = i.WettingRecommended,
+                WettingRecommendedByHectares = i.WettingRecommended,
                 WaitingToHarvest = i.WaitingToHarvest.Select(w=>new WaitingHarvest {
                     CertifiedEntity = certifiedEntities.First(c=>c.Id.Equals(w.IdCertifiedEntity)),
                     IsLabel = w.IsLabel,

@@ -28,7 +28,7 @@ namespace trifenix.agro.external.operations.tests.helper.Instances
                     return new ProductOperations(
                         IngredientsInstances.GetInstance(Results.Values).Object,
                         GetInstance(Results.Values).Object,
-                        SicknessInstances.GetInstance(Results.Values).Object,
+                        ApplicationTargetInstances.GetInstance(Results.Values).Object,
                         CertifiedEntitiesInstances.GetInstance(Results.Values).Object,
                         VarietyInstances.GetInstance(Results.Values).Object,
                         SpeciesIntances.GetInstance(Results.Values).Object,
@@ -38,7 +38,7 @@ namespace trifenix.agro.external.operations.tests.helper.Instances
                     return new ProductOperations(
                         IngredientsInstances.GetInstance(Results.Empty).Object,
                         GetInstance(Results.Values).Object,
-                        SicknessInstances.GetInstance(Results.Values).Object,
+                        ApplicationTargetInstances.GetInstance(Results.Values).Object,
                         CertifiedEntitiesInstances.GetInstance(Results.Values).Object,
                         VarietyInstances.GetInstance(Results.Values).Object,
                         SpeciesIntances.GetInstance(Results.Values).Object,
