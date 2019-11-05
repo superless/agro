@@ -10,15 +10,12 @@ namespace trifenix.agro.external.operations.tests.helper.Instances
 
     public static class ProductInstances
     {
-        
-
         public static Mock<IProductRepository> GetInstance(Results result) =>
             MoqGenerator.GetMoqResult<IProductRepository, Product>(
                 result, 
                 (s) => s.CreateUpdateProduct(It.IsAny<Product>()), 
                 (s) => s.GetProduct(It.IsAny<string>()), 
                 s => s.GetProducts());
-
 
         public static ProductOperations GetProductOperations(ProductEnumIntances instance) {
 
@@ -45,8 +42,7 @@ namespace trifenix.agro.external.operations.tests.helper.Instances
                         CommonDbInstances<Product>.GetInstance(Results.Values).Object
                         );
             }
-            throw new Exception("bar params");
-
+            throw new Exception("Bad parameters!");
         }
     }
 }

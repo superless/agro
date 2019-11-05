@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using trifenix.agro.db.model.agro.enums;
-using trifenix.agro.external.operations.entities.ext;
 using trifenix.agro.external.operations.tests.helper.Instances;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
@@ -10,9 +9,6 @@ namespace trifenix.agro.external.operations.tests
 {
     public class ProductOperationTest
     {
-
-
-
         [Theory]
         [InlineData("atlas43", "gfdhgfghkh","marcaX", null, MeasureType.KL,100, KindOfProductContainer.Bottle)]
         public async Task SaveProduct_allParameters_success(string commercialName, string idActiveIngredient, string brand, DosesInput[] doses, MeasureType measureType, int quantity, KindOfProductContainer kindOfProduct) {

@@ -84,8 +84,6 @@ namespace trifenix.agro.external.operations.entities.ext
                    $"ya existe producto con nombre : {commercialName}"
                );
         }
-
-
         private async Task<List<Doses>> GetDoses(DosesInput[] input, IEnumerable<string> varietyIds, IEnumerable<string> targetsId, IEnumerable<string> speciesIds, IEnumerable<string> certifiedEntitiesIds) {
 
             
