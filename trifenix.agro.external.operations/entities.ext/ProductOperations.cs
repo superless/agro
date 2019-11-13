@@ -139,12 +139,13 @@ namespace trifenix.agro.external.operations.entities.ext
                 WettingRecommendedByHectares = i.WettingRecommendedByHectares,
                 IdSeason = idSeason,
                 DosesApplicatedTo = i.DosesApplicatedTo,
-                DosesQuantity = i.DosesQuantity,
+                DosesQuantityMin = i.DosesQuantityMin,
+                DosesQuantityMax = i.DosesQuantityMax,
                 WaitingToHarvest = i.WaitingToHarvest.Select(w=>new WaitingHarvest {
-                    CertifiedEntity = certifiedEntities.First(c=>c.Id.Equals(w.IdCertifiedEntity)),
-                    IsLabel = w.IsLabel,
+                    CertifiedEntity = certifiedEntities.First(c=>c.Id.Equals(w.IdCertifiedEntity)),                    
                     WaitingDays = w.WaitingDays
-                }).ToList()
+                }).ToList(),
+                WaitingDaysLabel = i.WaitingDaysLabel
 
             }).ToList();
         }

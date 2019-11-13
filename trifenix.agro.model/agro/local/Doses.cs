@@ -92,11 +92,17 @@ namespace trifenix.agro.db.model.agro.local
         public int WettingRecommendedByHectares { get; set; }
 
 
-        public int DosesQuantity { get; set; }
+        public int DosesQuantityMin { get; set; }
+
+        public int DosesQuantityMax { get; set; }
+
 
         public DosesApplicatedTo DosesApplicatedTo { get; set; }
 
         public string IdSeason { get; set; }
+
+
+        public int? WaitingDaysLabel { get; set; }
     }
 
     public enum DosesApplicatedTo {
