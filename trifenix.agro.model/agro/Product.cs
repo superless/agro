@@ -1,6 +1,7 @@
 ﻿using Cosmonaut;
 using Cosmonaut.Attributes;
 using System.Collections.Generic;
+using trifenix.agro.db.model.agro.enums;
 using trifenix.agro.db.model.agro.local;
 
 namespace trifenix.agro.db.model.agro
@@ -9,7 +10,7 @@ namespace trifenix.agro.db.model.agro
     /// <summary>
     /// Producto Quimico usado por las órdenes
     /// </summary>
-    [SharedCosmosCollection("agro", "Product")]    
+    [SharedCosmosCollection("agro", "Product")]
     public class Product : DocumentBase, ISharedCosmosEntity
     {
         /// <summary>
@@ -98,7 +99,7 @@ namespace trifenix.agro.db.model.agro
             }
             set { _idVarieties = value; }
         }
-        
+
         private List<string> __idsSpecies;
 
 
@@ -115,6 +116,11 @@ namespace trifenix.agro.db.model.agro
             set { __idsSpecies = value; }
         }
 
+        public MeasureType MeasureType { get; set; }
+
+        public int QuantityByContainer {get ; set;}
+
+        public KindOfProductContainer KindOfContainer { get; set; }
 
 
 
@@ -122,5 +128,6 @@ namespace trifenix.agro.db.model.agro
 
 
 
-    }
+
+}
 }

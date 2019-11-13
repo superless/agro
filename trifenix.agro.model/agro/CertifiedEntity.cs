@@ -21,5 +21,12 @@ namespace trifenix.agro.db.model.agro
         /// </summary>
         public string Name { get; set; }
 
+        public string Abbreviation
+        {
+            get => default;
+            set
+            {
+            }
+        }
     }
 }

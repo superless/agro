@@ -1,6 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using trifenix.agro.common.tests.fakes;
 using trifenix.agro.db.model.agro.enums;
-using trifenix.agro.external.operations.entities.ext;
 using trifenix.agro.external.operations.tests.helper.Instances;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
@@ -22,6 +23,28 @@ namespace trifenix.agro.external.operations.tests
             var action = await repo.CreateProduct(commercialName, idActiveIngredient, brand, doses, measureType, quantity, kindOfProduct);
 
             Assert.True(action.MessageResult == ExtMessageResult.Ok);
+        }
+
+
+        [Fact]
+        public async Task SaveProduct_dosesInParameters_saveSuccessfull() {
+            var doses = FakeGenerator.GetElements<DosesInput>().ToArray();
+            var repo = ProductInstances.GetProductOperations(ProductEnumIntances.DefaultInstance);
+
+            var action = await repo.CreateProduct("atlas43", "gfdhgfghkh", "marcaX", doses, MeasureType.KL, 100, KindOfProductContainer.Bottle);
+
+            Assert.True(action.MessageResult == ExtMessageResult.Ok);
+        }
+
+        [Fact]
+        public async Task SaveProduct_dosesInParameters_NullFromDb()
+        {
+            var doses = FakeGenerator.GetElements<DosesInput>().ToArray();
+            var repo = ProductInstances.GetProductOperations(ProductEnumIntances.DefaultInstanceNullIds);
+
+            var action = await repo.CreateProduct("atlas43", "gfdhgfghkh", "marcaX", doses, MeasureType.KL, 100, KindOfProductContainer.Bottle);
+
+            Assert.True(action.GetType() == typeof(ExtPostErrorContainer<string>));
         }
 
         [Theory]

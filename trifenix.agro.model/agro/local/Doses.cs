@@ -25,7 +25,7 @@ namespace trifenix.agro.db.model.agro.local
         /// <summary>
         /// Especie que aplica 
         /// </summary>
-        public Specie Specie { get; set; }
+        
 
         private List<ApplicationTarget> _target;
 
@@ -44,7 +44,21 @@ namespace trifenix.agro.db.model.agro.local
         public int DaysToReEntryToBarrack { get; set; }
 
 
-        
+        private List<Specie> _species;
+
+        /// <summary>
+        /// Dias para cosechar por entidad certificadora
+        /// </summary>
+        public List<Specie> Species
+        {
+            get
+            {
+                _species = _species ?? new List<Specie>();
+                return _species;
+            }
+            set { _species = value; }
+        }
+
         private List<WaitingHarvest> _waitingToHarvest;
 
         /// <summary>
@@ -82,18 +96,12 @@ namespace trifenix.agro.db.model.agro.local
 
         public DosesApplicatedTo DosesApplicatedTo { get; set; }
 
-        public int idSeason
-        {
-            get => default;
-            set
-            {
-            }
-        }
+        public string IdSeason { get; set; }
     }
 
     public enum DosesApplicatedTo {
-        L100,
-        L1000
+        L100 = 0,
+        L1000 = 1
 
     }
 
