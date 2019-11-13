@@ -13,10 +13,7 @@ namespace trifenix.agro.db.model.agro.local
         /// </summary>
         public int WaitingDays { get; set; }
 
-        /// <summary>
-        /// Determina si la espera es indicado en la etiqueta.
-        /// </summary>
-        public bool IsLabel { get; set; }
+       
 
 
         /// <summary>
