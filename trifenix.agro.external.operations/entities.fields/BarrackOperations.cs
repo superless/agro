@@ -1,7 +1,6 @@
-﻿using Cosmonaut.Extensions;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces.agro;
 using trifenix.agro.db.interfaces.agro.fields;
@@ -31,27 +30,45 @@ namespace trifenix.agro.external.operations.entities.fields
 
         public async Task<ExtGetContainer<Barrack>> GetBarrack(string id)
         {
-            var barrack = await _repo.GetBarrack(id);
-            return OperationHelper.GetElement(barrack);
+            try
+            {
+                var barrack = await _repo.GetBarrack(id);
+                if (barrack == null)
+                {
+                    return new ExtGetContainer<Barrack> { StatusResult = ExtGetDataResult.EmptyResults };
+                }
+                return OperationHelper.GetElement(barrack);
+            }
+            catch (Exception e)
+            {
+                return OperationHelper.GetException<Barrack>(e, e.Message);
+            }
         }
 
         public async Task<ExtGetContainer<List<Barrack>>> GetBarracks()
         {
-            var queryBarracks = _repo.GetBarracks();
-            var barracks = await _commonDb.TolistAsync(queryBarracks);
-            return OperationHelper.GetElements(barracks);
+            try
+            {
+                var queryBarracks = _repo.GetBarracks();
+                if (queryBarracks == null || !queryBarracks.Any())
+                {
+                    return new ExtGetContainer<List<Barrack>> { StatusResult = ExtGetDataResult.EmptyResults };
+                    
+                }
+                var barracks = await _commonDb.TolistAsync(queryBarracks);
+                return OperationHelper.GetElements(barracks);
+            }
+            catch (Exception e)
+            {
+                return OperationHelper.GetException<List<Barrack>>(e, e.Message);
+            }
         }
 
         public async Task<ExtPostContainer<Barrack>> SaveEditBarrack(string id, string name, string idPlotLand, float hectares, int plantingYear, string idVariety, int numberOfPlants, string idPollinator)
         {
             var elements = await GetElementToBarracks(idPlotLand, idVariety, idPollinator);
-
             if (!elements.Success) return OperationHelper.PostNotFoundElementException<Barrack>(elements.Message, elements.IdNotfound);
-
-
-
             var element = await _repo.GetBarrack(id);
-
             return await OperationHelper.EditElement(id,
                 element,
                 s => {
@@ -100,6 +117,7 @@ namespace trifenix.agro.external.operations.entities.fields
 
         private async Task<ElementsBarracks> GetElementToBarracks(string idPlotLand, string idVariety, string idVarietyPollinator) {
             var elementBarrack = new ElementsBarracks();
+            elementBarrack.Success = true;
             elementBarrack.PlotLand = await _repoPlotLand.GetPlotLand(idPlotLand);
             if (elementBarrack.PlotLand == null)
             {
@@ -118,7 +136,6 @@ namespace trifenix.agro.external.operations.entities.fields
             {
                 elementBarrack.Pollinator = await _repoVariety.GetVariety(idVarietyPollinator);
             }
-            elementBarrack.Success = true;
             return elementBarrack;
         }
 
@@ -136,10 +153,6 @@ namespace trifenix.agro.external.operations.entities.fields
         public string Message { get; set; }
 
         public string IdNotfound { get; set; }
-
-
-
-
 
     }
 }

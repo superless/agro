@@ -140,9 +140,6 @@ namespace trifenix.agro.external.operations.entities.events
             }
 
         }
-
-        
-
         
     }
 }

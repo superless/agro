@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using trifenix.agro.db;
 
 namespace trifenix.agro.functions.settings

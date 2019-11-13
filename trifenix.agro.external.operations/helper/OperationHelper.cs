@@ -126,7 +126,6 @@ namespace trifenix.agro.external.operations.helper
         /// <returns>Contenedor con el id del elemento creado o el error del resultado</returns>
         public static async Task<ExtPostContainer<string>> CreateElement<T>(ICommonDbOperations<T> dbOper, IQueryable<T> store,  Func<string, Task<string>> elementToSave, Expression<Func<T, bool>> alreadyExists, string messageAlreadyExists ) where T:DocumentBase
         {
-
             try
             {
                 var element = await dbOper.FirstOrDefaultAsync(store, alreadyExists);

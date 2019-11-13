@@ -120,8 +120,6 @@ namespace trifenix.agro.external.operations.entities.ext
             }
             return listLocal;
         }
-
-
         private async Task<List<Doses>> GetDoses(DosesInput[] input, IEnumerable<string> varietyIds, IEnumerable<string> targetsId, IEnumerable<string> speciesIds, IEnumerable<string> certifiedEntitiesIds) {
 
             

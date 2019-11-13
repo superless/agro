@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace trifenix.agro.functions.settings
+﻿namespace trifenix.agro.functions.settings
 {
     public class AzureSettings
     {
