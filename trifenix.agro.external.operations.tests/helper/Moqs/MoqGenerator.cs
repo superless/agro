@@ -11,14 +11,14 @@ namespace trifenix.agro.external.operations.tests.helper.Moqs
 {
     public static class MoqGenerator
     {
-        public static Mock<T> GetMoqResult<T, T2>(
-            Results result,
-            Expression<Func<T, Task<string>>> create,
-            Expression<Func<T, Task<T2>>> getElement,
-            Expression<Func<T, IQueryable<T2>>> getElements
-        ) where T : class where T2 : DocumentBase
+        public static Mock<T> GetMoqResult<T, T2>(Results result, Expression<Func<T, Task<string>>> create, 
+            Expression<Func<T, Task<T2>>> getElement, Expression<Func<T, IQueryable<T2>>> getElements ) where T : class where T2 : DocumentBase
         {
             var mock = new Mock<T>();
+           
+
+            
+
             switch (result)
             {
                 case Results.Nullables:
@@ -45,7 +45,9 @@ namespace trifenix.agro.external.operations.tests.helper.Moqs
                 default:
                     break;
             }
+            
             return mock;
         }
+
     }
 }

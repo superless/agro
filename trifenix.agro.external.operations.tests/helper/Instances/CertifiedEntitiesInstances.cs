@@ -12,7 +12,8 @@ namespace trifenix.agro.external.operations.tests.helper.Instances
             MoqGenerator.GetMoqResult<ICertifiedEntityRepository, CertifiedEntity>(result, (s) =>
                 s.CreateUpdateCertifiedEntity(It.IsAny<CertifiedEntity>()),
                 (s) => s.GetCertifiedEntity(It.IsAny<string>()),
-                s => s.GetCertifiedEntities());
+                s=>s.GetCertifiedEntities()
+               );
     }
 
     public static class ApplicationTargetInstances

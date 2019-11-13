@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using trifenix.agro.db.model.agro.local;
 
 namespace trifenix.agro.model.external.Input
 {
@@ -6,7 +7,7 @@ namespace trifenix.agro.model.external.Input
     {
         public string[] IdVarieties { get; set; }
 
-        public string IdSpecie { get; set; }
+        public string[] IdSpecies { get; set; }
 
         public string[] idsApplicationTarget { get; set; }
 
@@ -21,7 +22,7 @@ namespace trifenix.agro.model.external.Input
 
 
         
-        public int WettingRecommended { get; set; }
+        public int WettingRecommendedByHectares { get; set; }
 
         private List<WaitingHarvestInput> _waitingToHarvest;
 
@@ -34,6 +35,10 @@ namespace trifenix.agro.model.external.Input
             }
             set { _waitingToHarvest = value; }
         }
+
+        public int DosesQuantity { get; set; }
+
+        public DosesApplicatedTo DosesApplicatedTo { get; set; }
 
     }
 
