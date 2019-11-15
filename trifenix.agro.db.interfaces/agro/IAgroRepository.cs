@@ -1,4 +1,5 @@
 ﻿using trifenix.agro.db.interfaces.agro.events;
+using trifenix.agro.db.interfaces.agro.ext;
 using trifenix.agro.db.interfaces.agro.fields;
 using trifenix.agro.db.interfaces.agro.orders;
 
@@ -33,6 +34,11 @@ namespace trifenix.agro.db.interfaces.agro
         IPlotLandRepository PlotLands { get; }
 
         ISectorRepository Sectors { get; }
+
+
+        IProductRepository Products { get; }
+
+        ICertifiedEntityRepository CertifiedEntities { get; }
 
 
 

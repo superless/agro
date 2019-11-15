@@ -26,7 +26,7 @@ namespace trifenix.agro.model.external.Input
 
         private List<WaitingHarvestInput> _waitingToHarvest;
 
-        public List<WaitingHarvestInput> WaitingToHarvest
+        public List<WaitingHarvestInput> WaitingHarvest
         {
             get
             {

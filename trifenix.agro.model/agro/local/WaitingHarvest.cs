@@ -12,10 +12,6 @@ namespace trifenix.agro.db.model.agro.local
         /// días de espera antes de la cosecha
         /// </summary>
         public int WaitingDays { get; set; }
-
-       
-
-
         /// <summary>
         /// Entidad certificadora (opcional), si es indicado en la etiqueta, probablemente no sea de una entidad certificadora.
         /// </summary>

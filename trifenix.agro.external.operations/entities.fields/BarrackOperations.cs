@@ -33,10 +33,7 @@ namespace trifenix.agro.external.operations.entities.fields
             try
             {
                 var barrack = await _repo.GetBarrack(id);
-                if (barrack == null)
-                {
-                    return new ExtGetContainer<Barrack> { StatusResult = ExtGetDataResult.EmptyResults };
-                }
+                
                 return OperationHelper.GetElement(barrack);
             }
             catch (Exception e)
@@ -50,11 +47,7 @@ namespace trifenix.agro.external.operations.entities.fields
             try
             {
                 var queryBarracks = _repo.GetBarracks();
-                if (queryBarracks == null || !queryBarracks.Any())
-                {
-                    return new ExtGetContainer<List<Barrack>> { StatusResult = ExtGetDataResult.EmptyResults };
-                    
-                }
+               
                 var barracks = await _commonDb.TolistAsync(queryBarracks);
                 return OperationHelper.GetElements(barracks);
             }

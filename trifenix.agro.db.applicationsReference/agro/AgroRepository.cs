@@ -1,8 +1,10 @@
 ﻿using trifenix.agro.db.applicationsReference.agro.events;
+using trifenix.agro.db.applicationsReference.agro.ext;
 using trifenix.agro.db.applicationsReference.agro.fields;
 using trifenix.agro.db.applicationsReference.agro.orders;
 using trifenix.agro.db.interfaces.agro;
 using trifenix.agro.db.interfaces.agro.events;
+using trifenix.agro.db.interfaces.agro.ext;
 using trifenix.agro.db.interfaces.agro.fields;
 using trifenix.agro.db.interfaces.agro.orders;
 using trifenix.agro.db.model.agro;
@@ -13,7 +15,7 @@ namespace trifenix.agro.db.applicationsReference.agro
     {
 
 
-        private AgroDbArguments _dbArguments;
+        private readonly AgroDbArguments _dbArguments;
         public AgroRepository(AgroDbArguments dbArguments)
         {
             _dbArguments = dbArguments;
@@ -43,5 +45,10 @@ namespace trifenix.agro.db.applicationsReference.agro
         public ISectorRepository Sectors => new SectorRepository(new MainDb<Sector>(_dbArguments));
 
         public IVarietyRepository Varieties => new VarietyRepository(new MainDb<Variety>(_dbArguments));
+
+
+        public IProductRepository Products => new ProductRepository(new MainDb<Product>(_dbArguments));
+
+        public ICertifiedEntityRepository CertifiedEntities => new CertifiedEntityRepository(new MainDb<CertifiedEntity>(_dbArguments));
     }
 }

@@ -83,7 +83,7 @@ namespace trifenix.agro.db.model.agro.local
         /// <summary>
         /// número de aplicaciones secuenciales (1 por defecto).
         /// </summary>
-        public int NumberOfSecuencialAppication { get; set; }
+        public int NumberOfSecuencialApplication { get; set; }
 
 
         /// <summary>
@@ -96,13 +96,11 @@ namespace trifenix.agro.db.model.agro.local
 
         public int DosesQuantityMax { get; set; }
 
+        public int? WaitingDaysLabel { get; set; }
 
         public DosesApplicatedTo DosesApplicatedTo { get; set; }
 
         public string IdSeason { get; set; }
-
-
-        public int? WaitingDaysLabel { get; set; }
     }
 
     public enum DosesApplicatedTo {
