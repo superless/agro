@@ -1,4 +1,5 @@
 ﻿using trifenix.agro.external.interfaces.entities.events;
+using trifenix.agro.external.interfaces.entities.ext;
 using trifenix.agro.external.interfaces.entities.fields;
 using trifenix.agro.external.interfaces.entities.main;
 using trifenix.agro.external.interfaces.entities.orders;
@@ -32,6 +33,12 @@ namespace trifenix.agro.external.interfaces
         INotificatonEventOperations NotificationEvents { get; }
 
         IVarietyOperations Varieties { get; }
+
+        IProductOperations Products { get; }
+
+        ICertifiedEntityOperations CertifiedEntities { get; }
+
+
 
 
 

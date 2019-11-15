@@ -8,6 +8,10 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using trifenix.agro.functions.Helper;
 using System.Linq;
+using trifenix.agro.db.model.agro.enums;
+using System.Collections.Generic;
+using trifenix.agro.model.external.Input;
+using trifenix.agro.db.model.agro;
 
 namespace trifenix.agro.functions
 {
@@ -113,6 +117,46 @@ namespace trifenix.agro.functions
 
             var manager = await ContainerMethods.AgroManager();
             var result = await manager.Species.GetSpecies();
+            return ContainerMethods.GetJsonGetContainer(result, log);
+        }
+
+        [FunctionName("CertifiedEntity")]
+        public static async Task<IActionResult> CertifiedEntity(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/certified_entities/{parameter?}")] HttpRequest req, string parameter,
+            ILogger log)
+        {
+            if (req.Method.ToLower().Equals("post"))
+            {
+                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                {
+                    var name = (string)model["name"];
+                    var abbreviation = (string)model["abbreviation"];
+                    return await db.CertifiedEntities.SaveNewCertifiedEntity(name, abbreviation);
+                });
+            }
+
+            if (req.Method.ToLower().Equals("put"))
+            {
+                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                {
+                    var id = (string)model["id"];
+
+                    var name = (string)model["name"];
+                    var abbreviation = (string)model["abbreviation"];
+                    return await db.CertifiedEntities.SaveEditCertifiedEntity(id, name, abbreviation);
+                });
+            }
+
+            if (!string.IsNullOrWhiteSpace(parameter))
+            {
+                var managerLocal = await ContainerMethods.AgroManager();
+                var resultLocal = await managerLocal.CertifiedEntities.GetCertifiedEntity(parameter);
+                return ContainerMethods.GetJsonGetContainer(resultLocal, log);
+
+            }
+
+            var manager = await ContainerMethods.AgroManager();
+            var result = await manager.CertifiedEntities.GetCertifiedEntities();
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
 
@@ -259,6 +303,62 @@ namespace trifenix.agro.functions
 
             var manager = await ContainerMethods.AgroManager();
             var result = await manager.OrderFolder.GetOrderFolders();
+            return ContainerMethods.GetJsonGetContainer(result, log);
+        }
+
+
+        [FunctionName("Product")]
+        public static async Task<IActionResult> Product(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/products/{parameter?}")] HttpRequest req, string parameter,
+            ILogger log)
+        {
+            if (req.Method.ToLower().Equals("post"))
+            {
+                return await ContainerMethods.ApiPostOperations<string>(req.Body, log, async (db, model) =>
+                {
+                    var commercialName = (string)model["commercialName"];
+                    var idActiveIngredient = (string)model["idActiveIngredient"];
+                    var brand = (string)model["brand"];
+                    var measureType = (MeasureType)Convert.ToInt32(model["measureType"]);
+                    var quantity = (int)model["quantity"];
+                    var kindOfBottle = (KindOfProductContainer)Convert.ToInt32(model["kindOfBottle"]);
+                    var dosesStr =  ((object)model["doses"])?.ToString();
+                    var doses = !string.IsNullOrWhiteSpace(dosesStr) ? JsonConvert.DeserializeObject<DosesInput[]>(dosesStr) : null;
+
+                    return await db.Products.CreateProduct(commercialName, idActiveIngredient, brand, doses, measureType, quantity, kindOfBottle);
+                });
+            }
+
+            if (req.Method.ToLower().Equals("put"))
+            {
+                return await ContainerMethods.ApiPostOperations<Product>(req.Body, log, async (db, model) =>
+                {
+                    var id = (string)model["id"];
+                    var commercialName = (string)model["commercialName"];
+                    var idActiveIngredient = (string)model["idActiveIngredient"];
+                    var brand = (string)model["brand"];
+                    var measureType = (MeasureType)Convert.ToInt32(model["measureType"]);
+                    var quantity = (int)model["quantity"];
+                    var kindOfBottle = (KindOfProductContainer)Convert.ToInt32(model["kindOfBottle"]);
+                    var dosesStr = ((object)model["doses"])?.ToString();
+                    var doses = !string.IsNullOrWhiteSpace(dosesStr) ? JsonConvert.DeserializeObject<DosesInput[]>(dosesStr) : null;
+
+
+
+                    return await db.Products.CreateEditProduct(id, commercialName, idActiveIngredient, brand, doses, measureType, quantity, kindOfBottle);
+                });
+            }
+
+            if (!string.IsNullOrWhiteSpace(parameter))
+            {
+                var managerLocal = await ContainerMethods.AgroManager();
+                var resultLocal = await managerLocal.Products.GetProduct(parameter);
+                return ContainerMethods.GetJsonGetContainer(resultLocal, log);
+
+            }
+
+            var manager = await ContainerMethods.AgroManager();
+            var result = await manager.Products.GetProducts();
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
 

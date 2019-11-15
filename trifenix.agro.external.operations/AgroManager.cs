@@ -3,10 +3,12 @@ using trifenix.agro.db.interfaces.agro;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.external.interfaces;
 using trifenix.agro.external.interfaces.entities.events;
+using trifenix.agro.external.interfaces.entities.ext;
 using trifenix.agro.external.interfaces.entities.fields;
 using trifenix.agro.external.interfaces.entities.main;
 using trifenix.agro.external.interfaces.entities.orders;
 using trifenix.agro.external.operations.entities.events;
+using trifenix.agro.external.operations.entities.ext;
 using trifenix.agro.external.operations.entities.fields;
 using trifenix.agro.external.operations.entities.main;
 using trifenix.agro.external.operations.entities.orders;
@@ -67,5 +69,18 @@ namespace trifenix.agro.external.operations
         public INotificatonEventOperations NotificationEvents => new NotificationEventOperations(_repository.NotificationEvents, _repository.Barracks, _repository.PhenologicalEvents, new CommonDbOperations<NotificationEvent>(), _uploadImage);
 
         public IVarietyOperations Varieties => new VarietyOperations(_repository.Varieties, _repository.Species, new CommonDbOperations<Variety>());
+
+        public IProductOperations Products => new ProductOperations(_repository.Ingredients,
+            _repository.Products,            
+            _repository.Targets,
+            _repository.CertifiedEntities,
+            _repository.Varieties,
+            _repository.Species,
+            new CommonDbOperations<Product>(),
+            _idSeason
+            );
+
+        public ICertifiedEntityOperations CertifiedEntities => new CertifiedEntityOperations(_repository.CertifiedEntities, new CommonDbOperations<CertifiedEntity>());
+
     }
 }
