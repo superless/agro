@@ -13,42 +13,43 @@ namespace trifenix.agro.db.applicationsReference.agro
 {
     public class AgroRepository : IAgroRepository
     {
-
-
-        private readonly AgroDbArguments _dbArguments;
+        public AgroDbArguments DbArguments { get; }
         public AgroRepository(AgroDbArguments dbArguments)
         {
-            _dbArguments = dbArguments;
+            DbArguments = dbArguments;
         }
-        public IApplicationTargetRepository Targets => new ApplicationTargetRepository(new MainDb<ApplicationTarget>(_dbArguments));
 
-        public IIngredientCategoryRepository Categories => new IngredientCategoryRepository(new MainDb<IngredientCategory>(_dbArguments));
+        public IApplicationTargetRepository Targets => new ApplicationTargetRepository(new MainDb<ApplicationTarget>(DbArguments));
 
-        public IIngredientRepository Ingredients => new IngredientRepository(new MainDb<Ingredient>(_dbArguments));
+        public IIngredientCategoryRepository Categories => new IngredientCategoryRepository(new MainDb<IngredientCategory>(DbArguments));
 
-        public IPhenologicalEventRepository PhenologicalEvents => new PhenologicalEventRepository(new MainDb<PhenologicalEvent>(_dbArguments));
+        public IIngredientRepository Ingredients => new IngredientRepository(new MainDb<Ingredient>(DbArguments));
 
-        public ISpecieRepository Species => new SpecieRepository(new MainDb<Specie>(_dbArguments));
+        public IPhenologicalEventRepository PhenologicalEvents => new PhenologicalEventRepository(new MainDb<PhenologicalEvent>(DbArguments));
 
-        public ISeasonRepository Seasons => new SeasonRepository(new MainDb<Season>(_dbArguments));
+        public ISpecieRepository Species => new SpecieRepository(new MainDb<Specie>(DbArguments));
 
-        public IOrderFolderRepository OrderFolder => new OrderFolderRepository(new MainDb<OrderFolder>(_dbArguments));
+        public ISeasonRepository Seasons => new SeasonRepository(new MainDb<Season>(DbArguments));
 
-        public IPhenologicalPreOrderRepository PhenologicalPreOrders => new PhenologicalPreOrderRepository(new MainDb<PhenologicalPreOrder>(_dbArguments));
+        public IOrderFolderRepository OrderFolder => new OrderFolderRepository(new MainDb<OrderFolder>(DbArguments));
 
-        public INotificationEventRepository NotificationEvents => new NotificationEventRepository(new MainDb<NotificationEvent>(_dbArguments));
+        public IPhenologicalPreOrderRepository PhenologicalPreOrders => new PhenologicalPreOrderRepository(new MainDb<PhenologicalPreOrder>(DbArguments));
 
-        public IBarrackRepository Barracks => new BarrackRepository(new MainDb<Barrack>(_dbArguments));
+        public INotificationEventRepository NotificationEvents => new NotificationEventRepository(new MainDb<NotificationEvent>(DbArguments));
 
-        public IPlotLandRepository PlotLands => new PlotLandRepository(new MainDb<PlotLand>(_dbArguments));
+        public IBarrackRepository Barracks => new BarrackRepository(new MainDb<Barrack>(DbArguments));
 
-        public ISectorRepository Sectors => new SectorRepository(new MainDb<Sector>(_dbArguments));
+        public IPlotLandRepository PlotLands => new PlotLandRepository(new MainDb<PlotLand>(DbArguments));
 
-        public IVarietyRepository Varieties => new VarietyRepository(new MainDb<Variety>(_dbArguments));
+        public ISectorRepository Sectors => new SectorRepository(new MainDb<Sector>(DbArguments));
+
+        public IVarietyRepository Varieties => new VarietyRepository(new MainDb<Variety>(DbArguments));
 
 
-        public IProductRepository Products => new ProductRepository(new MainDb<Product>(_dbArguments));
+        public IProductRepository Products => new ProductRepository(new MainDb<Product>(DbArguments));
 
-        public ICertifiedEntityRepository CertifiedEntities => new CertifiedEntityRepository(new MainDb<CertifiedEntity>(_dbArguments));
+        public ICertifiedEntityRepository CertifiedEntities => new CertifiedEntityRepository(new MainDb<CertifiedEntity>(DbArguments));
+
+        
     }
 }

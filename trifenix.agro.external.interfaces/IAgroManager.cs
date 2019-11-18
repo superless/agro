@@ -38,7 +38,7 @@ namespace trifenix.agro.external.interfaces
 
         ICertifiedEntityOperations CertifiedEntities { get; }
 
-
+        ICustomManager CustomManager { get; }
 
 
 

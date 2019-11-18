@@ -6,12 +6,14 @@ namespace trifenix.agro.db
     {
         public abstract string Id { get; set; }
 
-        public DocumentBase()
+        protected DocumentBase()
         {
             CosmosEntityName = GetType().Name;
         }
 
         [CosmosPartitionKey]
         public string CosmosEntityName { get; set; }
+
+        
     }
 }
