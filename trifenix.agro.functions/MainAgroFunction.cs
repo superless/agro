@@ -388,6 +388,18 @@ namespace trifenix.agro.functions
             if (!string.IsNullOrWhiteSpace(parameter))
             {
                 var managerLocal = await ContainerMethods.AgroManager();
+                if (parameter.Equals("init"))
+                {
+                    var resultEvent = await managerLocal.CustomManager.MobileEvents.GetEventData();
+                    return ContainerMethods.GetJsonGetContainer(resultEvent, log);
+                }
+
+                if (parameter.Equals("ts"))
+                {
+                    var resultTs = await managerLocal.CustomManager.MobileEvents.GetMobileEventTimestamp();
+                    return ContainerMethods.GetJsonGetContainer(resultTs, log);
+                }
+                
                 var resultLocal = await managerLocal.NotificationEvents.GetEvent(parameter);
                 return ContainerMethods.GetJsonGetContainer(resultLocal, log);
 
@@ -528,6 +540,10 @@ namespace trifenix.agro.functions
             var result = await manager.Varieties.GetVarieties();
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
+
+
+       
+
 
         [FunctionName("BarracksV2")]
         public static async Task<IActionResult> BarracksV2(

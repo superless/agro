@@ -82,5 +82,6 @@ namespace trifenix.agro.external.operations
 
         public ICertifiedEntityOperations CertifiedEntities => new CertifiedEntityOperations(_repository.CertifiedEntities, new CommonDbOperations<CertifiedEntity>());
 
+        public ICustomManager CustomManager => new CustomManager(_repository, _idSeason);
     }
 }

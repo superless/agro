@@ -7,7 +7,9 @@ namespace trifenix.agro.db.interfaces.agro
 {
     public interface IAgroRepository
     {
-        
+
+
+        AgroDbArguments DbArguments { get; }
         IApplicationTargetRepository Targets { get; }
 
         IIngredientCategoryRepository Categories { get; }
@@ -39,6 +41,9 @@ namespace trifenix.agro.db.interfaces.agro
         IProductRepository Products { get; }
 
         ICertifiedEntityRepository CertifiedEntities { get; }
+
+        
+
 
 
 
