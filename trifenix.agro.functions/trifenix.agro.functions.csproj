@@ -8,6 +8,7 @@
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.29" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\trifenix.agro.authentication.operations\trifenix.agro.authentication.operations.csproj" />
     <ProjectReference Include="..\trifenix.agro.db.applicationsReference\trifenix.agro.db.applicationsReference.csproj" />
     <ProjectReference Include="..\trifenix.agro.external.operations\trifenix.agro.external.operations.csproj" />
     <ProjectReference Include="..\trifenix.agro.storage.operations\trifenix.agro.storage.operations.csproj" />

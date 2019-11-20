@@ -17,11 +17,16 @@ namespace trifenix.agro.functions
 {
     public static class MainAgroFunction
     {
+
+        private static bool mustBeAuthenticated = false;
+
         [FunctionName("PhenologicalEventV2")]
         public static async Task<IActionResult> PhenologicalEventV2(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/phenological_events")] HttpRequest req,
             ILogger log)
         {
+            if (!(await Auth.Validate(req, mustBeAuthenticated)))
+                return new UnauthorizedResult();
             if (req.Method.ToLower().Equals("post")) {
                 return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
                 {
@@ -56,6 +61,8 @@ namespace trifenix.agro.functions
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/seasons")] HttpRequest req,
             ILogger log)
         {
+            if (!(await Auth.Validate(req, mustBeAuthenticated)))
+                return new UnauthorizedResult();
             if (req.Method.ToLower().Equals("post"))
             {
                 return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
@@ -93,6 +100,8 @@ namespace trifenix.agro.functions
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/species")] HttpRequest req,
             ILogger log)
         {
+            if (!(await Auth.Validate(req, mustBeAuthenticated)))
+                return new UnauthorizedResult();
             if (req.Method.ToLower().Equals("post"))
             {
                 return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
@@ -125,6 +134,8 @@ namespace trifenix.agro.functions
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/certified_entities/{parameter?}")] HttpRequest req, string parameter,
             ILogger log)
         {
+            if (!(await Auth.Validate(req, mustBeAuthenticated)))
+                return new UnauthorizedResult();
             if (req.Method.ToLower().Equals("post"))
             {
                 return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
@@ -165,6 +176,8 @@ namespace trifenix.agro.functions
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/ingredient_categories")] HttpRequest req,
             ILogger log)
         {
+            if (!(await Auth.Validate(req, mustBeAuthenticated)))
+                return new UnauthorizedResult();
             if (req.Method.ToLower().Equals("post"))
             {
                 return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
@@ -197,6 +210,8 @@ namespace trifenix.agro.functions
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/ingredients")] HttpRequest req,
             ILogger log)
         {
+            if (!(await Auth.Validate(req, mustBeAuthenticated)))
+                return new UnauthorizedResult();
             if (req.Method.ToLower().Equals("post"))
             {
                 return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
@@ -231,6 +246,8 @@ namespace trifenix.agro.functions
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/targets")] HttpRequest req,
             ILogger log)
         {
+            if (!(await Auth.Validate(req, mustBeAuthenticated)))
+                return new UnauthorizedResult();
             if (req.Method.ToLower().Equals("post"))
             {
                 return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
@@ -264,6 +281,8 @@ namespace trifenix.agro.functions
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/order_folders/{parameter?}")] HttpRequest req, string parameter,
             ILogger log)
         {
+            if (!(await Auth.Validate(req, mustBeAuthenticated)))
+                return new UnauthorizedResult();
             if (req.Method.ToLower().Equals("post"))
             {
                 return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
@@ -312,6 +331,8 @@ namespace trifenix.agro.functions
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/products/{parameter?}")] HttpRequest req, string parameter,
             ILogger log)
         {
+            if (!(await Auth.Validate(req, mustBeAuthenticated)))
+                return new UnauthorizedResult();
             if (req.Method.ToLower().Equals("post"))
             {
                 return await ContainerMethods.ApiPostOperations<string>(req.Body, log, async (db, model) =>
@@ -367,6 +388,8 @@ namespace trifenix.agro.functions
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "v2/notification_events/{parameter?}")] HttpRequest req, string parameter,
             ILogger log)
         {
+            if (!(await Auth.Validate(req, mustBeAuthenticated)))
+                return new UnauthorizedResult();
             if (req.Method.ToLower().Equals("post"))
             {
                 return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
@@ -416,6 +439,8 @@ namespace trifenix.agro.functions
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/sectors/{parameter?}")] HttpRequest req, string parameter,
             ILogger log)
         {
+            if (!(await Auth.Validate(req, mustBeAuthenticated)))
+                return new UnauthorizedResult();
             if (req.Method.ToLower().Equals("post"))
             {
                 return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
@@ -458,6 +483,8 @@ namespace trifenix.agro.functions
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/plotlands/{parameter?}")] HttpRequest req, string parameter,
             ILogger log)
         {
+            if (!(await Auth.Validate(req, mustBeAuthenticated)))
+                return new UnauthorizedResult();
             if (req.Method.ToLower().Equals("post"))
             {
                 return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
@@ -501,6 +528,8 @@ namespace trifenix.agro.functions
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/varieties/{parameter?}")] HttpRequest req, string parameter,
             ILogger log)
         {
+            if (!(await Auth.Validate(req, mustBeAuthenticated)))
+                return new UnauthorizedResult();
             if (req.Method.ToLower().Equals("post"))
             {
                 return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
@@ -541,15 +570,13 @@ namespace trifenix.agro.functions
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
 
-
-       
-
-
         [FunctionName("BarracksV2")]
         public static async Task<IActionResult> BarracksV2(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/barracks/{parameter?}")] HttpRequest req, string parameter,
             ILogger log)
         {
+            if (!(await Auth.Validate(req, mustBeAuthenticated)))
+                return new UnauthorizedResult();
             if (req.Method.ToLower().Equals("post"))
             {
                 return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
@@ -603,6 +630,8 @@ namespace trifenix.agro.functions
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/phenological_preorders/{parameter?}")] HttpRequest req, string parameter,
             ILogger log)
         {
+            if (!(await Auth.Validate(req, mustBeAuthenticated)))
+                return new UnauthorizedResult();
             if (req.Method.ToLower().Equals("post"))
             {
                 return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
@@ -645,11 +674,6 @@ namespace trifenix.agro.functions
             var result = await manager.PhenologicalPreOrders.GetPhenologicalPreOrders();
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
-
-
-
-
-
 
     }
 }
