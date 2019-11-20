@@ -39,6 +39,8 @@ namespace trifenix.agro.external.operations
 
         public ISpecieOperations Species => new SpecieOperations(_repository.Species, new CommonDbOperations<Specie>());
 
+        public IRootstockOperations Rootstock => new RootstockOperations(_repository.Rootstock, new CommonDbOperations<Rootstock>());
+
         public IIngredientCategoryOperations IngredientCategories => new IngredientCategoryOperations(_repository.Categories, new CommonDbOperations<IngredientCategory>());
 
         public IIngredientsOperations Ingredients => new IngredientOperations(_repository.Ingredients, _repository.Categories, new CommonDbOperations<Ingredient>());

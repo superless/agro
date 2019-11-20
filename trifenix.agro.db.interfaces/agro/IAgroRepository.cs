@@ -18,7 +18,9 @@ namespace trifenix.agro.db.interfaces.agro
 
         IPhenologicalEventRepository PhenologicalEvents { get; }
 
-        ISpecieRepository Species{ get; }
+        ISpecieRepository Species { get; }
+
+        IRootstockRepository Rootstock { get; }
 
         ISeasonRepository Seasons { get; }
 

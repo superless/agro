@@ -11,8 +11,10 @@ namespace trifenix.agro.external.interfaces
         IPhenologicalOperations PhenologicalEvents { get; }
 
         IApplicationTargetOperations ApplicationTargets { get; }
-        
+
         ISpecieOperations Species { get; }
+
+        IRootstockOperations Rootstock { get; }
 
         IIngredientCategoryOperations IngredientCategories { get; }
 
