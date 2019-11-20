@@ -48,7 +48,7 @@ namespace trifenix.agro.external.operations.custom
             
             var tsResult = await GetMobileEventTimestamp();
 
-            var sectors = await Task.WhenAll(GetSectors(barracks));
+            var sectors = GetSectors(barracks);
 
 
             return new EventInitData
@@ -70,12 +70,12 @@ namespace trifenix.agro.external.operations.custom
 
 
         
-        private Task<OutputMobileSector>[] GetSectors(List<Barrack> barracks) {
+        private OutputMobileSector[] GetSectors(List<Barrack> barracks) {
 
 
-             return barracks.GroupBy(s => s.PlotLand.Sector.Id).Select( async s=> {
+             return barracks.GroupBy(s => s.PlotLand.Sector.Id).Select( s=> {
 
-                 var species = await Task.WhenAll(GetVarieties(s.ToList()));
+                 var species = GetVarieties(s.ToList()).ToArray();
 
 
                  return new OutputMobileSector
@@ -103,11 +103,17 @@ namespace trifenix.agro.external.operations.custom
 
         }
 
-        private Task<OutputMobileSpecie>[] GetVarieties(List<Barrack> barracks) {
 
-            
 
-            return barracks.GroupBy(s => s.Variety.Id).Select(async s => {
+       
+
+        private IEnumerable<OutputMobileSpecie> GetVarieties(List<Barrack> barracks) {
+
+
+
+
+            var specieList = barracks.GroupBy(s => s.Variety.Id).Select(async s =>
+            {
 
                 var specie = await GetSpecie(s.Key);
 
@@ -118,7 +124,15 @@ namespace trifenix.agro.external.operations.custom
                     Name = specie.Name,
                     Barracks = GetBarracks(s.ToList())
                 };
-            }).ToArray();
+            });
+
+            return specieList.GroupBy(s => s.Result.Id).Select(v => new OutputMobileSpecie
+            {
+                Id = v.Key,
+                Name = v.First().Result.Name,
+                Barracks = v.SelectMany(a => a.Result.Barracks).GroupBy(b => b.Id).Select(f => f.First()).ToArray()
+            });
+
 
         }
 
