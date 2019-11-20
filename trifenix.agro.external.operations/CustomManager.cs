@@ -18,13 +18,13 @@ namespace trifenix.agro.external.operations
 
         public CustomManager(IAgroRepository agroRepository, string idSeason)
         {
-            this.tsRepo = new TimeStampDbQueries(agroRepository.DbArguments);
-            this.dbBarrackOper = new CommonDbOperations<Barrack>();
-            this.dbPhenologicalOper = new CommonDbOperations<PhenologicalEvent>();
+            tsRepo = new TimeStampDbQueries(agroRepository.DbArguments);
+            dbBarrackOper = new CommonDbOperations<Barrack>();
+            dbPhenologicalOper = new CommonDbOperations<PhenologicalEvent>();
             this.idSeason = idSeason;
             this.agroRepository = agroRepository;
 
         }
-        public IMobileEventCustomElements MobileEvents => new MobileCustomElements(tsRepo, agroRepository.Barracks, agroRepository.PhenologicalEvents, dbBarrackOper, dbPhenologicalOper, idSeason);
+        public IMobileEventCustomElements MobileEvents => new MobileCustomElements(tsRepo, agroRepository.Barracks, agroRepository.PhenologicalEvents, agroRepository.Varieties, dbBarrackOper, dbPhenologicalOper, idSeason);
     }
 }

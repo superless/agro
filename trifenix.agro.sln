@@ -57,9 +57,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.util.exceptions", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "authentication", "authentication", "{99E43F52-B7D5-4298-B900-DBB8F6846D4F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "trifenix.agro.authentication.interfaces", "trifenix.agro.authentication.interfaces\trifenix.agro.authentication.interfaces.csproj", "{B999010B-76DB-451F-8697-2D027C99B3DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.authentication.interfaces", "trifenix.agro.authentication.interfaces\trifenix.agro.authentication.interfaces.csproj", "{B999010B-76DB-451F-8697-2D027C99B3DA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "trifenix.agro.authentication.operations", "trifenix.agro.authentication.operations\trifenix.agro.authentication.operations.csproj", "{40195058-1B3F-4064-A1C2-62F93101DB32}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.authentication.operations", "trifenix.agro.authentication.operations\trifenix.agro.authentication.operations.csproj", "{40195058-1B3F-4064-A1C2-62F93101DB32}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
