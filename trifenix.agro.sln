@@ -31,7 +31,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5. util", "5. util", "{8425
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.search.model", "trifenix.agro.search.model\trifenix.agro.search.model.csproj", "{55021BD1-AF91-42BD-A049-ED1874F5081A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "storage", "storage", "{EE7EE3F6-BC9A-44DF-B961-7FEADCABB83D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "8. storage", "8. storage", "{EE7EE3F6-BC9A-44DF-B961-7FEADCABB83D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.external.interfaces", "trifenix.agro.external.interfaces\trifenix.agro.external.interfaces.csproj", "{1490B1C3-C9DB-4D83-B2FA-C39E75BB35BB}"
 EndProject
@@ -41,7 +41,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.storage.inter
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.storage.operations", "trifenix.agro.storage.operations\trifenix.agro.storage.operations.csproj", "{C3DFF7BF-CC0C-40B9-8B8B-296F9B62EE56}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common.tests", "common.tests", "{763FDFA9-24FA-4CB3-A7C4-A233F27A227C}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "7. common.tests", "7. common.tests", "{763FDFA9-24FA-4CB3-A7C4-A233F27A227C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Fakes", "Fakes", "{F1ECE31B-0D63-4978-A544-46ED6B4FD1E2}"
 EndProject
@@ -55,11 +55,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.common.tests.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.util.exceptions", "trifenix.util.exceptions\trifenix.util.exceptions.csproj", "{732B1C12-D841-4933-AC2F-7038D5B0F6CC}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "authentication", "authentication", "{99E43F52-B7D5-4298-B900-DBB8F6846D4F}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "6. authentication", "6. authentication", "{99E43F52-B7D5-4298-B900-DBB8F6846D4F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.authentication.interfaces", "trifenix.agro.authentication.interfaces\trifenix.agro.authentication.interfaces.csproj", "{B999010B-76DB-451F-8697-2D027C99B3DA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.authentication.operations", "trifenix.agro.authentication.operations\trifenix.agro.authentication.operations.csproj", "{40195058-1B3F-4064-A1C2-62F93101DB32}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "9. static", "9. static", "{B8078832-CAAD-4310-A98B-C2E2F75888B8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.enums", "trifenix.agro.enums\trifenix.agro.enums.csproj", "{5940E74B-02FF-41DF-8CB0-90C69086C44C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -147,6 +151,10 @@ Global
 		{40195058-1B3F-4064-A1C2-62F93101DB32}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40195058-1B3F-4064-A1C2-62F93101DB32}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40195058-1B3F-4064-A1C2-62F93101DB32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5940E74B-02FF-41DF-8CB0-90C69086C44C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5940E74B-02FF-41DF-8CB0-90C69086C44C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5940E74B-02FF-41DF-8CB0-90C69086C44C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5940E74B-02FF-41DF-8CB0-90C69086C44C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -173,6 +181,7 @@ Global
 		{732B1C12-D841-4933-AC2F-7038D5B0F6CC} = {8425A92F-85CA-4E30-95F9-272CC5A1EDD9}
 		{B999010B-76DB-451F-8697-2D027C99B3DA} = {99E43F52-B7D5-4298-B900-DBB8F6846D4F}
 		{40195058-1B3F-4064-A1C2-62F93101DB32} = {99E43F52-B7D5-4298-B900-DBB8F6846D4F}
+		{5940E74B-02FF-41DF-8CB0-90C69086C44C} = {B8078832-CAAD-4310-A98B-C2E2F75888B8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2C0C9D82-464E-4741-8541-CDC460278FEC}
