@@ -1,5 +1,8 @@
 ﻿
 
+using System.Collections.Generic;
+using trifenix.agro.enums;
+
 namespace trifenix.agro.model.external.output
 {
     public class EventInitData
@@ -8,12 +11,25 @@ namespace trifenix.agro.model.external.output
 
         public OutputMobileSector[] Sectors { get; set; }
 
-        public OutputMobilePhenologicalEvent[] PhenologicalEvents { get; set; }
+        private Dictionary<int, OutputMobileEvent[]> _events;
+
+        public Dictionary<int, OutputMobileEvent[]> Events
+        {
+            get {
+                _events = _events ?? new Dictionary<int, OutputMobileEvent[]>();
+                return _events; }
+            set { _events = value; }
+        }
+
 
     }
 
+   
 
-    public class OutputMobilePhenologicalEvent {
+
+    
+
+    public class OutputMobileEvent {
 
         public string Id { get; set; }
 
@@ -26,12 +42,12 @@ namespace trifenix.agro.model.external.output
 
         public string Name { get; set; }
 
-        public OutputMobileVariety[] Varieties { get; set; }
+        public OutputMobileSpecie[] Species { get; set; }
 
 
     }
 
-    public class OutputMobileVariety
+    public class OutputMobileSpecie
     {
         public string Id { get; set; }
 

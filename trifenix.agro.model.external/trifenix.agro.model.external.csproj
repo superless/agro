@@ -5,11 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\trifenix.agro.enums\trifenix.agro.enums.csproj" />
     <ProjectReference Include="..\trifenix.agro.model\trifenix.agro.db.model.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="output\" />
   </ItemGroup>
 
 </Project>
