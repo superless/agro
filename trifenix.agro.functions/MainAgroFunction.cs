@@ -129,6 +129,40 @@ namespace trifenix.agro.functions
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
 
+        [FunctionName("RootstockV2")]
+        public static async Task<IActionResult> RootstockV2(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/rootstock")] HttpRequest req,
+            ILogger log)
+        {
+            if (!(await Auth.Validate(req, mustBeAuthenticated)))
+                return new UnauthorizedResult();
+            if (req.Method.ToLower().Equals("post"))
+            {
+                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                {
+                    var name = (string)model["name"];
+                    var abbreviation = (string)model["abbreviation"];
+                    return await db.Rootstock.SaveNewRootstock(name, abbreviation);
+                });
+            }
+
+            if (req.Method.ToLower().Equals("put"))
+            {
+                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                {
+                    var id = (string)model["id"];
+
+                    var name = (string)model["name"];
+                    var abbreviation = (string)model["abbreviation"];
+                    return await db.Rootstock.SaveEditRootstock(id, name, abbreviation);
+                });
+            }
+
+            var manager = await ContainerMethods.AgroManager();
+            var result = await manager.Rootstock.GetRootstocks();
+            return ContainerMethods.GetJsonGetContainer(result, log);
+        }
+
         [FunctionName("CertifiedEntity")]
         public static async Task<IActionResult> CertifiedEntity(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/certified_entities/{parameter?}")] HttpRequest req, string parameter,

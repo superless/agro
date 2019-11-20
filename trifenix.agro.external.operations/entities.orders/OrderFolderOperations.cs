@@ -216,9 +216,9 @@ namespace trifenix.agro.external.operations.entities.orders
 
         public Specie Specie { get; set; }
 
-        public Ingredient Ingredient { get; set; }
+        public Rootstock Rootstock { get; set; }
 
-        
+        public Ingredient Ingredient { get; set; }
 
         public string Message { get; set; }
 

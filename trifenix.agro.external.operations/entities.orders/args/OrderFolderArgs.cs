@@ -19,6 +19,8 @@ namespace trifenix.agro.external.operations.entities.orders.args
 
         public ISpecieRepository Specie { get; set; }
 
+        public IRootstockRepository Rootstock { get; set; }
+
         public IIngredientRepository Ingredient { get; set; }
 
         public IIngredientCategoryRepository IngredientCategory { get; set; }
