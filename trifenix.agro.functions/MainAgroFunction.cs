@@ -672,7 +672,8 @@ namespace trifenix.agro.functions
                     var idPlotland = (string)model["idPlotland"];
                     var idVariety = (string)model["idVariety"];
                     var idPollinator = (string)model["idPollinator"];
-                    return await db.Barracks.SaveNewBarrack(name, idPlotland, hectares, plantingYear, idVariety, numberOfPlants, idPollinator);
+                    var idRootstock = (string)model["idRootstock"];
+                    return await db.Barracks.SaveNewBarrack(name, idPlotland, hectares, plantingYear, idVariety, numberOfPlants, idPollinator, idRootstock);
                 });
             }
 
@@ -688,10 +689,8 @@ namespace trifenix.agro.functions
                     var idPlotland = (string)model["idPlotland"];
                     var idVariety = (string)model["idVariety"];
                     var idPollinator = (string)model["idPollinator"];
-
-
-
-                    return await db.Barracks.SaveEditBarrack(id, name, idPlotland, hectares, plantingYear, idVariety, numberOfPlants, idPollinator);
+                    var idRootstock = (string)model["idRootstock"];
+                    return await db.Barracks.SaveEditBarrack(id, name, idPlotland, hectares, plantingYear, idVariety, numberOfPlants, idPollinator, idRootstock);
                 });
             }
 

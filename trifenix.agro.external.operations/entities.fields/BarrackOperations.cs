@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces.agro;
 using trifenix.agro.db.interfaces.agro.fields;
@@ -14,18 +13,20 @@ namespace trifenix.agro.external.operations.entities.fields
 {
     public class BarrackOperations : IBarrackOperations
     {
-        private readonly IPlotLandRepository _repoPlotLand;
         private readonly string _idSeason;
         private readonly IBarrackRepository _repo;
+        private readonly IRootstockRepository _repoRootstock;
+        private readonly IPlotLandRepository _repoPlotLand;
         private readonly IVarietyRepository _repoVariety;
         private readonly ICommonDbOperations<Barrack> _commonDb;
-        public BarrackOperations(IBarrackRepository repo, IVarietyRepository repoVariety,IPlotLandRepository repoPlotLand, ICommonDbOperations<Barrack> commonDb, string idSeason)
+        public BarrackOperations(IBarrackRepository repo, IRootstockRepository repoRootstock,IPlotLandRepository repoPlotLand, IVarietyRepository repoVariety, ICommonDbOperations<Barrack> commonDb, string idSeason)
         {
             _repo = repo;
+            _repoRootstock = repoRootstock;
             _repoPlotLand = repoPlotLand;
-            _idSeason = idSeason;
             _repoVariety = repoVariety;
             _commonDb = commonDb;
+            _idSeason = idSeason;
         }
 
         public async Task<ExtGetContainer<Barrack>> GetBarrack(string id)
@@ -57,9 +58,9 @@ namespace trifenix.agro.external.operations.entities.fields
             }
         }
 
-        public async Task<ExtPostContainer<Barrack>> SaveEditBarrack(string id, string name, string idPlotLand, float hectares, int plantingYear, string idVariety, int numberOfPlants, string idPollinator)
+        public async Task<ExtPostContainer<Barrack>> SaveEditBarrack(string id, string name, string idPlotLand, float hectares, int plantingYear, string idVariety, int numberOfPlants, string idPollinator, string idRootstock)
         {
-            var elements = await GetElementToBarracks(idPlotLand, idVariety, idPollinator);
+            var elements = await GetElementToBarracks(idPlotLand, idVariety, idPollinator, idRootstock);
             if (!elements.Success) return OperationHelper.PostNotFoundElementException<Barrack>(elements.Message, elements.IdNotfound);
             var element = await _repo.GetBarrack(id);
             return await OperationHelper.EditElement(id,
@@ -70,10 +71,10 @@ namespace trifenix.agro.external.operations.entities.fields
                     s.PlotLand = elements.PlotLand;
                     s.NumberOfPlants = numberOfPlants;
                     s.PlantingYear = plantingYear;
+                    s.Rootstock = elements.Rootstock;
                     s.Pollinator = elements.Pollinator;
                     s.Variety = elements.Variety;
                     s.Hectares = hectares;
-                    
                     return s;
                 },
                 _repo.CreateUpdateBarrack,
@@ -82,9 +83,9 @@ namespace trifenix.agro.external.operations.entities.fields
 
         }
 
-        public async Task<ExtPostContainer<string>> SaveNewBarrack(string name, string idPlotLand, float hectares, int plantingYear, string idVariety, int numberOfPlants, string idPollinator)
+        public async Task<ExtPostContainer<string>> SaveNewBarrack(string name, string idPlotLand, float hectares, int plantingYear, string idVariety, int numberOfPlants, string idPollinator, string idRootstock)
         {
-            var elements = await GetElementToBarracks(idPlotLand, idVariety, idPollinator);
+            var elements = await GetElementToBarracks(idPlotLand, idVariety, idPollinator, idRootstock);
 
             if (!elements.Success) return OperationHelper.PostNotFoundElementException<string>(elements.Message, elements.IdNotfound);
 
@@ -98,6 +99,7 @@ namespace trifenix.agro.external.operations.entities.fields
                     Hectares = hectares,
                     NumberOfPlants = numberOfPlants,
                     PlantingYear = plantingYear,
+                    Rootstock = elements.Rootstock,
                     Pollinator = elements.Pollinator,
                     Variety = elements.Variety
                 }),
@@ -108,7 +110,7 @@ namespace trifenix.agro.external.operations.entities.fields
 
         }
 
-        private async Task<ElementsBarracks> GetElementToBarracks(string idPlotLand, string idVariety, string idVarietyPollinator) {
+        private async Task<ElementsBarracks> GetElementToBarracks(string idPlotLand, string idVariety, string idVarietyPollinator, string idRootstock) {
             var elementBarrack = new ElementsBarracks();
             elementBarrack.Success = true;
             elementBarrack.PlotLand = await _repoPlotLand.GetPlotLand(idPlotLand);
@@ -129,6 +131,10 @@ namespace trifenix.agro.external.operations.entities.fields
             {
                 elementBarrack.Pollinator = await _repoVariety.GetVariety(idVarietyPollinator);
             }
+            if (!string.IsNullOrWhiteSpace(idRootstock))
+            {
+                elementBarrack.Rootstock = await _repoRootstock.GetRootstock(idRootstock);
+            }
             return elementBarrack;
         }
 
@@ -142,6 +148,8 @@ namespace trifenix.agro.external.operations.entities.fields
         public Variety Pollinator { get; set; }
 
         public PlotLand PlotLand { get; set; }
+
+        public Rootstock Rootstock { get; set; }
 
         public string Message { get; set; }
 

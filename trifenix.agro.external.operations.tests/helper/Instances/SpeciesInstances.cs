@@ -5,7 +5,7 @@ using trifenix.agro.external.operations.tests.helper.Moqs;
 
 namespace trifenix.agro.external.operations.tests.helper.Instances
 {
-    public static class SpeciesIntances {
+    public static class SpeciesInstances {
         public static Mock<ISpecieRepository> GetInstance(Results result) =>
            MoqGenerator.GetMoqResult<ISpecieRepository, Specie>(
                result,
