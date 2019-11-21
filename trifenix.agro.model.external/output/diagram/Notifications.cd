@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="trifenix.agro.model.external.output.OutPutNotificationPreOrder">
-    <Position X="2.25" Y="2.75" Width="1.5" />
+    <Position X="1.25" Y="2.75" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>output\NotificationPreOrder.cs</FileName>
@@ -11,7 +11,7 @@
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="trifenix.agro.model.external.output.OutPutPhenologicalPreOrder">
-    <Position X="5.25" Y="3.75" Width="1.5" />
+    <Position X="5.25" Y="3.75" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAACIAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAEAA=</HashCode>
       <FileName>output\NotificationPreOrder.cs</FileName>
@@ -31,7 +31,7 @@
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="trifenix.agro.model.external.output.OutputNotificationEvent">
-    <Position X="8.75" Y="7" Width="1.5" />
+    <Position X="8.75" Y="7" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAACAAAAIAAgAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAA=</HashCode>
       <FileName>output\NotificationPreOrder.cs</FileName>
