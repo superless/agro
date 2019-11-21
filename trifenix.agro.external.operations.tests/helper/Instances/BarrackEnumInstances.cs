@@ -1,4 +1,4 @@
-﻿public enum BarrackEnumIntances {
+﻿public enum BarrackEnumInstances {
     DefaultInstance,
     EmptyResultInstance,
     ExceptionInstance,

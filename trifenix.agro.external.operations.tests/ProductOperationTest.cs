@@ -15,7 +15,7 @@ namespace trifenix.agro.external.operations.tests
         [InlineData("atlas43", "gfdhgfghkh","marcaX", null, MeasureType.KL,100, KindOfProductContainer.Bottle)]
         public async Task SaveProduct_allParameters_success(string commercialName, string idActiveIngredient, string brand, DosesInput[] doses, MeasureType measureType, int quantity, KindOfProductContainer kindOfProduct) {
 
-            var repo = ProductInstances.GetProductOperations(ProductEnumIntances.DefaultInstance);
+            var repo = ProductInstances.GetProductOperations(ProductEnumInstances.DefaultInstance);
 
             var action = await repo.CreateProduct(commercialName, idActiveIngredient, brand, doses, measureType, quantity, kindOfProduct);
 
@@ -26,7 +26,7 @@ namespace trifenix.agro.external.operations.tests
         [Fact]
         public async Task SaveProduct_dosesInParameters_saveSuccessfull() {
             var doses = FakeGenerator.GetElements<DosesInput>().ToArray();
-            var repo = ProductInstances.GetProductOperations(ProductEnumIntances.DefaultInstance);
+            var repo = ProductInstances.GetProductOperations(ProductEnumInstances.DefaultInstance);
 
             var action = await repo.CreateProduct("atlas43", "gfdhgfghkh", "marcaX", doses, MeasureType.KL, 100, KindOfProductContainer.Bottle);
 
@@ -37,7 +37,7 @@ namespace trifenix.agro.external.operations.tests
         public async Task SaveProduct_dosesInParameters_NullFromDb()
         {
             var doses = FakeGenerator.GetElements<DosesInput>().ToArray();
-            var repo = ProductInstances.GetProductOperations(ProductEnumIntances.DefaultInstanceNullIds);
+            var repo = ProductInstances.GetProductOperations(ProductEnumInstances.DefaultInstanceNullIds);
 
             var action = await repo.CreateProduct("atlas43", "gfdhgfghkh", "marcaX", doses, MeasureType.KL, 100, KindOfProductContainer.Bottle);
 
@@ -52,7 +52,7 @@ namespace trifenix.agro.external.operations.tests
         public async Task SaveProduct_nullparameters_error(string commercialName, string idActiveIngredient, string brand, DosesInput[] idDoses, MeasureType measureType, int quantity, KindOfProductContainer kindOfProduct)
         {
 
-            var repo = ProductInstances.GetProductOperations(ProductEnumIntances.DefaultInstance);
+            var repo = ProductInstances.GetProductOperations(ProductEnumInstances.DefaultInstance);
 
             var action = await repo.CreateProduct(commercialName, idActiveIngredient, brand, idDoses, measureType, quantity, kindOfProduct);
 
@@ -64,7 +64,7 @@ namespace trifenix.agro.external.operations.tests
         public async Task SaveProduct_nullparameters_NoIngredienteObDbGetExceptionContainer(string commercialName, string idActiveIngredient, string brand, DosesInput[] idDoses, MeasureType measureType, int quantity, KindOfProductContainer kindOfProduct)
         {
 
-            var repo = ProductInstances.GetProductOperations(ProductEnumIntances.InstanceNoIngredientOnDb);
+            var repo = ProductInstances.GetProductOperations(ProductEnumInstances.InstanceNoIngredientOnDb);
 
             var action = await repo.CreateProduct(commercialName, idActiveIngredient, brand, idDoses, measureType, quantity, kindOfProduct);
 

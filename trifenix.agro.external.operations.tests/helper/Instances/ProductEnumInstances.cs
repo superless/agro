@@ -1,4 +1,4 @@
-﻿public enum ProductEnumIntances {
+﻿public enum ProductEnumInstances {
     DefaultInstance,
     InstanceNoIngredientOnDb,
     DefaultInstanceNullIds
