@@ -6,7 +6,7 @@ using trifenix.agro.storage.interfaces;
 
 namespace trifenix.agro.external.operations.tests.helper.Instances
 {
-    public static class UploadImageInstance {
+    public static class UploadImageInstances {
         public static Mock<IUploadImage> GetInstance(Results result) {
 
             var mockUpload = new Mock<IUploadImage>();

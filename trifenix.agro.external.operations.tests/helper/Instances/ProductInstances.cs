@@ -18,40 +18,40 @@ namespace trifenix.agro.external.operations.tests.helper.Instances
                 (s) => s.GetProduct(It.IsAny<string>()), 
                 s => s.GetProducts());
 
-        public static ProductOperations GetProductOperations(ProductEnumIntances instance) {
+        public static ProductOperations GetProductOperations(ProductEnumInstances instance) {
 
             switch (instance)
             {
-                case ProductEnumIntances.DefaultInstance:
+                case ProductEnumInstances.DefaultInstance:
                     return new ProductOperations(
                         IngredientsInstances.GetInstance(Results.Values).Object,
                         GetInstance(Results.Values).Object,
                         ApplicationTargetInstances.GetInstance(Results.Values).Object,
                         CertifiedEntitiesInstances.GetInstance(Results.Values).Object,
                         VarietyInstances.GetInstance(Results.Values).Object,
-                        SpeciesIntances.GetInstance(Results.Values).Object,
+                        SpeciesInstances.GetInstance(Results.Values).Object,
                         CommonDbInstances<Product>.GetInstance(Results.Nullables).Object,
                         FakeGenerator.CreateString()
                         );
-                case ProductEnumIntances.InstanceNoIngredientOnDb:
+                case ProductEnumInstances.InstanceNoIngredientOnDb:
                     return new ProductOperations(
                         IngredientsInstances.GetInstance(Results.Empty).Object,
                         GetInstance(Results.Values).Object,
                         ApplicationTargetInstances.GetInstance(Results.Values).Object,
                         CertifiedEntitiesInstances.GetInstance(Results.Values).Object,
                         VarietyInstances.GetInstance(Results.Values).Object,
-                        SpeciesIntances.GetInstance(Results.Values).Object,
+                        SpeciesInstances.GetInstance(Results.Values).Object,
                         CommonDbInstances<Product>.GetInstance(Results.Values).Object,
                         FakeGenerator.CreateString()
                         );
-                case ProductEnumIntances.DefaultInstanceNullIds:
+                case ProductEnumInstances.DefaultInstanceNullIds:
                     return new ProductOperations(
                         IngredientsInstances.GetInstance(Results.Values).Object,
                         GetInstance(Results.Values).Object,
                         ApplicationTargetInstances.GetInstance(Results.Nullables).Object,
                         CertifiedEntitiesInstances.GetInstance(Results.Nullables).Object,
                         VarietyInstances.GetInstance(Results.Nullables).Object,
-                        SpeciesIntances.GetInstance(Results.Nullables).Object,
+                        SpeciesInstances.GetInstance(Results.Nullables).Object,
                         CommonDbInstances<Product>.GetInstance(Results.Nullables).Object,
                         FakeGenerator.CreateString()
                         );
