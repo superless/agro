@@ -12,7 +12,10 @@ namespace trifenix.agro.db.applicationsReference
 
         protected readonly CosmosStoreSettings StoreSettings;
         protected readonly AgroDbArguments MainArgs;
-        protected readonly ICosmosStore<T> Store;
+
+        public ICosmosStore<T> Store { get; private set; }
+
+        
 
         public MainDb(AgroDbArguments args)
         {
@@ -26,6 +29,7 @@ namespace trifenix.agro.db.applicationsReference
             if (string.IsNullOrWhiteSpace(entity.Id)) throw new NonIdException<DocumentBase>(entity);
 
             var result = await Store.UpsertAsync(entity);
+            
 
             if (!result.IsSuccess) throw result.Exception;
 
@@ -42,6 +46,10 @@ namespace trifenix.agro.db.applicationsReference
 
             
             return Store.Query();
+        }
+
+        public async Task<long> GetTotalElements() {
+            return await Store.QuerySingleAsync<long>("SELECT VALUE COUNT(1) FROM c");
         }
     }
 

@@ -3,9 +3,20 @@ using trifenix.agro.db.model.agro;
 
 namespace trifenix.agro.model.external.output
 {
+
+
+    public class NotificationCustomPhenologicalResult {
+
+        public long Total { get; set; }
+
+        public OutPutNotificationPreOrder[] Notifications { get; set; }
+    }
+
     public class OutPutNotificationPreOrder : NotificationEvent
     {
         public OutPutPhenologicalPreOrder[] PreOrders { get; set; }
+
+        
 
 
     }

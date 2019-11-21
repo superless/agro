@@ -383,8 +383,28 @@ namespace trifenix.agro.functions
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
 
-        [FunctionName("UploadEvent")]
-        public static async Task<IActionResult> UploadEvent(
+
+        [FunctionName("CustomNotificationEvents")]
+        public static async Task<IActionResult> CustomNotificationEvents(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/custom_notification_events/{page}/{totalByPage}/{desc?}")] HttpRequest req, int page, int totalByPage, string desc,
+            ILogger log)
+        {
+            if (!(await Auth.Validate(req, mustBeAuthenticated)))
+                return new UnauthorizedResult();
+
+            var manager = await ContainerMethods.AgroManager();
+
+            var orderDate = string.IsNullOrWhiteSpace(desc) || desc.ToLower().Equals("desc");
+
+            var result = await manager.CustomManager.MobileEvents.GetNotificationPreOrdersResult(page, totalByPage, orderDate);
+
+            return ContainerMethods.GetJsonGetContainer(result, log);
+
+        }
+
+
+        [FunctionName("NotificationEvents")]
+        public static async Task<IActionResult> NotificationEvents(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "v2/notification_events/{parameter?}")] HttpRequest req, string parameter,
             ILogger log)
         {

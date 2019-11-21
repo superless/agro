@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Cosmonaut;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace trifenix.agro.db.interfaces
@@ -12,5 +10,8 @@ namespace trifenix.agro.db.interfaces
         Task<T> GetEntity(string uniqueId);
         IQueryable<T> GetEntities();
 
+        Task<long> GetTotalElements();
+
+        ICosmosStore<T> Store { get; }
     }
 }
