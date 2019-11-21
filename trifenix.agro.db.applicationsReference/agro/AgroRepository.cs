@@ -29,6 +29,8 @@ namespace trifenix.agro.db.applicationsReference.agro
 
         public ISpecieRepository Species => new SpecieRepository(new MainDb<Specie>(DbArguments));
 
+        public IRootstockRepository Rootstock => new RootstockRepository(new MainDb<Rootstock>(DbArguments));
+
         public ISeasonRepository Seasons => new SeasonRepository(new MainDb<Season>(DbArguments));
 
         public IOrderFolderRepository OrderFolder => new OrderFolderRepository(new MainDb<OrderFolder>(DbArguments));

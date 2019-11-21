@@ -18,6 +18,8 @@ namespace trifenix.agro.db.model.agro
 
         public Specie Specie { get; set; }
 
+        public Rootstock Rootstock { get; set; }
+
         public IngredientCategory Category { get; set; }
 
         public LocalIngredient Ingredient { get; set; }
