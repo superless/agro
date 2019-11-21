@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces.agro;
 using trifenix.agro.db.interfaces.agro.events;
@@ -73,15 +74,45 @@ namespace trifenix.agro.external.operations.entities.events
 
             try
             {
-                var result = _repo.GetNotificationEvents();
-                if (result == null)
-                {
-                    var message = "La base de datos retorna nulo para eventos";
-                    return OperationHelper.GetException<List<NotificationEvent>>(new Exception(message), message);
-                }
-                
-                var notEvents = await _commonDb.TolistAsync(result);
-                return OperationHelper.GetElements(notEvents);
+                return await GetEventsWrapper(_repo.GetNotificationEvents());
+            }
+            catch (Exception e)
+            {
+
+                return OperationHelper.GetException<List<NotificationEvent>>(e, e.Message);
+            }
+        }
+
+        private async Task<ExtGetContainer<List<NotificationEvent>>> GetEventsWrapper(IQueryable<NotificationEvent> notificationQuery) {
+            if (notificationQuery == null)
+            {
+                var message = "La base de datos retorna nulo para eventos";
+                return OperationHelper.GetException<List<NotificationEvent>>(new Exception(message), message);
+            }
+
+            var notEvents = await _commonDb.TolistAsync(notificationQuery);
+            return OperationHelper.GetElements(notEvents);
+        }
+
+        public async  Task<ExtGetContainer<List<NotificationEvent>>> GetEventsByBarrackId(string id)
+        {
+            
+            try
+            {
+                return await GetEventsWrapper(_repo.GetNotificationEvents().Where(s => s.Barrack.Id.Equals(id)));
+            }
+            catch (Exception e)
+            {
+
+                return OperationHelper.GetException<List<NotificationEvent>>(e, e.Message);
+            }
+        }
+
+        public async Task<ExtGetContainer<List<NotificationEvent>>> GetEventsByBarrackPhenologicalEventId(string idBarrack, string idPhenologicalId)
+        {
+            try
+            {
+                return await GetEventsWrapper(_repo.GetNotificationEvents().Where(s => s.Barrack.Id.Equals(idBarrack) && s.PhenologicalEvent.Id.Equals(idPhenologicalId)));
             }
             catch (Exception e)
             {

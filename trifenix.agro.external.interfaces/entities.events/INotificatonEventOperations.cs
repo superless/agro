@@ -13,5 +13,10 @@ namespace trifenix.agro.external.interfaces.entities.events
 
         Task<ExtGetContainer<NotificationEvent>> GetEvent(string id);
 
+        Task<ExtGetContainer<List<NotificationEvent>>> GetEventsByBarrackId(string id);
+
+        Task<ExtGetContainer<List<NotificationEvent>>> GetEventsByBarrackPhenologicalEventId(string idBarrack, string idPhenologicalId);
+
+
     }
 }
