@@ -24,7 +24,7 @@ namespace trifenix.agro.external.operations
         private readonly string _idSeason;
         private readonly IUploadImage _uploadImage;
 
-        public AgroManager(IAgroRepository repository, string idSeason, IUploadImage uploadImage = null)
+        public AgroManager(IAgroRepository repository, string idSeason, IUploadImage uploadImage)
         {
             _repository = repository;
             _idSeason = idSeason;
@@ -64,7 +64,7 @@ namespace trifenix.agro.external.operations
 
         public IPlotLandOperations PlotLands => new PlotLandOperations(_repository.PlotLands, _repository.Sectors, new CommonDbOperations<PlotLand>(), _idSeason);
 
-        public IBarrackOperations Barracks => new BarrackOperations(_repository.Barracks, _repository.Varieties, _repository.PlotLands, new CommonDbOperations<Barrack>(), _idSeason);
+        public IBarrackOperations Barracks => new BarrackOperations(_repository.Barracks, _repository.Rootstock, _repository.PlotLands, _repository.Varieties, new CommonDbOperations<Barrack>(), _idSeason);
 
         public IPhenologicalPreOrderOperations PhenologicalPreOrders => new PhenologicalPreOrdersOperations(_repository.PhenologicalPreOrders, new CommonDbOperations<PhenologicalPreOrder>(), _idSeason);
 

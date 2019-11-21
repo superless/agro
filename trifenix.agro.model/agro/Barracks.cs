@@ -39,10 +39,7 @@ namespace trifenix.agro.db.model.agro
 
         public Variety Pollinator { get; set; }
 
-
-
-
-
+        public Rootstock Rootstock { get; set; }
 
     }
 
