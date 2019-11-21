@@ -9,5 +9,8 @@ namespace trifenix.agro.external.interfaces.custom
         Task<ExtGetContainer<long>> GetMobileEventTimestamp();
 
         Task<ExtGetContainer<EventInitData>> GetEventData();
+
+
+        Task<ExtGetContainer<NotificationCustomPhenologicalResult>> GetNotificationPreOrdersResult(int page, int elementsByPage, bool orderDateDesc);
     }
 }

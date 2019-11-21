@@ -12,5 +12,9 @@ namespace trifenix.agro.db.interfaces.agro.events
         Task<NotificationEvent> GetNotificationEvent(string id);
 
         IQueryable<NotificationEvent> GetNotificationEvents();
+
+        Task<long> Total();
+
+        Task<long> Total(string season);
     }
 }

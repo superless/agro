@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces.common;
 
@@ -21,6 +20,11 @@ namespace trifenix.agro.db.applicationsReference.common
         {
             if (list == null) return new List<T>();
             return await list.ToListAsync();
+        }
+
+        public IQueryable<T> WithPagination(IQueryable<T> list, int page, int totalElementsOnPage)
+        {
+            return list.WithPagination(page, totalElementsOnPage);
         }
     }
 }

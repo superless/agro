@@ -32,5 +32,15 @@ namespace trifenix.agro.db.applicationsReference.agro.events
         {
             return _db.GetEntities();
         }
+
+        public async Task<long> Total()
+        {
+            return await _db.GetTotalElements();
+        }
+
+        public async Task<long> Total(string season)
+        {
+            return await _db.Store.QuerySingleAsync<long>($"SELECT value count(1) FROM c where c.Barrack.SeasonId = '{season}'");
+        }
     }
 }

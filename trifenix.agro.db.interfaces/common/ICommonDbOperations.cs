@@ -11,5 +11,8 @@ namespace trifenix.agro.db.interfaces.common
         Task<List<T>> TolistAsync(IQueryable<T> list);
 
         Task<T> FirstOrDefaultAsync(IQueryable<T> list, Expression<Func<T, bool>> predicate);
+
+        IQueryable<T> WithPagination(IQueryable<T> list, int page, int totalElementsOnPage);
+
     }
 }
