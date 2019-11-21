@@ -9,7 +9,6 @@ using Newtonsoft.Json;
 using trifenix.agro.functions.Helper;
 using System.Linq;
 using trifenix.agro.db.model.agro.enums;
-using System.Collections.Generic;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.db.model.agro;
 
@@ -434,6 +433,36 @@ namespace trifenix.agro.functions
 
             return ContainerMethods.GetJsonGetContainer(result, log);
 
+        }
+
+
+        [FunctionName("CustomNotificationBarrack")]
+        public static async Task<IActionResult> CustomNotificationBarrack(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/notification/barrack/{idBarrack}")] HttpRequest req, string idBarrack,
+            ILogger log)
+        {
+            if (!(await Auth.Validate(req, mustBeAuthenticated)))
+                return new UnauthorizedResult();
+
+            var manager = await ContainerMethods.AgroManager();
+
+            return ContainerMethods.GetJsonGetContainer(await manager.NotificationEvents.GetEventsByBarrackId(idBarrack), log);
+        }
+
+        [FunctionName("CustomNotificationBarrackPhenologicalEvent")]
+        public static async Task<IActionResult> CustomNotificationBarrackPhenologicalEvent(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/notification/barrack/{idBarrack}/phenological/{idPhenological}")] HttpRequest req, string idBarrack, string idPhenological,
+            
+            ILogger log)
+        {
+            if (!(await Auth.Validate(req, mustBeAuthenticated)))
+                return new UnauthorizedResult();
+
+            
+
+            var manager = await ContainerMethods.AgroManager();
+
+            return ContainerMethods.GetJsonGetContainer(await manager.NotificationEvents.GetEventsByBarrackPhenologicalEventId(idBarrack, idPhenological), log);
         }
 
 
