@@ -18,7 +18,7 @@ namespace trifenix.agro.functions
     public static class MainAgroFunction
     {
 
-        private static bool mustBeAuthenticated = false;
+        private static bool mustBeAuthenticated = bool.Parse(Environment.GetEnvironmentVariable("mustBeAuthenticated", EnvironmentVariableTarget.Process));
 
         [FunctionName("PhenologicalEventV2")]
         public static async Task<IActionResult> PhenologicalEventV2(
@@ -134,7 +134,7 @@ namespace trifenix.agro.functions
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/rootstock")] HttpRequest req,
             ILogger log)
         {
-            if (!(await Auth.Validate(req, true)))
+            if (!(await Auth.Validate(req, mustBeAuthenticated)))
                 return new UnauthorizedResult();
             if (req.Method.ToLower().Equals("post"))
             {
