@@ -134,7 +134,7 @@ namespace trifenix.agro.functions
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/rootstock")] HttpRequest req,
             ILogger log)
         {
-            if (!(await Auth.Validate(req, mustBeAuthenticated)))
+            if (!(await Auth.Validate(req, true)))
                 return new UnauthorizedResult();
             if (req.Method.ToLower().Equals("post"))
             {
