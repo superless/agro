@@ -17,7 +17,7 @@ namespace trifenix.agro.functions
     public static class MainAgroFunction
     {
 
-        private static bool mustBeAuthenticated = false;
+        private static bool mustBeAuthenticated = bool.Parse(Environment.GetEnvironmentVariable("mustBeAuthenticated", EnvironmentVariableTarget.Process));
 
         #region v2/phenological_events
         [FunctionName("PhenologicalEventV2")]
