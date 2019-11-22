@@ -44,7 +44,11 @@ namespace trifenix.agro.db.interfaces.agro
 
         ICertifiedEntityRepository CertifiedEntities { get; }
 
-        
+
+        IApplicationOrderRepository Order { get;  }
+
+
+
 
 
 

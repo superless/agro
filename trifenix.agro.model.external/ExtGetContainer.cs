@@ -19,9 +19,11 @@ namespace trifenix.agro.model.external
         /// </summary>
         public T Result { get; set; }
 
+        
         /// <summary>
         /// mensaje de error, si existe.
         /// </summary>
+        
         public string ErrorMessage { get; set; }
 
     }
