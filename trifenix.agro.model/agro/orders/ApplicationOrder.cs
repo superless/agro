@@ -43,6 +43,18 @@ namespace trifenix.agro.db.model.agro.orders
                 return _applicationsInOrder; }
             set { _applicationsInOrder = value; }
         }
+
+        private List<PhenologicalPreOrder> _phenologicalPreOrders;
+
+        public List<PhenologicalPreOrder> PhenologicalPreOrders
+        {
+            get {
+
+                _phenologicalPreOrders = _phenologicalPreOrders ?? new List<PhenologicalPreOrder>();
+                return _phenologicalPreOrders; }
+            set { _phenologicalPreOrders = value; }
+        }
+
     }
 
 

@@ -19,6 +19,7 @@ namespace trifenix.agro.functions
 
         private static bool mustBeAuthenticated = bool.Parse(Environment.GetEnvironmentVariable("mustBeAuthenticated", EnvironmentVariableTarget.Process));
 
+        #region v2/phenological_events
         [FunctionName("PhenologicalEventV2")]
         public static async Task<IActionResult> PhenologicalEventV2(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/phenological_events")] HttpRequest req,
@@ -26,14 +27,15 @@ namespace trifenix.agro.functions
         {
             if (!(await Auth.Validate(req, mustBeAuthenticated)))
                 return new UnauthorizedResult();
-            if (req.Method.ToLower().Equals("post")) {
+            if (req.Method.ToLower().Equals("post"))
+            {
                 return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
                 {
                     var name = (string)model["name"];
                     var initDate = (DateTime)model["startDate"];
                     var endDate = (DateTime)model["endDate"];
 
-                    
+
                     return await db.PhenologicalEvents.SaveNewPhenologicalEvent(name, initDate, endDate);
                 });
             }
@@ -54,7 +56,9 @@ namespace trifenix.agro.functions
             var result = await manager.PhenologicalEvents.GetPhenologicalEvents();
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
+        #endregion
 
+        #region v2/seasons
         [FunctionName("SeasonV2")]
         public static async Task<IActionResult> SeasonV2(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/seasons")] HttpRequest req,
@@ -66,7 +70,7 @@ namespace trifenix.agro.functions
             {
                 return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
                 {
-                    
+
                     var initDate = (DateTime)model["startDate"];
                     var endDate = (DateTime)model["endDate"];
 
@@ -80,7 +84,7 @@ namespace trifenix.agro.functions
                 return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
                 {
                     var id = (string)model["id"];
-                    
+
                     var initDate = (DateTime)model["startDate"];
                     var endDate = (DateTime)model["endDate"];
                     var current = (bool)model["current"];
@@ -93,7 +97,9 @@ namespace trifenix.agro.functions
             var result = await manager.Seasons.GetSeasons();
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
+        #endregion
 
+        #region v2/specie
         [FunctionName("SpecieV2")]
         public static async Task<IActionResult> SpecieV2(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/species")] HttpRequest req,
@@ -127,7 +133,9 @@ namespace trifenix.agro.functions
             var result = await manager.Species.GetSpecies();
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
+        #endregion
 
+        #region v2/rootstock
         [FunctionName("RootstockV2")]
         public static async Task<IActionResult> RootstockV2(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/rootstock")] HttpRequest req,
@@ -161,7 +169,9 @@ namespace trifenix.agro.functions
             var result = await manager.Rootstock.GetRootstocks();
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
+        #endregion
 
+        #region v2/certified_entities
         [FunctionName("CertifiedEntity")]
         public static async Task<IActionResult> CertifiedEntity(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/certified_entities/{parameter?}")] HttpRequest req, string parameter,
@@ -203,7 +213,9 @@ namespace trifenix.agro.functions
             var result = await manager.CertifiedEntities.GetCertifiedEntities();
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
+        #endregion
 
+        #region v2/ingredient_categories
         [FunctionName("CategoryIngredientsV2")]
         public static async Task<IActionResult> CategoryIngredientsV2(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/ingredient_categories")] HttpRequest req,
@@ -236,8 +248,10 @@ namespace trifenix.agro.functions
             var result = await manager.IngredientCategories.GetIngredientCategories();
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
+        #endregion
 
 
+        #region v2/ingredients
         [FunctionName("IngredientsV2")]
         public static async Task<IActionResult> IngredientsV2(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/ingredients")] HttpRequest req,
@@ -272,8 +286,10 @@ namespace trifenix.agro.functions
             var result = await manager.Ingredients.GetIngredients();
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
+        #endregion
 
 
+        #region v2/targets
         [FunctionName("TargetV2")]
         public static async Task<IActionResult> TargetV2(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/targets")] HttpRequest req,
@@ -308,7 +324,9 @@ namespace trifenix.agro.functions
             var result = await manager.ApplicationTargets.GetAplicationsTarget();
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
+        #endregion
 
+        #region v2/order_folders
         [FunctionName("OrderFolder")]
         public static async Task<IActionResult> OrderFolder(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/order_folders/{parameter?}")] HttpRequest req, string parameter,
@@ -339,14 +357,15 @@ namespace trifenix.agro.functions
                     var idCategory = (string)model["idCategory"];
                     var idSpecie = (string)model["idSpecie"];
                     var idIngredient = (string)model["idIngredient"];
-                    
+
 
 
                     return await db.OrderFolder.SaveEditOrderFolder(id, idPhenologicalEvent, idApplicationTarget, idCategory, idSpecie, idIngredient);
                 });
             }
 
-            if (!string.IsNullOrWhiteSpace(parameter)) {
+            if (!string.IsNullOrWhiteSpace(parameter))
+            {
                 var managerLocal = await ContainerMethods.AgroManager();
                 var resultLocal = await managerLocal.OrderFolder.GetOrderFolder(parameter);
                 return ContainerMethods.GetJsonGetContainer(resultLocal, log);
@@ -357,8 +376,10 @@ namespace trifenix.agro.functions
             var result = await manager.OrderFolder.GetOrderFolders();
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
+        #endregion
 
 
+        #region v2/products
         [FunctionName("Product")]
         public static async Task<IActionResult> Product(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/products/{parameter?}")] HttpRequest req, string parameter,
@@ -376,7 +397,7 @@ namespace trifenix.agro.functions
                     var measureType = (MeasureType)Convert.ToInt32(model["measureType"]);
                     var quantity = (int)model["quantity"];
                     var kindOfBottle = (KindOfProductContainer)Convert.ToInt32(model["kindOfBottle"]);
-                    var dosesStr =  ((object)model["doses"])?.ToString();
+                    var dosesStr = ((object)model["doses"])?.ToString();
                     var doses = !string.IsNullOrWhiteSpace(dosesStr) ? JsonConvert.DeserializeObject<DosesInput[]>(dosesStr) : null;
 
                     return await db.Products.CreateProduct(commercialName, idActiveIngredient, brand, doses, measureType, quantity, kindOfBottle);
@@ -415,8 +436,10 @@ namespace trifenix.agro.functions
             var result = await manager.Products.GetProducts();
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
+        #endregion
 
 
+        #region v2/custom_notification_events
         [FunctionName("CustomNotificationEvents")]
         public static async Task<IActionResult> CustomNotificationEvents(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/custom_notification_events/{page}/{totalByPage}/{desc?}")] HttpRequest req, int page, int totalByPage, string desc,
@@ -434,8 +457,10 @@ namespace trifenix.agro.functions
             return ContainerMethods.GetJsonGetContainer(result, log);
 
         }
+        #endregion
 
 
+        #region v2/notification/barrack/{idBarrack}
         [FunctionName("CustomNotificationBarrack")]
         public static async Task<IActionResult> CustomNotificationBarrack(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/notification/barrack/{idBarrack}")] HttpRequest req, string idBarrack,
@@ -448,24 +473,28 @@ namespace trifenix.agro.functions
 
             return ContainerMethods.GetJsonGetContainer(await manager.NotificationEvents.GetEventsByBarrackId(idBarrack), log);
         }
+        #endregion
 
+        #region v2/notification/barrack/{idBarrack}/phenological/{idPhenological}
         [FunctionName("CustomNotificationBarrackPhenologicalEvent")]
         public static async Task<IActionResult> CustomNotificationBarrackPhenologicalEvent(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/notification/barrack/{idBarrack}/phenological/{idPhenological}")] HttpRequest req, string idBarrack, string idPhenological,
-            
+
             ILogger log)
         {
             if (!(await Auth.Validate(req, mustBeAuthenticated)))
                 return new UnauthorizedResult();
 
-            
+
 
             var manager = await ContainerMethods.AgroManager();
 
             return ContainerMethods.GetJsonGetContainer(await manager.NotificationEvents.GetEventsByBarrackPhenologicalEventId(idBarrack, idPhenological), log);
         }
+        #endregion
 
 
+        #region v2/notification_events
         [FunctionName("NotificationEvents")]
         public static async Task<IActionResult> NotificationEvents(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "v2/notification_events/{parameter?}")] HttpRequest req, string parameter,
@@ -489,7 +518,7 @@ namespace trifenix.agro.functions
                 });
             }
 
-            
+
 
             if (!string.IsNullOrWhiteSpace(parameter))
             {
@@ -505,7 +534,7 @@ namespace trifenix.agro.functions
                     var resultTs = await managerLocal.CustomManager.MobileEvents.GetMobileEventTimestamp();
                     return ContainerMethods.GetJsonGetContainer(resultTs, log);
                 }
-                
+
                 var resultLocal = await managerLocal.NotificationEvents.GetEvent(parameter);
                 return ContainerMethods.GetJsonGetContainer(resultLocal, log);
 
@@ -515,8 +544,10 @@ namespace trifenix.agro.functions
             var result = await manager.NotificationEvents.GetEvents();
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
+        #endregion
 
 
+        #region v2/sectors
         [FunctionName("SectorV2")]
         public static async Task<IActionResult> Sector(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/sectors/{parameter?}")] HttpRequest req, string parameter,
@@ -528,7 +559,7 @@ namespace trifenix.agro.functions
             {
                 return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
                 {
-                   
+
                     var name = (string)model["name"];
                     return await db.Sectors.SaveNewSector(name);
                 });
@@ -560,7 +591,9 @@ namespace trifenix.agro.functions
             var result = await manager.Sectors.GetSectors();
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
+        #endregion
 
+        #region v2/plotlands
         [FunctionName("PlotLandsV2")]
         public static async Task<IActionResult> PlotLandsV2(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/plotlands/{parameter?}")] HttpRequest req, string parameter,
@@ -605,7 +638,9 @@ namespace trifenix.agro.functions
             var result = await manager.PlotLands.GetPlotLands();
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
+        #endregion
 
+        #region v2/varieties
         [FunctionName("VarietiesV2")]
         public static async Task<IActionResult> VarietiesV2(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/varieties/{parameter?}")] HttpRequest req, string parameter,
@@ -652,7 +687,9 @@ namespace trifenix.agro.functions
             var result = await manager.Varieties.GetVarieties();
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
+        #endregion
 
+        #region v2/barracks
         [FunctionName("BarracksV2")]
         public static async Task<IActionResult> BarracksV2(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/barracks/{parameter?}")] HttpRequest req, string parameter,
@@ -706,7 +743,9 @@ namespace trifenix.agro.functions
             var result = await manager.Barracks.GetBarracks();
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
+        #endregion
 
+        #region v2/phenological_preorders
         [FunctionName("PhenologicalPreOrders")]
         public static async Task<IActionResult> PhenologicalPreOrders(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/phenological_preorders/{parameter?}")] HttpRequest req, string parameter,
@@ -755,7 +794,8 @@ namespace trifenix.agro.functions
             var manager = await ContainerMethods.AgroManager();
             var result = await manager.PhenologicalPreOrders.GetPhenologicalPreOrders();
             return ContainerMethods.GetJsonGetContainer(result, log);
-        }
+        } 
+        #endregion
 
     }
 }
