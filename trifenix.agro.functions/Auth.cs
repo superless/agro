@@ -22,6 +22,9 @@ namespace trifenix.agro.functions
                 Environment.GetEnvironmentVariable("tenant", EnvironmentVariableTarget.Process),
                 Environment.GetEnvironmentVariable("tenantID", EnvironmentVariableTarget.Process)
             );
+            //Console.WriteLine("El Token que recibo:");
+            //Console.WriteLine(GetAccessToken(request));
+            //Console.WriteLine("|-----------------|");
             if ((accessToken = GetAccessToken(request)) != null) {
                 authorize = await auth.ValidateAccessToken(accessToken);
                 if (authorize != null)
