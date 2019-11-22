@@ -8,6 +8,7 @@ using trifenix.agro.db.interfaces.agro.ext;
 using trifenix.agro.db.interfaces.agro.fields;
 using trifenix.agro.db.interfaces.agro.orders;
 using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model.agro.orders;
 
 namespace trifenix.agro.db.applicationsReference.agro
 {
@@ -52,6 +53,6 @@ namespace trifenix.agro.db.applicationsReference.agro
 
         public ICertifiedEntityRepository CertifiedEntities => new CertifiedEntityRepository(new MainDb<CertifiedEntity>(DbArguments));
 
-        
+        public IApplicationOrderRepository Order => new ApplicationOrderRepository(new MainDb<ApplicationOrder>(DbArguments));
     }
 }
