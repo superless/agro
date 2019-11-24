@@ -12,6 +12,7 @@ using trifenix.agro.db.model.agro.enums;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.email.operations;
+using trifenix.agro.db.model.agro.orders;
 
 namespace trifenix.agro.functions
 {
@@ -549,6 +550,57 @@ namespace trifenix.agro.functions
             var result = await manager.NotificationEvents.GetEvents();
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
+        #endregion
+
+
+        #region v2/orders
+        [FunctionName("Orders")]
+        public static async Task<IActionResult> Orders(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/orders/{parameter?}")] HttpRequest req, string parameter,
+            ILogger log)
+        {
+            if (!(await Auth.Validate(req)))
+                return new UnauthorizedResult();
+            if (req.Method.ToLower().Equals("post"))
+            {
+                return await ContainerMethods.ApiPostOperations<string>(req.Body, log, async (db, model) =>
+                {
+                    var input = JsonConvert.DeserializeObject<ApplicationOrderInput>(model);
+
+
+                    return await db.ApplicationOrders.SaveNewApplicationOrder(input);
+                });
+            }
+
+            if (req.Method.ToLower().Equals("put"))
+            {
+                if (string.IsNullOrWhiteSpace(parameter))
+                {
+                    return new NotFoundResult();
+                }
+
+                return await ContainerMethods.ApiPostOperations<ApplicationOrder>(req.Body, log, async (db, model) =>
+                {
+                    
+                    var id = parameter;
+                    var input = JsonConvert.DeserializeObject<ApplicationOrderInput>(model);
+                    return await db.ApplicationOrders.SaveEditPhenologicalPreOrder(id, input);
+                });
+            }
+
+            if (!string.IsNullOrWhiteSpace(parameter))
+            {
+                var managerLocal = await ContainerMethods.AgroManager();
+                var resultLocal = await managerLocal.ApplicationOrders.GetApplicationOrder(parameter);
+                return ContainerMethods.GetJsonGetContainer(resultLocal, log);
+
+            }
+
+            var manager = await ContainerMethods.AgroManager();
+            var result = await manager.ApplicationOrders.GetApplicationOrders();
+            return ContainerMethods.GetJsonGetContainer(result, log);
+        }
+
         #endregion
 
 

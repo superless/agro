@@ -1,6 +1,7 @@
 ﻿using trifenix.agro.db.applicationsReference.common;
 using trifenix.agro.db.interfaces.agro;
 using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model.agro.orders;
 using trifenix.agro.external.interfaces;
 using trifenix.agro.external.interfaces.entities.events;
 using trifenix.agro.external.interfaces.entities.ext;
@@ -83,5 +84,23 @@ namespace trifenix.agro.external.operations
         public ICertifiedEntityOperations CertifiedEntities => new CertifiedEntityOperations(_repository.CertifiedEntities, new CommonDbOperations<CertifiedEntity>());
 
         public ICustomManager CustomManager => new CustomManager(_repository, _idSeason);
+
+
+        public IApplicationOrderOperations ApplicationOrders => new ApplicationOrderOperations(new ApplicationOrderArgs { 
+            ApplicationOrder = _repository.Order,
+            Barracks = _repository.Barracks,
+            CommonDb = new ApplicationOrderCommonDbArgs { 
+                ApplicationOrder = new CommonDbOperations<ApplicationOrder>()
+            },
+            DosesArgs = new DosesArgs { 
+                CertifiedEntity = _repository.CertifiedEntities,
+                Specie = _repository.Species,
+                Target = _repository.Targets,
+                Variety = _repository.Varieties
+            },
+            PreOrder = _repository.PhenologicalPreOrders,
+            SeasonId = _idSeason
+        });
+
     }
 }

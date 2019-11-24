@@ -69,7 +69,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "7.common", "7.common", "{65
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.util", "trifenix.agro.util\trifenix.agro.util.csproj", "{7D4EDE96-D522-47DB-8CD7-A91DFAC0FAB7}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "11. notifations", "11. notifations", "{151C664A-3D9D-4708-8535-EE73FDCCE2AE}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "11. notifications", "11. notifications", "{151C664A-3D9D-4708-8535-EE73FDCCE2AE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "email", "email", "{89AFB33C-23FD-49D4-BB32-C926508BCBF5}"
 EndProject

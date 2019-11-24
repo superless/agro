@@ -17,7 +17,7 @@ namespace trifenix.agro.external.operations.entities.orders.args
         public IBarrackRepository Barracks { get; set; }
 
 
-        public INotificationEventRepository Notifications { get; set; }
+       
 
         public IPhenologicalPreOrderRepository PreOrder { get; set; }
 
