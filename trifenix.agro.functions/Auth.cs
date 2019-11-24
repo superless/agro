@@ -9,11 +9,13 @@ namespace trifenix.agro.functions
 {
     public static class Auth
     {
-        //Recibe como parametro una request http para validar el bearer token incluido en su cabecera, y un parametro booleano que permite ignorar la validacion
+        private static bool MustBeAuthenticated() => bool.Parse(Environment.GetEnvironmentVariable("mustBeAuthenticated", EnvironmentVariableTarget.Process));
+        
+        //Recibe como parametro una request http para validar el bearer token incluido en su cabecera
         //Retorna true si posee token de acceso valido, de lo contrario retorna false
-        public static async Task<bool> Validate(HttpRequest request, bool mustBeAuthenticated)
+        public static async Task<bool> Validate(HttpRequest request)
         {
-            if (!mustBeAuthenticated)
+            if (!MustBeAuthenticated())
                 return true;
             string accessToken;
             ClaimsPrincipal authorize;
