@@ -67,7 +67,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.enums", "trif
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "7.common", "7.common", "{653573E2-C170-406C-944D-4F851E643F84}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "trifenix.agro.util", "trifenix.agro.util\trifenix.agro.util.csproj", "{7D4EDE96-D522-47DB-8CD7-A91DFAC0FAB7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.util", "trifenix.agro.util\trifenix.agro.util.csproj", "{7D4EDE96-D522-47DB-8CD7-A91DFAC0FAB7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "11. notifations", "11. notifations", "{151C664A-3D9D-4708-8535-EE73FDCCE2AE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "email", "email", "{89AFB33C-23FD-49D4-BB32-C926508BCBF5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.email.interfaces", "trifenix.agro.email.interfaces\trifenix.agro.email.interfaces.csproj", "{3DCC35D0-CFDC-40A9-B7A4-838B35D0E216}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.email.operations", "trifenix.agro.email.operations\trifenix.agro.email.operations.csproj", "{0A948F6E-5404-48D5-9A28-5146FD341C03}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -163,6 +171,14 @@ Global
 		{7D4EDE96-D522-47DB-8CD7-A91DFAC0FAB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D4EDE96-D522-47DB-8CD7-A91DFAC0FAB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D4EDE96-D522-47DB-8CD7-A91DFAC0FAB7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DCC35D0-CFDC-40A9-B7A4-838B35D0E216}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DCC35D0-CFDC-40A9-B7A4-838B35D0E216}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DCC35D0-CFDC-40A9-B7A4-838B35D0E216}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DCC35D0-CFDC-40A9-B7A4-838B35D0E216}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A948F6E-5404-48D5-9A28-5146FD341C03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A948F6E-5404-48D5-9A28-5146FD341C03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A948F6E-5404-48D5-9A28-5146FD341C03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A948F6E-5404-48D5-9A28-5146FD341C03}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -191,6 +207,9 @@ Global
 		{40195058-1B3F-4064-A1C2-62F93101DB32} = {99E43F52-B7D5-4298-B900-DBB8F6846D4F}
 		{5940E74B-02FF-41DF-8CB0-90C69086C44C} = {B8078832-CAAD-4310-A98B-C2E2F75888B8}
 		{7D4EDE96-D522-47DB-8CD7-A91DFAC0FAB7} = {653573E2-C170-406C-944D-4F851E643F84}
+		{89AFB33C-23FD-49D4-BB32-C926508BCBF5} = {151C664A-3D9D-4708-8535-EE73FDCCE2AE}
+		{3DCC35D0-CFDC-40A9-B7A4-838B35D0E216} = {89AFB33C-23FD-49D4-BB32-C926508BCBF5}
+		{0A948F6E-5404-48D5-9A28-5146FD341C03} = {89AFB33C-23FD-49D4-BB32-C926508BCBF5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2C0C9D82-464E-4741-8541-CDC460278FEC}
