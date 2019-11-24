@@ -29,8 +29,6 @@ namespace trifenix.agro.external.operations
             _repository = repository;
             _idSeason = idSeason;
             _uploadImage = uploadImage;
-
-            
         }
 
         public IPhenologicalOperations PhenologicalEvents => new PhenologicalEventOperations(_repository.PhenologicalEvents, new CommonDbOperations<PhenologicalEvent>());

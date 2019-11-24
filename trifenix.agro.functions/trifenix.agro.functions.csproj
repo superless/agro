@@ -10,6 +10,7 @@
   <ItemGroup>
     <ProjectReference Include="..\trifenix.agro.authentication.operations\trifenix.agro.authentication.operations.csproj" />
     <ProjectReference Include="..\trifenix.agro.db.applicationsReference\trifenix.agro.db.applicationsReference.csproj" />
+    <ProjectReference Include="..\trifenix.agro.email.operations\trifenix.agro.email.operations.csproj" />
     <ProjectReference Include="..\trifenix.agro.external.operations\trifenix.agro.external.operations.csproj" />
     <ProjectReference Include="..\trifenix.agro.storage.operations\trifenix.agro.storage.operations.csproj" />
     <ProjectReference Include="..\trifenix.util.extensions\trifenix.util.extensions.csproj" />
