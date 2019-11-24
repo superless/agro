@@ -519,8 +519,8 @@ namespace trifenix.agro.functions
                           <body>
                           <p> Estimado(a),</p>
                             <p> Llego una notificacion </p>
-                                <img src='{url}'>
-                                <p> Atentamente,<br> -Aresa </br></p>
+                                <img src='{url}' style='width:50%;height:auto;'>
+                                     < p> Atentamente,<br> -Aresa </br></p>
                                 </body>
                         </html>");
                     return response;
