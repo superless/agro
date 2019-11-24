@@ -515,13 +515,14 @@ namespace trifenix.agro.functions
                     var response = await db.NotificationEvents.SaveNewNotificationEvent(barrack, idPhenologicalEvent, base64, description);
                     var evt = await db.NotificationEvents.GetEvent(response.IdRelated);
                     var url = evt.Result.PicturePath;
-                    await email.SendEmail("Notificacion", $@"<html>
-                          <body>
-                          <p> Estimado(a),</p>
-                            <p> Llego una notificacion </p>
+                    await email.SendEmail("Notificacion", 
+                        $@"<html>
+                            <body>
+                                <p> Estimado(a), </p>
+                                <p> Llego una notificacion </p>
                                 <img src='{url}' style='width:50%;height:auto;'>
-                                     < p> Atentamente,<br> -Aresa </br></p>
-                                </body>
+                                <p> Atentamente,<br> -Aresa </br></p>
+                            </body>
                         </html>");
                     return response;
                 });
