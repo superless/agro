@@ -11,6 +11,7 @@ using trifenix.agro.external.operations.custom.args;
 using trifenix.agro.external.operations.helper;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.output;
+using trifenix.agro.util;
 
 namespace trifenix.agro.external.operations.custom
 {
@@ -313,13 +314,7 @@ namespace trifenix.agro.external.operations.custom
         }
         private async Task<IEnumerable<Barrack>> GetBarracksFromIds(string[] ids)
         {
-
-            var barracks = await Task.WhenAll(ids.Select(_args.Barrack.GetBarrack));
-
-            return barracks;
-
-
-
+            return await ids.SelectElement(_args.Barrack.GetBarrack, "Uno o más cuarteles no fueron encontrados");
         } 
         #endregion
 

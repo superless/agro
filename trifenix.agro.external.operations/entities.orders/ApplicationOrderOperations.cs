@@ -1,0 +1,174 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model.agro.local;
+using trifenix.agro.db.model.agro.orders;
+using trifenix.agro.external.interfaces.entities.orders;
+using trifenix.agro.external.operations.common;
+using trifenix.agro.external.operations.entities.orders.args;
+using trifenix.agro.external.operations.helper;
+using trifenix.agro.model.external;
+using trifenix.agro.model.external.Input;
+using trifenix.agro.util;
+
+namespace trifenix.agro.external.operations.entities.orders
+{
+    public class ApplicationOrderOperations : IApplicationOrderOperations
+    {
+
+
+        private readonly ApplicationOrderArgs _args;
+        public ApplicationOrderOperations(ApplicationOrderArgs args)
+        {
+            _args = args;
+        }
+        public async Task<ExtGetContainer<ApplicationOrder>> GetApplicationOrder(string id)
+        {
+            try
+            {
+                var appOrder = await _args.ApplicationOrder.GetApplicationOrder(id);
+                return OperationHelper.GetElement(appOrder);
+            }
+            catch (Exception e)
+            {
+
+                return OperationHelper.GetException<ApplicationOrder>(e, e.Message);
+            }
+        }
+
+        public async Task<ExtGetContainer<List<ApplicationOrder>>> GetApplicationOrders()
+        {
+            try
+            {
+                var applicationOrderQuery = _args.ApplicationOrder.GetApplicationOrders();
+                var applicationOrders = await _args.CommonDb.ApplicationOrder.TolistAsync(applicationOrderQuery);
+                return OperationHelper.GetElements(applicationOrders);
+
+            }
+            catch (Exception e)
+            {
+
+                return OperationHelper.GetException<List<ApplicationOrder>>(e, e.Message); 
+            }
+        }
+
+        public async Task<ExtPostContainer<ApplicationOrder>> SaveEditPhenologicalPreOrder(string id, ApplicationOrderInput input)
+        {
+            
+
+            var order = await _args.ApplicationOrder.GetApplicationOrder(id);
+
+            var appNewOrder = await GetApplicationOrder(id, input);
+
+            return await OperationHelper.EditElement(id, order, s => appNewOrder, _args.ApplicationOrder.CreateUpdate, "No existe orden con id {id}");
+
+        }
+
+        private async Task<ApplicationOrder> GetApplicationOrder(string id, ApplicationOrderInput input) {
+            var varietyIds = input.Applications.SelectMany(s => s.Doses.IdVarieties).Distinct();
+
+            var targetIds = input.Applications.SelectMany(s => s.Doses.idsApplicationTarget).Distinct();
+
+            var speciesIds = input.Applications.SelectMany(s => s.Doses.IdSpecies).Distinct();
+
+            var certifiedEntitiesIds = input.Applications.SelectMany(s => s.Doses.WaitingHarvest.Select(a => a.IdCertifiedEntity)).Distinct();
+
+            var barracksInstances = await GetBarracksIntance(input.BarracksInput);
+
+            var applications = GetApplicationInOrder(input.Applications);
+
+            var phenologicalPreOrders = input.PreOrdersId == null || !input.PreOrdersId.Any() ? new List<PhenologicalPreOrder>() :
+                           await input.PreOrdersId.SelectElement(_args.PreOrder.GetPhenologicalPreOrder, "Existen identificadores de preordenes que no fueron encontrados");
+
+
+            return new ApplicationOrder
+            {
+                Id = id,
+                IdsCertifiedEntities = certifiedEntitiesIds?.ToList(),
+                IdsSpecies = speciesIds?.ToList(),
+                Barracks = barracksInstances,
+                IdsTargets = targetIds?.ToList(),
+                IdVarieties = varietyIds?.ToList(),
+                SeasonId = _args.SeasonId,
+                Name = input.Name,
+                Wetting = input.Wetting,
+                ApplicationInOrders = applications,
+                PhenologicalPreOrders = phenologicalPreOrders
+            };
+        }
+
+        public async Task<ExtPostContainer<string>> SaveNewApplicationOrder(ApplicationOrderInput input)
+        {
+            return await OperationHelper.CreateElement(_args.CommonDb.ApplicationOrder, _args.ApplicationOrder.GetApplicationOrders(),
+                       async s => await _args.ApplicationOrder.CreateUpdate(await GetApplicationOrder(s, input)),
+                       s => s.Name.Equals(input.Name),
+                       $"ya existe producto con nombre : {input.Name}"
+                   ) ;
+        }
+
+        
+
+        private List<ApplicationsInOrder> GetApplicationInOrder(ApplicationInOrderInput[] appInOrder) {
+
+            
+
+            return appInOrder.Select(async s =>
+            {
+                if (s.Doses == null)
+                {
+                    return new ApplicationsInOrder
+                    {
+                        ProductId = s.ProductId,
+                        QuantityByHectare = s.QuantityByHectare
+
+                    };
+                }
+
+                var dose = await GetDose(s.Doses);
+                return new ApplicationsInOrder
+                {
+                    ProductId = s.ProductId,
+                    QuantityByHectare = s.QuantityByHectare,
+                    Doses = dose
+
+                };
+
+
+            }).Select(s => s.Result).ToList();
+        }
+
+        private async Task<Doses> GetDose(DosesInput input)
+        {
+
+            var doses = new List<DosesInput> { input };
+            var idCerts = input.WaitingHarvest.Select(s => s.IdCertifiedEntity).Distinct();
+
+
+            var dosesResult= await ModelCommonOperations.GetDoses(_args.DosesArgs.Variety, _args.DosesArgs.Target,
+                _args.DosesArgs.Specie, _args.DosesArgs.CertifiedEntity, doses.ToArray(), input.IdVarieties, input.idsApplicationTarget, input.IdSpecies, idCerts, _args.SeasonId);
+
+            return dosesResult.First();
+
+        }
+
+
+
+        private async Task<List<BarrackOrderInstance>> GetBarracksIntance(BarrackEventInput[] barracksInput) {
+           
+            var barracks = await barracksInput.Select(s => s.IdBarrack).SelectElement(_args.Barracks.GetBarrack, "Uno de los identificadores de cuartel no fue encontrado");
+
+            return barracksInput.Select(s =>
+            {
+                return new BarrackOrderInstance
+                {
+                    Barrack = barracks.First(a=>a.Id.Equals(s.IdBarrack)),
+                    EventsId = s.EventsId?.ToList()
+                };
+            }).ToList();
+
+        }
+    }
+}
