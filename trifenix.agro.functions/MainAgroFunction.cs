@@ -11,13 +11,13 @@ using System.Linq;
 using trifenix.agro.db.model.agro.enums;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.db.model.agro;
+using trifenix.agro.email.operations;
 
 namespace trifenix.agro.functions
 {
     public static class MainAgroFunction
     {
-
-        private static bool mustBeAuthenticated = bool.Parse(Environment.GetEnvironmentVariable("mustBeAuthenticated", EnvironmentVariableTarget.Process));
+        private static readonly Email email = new Email();
 
         #region v2/phenological_events
         [FunctionName("PhenologicalEventV2")]
@@ -25,7 +25,7 @@ namespace trifenix.agro.functions
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/phenological_events")] HttpRequest req,
             ILogger log)
         {
-            if (!(await Auth.Validate(req, mustBeAuthenticated)))
+            if (!(await Auth.Validate(req)))
                 return new UnauthorizedResult();
             if (req.Method.ToLower().Equals("post"))
             {
@@ -64,7 +64,7 @@ namespace trifenix.agro.functions
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/seasons")] HttpRequest req,
             ILogger log)
         {
-            if (!(await Auth.Validate(req, mustBeAuthenticated)))
+            if (!(await Auth.Validate(req)))
                 return new UnauthorizedResult();
             if (req.Method.ToLower().Equals("post"))
             {
@@ -105,7 +105,7 @@ namespace trifenix.agro.functions
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/species")] HttpRequest req,
             ILogger log)
         {
-            if (!(await Auth.Validate(req, mustBeAuthenticated)))
+            if (!(await Auth.Validate(req)))
                 return new UnauthorizedResult();
             if (req.Method.ToLower().Equals("post"))
             {
@@ -141,7 +141,7 @@ namespace trifenix.agro.functions
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/rootstock")] HttpRequest req,
             ILogger log)
         {
-            if (!(await Auth.Validate(req, mustBeAuthenticated)))
+            if (!(await Auth.Validate(req)))
                 return new UnauthorizedResult();
             if (req.Method.ToLower().Equals("post"))
             {
@@ -177,7 +177,7 @@ namespace trifenix.agro.functions
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/certified_entities/{parameter?}")] HttpRequest req, string parameter,
             ILogger log)
         {
-            if (!(await Auth.Validate(req, mustBeAuthenticated)))
+            if (!(await Auth.Validate(req)))
                 return new UnauthorizedResult();
             if (req.Method.ToLower().Equals("post"))
             {
@@ -221,7 +221,7 @@ namespace trifenix.agro.functions
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/ingredient_categories")] HttpRequest req,
             ILogger log)
         {
-            if (!(await Auth.Validate(req, mustBeAuthenticated)))
+            if (!(await Auth.Validate(req)))
                 return new UnauthorizedResult();
             if (req.Method.ToLower().Equals("post"))
             {
@@ -257,7 +257,7 @@ namespace trifenix.agro.functions
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/ingredients")] HttpRequest req,
             ILogger log)
         {
-            if (!(await Auth.Validate(req, mustBeAuthenticated)))
+            if (!(await Auth.Validate(req)))
                 return new UnauthorizedResult();
             if (req.Method.ToLower().Equals("post"))
             {
@@ -295,7 +295,7 @@ namespace trifenix.agro.functions
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/targets")] HttpRequest req,
             ILogger log)
         {
-            if (!(await Auth.Validate(req, mustBeAuthenticated)))
+            if (!(await Auth.Validate(req)))
                 return new UnauthorizedResult();
             if (req.Method.ToLower().Equals("post"))
             {
@@ -332,7 +332,7 @@ namespace trifenix.agro.functions
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/order_folders/{parameter?}")] HttpRequest req, string parameter,
             ILogger log)
         {
-            if (!(await Auth.Validate(req, mustBeAuthenticated)))
+            if (!(await Auth.Validate(req)))
                 return new UnauthorizedResult();
             if (req.Method.ToLower().Equals("post"))
             {
@@ -385,7 +385,7 @@ namespace trifenix.agro.functions
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/products/{parameter?}")] HttpRequest req, string parameter,
             ILogger log)
         {
-            if (!(await Auth.Validate(req, mustBeAuthenticated)))
+            if (!(await Auth.Validate(req)))
                 return new UnauthorizedResult();
             if (req.Method.ToLower().Equals("post"))
             {
@@ -445,7 +445,7 @@ namespace trifenix.agro.functions
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/custom_notification_events/{page}/{totalByPage}/{desc?}")] HttpRequest req, int page, int totalByPage, string desc,
             ILogger log)
         {
-            if (!(await Auth.Validate(req, mustBeAuthenticated)))
+            if (!(await Auth.Validate(req)))
                 return new UnauthorizedResult();
 
             var manager = await ContainerMethods.AgroManager();
@@ -466,7 +466,7 @@ namespace trifenix.agro.functions
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/notification/barrack/{idBarrack}")] HttpRequest req, string idBarrack,
             ILogger log)
         {
-            if (!(await Auth.Validate(req, mustBeAuthenticated)))
+            if (!(await Auth.Validate(req)))
                 return new UnauthorizedResult();
 
             var manager = await ContainerMethods.AgroManager();
@@ -482,7 +482,7 @@ namespace trifenix.agro.functions
 
             ILogger log)
         {
-            if (!(await Auth.Validate(req, mustBeAuthenticated)))
+            if (!(await Auth.Validate(req)))
                 return new UnauthorizedResult();
 
 
@@ -500,21 +500,26 @@ namespace trifenix.agro.functions
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "v2/notification_events/{parameter?}")] HttpRequest req, string parameter,
             ILogger log)
         {
-            if (!(await Auth.Validate(req, mustBeAuthenticated)))
+            if (!(await Auth.Validate(req)))
                 return new UnauthorizedResult();
             if (req.Method.ToLower().Equals("post"))
             {
                 return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
                 {
-
                     var newModel = model["_parts"][0][1];
                     var idPhenologicalEvent = (string)newModel["idPhenologicalEvent"];
                     var description = (string)newModel["description"];
                     var base64 = (string)newModel["base64"];
                     var barrack = (string)newModel["idBarrack"];
-
-
-                    return await db.NotificationEvents.SaveNewNotificationEvent(barrack, idPhenologicalEvent, base64, description);
+                    var response = await db.NotificationEvents.SaveNewNotificationEvent(barrack, idPhenologicalEvent, base64, description);
+                    await email.SendEmail("Notificacion", @"<html>
+                          <body>
+                          <p> Estimado(a),</p>
+                            <p> Llego una notificacion </p>
+                               <p> Atentamente,<br> -Aresa </br></p>
+                               </body>
+                        </html>");
+                    return response;
                 });
             }
 
@@ -553,7 +558,7 @@ namespace trifenix.agro.functions
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/sectors/{parameter?}")] HttpRequest req, string parameter,
             ILogger log)
         {
-            if (!(await Auth.Validate(req, mustBeAuthenticated)))
+            if (!(await Auth.Validate(req)))
                 return new UnauthorizedResult();
             if (req.Method.ToLower().Equals("post"))
             {
@@ -599,7 +604,7 @@ namespace trifenix.agro.functions
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/plotlands/{parameter?}")] HttpRequest req, string parameter,
             ILogger log)
         {
-            if (!(await Auth.Validate(req, mustBeAuthenticated)))
+            if (!(await Auth.Validate(req)))
                 return new UnauthorizedResult();
             if (req.Method.ToLower().Equals("post"))
             {
@@ -646,7 +651,7 @@ namespace trifenix.agro.functions
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/varieties/{parameter?}")] HttpRequest req, string parameter,
             ILogger log)
         {
-            if (!(await Auth.Validate(req, mustBeAuthenticated)))
+            if (!(await Auth.Validate(req)))
                 return new UnauthorizedResult();
             if (req.Method.ToLower().Equals("post"))
             {
@@ -695,7 +700,7 @@ namespace trifenix.agro.functions
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/barracks/{parameter?}")] HttpRequest req, string parameter,
             ILogger log)
         {
-            if (!(await Auth.Validate(req, mustBeAuthenticated)))
+            if (!(await Auth.Validate(req)))
                 return new UnauthorizedResult();
             if (req.Method.ToLower().Equals("post"))
             {
@@ -751,7 +756,7 @@ namespace trifenix.agro.functions
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/phenological_preorders/{parameter?}")] HttpRequest req, string parameter,
             ILogger log)
         {
-            if (!(await Auth.Validate(req, mustBeAuthenticated)))
+            if (!(await Auth.Validate(req)))
                 return new UnauthorizedResult();
             if (req.Method.ToLower().Equals("post"))
             {
