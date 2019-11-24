@@ -23,7 +23,7 @@ namespace trifenix.agro.model.external.Input
     {
         public string ProductId { get; set; }
 
-        public string QuantityByHectare { get; set; }
+        public double QuantityByHectare { get; set; }
 
         public DosesInput Doses { get; set; }
 

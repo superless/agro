@@ -9,10 +9,11 @@ using trifenix.agro.db.model.agro;
 using trifenix.agro.db.model.agro.enums;
 using trifenix.agro.db.model.agro.local;
 using trifenix.agro.external.interfaces.entities.ext;
+using trifenix.agro.external.operations.common;
 using trifenix.agro.external.operations.helper;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
-using trifenix.util.exceptions;
+using trifenix.agro.util;
 
 namespace trifenix.agro.external.operations.entities.ext
 {
@@ -188,46 +189,12 @@ namespace trifenix.agro.external.operations.entities.ext
         }
 
 
-        private async Task<List<T>> SelectElement<T>(IEnumerable<string> list, Func<string, Task<T>> getElement, string message) {
-            if (list == null) throw new GenericException(message);
-            if (list.Any(s => s == null)) throw new GenericException(message);
-            var listLocal = new List<T>();
-            foreach (var item in list)
-            {
-                var element = await getElement(item);
-                if (element == null) throw new GenericException(message);
-                listLocal.Add(element);
-            }
-            return listLocal;
-        }
+       
         private async Task<List<Doses>> GetDoses(DosesInput[] input, IEnumerable<string> varietyIds, IEnumerable<string> targetsId, IEnumerable<string> speciesIds, IEnumerable<string> certifiedEntitiesIds) {
 
-            
 
-            var varieties = await SelectElement(varietyIds, varietyRepository.GetVariety, "Una o más variedades no fueron encontradas");
-            var targets = await SelectElement(targetsId, targetRepository.GetTarget, "Uno o mas objetivos de aplicación no fueron encontrados"); 
-            var species = await SelectElement(speciesIds, specieRepository.GetSpecie, "Uno o mas especies no fueron encontrados");
-            var certifiedEntities = await SelectElement(certifiedEntitiesIds, certifiedEntityRepository.GetCertifiedEntity,"uno o más de las entidades certificadoras no fueron encontradas");
-
-            return input.Select(i => new Doses {
-                ApplicationDaysInterval = i.ApplicationDaysInterval,
-                DaysToReEntryToBarrack = i.DaysToReEntryToBarrack,
-                NumberOfSecuencialApplication = i.NumberOfSecuencialAppication,
-                Targets = i.idsApplicationTarget.Select(s=>targets.First(a=>a.Id.Equals(s))).ToList(),
-                Varieties = i.IdVarieties.Select(s => varieties.First(a => a.Id.Equals(s))).ToList(),
-                Species = i.IdSpecies.Select(s => species.First(a => a.Id.Equals(s))).ToList(),
-                WettingRecommendedByHectares = i.WettingRecommendedByHectares,
-                IdSeason = idSeason,
-                DosesApplicatedTo = i.DosesApplicatedTo,
-                DosesQuantityMin = i.DosesQuantityMin,
-                DosesQuantityMax = i.DosesQuantityMax,
-                WaitingDaysLabel = i.WaitingDaysLabel,
-                WaitingToHarvest = i.WaitingHarvest.Select(w=>new WaitingHarvest {
-                    CertifiedEntity = certifiedEntities.First(c=>c.Id.Equals(w.IdCertifiedEntity)),
-                    WaitingDays = w.WaitingDays
-                }).ToList()
-
-            }).ToList();
+            return await ModelCommonOperations.GetDoses(varietyRepository, targetRepository, 
+                specieRepository, certifiedEntityRepository, input, varietyIds, targetsId, speciesIds, certifiedEntitiesIds, idSeason);
         }
 
         

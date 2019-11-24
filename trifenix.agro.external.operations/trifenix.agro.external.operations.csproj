@@ -10,6 +10,7 @@
     <ProjectReference Include="..\trifenix.agro.external.interfaces\trifenix.agro.external.interfaces.csproj" />
     <ProjectReference Include="..\trifenix.agro.model.external\trifenix.agro.model.external.csproj" />
     <ProjectReference Include="..\trifenix.agro.storage.interfaces\trifenix.agro.storage.interfaces.csproj" />
+    <ProjectReference Include="..\trifenix.agro.util\trifenix.agro.util.csproj" />
     <ProjectReference Include="..\trifenix.util.exceptions\trifenix.util.exceptions.csproj" />
   </ItemGroup>
 

@@ -55,6 +55,75 @@ namespace trifenix.agro.db.model.agro.orders
             set { _phenologicalPreOrders = value; }
         }
 
+
+
+        private List<string> _idsCertifiedEntities;
+
+        /// <summary>
+        /// Ids de las entidades certificadoras, dentro de las dosis
+        /// </summary>
+        public List<string> IdsCertifiedEntities
+        {
+            get
+            {
+                _idsCertifiedEntities = _idsCertifiedEntities ?? new List<string>();
+                return _idsCertifiedEntities;
+            }
+            set { _idsCertifiedEntities = value; }
+        }
+
+
+        private List<string> _idsTargets;
+
+
+        /// <summary>
+        /// Ids de las enfermedades dentro de las dosis
+        /// </summary>
+        public List<string> IdsTargets
+        {
+            get
+            {
+                _idsTargets = _idsTargets ?? new List<string>();
+                return _idsTargets;
+            }
+            set { _idsTargets = value; }
+        }
+
+        private List<string> _idVarieties;
+
+
+        /// <summary>
+        /// variedades dentro de las dosis
+        /// </summary>
+        public List<string> IdVarieties
+        {
+            get
+            {
+                _idVarieties = _idVarieties ?? new List<string>();
+                return _idVarieties;
+            }
+            set { _idVarieties = value; }
+        }
+
+        private List<string> __idsSpecies;
+
+
+        /// <summary>
+        /// especies dentro de las dosis
+        /// </summary>
+        public List<string> IdsSpecies
+        {
+            get
+            {
+                __idsSpecies = __idsSpecies ?? new List<string>();
+                return __idsSpecies;
+            }
+            set { __idsSpecies = value; }
+        }
+
+
+
+
     }
 
 
