@@ -50,19 +50,19 @@ namespace trifenix.agro.email.operations
         {
             string bearerToken = "";
             HttpRequestMessage requestMessage;
-            using (requestMessage = new HttpRequestMessage(HttpMethod.Post, "https://login.microsoftonline.com/aresatest.onmicrosoft.com/oauth2/v2.0/token"))
+            using (requestMessage = new HttpRequestMessage(HttpMethod.Post, "https://login.microsoftonline.com/jhmad.onmicrosoft.com/oauth2/v2.0/token"))
             {
                 var parameters = new Dictionary<string, string> {
-                    { "client_id", "8247a3f6-7aa4-4399-8849-894e702ec793" },
+                    { "client_id", "a81f0ad4-912b-46d3-ba3e-7bf605693242" },
                     { "scope", "https://graph.microsoft.com/.default" },
-                    { "client_secret", "i39j]Rq9B1M=IPNQxsCwvXX@_rKc1ZwZ" },
+                    { "client_secret", "gUjIa4F=NXlAwwMCF2j2SFMMj3?m@=FM" },
                     { "grant_type", "client_credentials" },
                 };
                 requestMessage.Content = new FormUrlEncodedContent(parameters);
                 dynamic response = JsonConvert.DeserializeObject(await (await client.SendAsync(requestMessage)).Content.ReadAsStringAsync());
                 bearerToken = response.access_token;
             }
-            using (requestMessage = new HttpRequestMessage(HttpMethod.Get, "https://graph.microsoft.com/v1.0/directoryRoles/df87464f-16e5-467e-b7f5-3c704ba3d099/members"))
+            using (requestMessage = new HttpRequestMessage(HttpMethod.Get, "https://graph.microsoft.com/v1.0/directoryRoles/1add1d5e-8da1-4495-b33e-4bd26ad894eb/members"))
             {
                 requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
                 dynamic response = JsonConvert.DeserializeObject(await (await client.SendAsync(requestMessage)).Content.ReadAsStringAsync());

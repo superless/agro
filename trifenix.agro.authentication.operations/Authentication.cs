@@ -18,13 +18,13 @@ namespace trifenix.agro.authentication.operations
         private readonly string _tenant;
         private readonly string _tenantID;
 
-        //Usuario test: Chris@aresaTest.onmicrosoft.com
-        //Password:     T1r2i3c4k5i6n7g8
+        //Usuario test: sebastian.murray@trifenix.com
+        //Password:     trifenix7516
         public Authentication(string clientID, string tenant, string tenantID)
         {
-            _clientID = clientID;     //Id aplicacion registrada en Azure Active Directory      //247a3f6-7aa4-4399-8849-894e702ec793
-            _tenant = tenant;                  //Nombre inquilino en Azure Active Directory     //aresaTest.onmicrosoft.com
-            _tenantID = tenantID;     //Id inquilino en Azure Active Directory                  //a6df0226-dec3-4685-a6ee-d6e707c4b7be
+            _clientID = clientID;     //Id aplicacion registrada en Azure Active Directory      //a81f0ad4-912b-46d3-ba3e-7bf605693242
+            _tenant = tenant;         //Nombre inquilino en Azure Active Directory              //jhmad.onmicrosoft.com
+            _tenantID = tenantID;     //Id inquilino en Azure Active Directory                  //dc17aef1-b155-4005-aa00-9e80f52d2a7d
         }
 
         public async Task<ClaimsPrincipal> ValidateAccessToken(string accessToken)
