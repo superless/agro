@@ -569,10 +569,18 @@ namespace trifenix.agro.functions
             {
                 return await ContainerMethods.ApiPostOperations<string>(req.Body, log, async (db, model) =>
                 {
-                    var input = JsonConvert.DeserializeObject<ApplicationOrderInput>(model.ToString());
+                    try
+                    {
+                        var input = JsonConvert.DeserializeObject<ApplicationOrderInput>(model.ToString());
 
 
-                    return await db.ApplicationOrders.SaveNewApplicationOrder(input);
+                        return await db.ApplicationOrders.SaveNewApplicationOrder(input);
+                    }
+                    catch (Exception E)
+                    {
+
+                        throw E;
+                    }
                 });
             }
 
