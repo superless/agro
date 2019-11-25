@@ -31,7 +31,7 @@ namespace trifenix.agro.external.operations.entities.orders
         private OutPutApplicationOrder GetOutputOrder(ApplicationOrder appOrder) {
             return new OutPutApplicationOrder
             {
-
+                Id = appOrder.Id,
                 Wetting = appOrder.Wetting,
                 Name = appOrder.Name,
                 SeasonId = appOrder.SeasonId,

@@ -7,6 +7,9 @@ using trifenix.agro.db.model.agro.orders;
 namespace trifenix.agro.model.external.output
 {
     public class OutPutApplicationOrder {
+
+        public string Id { get; set; }
+
         public string Name { get; set; }
 
         private List<OutputBarrackInstance> _barracks;
