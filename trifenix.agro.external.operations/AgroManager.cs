@@ -89,6 +89,8 @@ namespace trifenix.agro.external.operations
         public IApplicationOrderOperations ApplicationOrders => new ApplicationOrderOperations(new ApplicationOrderArgs { 
             ApplicationOrder = _repository.Order,
             Barracks = _repository.Barracks,
+            Product = _repository.Products,
+            Notifications = _repository.NotificationEvents,
             CommonDb = new ApplicationOrderCommonDbArgs { 
                 ApplicationOrder = new CommonDbOperations<ApplicationOrder>()
             },

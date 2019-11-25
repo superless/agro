@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using trifenix.agro.db.model.agro.orders;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
+using trifenix.agro.model.external.output;
 
 namespace trifenix.agro.external.interfaces.entities.orders
 {
@@ -13,11 +14,11 @@ namespace trifenix.agro.external.interfaces.entities.orders
 
         Task<ExtPostContainer<string>> SaveNewApplicationOrder(ApplicationOrderInput input);
 
-        Task<ExtPostContainer<ApplicationOrder>> SaveEditPhenologicalPreOrder(string id, ApplicationOrderInput input);
+        Task<ExtPostContainer<OutPutApplicationOrder>> SaveEditPhenologicalPreOrder(string id, ApplicationOrderInput input);
 
-        Task<ExtGetContainer<ApplicationOrder>> GetApplicationOrder(string id);
+        Task<ExtGetContainer<OutPutApplicationOrder>> GetApplicationOrder(string id);
 
-        Task<ExtGetContainer<List<ApplicationOrder>>> GetApplicationOrders();
+        Task<ExtGetContainer<List<OutPutApplicationOrder>>> GetApplicationOrders();
 
 
 

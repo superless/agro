@@ -12,6 +12,7 @@ using trifenix.agro.external.operations.entities.orders.args;
 using trifenix.agro.external.operations.helper;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
+using trifenix.agro.model.external.output;
 using trifenix.agro.util;
 
 namespace trifenix.agro.external.operations.entities.orders
@@ -25,37 +26,90 @@ namespace trifenix.agro.external.operations.entities.orders
         {
             _args = args;
         }
-        public async Task<ExtGetContainer<ApplicationOrder>> GetApplicationOrder(string id)
+
+
+        private OutPutApplicationOrder GetOutputOrder(ApplicationOrder appOrder) {
+            return new OutPutApplicationOrder
+            {
+
+                Wetting = appOrder.Wetting,
+                Name = appOrder.Name,
+                SeasonId = appOrder.SeasonId,
+                ApplicationInOrders = appOrder.ApplicationInOrders.Select(async s =>
+                {
+
+
+                    return new OutPutApplicationInOrder
+                    {
+                        Doses = s.Doses,
+                        Product = await _args.Product.GetProduct(s.ProductId),
+                        ProductId = s.ProductId,
+                        QuantityByHectare = s.QuantityByHectare
+                    };
+                }).Select(s => s.Result).ToList(),
+                PhenologicalPreOrders = appOrder.PhenologicalPreOrders,
+                Barracks = appOrder.Barracks.Select(async s =>
+                {
+
+                    var events = await s.EventsId.SelectElement(_args.Notifications.GetNotificationEvent, "identicadores de evento no encontrados");
+
+
+                    return new OutputBarrackInstance
+                    {
+                        Barrack = s.Barrack,
+                        EventsId = s.EventsId,
+                        Events = events.Select(a => new OutputOrderNotificationEvent
+                        {
+                            Created = a.Created,
+                            Description = a.Description,
+                            Id = a.Id,
+                            PhenologicalEvent = a.PhenologicalEvent,
+                            PicturePath = a.PicturePath
+                        }).ToList()
+
+                    };
+                }).Select(s => s.Result).ToList()
+            };
+        }
+
+
+        public async Task<ExtGetContainer<OutPutApplicationOrder>> GetApplicationOrder(string id)
         {
             try
             {
                 var appOrder = await _args.ApplicationOrder.GetApplicationOrder(id);
-                return OperationHelper.GetElement(appOrder);
+
+                var newAppOrder = GetOutputOrder(appOrder);
+
+
+                return OperationHelper.GetElement(newAppOrder);
             }
             catch (Exception e)
             {
 
-                return OperationHelper.GetException<ApplicationOrder>(e, e.Message);
+                return OperationHelper.GetException<OutPutApplicationOrder>(e, e.Message);
             }
         }
 
-        public async Task<ExtGetContainer<List<ApplicationOrder>>> GetApplicationOrders()
+        public async Task<ExtGetContainer<List<OutPutApplicationOrder>>> GetApplicationOrders()
         {
             try
             {
                 var applicationOrderQuery = _args.ApplicationOrder.GetApplicationOrders();
                 var applicationOrders = await _args.CommonDb.ApplicationOrder.TolistAsync(applicationOrderQuery);
-                return OperationHelper.GetElements(applicationOrders);
+                var outputOrders = applicationOrders.Select(GetOutputOrder).ToList();
+
+                return OperationHelper.GetElements(outputOrders);
 
             }
             catch (Exception e)
             {
 
-                return OperationHelper.GetException<List<ApplicationOrder>>(e, e.Message); 
+                return OperationHelper.GetException<List<OutPutApplicationOrder>>(e, e.Message); 
             }
         }
 
-        public async Task<ExtPostContainer<ApplicationOrder>> SaveEditPhenologicalPreOrder(string id, ApplicationOrderInput input)
+        public async Task<ExtPostContainer<OutPutApplicationOrder>> SaveEditPhenologicalPreOrder(string id, ApplicationOrderInput input)
         {
             
 
@@ -63,7 +117,15 @@ namespace trifenix.agro.external.operations.entities.orders
 
             var appNewOrder = await GetApplicationOrder(id, input);
 
-            return await OperationHelper.EditElement(id, order, s => appNewOrder, _args.ApplicationOrder.CreateUpdate, "No existe orden con id {id}");
+            var result = await OperationHelper.EditElement(id, order, s => appNewOrder, _args.ApplicationOrder.CreateUpdate, "No existe orden con id {id}");
+
+            return new ExtPostContainer<OutPutApplicationOrder>
+            {
+                IdRelated = result.IdRelated,
+                Message = result.Message,
+                MessageResult = result.MessageResult,
+                Result = GetOutputOrder(appNewOrder)
+            };
 
         }
 
