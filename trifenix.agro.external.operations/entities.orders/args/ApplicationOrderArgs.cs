@@ -24,6 +24,10 @@ namespace trifenix.agro.external.operations.entities.orders.args
 
         public IApplicationOrderRepository ApplicationOrder { get; set; }
 
+        public IProductRepository Product { get; set; }
+
+        public INotificationEventRepository Notifications { get; set; }
+
 
         public string SeasonId { get; set; }
 
