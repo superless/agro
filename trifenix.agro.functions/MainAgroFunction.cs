@@ -569,7 +569,7 @@ namespace trifenix.agro.functions
             {
                 return await ContainerMethods.ApiPostOperations<string>(req.Body, log, async (db, model) =>
                 {
-                    var input = JsonConvert.DeserializeObject<ApplicationOrderInput>(model);
+                    var input = JsonConvert.DeserializeObject<ApplicationOrderInput>(model.ToString());
 
 
                     return await db.ApplicationOrders.SaveNewApplicationOrder(input);
@@ -587,7 +587,7 @@ namespace trifenix.agro.functions
                 {
                     
                     var id = parameter;
-                    var input = JsonConvert.DeserializeObject<ApplicationOrderInput>(model);
+                    var input = JsonConvert.DeserializeObject<ApplicationOrderInput>(model.ToString());
                     return await db.ApplicationOrders.SaveEditPhenologicalPreOrder(id, input);
                 });
             }
