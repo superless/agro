@@ -40,7 +40,7 @@ namespace trifenix.agro.db.applicationsReference.agro.events
 
         public async Task<long> Total(string season, string idSpecie)
         {
-            return await _db.Store.QuerySingleAsync<long>($"SELECT value count(1) FROM c where c.Barrack.SeasonId = '{season}' && c.Barrack.Variety.Specie.Id = '{idSpecie}'");
+            return await _db.Store.QuerySingleAsync<long>($"SELECT value count(1) FROM c where c.Barrack.SeasonId = '{season}' and c.Barrack.Variety.Specie.Id = '{idSpecie}'");
         }
     }
 }
