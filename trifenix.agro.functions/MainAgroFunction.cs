@@ -443,7 +443,7 @@ namespace trifenix.agro.functions
         #region v2/custom_notification_events
         [FunctionName("CustomNotificationEvents")]
         public static async Task<IActionResult> CustomNotificationEvents(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/custom_notification_events/{page}/{totalByPage}/{desc?}")] HttpRequest req, int page, int totalByPage, string desc,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/custom_notification_events/{idSpecie}/{page}/{totalByPage}/{desc?}")] HttpRequest req, string idSpecie, int page, int totalByPage, string desc,
             ILogger log)
         {
             if (!(await Auth.Validate(req)))
@@ -453,7 +453,7 @@ namespace trifenix.agro.functions
 
             var orderDate = string.IsNullOrWhiteSpace(desc) || desc.ToLower().Equals("desc");
 
-            var result = await manager.CustomManager.MobileEvents.GetNotificationPreOrdersResult(page, totalByPage, orderDate);
+            var result = await manager.CustomManager.MobileEvents.GetNotificationPreOrdersResult(idSpecie, page, totalByPage, orderDate);
 
             return ContainerMethods.GetJsonGetContainer(result, log);
 
