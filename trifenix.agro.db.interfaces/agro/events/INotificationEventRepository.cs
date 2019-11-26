@@ -15,6 +15,6 @@ namespace trifenix.agro.db.interfaces.agro.events
 
         Task<long> Total();
 
-        Task<long> Total(string season);
+        Task<long> Total(string season, string idSpecie);
     }
 }
