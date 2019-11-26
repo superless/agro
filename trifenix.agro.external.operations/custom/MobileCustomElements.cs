@@ -149,9 +149,9 @@ namespace trifenix.agro.external.operations.custom
 
         }
 
-        public async Task<ExtGetContainer<NotificationCustomPhenologicalResult>> GetNotificationPreOrdersResult(int page, int elementsByPage, bool orderDateDesc)
+        public async Task<ExtGetContainer<NotificationCustomPhenologicalResult>> GetNotificationPreOrdersResult(string idSpecie, int page, int elementsByPage, bool orderDateDesc)
         {
-            var notifications = await GetNotificationPreOrders(page, elementsByPage, orderDateDesc);
+            var notifications = await GetNotificationPreOrders(idSpecie, page, elementsByPage, orderDateDesc);
 
             var total = await _args.NotificationEvent.Total(_args.IdSeason);
 
@@ -163,9 +163,9 @@ namespace trifenix.agro.external.operations.custom
         }
 
         #region private methods
-        private async Task<OutPutNotificationPreOrder[]> GetNotificationPreOrders(int page, int elementsByPage, bool orderDateDesc)
+        private async Task<OutPutNotificationPreOrder[]> GetNotificationPreOrders(string idSpecie, int page, int elementsByPage, bool orderDateDesc)
         {
-            var notifications = await GetNotificationEvents(page, elementsByPage, orderDateDesc);
+            var notifications = await GetNotificationEvents(idSpecie, page, elementsByPage, orderDateDesc);
             return GetNotificationPreOrders(notifications.ToList()).ToArray();
 
 
@@ -196,10 +196,11 @@ namespace trifenix.agro.external.operations.custom
 
 
 
-        private async Task<IEnumerable<NotificationEvent>> GetNotificationEvents(int page, int elementsByPage, bool orderDateDesc)
+        private async Task<IEnumerable<NotificationEvent>> GetNotificationEvents(string idSpecie, int page, int elementsByPage, bool orderDateDesc)
         {
 
-            var notificationsQuery = _args.NotificationEvent.GetNotificationEvents().Where(s => s.Barrack.SeasonId.Equals(_args.IdSeason));
+            //var notificationsQuery = _args.NotificationEvent.GetNotificationEvents().Where(s => s.Barrack.SeasonId.Equals(_args.IdSeason));
+            var notificationsQuery = _args.NotificationEvent.GetNotificationEvents().Where(s => s.Barrack.SeasonId.Equals(_args.IdSeason) && s.Barrack.Variety.Specie.Id.Equals(idSpecie));
             var notificationQueryWithPagination = _args.CommonDb.NotificationEvent.WithPagination(notificationsQuery, page, elementsByPage);
 
             if (orderDateDesc)

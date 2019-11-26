@@ -11,6 +11,6 @@ namespace trifenix.agro.external.interfaces.custom
         Task<ExtGetContainer<EventInitData>> GetEventData();
 
 
-        Task<ExtGetContainer<NotificationCustomPhenologicalResult>> GetNotificationPreOrdersResult(int page, int elementsByPage, bool orderDateDesc);
+        Task<ExtGetContainer<NotificationCustomPhenologicalResult>> GetNotificationPreOrdersResult(string idSpecie, int page, int elementsByPage, bool orderDateDesc);
     }
 }
