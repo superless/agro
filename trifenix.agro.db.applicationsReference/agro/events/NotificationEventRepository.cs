@@ -38,9 +38,9 @@ namespace trifenix.agro.db.applicationsReference.agro.events
             return await _db.GetTotalElements();
         }
 
-        public async Task<long> Total(string season)
+        public async Task<long> Total(string season, string idSpecie)
         {
-            return await _db.Store.QuerySingleAsync<long>($"SELECT value count(1) FROM c where c.Barrack.SeasonId = '{season}'");
+            return await _db.Store.QuerySingleAsync<long>($"SELECT value count(1) FROM c where c.Barrack.SeasonId = '{season}' && c.Barrack.Variety.Specie.Id = '{idSpecie}'");
         }
     }
 }

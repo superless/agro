@@ -153,7 +153,7 @@ namespace trifenix.agro.external.operations.custom
         {
             var notifications = await GetNotificationPreOrders(idSpecie, page, elementsByPage, orderDateDesc);
 
-            var total = await _args.NotificationEvent.Total(_args.IdSeason);
+            var total = await _args.NotificationEvent.Total(_args.IdSeason, idSpecie);
 
             return OperationHelper.GetElement(new NotificationCustomPhenologicalResult
             {
