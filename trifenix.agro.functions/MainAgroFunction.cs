@@ -448,15 +448,12 @@ namespace trifenix.agro.functions
         {
             if (!(await Auth.Validate(req)))
                 return new UnauthorizedResult();
-
-            var manager = await ContainerMethods.AgroManager();
-
             var orderDate = string.IsNullOrWhiteSpace(desc) || desc.ToLower().Equals("desc");
-
+            if (!orderDate && !desc.ToLower().Equals("asc"))
+                return new BadRequestResult();
+            var manager = await ContainerMethods.AgroManager();
             var result = await manager.CustomManager.MobileEvents.GetNotificationPreOrdersResult(idSpecie, page, totalByPage, orderDate);
-
             return ContainerMethods.GetJsonGetContainer(result, log);
-
         }
         #endregion
 
