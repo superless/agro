@@ -13,6 +13,7 @@ using trifenix.agro.model.external.Input;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.email.operations;
 using trifenix.agro.db.model.agro.orders;
+using trifenix.agro.model.external.output;
 
 namespace trifenix.agro.functions
 {
@@ -588,7 +589,7 @@ namespace trifenix.agro.functions
                     return new NotFoundResult();
                 }
 
-                return await ContainerMethods.ApiPostOperations<ApplicationOrder>(req.Body, log, async (db, model) =>
+                return await ContainerMethods.ApiPostOperations<OutPutApplicationOrder>(req.Body, log, async (db, model) =>
                 {
                     
                     var id = parameter;
