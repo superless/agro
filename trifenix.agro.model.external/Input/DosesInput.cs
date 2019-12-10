@@ -18,7 +18,7 @@ namespace trifenix.agro.model.external.Input
 
 
         
-        public int NumberOfSecuencialAppication { get; set; }
+        public int NumberOfSequentialApplication { get; set; }
 
 
         

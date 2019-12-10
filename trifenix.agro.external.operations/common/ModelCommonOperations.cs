@@ -26,7 +26,7 @@ namespace trifenix.agro.external.operations.common
             {
                 ApplicationDaysInterval = i.ApplicationDaysInterval,
                 DaysToReEntryToBarrack = i.DaysToReEntryToBarrack,
-                NumberOfSecuencialApplication = i.NumberOfSecuencialAppication,
+                NumberOfSequentialApplication = i.NumberOfSequentialApplication,
                 Targets = i.idsApplicationTarget.Select(s => targets.First(a => a.Id.Equals(s))).ToList(),
                 Varieties = i.IdVarieties.Select(s => varieties.First(a => a.Id.Equals(s))).ToList(),
                 Species = i.IdSpecies.Select(s => species.First(a => a.Id.Equals(s))).ToList(),
