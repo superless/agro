@@ -83,7 +83,7 @@ namespace trifenix.agro.db.model.agro.local
         /// <summary>
         /// número de aplicaciones secuenciales (1 por defecto).
         /// </summary>
-        public int NumberOfSecuencialApplication { get; set; }
+        public int NumberOfSequentialApplication { get; set; }
 
 
         /// <summary>
