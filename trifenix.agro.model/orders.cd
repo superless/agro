@@ -3,17 +3,17 @@
   <Class Name="trifenix.agro.db.model.agro.orders.ApplicationOrder" BaseTypeListCollapsed="true">
     <Position X="5" Y="2.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AgACIAAAAAAAAAAIAAAAEAQAAAAAAAAAAAAAAAAAFAA=</HashCode>
+      <HashCode>AggCKCAgEAIAAAAIAAgAEAQAAgAAAAAAAQAAAAAAFAA=</HashCode>
       <FileName>agro\orders\ApplicationOrder.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
-      <Property Name="ApplicationInOrders" />
       <Property Name="Barracks" />
+      <Property Name="ApplicationInOrders" />
     </ShowAsCollectionAssociation>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="trifenix.agro.db.model.agro.orders.BarrackOrderInstance">
-    <Position X="7.75" Y="5.75" Width="1.5" />
+    <Position X="7.75" Y="5.75" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAABAAAAAAAAAgAAAAACAAAAAAAA=</HashCode>
       <FileName>agro\orders\ApplicationOrder.cs</FileName>
@@ -22,7 +22,7 @@
   <Class Name="trifenix.agro.db.model.agro.local.Doses">
     <Position X="11" Y="1.25" Width="3" />
     <TypeIdentifier>
-      <HashCode>AAAEAQAoAACACAAAEARAAAAAQCAEQEEAAAQQAAAAAAA=</HashCode>
+      <HashCode>AAAEAQAoAACACAABEABAAAAAQCAEQEEAAAQQAAAAAAA=</HashCode>
       <FileName>agro\local\Doses.cs</FileName>
     </TypeIdentifier>
   </Class>
