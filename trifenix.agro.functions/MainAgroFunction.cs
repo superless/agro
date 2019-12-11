@@ -21,6 +21,8 @@ namespace trifenix.agro.functions
     {
         private static readonly Email email = new Email();
 
+        //TODO: test cicd borrar
+
         #region v2/phenological_events
         [FunctionName("PhenologicalEventV2")]
         public static async Task<IActionResult> PhenologicalEventV2(
