@@ -23,6 +23,8 @@ namespace trifenix.agro.functions
 
         //TODO: test cicd borrar
 
+            //test
+
         #region v2/phenological_events
         [FunctionName("PhenologicalEventV2")]
         public static async Task<IActionResult> PhenologicalEventV2(
