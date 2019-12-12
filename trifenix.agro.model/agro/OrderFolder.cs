@@ -1,7 +1,8 @@
 ﻿using Cosmonaut;
 using Cosmonaut.Attributes;
+using System.Collections.Generic;
 using trifenix.agro.db.model.agro.local;
-
+using trifenix.agro.microsoftgraph.model;
 
 namespace trifenix.agro.db.model.agro
 {
@@ -13,8 +14,20 @@ namespace trifenix.agro.db.model.agro
 
         public PhenologicalEvent PhenologicalEvent { get; set; }
 
-        public ApplicationTarget ApplicationTarget { get; set; }
+        public UserInfo Creator { get; set; }
 
+        private List<UserInfo> _modifyBy;
+        public List<UserInfo> ModifyBy
+        {
+            get
+            {
+                _modifyBy = _modifyBy ?? new List<UserInfo>();
+                return _modifyBy;
+            }
+            set { _modifyBy = value; }
+        }
+
+        public ApplicationTarget ApplicationTarget { get; set; }
 
         public Specie Specie { get; set; }
 

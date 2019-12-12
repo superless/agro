@@ -10,6 +10,7 @@ using trifenix.agro.external.interfaces.entities.orders;
 using trifenix.agro.external.operations.common;
 using trifenix.agro.external.operations.entities.orders.args;
 using trifenix.agro.external.operations.helper;
+using trifenix.agro.microsoftgraph.model;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.model.external.output;
@@ -19,14 +20,11 @@ namespace trifenix.agro.external.operations.entities.orders
 {
     public class ApplicationOrderOperations : IApplicationOrderOperations
     {
-
-
         private readonly ApplicationOrderArgs _args;
         public ApplicationOrderOperations(ApplicationOrderArgs args)
         {
             _args = args;
         }
-
 
         private OutPutApplicationOrder GetOutputOrder(ApplicationOrder appOrder) {
             return new OutPutApplicationOrder
@@ -72,7 +70,6 @@ namespace trifenix.agro.external.operations.entities.orders
             };
         }
 
-
         public async Task<ExtGetContainer<OutPutApplicationOrder>> GetApplicationOrder(string id)
         {
             try
@@ -109,16 +106,23 @@ namespace trifenix.agro.external.operations.entities.orders
             }
         }
 
-        public async Task<ExtPostContainer<OutPutApplicationOrder>> SaveEditPhenologicalPreOrder(string id, ApplicationOrderInput input)
+        public async Task<ExtPostContainer<OutPutApplicationOrder>> SaveEditApplicationOrder(string id, ApplicationOrderInput input)
         {
-            
-
+            var modifier = await _args.GraphApi.GetUserInfo();
             var order = await _args.ApplicationOrder.GetApplicationOrder(id);
-
             var appNewOrder = await GetApplicationOrder(id, input);
-
-            var result = await OperationHelper.EditElement(id, order, s => appNewOrder, _args.ApplicationOrder.CreateUpdate, "No existe orden con id {id}");
-
+            var result = await OperationHelper.EditElement(
+                id,
+                order,
+                s => {
+                    appNewOrder.Creator = s.Creator;
+                    appNewOrder.ModifyBy = s.ModifyBy;
+                    appNewOrder.ModifyBy.Add(new UserInfo(DateTime.Now, modifier));
+                    return appNewOrder;
+                },
+                _args.ApplicationOrder.CreateUpdate,
+                "No existe orden con id {id}"
+            );
             return new ExtPostContainer<OutPutApplicationOrder>
             {
                 IdRelated = result.IdRelated,
@@ -126,26 +130,18 @@ namespace trifenix.agro.external.operations.entities.orders
                 MessageResult = result.MessageResult,
                 Result = GetOutputOrder(appNewOrder)
             };
-
         }
 
         private async Task<ApplicationOrder> GetApplicationOrder(string id, ApplicationOrderInput input) {
             var varietyIds = input.Applications.Any(s => s.Doses != null)? input.Applications.Where(s => s.Doses != null).SelectMany(s => s.Doses.IdVarieties).Distinct() : new List<string>();
-
             var targetIds = input.Applications.Any(s => s.Doses != null) ? input.Applications.Where(s => s.Doses != null).SelectMany(s => s.Doses.idsApplicationTarget).Distinct(): new List<string>();
-
             var speciesIds = input.Applications.Any(s => s.Doses != null) ? input.Applications.Where(s => s.Doses != null).SelectMany(s => s.Doses.IdSpecies).Distinct() : new List<string>();
-
             var certifiedEntitiesIds = input.Applications.Any(s=>s.Doses!=null)? input.Applications.Where(s=>s.Doses!=null).SelectMany(s => s.Doses.WaitingHarvest.Select(a => a.IdCertifiedEntity)).Distinct(): new List<string>();
-
             var barracksInstances = await GetBarracksIntance(input.BarracksInput);
-
             var applications = GetApplicationInOrder(input.Applications);
-
             var phenologicalPreOrders = input.PreOrdersId == null || !input.PreOrdersId.Any() ? new List<PhenologicalPreOrder>() :
                            await input.PreOrdersId.SelectElement(_args.PreOrder.GetPhenologicalPreOrder, "Existen identificadores de preordenes que no fueron encontrados");
-
-
+            var creator = await _args.GraphApi.GetUserInfo();
             return new ApplicationOrder
             {
                 Id = id,
@@ -158,6 +154,7 @@ namespace trifenix.agro.external.operations.entities.orders
                 Name = input.Name,
                 Wetting = input.Wetting,
                 ApplicationInOrders = applications,
+                Creator = new UserInfo(DateTime.Now, creator),
                 PhenologicalPreOrders = phenologicalPreOrders
             };
         }
@@ -170,8 +167,6 @@ namespace trifenix.agro.external.operations.entities.orders
                        $"ya existe producto con nombre : {input.Name}"
                    ) ;
         }
-
-        
 
         private List<ApplicationsInOrder> GetApplicationInOrder(ApplicationInOrderInput[] appInOrder) {
 
@@ -215,8 +210,6 @@ namespace trifenix.agro.external.operations.entities.orders
             return dosesResult.First();
 
         }
-
-
 
         private async Task<List<BarrackOrderInstance>> GetBarracksIntance(BarrackEventInput[] barracksInput) {
            

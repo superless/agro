@@ -5,6 +5,7 @@ using trifenix.agro.db.interfaces.agro.fields;
 using trifenix.agro.db.interfaces.agro.orders;
 using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model.agro.orders;
+using trifenix.agro.microsoftgraph.interfaces;
 
 namespace trifenix.agro.external.operations.entities.orders.args
 {
@@ -16,13 +17,11 @@ namespace trifenix.agro.external.operations.entities.orders.args
 
         public IBarrackRepository Barracks { get; set; }
 
-
-       
-
         public IPhenologicalPreOrderRepository PreOrder { get; set; }
 
-
         public IApplicationOrderRepository ApplicationOrder { get; set; }
+
+        public IGraphApi GraphApi { get; set; }
 
         public IProductRepository Product { get; set; }
 

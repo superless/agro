@@ -7,6 +7,8 @@ using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.external.interfaces.entities.orders;
 using trifenix.agro.external.operations.helper;
+using trifenix.agro.microsoftgraph.interfaces;
+using trifenix.agro.microsoftgraph.model;
 using trifenix.agro.model.external;
 
 namespace trifenix.agro.external.operations.entities.orders
@@ -17,12 +19,14 @@ namespace trifenix.agro.external.operations.entities.orders
         private readonly IPhenologicalPreOrderRepository _repo;
         private readonly string _idSeason;
         private readonly ICommonDbOperations<PhenologicalPreOrder> _commonDb;
-        public PhenologicalPreOrdersOperations(IPhenologicalPreOrderRepository repo, ICommonDbOperations<PhenologicalPreOrder> commonDb, string idSeason )
+        private readonly IGraphApi _graphApi;
+
+        public PhenologicalPreOrdersOperations(IPhenologicalPreOrderRepository repo, ICommonDbOperations<PhenologicalPreOrder> commonDb, string idSeason, IGraphApi graphApi)
         {
             _repo = repo;
             _idSeason = idSeason;
             _commonDb = commonDb;
-
+            _graphApi = graphApi;
         }
 
         public async Task<ExtGetContainer<PhenologicalPreOrder>> GetPhenologicalPreOrder(string id)
@@ -41,14 +45,16 @@ namespace trifenix.agro.external.operations.entities.orders
         public async Task<ExtPostContainer<PhenologicalPreOrder>> SaveEditPhenologicalPreOrder(string id, string name, string idOrderFolder, List<string> idBarracks)
         {
             var element = await _repo.GetPhenologicalPreOrder(id);
-
-            return await OperationHelper.EditElement(id,
+            var modifier = await _graphApi.GetUserInfo();
+            return await OperationHelper.EditElement(
+                id,
                 element,
                 s => {
                     s.Name = name;
                     s.SeasonId = _idSeason;
                     s.BarracksId = idBarracks;
                     s.OrderFolderId = idOrderFolder;
+                    s.ModifyBy.Add(new UserInfo(DateTime.Now, modifier));
                     s.Created = DateTime.Now;
                     return s;
                 },
@@ -59,6 +65,7 @@ namespace trifenix.agro.external.operations.entities.orders
 
         public async Task<ExtPostContainer<string>> SaveNewPhenologicalPreOrder(string name, string idOrderFolder, List<string> idBarracks)
         {
+            var creator = await _graphApi.GetUserInfo();
             return await OperationHelper.CreateElement(_commonDb,_repo.GetPhenologicalPreOrders(),
                async s => await _repo.CreateUpdatePhenologicalPreOrder(new PhenologicalPreOrder
                {
@@ -67,11 +74,11 @@ namespace trifenix.agro.external.operations.entities.orders
                    SeasonId = _idSeason,
                    BarracksId = idBarracks,
                    Created = DateTime.Now,
-                   OrderFolderId = idOrderFolder
+                   OrderFolderId = idOrderFolder,
+                   Creator = new UserInfo(DateTime.Now, creator)
                }),
                s => s.Name.Equals(name),
                $"ya existe Cuartel con nombre {name} "
-
            ); 
         }
     }

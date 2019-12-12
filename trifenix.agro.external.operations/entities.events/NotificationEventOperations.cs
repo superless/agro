@@ -9,6 +9,8 @@ using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.external.interfaces.entities.events;
 using trifenix.agro.external.operations.helper;
+using trifenix.agro.microsoftgraph.interfaces;
+using trifenix.agro.microsoftgraph.model;
 using trifenix.agro.model.external;
 using trifenix.agro.storage.interfaces;
 
@@ -25,6 +27,7 @@ namespace trifenix.agro.external.operations.entities.events
         private readonly IBarrackRepository _barrackRepository;
         private readonly IUploadImage _uploadImage;
         private readonly INotificationEventRepository _repo;
+        private readonly IGraphApi _graphApi;
 
 
         /// <summary>
@@ -35,13 +38,14 @@ namespace trifenix.agro.external.operations.entities.events
         /// <param name="phenologicalRepository">repositorio de eventos fenológicos</param>
         /// <param name="phenologicalRepository">repositorio de eventos fenológicos</param>
         /// <param name="uploadImage">Objeto que permite obtener la imagen subida en la aplicación</param>
-        public NotificationEventOperations(INotificationEventRepository repo, IBarrackRepository barrackRepository, IPhenologicalEventRepository phenologicalRepository, ICommonDbOperations<NotificationEvent> commonDb, IUploadImage uploadImage = null)
+        public NotificationEventOperations(INotificationEventRepository repo, IBarrackRepository barrackRepository, IPhenologicalEventRepository phenologicalRepository, ICommonDbOperations<NotificationEvent> commonDb, IUploadImage uploadImage, IGraphApi graphApi)
         {
             _repo = repo;
             _phenologicalRepository = phenologicalRepository;
             _commonDb = commonDb;
             _barrackRepository = barrackRepository;
             _uploadImage = uploadImage;
+            _graphApi = graphApi;
         }
 
 
@@ -89,7 +93,6 @@ namespace trifenix.agro.external.operations.entities.events
                 var message = "La base de datos retorna nulo para eventos";
                 return OperationHelper.GetException<List<NotificationEvent>>(new Exception(message), message);
             }
-
             var notEvents = await _commonDb.TolistAsync(notificationQuery);
             return OperationHelper.GetElements(notEvents);
         }
@@ -149,7 +152,7 @@ namespace trifenix.agro.external.operations.entities.events
                 {
                     imgPath = await _uploadImage.UploadImageBase64(base64);
                 }
-
+                var creator = await _graphApi.GetUserInfo();
                 return await OperationHelper.CreateElement(_commonDb, _repo.GetNotificationEvents(),
                    async s => await _repo.CreateUpdateNotificationEvent(new NotificationEvent
                    {
@@ -158,7 +161,8 @@ namespace trifenix.agro.external.operations.entities.events
                        Created = DateTime.Now,
                        Description = description,
                        PhenologicalEvent = localPhenological,
-                       PicturePath = imgPath
+                       PicturePath = imgPath,
+                       Creator = new UserInfo(DateTime.Now, creator)
                    }),
                    s => false,
                    $""

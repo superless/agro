@@ -3,11 +3,13 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.IO;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using trifenix.agro.db.applicationsReference.agro;
 using trifenix.agro.external.interfaces;
 using trifenix.agro.external.operations;
 using trifenix.agro.functions.settings;
+using trifenix.agro.microsoftgraph.operations;
 using trifenix.agro.model.external;
 using trifenix.agro.storage.operations;
 
@@ -17,24 +19,25 @@ namespace trifenix.agro.functions.Helper
     {
         
 
-        public static async Task<IAgroManager> AgroManager(){
+        public static async Task<IAgroManager> AgroManager(ClaimsPrincipal claims){
            
             var agroDb = new AgroRepository(ConfigManager.GetDbArguments);
             var season = await agroDb.Seasons.GetCurrentSeason();
             var uploadImage = new UploadImage(Environment.GetEnvironmentVariable("StorageConnectionStrings", EnvironmentVariableTarget.Process));
-            return new AgroManager(agroDb, season?.Id,uploadImage); 
+            var graphApi = new GraphApi(claims);
+            return new AgroManager(agroDb, season?.Id,uploadImage, graphApi);
         
         }
 
 
-        public static async Task<JsonResult> ApiPostOperations<T>(Stream body, ILogger log, Func<IAgroManager, dynamic, Task<ExtPostContainer<T>>> create) 
+        public static async Task<JsonResult> ApiPostOperations<T>(Stream body, ILogger log, Func<IAgroManager, dynamic, Task<ExtPostContainer<T>>> create, ClaimsPrincipal claims) 
         {
             try
             {
                 var requestBody = await new StreamReader(body).ReadToEndAsync();
                 dynamic result = JsonConvert.DeserializeObject(requestBody);
 
-                var manager = await AgroManager();
+                var manager = await AgroManager(claims);
                 var resultDb = await create(manager, result);
                 return ContainerMethods.GetJsonPostContainer(resultDb, log);
             }

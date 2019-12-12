@@ -2,6 +2,7 @@
 using Cosmonaut.Attributes;
 using System;
 using System.Collections.Generic;
+using trifenix.agro.microsoftgraph.model;
 
 namespace trifenix.agro.db.model.agro
 {
@@ -15,6 +16,19 @@ namespace trifenix.agro.db.model.agro
         public string SeasonId { get; set; }
 
         public string OrderFolderId { get; set; }
+
+        public UserInfo Creator { get; set; }
+
+        private List<UserInfo> _modifyBy;
+        public List<UserInfo> ModifyBy
+        {
+            get
+            {
+                _modifyBy = _modifyBy ?? new List<UserInfo>();
+                return _modifyBy;
+            }
+            set { _modifyBy = value; }
+        }
 
         private List<string> _barracksId;
 

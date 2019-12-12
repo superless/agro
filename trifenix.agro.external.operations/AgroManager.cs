@@ -14,6 +14,7 @@ using trifenix.agro.external.operations.entities.fields;
 using trifenix.agro.external.operations.entities.main;
 using trifenix.agro.external.operations.entities.orders;
 using trifenix.agro.external.operations.entities.orders.args;
+using trifenix.agro.microsoftgraph.interfaces;
 using trifenix.agro.storage.interfaces;
 
 namespace trifenix.agro.external.operations
@@ -24,12 +25,15 @@ namespace trifenix.agro.external.operations
         private readonly IAgroRepository _repository;
         private readonly string _idSeason;
         private readonly IUploadImage _uploadImage;
+        private readonly IGraphApi _graphApi;
 
-        public AgroManager(IAgroRepository repository, string idSeason, IUploadImage uploadImage)
+
+        public AgroManager(IAgroRepository repository, string idSeason, IUploadImage uploadImage, IGraphApi graphApi)
         {
             _repository = repository;
             _idSeason = idSeason;
             _uploadImage = uploadImage;
+            _graphApi = graphApi;
         }
 
         public IPhenologicalOperations PhenologicalEvents => new PhenologicalEventOperations(_repository.PhenologicalEvents, new CommonDbOperations<PhenologicalEvent>());
@@ -45,29 +49,12 @@ namespace trifenix.agro.external.operations
         public IIngredientsOperations Ingredients => new IngredientOperations(_repository.Ingredients, _repository.Categories, new CommonDbOperations<Ingredient>());
 
         public ISeasonOperations Seasons => new SeasonOperations(_repository.Seasons, new CommonDbOperations<Season>());
-
-        public IOrderFolderOperations OrderFolder => new OrderFolderOperations(new OrderFolderArgs {
-            Ingredient = _repository.Ingredients,
-            IngredientCategory = _repository.Categories,
-            OrderFolder = _repository.OrderFolder,
-            PhenologicalEvent = _repository.PhenologicalEvents,
-            Specie = _repository.Species,
-            Target = _repository.Targets,
-            IdSeason = _idSeason,
-            NotificationEvent = _repository.NotificationEvents,
-            CommonDb= new CommonDbOperations<OrderFolder>(),
-            CommonDbNotifications = new CommonDbOperations<NotificationEvent>()
-        });
-
+        
         public ISectorOperations Sectors => new SectorOperations(_repository.Sectors, new CommonDbOperations<Sector>(), _idSeason);
 
         public IPlotLandOperations PlotLands => new PlotLandOperations(_repository.PlotLands, _repository.Sectors, new CommonDbOperations<PlotLand>(), _idSeason);
 
         public IBarrackOperations Barracks => new BarrackOperations(_repository.Barracks, _repository.Rootstock, _repository.PlotLands, _repository.Varieties, new CommonDbOperations<Barrack>(), _idSeason);
-
-        public IPhenologicalPreOrderOperations PhenologicalPreOrders => new PhenologicalPreOrdersOperations(_repository.PhenologicalPreOrders, new CommonDbOperations<PhenologicalPreOrder>(), _idSeason);
-
-        public INotificatonEventOperations NotificationEvents => new NotificationEventOperations(_repository.NotificationEvents, _repository.Barracks, _repository.PhenologicalEvents, new CommonDbOperations<NotificationEvent>(), _uploadImage);
 
         public IVarietyOperations Varieties => new VarietyOperations(_repository.Varieties, _repository.Species, new CommonDbOperations<Variety>());
 
@@ -86,15 +73,19 @@ namespace trifenix.agro.external.operations
         public ICustomManager CustomManager => new CustomManager(_repository, _idSeason);
 
 
-        public IApplicationOrderOperations ApplicationOrders => new ApplicationOrderOperations(new ApplicationOrderArgs { 
+        public IApplicationOrderOperations ApplicationOrders => new ApplicationOrderOperations(new ApplicationOrderArgs
+        {
             ApplicationOrder = _repository.Order,
+            GraphApi = _graphApi,
             Barracks = _repository.Barracks,
             Product = _repository.Products,
             Notifications = _repository.NotificationEvents,
-            CommonDb = new ApplicationOrderCommonDbArgs { 
+            CommonDb = new ApplicationOrderCommonDbArgs
+            {
                 ApplicationOrder = new CommonDbOperations<ApplicationOrder>()
             },
-            DosesArgs = new DosesArgs { 
+            DosesArgs = new DosesArgs
+            {
                 CertifiedEntity = _repository.CertifiedEntities,
                 Specie = _repository.Species,
                 Target = _repository.Targets,
@@ -103,6 +94,22 @@ namespace trifenix.agro.external.operations
             PreOrder = _repository.PhenologicalPreOrders,
             SeasonId = _idSeason
         });
+        public INotificatonEventOperations NotificationEvents => new NotificationEventOperations(_repository.NotificationEvents, _repository.Barracks, _repository.PhenologicalEvents, new CommonDbOperations<NotificationEvent>(), _uploadImage, _graphApi);
+        public IOrderFolderOperations OrderFolder => new OrderFolderOperations(new OrderFolderArgs
+        {
+            Ingredient = _repository.Ingredients,
+            IngredientCategory = _repository.Categories,
+            OrderFolder = _repository.OrderFolder,
+            GraphApi = _graphApi,
+            PhenologicalEvent = _repository.PhenologicalEvents,
+            Specie = _repository.Species,
+            Target = _repository.Targets,
+            IdSeason = _idSeason,
+            NotificationEvent = _repository.NotificationEvents,
+            CommonDb = new CommonDbOperations<OrderFolder>(),
+            CommonDbNotifications = new CommonDbOperations<NotificationEvent>()
+        });
+        public IPhenologicalPreOrderOperations PhenologicalPreOrders => new PhenologicalPreOrdersOperations(_repository.PhenologicalPreOrders, new CommonDbOperations<PhenologicalPreOrder>(), _idSeason, _graphApi);
 
     }
 }
