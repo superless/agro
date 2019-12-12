@@ -27,7 +27,8 @@ namespace trifenix.agro.external.operations.tests.helper.Instances
                         BarrackInstances.GetInstance(Results.Values).Object,
                         PhenologicalEventsInstances.GetInstance(Results.Values).Object,
                         CommonDbInstances<NotificationEvent>.GetInstance(Results.Values).Object,
-                        UploadImageInstances.GetInstance(Results.Values).Object
+                        UploadImageInstances.GetInstance(Results.Values).Object,
+                        null
                     );
 
                 case KindOfInstance.DefaultReturnNull:
@@ -36,7 +37,8 @@ namespace trifenix.agro.external.operations.tests.helper.Instances
                         BarrackInstances.GetInstance(Results.Values).Object,
                         PhenologicalEventsInstances.GetInstance(Results.Values).Object,
                         CommonDbInstances<NotificationEvent>.GetInstance(Results.Values).Object,
-                        UploadImageInstances.GetInstance(Results.Values).Object
+                        UploadImageInstances.GetInstance(Results.Values).Object,
+                        null
                     );
                 case KindOfInstance.DefaultReturnException:
                     return new NotificationEventOperations(
@@ -44,7 +46,8 @@ namespace trifenix.agro.external.operations.tests.helper.Instances
                        BarrackInstances.GetInstance(Results.Values).Object,
                        PhenologicalEventsInstances.GetInstance(Results.Values).Object,
                        CommonDbInstances<NotificationEvent>.GetInstance(Results.Values).Object,
-                       UploadImageInstances.GetInstance(Results.Values).Object
+                       UploadImageInstances.GetInstance(Results.Values).Object,
+                       null
                    );
 
                 case KindOfInstance.DefaultReturnEmpty:
@@ -53,7 +56,8 @@ namespace trifenix.agro.external.operations.tests.helper.Instances
                        BarrackInstances.GetInstance(Results.Values).Object,
                        PhenologicalEventsInstances.GetInstance(Results.Values).Object,
                        CommonDbInstances<NotificationEvent>.GetInstance(Results.Values).Object,
-                       UploadImageInstances.GetInstance(Results.Values).Object
+                       UploadImageInstances.GetInstance(Results.Values).Object,
+                       null
                    );
 
                 case KindOfInstance.DefaultReturnValuesNullCommonDb:
@@ -62,7 +66,8 @@ namespace trifenix.agro.external.operations.tests.helper.Instances
                        BarrackInstances.GetInstance(Results.Values).Object,
                        PhenologicalEventsInstances.GetInstance(Results.Values).Object,
                        CommonDbInstances<NotificationEvent>.GetInstance(Results.Nullables).Object,
-                       UploadImageInstances.GetInstance(Results.Values).Object
+                       UploadImageInstances.GetInstance(Results.Values).Object,
+                       null
                    );
 
                 case KindOfInstance.DefaultReturnValuesOkCommonDb:
@@ -71,7 +76,8 @@ namespace trifenix.agro.external.operations.tests.helper.Instances
                        BarrackInstances.GetInstance(Results.Values).Object,
                        PhenologicalEventsInstances.GetInstance(Results.Values).Object,
                        CommonDbInstances<NotificationEvent>.GetInstance(Results.Nullables).Object,
-                       UploadImageInstances.GetInstance(Results.Values).Object
+                       UploadImageInstances.GetInstance(Results.Values).Object,
+                       null
                    );
                 case KindOfInstance.DefaultReturnExceptionOnBarracksEmpty:
                     return new NotificationEventOperations(
@@ -79,7 +85,8 @@ namespace trifenix.agro.external.operations.tests.helper.Instances
                        BarrackInstances.GetInstance(Results.Nullables).Object,
                        PhenologicalEventsInstances.GetInstance(Results.Values).Object,
                        CommonDbInstances<NotificationEvent>.GetInstance(Results.Values).Object,
-                       UploadImageInstances.GetInstance(Results.Values).Object
+                       UploadImageInstances.GetInstance(Results.Values).Object,
+                       null
                    );
 
                 case KindOfInstance.DefaultReturnExceptionOnPhenologicalEmpty:
@@ -88,7 +95,8 @@ namespace trifenix.agro.external.operations.tests.helper.Instances
                        BarrackInstances.GetInstance(Results.Values).Object,
                        PhenologicalEventsInstances.GetInstance(Results.Nullables).Object,
                        CommonDbInstances<NotificationEvent>.GetInstance(Results.Values).Object,
-                       UploadImageInstances.GetInstance(Results.Values).Object
+                       UploadImageInstances.GetInstance(Results.Values).Object,
+                       null
                    );
 
                 
@@ -98,10 +106,9 @@ namespace trifenix.agro.external.operations.tests.helper.Instances
                        BarrackInstances.GetInstance(Results.Nullables).Object,
                        PhenologicalEventsInstances.GetInstance(Results.Nullables).Object,
                        CommonDbInstances<NotificationEvent>.GetInstance(Results.Nullables).Object,
-                       UploadImageInstances.GetInstance(Results.Values).Object
+                       UploadImageInstances.GetInstance(Results.Values).Object,
+                       null
                    );
-   
-
             }
             throw new Exception("bad parameters");
         }
