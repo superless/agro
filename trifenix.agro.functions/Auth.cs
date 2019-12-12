@@ -13,10 +13,10 @@ namespace trifenix.agro.functions
         
         //Recibe como parametro una request http para validar el bearer token incluido en su cabecera
         //Retorna true si posee token de acceso valido, de lo contrario retorna false
-        public static async Task<bool> Validate(HttpRequest request)
+        public static async Task<ClaimsPrincipal> Validate(HttpRequest request)
         {
             if (!MustBeAuthenticated())
-                return true;
+                return new ClaimsPrincipal();
             string accessToken;
             ClaimsPrincipal authorize;
             IAuthentication auth = new Authentication(
@@ -30,9 +30,9 @@ namespace trifenix.agro.functions
             if ((accessToken = GetAccessToken(request)) != null) {
                 authorize = await auth.ValidateAccessToken(accessToken);
                 if (authorize != null)
-                    return true;
+                    return authorize;
             }
-            return false;
+            return null;
         }
         private static string GetAccessToken(HttpRequest req)
         {

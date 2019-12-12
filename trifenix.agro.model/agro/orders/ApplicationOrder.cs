@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using trifenix.agro.db.model.agro.local;
+using trifenix.agro.microsoftgraph.model;
 
 namespace trifenix.agro.db.model.agro.orders
 {
@@ -42,6 +43,19 @@ namespace trifenix.agro.db.model.agro.orders
                 _applicationsInOrder = _applicationsInOrder ?? new List<ApplicationsInOrder>();
                 return _applicationsInOrder; }
             set { _applicationsInOrder = value; }
+        }
+
+        public UserInfo Creator { get; set; }
+
+        private List<UserInfo> _modifyBy;
+        public List<UserInfo> ModifyBy
+        {
+            get
+            {
+                _modifyBy = _modifyBy ?? new List<UserInfo>();
+                return _modifyBy;
+            }
+            set { _modifyBy = value; }
         }
 
         private List<PhenologicalPreOrder> _phenologicalPreOrders;

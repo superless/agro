@@ -19,7 +19,7 @@ namespace trifenix.agro.authentication.operations
         private readonly string _tenantID;
 
         //Usuario test: sebastian.murray@trifenix.com
-        //Password:     trifenix7516
+        //Password:     trifeniX216
         public Authentication(string clientID, string tenant, string tenantID)
         {
             _clientID = clientID;     //Id aplicacion registrada en Azure Active Directory      //a81f0ad4-912b-46d3-ba3e-7bf605693242
@@ -52,8 +52,7 @@ namespace trifenix.agro.authentication.operations
             TokenValidationParameters validationParameters = new TokenValidationParameters
             {
                 // App Id URI and AppId of this service application are both valid audiences.
-                ValidAudiences = new[] { _clientID },
-                ValidateIssuer = true,
+                ValidAudiences = new[] { _clientID, "https://sprint3-jhm.trifenix.io" },
                 // Support Azure AD V1 and V2 endpoints.
                 ValidIssuers = validIssuers,
                 IssuerSigningKeys = config.SigningKeys
@@ -66,8 +65,7 @@ namespace trifenix.agro.authentication.operations
             }
             catch (Exception ex)
             {
-                Console.WriteLine("|Error in catch: " +
-                    "-------------------------------------------------------------------------------------------------------|");
+                Console.WriteLine("|Error in catch: \n-------------------------------------------------------------------------------------------------------|");
                 Console.WriteLine(ex.Message);
                 Console.WriteLine("|--------------------------------------------------------------------------------------------------------|");
             }

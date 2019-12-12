@@ -1,6 +1,7 @@
 ﻿using Cosmonaut;
 using Cosmonaut.Attributes;
 using System;
+using trifenix.agro.microsoftgraph.model;
 
 namespace trifenix.agro.db.model.agro
 {
@@ -28,6 +29,8 @@ namespace trifenix.agro.db.model.agro
         /// Evento fenológico asignado a la notificación.
         /// </summary>
         public PhenologicalEvent PhenologicalEvent { get; set; }
+
+        public UserInfo Creator { get; set; }
 
         /// <summary>
         /// Ruta o Url en internet de la imagen subida.

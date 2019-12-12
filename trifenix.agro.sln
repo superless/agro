@@ -77,6 +77,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.email.interfa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.email.operations", "trifenix.agro.email.operations\trifenix.agro.email.operations.csproj", "{0A948F6E-5404-48D5-9A28-5146FD341C03}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "12. microsoft graph", "12. microsoft graph", "{55E16337-33EA-4B73-B1DE-E0AEE8B6E44F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "trifenix.agro.microsoftgraph.model", "trifenix.agro.microsoftgraph.model\trifenix.agro.microsoftgraph.model.csproj", "{D287CE7A-B288-4619-A14C-4146C2B3010D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "trifenix.agro.microsoftgraph.operations", "trifenix.agro.microsoftgraph.operations\trifenix.agro.microsoftgraph.operations.csproj", "{A174267A-6ABB-44B6-B9AE-7578140E8E64}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "trifenix.agro.microsoftgraph.interfaces", "trifenix.agro.microsoftgraph.interfaces\trifenix.agro.microsoftgraph.interfaces.csproj", "{2977A9B0-AC1C-4A8F-8E52-8E531247CF94}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -179,6 +187,18 @@ Global
 		{0A948F6E-5404-48D5-9A28-5146FD341C03}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A948F6E-5404-48D5-9A28-5146FD341C03}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A948F6E-5404-48D5-9A28-5146FD341C03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D287CE7A-B288-4619-A14C-4146C2B3010D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D287CE7A-B288-4619-A14C-4146C2B3010D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D287CE7A-B288-4619-A14C-4146C2B3010D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D287CE7A-B288-4619-A14C-4146C2B3010D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A174267A-6ABB-44B6-B9AE-7578140E8E64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A174267A-6ABB-44B6-B9AE-7578140E8E64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A174267A-6ABB-44B6-B9AE-7578140E8E64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A174267A-6ABB-44B6-B9AE-7578140E8E64}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2977A9B0-AC1C-4A8F-8E52-8E531247CF94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2977A9B0-AC1C-4A8F-8E52-8E531247CF94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2977A9B0-AC1C-4A8F-8E52-8E531247CF94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2977A9B0-AC1C-4A8F-8E52-8E531247CF94}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -210,6 +230,9 @@ Global
 		{89AFB33C-23FD-49D4-BB32-C926508BCBF5} = {151C664A-3D9D-4708-8535-EE73FDCCE2AE}
 		{3DCC35D0-CFDC-40A9-B7A4-838B35D0E216} = {89AFB33C-23FD-49D4-BB32-C926508BCBF5}
 		{0A948F6E-5404-48D5-9A28-5146FD341C03} = {89AFB33C-23FD-49D4-BB32-C926508BCBF5}
+		{D287CE7A-B288-4619-A14C-4146C2B3010D} = {55E16337-33EA-4B73-B1DE-E0AEE8B6E44F}
+		{A174267A-6ABB-44B6-B9AE-7578140E8E64} = {55E16337-33EA-4B73-B1DE-E0AEE8B6E44F}
+		{2977A9B0-AC1C-4A8F-8E52-8E531247CF94} = {55E16337-33EA-4B73-B1DE-E0AEE8B6E44F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2C0C9D82-464E-4741-8541-CDC460278FEC}

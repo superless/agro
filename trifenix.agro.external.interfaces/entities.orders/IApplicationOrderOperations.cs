@@ -14,7 +14,7 @@ namespace trifenix.agro.external.interfaces.entities.orders
 
         Task<ExtPostContainer<string>> SaveNewApplicationOrder(ApplicationOrderInput input);
 
-        Task<ExtPostContainer<OutPutApplicationOrder>> SaveEditPhenologicalPreOrder(string id, ApplicationOrderInput input);
+        Task<ExtPostContainer<OutPutApplicationOrder>> SaveEditApplicationOrder(string id, ApplicationOrderInput input);
 
         Task<ExtGetContainer<OutPutApplicationOrder>> GetApplicationOrder(string id);
 
