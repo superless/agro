@@ -152,7 +152,7 @@ namespace trifenix.agro.external.operations.entities.events
                 {
                     imgPath = await _uploadImage.UploadImageBase64(base64);
                 }
-                var creator = await _graphApi.GetUserInfo();
+                //var creator = await _graphApi.GetUserInfo();
                 return await OperationHelper.CreateElement(_commonDb, _repo.GetNotificationEvents(),
                    async s => await _repo.CreateUpdateNotificationEvent(new NotificationEvent
                    {
@@ -162,7 +162,7 @@ namespace trifenix.agro.external.operations.entities.events
                        Description = description,
                        PhenologicalEvent = localPhenological,
                        PicturePath = imgPath,
-                       Creator = new UserInfo(DateTime.Now, creator)
+                       Creator = null
                    }),
                    s => false,
                    $""

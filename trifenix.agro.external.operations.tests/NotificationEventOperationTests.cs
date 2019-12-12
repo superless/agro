@@ -202,18 +202,6 @@ namespace trifenix.agro.external.operations.tests
             Assert.True(result.GetType() == typeof(ExtPostErrorContainer<string>));
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
         #endregion
     }
 }
