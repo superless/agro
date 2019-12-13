@@ -8,6 +8,9 @@ namespace trifenix.agro.model.external.Input
     {
         public string Name { get; set; }
 
+        public DateTime InitDate { get; set; }
+        public DateTime EndDate { get; set; }
+
         public double Wetting { get; set; }
 
         public BarrackEventInput[] BarracksInput { get; set; }

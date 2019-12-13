@@ -32,6 +32,8 @@ namespace trifenix.agro.external.operations.entities.orders
                 Id = appOrder.Id,
                 Wetting = appOrder.Wetting,
                 Name = appOrder.Name,
+                InitDate = appOrder.InitDate,
+                EndDate = appOrder.EndDate,
                 SeasonId = appOrder.SeasonId,
                 ApplicationInOrders = appOrder.ApplicationInOrders.Select(async s =>
                 {
@@ -152,6 +154,8 @@ namespace trifenix.agro.external.operations.entities.orders
                 IdVarieties = varietyIds?.ToList(),
                 SeasonId = _args.SeasonId,
                 Name = input.Name,
+                InitDate = input.InitDate,
+                EndDate = input.EndDate,
                 Wetting = input.Wetting,
                 ApplicationInOrders = applications,
                 Creator = new UserInfo(DateTime.Now, creator),

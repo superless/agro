@@ -12,6 +12,9 @@ namespace trifenix.agro.model.external.output
 
         public string Name { get; set; }
 
+        public DateTime InitDate { get; set; }
+        public DateTime EndDate { get; set; }
+
         private List<OutputBarrackInstance> _barracks;
 
         public List<OutputBarrackInstance> Barracks

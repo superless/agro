@@ -10,7 +10,6 @@ namespace trifenix.agro.db.model.agro
         public override string Id { get; set; }
         public string Name { get; set; }
         public DateTime InitDate { get; set; }
-
         public DateTime EndDate { get; set; }
     }
 }
