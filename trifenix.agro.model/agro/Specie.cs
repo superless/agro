@@ -13,6 +13,8 @@ namespace trifenix.agro.db.model.agro
 
 
         public string Abbreviation { get; set; }
+        // comentario de prueba
+
 
     }
 }
