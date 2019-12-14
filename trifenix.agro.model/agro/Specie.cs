@@ -16,5 +16,7 @@ namespace trifenix.agro.db.model.agro
         // comentario de prueba
 
 
+
+        //nuevos funcuoe
     }
 }
