@@ -767,7 +767,7 @@ namespace trifenix.agro.functions
 
         #region v2/jobs
         [FunctionName("Jobs")]
-        public static async Task<IActionResult> Jobs([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/jobs")] HttpRequest req, ILogger log)
+        public static async Task<IActionResult> Jobs([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/jobs/{id?}")] HttpRequest req, ILogger log, string id)
         {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
@@ -784,7 +784,6 @@ namespace trifenix.agro.functions
             {
                 return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
                 {
-                    var id = (string)model["id"];
                     var name = (string)model["name"];
                     return await db.Jobs.SaveEditJob(id, name);
                 }, claims);
