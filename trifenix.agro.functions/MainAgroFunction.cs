@@ -15,6 +15,9 @@ using trifenix.agro.email.operations;
 using trifenix.agro.db.model.agro.orders;
 using trifenix.agro.model.external.output;
 using System.Security.Claims;
+using System.IO;
+using System.Collections.Generic;
+using trifenix.agro.external.operations.helper;
 
 namespace trifenix.agro.functions
 {
@@ -705,7 +708,61 @@ namespace trifenix.agro.functions
             var manager = await ContainerMethods.AgroManager(claims);
             var result = await manager.PhenologicalPreOrders.GetPhenologicalPreOrders();
             return ContainerMethods.GetJsonGetContainer(result, log);
-        } 
+        }
+        #endregion
+
+        #region v2/roles
+        [FunctionName("Roles")]
+        public static async Task<IActionResult> Roles([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/roles")] HttpRequest req, ILogger log)
+        {
+            //ClaimsPrincipal claims = await Auth.Validate(req);
+            //if (claims == null)
+            //    return new UnauthorizedResult();
+            var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            dynamic jsonBody = JsonConvert.DeserializeObject(requestBody);
+            try
+            {
+                string roles = Environment.GetEnvironmentVariable("roles", EnvironmentVariableTarget.Process);
+                if (req.Method.ToLower().Equals("get"))
+                {
+                    List<string> arrayOfRoles = roles.Split(",").ToList();
+                    var result = OperationHelper.GetElement(arrayOfRoles);
+                    return ContainerMethods.GetJsonGetContainer(result, log);
+                }
+                else if (req.Method.ToLower().Equals("post"))
+                {
+                    List<string> arrayOfRoles = roles.Split(",").ToList();
+                    if (arrayOfRoles.IndexOf((string)jsonBody.roleName) != -1)
+                        throw new Exception("El rol " + (string)jsonBody.roleName + " ya existe.");
+                    arrayOfRoles.Add((string)jsonBody.roleName);
+                    Environment.SetEnvironmentVariable("roles", String.Join(",", arrayOfRoles), EnvironmentVariableTarget.Process);
+                    var result = OperationHelper.GetElement(jsonBody.roleName);
+                    return ContainerMethods.GetJsonGetContainer(result, log);
+                }
+                else if (req.Method.ToLower().Equals("put"))
+                {
+                    List<string> arrayOfRoles = roles.Split(",").ToList();
+                    string error = "";
+                    int index = arrayOfRoles.IndexOf((string)jsonBody.roleName);
+                    if (index == -1)
+                        error += "El rol por reemplazar '" + (string)jsonBody.roleName + "' no existe. ";
+                    if (arrayOfRoles.IndexOf((string)jsonBody.newRoleName) != -1)
+                        error += "El rol para reemplazar '" + (string)jsonBody.newRoleName + "' ya existe. ";
+                    if (error.Length != 0)
+                        throw new Exception(error);
+                    arrayOfRoles[index] = (string)jsonBody.newRoleName;
+                    Environment.SetEnvironmentVariable("roles", String.Join(",", arrayOfRoles), EnvironmentVariableTarget.Process);
+                    var result = OperationHelper.GetElement(jsonBody.newRoleName);
+                    return ContainerMethods.GetJsonGetContainer(result, log);
+                }
+            }
+            catch (Exception ex)
+            {
+                var result = OperationHelper.GetException<string>(ex, ex.Message);
+                return ContainerMethods.GetJsonGetContainer(result, log);
+            }
+            return new BadRequestResult();
+        }
         #endregion
 
     }
