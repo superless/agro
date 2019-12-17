@@ -40,6 +40,8 @@ namespace trifenix.agro.external.operations
 
         public IApplicationTargetOperations ApplicationTargets => new ApplicationTargetOperations(_repository.Targets, new CommonDbOperations<ApplicationTarget>());
 
+        public IJobOperations Jobs => new JobOperations(_repository.Jobs, new CommonDbOperations<Job>());
+
         public ISpecieOperations Species => new SpecieOperations(_repository.Species, new CommonDbOperations<Specie>());
 
         public IRootstockOperations Rootstock => new RootstockOperations(_repository.Rootstock, new CommonDbOperations<Rootstock>());

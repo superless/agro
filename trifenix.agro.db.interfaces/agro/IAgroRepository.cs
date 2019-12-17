@@ -12,6 +12,8 @@ namespace trifenix.agro.db.interfaces.agro
         AgroDbArguments DbArguments { get; }
         IApplicationTargetRepository Targets { get; }
 
+        IJobRepository Jobs { get; }
+
         IIngredientCategoryRepository Categories { get; }
 
         IIngredientRepository Ingredients { get; }

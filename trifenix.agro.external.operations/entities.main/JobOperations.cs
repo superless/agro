@@ -10,43 +10,41 @@ using trifenix.agro.model.external;
 
 namespace trifenix.agro.external.operations.entities.main
 {
-
-
-    public class ApplicationTargetOperations : IApplicationTargetOperations
+    public class JobOperations : IJobOperations
     {
-        private readonly IApplicationTargetRepository _repo;
-        private readonly ICommonDbOperations<ApplicationTarget> _commonDb;
-        public ApplicationTargetOperations(IApplicationTargetRepository repo, ICommonDbOperations<ApplicationTarget> commonDb)
+        private readonly IJobRepository _repo;
+        private readonly ICommonDbOperations<Job> _commonDb;
+        public JobOperations(IJobRepository repo, ICommonDbOperations<Job> commonDb)
         {
             _repo = repo;
             _commonDb = commonDb;
         }
-        public async Task<ExtGetContainer<List<ApplicationTarget>>> GetAplicationsTarget()
+        public async Task<ExtGetContainer<List<Job>>> GetJobs()
         {
-            var queryTargets = _repo.GetTargets();
+            var queryTargets = _repo.GetJobs();
             var targets = await _commonDb.TolistAsync(queryTargets);
             return OperationHelper.GetElements(targets);
         }
 
-        public async Task<ExtPostContainer<ApplicationTarget>> SaveEditApplicationTarget(string id, string name)
+        public async Task<ExtPostContainer<Job>> SaveEditJob(string id, string name)
         {
-            var element = await _repo.GetTarget(id);
+            var element = await _repo.GetJob(id);
             return await OperationHelper.EditElement(id,
                 element,
                 s => {
                     s.Name = name;
                     return s;
                 },
-                _repo.CreateUpdateTargetApp,
+                _repo.CreateUpdateJob,
                  $"No existe objetivo aplicación con id : {id}"
             );
 
         }
 
-        public async Task<ExtPostContainer<string>> SaveNewApplicationTarget(string name)
+        public async Task<ExtPostContainer<string>> SaveNewJob(string name)
         {
-            return await OperationHelper.CreateElement(_commonDb,_repo.GetTargets(),
-                async s => await _repo.CreateUpdateTargetApp(new ApplicationTarget
+            return await OperationHelper.CreateElement(_commonDb,_repo.GetJobs(),
+                async s => await _repo.CreateUpdateJob(new Job
                 {
                     Id = s,
                     Name = name

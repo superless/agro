@@ -12,6 +12,8 @@ namespace trifenix.agro.external.interfaces
 
         IApplicationTargetOperations ApplicationTargets { get; }
 
+        IJobOperations Jobs { get; }
+
         ISpecieOperations Species { get; }
 
         IRootstockOperations Rootstock { get; }
