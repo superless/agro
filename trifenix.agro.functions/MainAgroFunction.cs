@@ -25,9 +25,7 @@ namespace trifenix.agro.functions
     {
         private static readonly Email email = new Email();
 
-        //TODO: test cicd borrar
-
-            //test
+        //otra prueba
 
         #region v2/phenological_events
         [FunctionName("PhenologicalEventV2")]
