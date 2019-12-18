@@ -42,6 +42,8 @@ namespace trifenix.agro.external.operations
 
         public IJobOperations Jobs => new JobOperations(_repository.Jobs, new CommonDbOperations<Job>());
 
+        public IRoleOperations Roles => new RoleOperations(_repository.Roles, new CommonDbOperations<Role>());
+
         public ISpecieOperations Species => new SpecieOperations(_repository.Species, new CommonDbOperations<Specie>());
 
         public IRootstockOperations Rootstock => new RootstockOperations(_repository.Rootstock, new CommonDbOperations<Rootstock>());

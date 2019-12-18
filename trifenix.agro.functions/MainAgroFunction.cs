@@ -711,55 +711,30 @@ namespace trifenix.agro.functions
 
         #region v2/roles
         [FunctionName("Roles")]
-        public static async Task<IActionResult> Roles([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/roles")] HttpRequest req, ILogger log)
+        public static async Task<IActionResult> Roles([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/roles/{id?}")] HttpRequest req, ILogger log, string id)
         {
-            //ClaimsPrincipal claims = await Auth.Validate(req);
-            //if (claims == null)
-            //    return new UnauthorizedResult();
-            var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic jsonBody = JsonConvert.DeserializeObject(requestBody);
-            try
+            ClaimsPrincipal claims = await Auth.Validate(req);
+            if (claims == null)
+                return new UnauthorizedResult();
+            if (req.Method.ToLower().Equals("post"))
             {
-                string roles = Environment.GetEnvironmentVariable("roles", EnvironmentVariableTarget.Process);
-                if (req.Method.ToLower().Equals("get"))
+                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
                 {
-                    List<string> arrayOfRoles = roles.Split(",").ToList();
-                    var result = OperationHelper.GetElement(arrayOfRoles);
-                    return ContainerMethods.GetJsonGetContainer(result, log);
-                }
-                else if (req.Method.ToLower().Equals("post"))
-                {
-                    List<string> arrayOfRoles = roles.Split(",").ToList();
-                    if (arrayOfRoles.IndexOf((string)jsonBody.roleName) != -1)
-                        throw new Exception("El rol " + (string)jsonBody.roleName + " ya existe.");
-                    arrayOfRoles.Add((string)jsonBody.roleName);
-                    Environment.SetEnvironmentVariable("roles", String.Join(",", arrayOfRoles), EnvironmentVariableTarget.Process);
-                    var result = OperationHelper.GetElement(jsonBody.roleName);
-                    return ContainerMethods.GetJsonGetContainer(result, log);
-                }
-                else if (req.Method.ToLower().Equals("put"))
-                {
-                    List<string> arrayOfRoles = roles.Split(",").ToList();
-                    string error = "";
-                    int index = arrayOfRoles.IndexOf((string)jsonBody.roleName);
-                    if (index == -1)
-                        error += "El rol por reemplazar '" + (string)jsonBody.roleName + "' no existe. ";
-                    if (arrayOfRoles.IndexOf((string)jsonBody.newRoleName) != -1)
-                        error += "El rol para reemplazar '" + (string)jsonBody.newRoleName + "' ya existe. ";
-                    if (error.Length != 0)
-                        throw new Exception(error);
-                    arrayOfRoles[index] = (string)jsonBody.newRoleName;
-                    Environment.SetEnvironmentVariable("roles", String.Join(",", arrayOfRoles), EnvironmentVariableTarget.Process);
-                    var result = OperationHelper.GetElement(jsonBody.newRoleName);
-                    return ContainerMethods.GetJsonGetContainer(result, log);
-                }
+                    var name = (string)model["name"];
+                    return await db.Roles.SaveNewRole(name);
+                }, claims);
             }
-            catch (Exception ex)
+            if (req.Method.ToLower().Equals("put"))
             {
-                var result = OperationHelper.GetException<string>(ex, ex.Message);
-                return ContainerMethods.GetJsonGetContainer(result, log);
+                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                {
+                    var name = (string)model["name"];
+                    return await db.Roles.SaveEditRole(id, name);
+                }, claims);
             }
-            return new BadRequestResult();
+            var manager = await ContainerMethods.AgroManager(claims);
+            var result = await manager.Roles.GetRoles();
+            return ContainerMethods.GetJsonGetContainer(result, log);
         }
         #endregion
 

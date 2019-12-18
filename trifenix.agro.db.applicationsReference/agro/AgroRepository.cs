@@ -24,6 +24,8 @@ namespace trifenix.agro.db.applicationsReference.agro
 
         public IJobRepository Jobs => new JobRepository(new MainDb<Job>(DbArguments));
 
+        public IRoleRepository Roles => new RoleRepository(new MainDb<Role>(DbArguments));
+
         public IIngredientCategoryRepository Categories => new IngredientCategoryRepository(new MainDb<IngredientCategory>(DbArguments));
 
         public IIngredientRepository Ingredients => new IngredientRepository(new MainDb<Ingredient>(DbArguments));
