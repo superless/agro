@@ -16,6 +16,8 @@ namespace trifenix.agro.external.interfaces
 
         IRoleOperations Roles { get; }
 
+        IUserOperations Users { get; }
+
         ISpecieOperations Species { get; }
 
         IRootstockOperations Rootstock { get; }
