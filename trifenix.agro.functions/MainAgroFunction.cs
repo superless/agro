@@ -749,5 +749,48 @@ namespace trifenix.agro.functions
         }
         #endregion
 
+        #region v2/users
+        [FunctionName("Users")]
+        public static async Task<IActionResult> Users([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/users/{id?}")] HttpRequest req, string id, ILogger log)
+        {
+            ClaimsPrincipal claims = await Auth.Validate(req);
+            if (claims == null)
+                return new UnauthorizedResult();
+            if (req.Method.ToLower().Equals("post"))
+            {
+                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                {
+                    var name = (string)model["name"];
+                    var rut = (string)model["rut"];
+                    var email = (string)model["email"];
+                    var idJob = (string)model["idJob"];
+                    var idsRoles = (string[])model["idsRoles"].ToObject<string[]>();
+                    return await db.Users.SaveNewUser(name, rut, email, idJob, idsRoles);
+                }, claims);
+            }
+            if (req.Method.ToLower().Equals("put"))
+            {
+                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                {
+                    var name = (string)model["name"];
+                    var rut = (string)model["rut"];
+                    var email = (string)model["email"];
+                    var idJob = (string)model["idJob"];
+                    var idsRoles = (string[])model["idsRoles"].ToObject<string[]>();
+                    return await db.Users.SaveEditUser(id, name, rut, email, idJob, idsRoles);
+                }, claims);
+            }
+            if (!string.IsNullOrWhiteSpace(id))
+            {
+                var managerLocal = await ContainerMethods.AgroManager(claims);
+                var resultLocal = await managerLocal.Users.GetUser(id);
+                return ContainerMethods.GetJsonGetContainer(resultLocal, log);
+            }
+            var manager = await ContainerMethods.AgroManager(claims);
+            var result = await manager.Users.GetUsers();
+            return ContainerMethods.GetJsonGetContainer(result, log);
+        }
+        #endregion
+
     }
 }

@@ -13,8 +13,6 @@ namespace trifenix.agro.external.interfaces.entities.main
 
         Task<ExtGetContainer<List<Role>>> GetRoles();
 
-        
-
 
     }
 }
