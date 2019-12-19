@@ -23,6 +23,8 @@ namespace trifenix.agro.functions
 
         //otra prueba
 
+
+        // cristian very good job adding id for every query. 
         #region v2/phenological_events
         [FunctionName("PhenologicalEventV2")]
         public static async Task<IActionResult> PhenologicalEventV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/phenological_events/{id?}")] HttpRequest req, string id,ILogger log){
