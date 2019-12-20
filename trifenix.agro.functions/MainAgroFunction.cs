@@ -732,7 +732,8 @@ namespace trifenix.agro.functions
                 return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
                 {
                     var name = (string)model["name"];
-                    return await db.Jobs.SaveNewJob(name);
+                    var isApplicator = (bool)model["isApplicator"];
+                    return await db.Jobs.SaveNewJob(name, isApplicator);
                 }, claims);
             }
             if (req.Method.ToLower().Equals("put"))
@@ -740,7 +741,8 @@ namespace trifenix.agro.functions
                 return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
                 {
                     var name = (string)model["name"];
-                    return await db.Jobs.SaveEditJob(id, name);
+                    var isApplicator = (bool)model["isApplicator"];
+                    return await db.Jobs.SaveEditJob(id, name, isApplicator);
                 }, claims);
             }
             var manager = await ContainerMethods.AgroManager(claims);

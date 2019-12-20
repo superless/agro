@@ -26,13 +26,14 @@ namespace trifenix.agro.external.operations.entities.main
             return OperationHelper.GetElements(targets);
         }
 
-        public async Task<ExtPostContainer<Job>> SaveEditJob(string id, string name)
+        public async Task<ExtPostContainer<Job>> SaveEditJob(string id, string name, bool isApplicator)
         {
             var element = await _repo.GetJob(id);
             return await OperationHelper.EditElement(id,
                 element,
                 s => {
                     s.Name = name;
+                    s.IsApplicator = isApplicator;
                     return s;
                 },
                 _repo.CreateUpdateJob,
@@ -41,13 +42,14 @@ namespace trifenix.agro.external.operations.entities.main
 
         }
 
-        public async Task<ExtPostContainer<string>> SaveNewJob(string name)
+        public async Task<ExtPostContainer<string>> SaveNewJob(string name, bool isApplicator)
         {
             return await OperationHelper.CreateElement(_commonDb,_repo.GetJobs(),
                 async s => await _repo.CreateUpdateJob(new Job
                 {
                     Id = s,
-                    Name = name
+                    Name = name,
+                    IsApplicator = isApplicator
                 }),
                 s => s.Name.Equals(name),
                 $"ya existe especie con nombre {name} "
