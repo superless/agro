@@ -10,7 +10,5 @@ namespace trifenix.agro.db.model.agro
 
         public string Name { get; set; }
 
-        public bool IsApplicator { get; set; }
-
     }
 }

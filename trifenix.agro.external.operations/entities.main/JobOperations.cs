@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces.agro;
 using trifenix.agro.db.interfaces.common;
@@ -26,14 +25,13 @@ namespace trifenix.agro.external.operations.entities.main
             return OperationHelper.GetElements(targets);
         }
 
-        public async Task<ExtPostContainer<Job>> SaveEditJob(string id, string name, bool isApplicator)
+        public async Task<ExtPostContainer<Job>> SaveEditJob(string id, string name)
         {
             var element = await _repo.GetJob(id);
             return await OperationHelper.EditElement(id,
                 element,
                 s => {
                     s.Name = name;
-                    s.IsApplicator = isApplicator;
                     return s;
                 },
                 _repo.CreateUpdateJob,
@@ -42,18 +40,16 @@ namespace trifenix.agro.external.operations.entities.main
 
         }
 
-        public async Task<ExtPostContainer<string>> SaveNewJob(string name, bool isApplicator)
+        public async Task<ExtPostContainer<string>> SaveNewJob(string name)
         {
             return await OperationHelper.CreateElement(_commonDb,_repo.GetJobs(),
                 async s => await _repo.CreateUpdateJob(new Job
                 {
                     Id = s,
-                    Name = name,
-                    IsApplicator = isApplicator
+                    Name = name
                 }),
                 s => s.Name.Equals(name),
-                $"ya existe especie con nombre {name} "
-
+                $"Ya existe cargo con nombre {name} "
             );
         }
     }

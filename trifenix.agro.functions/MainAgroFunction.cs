@@ -14,6 +14,8 @@ using trifenix.agro.db.model.agro;
 using trifenix.agro.email.operations;
 using trifenix.agro.model.external.output;
 using System.Security.Claims;
+using trifenix.agro.model.external;
+using System.Collections.Generic;
 
 namespace trifenix.agro.functions
 {
@@ -25,34 +27,36 @@ namespace trifenix.agro.functions
 
 
         // cristian very good job adding id for every query. 
+
         #region v2/phenological_events
         [FunctionName("PhenologicalEventV2")]
         public static async Task<IActionResult> PhenologicalEventV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/phenological_events/{id?}")] HttpRequest req, string id,ILogger log){
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
-            if (req.Method.ToLower().Equals("post"))
-            {
-                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                {
-                    var name = (string)model["name"];
-                    var initDate = (DateTime)model["startDate"];
-                    var endDate = (DateTime)model["endDate"];
-                    return await db.PhenologicalEvents.SaveNewPhenologicalEvent(name, initDate, endDate);
-                },claims);
-            }
-            if (req.Method.ToLower().Equals("put"))
-            {
-                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                {
-                    var name = (string)model["name"];
-                    var initDate = (DateTime)model["startDate"];
-                    var endDate = (DateTime)model["endDate"];
-                    return await db.PhenologicalEvents.SaveEditPhenologicalEvent(id, name, initDate, endDate);
-                }, claims);
-            }
             var manager = await ContainerMethods.AgroManager(claims);
-            var result = await manager.PhenologicalEvents.GetPhenologicalEvents();
+            ExtGetContainer<List<PhenologicalEvent>> result = null;
+            switch (req.Method.ToLower()){
+                case "get":
+                    result = await manager.PhenologicalEvents.GetPhenologicalEvents();
+                    break;
+                case "post":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var name = (string)model["name"];
+                        var initDate = (DateTime)model["startDate"];
+                        var endDate = (DateTime)model["endDate"];
+                        return await db.PhenologicalEvents.SaveNewPhenologicalEvent(name, initDate, endDate);
+                    }, claims);
+                case "put":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var name = (string)model["name"];
+                        var initDate = (DateTime)model["startDate"];
+                        var endDate = (DateTime)model["endDate"];
+                        return await db.PhenologicalEvents.SaveEditPhenologicalEvent(id, name, initDate, endDate);
+                    }, claims);
+            }
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
         #endregion
@@ -63,27 +67,29 @@ namespace trifenix.agro.functions
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
-            if (req.Method.ToLower().Equals("post"))
-            {
-                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                {
-                    var initDate = (DateTime)model["startDate"];
-                    var endDate = (DateTime)model["endDate"];
-                    return await db.Seasons.SaveNewSeason(initDate, endDate);
-                }, claims);
-            }
-            if (req.Method.ToLower().Equals("put"))
-            {
-                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                {
-                    var initDate = (DateTime)model["startDate"];
-                    var endDate = (DateTime)model["endDate"];
-                    var current = (bool)model["current"];
-                    return await db.Seasons.SaveEditSeason(id, initDate, endDate, current);
-                }, claims);
-            }
             var manager = await ContainerMethods.AgroManager(claims);
-            var result = await manager.Seasons.GetSeasons();
+            ExtGetContainer<List<Season>> result = null;
+            switch (req.Method.ToLower())
+            {
+                case "get":
+                    result = await manager.Seasons.GetSeasons();
+                    break;
+                case "post":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var initDate = (DateTime)model["startDate"];
+                        var endDate = (DateTime)model["endDate"];
+                        return await db.Seasons.SaveNewSeason(initDate, endDate);
+                    }, claims);
+                case "put":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var initDate = (DateTime)model["startDate"];
+                        var endDate = (DateTime)model["endDate"];
+                        var current = (bool)model["current"];
+                        return await db.Seasons.SaveEditSeason(id, initDate, endDate, current);
+                    }, claims);
+            }
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
         #endregion
@@ -94,26 +100,28 @@ namespace trifenix.agro.functions
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
-            if (req.Method.ToLower().Equals("post"))
-            {
-                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                {
-                    var name = (string)model["name"];
-                    var abbreviation = (string)model["abbreviation"];
-                    return await db.Species.SaveNewSpecie(name, abbreviation);
-                }, claims);
-            }
-            if (req.Method.ToLower().Equals("put"))
-            {
-                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                {
-                    var name = (string)model["name"];
-                    var abbreviation = (string)model["abbreviation"];
-                    return await db.Species.SaveEditSpecie(id, name, abbreviation);
-                }, claims);
-            }
             var manager = await ContainerMethods.AgroManager(claims);
-            var result = await manager.Species.GetSpecies();
+            ExtGetContainer<List<Specie>> result = null;
+            switch (req.Method.ToLower())
+            {
+                case "get":
+                    result = await manager.Species.GetSpecies();
+                    break;
+                case "post":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var name = (string)model["name"];
+                        var abbreviation = (string)model["abbreviation"];
+                        return await db.Species.SaveNewSpecie(name, abbreviation);
+                    }, claims);
+                case "put":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var name = (string)model["name"];
+                        var abbreviation = (string)model["abbreviation"];
+                        return await db.Species.SaveEditSpecie(id, name, abbreviation);
+                    }, claims);
+            }
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
         #endregion
@@ -124,26 +132,28 @@ namespace trifenix.agro.functions
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
-            if (req.Method.ToLower().Equals("post"))
-            {
-                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                {
-                    var name = (string)model["name"];
-                    var abbreviation = (string)model["abbreviation"];
-                    return await db.Rootstock.SaveNewRootstock(name, abbreviation);
-                }, claims);
-            }
-            if (req.Method.ToLower().Equals("put"))
-            {
-                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                {
-                    var name = (string)model["name"];
-                    var abbreviation = (string)model["abbreviation"];
-                    return await db.Rootstock.SaveEditRootstock(id, name, abbreviation);
-                }, claims);
-            }
             var manager = await ContainerMethods.AgroManager(claims);
-            var result = await manager.Rootstock.GetRootstocks();
+            ExtGetContainer<List<Rootstock>> result = null;
+            switch (req.Method.ToLower())
+            {
+                case "get":
+                    result = await manager.Rootstock.GetRootstocks();
+                    break;
+                case "post":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var name = (string)model["name"];
+                        var abbreviation = (string)model["abbreviation"];
+                        return await db.Rootstock.SaveNewRootstock(name, abbreviation);
+                    }, claims);
+                case "put":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var name = (string)model["name"];
+                        var abbreviation = (string)model["abbreviation"];
+                        return await db.Rootstock.SaveEditRootstock(id, name, abbreviation);
+                    }, claims);
+            }
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
         #endregion
@@ -154,33 +164,33 @@ namespace trifenix.agro.functions
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
-            if (req.Method.ToLower().Equals("post"))
-            {
-                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                {
-                    var name = (string)model["name"];
-                    var abbreviation = (string)model["abbreviation"];
-                    return await db.CertifiedEntities.SaveNewCertifiedEntity(name, abbreviation);
-                }, claims);
-            }
-            if (req.Method.ToLower().Equals("put"))
-            {
-                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                {
-                    var name = (string)model["name"];
-                    var abbreviation = (string)model["abbreviation"];
-                    return await db.CertifiedEntities.SaveEditCertifiedEntity(id, name, abbreviation);
-                }, claims);
-            }
-            if (!string.IsNullOrWhiteSpace(id))
-            {
-                var managerLocal = await ContainerMethods.AgroManager(claims);
-                var resultLocal = await managerLocal.CertifiedEntities.GetCertifiedEntity(id);
-                return ContainerMethods.GetJsonGetContainer(resultLocal, log);
-            }
             var manager = await ContainerMethods.AgroManager(claims);
-            var result = await manager.CertifiedEntities.GetCertifiedEntities();
-            return ContainerMethods.GetJsonGetContainer(result, log);
+            ExtGetContainer<CertifiedEntity> result = null;
+            switch (req.Method.ToLower()){
+                case "get":
+                    if (!string.IsNullOrWhiteSpace(id))
+                    {
+                        result = await manager.CertifiedEntities.GetCertifiedEntity(id);
+                        return ContainerMethods.GetJsonGetContainer(result, log);
+                    }
+                    break;
+                case "post":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var name = (string)model["name"];
+                        var abbreviation = (string)model["abbreviation"];
+                        return await db.CertifiedEntities.SaveNewCertifiedEntity(name, abbreviation);
+                    }, claims);
+                case "put":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var name = (string)model["name"];
+                        var abbreviation = (string)model["abbreviation"];
+                        return await db.CertifiedEntities.SaveEditCertifiedEntity(id, name, abbreviation);
+                    }, claims);
+            }
+            ExtGetContainer<List<CertifiedEntity>> resultGetAll = await manager.CertifiedEntities.GetCertifiedEntities();
+            return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
         }
         #endregion
 
@@ -190,24 +200,25 @@ namespace trifenix.agro.functions
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
-            if (req.Method.ToLower().Equals("post"))
-            {
-                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                {
-                    var name = (string)model["name"];
-                    return await db.IngredientCategories.SaveNewIngredientCategory(name);
-                }, claims);
-            }
-            if (req.Method.ToLower().Equals("put"))
-            {
-                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                {
-                    var name = (string)model["name"];
-                    return await db.IngredientCategories.SaveEditIngredientCategory(id, name);
-                }, claims);
-            }
             var manager = await ContainerMethods.AgroManager(claims);
-            var result = await manager.IngredientCategories.GetIngredientCategories();
+            ExtGetContainer<List<IngredientCategory>> result = null;
+            switch (req.Method.ToLower()){
+                case "get":
+                    result = await manager.IngredientCategories.GetIngredientCategories();
+                    break;
+                case "post":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var name = (string)model["name"];
+                        return await db.IngredientCategories.SaveNewIngredientCategory(name);
+                    }, claims);
+                case "put":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var name = (string)model["name"];
+                        return await db.IngredientCategories.SaveEditIngredientCategory(id, name);
+                    }, claims);
+            }
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
         #endregion
@@ -218,26 +229,32 @@ namespace trifenix.agro.functions
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
-            if (req.Method.ToLower().Equals("post"))
-            {
-                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                {
-                    var name = (string)model["name"];
-                    var idCategory = (string)model["idCategory"];
-                    return await db.Ingredients.SaveNewIngredient(name, idCategory);
-                }, claims);
-            }
-            if (req.Method.ToLower().Equals("put"))
-            {
-                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                {
-                    var name = (string)model["name"];
-                    var idCategory = (string)model["idCategory"];
-                    return await db.Ingredients.SaveEditIngredient(id, name, idCategory);
-                }, claims);
-            }
             var manager = await ContainerMethods.AgroManager(claims);
-            var result = await manager.Ingredients.GetIngredients();
+            ExtGetContainer<List<Ingredient>> result = null;
+            switch (req.Method.ToLower())
+            {
+                case "get":
+                    if (!string.IsNullOrWhiteSpace(id))
+                    {
+                        result = await manager.Ingredients.GetIngredients();
+                        return ContainerMethods.GetJsonGetContainer(result, log);
+                    }
+                    break;
+                case "post":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var name = (string)model["name"];
+                        var idCategory = (string)model["idCategory"];
+                        return await db.Ingredients.SaveNewIngredient(name, idCategory);
+                    }, claims);
+                case "put":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var name = (string)model["name"];
+                        var idCategory = (string)model["idCategory"];
+                        return await db.Ingredients.SaveEditIngredient(id, name, idCategory);
+                    }, claims);
+            }
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
         #endregion
@@ -248,24 +265,30 @@ namespace trifenix.agro.functions
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
-            if (req.Method.ToLower().Equals("post"))
-            {
-                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                {
-                    var name = (string)model["name"];
-                    return await db.ApplicationTargets.SaveNewApplicationTarget(name);
-                }, claims);
-            }
-            if (req.Method.ToLower().Equals("put"))
-            {
-                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                {
-                    var name = (string)model["name"];
-                    return await db.ApplicationTargets.SaveEditApplicationTarget(id, name);
-                }, claims);
-            }
             var manager = await ContainerMethods.AgroManager(claims);
-            var result = await manager.ApplicationTargets.GetAplicationsTarget();
+            ExtGetContainer<List<ApplicationTarget>> result = null;
+            switch (req.Method.ToLower())
+            {
+                case "get":
+                    if (!string.IsNullOrWhiteSpace(id))
+                    {
+                        result = await manager.ApplicationTargets.GetAplicationsTarget();
+                        return ContainerMethods.GetJsonGetContainer(result, log);
+                    }
+                    break;
+                case "post":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var name = (string)model["name"];
+                        return await db.ApplicationTargets.SaveNewApplicationTarget(name);
+                    }, claims);
+                case "put":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var name = (string)model["name"];
+                        return await db.ApplicationTargets.SaveEditApplicationTarget(id, name);
+                    }, claims);
+            }
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
         #endregion
@@ -276,39 +299,40 @@ namespace trifenix.agro.functions
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
-            if (req.Method.ToLower().Equals("post"))
-            {
-                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                {
-                    var idPhenologicalEvent = (string)model["idPhenologicalEvent"];
-                    var idApplicationTarget = (string)model["idApplicationTarget"];
-                    var categoryId = (string)model["idCategory"];
-                    var idSpecie = (string)model["idSpecie"];
-                    var idIngredient = (string)model["idIngredient"];
-                    return await db.OrderFolder.SaveNewOrderFolder(idPhenologicalEvent, idApplicationTarget, categoryId, idSpecie, idIngredient);
-                }, claims);
-            }
-            if (req.Method.ToLower().Equals("put"))
-            {
-                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                {
-                    var idPhenologicalEvent = (string)model["idPhenologicalEvent"];
-                    var idApplicationTarget = (string)model["idApplicationTarget"];
-                    var idCategory = (string)model["idCategory"];
-                    var idSpecie = (string)model["idSpecie"];
-                    var idIngredient = (string)model["idIngredient"];
-                    return await db.OrderFolder.SaveEditOrderFolder(id, idPhenologicalEvent, idApplicationTarget, idCategory, idSpecie, idIngredient);
-                }, claims);
-            }
-            if (!string.IsNullOrWhiteSpace(id))
-            {
-                var managerLocal = await ContainerMethods.AgroManager(claims);
-                var resultLocal = await managerLocal.OrderFolder.GetOrderFolder(id);
-                return ContainerMethods.GetJsonGetContainer(resultLocal, log);
-            }
             var manager = await ContainerMethods.AgroManager(claims);
-            var result = await manager.OrderFolder.GetOrderFolders();
-            return ContainerMethods.GetJsonGetContainer(result, log);
+            ExtGetContainer<OrderFolder> result = null;
+            switch (req.Method.ToLower())
+            {
+                case "get":
+                    if (!string.IsNullOrWhiteSpace(id))
+                    {
+                        result = await manager.OrderFolder.GetOrderFolder(id);
+                        return ContainerMethods.GetJsonGetContainer(result, log);
+                    }
+                    break;
+                case "post":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var idPhenologicalEvent = (string)model["idPhenologicalEvent"];
+                        var idApplicationTarget = (string)model["idApplicationTarget"];
+                        var categoryId = (string)model["idCategory"];
+                        var idSpecie = (string)model["idSpecie"];
+                        var idIngredient = (string)model["idIngredient"];
+                        return await db.OrderFolder.SaveNewOrderFolder(idPhenologicalEvent, idApplicationTarget, categoryId, idSpecie, idIngredient);
+                    }, claims);
+                case "put":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var idPhenologicalEvent = (string)model["idPhenologicalEvent"];
+                        var idApplicationTarget = (string)model["idApplicationTarget"];
+                        var idCategory = (string)model["idCategory"];
+                        var idSpecie = (string)model["idSpecie"];
+                        var idIngredient = (string)model["idIngredient"];
+                        return await db.OrderFolder.SaveEditOrderFolder(id, idPhenologicalEvent, idApplicationTarget, idCategory, idSpecie, idIngredient);
+                    }, claims);
+            }
+            ExtGetContainer<List<OrderFolder>> resultGetAll = await manager.OrderFolder.GetOrderFolders();
+            return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
         }
         #endregion
 
@@ -318,45 +342,46 @@ namespace trifenix.agro.functions
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
-            if (req.Method.ToLower().Equals("post"))
-            {
-                return await ContainerMethods.ApiPostOperations<string>(req.Body, log, async (db, model) =>
-                {
-                    var commercialName = (string)model["commercialName"];
-                    var idActiveIngredient = (string)model["idActiveIngredient"];
-                    var brand = (string)model["brand"];
-                    var measureType = (MeasureType)Convert.ToInt32(model["measureType"]);
-                    var quantity = (int)model["quantity"];
-                    var kindOfBottle = (KindOfProductContainer)Convert.ToInt32(model["kindOfBottle"]);
-                    var dosesStr = ((object)model["doses"])?.ToString();
-                    var doses = !string.IsNullOrWhiteSpace(dosesStr) ? JsonConvert.DeserializeObject<DosesInput[]>(dosesStr) : null;
-                    return await db.Products.CreateProduct(commercialName, idActiveIngredient, brand, doses, measureType, quantity, kindOfBottle);
-                }, claims);
-            }
-            if (req.Method.ToLower().Equals("put"))
-            {
-                return await ContainerMethods.ApiPostOperations<Product>(req.Body, log, async (db, model) =>
-                {
-                    var commercialName = (string)model["commercialName"];
-                    var idActiveIngredient = (string)model["idActiveIngredient"];
-                    var brand = (string)model["brand"];
-                    var measureType = (MeasureType)Convert.ToInt32(model["measureType"]);
-                    var quantity = (int)model["quantity"];
-                    var kindOfBottle = (KindOfProductContainer)Convert.ToInt32(model["kindOfBottle"]);
-                    var dosesStr = ((object)model["doses"])?.ToString();
-                    var doses = !string.IsNullOrWhiteSpace(dosesStr) ? JsonConvert.DeserializeObject<DosesInput[]>(dosesStr) : null;
-                    return await db.Products.CreateEditProduct(id, commercialName, idActiveIngredient, brand, doses, measureType, quantity, kindOfBottle);
-                }, claims);
-            }
-            if (!string.IsNullOrWhiteSpace(id))
-            {
-                var managerLocal = await ContainerMethods.AgroManager(claims);
-                var resultLocal = await managerLocal.Products.GetProduct(id);
-                return ContainerMethods.GetJsonGetContainer(resultLocal, log);
-            }
             var manager = await ContainerMethods.AgroManager(claims);
-            var result = await manager.Products.GetProducts();
-            return ContainerMethods.GetJsonGetContainer(result, log);
+            ExtGetContainer<Product> result = null;
+            switch (req.Method.ToLower())
+            {
+                case "get":
+                    if (!string.IsNullOrWhiteSpace(id))
+                    {
+                        result = await manager.Products.GetProduct(id);
+                        return ContainerMethods.GetJsonGetContainer(result, log);
+                    }
+                    break;
+                case "post":
+                    return await ContainerMethods.ApiPostOperations<string>(req.Body, log, async (db, model) =>
+                    {
+                        var commercialName = (string)model["commercialName"];
+                        var idActiveIngredient = (string)model["idActiveIngredient"];
+                        var brand = (string)model["brand"];
+                        var measureType = (MeasureType)Convert.ToInt32(model["measureType"]);
+                        var quantity = (int)model["quantity"];
+                        var kindOfBottle = (KindOfProductContainer)Convert.ToInt32(model["kindOfBottle"]);
+                        var dosesStr = ((object)model["doses"])?.ToString();
+                        var doses = !string.IsNullOrWhiteSpace(dosesStr) ? JsonConvert.DeserializeObject<DosesInput[]>(dosesStr) : null;
+                        return await db.Products.CreateProduct(commercialName, idActiveIngredient, brand, doses, measureType, quantity, kindOfBottle);
+                    }, claims);
+                case "put":
+                    return await ContainerMethods.ApiPostOperations<Product>(req.Body, log, async (db, model) =>
+                    {
+                        var commercialName = (string)model["commercialName"];
+                        var idActiveIngredient = (string)model["idActiveIngredient"];
+                        var brand = (string)model["brand"];
+                        var measureType = (MeasureType)Convert.ToInt32(model["measureType"]);
+                        var quantity = (int)model["quantity"];
+                        var kindOfBottle = (KindOfProductContainer)Convert.ToInt32(model["kindOfBottle"]);
+                        var dosesStr = ((object)model["doses"])?.ToString();
+                        var doses = !string.IsNullOrWhiteSpace(dosesStr) ? JsonConvert.DeserializeObject<DosesInput[]>(dosesStr) : null;
+                        return await db.Products.CreateEditProduct(id, commercialName, idActiveIngredient, brand, doses, measureType, quantity, kindOfBottle);
+                    }, claims);
+            }
+            ExtGetContainer<List<Product>> resultGetAll = await manager.Products.GetProducts();
+            return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
         }
         #endregion
 
@@ -403,20 +428,38 @@ namespace trifenix.agro.functions
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
-            if (req.Method.ToLower().Equals("post"))
+            var manager = await ContainerMethods.AgroManager(claims);
+            ExtGetContainer<NotificationEvent> result = null;
+            switch (req.Method.ToLower())
             {
-                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                {
-                    var newModel = model["_parts"][0][1];
-                    var idPhenologicalEvent = (string)newModel["idPhenologicalEvent"];
-                    var description = (string)newModel["description"];
-                    var base64 = (string)newModel["base64"];
-                    var barrack = (string)newModel["idBarrack"];
-                    var response = await db.NotificationEvents.SaveNewNotificationEvent(barrack, idPhenologicalEvent, base64, description);
-                    var evt = await db.NotificationEvents.GetEvent(response.IdRelated);
-                    var url = evt.Result.PicturePath;
-                    await email.SendEmail("Notificacion", 
-                        $@"<html>
+                case "get":
+                    if (!string.IsNullOrWhiteSpace(id)){
+                        switch (id){
+                            case "init":
+                                var resultEvent = await manager.CustomManager.MobileEvents.GetEventData();
+                                return ContainerMethods.GetJsonGetContainer(resultEvent, log);
+                            case "ts":
+                                var resultTs = await manager.CustomManager.MobileEvents.GetMobileEventTimestamp();
+                                return ContainerMethods.GetJsonGetContainer(resultTs, log);
+                            default:
+                                result = await manager.NotificationEvents.GetEvent(id);
+                                return ContainerMethods.GetJsonGetContainer(result, log);
+                        }
+                    }
+                    break;
+                case "post":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var newModel = model["_parts"][0][1];
+                        var idPhenologicalEvent = (string)newModel["idPhenologicalEvent"];
+                        var description = (string)newModel["description"];
+                        var base64 = (string)newModel["base64"];
+                        var barrack = (string)newModel["idBarrack"];
+                        var response = await db.NotificationEvents.SaveNewNotificationEvent(barrack, idPhenologicalEvent, base64, description);
+                        var evt = await db.NotificationEvents.GetEvent(response.IdRelated);
+                        var url = evt.Result.PicturePath;
+                        await email.SendEmail("Notificacion",
+                            $@"<html>
                             <body>
                                 <p> Estimado(a), </p>
                                 <p> Llego una notificacion </p>
@@ -424,28 +467,11 @@ namespace trifenix.agro.functions
                                 <p> Atentamente,<br> -Aresa </br></p>
                             </body>
                         </html>");
-                    return response;
-                },claims);
+                        return response;
+                    }, claims);
             }
-            if (!string.IsNullOrWhiteSpace(id))
-            {
-                var managerLocal = await ContainerMethods.AgroManager(claims);
-                if (id.Equals("init"))
-                {
-                    var resultEvent = await managerLocal.CustomManager.MobileEvents.GetEventData();
-                    return ContainerMethods.GetJsonGetContainer(resultEvent, log);
-                }
-                if (id.Equals("ts"))
-                {
-                    var resultTs = await managerLocal.CustomManager.MobileEvents.GetMobileEventTimestamp();
-                    return ContainerMethods.GetJsonGetContainer(resultTs, log);
-                }
-                var resultLocal = await managerLocal.NotificationEvents.GetEvent(id);
-                return ContainerMethods.GetJsonGetContainer(resultLocal, log);
-            }
-            var manager = await ContainerMethods.AgroManager(claims);
-            var result = await manager.NotificationEvents.GetEvents();
-            return ContainerMethods.GetJsonGetContainer(result, log);
+            ExtGetContainer<List<NotificationEvent>> resultGetAll = await manager.NotificationEvents.GetEvents();
+            return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
         }
         #endregion
 
@@ -455,39 +481,31 @@ namespace trifenix.agro.functions
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
-            if (req.Method.ToLower().Equals("post"))
+            var manager = await ContainerMethods.AgroManager(claims);
+            ExtGetContainer<OutPutApplicationOrder> result = null;
+            switch (req.Method.ToLower())
             {
-                return await ContainerMethods.ApiPostOperations<string>(req.Body, log, async (db, model) =>
-                {
-                    try
+                case "get":
+                    if (!string.IsNullOrWhiteSpace(id))
+                    {
+                        result = await manager.ApplicationOrders.GetApplicationOrder(id);
+                        return ContainerMethods.GetJsonGetContainer(result, log);
+                    }
+                    break;
+                case "post":
+                    return await ContainerMethods.ApiPostOperations<string>(req.Body, log, async (db, model) =>
                     {
                         var input = JsonConvert.DeserializeObject<ApplicationOrderInput>(model.ToString());
                         return await db.ApplicationOrders.SaveNewApplicationOrder(input);
-                    }
-                    catch (Exception E)
-                    {
-                        throw E;
-                    }
-                },claims);
-            }
-            if (req.Method.ToLower().Equals("put"))
-            {
-                if (string.IsNullOrWhiteSpace(id))
-                    return new NotFoundResult();
-                return await ContainerMethods.ApiPostOperations<OutPutApplicationOrder>(req.Body, log, async (db, model) =>{
+                    }, claims);
+                case "put":
+                    return await ContainerMethods.ApiPostOperations<OutPutApplicationOrder>(req.Body, log, async (db, model) => {
                         var input = JsonConvert.DeserializeObject<ApplicationOrderInput>(model.ToString());
                         return await db.ApplicationOrders.SaveEditApplicationOrder(id, input);
                     }, claims);
             }
-            if (!string.IsNullOrWhiteSpace(id))
-            {
-                var managerLocal = await ContainerMethods.AgroManager(claims);
-                var resultLocal = await managerLocal.ApplicationOrders.GetApplicationOrder(id);
-                return ContainerMethods.GetJsonGetContainer(resultLocal, log);
-            }
-            var manager = await ContainerMethods.AgroManager(claims);
-            var result = await manager.ApplicationOrders.GetApplicationOrders();
-            return ContainerMethods.GetJsonGetContainer(result, log);
+            ExtGetContainer<List<OutPutApplicationOrder>> resultGetAll = await manager.ApplicationOrders.GetApplicationOrders();
+            return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
         }
 
         #endregion
@@ -498,31 +516,32 @@ namespace trifenix.agro.functions
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
-            if (req.Method.ToLower().Equals("post"))
-            {
-                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                {
-                    var name = (string)model["name"];
-                    return await db.Sectors.SaveNewSector(name);
-                },claims);
-            }
-            if (req.Method.ToLower().Equals("put"))
-            {
-                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                {
-                    var name = (string)model["name"];
-                    return await db.Sectors.SaveEditSector(id, name);
-                },claims);
-            }
-            if (!string.IsNullOrWhiteSpace(id))
-            {
-                var managerLocal = await ContainerMethods.AgroManager(claims);
-                var resultLocal = await managerLocal.Sectors.GetSector(id);
-                return ContainerMethods.GetJsonGetContainer(resultLocal, log);
-            }
             var manager = await ContainerMethods.AgroManager(claims);
-            var result = await manager.Sectors.GetSectors();
-            return ContainerMethods.GetJsonGetContainer(result, log);
+            ExtGetContainer<Sector> result = null;
+            switch (req.Method.ToLower())
+            {
+                case "get":
+                    if (!string.IsNullOrWhiteSpace(id))
+                    {
+                        result = await manager.Sectors.GetSector(id);
+                        return ContainerMethods.GetJsonGetContainer(result, log);
+                    }
+                    break;
+                case "post":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var name = (string)model["name"];
+                        return await db.Sectors.SaveNewSector(name);
+                    }, claims);
+                case "put":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var name = (string)model["name"];
+                        return await db.Sectors.SaveEditSector(id, name);
+                    }, claims);
+            }
+            ExtGetContainer<List<Sector>> resultGetAll = await manager.Sectors.GetSectors();
+            return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
         }
         #endregion
 
@@ -532,33 +551,34 @@ namespace trifenix.agro.functions
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
-            if (req.Method.ToLower().Equals("post"))
-            {
-                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                {
-                    var name = (string)model["name"];
-                    var idSector = (string)model["idSector"];
-                    return await db.PlotLands.SaveNewPlotLand(name, idSector);
-                }, claims);
-            }
-            if (req.Method.ToLower().Equals("put"))
-            {
-                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                {
-                    var name = (string)model["name"];
-                    var idSector = (string)model["idSector"];
-                    return await db.PlotLands.SaveEditPlotLand(id, name, idSector);
-                }, claims);
-            }
-            if (!string.IsNullOrWhiteSpace(id))
-            {
-                var managerLocal = await ContainerMethods.AgroManager(claims);
-                var resultLocal = await managerLocal.PlotLands.GetPlotLand(id);
-                return ContainerMethods.GetJsonGetContainer(resultLocal, log);
-            }
             var manager = await ContainerMethods.AgroManager(claims);
-            var result = await manager.PlotLands.GetPlotLands();
-            return ContainerMethods.GetJsonGetContainer(result, log);
+            ExtGetContainer<PlotLand> result = null;
+            switch (req.Method.ToLower())
+            {
+                case "get":
+                    if (!string.IsNullOrWhiteSpace(id))
+                    {
+                        result = await manager.PlotLands.GetPlotLand(id);
+                        return ContainerMethods.GetJsonGetContainer(result, log);
+                    }
+                    break;
+                case "post":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var name = (string)model["name"];
+                        var idSector = (string)model["idSector"];
+                        return await db.PlotLands.SaveNewPlotLand(name, idSector);
+                    }, claims);
+                case "put":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var name = (string)model["name"];
+                        var idSector = (string)model["idSector"];
+                        return await db.PlotLands.SaveEditPlotLand(id, name, idSector);
+                    }, claims);
+            }
+            ExtGetContainer<List<PlotLand>> resultGetAll = await manager.PlotLands.GetPlotLands();
+            return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
         }
         #endregion
 
@@ -568,36 +588,36 @@ namespace trifenix.agro.functions
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
-            if (req.Method.ToLower().Equals("post"))
-            {
-                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                {
-
-                    var name = (string)model["name"];
-                    var idSpecie = (string)model["idSpecie"];
-                    var abbreviation = (string)model["abbreviation"];
-                    return await db.Varieties.SaveNewVariety(name, abbreviation, idSpecie);
-                },claims);
-            }
-            if (req.Method.ToLower().Equals("put"))
-            {
-                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                {
-                    var name = (string)model["name"];
-                    var idSpecie = (string)model["idSpecie"];
-                    var abbreviation = (string)model["abbreviation"];
-                    return await db.Varieties.SaveEditVariety(id, name, abbreviation, idSpecie);
-                },claims);
-            }
-            if (!string.IsNullOrWhiteSpace(id))
-            {
-                var managerLocal = await ContainerMethods.AgroManager(claims);
-                var resultLocal = await managerLocal.Varieties.GetVariety(id);
-                return ContainerMethods.GetJsonGetContainer(resultLocal, log);
-            }
             var manager = await ContainerMethods.AgroManager(claims);
-            var result = await manager.Varieties.GetVarieties();
-            return ContainerMethods.GetJsonGetContainer(result, log);
+            ExtGetContainer<Variety> result = null;
+            switch (req.Method.ToLower())
+            {
+                case "get":
+                    if (!string.IsNullOrWhiteSpace(id))
+                    {
+                        result = await manager.Varieties.GetVariety(id);
+                        return ContainerMethods.GetJsonGetContainer(result, log);
+                    }
+                    break;
+                case "post":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var name = (string)model["name"];
+                        var idSpecie = (string)model["idSpecie"];
+                        var abbreviation = (string)model["abbreviation"];
+                        return await db.Varieties.SaveNewVariety(name, abbreviation, idSpecie);
+                    }, claims);
+                case "put":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var name = (string)model["name"];
+                        var idSpecie = (string)model["idSpecie"];
+                        var abbreviation = (string)model["abbreviation"];
+                        return await db.Varieties.SaveEditVariety(id, name, abbreviation, idSpecie);
+                    }, claims);
+            }
+            ExtGetContainer<List<Variety>> resultGetAll = await manager.Varieties.GetVarieties();
+            return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
         }
         #endregion
 
@@ -607,46 +627,46 @@ namespace trifenix.agro.functions
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
-            if (req.Method.ToLower().Equals("post"))
-            {
-                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                {
-                    var name = (string)model["name"];
-                    var numberOfPlants = (int)model["numberOfPlants"];
-                    var plantingYear = (int)model["plantingYear"];
-                    var hectares = float.Parse((string)model["hectares"]);
-                    var idPlotland = (string)model["idPlotland"];
-                    var idVariety = (string)model["idVariety"];
-                    var idPollinator = (string)model["idPollinator"];
-                    var idRootstock = (string)model["idRootstock"];
-                    return await db.Barracks.SaveNewBarrack(name, idPlotland, hectares, plantingYear, idVariety, numberOfPlants, idPollinator, idRootstock);
-                },claims);
-            }
-            if (req.Method.ToLower().Equals("put"))
-            {
-                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                {
-                    var name = (string)model["name"];
-                    var numberOfPlants = (int)model["numberOfPlants"];
-                    var plantingYear = (int)model["plantingYear"];
-                    var hectares = float.Parse((string)model["hectares"]);
-                    var idPlotland = (string)model["idPlotland"];
-                    var idVariety = (string)model["idVariety"];
-                    var idPollinator = (string)model["idPollinator"];
-                    var idRootstock = (string)model["idRootstock"];
-                    return await db.Barracks.SaveEditBarrack(id, name, idPlotland, hectares, plantingYear, idVariety, numberOfPlants, idPollinator, idRootstock);
-                },claims);
-            }
-            if (!string.IsNullOrWhiteSpace(id))
-            {
-                var managerLocal = await ContainerMethods.AgroManager(claims);
-                var resultLocal = await managerLocal.Barracks.GetBarrack(id);
-                return ContainerMethods.GetJsonGetContainer(resultLocal, log);
-
-            }
             var manager = await ContainerMethods.AgroManager(claims);
-            var result = await manager.Barracks.GetBarracks();
-            return ContainerMethods.GetJsonGetContainer(result, log);
+            ExtGetContainer<Barrack> result = null;
+            switch (req.Method.ToLower())
+            {
+                case "get":
+                    if (!string.IsNullOrWhiteSpace(id))
+                    {
+                        result = await manager.Barracks.GetBarrack(id);
+                        return ContainerMethods.GetJsonGetContainer(result, log);
+                    }
+                    break;
+                case "post":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var name = (string)model["name"];
+                        var numberOfPlants = (int)model["numberOfPlants"];
+                        var plantingYear = (int)model["plantingYear"];
+                        var hectares = float.Parse((string)model["hectares"]);
+                        var idPlotland = (string)model["idPlotland"];
+                        var idVariety = (string)model["idVariety"];
+                        var idPollinator = (string)model["idPollinator"];
+                        var idRootstock = (string)model["idRootstock"];
+                        return await db.Barracks.SaveNewBarrack(name, idPlotland, hectares, plantingYear, idVariety, numberOfPlants, idPollinator, idRootstock);
+                    }, claims);
+                case "put":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var name = (string)model["name"];
+                        var numberOfPlants = (int)model["numberOfPlants"];
+                        var plantingYear = (int)model["plantingYear"];
+                        var hectares = float.Parse((string)model["hectares"]);
+                        var idPlotland = (string)model["idPlotland"];
+                        var idVariety = (string)model["idVariety"];
+                        var idPollinator = (string)model["idPollinator"];
+                        var idRootstock = (string)model["idRootstock"];
+                        return await db.Barracks.SaveEditBarrack(id, name, idPlotland, hectares, plantingYear, idVariety, numberOfPlants, idPollinator, idRootstock);
+                    }, claims);
+            }
+            ExtGetContainer<List<Barrack>> resultGetAll = await manager.Barracks.GetBarracks();
+            return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
         }
         #endregion
 
@@ -656,140 +676,209 @@ namespace trifenix.agro.functions
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
-            if (req.Method.ToLower().Equals("post"))
-            {
-                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                {
-                    var name = (string)model["name"];
-                    var idFolder = (string)model["idOrderFolder"];
-                    var arr = (string)model["idBarracks"].ToString();
-                    var idBarracks = JsonConvert.DeserializeObject<string[]>(arr);
-
-                    return await db.PhenologicalPreOrders.SaveNewPhenologicalPreOrder(name, idFolder, idBarracks.ToList());
-                }, claims);
-            }
-            if (req.Method.ToLower().Equals("put"))
-            {
-                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                {
-                    var name = (string)model["name"];
-                    var idFolder = (string)model["idOrderFolder"];
-                    var arr = (string)model["idBarracks"].ToString();
-                    var idBarracks = JsonConvert.DeserializeObject<string[]>(arr);
-                    return await db.PhenologicalPreOrders.SaveEditPhenologicalPreOrder(id, name, idFolder, idBarracks.ToList());
-                }, claims);
-            }
-            if (!string.IsNullOrWhiteSpace(id))
-            {
-                var managerLocal = await ContainerMethods.AgroManager(claims);
-                var resultLocal = await managerLocal.PhenologicalPreOrders.GetPhenologicalPreOrder(id);
-                return ContainerMethods.GetJsonGetContainer(resultLocal, log);
-            }
             var manager = await ContainerMethods.AgroManager(claims);
-            var result = await manager.PhenologicalPreOrders.GetPhenologicalPreOrders();
-            return ContainerMethods.GetJsonGetContainer(result, log);
+            ExtGetContainer<PhenologicalPreOrder> result = null;
+            switch (req.Method.ToLower())
+            {
+                case "get":
+                    if (!string.IsNullOrWhiteSpace(id))
+                    {
+                        result = await manager.PhenologicalPreOrders.GetPhenologicalPreOrder(id);
+                        return ContainerMethods.GetJsonGetContainer(result, log);
+                    }
+                    break;
+                case "post":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var name = (string)model["name"];
+                        var idFolder = (string)model["idOrderFolder"];
+                        var arr = (string)model["idBarracks"].ToString();
+                        var idBarracks = JsonConvert.DeserializeObject<string[]>(arr);
+
+                        return await db.PhenologicalPreOrders.SaveNewPhenologicalPreOrder(name, idFolder, idBarracks.ToList());
+                    }, claims);
+                case "put":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var name = (string)model["name"];
+                        var idFolder = (string)model["idOrderFolder"];
+                        var arr = (string)model["idBarracks"].ToString();
+                        var idBarracks = JsonConvert.DeserializeObject<string[]>(arr);
+                        return await db.PhenologicalPreOrders.SaveEditPhenologicalPreOrder(id, name, idFolder, idBarracks.ToList());
+                    }, claims);
+            }
+            ExtGetContainer<List<PhenologicalPreOrder>> resultGetAll = await manager.PhenologicalPreOrders.GetPhenologicalPreOrders();
+            return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
         }
         #endregion
 
         #region v2/roles
         [FunctionName("Roles")]
-        public static async Task<IActionResult> Roles([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/roles/{id?}")] HttpRequest req, ILogger log, string id)
-        {
+        public static async Task<IActionResult> Roles([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/roles/{id?}")] HttpRequest req, ILogger log, string id){
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
-            if (req.Method.ToLower().Equals("post"))
-            {
-                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                {
-                    var name = (string)model["name"];
-                    return await db.Roles.SaveNewRole(name);
-                }, claims);
-            }
-            if (req.Method.ToLower().Equals("put"))
-            {
-                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                {
-                    var name = (string)model["name"];
-                    return await db.Roles.SaveEditRole(id, name);
-                }, claims);
-            }
             var manager = await ContainerMethods.AgroManager(claims);
-            var result = await manager.Roles.GetRoles();
+            ExtGetContainer<List<Role>> result = null;
+            switch (req.Method.ToLower())
+            {
+                case "get":
+                    result = await manager.Roles.GetRoles();
+                    break;
+                case "post":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var name = (string)model["name"];
+                        return await db.Roles.SaveNewRole(name);
+                    }, claims);
+                case "put":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var name = (string)model["name"];
+                        return await db.Roles.SaveEditRole(id, name);
+                    }, claims);
+            }
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
         #endregion
 
         #region v2/jobs
         [FunctionName("Jobs")]
-        public static async Task<IActionResult> Jobs([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/jobs/{id?}")] HttpRequest req, ILogger log, string id)
-        {
+        public static async Task<IActionResult> Jobs([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/jobs/{id?}")] HttpRequest req, ILogger log, string id){
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
-            if (req.Method.ToLower().Equals("post"))
-            {
-                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                {
-                    var name = (string)model["name"];
-                    var isApplicator = (bool)model["isApplicator"];
-                    return await db.Jobs.SaveNewJob(name, isApplicator);
-                }, claims);
-            }
-            if (req.Method.ToLower().Equals("put"))
-            {
-                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                {
-                    var name = (string)model["name"];
-                    var isApplicator = (bool)model["isApplicator"];
-                    return await db.Jobs.SaveEditJob(id, name, isApplicator);
-                }, claims);
-            }
             var manager = await ContainerMethods.AgroManager(claims);
-            var result = await manager.Jobs.GetJobs();
+            ExtGetContainer<List<Job>> result = null;
+            switch (req.Method.ToLower())
+            {
+                case "get":
+                    result = await manager.Jobs.GetJobs();
+                    break;
+                case "post":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var name = (string)model["name"];
+                        return await db.Jobs.SaveNewJob(name);
+                    }, claims);
+                case "put":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var name = (string)model["name"];
+                        return await db.Jobs.SaveEditJob(id, name);
+                    }, claims);
+            }
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
         #endregion
 
         #region v2/users
         [FunctionName("Users")]
-        public static async Task<IActionResult> Users([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/users/{id?}")] HttpRequest req, string id, ILogger log)
-        {
+        public static async Task<IActionResult> Users([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/users/{id?}")] HttpRequest req, string id, ILogger log){
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
-            if (req.Method.ToLower().Equals("post"))
-            {
-                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                {
-                    var name = (string)model["name"];
-                    var rut = (string)model["rut"];
-                    var email = (string)model["email"];
-                    var idJob = (string)model["idJob"];
-                    var idsRoles = (string[])model["idsRoles"].ToObject<string[]>();
-                    return await db.Users.SaveNewUser(name, rut, email, idJob, idsRoles);
-                }, claims);
-            }
-            if (req.Method.ToLower().Equals("put"))
-            {
-                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                {
-                    var name = (string)model["name"];
-                    var rut = (string)model["rut"];
-                    var email = (string)model["email"];
-                    var idJob = (string)model["idJob"];
-                    var idsRoles = (string[])model["idsRoles"].ToObject<string[]>();
-                    return await db.Users.SaveEditUser(id, name, rut, email, idJob, idsRoles);
-                }, claims);
-            }
-            if (!string.IsNullOrWhiteSpace(id))
-            {
-                var managerLocal = await ContainerMethods.AgroManager(claims);
-                var resultLocal = await managerLocal.Users.GetUser(id);
-                return ContainerMethods.GetJsonGetContainer(resultLocal, log);
-            }
             var manager = await ContainerMethods.AgroManager(claims);
-            var result = await manager.Users.GetUsers();
+            ExtGetContainer<User> result = null;
+            switch (req.Method.ToLower())
+            {
+                case "get":
+                    if (!string.IsNullOrWhiteSpace(id))
+                    {
+                        result = await manager.Users.GetUser(id);
+                        return ContainerMethods.GetJsonGetContainer(result, log);
+                    }
+                    break;
+                case "post":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var name = (string)model["name"];
+                        var rut = (string)model["rut"];
+                        var email = (string)model["email"];
+                        var idJob = (string)model["idJob"];
+                        var idsRoles = (string[])model["idsRoles"].ToObject<string[]>();
+                        var idTractor = (string)model["idTractor"];
+                        var idNebulizer = (string)model["idNebulizer"];
+                        return await db.Users.SaveNewUser(name, rut, email, idJob, idsRoles, idNebulizer, idTractor);
+                    }, claims);
+                case "put":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var name = (string)model["name"];
+                        var rut = (string)model["rut"];
+                        var email = (string)model["email"];
+                        var idJob = (string)model["idJob"];
+                        var idsRoles = (string[])model["idsRoles"].ToObject<string[]>();
+                        var idTractor = (string)model["idTractor"];
+                        var idNebulizer = (string)model["idNebulizer"];
+                        return await db.Users.SaveEditUser(id, name, rut, email, idJob, idsRoles, idNebulizer, idTractor);
+                    }, claims);
+            }
+            ExtGetContainer<List<User>> resultGetAll = await manager.Users.GetUsers();
+            return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
+        }
+        #endregion
+
+        #region v2/nebulizers
+        [FunctionName("Nebulizers")]
+        public static async Task<IActionResult> Nebulizers([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/nebulizers/{id?}")] HttpRequest req, ILogger log, string id){
+            ClaimsPrincipal claims = await Auth.Validate(req);
+            if (claims == null)
+                return new UnauthorizedResult();
+            var manager = await ContainerMethods.AgroManager(claims);
+            ExtGetContainer<List<Nebulizer>> result = null;
+            switch (req.Method.ToLower())
+            {
+                case "get":
+                    result = await manager.Nebulizers.GetNebulizers();
+                    break;
+                case "post":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var brand = (string)model["brand"];
+                        var code = (string)model["code"];
+                        return await db.Nebulizers.SaveNewNebulizer(brand, code);
+                    }, claims);
+                case "put":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var brand = (string)model["brand"];
+                        var code = (string)model["code"];
+                        return await db.Nebulizers.SaveEditNebulizer(id, brand, code);
+                    }, claims);
+            }
+            return ContainerMethods.GetJsonGetContainer(result, log);
+        }
+        #endregion
+
+        #region v2/tractors
+        [FunctionName("Tractors")]
+        public static async Task<IActionResult> Tractors([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/tractors/{id?}")] HttpRequest req, ILogger log, string id){
+            ClaimsPrincipal claims = await Auth.Validate(req);
+            if (claims == null)
+                return new UnauthorizedResult();
+            var manager = await ContainerMethods.AgroManager(claims);
+            ExtGetContainer<List<Tractor>> result = null;
+            switch (req.Method.ToLower())
+            {
+                case "get":
+                    result = await manager.Tractors.GetTractors();
+                    break;
+                case "post":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var brand = (string)model["brand"];
+                        var code = (string)model["code"];
+                        return await db.Tractors.SaveNewTractor(brand, code);
+                    }, claims);
+                case "put":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var brand = (string)model["brand"];
+                        var code = (string)model["code"];
+                        return await db.Tractors.SaveEditTractor(id, brand, code);
+                    }, claims);
+            }
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
         #endregion

@@ -18,6 +18,10 @@ namespace trifenix.agro.external.interfaces
 
         IUserOperations Users { get; }
 
+        ITractorOperations Tractors { get; }
+
+        INebulizerOperations Nebulizers { get; }
+
         ISpecieOperations Species { get; }
 
         IRootstockOperations Rootstock { get; }
@@ -49,11 +53,6 @@ namespace trifenix.agro.external.interfaces
         ICustomManager CustomManager { get; }
 
         IApplicationOrderOperations ApplicationOrders { get; }
-
-
-
-
-
-
+               
     }
 }

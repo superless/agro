@@ -24,7 +24,6 @@ namespace trifenix.agro.external.operations.entities.main
             _commonDb = commonDb;
         }
 
-
         public async Task<ExtGetContainer<List<PhenologicalEvent>>> GetPhenologicalEvents()
         {
             var phenologicalsQuery = _repo.GetPhenologicalEvents();
@@ -63,6 +62,5 @@ namespace trifenix.agro.external.operations.entities.main
             );
         }
 
-        
     }
 }

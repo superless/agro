@@ -7,14 +7,11 @@ namespace trifenix.agro.external.interfaces.entities.main
 {
     public interface IJobOperations
     {
-        Task<ExtPostContainer<string>> SaveNewJob(string name, bool isApplicator);
+        Task<ExtPostContainer<string>> SaveNewJob(string name);
 
-        Task<ExtPostContainer<Job>> SaveEditJob(string id, string name, bool isApplicator);
+        Task<ExtPostContainer<Job>> SaveEditJob(string id, string name);
 
         Task<ExtGetContainer<List<Job>>> GetJobs();
-
-        
-
 
     }
 }

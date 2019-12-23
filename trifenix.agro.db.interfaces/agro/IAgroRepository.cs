@@ -18,6 +18,10 @@ namespace trifenix.agro.db.interfaces.agro
 
         IUserRepository Users { get; }
 
+        INebulizerRepository Nebulizers { get; }
+
+        ITractorRepository Tractors { get; }
+
         IIngredientCategoryRepository Categories { get; }
 
         IIngredientRepository Ingredients { get; }
