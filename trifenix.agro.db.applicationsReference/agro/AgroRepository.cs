@@ -28,6 +28,10 @@ namespace trifenix.agro.db.applicationsReference.agro
 
         public IUserRepository Users => new UserRepository(new MainDb<User>(DbArguments));
 
+        public INebulizerRepository Nebulizers => new NebulizerRepository(new MainDb<Nebulizer>(DbArguments));
+
+        public ITractorRepository Tractors => new TractorRepository(new MainDb<Tractor>(DbArguments));
+
         public IIngredientCategoryRepository Categories => new IngredientCategoryRepository(new MainDb<IngredientCategory>(DbArguments));
 
         public IIngredientRepository Ingredients => new IngredientRepository(new MainDb<Ingredient>(DbArguments));
@@ -53,7 +57,6 @@ namespace trifenix.agro.db.applicationsReference.agro
         public ISectorRepository Sectors => new SectorRepository(new MainDb<Sector>(DbArguments));
 
         public IVarietyRepository Varieties => new VarietyRepository(new MainDb<Variety>(DbArguments));
-
 
         public IProductRepository Products => new ProductRepository(new MainDb<Product>(DbArguments));
 

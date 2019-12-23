@@ -62,7 +62,6 @@ namespace trifenix.agro.external.operations.entities.main
                 }),
                 s => false,
                 $""
-
             );
         }
     }

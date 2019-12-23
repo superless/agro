@@ -7,9 +7,9 @@ namespace trifenix.agro.external.interfaces.entities.main
 {
     public interface IUserOperations
     {
-        Task<ExtPostContainer<string>> SaveNewUser(string name, string rut, string email, string idJob, string[] idsRoles);
+        Task<ExtPostContainer<string>> SaveNewUser(string name, string rut, string email, string idJob, string[] idsRoles, string idNebulizer, string idTractor);
 
-        Task<ExtPostContainer<User>> SaveEditUser(string id, string name, string rut, string email, string idJob, string[] idsRoles);
+        Task<ExtPostContainer<User>> SaveEditUser(string id, string name, string rut, string email, string idJob, string[] idsRoles, string idNebulizer, string idTractor);
 
         Task<ExtGetContainer<User>> GetUser(string id);
 

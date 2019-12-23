@@ -17,8 +17,6 @@ namespace trifenix.agro.functions.Helper
 {
     public static class ContainerMethods
     {
-        
-
         public static async Task<IAgroManager> AgroManager(ClaimsPrincipal claims){
            
             var agroDb = new AgroRepository(ConfigManager.GetDbArguments);
@@ -26,9 +24,7 @@ namespace trifenix.agro.functions.Helper
             var uploadImage = new UploadImage(Environment.GetEnvironmentVariable("StorageConnectionStrings", EnvironmentVariableTarget.Process));
             var graphApi = new GraphApi(claims);
             return new AgroManager(agroDb, season?.Id,uploadImage, graphApi);
-        
         }
-
 
         public static async Task<JsonResult> ApiPostOperations<T>(Stream body, ILogger log, Func<IAgroManager, dynamic, Task<ExtPostContainer<T>>> create, ClaimsPrincipal claims) 
         {
@@ -50,9 +46,7 @@ namespace trifenix.agro.functions.Helper
                     MessageResult = ExtMessageResult.Error
                 }, log);
             }
-           
         }
-
 
         public static JsonResult GetJsonPostContainer<T>(ExtPostContainer<T> containerResponse, ILogger log){
             if (containerResponse.GetType() == typeof(ExtPostErrorContainer<T>))
@@ -60,9 +54,7 @@ namespace trifenix.agro.functions.Helper
                 var resultError = (ExtPostErrorContainer<T>)containerResponse;
                 log.LogError(resultError.InternalException, resultError.Message);
                 return new JsonResult(resultError.GetBase);
-
             }
-
             return new JsonResult(containerResponse);
         }
 
@@ -73,9 +65,7 @@ namespace trifenix.agro.functions.Helper
                 var resultError = (ExtGetErrorContainer<T>)containerResponse;
                 log.LogError(resultError.InternalException, resultError.ErrorMessage);
                 return new JsonResult(resultError.GetBase);
-
             }
-
             return new JsonResult(containerResponse);
         }
     }

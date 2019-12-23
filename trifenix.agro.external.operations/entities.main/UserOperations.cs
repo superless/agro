@@ -14,19 +14,23 @@ namespace trifenix.agro.external.operations.entities.main
         private readonly IUserRepository _repo;
         private readonly IJobRepository _repoJob;
         private readonly IRoleRepository _repoRole;
+        private readonly INebulizerRepository _repoNebulizer;
+        private readonly ITractorRepository _repoTractor;
         private readonly ICommonDbOperations<User> _commonDb;
-        public UserOperations(IUserRepository repo, IJobRepository repoJob, IRoleRepository repoRole, ICommonDbOperations<User> commonDb)
+        public UserOperations(IUserRepository repo, IJobRepository repoJob, IRoleRepository repoRole, INebulizerRepository repoNebulizer, ITractorRepository repoTractor, ICommonDbOperations<User> commonDb)
         {
             _repo = repo;
             _repoJob = repoJob;
             _repoRole = repoRole;
+            _repoNebulizer = repoNebulizer;
+            _repoTractor = repoTractor;
             _commonDb = commonDb;
         }
 
         public async Task<ExtGetContainer<User>> GetUser(string id)
         {
-            var order = await _repo.GetUser(id);
-            return OperationHelper.GetElement(order);
+            var user = await _repo.GetUser(id);
+            return OperationHelper.GetElement(user);
         }
 
         public async Task<ExtGetContainer<List<User>>> GetUsers()
@@ -36,7 +40,7 @@ namespace trifenix.agro.external.operations.entities.main
             return OperationHelper.GetElements(targets);
         }
 
-        public async Task<ExtPostContainer<User>> SaveEditUser(string id, string name, string rut, string email, string idJob, string[] idsRoles)
+        public async Task<ExtPostContainer<User>> SaveEditUser(string id, string name, string rut, string email, string idJob, string[] idsRoles, string idNebulizer, string idTractor)
         {
             Job job = await _repoJob.GetJob(idJob);
             if (job == null)
@@ -49,6 +53,18 @@ namespace trifenix.agro.external.operations.entities.main
                 if (role == null)
                     return OperationHelper.PostNotFoundElementException<User>($"No se encontró el rol con id {idRole}", idRole);
                 roles.Add(role);
+            }
+            bool isApplicator = roles.Exists(r => r.Name.Equals("Aplicador"));
+            Nebulizer nebulizer = null;
+            Tractor tractor = null;
+            if (isApplicator)
+            {
+                nebulizer = await _repoNebulizer.GetNebulizer(idNebulizer);
+                if (nebulizer == null)
+                    return OperationHelper.PostNotFoundElementException<User>($"No se encontró la nebulizadora con id {idNebulizer}", idNebulizer);
+                tractor = await _repoTractor.GetTractor(idTractor);
+                if (tractor == null)
+                    return OperationHelper.PostNotFoundElementException<User>($"No se encontró el tractor con id {idTractor}", idTractor);
             }
             var element = await _repo.GetUser(id);
             return await OperationHelper.EditElement(id,
@@ -66,7 +82,7 @@ namespace trifenix.agro.external.operations.entities.main
             );
         }
 
-        public async Task<ExtPostContainer<string>> SaveNewUser(string name, string rut, string email, string idJob, string[] idsRoles)
+        public async Task<ExtPostContainer<string>> SaveNewUser(string name, string rut, string email, string idJob, string[] idsRoles, string idNebulizer, string idTractor)
         {
             Job job = await _repoJob.GetJob(idJob);
             if (job == null)
@@ -80,16 +96,37 @@ namespace trifenix.agro.external.operations.entities.main
                     return OperationHelper.PostNotFoundElementException<string>($"No se encontró el rol con id {idRole}", idRole);
                 roles.Add(role);
             }
+            bool isApplicator = roles.Exists(r => r.Name.Equals("Aplicador"));
+            Nebulizer nebulizer = null;
+            Tractor tractor = null;
+            if (isApplicator){
+                nebulizer = await _repoNebulizer.GetNebulizer(idNebulizer);
+                if (nebulizer == null)
+                    return OperationHelper.PostNotFoundElementException<string>($"No se encontró la nebulizadora con id {idNebulizer}", idNebulizer);
+                tractor = await _repoTractor.GetTractor(idTractor);
+                if (tractor == null)
+                    return OperationHelper.PostNotFoundElementException<string>($"No se encontró el tractor con id {idTractor}", idTractor);
+            }
             return await OperationHelper.CreateElement(_commonDb,_repo.GetUsers(),
-                async s => await _repo.CreateUpdateUser(new User
-                {
-                    Id = s,
-                    Name = name,
-                    Rut = rut,
-                    Email = email,
-                    Job = job,
-                    Roles = roles
-                }),
+                async s => await _repo.CreateUpdateUser(isApplicator?
+                        new UserApplicator{
+                            Id = s,
+                            Name = name,
+                            Rut = rut,
+                            Email = email,
+                            Job = job,
+                            Roles = roles,
+                            Nebulizer = nebulizer,
+                            Tractor = tractor
+                        }:
+                        new User{
+                            Id = s,
+                            Name = name,
+                            Rut = rut,
+                            Email = email,
+                            Job = job,
+                            Roles = roles
+                        }),
                 s => s.Name.Equals(name) || s.Rut.Equals(rut),
                 $"Este nombre o rut ya existe"
             );
