@@ -45,7 +45,7 @@ namespace trifenix.agro.external.operations.entities.main
                 },
                 _repo.CreateUpdatePhenologicalEvent,
                  $"No existe especie con id : {currentId}",
-                s => s.Name.Equals(name),
+                s => s.Name.Equals(name) && name != element.Name,
                 $"Ya existe Evento fenológico con nombre: {name}"
             );
         }

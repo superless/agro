@@ -60,7 +60,7 @@ namespace trifenix.agro.external.operations.entities.orders
                 },
                 _repo.CreateUpdatePhenologicalPreOrder,
                  $"No existe PreOrden Fenológica con id: {id}",
-                s => s.Name.Equals(name),
+                s => s.Name.Equals(name) && name != element.Name,
                 $"Ya existe preorden fenologica con nombre {name}"
             );
         }

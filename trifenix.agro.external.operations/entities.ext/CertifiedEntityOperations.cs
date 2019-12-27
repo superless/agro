@@ -69,9 +69,9 @@ namespace trifenix.agro.external.operations.entities.ext
                     },
                     _repo.CreateUpdateCertifiedEntity,
                     $"no existe entidad certificadora con nombre {name}",
-                    s => s.Name.Equals(name),
+                    s => s.Name.Equals(name) && name!=element.Name,
                     $"Este nombre ya existe"
-                    );
+             );
 
             }
             catch (Exception e)

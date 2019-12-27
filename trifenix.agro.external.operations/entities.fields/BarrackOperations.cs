@@ -79,7 +79,7 @@ namespace trifenix.agro.external.operations.entities.fields
                 },
                 _repo.CreateUpdateBarrack,
                  $"No existe cuartel con id : {id}",
-                s => s.Name.Equals(name),
+                s => s.Name.Equals(name) && name!=element.Name,
                 $"Ya existe un cuartel con nombre {name}"
             );
 

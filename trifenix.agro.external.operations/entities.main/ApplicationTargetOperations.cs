@@ -40,7 +40,7 @@ namespace trifenix.agro.external.operations.entities.main
                 },
                 _repo.CreateUpdateTargetApp,
                  $"No existe objetivo aplicación con id: {id}",
-                s => s.Name.Equals(name),
+                s => s.Name.Equals(name) && name != element.Name,
                 $"Ya existe aplicacion target con nombre: {name}"
             );
 

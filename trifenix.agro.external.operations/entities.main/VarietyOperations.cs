@@ -55,7 +55,7 @@ namespace trifenix.agro.external.operations.entities.main
                 },
                 _repo.CreateUpdateVariety,
                  $"No existe variedad con id : {id}",
-                s => s.Name.Equals(name),
+                s => s.Name.Equals(name) && name != element.Name,
                 $"Ya existe variedad con nombre {name}"
             );
 

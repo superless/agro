@@ -124,7 +124,7 @@ namespace trifenix.agro.external.operations.entities.orders
                 },
                 _args.ApplicationOrder.CreateUpdate,
                 $"No existe orden con id {id}",
-                s => s.Name.Equals(input.Name),
+                s => s.Name.Equals(input.Name) && input.Name != order.Name,
                 $"Ya existe orden de aplicacion con nombre : {input.Name}"
             );
             return new ExtPostContainer<OutPutApplicationOrder>

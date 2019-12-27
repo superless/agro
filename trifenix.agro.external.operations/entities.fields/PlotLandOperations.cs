@@ -61,7 +61,7 @@ namespace trifenix.agro.external.operations.entities.fields
                 },
                 _repo.CreateUpdateSector,
                  $"No existe Parcela con id :{id}",
-                s => s.Name.Equals(name),
+                s => s.Name.Equals(name) && name!=element.Name,
                 $"Ya existe parcela con nombre: {name}"
             );
         }
