@@ -46,7 +46,7 @@ namespace trifenix.agro.external.operations.entities.orders
         {
             var element = await _repo.GetPhenologicalPreOrder(id);
             var modifier = await _graphApi.GetUserInfo();
-            return await OperationHelper.EditElement(
+            return await OperationHelper.EditElement(_commonDb, _repo.GetPhenologicalPreOrders(),
                 id,
                 element,
                 s => {
@@ -59,7 +59,9 @@ namespace trifenix.agro.external.operations.entities.orders
                     return s;
                 },
                 _repo.CreateUpdatePhenologicalPreOrder,
-                 $"No existe PreOrden Fenológica con id : {id}"
+                 $"No existe PreOrden Fenológica con id: {id}",
+                s => s.Name.Equals(name),
+                $"Ya existe preorden fenologica con nombre {name}"
             );
         }
 
@@ -78,7 +80,7 @@ namespace trifenix.agro.external.operations.entities.orders
                    Creator = new UserInfo(DateTime.Now, creator)
                }),
                s => s.Name.Equals(name),
-               $"ya existe Cuartel con nombre {name} "
+               $"ya existe preorden fenologica con nombre {name}"
            ); 
         }
     }

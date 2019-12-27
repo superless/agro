@@ -44,7 +44,8 @@ namespace trifenix.agro.external.operations.entities.main
 
             var element = await _repo.GetVariety(id);
 
-            return await OperationHelper.EditElement(id,
+            return await OperationHelper.EditElement(_commonDb, _repo.GetVarieties(), 
+                id,
                 element,
                 s => {
                     s.Name = name;
@@ -53,7 +54,9 @@ namespace trifenix.agro.external.operations.entities.main
                     return s;
                 },
                 _repo.CreateUpdateVariety,
-                 $"No existe variedad con id : {id}"
+                 $"No existe variedad con id : {id}",
+                s => s.Name.Equals(name),
+                $"Ya existe variedad con nombre {name}"
             );
 
         }
@@ -71,8 +74,7 @@ namespace trifenix.agro.external.operations.entities.main
                     Specie = specie
                 }),
                 s => s.Name.Equals(name),
-                $"ya existe variedad con nombre {name} "
-
+                $"Ya existe variedad con nombre {name}"
             );
 
         }

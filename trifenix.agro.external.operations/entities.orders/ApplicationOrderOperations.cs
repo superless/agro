@@ -113,7 +113,7 @@ namespace trifenix.agro.external.operations.entities.orders
             var modifier = await _args.GraphApi.GetUserInfo();
             var order = await _args.ApplicationOrder.GetApplicationOrder(id);
             var appNewOrder = await GetApplicationOrder(id, input);
-            var result = await OperationHelper.EditElement(
+            var result = await OperationHelper.EditElement(_args.CommonDb.ApplicationOrder, _args.ApplicationOrder.GetApplicationOrders(),
                 id,
                 order,
                 s => {
@@ -123,7 +123,9 @@ namespace trifenix.agro.external.operations.entities.orders
                     return appNewOrder;
                 },
                 _args.ApplicationOrder.CreateUpdate,
-                "No existe orden con id {id}"
+                $"No existe orden con id {id}",
+                s => s.Name.Equals(input.Name),
+                $"Ya existe orden de aplicacion con nombre : {input.Name}"
             );
             return new ExtPostContainer<OutPutApplicationOrder>
             {
@@ -168,7 +170,7 @@ namespace trifenix.agro.external.operations.entities.orders
             return await OperationHelper.CreateElement(_args.CommonDb.ApplicationOrder, _args.ApplicationOrder.GetApplicationOrders(),
                        async s => await _args.ApplicationOrder.CreateUpdate(await GetApplicationOrder(s, input)),
                        s => s.Name.Equals(input.Name),
-                       $"ya existe producto con nombre : {input.Name}"
+                       $"Ya existe orden de aplicacion con nombre: {input.Name}"
                    ) ;
         }
 

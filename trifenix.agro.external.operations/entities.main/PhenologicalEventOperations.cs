@@ -34,7 +34,8 @@ namespace trifenix.agro.external.operations.entities.main
         public async Task<ExtPostContainer<PhenologicalEvent>> SaveEditPhenologicalEvent(string currentId, string name, DateTime startDate, DateTime endDate)
         {
             var element = await _repo.GetPhenologicalEvent(currentId);
-            return await OperationHelper.EditElement(currentId,
+            return await OperationHelper.EditElement(_commonDb, _repo.GetPhenologicalEvents(),
+                currentId,
                 element,
                 s => {
                     s.Name = name;
@@ -43,7 +44,9 @@ namespace trifenix.agro.external.operations.entities.main
                     return s;
                 },
                 _repo.CreateUpdatePhenologicalEvent,
-                 $"No existe especie con id : {currentId}"
+                 $"No existe especie con id : {currentId}",
+                s => s.Name.Equals(name),
+                $"Ya existe Evento fenológico con nombre: {name}"
             );
         }
 
@@ -57,7 +60,7 @@ namespace trifenix.agro.external.operations.entities.main
                     EndDate = endDate
                 }),
                 s => s.Name.Equals(name),
-                $"ya existe Evento fenológico con nombre {name} "
+                $"Ya existe Evento fenológico con nombre: {name}"
 
             );
         }

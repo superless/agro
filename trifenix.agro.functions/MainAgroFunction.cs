@@ -779,7 +779,7 @@ namespace trifenix.agro.functions
             if (claims == null)
                 return new UnauthorizedResult();
             var manager = await ContainerMethods.AgroManager(claims);
-            ExtGetContainer<User> result = null;
+            ExtGetContainer<UserApplicator> result = null;
             switch (req.Method.ToLower())
             {
                 case "get":
@@ -814,7 +814,7 @@ namespace trifenix.agro.functions
                         return await db.Users.SaveEditUser(id, name, rut, email, idJob, idsRoles, idNebulizer, idTractor);
                     }, claims);
             }
-            ExtGetContainer<List<User>> resultGetAll = await manager.Users.GetUsers();
+            ExtGetContainer<List<UserApplicator>> resultGetAll = await manager.Users.GetUsers();
             return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
         }
         #endregion

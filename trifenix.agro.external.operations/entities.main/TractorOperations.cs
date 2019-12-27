@@ -28,7 +28,8 @@ namespace trifenix.agro.external.operations.entities.main
         public async Task<ExtPostContainer<Tractor>> SaveEditTractor(string id, string brand, string code)
         {
             var element = await _repo.GetTractor(id);
-            return await OperationHelper.EditElement(id,
+            return await OperationHelper.EditElement(_commonDb, _repo.GetTractors(),
+                id,
                 element,
                 s => {
                     s.Brand = brand;
@@ -36,7 +37,9 @@ namespace trifenix.agro.external.operations.entities.main
                     return s;
                 },
                 _repo.CreateUpdateTractor,
-                 $"No existe objetivo aplicación con id : {id}"
+                $"No existe objetivo aplicación con id : {id}",
+                s => s.Code.Equals(code),
+                $"Ya existe tractor con codigo {code}"
             );
 
         }
@@ -51,7 +54,7 @@ namespace trifenix.agro.external.operations.entities.main
                     Code = code
                 }),
                 s => s.Code.Equals(code),
-                $"Ya existe tractor con codigo {code} "
+                $"Ya existe tractor con codigo {code}"
 
             );
         }

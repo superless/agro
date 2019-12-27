@@ -41,8 +41,8 @@ namespace trifenix.agro.external.operations.entities.fields
         public async Task<ExtPostContainer<Sector>> SaveEditSector(string id, string name)
         {
             var element = await _repo.GetSector(id);
-
-            return await OperationHelper.EditElement(id,
+            return await OperationHelper.EditElement(_commonDb, _repo.GetSectors(), 
+                id,
                 element,
                 s => {
                     s.Name = name;
@@ -50,7 +50,9 @@ namespace trifenix.agro.external.operations.entities.fields
                     return s;
                 },
                 _repo.CreateUpdateSector,
-                 $"No existe Sector con id : {id}"
+                 $"No existe Sector con id: {id}",
+                s => s.Name.Equals(name),
+                $"Ya existe sector con nombre: {name}"
             );
         }
 
@@ -64,7 +66,7 @@ namespace trifenix.agro.external.operations.entities.fields
                     SeasonId = _idSeason
                 }),
                 s => s.Name.Equals(name),
-                $"ya existe sector con nombre {name} "
+                $"Ya existe sector con nombre: {name}"
 
             );
         }

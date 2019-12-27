@@ -9,23 +9,23 @@ namespace trifenix.agro.db.applicationsReference.agro
     public class UserRepository : IUserRepository
     {
 
-        private readonly IMainDb<User> _db;
-        public UserRepository(IMainDb<User> db)
+        private readonly IMainDb<UserApplicator> _db;
+        public UserRepository(IMainDb<UserApplicator> db)
         {
             _db = db;
         }
 
-        public async Task<string> CreateUpdateUser(User User)
+        public async Task<string> CreateUpdateUser(UserApplicator User)
         {
             return await _db.CreateUpdate(User);
         }
 
-        public IQueryable<User> GetUsers()
+        public IQueryable<UserApplicator> GetUsers()
         {
             return _db.GetEntities();
         }
 
-        public async Task<User> GetUser(string id)
+        public async Task<UserApplicator> GetUser(string id)
         {
             return await _db.GetEntity(id);
         }

@@ -26,7 +26,7 @@ namespace trifenix.agro.db.applicationsReference.agro
 
         public IRoleRepository Roles => new RoleRepository(new MainDb<Role>(DbArguments));
 
-        public IUserRepository Users => new UserRepository(new MainDb<User>(DbArguments));
+        public IUserRepository Users => new UserRepository(new MainDb<UserApplicator>(DbArguments));
 
         public INebulizerRepository Nebulizers => new NebulizerRepository(new MainDb<Nebulizer>(DbArguments));
 

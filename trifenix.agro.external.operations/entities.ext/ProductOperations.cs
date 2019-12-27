@@ -42,10 +42,6 @@ namespace trifenix.agro.external.operations.entities.ext
 
         private ExtPostErrorContainer<T> GetException<T>(string message) => OperationHelper.GetPostException<T>(new Exception(message));
 
-        
-
-
-
         public async Task<ExtPostContainer<Product>> CreateEditProduct(string id, string commercialName, string idActiveIngredient, string brand, DosesInput[] doses, MeasureType measureType, int quantity, KindOfProductContainer kindOfProduct)
         {
             if (string.IsNullOrWhiteSpace(commercialName)) return GetException<Product>("nombre comercial obligatorio");
@@ -89,7 +85,7 @@ namespace trifenix.agro.external.operations.entities.ext
                     }
                 }
 
-                return await OperationHelper.EditElement<Product>(id,
+                return await OperationHelper.EditElement<Product>(commonDb, productRepository.GetProducts(), id,
                 product,
                 s => {
                     s.ActiveIngredient = ingredient;
@@ -106,7 +102,9 @@ namespace trifenix.agro.external.operations.entities.ext
                     return s;
                 },
                 productRepository.CreateUpdateProduct,
-                 $"No existe producto con id : {id}"
+                 $"No existe producto con id : {id}",
+                s => s.CommercialName.Equals(commercialName),
+                $"Este nombre comercial ya existe"
             );
 
 
