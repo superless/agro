@@ -266,11 +266,7 @@ namespace trifenix.agro.functions
             switch (req.Method.ToLower())
             {
                 case "get":
-                    if (!string.IsNullOrWhiteSpace(id))
-                    {
-                        result = await manager.ApplicationTargets.GetAplicationsTarget();
-                        return ContainerMethods.GetJsonGetContainer(result, log);
-                    }
+                    result = await manager.ApplicationTargets.GetAplicationsTarget();
                     break;
                 case "post":
                     return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
