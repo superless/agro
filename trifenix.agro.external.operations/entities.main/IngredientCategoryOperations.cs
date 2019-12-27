@@ -47,14 +47,17 @@ namespace trifenix.agro.external.operations.entities.main
         public async Task<ExtPostContainer<IngredientCategory>> SaveEditIngredientCategory(string id, string name)
         {
             var element = await _repo.GetIngredientCategory(id);
-            return await OperationHelper.EditElement(id,
+            return await OperationHelper.EditElement(_commonDb, _repo.GetIngredientCategories(), 
+                id,
                 element,
                 s => {
                     s.Name = name;
                     return s;
                 },
                 _repo.CreateUpdateIngredientCategory,
-                 $"No existe categoria con id : {id}"
+                 $"No existe categoria con id : {id}",
+                s => s.Name.Equals(name),
+                $"Ya existe categoria con nombre: {name}"
             );
         }
 
@@ -67,7 +70,7 @@ namespace trifenix.agro.external.operations.entities.main
                     Name = name
                 }),
                 s => s.Name.Equals(name),
-                $"ya existe categoria con nombre {name} "
+                $"Ya existe categoria con nombre: {name}"
 
             );
         }

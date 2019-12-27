@@ -63,7 +63,7 @@ namespace trifenix.agro.external.operations.entities.fields
             var elements = await GetElementToBarracks(idPlotLand, idVariety, idPollinator, idRootstock);
             if (!elements.Success) return OperationHelper.PostNotFoundElementException<Barrack>(elements.Message, elements.IdNotfound);
             var element = await _repo.GetBarrack(id);
-            return await OperationHelper.EditElement(id,
+            return await OperationHelper.EditElement(_commonDb, _repo.GetBarracks(), id,
                 element,
                 s => {
                     s.Name = name;
@@ -78,7 +78,9 @@ namespace trifenix.agro.external.operations.entities.fields
                     return s;
                 },
                 _repo.CreateUpdateBarrack,
-                 $"No existe Parcela con id : {id}"
+                 $"No existe cuartel con id : {id}",
+                s => s.Name.Equals(name),
+                $"Ya existe un cuartel con nombre {name}"
             );
 
         }
@@ -105,7 +107,6 @@ namespace trifenix.agro.external.operations.entities.fields
                 }),
                 s => s.Name.Equals(name),
                 $"ya existe Cuartel con nombre {name} "
-
             );
 
         }

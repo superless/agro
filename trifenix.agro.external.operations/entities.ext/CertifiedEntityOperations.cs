@@ -59,7 +59,7 @@ namespace trifenix.agro.external.operations.entities.ext
             try
             {
                 var element = await _repo.GetCertifiedEntity(id);
-                return await OperationHelper.EditElement(id,
+                return await OperationHelper.EditElement(_commonDb, _repo.GetCertifiedEntities(), id,
                     element,
                     s =>
                     {
@@ -68,9 +68,9 @@ namespace trifenix.agro.external.operations.entities.ext
                         return s;
                     },
                     _repo.CreateUpdateCertifiedEntity,
-                    $"no existe entidad certificadora con nombre {name}"
-
-
+                    $"no existe entidad certificadora con nombre {name}",
+                    s => s.Name.Equals(name),
+                    $"Este nombre ya existe"
                     );
 
             }

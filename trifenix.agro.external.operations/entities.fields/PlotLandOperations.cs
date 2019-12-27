@@ -50,7 +50,8 @@ namespace trifenix.agro.external.operations.entities.fields
 
             var element = await _repo.GetPlotLand(id);
 
-            return await OperationHelper.EditElement(id,
+            return await OperationHelper.EditElement(_commonDb, _repo.GetPlotLands(),
+                id,
                 element,
                 s => {
                     s.Name = name;
@@ -59,7 +60,9 @@ namespace trifenix.agro.external.operations.entities.fields
                     return s;
                 },
                 _repo.CreateUpdateSector,
-                 $"No existe Parcela con id : {id}"
+                 $"No existe Parcela con id :{id}",
+                s => s.Name.Equals(name),
+                $"Ya existe parcela con nombre: {name}"
             );
         }
 
@@ -81,8 +84,7 @@ namespace trifenix.agro.external.operations.entities.fields
                     Sector = sector
                 }),
                 s => s.Name.Equals(name),
-                $"ya existe parcela con nombre {name} "
-
+                $"Ya existe parcela con nombre: {name}"
             );
 
         }

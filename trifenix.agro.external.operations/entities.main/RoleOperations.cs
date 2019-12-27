@@ -29,14 +29,17 @@ namespace trifenix.agro.external.operations.entities.main
         public async Task<ExtPostContainer<Role>> SaveEditRole(string id, string name)
         {
             var element = await _repo.GetRole(id);
-            return await OperationHelper.EditElement(id,
+            return await OperationHelper.EditElement(_commonDb, _repo.GetRoles(), 
+                id,
                 element,
                 s => {
                     s.Name = name;
                     return s;
                 },
                 _repo.CreateUpdateRole,
-                 $"No existe objetivo aplicación con id : {id}"
+                 $"No existe objetivo aplicación con id: {id}",
+                s => s.Name.Equals(name),
+                $"Ya existe rol con nombre: {name}"
             );
 
         }
@@ -50,7 +53,7 @@ namespace trifenix.agro.external.operations.entities.main
                     Name = name
                 }),
                 s => s.Name.Equals(name),
-                $"ya existe especie con nombre {name} "
+                $"Ya existe rol con nombre: {name}"
 
             );
         }

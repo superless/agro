@@ -28,14 +28,17 @@ namespace trifenix.agro.external.operations.entities.main
         public async Task<ExtPostContainer<Job>> SaveEditJob(string id, string name)
         {
             var element = await _repo.GetJob(id);
-            return await OperationHelper.EditElement(id,
+            return await OperationHelper.EditElement(_commonDb, _repo.GetJobs(), 
+                id,
                 element,
                 s => {
                     s.Name = name;
                     return s;
                 },
                 _repo.CreateUpdateJob,
-                 $"No existe objetivo aplicación con id : {id}"
+                 $"No existe objetivo aplicación con id: {id}",
+                s => s.Name.Equals(name),
+                $"Ya existe cargo con nombre: {name}"
             );
 
         }
@@ -49,7 +52,7 @@ namespace trifenix.agro.external.operations.entities.main
                     Name = name
                 }),
                 s => s.Name.Equals(name),
-                $"Ya existe cargo con nombre {name} "
+                $"Ya existe cargo con nombre: {name}"
             );
         }
     }

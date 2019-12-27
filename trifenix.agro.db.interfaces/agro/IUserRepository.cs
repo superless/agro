@@ -6,11 +6,11 @@ namespace trifenix.agro.db.interfaces.agro
 {
     public interface IUserRepository
     {
-        Task<string> CreateUpdateUser(User user);
+        Task<string> CreateUpdateUser(UserApplicator user);
 
-        Task<User> GetUser(string id);
+        Task<UserApplicator> GetUser(string id);
 
-        IQueryable<User> GetUsers();
+        IQueryable<UserApplicator> GetUsers();
 
     }
 }

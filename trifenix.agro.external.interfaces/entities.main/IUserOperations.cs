@@ -9,11 +9,11 @@ namespace trifenix.agro.external.interfaces.entities.main
     {
         Task<ExtPostContainer<string>> SaveNewUser(string name, string rut, string email, string idJob, string[] idsRoles, string idNebulizer, string idTractor);
 
-        Task<ExtPostContainer<User>> SaveEditUser(string id, string name, string rut, string email, string idJob, string[] idsRoles, string idNebulizer, string idTractor);
+        Task<ExtPostContainer<UserApplicator>> SaveEditUser(string id, string name, string rut, string email, string idJob, string[] idsRoles, string idNebulizer, string idTractor);
 
-        Task<ExtGetContainer<User>> GetUser(string id);
+        Task<ExtGetContainer<UserApplicator>> GetUser(string id);
 
-        Task<ExtGetContainer<List<User>>> GetUsers();
+        Task<ExtGetContainer<List<UserApplicator>>> GetUsers();
 
     }
 }

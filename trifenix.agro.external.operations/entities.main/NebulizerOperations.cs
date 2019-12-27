@@ -28,7 +28,8 @@ namespace trifenix.agro.external.operations.entities.main
         public async Task<ExtPostContainer<Nebulizer>> SaveEditNebulizer(string id, string brand, string code)
         {
             var element = await _repo.GetNebulizer(id);
-            return await OperationHelper.EditElement(id,
+            return await OperationHelper.EditElement(_commonDb, _repo.GetNebulizers(),
+                id,
                 element,
                 s => {
                     s.Brand = brand;
@@ -36,7 +37,9 @@ namespace trifenix.agro.external.operations.entities.main
                     return s;
                 },
                 _repo.CreateUpdateNebulizer,
-                 $"No existe objetivo aplicación con id : {id}"
+                 $"No existe objetivo aplicación con id: {id}",
+                s => s.Code.Equals(code),
+                $"Ya existe nebulizadora con codigo: {code}"
             );
         }
 
@@ -50,7 +53,7 @@ namespace trifenix.agro.external.operations.entities.main
                     Code = code
                 }),
                 s => s.Code.Equals(code),
-                $"Ya existe nebulizadora con codigo {code} "
+                $"Ya existe nebulizadora con codigo: {code}"
             );
         }
     }

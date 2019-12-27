@@ -31,14 +31,17 @@ namespace trifenix.agro.external.operations.entities.main
         public async Task<ExtPostContainer<ApplicationTarget>> SaveEditApplicationTarget(string id, string name)
         {
             var element = await _repo.GetTarget(id);
-            return await OperationHelper.EditElement(id,
+            return await OperationHelper.EditElement(_commonDb, _repo.GetTargets(),
+                id,
                 element,
                 s => {
                     s.Name = name;
                     return s;
                 },
                 _repo.CreateUpdateTargetApp,
-                 $"No existe objetivo aplicación con id : {id}"
+                 $"No existe objetivo aplicación con id: {id}",
+                s => s.Name.Equals(name),
+                $"Ya existe aplicacion target con nombre: {name}"
             );
 
         }
@@ -52,7 +55,7 @@ namespace trifenix.agro.external.operations.entities.main
                     Name = name
                 }),
                 s => s.Name.Equals(name),
-                $"ya existe especie con nombre {name} "
+                $"Ya existe aplicacion target con nombre: {name}"
 
             );
         }

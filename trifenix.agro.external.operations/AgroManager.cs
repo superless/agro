@@ -44,7 +44,7 @@ namespace trifenix.agro.external.operations
 
         public IRoleOperations Roles => new RoleOperations(_repository.Roles, new CommonDbOperations<Role>());
 
-        public IUserOperations Users => new UserOperations(_repository.Users, _repository.Jobs, _repository.Roles, _repository.Nebulizers, _repository.Tractors, new CommonDbOperations<User>());
+        public IUserOperations Users => new UserOperations(_repository.Users, _repository.Jobs, _repository.Roles, _repository.Nebulizers, _repository.Tractors, new CommonDbOperations<UserApplicator>());
 
         public INebulizerOperations Nebulizers => new NebulizerOperations(_repository.Nebulizers, new CommonDbOperations<Nebulizer>());
         

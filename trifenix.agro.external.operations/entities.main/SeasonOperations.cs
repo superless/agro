@@ -35,7 +35,8 @@ namespace trifenix.agro.external.operations.entities.main
         {
             var element = await _repo.GetSeason(id);
 
-            return await OperationHelper.EditElement(id,
+            return await OperationHelper.EditElement(_commonDb, _repo.GetSeasons(),
+                id,
                 element,
                 s => {
                     s.Start = init;
@@ -44,13 +45,14 @@ namespace trifenix.agro.external.operations.entities.main
                     return s;
                 },
                 _repo.CreateUpdateSeason,
-                 $"No existe temporada con id : {id}"
+                 $"No existe temporada con id : {id}",
+                s => (init.CompareTo(s.Start) >= 0 && init.CompareTo(s.End) <= 0) || (end.CompareTo(s.Start) >= 0 && end.CompareTo(s.End) <= 0),
+                $"No se puede sobreponer fecha"
             );
         }
 
         public async Task<ExtPostContainer<string>> SaveNewSeason(DateTime init, DateTime end)
         {
-
             //TODO: validar que no se pueda sobreponer fechas.
             return await OperationHelper.CreateElement(_commonDb, _repo.GetSeasons(),
                 async s => await _repo.CreateUpdateSeason(new Season
@@ -60,8 +62,8 @@ namespace trifenix.agro.external.operations.entities.main
                     End = end,
                     Current = true
                 }),
-                s => false,
-                $""
+                s => (init.CompareTo(s.Start) >= 0 && init.CompareTo(s.End) <= 0) || (end.CompareTo(s.Start) >= 0 && end.CompareTo(s.End) <= 0),
+                $"No se puede sobreponer fecha"
             );
         }
     }

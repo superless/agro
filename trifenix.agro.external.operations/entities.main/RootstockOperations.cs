@@ -30,7 +30,8 @@ namespace trifenix.agro.external.operations.entities.main
         public async Task<ExtPostContainer<Rootstock>> SaveEditRootstock(string id, string name, string abbreviation)
         {
             var element = await _repo.GetRootstock(id);
-            return await OperationHelper.EditElement(id, 
+            return await OperationHelper.EditElement(_commonDb, _repo.GetRootstocks(),
+                id, 
                 element, 
                 s => {
                     s.Name = name;
@@ -38,7 +39,9 @@ namespace trifenix.agro.external.operations.entities.main
                     return s;
                 },
                 _repo.CreateUpdateRootstock,
-                 $"No existe portainjerto con id : {id}"
+                 $"No existe portainjerto con id : {id}",
+                s => s.Name.Equals(name),
+                $"Ya existe portainjerto con nombre: {name}"
             );
 
         }
@@ -54,8 +57,7 @@ namespace trifenix.agro.external.operations.entities.main
                     Abbreviation = abbreviation
                 }),
                 s => s.Name.Equals(name),
-                $"ya existe portainjerto con nombre {name} "
-
+                $"Ya existe portainjerto con nombre: {name}"
             );
             
         }
