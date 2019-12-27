@@ -58,14 +58,17 @@ namespace trifenix.agro.external.operations.entities.main
             bool isApplicator = roles.Exists(r => r.Name.Equals("Aplicador"));
             Nebulizer nebulizer = null;
             Tractor tractor = null;
-            if (isApplicator)
-            {
-                nebulizer = await _repoNebulizer.GetNebulizer(idNebulizer);
-                if (nebulizer == null)
-                    return OperationHelper.PostNotFoundElementException<UserApplicator>($"No se encontró la nebulizadora con id {idNebulizer}", idNebulizer);
-                tractor = await _repoTractor.GetTractor(idTractor);
-                if (tractor == null)
-                    return OperationHelper.PostNotFoundElementException<UserApplicator>($"No se encontró el tractor con id {idTractor}", idTractor);
+            if (isApplicator){
+                if (!String.IsNullOrWhiteSpace(idNebulizer)){
+                    nebulizer = await _repoNebulizer.GetNebulizer(idNebulizer);
+                    if (nebulizer == null)
+                        return OperationHelper.PostNotFoundElementException<UserApplicator>($"No se encontró la nebulizadora con id {idNebulizer}", idNebulizer);
+                }
+                if (!String.IsNullOrWhiteSpace(idTractor)){
+                    tractor = await _repoTractor.GetTractor(idTractor);
+                    if (tractor == null)
+                        return OperationHelper.PostNotFoundElementException<UserApplicator>($"No se encontró el tractor con id {idTractor}", idTractor);
+                }
             }
             var element = await _repo.GetUser(id);
             return await OperationHelper.EditElement(_commonDb, _repo.GetUsers(), id, element,
@@ -81,8 +84,8 @@ namespace trifenix.agro.external.operations.entities.main
                 },
                 _repo.CreateUpdateUser,
                 $"No existe objetivo aplicación con id : {id}",
-                s => (s.Name.Equals(name) && name != element.Name) || (s.Rut.Equals(rut) && rut != element.Rut) || (s.Email.Equals(email) && email != element.Email),
-                $"Este nombre, rut o correo ya existe"
+                s => (s.Rut.Equals(rut) && rut != element.Rut) || (s.Email.Equals(email) && email != element.Email),
+                $"Este rut o correo ya existe"
             );
         }
 
@@ -104,51 +107,32 @@ namespace trifenix.agro.external.operations.entities.main
             Nebulizer nebulizer = null;
             Tractor tractor = null;
             if (isApplicator){
-                nebulizer = await _repoNebulizer.GetNebulizer(idNebulizer);
-                if (nebulizer == null)
-                    return OperationHelper.PostNotFoundElementException<string>($"No se encontró la nebulizadora con id {idNebulizer}", idNebulizer);
-                tractor = await _repoTractor.GetTractor(idTractor);
-                if (tractor == null)
-                    return OperationHelper.PostNotFoundElementException<string>($"No se encontró el tractor con id {idTractor}", idTractor);
+                if (!String.IsNullOrWhiteSpace(idNebulizer)){
+                    nebulizer = await _repoNebulizer.GetNebulizer(idNebulizer);
+                    if (nebulizer == null)
+                        return OperationHelper.PostNotFoundElementException<string>($"No se encontró la nebulizadora con id {idNebulizer}", idNebulizer);
+                }
+                if (!String.IsNullOrWhiteSpace(idTractor)){
+                    tractor = await _repoTractor.GetTractor(idTractor);
+                    if (tractor == null)
+                        return OperationHelper.PostNotFoundElementException<string>($"No se encontró el tractor con id {idTractor}", idTractor);
+                }
             }
             return await OperationHelper.CreateElement(_commonDb,_repo.GetUsers(),
-                async s => await _repo.CreateUpdateUser(isApplicator?
-                        new UserApplicator{
-                            Id = s,
-                            Name = name,
-                            Rut = rut,
-                            Email = email,
-                            Job = job,
-                            Roles = roles,
-                            Nebulizer = nebulizer,
-                            Tractor = tractor
-                        }:
-                        new UserApplicator{
-                            Id = s,
-                            Name = name,
-                            Rut = rut,
-                            Email = email,
-                            Job = job,
-                            Roles = roles
-                        }),
-                s => s.Name.Equals(name) || s.Rut.Equals(rut) || s.Email.Equals(email),
+                async s => await _repo.CreateUpdateUser(
+                    new UserApplicator{
+                        Id = s,
+                        Name = name,
+                        Rut = rut,
+                        Email = email,
+                        Job = job,
+                        Roles = roles,
+                        Nebulizer = (isApplicator)?nebulizer:null,
+                        Tractor = (isApplicator)?tractor:null,
+                    }),
+                s => s.Rut.Equals(rut) || s.Email.Equals(email),
                 $"Este nombre, rut o correo ya existe"
             );
         }
-
-        //public async Task<bool> IsApplicator(User user)
-        //{
-        //    List<Role> roles = new List<Role>();
-        //    Role role;
-        //    foreach (Role _role in user.Roles)
-        //    {
-        //        role = await _repoRole.GetRole(_role.Id);
-        //        if (role == null)
-        //            throw new Exception($"No se encontró el rol con id {_role.Id}");
-        //        roles.Add(role);
-        //    }
-        //    bool isApplicator = roles.Exists(r => r.Name.Equals("Aplicador"));
-        //    return isApplicator;
-        //}
     }
 }
