@@ -37,7 +37,7 @@ namespace trifenix.agro.external.operations.entities.main
                 },
                 _repo.CreateUpdateJob,
                  $"No existe objetivo aplicación con id: {id}",
-                s => s.Name.Equals(name),
+                s => s.Name.Equals(name) && name != element.Name,
                 $"Ya existe cargo con nombre: {name}"
             );
 

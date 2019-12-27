@@ -51,7 +51,7 @@ namespace trifenix.agro.external.operations.entities.fields
                 },
                 _repo.CreateUpdateSector,
                  $"No existe Sector con id: {id}",
-                s => s.Name.Equals(name),
+                s => s.Name.Equals(name) && name!=element.Name,
                 $"Ya existe sector con nombre: {name}"
             );
         }

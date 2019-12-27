@@ -38,7 +38,7 @@ namespace trifenix.agro.external.operations.entities.main
                 },
                 _repo.CreateUpdateNebulizer,
                  $"No existe objetivo aplicación con id: {id}",
-                s => s.Code.Equals(code),
+                s => s.Code.Equals(code) && code != element.Code,
                 $"Ya existe nebulizadora con codigo: {code}"
             );
         }

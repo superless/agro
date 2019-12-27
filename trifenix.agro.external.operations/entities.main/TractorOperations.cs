@@ -38,7 +38,7 @@ namespace trifenix.agro.external.operations.entities.main
                 },
                 _repo.CreateUpdateTractor,
                 $"No existe objetivo aplicación con id : {id}",
-                s => s.Code.Equals(code),
+                s => s.Code.Equals(code) && code != element.Code,
                 $"Ya existe tractor con codigo {code}"
             );
 

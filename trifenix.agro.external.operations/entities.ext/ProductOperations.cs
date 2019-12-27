@@ -103,7 +103,7 @@ namespace trifenix.agro.external.operations.entities.ext
                 },
                 productRepository.CreateUpdateProduct,
                  $"No existe producto con id : {id}",
-                s => s.CommercialName.Equals(commercialName),
+                s => s.CommercialName.Equals(commercialName) && commercialName!=product.CommercialName,
                 $"Este nombre comercial ya existe"
             );
 
