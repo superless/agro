@@ -28,6 +28,7 @@ namespace trifenix.agro.external.operations.tests.helper.Instances
                         PhenologicalEventsInstances.GetInstance(Results.Values).Object,
                         CommonDbInstances<NotificationEvent>.GetInstance(Results.Values).Object,
                         UploadImageInstances.GetInstance(Results.Values).Object,
+                        null,
                         null
                     );
 
@@ -38,6 +39,7 @@ namespace trifenix.agro.external.operations.tests.helper.Instances
                         PhenologicalEventsInstances.GetInstance(Results.Values).Object,
                         CommonDbInstances<NotificationEvent>.GetInstance(Results.Values).Object,
                         UploadImageInstances.GetInstance(Results.Values).Object,
+                        null,
                         null
                     );
                 case KindOfInstance.DefaultReturnException:
@@ -47,6 +49,7 @@ namespace trifenix.agro.external.operations.tests.helper.Instances
                        PhenologicalEventsInstances.GetInstance(Results.Values).Object,
                        CommonDbInstances<NotificationEvent>.GetInstance(Results.Values).Object,
                        UploadImageInstances.GetInstance(Results.Values).Object,
+                       null,
                        null
                    );
 
@@ -57,6 +60,7 @@ namespace trifenix.agro.external.operations.tests.helper.Instances
                        PhenologicalEventsInstances.GetInstance(Results.Values).Object,
                        CommonDbInstances<NotificationEvent>.GetInstance(Results.Values).Object,
                        UploadImageInstances.GetInstance(Results.Values).Object,
+                       null,
                        null
                    );
 
@@ -67,6 +71,7 @@ namespace trifenix.agro.external.operations.tests.helper.Instances
                        PhenologicalEventsInstances.GetInstance(Results.Values).Object,
                        CommonDbInstances<NotificationEvent>.GetInstance(Results.Nullables).Object,
                        UploadImageInstances.GetInstance(Results.Values).Object,
+                       null,
                        null
                    );
 
@@ -77,7 +82,8 @@ namespace trifenix.agro.external.operations.tests.helper.Instances
                        PhenologicalEventsInstances.GetInstance(Results.Values).Object,
                        CommonDbInstances<NotificationEvent>.GetInstance(Results.Nullables).Object,
                        UploadImageInstances.GetInstance(Results.Values).Object,
-                       null
+                       null,
+                       WeatherApiInstances.GetInstance().Object
                    );
                 case KindOfInstance.DefaultReturnExceptionOnBarracksEmpty:
                     return new NotificationEventOperations(
@@ -86,6 +92,7 @@ namespace trifenix.agro.external.operations.tests.helper.Instances
                        PhenologicalEventsInstances.GetInstance(Results.Values).Object,
                        CommonDbInstances<NotificationEvent>.GetInstance(Results.Values).Object,
                        UploadImageInstances.GetInstance(Results.Values).Object,
+                       null,
                        null
                    );
 
@@ -96,6 +103,7 @@ namespace trifenix.agro.external.operations.tests.helper.Instances
                        PhenologicalEventsInstances.GetInstance(Results.Nullables).Object,
                        CommonDbInstances<NotificationEvent>.GetInstance(Results.Values).Object,
                        UploadImageInstances.GetInstance(Results.Values).Object,
+                       null,
                        null
                    );
 
@@ -107,6 +115,7 @@ namespace trifenix.agro.external.operations.tests.helper.Instances
                        PhenologicalEventsInstances.GetInstance(Results.Nullables).Object,
                        CommonDbInstances<NotificationEvent>.GetInstance(Results.Nullables).Object,
                        UploadImageInstances.GetInstance(Results.Values).Object,
+                       null,
                        null
                    );
             }

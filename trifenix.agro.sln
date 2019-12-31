@@ -79,11 +79,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.email.operati
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "12. microsoft graph", "12. microsoft graph", "{55E16337-33EA-4B73-B1DE-E0AEE8B6E44F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "trifenix.agro.microsoftgraph.model", "trifenix.agro.microsoftgraph.model\trifenix.agro.microsoftgraph.model.csproj", "{D287CE7A-B288-4619-A14C-4146C2B3010D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.microsoftgraph.model", "trifenix.agro.microsoftgraph.model\trifenix.agro.microsoftgraph.model.csproj", "{D287CE7A-B288-4619-A14C-4146C2B3010D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "trifenix.agro.microsoftgraph.operations", "trifenix.agro.microsoftgraph.operations\trifenix.agro.microsoftgraph.operations.csproj", "{A174267A-6ABB-44B6-B9AE-7578140E8E64}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.microsoftgraph.operations", "trifenix.agro.microsoftgraph.operations\trifenix.agro.microsoftgraph.operations.csproj", "{A174267A-6ABB-44B6-B9AE-7578140E8E64}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "trifenix.agro.microsoftgraph.interfaces", "trifenix.agro.microsoftgraph.interfaces\trifenix.agro.microsoftgraph.interfaces.csproj", "{2977A9B0-AC1C-4A8F-8E52-8E531247CF94}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.microsoftgraph.interfaces", "trifenix.agro.microsoftgraph.interfaces\trifenix.agro.microsoftgraph.interfaces.csproj", "{2977A9B0-AC1C-4A8F-8E52-8E531247CF94}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "13. weather", "13. weather", "{4DEC3786-2B9C-4263-B6E2-4439FAED41F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "trifenix.agro.weather.interfaces", "trifenix.agro.weather.interfaces\trifenix.agro.weather.interfaces.csproj", "{ABD164A9-CF43-4D17-AD0A-18F7B7F46188}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "trifenix.agro.weather.operations", "trifenix.agro.weather.operations\trifenix.agro.weather.operations.csproj", "{E84BDDB5-3407-4646-A5CE-B8C8BE1DC307}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "trifenix.agro.weather.model", "trifenix.agro.weather.model\trifenix.agro.weather.model.csproj", "{11D1F139-A32E-4677-8852-B938745243FD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -199,6 +207,18 @@ Global
 		{2977A9B0-AC1C-4A8F-8E52-8E531247CF94}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2977A9B0-AC1C-4A8F-8E52-8E531247CF94}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2977A9B0-AC1C-4A8F-8E52-8E531247CF94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABD164A9-CF43-4D17-AD0A-18F7B7F46188}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABD164A9-CF43-4D17-AD0A-18F7B7F46188}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABD164A9-CF43-4D17-AD0A-18F7B7F46188}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABD164A9-CF43-4D17-AD0A-18F7B7F46188}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E84BDDB5-3407-4646-A5CE-B8C8BE1DC307}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E84BDDB5-3407-4646-A5CE-B8C8BE1DC307}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E84BDDB5-3407-4646-A5CE-B8C8BE1DC307}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E84BDDB5-3407-4646-A5CE-B8C8BE1DC307}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11D1F139-A32E-4677-8852-B938745243FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11D1F139-A32E-4677-8852-B938745243FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11D1F139-A32E-4677-8852-B938745243FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11D1F139-A32E-4677-8852-B938745243FD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -233,6 +253,9 @@ Global
 		{D287CE7A-B288-4619-A14C-4146C2B3010D} = {55E16337-33EA-4B73-B1DE-E0AEE8B6E44F}
 		{A174267A-6ABB-44B6-B9AE-7578140E8E64} = {55E16337-33EA-4B73-B1DE-E0AEE8B6E44F}
 		{2977A9B0-AC1C-4A8F-8E52-8E531247CF94} = {55E16337-33EA-4B73-B1DE-E0AEE8B6E44F}
+		{ABD164A9-CF43-4D17-AD0A-18F7B7F46188} = {4DEC3786-2B9C-4263-B6E2-4439FAED41F6}
+		{E84BDDB5-3407-4646-A5CE-B8C8BE1DC307} = {4DEC3786-2B9C-4263-B6E2-4439FAED41F6}
+		{11D1F139-A32E-4677-8852-B938745243FD} = {4DEC3786-2B9C-4263-B6E2-4439FAED41F6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2C0C9D82-464E-4741-8541-CDC460278FEC}

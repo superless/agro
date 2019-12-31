@@ -7,7 +7,7 @@ namespace trifenix.agro.external.interfaces.entities.events
 {
     public interface INotificatonEventOperations
     {
-        Task<ExtPostContainer<string>> SaveNewNotificationEvent(string idBarrack, string idPhenologicalEvent, string base64, string description);
+        Task<ExtPostContainer<string>> SaveNewNotificationEvent(string idBarrack, string idPhenologicalEvent, string base64, string description, float lat, float lon);
 
         Task<ExtGetContainer<List<NotificationEvent>>> GetEvents();
 
