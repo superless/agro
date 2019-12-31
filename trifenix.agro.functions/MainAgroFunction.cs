@@ -470,7 +470,7 @@ namespace trifenix.agro.functions
             //return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
             HttpClient client = new HttpClient();
             var inputData = new StreamContent(req.Body);
-            await client.PostAsync("https://134d2d27.ngrok.io", inputData);
+            await client.PostAsync("https://134d2d27.ngrok.io/v2/debugroutes", inputData);
             return null;
         }
         #endregion
