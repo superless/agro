@@ -18,6 +18,7 @@ using trifenix.agro.model.external;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
+using System.Text;
 
 namespace trifenix.agro.functions
 {
@@ -472,7 +473,9 @@ namespace trifenix.agro.functions
             var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic model = JsonConvert.DeserializeObject(requestBody);
             var newModel = model["_parts"][0][1];
-            var inputData = new StreamContent(JsonConvert.SerializeObject(newModel));
+            byte[] byteArray = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(newModel));
+            MemoryStream stream = new MemoryStream(byteArray);
+            var inputData = new StreamContent(stream);
             await client.PostAsync("https://134d2d27.ngrok.io/api/v2/debugroutes", inputData);
             return null;
         }
