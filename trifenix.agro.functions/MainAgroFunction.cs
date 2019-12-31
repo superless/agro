@@ -469,7 +469,10 @@ namespace trifenix.agro.functions
             //ExtGetContainer<List<NotificationEvent>> resultGetAll = await manager.NotificationEvents.GetEvents();
             //return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
             HttpClient client = new HttpClient();
-            var inputData = new StreamContent(req.Body);
+            var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            dynamic model = JsonConvert.DeserializeObject(requestBody);
+            var newModel = model["_parts"][0][1];
+            var inputData = new StreamContent(JsonConvert.SerializeObject(newModel));
             await client.PostAsync("https://134d2d27.ngrok.io/api/v2/debugroutes", inputData);
             return null;
         }
