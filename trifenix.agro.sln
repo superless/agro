@@ -87,11 +87,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.microsoftgrap
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "13. weather", "13. weather", "{4DEC3786-2B9C-4263-B6E2-4439FAED41F6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.weather.interfaces", "trifenix.agro.weather.interfaces\trifenix.agro.weather.interfaces.csproj", "{ABD164A9-CF43-4D17-AD0A-18F7B7F46188}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "trifenix.agro.weather.interfaces", "trifenix.agro.weather.interfaces\trifenix.agro.weather.interfaces.csproj", "{ABD164A9-CF43-4D17-AD0A-18F7B7F46188}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.weather.operations", "trifenix.agro.weather.operations\trifenix.agro.weather.operations.csproj", "{E84BDDB5-3407-4646-A5CE-B8C8BE1DC307}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "trifenix.agro.weather.operations", "trifenix.agro.weather.operations\trifenix.agro.weather.operations.csproj", "{E84BDDB5-3407-4646-A5CE-B8C8BE1DC307}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.weather.model", "trifenix.agro.weather.model\trifenix.agro.weather.model.csproj", "{11D1F139-A32E-4677-8852-B938745243FD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "trifenix.agro.weather.model", "trifenix.agro.weather.model\trifenix.agro.weather.model.csproj", "{11D1F139-A32E-4677-8852-B938745243FD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

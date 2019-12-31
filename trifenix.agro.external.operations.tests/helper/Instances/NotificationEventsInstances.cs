@@ -83,7 +83,7 @@ namespace trifenix.agro.external.operations.tests.helper.Instances
                        CommonDbInstances<NotificationEvent>.GetInstance(Results.Nullables).Object,
                        UploadImageInstances.GetInstance(Results.Values).Object,
                        null,
-                       null
+                       WeatherApiInstances.GetInstance().Object
                    );
                 case KindOfInstance.DefaultReturnExceptionOnBarracksEmpty:
                     return new NotificationEventOperations(
