@@ -16,6 +16,7 @@ using trifenix.agro.external.operations.entities.orders;
 using trifenix.agro.external.operations.entities.orders.args;
 using trifenix.agro.microsoftgraph.interfaces;
 using trifenix.agro.storage.interfaces;
+using trifenix.agro.weather.interfaces;
 
 namespace trifenix.agro.external.operations
 {
@@ -26,14 +27,15 @@ namespace trifenix.agro.external.operations
         private readonly string _idSeason;
         private readonly IUploadImage _uploadImage;
         private readonly IGraphApi _graphApi;
+        private readonly IWeatherApi _weatherApi;
 
-
-        public AgroManager(IAgroRepository repository, string idSeason, IUploadImage uploadImage, IGraphApi graphApi)
+        public AgroManager(IAgroRepository repository, string idSeason, IUploadImage uploadImage, IGraphApi graphApi, IWeatherApi weatherApi)
         {
             _repository = repository;
             _idSeason = idSeason;
             _uploadImage = uploadImage;
             _graphApi = graphApi;
+            _weatherApi = weatherApi;
         }
 
         public IPhenologicalOperations PhenologicalEvents => new PhenologicalEventOperations(_repository.PhenologicalEvents, new CommonDbOperations<PhenologicalEvent>());
@@ -104,7 +106,7 @@ namespace trifenix.agro.external.operations
             PreOrder = _repository.PhenologicalPreOrders,
             SeasonId = _idSeason
         });
-        public INotificatonEventOperations NotificationEvents => new NotificationEventOperations(_repository.NotificationEvents, _repository.Barracks, _repository.PhenologicalEvents, new CommonDbOperations<NotificationEvent>(), _uploadImage, _graphApi);
+        public INotificatonEventOperations NotificationEvents => new NotificationEventOperations(_repository.NotificationEvents, _repository.Barracks, _repository.PhenologicalEvents, new CommonDbOperations<NotificationEvent>(), _uploadImage, _graphApi, _weatherApi);
         public IOrderFolderOperations OrderFolder => new OrderFolderOperations(new OrderFolderArgs
         {
             Ingredient = _repository.Ingredients,

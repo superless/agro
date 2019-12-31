@@ -12,6 +12,7 @@ using trifenix.agro.functions.settings;
 using trifenix.agro.microsoftgraph.operations;
 using trifenix.agro.model.external;
 using trifenix.agro.storage.operations;
+using trifenix.agro.weather.operations;
 
 namespace trifenix.agro.functions.Helper
 {
@@ -23,7 +24,8 @@ namespace trifenix.agro.functions.Helper
             var season = await agroDb.Seasons.GetCurrentSeason();
             var uploadImage = new UploadImage(Environment.GetEnvironmentVariable("StorageConnectionStrings", EnvironmentVariableTarget.Process));
             var graphApi = new GraphApi(claims);
-            return new AgroManager(agroDb, season?.Id,uploadImage, graphApi);
+            var weatherApi = new WeatherApi(Environment.GetEnvironmentVariable("KeyWeatherApi", EnvironmentVariableTarget.Process));
+            return new AgroManager(agroDb, season?.Id,uploadImage, graphApi, weatherApi);
         }
 
         public static async Task<JsonResult> ApiPostOperations<T>(Stream body, ILogger log, Func<IAgroManager, dynamic, Task<ExtPostContainer<T>>> create, ClaimsPrincipal claims) 

@@ -2,6 +2,7 @@
 using Cosmonaut.Attributes;
 using System;
 using trifenix.agro.microsoftgraph.model;
+using trifenix.agro.weather.model;
 
 namespace trifenix.agro.db.model.agro
 {
@@ -48,11 +49,7 @@ namespace trifenix.agro.db.model.agro
         /// </summary>
         public DateTime Created { get; set; }
 
-        
-
-
-
-
+        public Weather Weather { get; set; }
 
     }
 }

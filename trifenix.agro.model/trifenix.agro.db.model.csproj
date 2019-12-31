@@ -11,6 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\trifenix.agro.db\trifenix.agro.db.csproj" />
     <ProjectReference Include="..\trifenix.agro.microsoftgraph.model\trifenix.agro.microsoftgraph.model.csproj" />
+    <ProjectReference Include="..\trifenix.agro.weather.model\trifenix.agro.weather.model.csproj" />
   </ItemGroup>
 
  
