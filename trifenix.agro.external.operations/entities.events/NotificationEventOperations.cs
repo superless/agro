@@ -13,6 +13,7 @@ using trifenix.agro.microsoftgraph.interfaces;
 using trifenix.agro.microsoftgraph.model;
 using trifenix.agro.model.external;
 using trifenix.agro.storage.interfaces;
+using trifenix.agro.weather.interfaces;
 
 namespace trifenix.agro.external.operations.entities.events
 {
@@ -28,6 +29,7 @@ namespace trifenix.agro.external.operations.entities.events
         private readonly IUploadImage _uploadImage;
         private readonly INotificationEventRepository _repo;
         private readonly IGraphApi _graphApi;
+        private readonly IWeatherApi _weatherApi;
 
 
         /// <summary>
@@ -38,7 +40,7 @@ namespace trifenix.agro.external.operations.entities.events
         /// <param name="phenologicalRepository">repositorio de eventos fenológicos</param>
         /// <param name="phenologicalRepository">repositorio de eventos fenológicos</param>
         /// <param name="uploadImage">Objeto que permite obtener la imagen subida en la aplicación</param>
-        public NotificationEventOperations(INotificationEventRepository repo, IBarrackRepository barrackRepository, IPhenologicalEventRepository phenologicalRepository, ICommonDbOperations<NotificationEvent> commonDb, IUploadImage uploadImage, IGraphApi graphApi)
+        public NotificationEventOperations(INotificationEventRepository repo, IBarrackRepository barrackRepository, IPhenologicalEventRepository phenologicalRepository, ICommonDbOperations<NotificationEvent> commonDb, IUploadImage uploadImage, IGraphApi graphApi, IWeatherApi weatherApi)
         {
             _repo = repo;
             _phenologicalRepository = phenologicalRepository;
@@ -46,6 +48,7 @@ namespace trifenix.agro.external.operations.entities.events
             _barrackRepository = barrackRepository;
             _uploadImage = uploadImage;
             _graphApi = graphApi;
+            _weatherApi = weatherApi;
         }
 
 
@@ -133,7 +136,7 @@ namespace trifenix.agro.external.operations.entities.events
         /// <param name="base64">string de la imagen subida</param>
         /// <param name="description">descripción del evento notificado</param>
         /// <returns>contenedor con el identificador de la notificación</returns>
-        public async Task<ExtPostContainer<string>> SaveNewNotificationEvent(string idBarrack, string idPhenologicalEvent, string base64, string description)
+        public async Task<ExtPostContainer<string>> SaveNewNotificationEvent(string idBarrack, string idPhenologicalEvent, string base64, string description, float lat, float lon)
         {
             if (string.IsNullOrWhiteSpace(idBarrack) || string.IsNullOrWhiteSpace(idPhenologicalEvent) || string.IsNullOrWhiteSpace(base64))
             {
@@ -153,6 +156,7 @@ namespace trifenix.agro.external.operations.entities.events
                     imgPath = await _uploadImage.UploadImageBase64(base64);
                 }
                 //var creator = await _graphApi.GetUserInfo();
+                var weather = await _weatherApi.GetWeather(lat, lon);
                 return await OperationHelper.CreateElement(_commonDb, _repo.GetNotificationEvents(),
                    async s => await _repo.CreateUpdateNotificationEvent(new NotificationEvent
                    {
@@ -162,7 +166,8 @@ namespace trifenix.agro.external.operations.entities.events
                        Description = description,
                        PhenologicalEvent = localPhenological,
                        PicturePath = imgPath,
-                       Creator = null
+                       Creator = null,
+                       Weather = weather
                    }),
                    s => false,
                    $""

@@ -447,7 +447,9 @@ namespace trifenix.agro.functions
                         var description = (string)newModel["description"];
                         var base64 = (string)newModel["base64"];
                         var barrack = (string)newModel["idBarrack"];
-                        var response = await db.NotificationEvents.SaveNewNotificationEvent(barrack, idPhenologicalEvent, base64, description);
+                        var lat = (float)newModel["latitude"];
+                        var lon = (float)newModel["longitude"];
+                        var response = await db.NotificationEvents.SaveNewNotificationEvent(barrack, idPhenologicalEvent, base64, description, lat, lon);
                         var evt = await db.NotificationEvents.GetEvent(response.IdRelated);
                         var url = evt.Result.PicturePath;
                         await email.SendEmail("Notificacion",

@@ -121,83 +121,83 @@ namespace trifenix.agro.external.operations.tests
 
         #region SaveNewNotificationEvent
         [Theory]
-        [InlineData(null, null, null, null)]
-        [InlineData("", "", "", "")]
-        public async Task SaveNewNotificationEvent_EmptyAndNullParameters_returnErrorContainer(string idBarrick, string idPhenologicalEvent, string base64, string description)
+        [InlineData(null, null, null, null, 0F, 0F)]
+        [InlineData("", "", "", "", 0F, 0F)]
+        public async Task SaveNewNotificationEvent_EmptyAndNullParameters_returnErrorContainer(string idBarrick, string idPhenologicalEvent, string base64, string description, float lat, float lon)
         {
             //Arrange
 
             var repo = NotificationEventsInstances.GetInstance(KindOfInstance.DefaultReturnValuesNullCommonDb);
 
             //Action
-            var result = await repo.SaveNewNotificationEvent(idBarrick, idPhenologicalEvent, base64, description);
+            var result = await repo.SaveNewNotificationEvent(idBarrick, idPhenologicalEvent, base64, description, lat, lon);
             //Assert
             Assert.True(result.GetType() == typeof(ExtPostErrorContainer<string>));
         }
 
 
         [Theory]
-        [InlineData("a", "s", "d", "f")]
-        public async Task SaveNewNotificationEvent_differentParameters_returnOk(string idBarrick, string idPhenologicalEvent, string base64, string description)
+        [InlineData("a", "s", "d", "f", 0F, 0F)]
+        public async Task SaveNewNotificationEvent_differentParameters_returnOk(string idBarrick, string idPhenologicalEvent, string base64, string description, float lat, float lon)
         {
             //Arrange            
             var repo = NotificationEventsInstances.GetInstance(KindOfInstance.DefaultReturnValuesOkCommonDb);
 
             //Action
-            var result = await repo.SaveNewNotificationEvent(idBarrick, idPhenologicalEvent, base64, description);
+            var result = await repo.SaveNewNotificationEvent(idBarrick, idPhenologicalEvent, base64, description, lat, lon);
             //Assert
             Assert.True(result.MessageResult == ExtMessageResult.Ok);
         }
 
         [Theory]
-        [InlineData("a", "s", "d", "f")]
-        public async Task SaveNewNotificationEvent_differentParameters_returnExceptionOnBarracksEmpty(string idBarrick, string idPhenologicalEvent, string base64, string description)
+        [InlineData("a", "s", "d", "f", 0F, 0F)]
+        public async Task SaveNewNotificationEvent_differentParameters_returnExceptionOnBarracksEmpty(string idBarrick, string idPhenologicalEvent, string base64, string description, float lat, float lon)
         {
             //Arrange            
             var repo = NotificationEventsInstances.GetInstance(KindOfInstance.DefaultReturnExceptionOnBarracksEmpty);
 
             //Action
-            var result = await repo.SaveNewNotificationEvent(idBarrick, idPhenologicalEvent, base64, description);
+            var result = await repo.SaveNewNotificationEvent(idBarrick, idPhenologicalEvent, base64, description, lat, lon);
             //Assert
             Assert.True(result.GetType() == typeof(ExtPostErrorContainer<string>));
         }
 
         [Theory]
-        [InlineData("a", "s", "d", "f")]
-        public async Task SaveNewNotificationEvent_differentParameters_returnExceptionOnPhenologicalEmpty(string idBarrick, string idPhenologicalEvent, string base64, string description)
+        [InlineData("a", "s", "d", "f", 0F, 0F)]
+        public async Task SaveNewNotificationEvent_differentParameters_returnExceptionOnPhenologicalEmpty(string idBarrick, string idPhenologicalEvent, string base64, string description, float lat, float lon)
         {
             //Arrange            
             var repo = NotificationEventsInstances.GetInstance(KindOfInstance.DefaultReturnExceptionOnPhenologicalEmpty);
 
             //Action
-            var result = await repo.SaveNewNotificationEvent(idBarrick, idPhenologicalEvent, base64, description);
+            var result = await repo.SaveNewNotificationEvent(idBarrick, idPhenologicalEvent, base64, description, lat, lon);
             //Assert
             Assert.True(result.GetType() == typeof(ExtPostErrorContainer<string>));
         }
 
 
         [Theory]
-        [InlineData("a", "s", "d", "f")]
-        public async Task SaveNewNotificationEvent_differentParameters_returnExceptionOnElementExists(string idBarrick, string idPhenologicalEvent, string base64, string description)
+        [InlineData("a", "s", "d", "f", 0F, 0F)]
+        public async Task SaveNewNotificationEvent_differentParameters_returnExceptionOnElementExists(string idBarrick, string idPhenologicalEvent, string base64, string description, float lat, float lon)
         {
             //Arrange            
             var repo = NotificationEventsInstances.GetInstance(KindOfInstance.DefaultReturnValues);
 
             //Action
-            var result = await repo.SaveNewNotificationEvent(idBarrick, idPhenologicalEvent, base64, description);
+            var result = await repo.SaveNewNotificationEvent(idBarrick, idPhenologicalEvent, base64, description, lat, lon);
             //Assert
             Assert.True(result.GetType() == typeof(ExtPostErrorContainer<string>));
         }
 
         [Theory]
-        [InlineData("a", "s", "d", "f")]
-        public async Task SaveNewNotificationEvent_differentParameters_returnExceptionOnDbException(string idBarrick, string idPhenologicalEvent, string base64, string description)
+        [InlineData("a", "s", "d", "f", 0F, 0F)]
+        public async Task SaveNewNotificationEvent_differentParameters_returnExceptionOnDbException(string idBarrick, string idPhenologicalEvent, string base64, string description, float lat, float lon)
         {
             //Arrange            
             var repo = NotificationEventsInstances.GetInstance(KindOfInstance.DefaultReturnException);
 
             //Action
-            var result = await repo.SaveNewNotificationEvent(idBarrick, idPhenologicalEvent, base64, description);
+            var result = await repo.SaveNewNotificationEvent(idBarrick, idPhenologicalEvent, base64, description, lat, lon);
             //Assert
             Assert.True(result.GetType() == typeof(ExtPostErrorContainer<string>));
         }
