@@ -14,16 +14,11 @@ namespace trifenix.agro.microsoftgraph.operations
 {
     public class GraphApi : IGraphApi
     {
-        private ClaimsPrincipal _accessTokenClaims;
         public GraphApi(ClaimsPrincipal accessTokenClaim)
         {
             AccessTokenClaims = accessTokenClaim;
         }
-        public ClaimsPrincipal AccessTokenClaims
-        {
-            get => _accessTokenClaims;
-            set { _accessTokenClaims = value; }
-        }
+        public ClaimsPrincipal AccessTokenClaims { get; set; }
         private async Task<string> GetRoleName(string idRole)
         {
             HttpClient client = new HttpClient();
@@ -65,6 +60,11 @@ namespace trifenix.agro.microsoftgraph.operations
                 Console.WriteLine("Error en GetUserInfo():\n" + ex.StackTrace);
             }
             return null;
+        }
+
+        public Task<bool> CreateUserIntoActiveDirectory()
+        {
+            throw new NotImplementedException();
         }
     }
 }

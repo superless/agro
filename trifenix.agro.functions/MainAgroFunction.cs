@@ -420,64 +420,66 @@ namespace trifenix.agro.functions
         #region v2/notification_events
         [FunctionName("NotificationEvents")]
         public static async Task<IActionResult> NotificationEvents([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "v2/notification_events/{id?}")] HttpRequest req, string id,ILogger log){
-            //ClaimsPrincipal claims = await Auth.Validate(req);
-            //if (claims == null)
-            //    return new UnauthorizedResult();
-            //var manager = await ContainerMethods.AgroManager(claims);
-            //ExtGetContainer<NotificationEvent> result = null;
-            //switch (req.Method.ToLower())
-            //{
-            //    case "get":
-            //        if (!string.IsNullOrWhiteSpace(id)){
-            //            switch (id){
-            //                case "init":
-            //                    var resultEvent = await manager.CustomManager.MobileEvents.GetEventData();
-            //                    return ContainerMethods.GetJsonGetContainer(resultEvent, log);
-            //                case "ts":
-            //                    var resultTs = await manager.CustomManager.MobileEvents.GetMobileEventTimestamp();
-            //                    return ContainerMethods.GetJsonGetContainer(resultTs, log);
-            //                default:
-            //                    result = await manager.NotificationEvents.GetEvent(id);
-            //                    return ContainerMethods.GetJsonGetContainer(result, log);
-            //            }
-            //        }
-            //        break;
-            //    case "post":
-            //        return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-            //        {
-            //            var newModel = model["_parts"][0][1];
-            //            var idPhenologicalEvent = (string)newModel["idPhenologicalEvent"];
-            //            var description = (string)newModel["description"];
-            //            var base64 = (string)newModel["base64"];
-            //            var barrack = (string)newModel["idBarrack"];
-            //            var lat = (float)newModel["latitude"];
-            //            var lon = (float)newModel["longitude"];
-            //            var response = await db.NotificationEvents.SaveNewNotificationEvent(barrack, idPhenologicalEvent, base64, description, lat, lon);
-            //            var evt = await db.NotificationEvents.GetEvent(response.IdRelated);
-            //            var url = evt.Result.PicturePath;
-            //            await email.SendEmail("Notificacion",
-            //                $@"<html>
-            //                <body>
-            //                    <p> Estimado(a), </p>
-            //                    <p> Llego una notificacion </p>
-            //                    <img src='{url}' style='width:50%;height:auto;'>
-            //                    <p> Atentamente,<br> -Aresa </br></p>
-            //                </body>
-            //            </html>");
-            //            return response;
-            //        }, claims);
-            //}
-            //ExtGetContainer<List<NotificationEvent>> resultGetAll = await manager.NotificationEvents.GetEvents();
-            //return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
+            ClaimsPrincipal claims = await Auth.Validate(req);
+            if (claims == null)
+                return new UnauthorizedResult();
+            var manager = await ContainerMethods.AgroManager(claims);
             HttpClient client = new HttpClient();
             var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic model = JsonConvert.DeserializeObject(requestBody);
-            var newModel = model["_parts"][0][1];
-            byte[] byteArray = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(newModel));
+            dynamic body = JsonConvert.DeserializeObject(requestBody);
+            var newBody = body["_parts"][0][1];
+            byte[] byteArray = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(newBody));
             MemoryStream stream = new MemoryStream(byteArray);
             var inputData = new StreamContent(stream);
-            await client.PostAsync("https://134d2d27.ngrok.io/api/v2/debugroutes", inputData);
-            return null;
+            string ipNgrok = Environment.GetEnvironmentVariable("ipNgrok", EnvironmentVariableTarget.Process);
+            await client.PostAsync("https://" + ipNgrok + ".ngrok.io/api/v2/debugroutes", inputData);
+            ExtGetContainer<NotificationEvent> result = null;
+            switch (req.Method.ToLower())
+            {
+                case "get":
+                    if (!string.IsNullOrWhiteSpace(id))
+                    {
+                        switch (id)
+                        {
+                            case "init":
+                                var resultEvent = await manager.CustomManager.MobileEvents.GetEventData();
+                                return ContainerMethods.GetJsonGetContainer(resultEvent, log);
+                            case "ts":
+                                var resultTs = await manager.CustomManager.MobileEvents.GetMobileEventTimestamp();
+                                return ContainerMethods.GetJsonGetContainer(resultTs, log);
+                            default:
+                                result = await manager.NotificationEvents.GetEvent(id);
+                                return ContainerMethods.GetJsonGetContainer(result, log);
+                        }
+                    }
+                    break;
+                case "post":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var newModel = model["_parts"][0][1];
+                        var idPhenologicalEvent = (string)newModel["idPhenologicalEvent"];
+                        var description = (string)newModel["description"];
+                        var base64 = (string)newModel["base64"];
+                        var barrack = (string)newModel["idBarrack"];
+                        var lat = (float)newModel["latitude"];
+                        var lon = (float)newModel["longitude"];
+                        var response = await db.NotificationEvents.SaveNewNotificationEvent(barrack, idPhenologicalEvent, base64, description, lat, lon);
+                        var evt = await db.NotificationEvents.GetEvent(response.IdRelated);
+                        var url = evt.Result.PicturePath;
+                        await email.SendEmail("Notificacion",
+                            $@"<html>
+                            <body>
+                                <p> Estimado(a), </p>
+                                <p> Llego una notificacion </p>
+                                <img src='{url}' style='width:50%;height:auto;'>
+                                <p> Atentamente,<br> -Aresa </br></p>
+                            </body>
+                        </html>");
+                        return response;
+                    }, claims);
+            }
+            ExtGetContainer<List<NotificationEvent>> resultGetAll = await manager.NotificationEvents.GetEvents();
+            return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
         }
         #endregion
 
@@ -513,7 +515,6 @@ namespace trifenix.agro.functions
             ExtGetContainer<List<OutPutApplicationOrder>> resultGetAll = await manager.ApplicationOrders.GetApplicationOrders();
             return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
         }
-
         #endregion
 
         #region v2/sectors
@@ -889,11 +890,46 @@ namespace trifenix.agro.functions
         }
         #endregion
 
+        #region v2/executions
+        [FunctionName("Executions")]
+        public static async Task<IActionResult> Executions([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/executions/{id?}")] HttpRequest req, string id, ILogger log){
+            ClaimsPrincipal claims = await Auth.Validate(req);
+            if (claims == null)
+                return new UnauthorizedResult();
+            var manager = await ContainerMethods.AgroManager(claims);
+            //ExtGetContainer<OutPutApplicationOrder> result = null;
+            //switch (req.Method.ToLower())
+            //{
+            //    case "get":
+            //        if (!string.IsNullOrWhiteSpace(id))
+            //        {
+            //            result = await manager.ApplicationOrders.GetApplicationOrder(id);
+            //            return ContainerMethods.GetJsonGetContainer(result, log);
+            //        }
+            //        break;
+            //    case "post":
+            //        return await ContainerMethods.ApiPostOperations<string>(req.Body, log, async (db, model) =>
+            //        {
+            //            var input = JsonConvert.DeserializeObject<ApplicationOrderInput>(model.ToString());
+            //            return await db.ApplicationOrders.SaveNewApplicationOrder(input);
+            //        }, claims);
+            //    case "put":
+            //        return await ContainerMethods.ApiPostOperations<OutPutApplicationOrder>(req.Body, log, async (db, model) => {
+            //            var input = JsonConvert.DeserializeObject<ApplicationOrderInput>(model.ToString());
+            //            return await db.ApplicationOrders.SaveEditApplicationOrder(id, input);
+            //        }, claims);
+            //}
+            //ExtGetContainer<List<OutPutApplicationOrder>> resultGetAll = await manager.ApplicationOrders.GetApplicationOrders();
+            //return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
+            return null;
+        }
+        #endregion
+
         [FunctionName("DebugRoute")]
         public static async Task<IActionResult> DebugRoutes([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/debugroutes/{id?}")] HttpRequest req, ILogger log, string id){
             var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic result = JsonConvert.DeserializeObject(requestBody);
-            return null;
+            return result;
         }
 
     }

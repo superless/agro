@@ -5,12 +5,10 @@ namespace trifenix.agro.microsoftgraph.model
 {
     public class User
     {
-        private string _name;
-        private string _email;
         private List<string> _roleName;
 
-        public string Name { get => _name; }
-        public string Email { get => _email; }
+        public string Name { get; }
+        public string Email { get; }
         public List<string> RoleName
         {
             get
@@ -22,23 +20,20 @@ namespace trifenix.agro.microsoftgraph.model
         }
         public User(string name, string email, List<string> roleName)
         {
-            _name = name;
-            _email = email;
-            _roleName = roleName;
+            Name = name;
+            Email = email;
+            RoleName = roleName;
         }
     }
     public class UserInfo
     {
-        private DateTime _date;
-        private User _user;
-
-        public DateTime Date { get => _date; }
-        public User User { get => _user; }
+        public DateTime Date { get; }
+        public User User { get; }
 
         public UserInfo(DateTime date, User user)
         {
-            _date = date;
-            _user = user;
+            Date = date;
+            User = user;
         }
     }
 }
