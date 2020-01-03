@@ -25,12 +25,12 @@ namespace trifenix.agro.microsoftgraph.model
             RoleName = roleName;
         }
     }
-    public class UserInfo
+    public class UserActivity
     {
         public DateTime Date { get; }
         public User User { get; }
 
-        public UserInfo(DateTime date, User user)
+        public UserActivity(DateTime date, User user)
         {
             Date = date;
             User = user;

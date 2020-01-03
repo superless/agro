@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Text;
+using trifenix.agro.db.model.agro.orders;
 
 namespace trifenix.agro.functions
 {
@@ -897,30 +898,54 @@ namespace trifenix.agro.functions
             if (claims == null)
                 return new UnauthorizedResult();
             var manager = await ContainerMethods.AgroManager(claims);
-            //ExtGetContainer<OutPutApplicationOrder> result = null;
-            //switch (req.Method.ToLower())
-            //{
-            //    case "get":
-            //        if (!string.IsNullOrWhiteSpace(id))
-            //        {
-            //            result = await manager.ApplicationOrders.GetApplicationOrder(id);
-            //            return ContainerMethods.GetJsonGetContainer(result, log);
-            //        }
-            //        break;
-            //    case "post":
-            //        return await ContainerMethods.ApiPostOperations<string>(req.Body, log, async (db, model) =>
-            //        {
-            //            var input = JsonConvert.DeserializeObject<ApplicationOrderInput>(model.ToString());
-            //            return await db.ApplicationOrders.SaveNewApplicationOrder(input);
-            //        }, claims);
-            //    case "put":
-            //        return await ContainerMethods.ApiPostOperations<OutPutApplicationOrder>(req.Body, log, async (db, model) => {
-            //            var input = JsonConvert.DeserializeObject<ApplicationOrderInput>(model.ToString());
-            //            return await db.ApplicationOrders.SaveEditApplicationOrder(id, input);
-            //        }, claims);
-            //}
-            //ExtGetContainer<List<OutPutApplicationOrder>> resultGetAll = await manager.ApplicationOrders.GetApplicationOrders();
-            //return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
+            ExtGetContainer<ExecutionOrder> result = null;
+            switch (req.Method.ToLower()) {
+                case "get":
+                    if (!string.IsNullOrWhiteSpace(id)) {
+                        result = await manager.ExecutionOrders.GetExecutionOrderOrder(id);
+                        return ContainerMethods.GetJsonGetContainer(result, log);
+                    }
+                    break;
+                case "post":
+                    return await ContainerMethods.ApiPostOperations<string>(req.Body, log, async (db, model) => {
+                        string idOrder = (string)model["idOrder"];
+                        string idUserApplicator = (string)model["idUserApplicator"];
+                        string idNebulizer = (string)model["idNebulizer"];
+                        string idTractor = (string)model["idTractor"];
+                        string commentary = (string)model["commentary"];
+                        return await db.ExecutionOrders.SaveNewExecutionOrder(idOrder, idUserApplicator, idNebulizer, idTractor, commentary);
+                    }, claims);
+                case "put":
+                    return await ContainerMethods.ApiPostOperations<ExecutionOrder>(req.Body, log, async (db, model) => {
+                        string idOrder = (string)model["idOrder"];
+                        ExecutionStatus executionStatus = (ExecutionStatus)model["executionStatus"];
+                        FinishStatus finishStatus = (FinishStatus)model["finishStatus"];
+                        ClosedStatus closedStatus = (ClosedStatus)model["closedStatus"];
+                        string idUserApplicator = (string)model["idUserApplicator"];
+                        string idNebulizer = (string)model["idNebulizer"];
+                        string idTractor = (string)model["idTractor"];
+                        return await db.ExecutionOrders.SaveEditExecutionOrder(id, idOrder, executionStatus, finishStatus, closedStatus, idUserApplicator, idNebulizer, idTractor);
+                    }, claims);
+            }
+            ExtGetContainer<List<ExecutionOrder>> resultGetAll = await manager.ExecutionOrders.GetExecutionOrderOrders();
+            return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
+        }
+        #endregion
+
+        #region v2/executionsAddCommentary
+        [FunctionName("ExecutionsAddCommentary")]
+        public static async Task<IActionResult> ExecutionsAddCommentary([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/executions/add_commentary/{id}")] HttpRequest req, string id, ILogger log) {
+            ClaimsPrincipal claims = await Auth.Validate(req);
+            if (claims == null)
+                return new UnauthorizedResult();
+            var manager = await ContainerMethods.AgroManager(claims);
+            switch (req.Method.ToLower()) {
+                case "post":
+                    return await ContainerMethods.ApiPostOperations<ExecutionOrder>(req.Body, log, async (db, model) => {
+                        string commentary = (string)model["commentary"];
+                        return await db.ExecutionOrders.AddCommentaryToExecutionOrder(id, commentary);
+                    }, claims);
+            }
             return null;
         }
         #endregion

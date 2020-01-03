@@ -54,7 +54,7 @@ namespace trifenix.agro.external.operations.entities.orders
                     s.SeasonId = _idSeason;
                     s.BarracksId = idBarracks;
                     s.OrderFolderId = idOrderFolder;
-                    s.ModifyBy.Add(new UserInfo(DateTime.Now, modifier));
+                    s.ModifyBy.Add(new UserActivity(DateTime.Now, modifier));
                     s.Created = DateTime.Now;
                     return s;
                 },
@@ -77,7 +77,7 @@ namespace trifenix.agro.external.operations.entities.orders
                    BarracksId = idBarracks,
                    Created = DateTime.Now,
                    OrderFolderId = idOrderFolder,
-                   Creator = new UserInfo(DateTime.Now, creator)
+                   Creator = new UserActivity(DateTime.Now, creator)
                }),
                s => s.Name.Equals(name),
                $"ya existe preorden fenologica con nombre {name}"

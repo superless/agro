@@ -60,7 +60,7 @@ namespace trifenix.agro.external.operations.entities.orders
                 order.Stage = PhenologicalStage.Waiting;
                 order.SeasonId = _args.IdSeason;
                 order.PhenologicalEvent = elements.PhenologicalEvent;
-                order.ModifyBy.Add(new UserInfo(DateTime.Now, modifier));
+                order.ModifyBy.Add(new UserActivity(DateTime.Now, modifier));
                 order.Specie = elements.Specie;
                 order.Ingredient = elements.Ingredient != null ? new LocalIngredient { Id = idIngredient, Name = elements.Ingredient.Name } : null;
                 order.Category = elements.Category;
@@ -92,7 +92,7 @@ namespace trifenix.agro.external.operations.entities.orders
                 {
                     Id = Guid.NewGuid().ToString("N"),
                     ApplicationTarget = elements.Target,
-                    Creator = new UserInfo(DateTime.Now, creator),
+                    Creator = new UserActivity(DateTime.Now, creator),
                     Category = elements.Category,
                     Ingredient = elements.Ingredient != null ? new LocalIngredient { Id = idIngredient, Name = elements.Ingredient.Name } : null,
                     PhenologicalEvent = elements.PhenologicalEvent,
