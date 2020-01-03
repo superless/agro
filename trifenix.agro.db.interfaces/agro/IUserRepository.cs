@@ -10,6 +10,8 @@ namespace trifenix.agro.db.interfaces.agro
 
         Task<UserApplicator> GetUser(string id);
 
+        Task<UserApplicator> GetUserFromToken(string objectId);
+
         IQueryable<UserApplicator> GetUsers();
 
     }
