@@ -31,7 +31,7 @@ namespace trifenix.agro.db.model.agro
         /// </summary>
         public PhenologicalEvent PhenologicalEvent { get; set; }
 
-        public UserInfo Creator { get; set; }
+        public UserActivity Creator { get; set; }
 
         /// <summary>
         /// Ruta o Url en internet de la imagen subida.

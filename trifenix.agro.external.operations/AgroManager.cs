@@ -54,7 +54,7 @@ namespace trifenix.agro.external.operations
 
         public ISpecieOperations Species => new SpecieOperations(_repository.Species, new CommonDbOperations<Specie>());
 
-        public IRootstockOperations Rootstock => new RootstockOperations(_repository.Rootstock, new CommonDbOperations<Rootstock>());
+        public IRootstockOperations Rootstock => new RootstockOperations(_repository.Rootstocks, new CommonDbOperations<Rootstock>());
 
         public IIngredientCategoryOperations IngredientCategories => new IngredientCategoryOperations(_repository.Categories, new CommonDbOperations<IngredientCategory>());
 
@@ -66,7 +66,7 @@ namespace trifenix.agro.external.operations
 
         public IPlotLandOperations PlotLands => new PlotLandOperations(_repository.PlotLands, _repository.Sectors, new CommonDbOperations<PlotLand>(), _idSeason);
 
-        public IBarrackOperations Barracks => new BarrackOperations(_repository.Barracks, _repository.Rootstock, _repository.PlotLands, _repository.Varieties, new CommonDbOperations<Barrack>(), _idSeason);
+        public IBarrackOperations Barracks => new BarrackOperations(_repository.Barracks, _repository.Rootstocks, _repository.PlotLands, _repository.Varieties, new CommonDbOperations<Barrack>(), _idSeason);
 
         public IVarietyOperations Varieties => new VarietyOperations(_repository.Varieties, _repository.Species, new CommonDbOperations<Variety>());
 
@@ -87,7 +87,7 @@ namespace trifenix.agro.external.operations
 
         public IApplicationOrderOperations ApplicationOrders => new ApplicationOrderOperations(new ApplicationOrderArgs
         {
-            ApplicationOrder = _repository.Order,
+            ApplicationOrder = _repository.Orders,
             GraphApi = _graphApi,
             Barracks = _repository.Barracks,
             Product = _repository.Products,
@@ -123,5 +123,6 @@ namespace trifenix.agro.external.operations
         });
         public IPhenologicalPreOrderOperations PhenologicalPreOrders => new PhenologicalPreOrdersOperations(_repository.PhenologicalPreOrders, new CommonDbOperations<PhenologicalPreOrder>(), _idSeason, _graphApi);
 
+        public IExecutionOrderOperations ExecutionOrders => new ExecutionOrderOperations(_repository.ExecutionOrders, _repository.Orders, _repository.Users, _repository.Nebulizers, _repository.Tractors, new CommonDbOperations<ExecutionOrder>(), _graphApi);
     }
 }

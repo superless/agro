@@ -1,0 +1,33 @@
+﻿using System.Linq;
+using System.Threading.Tasks;
+using trifenix.agro.db.interfaces;
+using trifenix.agro.db.interfaces.agro.orders;
+using trifenix.agro.db.model.agro.orders;
+
+namespace trifenix.agro.db.applicationsReference.agro.orders
+{
+    public class ExecutionOrderRepository : IExecutionOrderRepository
+    {
+
+        private readonly IMainDb<ExecutionOrder> _db;
+        public ExecutionOrderRepository(IMainDb<ExecutionOrder> db) 
+        {
+            _db = db;
+        }
+
+        public async Task<string> CreateUpdateExecutionOrder(ExecutionOrder executionOrder)
+        {
+            return await _db.CreateUpdate(executionOrder);
+        }
+
+        public async Task<ExecutionOrder> GetExecutionOrder(string id)
+        {
+            return await _db.GetEntity(id);
+        }
+
+        public IQueryable<ExecutionOrder> GetExecutionOrders()
+        {
+            return _db.GetEntities();
+        }
+    }
+}

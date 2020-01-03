@@ -119,7 +119,7 @@ namespace trifenix.agro.external.operations.entities.orders
                 s => {
                     appNewOrder.Creator = s.Creator;
                     appNewOrder.ModifyBy = s.ModifyBy;
-                    appNewOrder.ModifyBy.Add(new UserInfo(DateTime.Now, modifier));
+                    appNewOrder.ModifyBy.Add(new UserActivity(DateTime.Now, modifier));
                     return appNewOrder;
                 },
                 _args.ApplicationOrder.CreateUpdate,
@@ -160,7 +160,7 @@ namespace trifenix.agro.external.operations.entities.orders
                 EndDate = input.EndDate,
                 Wetting = input.Wetting,
                 ApplicationInOrders = applications,
-                Creator = new UserInfo(DateTime.Now, creator),
+                Creator = new UserActivity(DateTime.Now, creator),
                 PhenologicalPreOrders = phenologicalPreOrders
             };
         }

@@ -39,16 +39,25 @@ namespace trifenix.agro.db.model.agro.orders
         public Nebulizer Nebulizer { get; set; }
         public Tractor Tractor { get; set; }
 
-        public List<Comments> Comments;
-
-        public UserInfo Creator { get; set; }
-
-        private List<UserInfo> _modifyBy;
-        public List<UserInfo> ModifyBy
+        private List<Comments> _comments;
+        public List<Comments> Comments
         {
             get
             {
-                _modifyBy = _modifyBy ?? new List<UserInfo>();
+                _comments = _comments ?? new List<Comments>();
+                return _comments;
+            }
+            set { _comments = value; }
+        }
+
+        public UserActivity Creator { get; set; }
+
+        private List<UserActivity> _modifyBy;
+        public List<UserActivity> ModifyBy
+        {
+            get
+            {
+                _modifyBy = _modifyBy ?? new List<UserActivity>();
                 return _modifyBy;
             }
             set { _modifyBy = value; }
@@ -58,8 +67,14 @@ namespace trifenix.agro.db.model.agro.orders
 
     public class Comments {
 
-        public UserInfo UserInfo;
-        public string commentary;
+        public UserActivity _userActivity;
+        public string _commentary;
+
+        public Comments(UserActivity UserActivity, string Commentary)
+        {
+            _userActivity = UserActivity;
+            _commentary = Commentary;
+        }
 
     }
 

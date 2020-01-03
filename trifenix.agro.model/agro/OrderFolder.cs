@@ -14,14 +14,14 @@ namespace trifenix.agro.db.model.agro
 
         public PhenologicalEvent PhenologicalEvent { get; set; }
 
-        public UserInfo Creator { get; set; }
+        public UserActivity Creator { get; set; }
 
-        private List<UserInfo> _modifyBy;
-        public List<UserInfo> ModifyBy
+        private List<UserActivity> _modifyBy;
+        public List<UserActivity> ModifyBy
         {
             get
             {
-                _modifyBy = _modifyBy ?? new List<UserInfo>();
+                _modifyBy = _modifyBy ?? new List<UserActivity>();
                 return _modifyBy;
             }
             set { _modifyBy = value; }

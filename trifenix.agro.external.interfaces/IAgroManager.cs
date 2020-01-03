@@ -53,6 +53,8 @@ namespace trifenix.agro.external.interfaces
         ICustomManager CustomManager { get; }
 
         IApplicationOrderOperations ApplicationOrders { get; }
-               
+
+        IExecutionOrderOperations ExecutionOrders { get; }
+
     }
 }
