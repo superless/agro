@@ -15,6 +15,7 @@ namespace trifenix.agro.functions
         //Retorna true si posee token de acceso valido, de lo contrario retorna false
         public static async Task<ClaimsPrincipal> Validate(HttpRequest request)
         {
+            Console.WriteLine("Debe autenticar",  Environment.GetEnvironmentVariable("mustBeAuthenticated", EnvironmentVariableTarget.Process));
             if (!MustBeAuthenticated())
                 return new ClaimsPrincipal();
             string accessToken;
