@@ -29,5 +29,11 @@ namespace trifenix.agro.db.applicationsReference.agro
         {
             return await _db.GetEntity(id);
         }
+
+        public async Task<UserApplicator> GetUserFromToken(string objectId)
+        {
+            var user = await _db.Store.QuerySingleAsync($"select * from c where c.ObjectIdAAD = '{objectId}'");
+            return user;
+        }
     }
 }

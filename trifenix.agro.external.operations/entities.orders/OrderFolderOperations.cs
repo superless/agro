@@ -7,7 +7,6 @@ using trifenix.agro.db.model.agro.local;
 using trifenix.agro.external.interfaces.entities.orders;
 using trifenix.agro.external.operations.entities.orders.args;
 using trifenix.agro.external.operations.helper;
-using trifenix.agro.microsoftgraph.model;
 using trifenix.agro.model.external;
 
 namespace trifenix.agro.external.operations.entities.orders
@@ -44,7 +43,8 @@ namespace trifenix.agro.external.operations.entities.orders
         }
 
         public async Task<ExtPostContainer<OrderFolder>> SaveEditOrderFolder(string id, string idPhenologicalEvent, string idApplicationTarget, string categoryId, string idSpecie, string idIngredient){
-            var modifier = await _args.GraphApi.GetUserInfo();
+            var modifier = await _args.GraphApi.GetUserFromToken();
+            var userActivity = new UserActivity(DateTime.Now, modifier);
             try
             {
                 var elements = await GetElementsToFolder(idPhenologicalEvent, idApplicationTarget, categoryId, idSpecie, idIngredient);
@@ -60,7 +60,7 @@ namespace trifenix.agro.external.operations.entities.orders
                 order.Stage = PhenologicalStage.Waiting;
                 order.SeasonId = _args.IdSeason;
                 order.PhenologicalEvent = elements.PhenologicalEvent;
-                order.ModifyBy.Add(new UserInfo(DateTime.Now, modifier));
+                order.ModifyBy.Add(userActivity);
                 order.Specie = elements.Specie;
                 order.Ingredient = elements.Ingredient != null ? new LocalIngredient { Id = idIngredient, Name = elements.Ingredient.Name } : null;
                 order.Category = elements.Category;
@@ -80,8 +80,10 @@ namespace trifenix.agro.external.operations.entities.orders
         }
 
         public async Task<ExtPostContainer<string>> SaveNewOrderFolder(string idPhenologicalEvent, string idApplicationTarget, string categoryId, string idSpecie, string idIngredient){
-            var creator = await _args.GraphApi.GetUserInfo();
-            try{
+            var creator = await _args.GraphApi.GetUserFromToken();
+            var userActivity = new UserActivity(DateTime.Now, creator);
+            try
+            {
                 var elements = await GetElementsToFolder(idPhenologicalEvent, idApplicationTarget, categoryId, idSpecie, idIngredient);
 
                 if (!elements.Success)
@@ -92,7 +94,7 @@ namespace trifenix.agro.external.operations.entities.orders
                 {
                     Id = Guid.NewGuid().ToString("N"),
                     ApplicationTarget = elements.Target,
-                    Creator = new UserInfo(DateTime.Now, creator),
+                    Creator = userActivity,
                     Category = elements.Category,
                     Ingredient = elements.Ingredient != null ? new LocalIngredient { Id = idIngredient, Name = elements.Ingredient.Name } : null,
                     PhenologicalEvent = elements.PhenologicalEvent,

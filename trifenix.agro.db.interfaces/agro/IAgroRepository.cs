@@ -7,8 +7,6 @@ namespace trifenix.agro.db.interfaces.agro
 {
     public interface IAgroRepository
     {
-
-
         AgroDbArguments DbArguments { get; }
         IApplicationTargetRepository Targets { get; }
 
@@ -30,7 +28,7 @@ namespace trifenix.agro.db.interfaces.agro
 
         ISpecieRepository Species { get; }
 
-        IRootstockRepository Rootstock { get; }
+        IRootstockRepository Rootstocks { get; }
 
         ISeasonRepository Seasons { get; }
 
@@ -55,13 +53,9 @@ namespace trifenix.agro.db.interfaces.agro
         ICertifiedEntityRepository CertifiedEntities { get; }
 
 
-        IApplicationOrderRepository Order { get;  }
+        IApplicationOrderRepository Orders { get;  }
 
-
-
-
-
-
+        IExecutionOrderRepository ExecutionOrders { get; }
 
     }
 }

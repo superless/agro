@@ -15,8 +15,6 @@ namespace trifenix.agro.db.applicationsReference
 
         public ICosmosStore<T> Store { get; private set; }
 
-        
-
         public MainDb(AgroDbArguments args)
         {
             StoreSettings = new CosmosStoreSettings(args.NameDb, args.EndPointUrl, args.PrimaryKey);
@@ -26,33 +24,26 @@ namespace trifenix.agro.db.applicationsReference
         }
 
         public async Task<string> CreateUpdate(T entity) {
-            if (string.IsNullOrWhiteSpace(entity.Id)) throw new NonIdException<DocumentBase>(entity);
-
+            if (string.IsNullOrWhiteSpace(entity.Id))
+                throw new NonIdException<DocumentBase>(entity);
             var result = await Store.UpsertAsync(entity);
-            
-
-            if (!result.IsSuccess) throw result.Exception;
-
+            if (!result.IsSuccess)
+                throw result.Exception;
             return result.Entity.Id;
         }
 
         public async Task<T> GetEntity(string uniqueId) {
             var entity = (T)Activator.CreateInstance(typeof(T));
-
             return await Store.FindAsync(uniqueId, entity.CosmosEntityName);
         }
 
         public  IQueryable<T> GetEntities() {
-
-            
             return Store.Query();
         }
 
         public async Task<long> GetTotalElements() {
             return await Store.QuerySingleAsync<long>("SELECT VALUE COUNT(1) FROM c");
         }
+
     }
-
-
-
 }

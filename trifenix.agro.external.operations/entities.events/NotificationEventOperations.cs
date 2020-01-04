@@ -7,10 +7,10 @@ using trifenix.agro.db.interfaces.agro.events;
 using trifenix.agro.db.interfaces.agro.fields;
 using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model.agro.local;
 using trifenix.agro.external.interfaces.entities.events;
 using trifenix.agro.external.operations.helper;
 using trifenix.agro.microsoftgraph.interfaces;
-using trifenix.agro.microsoftgraph.model;
 using trifenix.agro.model.external;
 using trifenix.agro.storage.interfaces;
 using trifenix.agro.weather.interfaces;
@@ -66,7 +66,6 @@ namespace trifenix.agro.external.operations.entities.events
             }
             catch (Exception e)
             {
-
                 return OperationHelper.GetException<NotificationEvent>(e, e.Message);
             }
         }
@@ -78,14 +77,12 @@ namespace trifenix.agro.external.operations.entities.events
         /// <returns>contenedor con la lista de eventos</returns>
         public async Task<ExtGetContainer<List<NotificationEvent>>> GetEvents()
         {
-
             try
             {
                 return await GetEventsWrapper(_repo.GetNotificationEvents());
             }
             catch (Exception e)
             {
-
                 return OperationHelper.GetException<List<NotificationEvent>>(e, e.Message);
             }
         }
@@ -155,7 +152,8 @@ namespace trifenix.agro.external.operations.entities.events
                 {
                     imgPath = await _uploadImage.UploadImageBase64(base64);
                 }
-                //var creator = await _graphApi.GetUserInfo();
+                var creator = await _graphApi.GetUserFromToken();
+                var userActivity = new UserActivity(DateTime.Now, creator);
                 var weather = await _weatherApi.GetWeather(lat, lon);
                 return await OperationHelper.CreateElement(_commonDb, _repo.GetNotificationEvents(),
                    async s => await _repo.CreateUpdateNotificationEvent(new NotificationEvent
@@ -166,7 +164,7 @@ namespace trifenix.agro.external.operations.entities.events
                        Description = description,
                        PhenologicalEvent = localPhenological,
                        PicturePath = imgPath,
-                       Creator = null,
+                       Creator = userActivity,
                        Weather = weather
                    }),
                    s => false,

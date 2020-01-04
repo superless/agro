@@ -40,7 +40,7 @@ namespace trifenix.agro.db.applicationsReference.agro
 
         public ISpecieRepository Species => new SpecieRepository(new MainDb<Specie>(DbArguments));
 
-        public IRootstockRepository Rootstock => new RootstockRepository(new MainDb<Rootstock>(DbArguments));
+        public IRootstockRepository Rootstocks => new RootstockRepository(new MainDb<Rootstock>(DbArguments));
 
         public ISeasonRepository Seasons => new SeasonRepository(new MainDb<Season>(DbArguments));
 
@@ -62,6 +62,9 @@ namespace trifenix.agro.db.applicationsReference.agro
 
         public ICertifiedEntityRepository CertifiedEntities => new CertifiedEntityRepository(new MainDb<CertifiedEntity>(DbArguments));
 
-        public IApplicationOrderRepository Order => new ApplicationOrderRepository(new MainDb<ApplicationOrder>(DbArguments));
+        public IApplicationOrderRepository Orders => new ApplicationOrderRepository(new MainDb<ApplicationOrder>(DbArguments));
+
+        public IExecutionOrderRepository ExecutionOrders => new ExecutionOrderRepository(new MainDb<ExecutionOrder>(DbArguments));
+
     }
 }

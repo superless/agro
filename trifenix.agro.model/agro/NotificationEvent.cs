@@ -1,7 +1,7 @@
 ﻿using Cosmonaut;
 using Cosmonaut.Attributes;
 using System;
-using trifenix.agro.microsoftgraph.model;
+using trifenix.agro.db.model.agro.local;
 using trifenix.agro.weather.model;
 
 namespace trifenix.agro.db.model.agro
@@ -31,7 +31,7 @@ namespace trifenix.agro.db.model.agro
         /// </summary>
         public PhenologicalEvent PhenologicalEvent { get; set; }
 
-        public UserInfo Creator { get; set; }
+        public UserActivity Creator { get; set; }
 
         /// <summary>
         /// Ruta o Url en internet de la imagen subida.
