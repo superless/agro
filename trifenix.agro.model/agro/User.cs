@@ -10,6 +10,8 @@ namespace trifenix.agro.db.model.agro
     
         public override string Id { get; set; }
 
+        public string ObjectIdAAD { get; set; }
+
         public string Name { get; set; }
 
         public string Rut { get; set; }

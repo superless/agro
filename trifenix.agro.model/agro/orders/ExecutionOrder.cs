@@ -2,7 +2,7 @@
 using Cosmonaut.Attributes;
 using System;
 using System.Collections.Generic;
-using trifenix.agro.microsoftgraph.model;
+using trifenix.agro.db.model.agro.local;
 
 namespace trifenix.agro.db.model.agro.orders
 {
@@ -12,7 +12,7 @@ namespace trifenix.agro.db.model.agro.orders
         /// Identificador de la entidad
         /// </summary>
         public override string Id { get; set; }
-        public string IdOrder { get; set; }
+        public ApplicationOrder Order { get; set; }
 
         public ExecutionStatus ExecutionStatus;
 
@@ -79,15 +79,15 @@ namespace trifenix.agro.db.model.agro.orders
     }
 
     public enum FinishStatus {
-        Successful = 0,
-        InComplete = 1,
-        Cancelled = 2,
-        Rescheduled = 3
+        Successful = 1,
+        InComplete = 2,
+        Cancelled = 3,
+        Rescheduled = 4
     }
 
     public enum ClosedStatus {
-        Successful = 0,
-        Failed = 1
+        Successful = 1,
+        Failed = 2
     }
 
     public enum ExecutionStatus {

@@ -788,30 +788,26 @@ namespace trifenix.agro.functions
                 return new UnauthorizedResult();
             var manager = await ContainerMethods.AgroManager(claims);
             ExtGetContainer<UserApplicator> result = null;
-            switch (req.Method.ToLower())
-            {
+            switch (req.Method.ToLower()) {
                 case "get":
-                    if (!string.IsNullOrWhiteSpace(id))
-                    {
+                    if (!string.IsNullOrWhiteSpace(id)) {
                         result = await manager.Users.GetUser(id);
                         return ContainerMethods.GetJsonGetContainer(result, log);
                     }
                     break;
                 case "post":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
-                        var name = (string)model["name"];
-                        var rut = (string)model["rut"];
-                        var email = (string)model["email"];
-                        var idJob = (string)model["idJob"];
-                        var idsRoles = (string[])model["idsRoles"].ToObject<string[]>();
-                        var idTractor = (string)model["idTractor"];
-                        var idNebulizer = (string)model["idNebulizer"];
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
+                        var name = (string)model?["name"];
+                        var rut = (string)model?["rut"];
+                        var email = (string)model?["email"];
+                        var idJob = (string)model?["idJob"];
+                        var idsRoles = (string[])model?["idsRoles"]?.ToObject<string[]>();
+                        var idTractor = (string)model?["idTractor"];
+                        var idNebulizer = (string)model?["idNebulizer"];
                         return await db.Users.SaveNewUser(name, rut, email, idJob, idsRoles, idNebulizer, idTractor);
                     }, claims);
                 case "put":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
                         var name = (string)model["name"];
                         var rut = (string)model["rut"];
                         var email = (string)model["email"];
@@ -824,6 +820,18 @@ namespace trifenix.agro.functions
             }
             ExtGetContainer<List<UserApplicator>> resultGetAll = await manager.Users.GetUsers();
             return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
+        }
+        #endregion
+
+        #region v2/userInfo
+        [FunctionName("UserInfo")]
+        public static async Task<IActionResult> UsersRoles([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/userinfo")] HttpRequest req, ILogger log){
+            ClaimsPrincipal claims = await Auth.Validate(req);
+            if (claims == null)
+                return new UnauthorizedResult();
+            var manager = await ContainerMethods.AgroManager(claims);
+            ExtGetContainer<UserApplicator> result = await manager.Users.GetUserFromToken();
+            return ContainerMethods.GetJsonGetContainer(result, log);
         }
         #endregion
 
@@ -934,19 +942,15 @@ namespace trifenix.agro.functions
 
         #region v2/executionsAddCommentary
         [FunctionName("ExecutionsAddCommentary")]
-        public static async Task<IActionResult> ExecutionsAddCommentary([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/executions/add_commentary/{id}")] HttpRequest req, string id, ILogger log) {
+        public static async Task<IActionResult> ExecutionsAddCommentary([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "v2/executions/add_commentary/{id}")] HttpRequest req, string id, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
             var manager = await ContainerMethods.AgroManager(claims);
-            switch (req.Method.ToLower()) {
-                case "post":
-                    return await ContainerMethods.ApiPostOperations<ExecutionOrder>(req.Body, log, async (db, model) => {
-                        string commentary = (string)model["commentary"];
-                        return await db.ExecutionOrders.AddCommentaryToExecutionOrder(id, commentary);
-                    }, claims);
-            }
-            return null;
+            return await ContainerMethods.ApiPostOperations<ExecutionOrder>(req.Body, log, async (db, model) => {
+                string commentary = (string)model["commentary"];
+                return await db.ExecutionOrders.AddCommentaryToExecutionOrder(id, commentary);
+            }, claims);
         }
         #endregion
 

@@ -5,11 +5,11 @@ using trifenix.agro.db.interfaces.agro;
 using trifenix.agro.db.interfaces.agro.orders;
 using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model.agro.local;
 using trifenix.agro.db.model.agro.orders;
 using trifenix.agro.external.interfaces.entities.orders;
 using trifenix.agro.external.operations.helper;
 using trifenix.agro.microsoftgraph.interfaces;
-using trifenix.agro.microsoftgraph.model;
 using trifenix.agro.model.external;
 
 namespace trifenix.agro.external.operations.entities.orders
@@ -23,7 +23,6 @@ namespace trifenix.agro.external.operations.entities.orders
         private readonly ITractorRepository _repoTractors;
         private readonly ICommonDbOperations<ExecutionOrder> _commonDb;
         private readonly IGraphApi _graphApi;
-
 
         public ExecutionOrderOperations(IExecutionOrderRepository repo, IApplicationOrderRepository repoOrders, IUserRepository repoUsers, INebulizerRepository repoNebulizers, ITractorRepository repoTractors, ICommonDbOperations<ExecutionOrder> commonDb, IGraphApi graphApi) {
             _repo = repo;
@@ -50,7 +49,8 @@ namespace trifenix.agro.external.operations.entities.orders
 
         public async Task<ExtPostContainer<string>> SaveNewExecutionOrder(string idOrder, string idUserApplicator, string idNebulizer, string idTractor, string commentary)
         {
-            var creator = await _graphApi.GetUserInfo();
+            //var creator = await _graphApi.GetUserFromToken();
+            UserApplicator creator = null;
             var userActivity = new UserActivity(DateTime.Now, creator);
             ApplicationOrder order = await _repoOrders.GetApplicationOrder(idOrder);
             if (order == null)
@@ -66,8 +66,7 @@ namespace trifenix.agro.external.operations.entities.orders
                 if (nebulizer == null)
                     return OperationHelper.PostNotFoundElementException<string>($"No se encontró la nebulizadora con id {idNebulizer}", idNebulizer);
             }
-            if (!String.IsNullOrWhiteSpace(idTractor))
-            {
+            if (!String.IsNullOrWhiteSpace(idTractor)) {
                 tractor = await _repoTractors.GetTractor(idTractor);
                 if (tractor == null)
                     return OperationHelper.PostNotFoundElementException<string>($"No se encontró el tractor con id {idTractor}", idTractor);
@@ -79,10 +78,8 @@ namespace trifenix.agro.external.operations.entities.orders
                async s => await _repo.CreateUpdateExecutionOrder(new ExecutionOrder
                {
                    Id = s,
-                   IdOrder = idOrder,
+                   Order = order,
                    ExecutionStatus = 0,
-                   FinishStatus = 0,
-                   ClosedStatus = 0,
                    UserApplicator = userApplicator,
                    Nebulizer = nebulizer,
                    Tractor = tractor,
@@ -97,7 +94,8 @@ namespace trifenix.agro.external.operations.entities.orders
         public async Task<ExtPostContainer<ExecutionOrder>> SaveEditExecutionOrder(string id, string idOrder, ExecutionStatus executionStatus, FinishStatus finishStatus, ClosedStatus closedStatus, string idUserApplicator, string idNebulizer, string idTractor)
         {
             var element = await _repo.GetExecutionOrder(id);
-            var modifier = await _graphApi.GetUserInfo();
+            //var modifier = await _graphApi.GetUserFromToken();
+            UserApplicator modifier = null;
             var userActivity = new UserActivity(DateTime.Now, modifier);
             ApplicationOrder order = await _repoOrders.GetApplicationOrder(idOrder);
             if (order == null)
@@ -123,7 +121,7 @@ namespace trifenix.agro.external.operations.entities.orders
                 id,
                 element,
                 s => {
-                    s.IdOrder = idOrder;
+                    s.Order = order;
                     s.ExecutionStatus = executionStatus;
                     s.FinishStatus = finishStatus;
                     s.ClosedStatus = closedStatus;
@@ -142,7 +140,8 @@ namespace trifenix.agro.external.operations.entities.orders
 
         public async Task<ExtPostContainer<ExecutionOrder>> AddCommentaryToExecutionOrder(string idExecutionOrder, string commentary) {
             var element = await _repo.GetExecutionOrder(idExecutionOrder);
-            var modifier = await _graphApi.GetUserInfo();
+            //var modifier = await _graphApi.GetUserFromToken();
+            UserApplicator modifier = null;
             var userActivity = new UserActivity(DateTime.Now, modifier);
             if (String.IsNullOrWhiteSpace(commentary))
                 return OperationHelper.PostNotFoundElementException<ExecutionOrder>("El comentario no puede estar vacio.");

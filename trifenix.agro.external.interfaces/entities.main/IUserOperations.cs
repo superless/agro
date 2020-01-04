@@ -13,6 +13,8 @@ namespace trifenix.agro.external.interfaces.entities.main
 
         Task<ExtGetContainer<UserApplicator>> GetUser(string id);
 
+        Task<ExtGetContainer<UserApplicator>> GetUserFromToken();
+
         Task<ExtGetContainer<List<UserApplicator>>> GetUsers();
 
     }

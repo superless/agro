@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Graph;
+using Microsoft.Identity.Client;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -7,64 +9,70 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using trifenix.agro.db.interfaces.agro;
+using trifenix.agro.db.model.agro;
 using trifenix.agro.microsoftgraph.interfaces;
-using trifenix.agro.microsoftgraph.model;
 
 namespace trifenix.agro.microsoftgraph.operations
 {
-    public class GraphApi : IGraphApi
-    {
-        public GraphApi(ClaimsPrincipal accessTokenClaim)
-        {
-            AccessTokenClaims = accessTokenClaim;
-        }
+    public class GraphApi : IGraphApi {
+
+        private IConfidentialClientApplication _confidentialClientApplication;
+        private readonly IUserRepository _repoUsers;
         public ClaimsPrincipal AccessTokenClaims { get; set; }
-        private async Task<string> GetRoleName(string idRole)
-        {
-            HttpClient client = new HttpClient();
-            var values = new Dictionary<string, string>{
-                { "grant_type", "client_credentials" },
-                { "scope", "https://graph.microsoft.com/.default" },
-                { "client_id", "a81f0ad4-912b-46d3-ba3e-7bf605693242" },
-                { "client_secret", "gUjIa4F=NXlAwwMCF2j2SFMMj3?m@=FM" }
-            };
-            var content = new FormUrlEncodedContent(values);
-            var response = await client.PostAsync("https://login.microsoftonline.com/jhmad.onmicrosoft.com/oauth2/v2.0/token", content);
-            string responseBody = await response.Content.ReadAsStringAsync();
-            dynamic json = JsonConvert.DeserializeObject(responseBody);
-            var requestMessage = new HttpRequestMessage(HttpMethod.Get, "https://graph.microsoft.com/v1.0/directoryRoles");
-            requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", (string)json.access_token);
-            response = await client.SendAsync(requestMessage);
-            client.Dispose();
-            responseBody = await response.Content.ReadAsStringAsync();
-            json = JsonConvert.DeserializeObject(responseBody);
-            var arrayOfRoles = (JArray)json.value;
-            string roleName = ((JObject)arrayOfRoles.FirstOrDefault(r => r["roleTemplateId"].ToString().Equals(idRole))).Value<string>("displayName");
-            string roleTransformation = Environment.GetEnvironmentVariable("roleTransformation", EnvironmentVariableTarget.Process);
-            json = JsonConvert.DeserializeObject(roleTransformation);
-            return json[roleName];
+
+        public GraphApi(ClaimsPrincipal accessTokenClaim, IUserRepository repoUsers) {
+            AccessTokenClaims = accessTokenClaim;
+            _confidentialClientApplication = ConfidentialClientApplicationBuilder
+                .Create(Environment.GetEnvironmentVariable("clientID", EnvironmentVariableTarget.Process))
+                .WithAuthority("https://login.microsoftonline.com/" + Environment.GetEnvironmentVariable("tenantID", EnvironmentVariableTarget.Process) + "/v2.0")
+                .WithClientSecret(Environment.GetEnvironmentVariable("clientSecret", EnvironmentVariableTarget.Process))
+                .Build();
+            _repoUsers = repoUsers;
         }
-        public async Task<User> GetUserInfo()
-        {
-            try
-            {
-                string name = AccessTokenClaims.FindFirst("name").Value;
-                string email = AccessTokenClaims.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress").Value;
-                List<string> roleNames = new List<string>();
-                foreach (Claim claim in AccessTokenClaims.FindAll("wids"))
-                    roleNames.Add(await GetRoleName(claim.Value));
-                return new User(name, email, roleNames);
+
+        public async Task<UserApplicator> GetUserFromToken() {
+            try {
+                string objectIdAAD = AccessTokenClaims.FindFirst("oid").Value;
+                var user = await _repoUsers.GetUserFromToken(objectIdAAD);
+                return user;
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error en GetUserInfo():\n" + ex.StackTrace);
+            catch (Exception ex) {
+                Console.WriteLine("Error en GetUserFromToken():\n" + ex.StackTrace);
             }
             return null;
         }
 
-        public Task<bool> CreateUserIntoActiveDirectory()
-        {
-            throw new NotImplementedException();
+        public async Task<string> CreateUserIntoActiveDirectory(string name, string email) {
+            var scopes = new string[] { "https://graph.microsoft.com/.default" };
+            var authResult = await _confidentialClientApplication.AcquireTokenForClient(scopes).ExecuteAsync();
+            GraphServiceClient graphServiceClient = new GraphServiceClient(new DelegateAuthenticationProvider(async (requestMessage) => 
+                    requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authResult.AccessToken)));
+            var invitation = new Invitation {
+                InvitedUserDisplayName = name,
+                InvitedUserEmailAddress = email,
+                InvitedUserMessageInfo = new InvitedUserMessageInfo() { CustomizedMessageBody = "Bienvenido a Aresa" },
+                InviteRedirectUrl = "https://sprint3-jhm.trifenix.io/",
+                SendInvitationMessage = true,
+            };
+            var invite = await graphServiceClient.Invitations.Request().AddAsync(invitation);
+            string objectId = await GetObjectIdFromEmail(email);
+            return objectId;
+        }
+
+        private async Task<string> GetObjectIdFromEmail(string email) {
+            var scopes = new string[] { "https://graph.microsoft.com/.default" };
+            var authResult = await _confidentialClientApplication.AcquireTokenForClient(scopes).ExecuteAsync();
+            HttpClient client = new HttpClient();
+            var requestMessage = new HttpRequestMessage(HttpMethod.Get, "https://graph.microsoft.com/v1.0/users/");
+            requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authResult.AccessToken);
+            var response = await client.SendAsync(requestMessage);
+            client.Dispose();
+            var responseBody = await response.Content.ReadAsStringAsync();
+            dynamic json = JsonConvert.DeserializeObject(responseBody);
+            JArray jArray = json.value?.ToObject<JArray>();
+            var jUser = jArray.FirstOrDefault(user => user.Value<string>("mail").Equals(email));
+            return jUser?.Value<string>("id");
         }
     }
 }

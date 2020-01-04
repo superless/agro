@@ -1,6 +1,4 @@
-﻿using Cosmonaut.Attributes;
-
-namespace trifenix.agro.db.model.agro
+﻿namespace trifenix.agro.db.model.agro
 {
     public class UserApplicator : User
     {

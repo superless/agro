@@ -10,7 +10,7 @@ using trifenix.agro.external.interfaces.entities.orders;
 using trifenix.agro.external.operations.common;
 using trifenix.agro.external.operations.entities.orders.args;
 using trifenix.agro.external.operations.helper;
-using trifenix.agro.microsoftgraph.model;
+using trifenix.agro.microsoftgraph.operations;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.model.external.output;
@@ -110,7 +110,8 @@ namespace trifenix.agro.external.operations.entities.orders
 
         public async Task<ExtPostContainer<OutPutApplicationOrder>> SaveEditApplicationOrder(string id, ApplicationOrderInput input)
         {
-            var modifier = await _args.GraphApi.GetUserInfo();
+            var modifier = await _args.GraphApi.GetUserFromToken();
+            var userActivity = new UserActivity(DateTime.Now, modifier);
             var order = await _args.ApplicationOrder.GetApplicationOrder(id);
             var appNewOrder = await GetApplicationOrder(id, input);
             var result = await OperationHelper.EditElement(_args.CommonDb.ApplicationOrder, _args.ApplicationOrder.GetApplicationOrders(),
@@ -119,7 +120,7 @@ namespace trifenix.agro.external.operations.entities.orders
                 s => {
                     appNewOrder.Creator = s.Creator;
                     appNewOrder.ModifyBy = s.ModifyBy;
-                    appNewOrder.ModifyBy.Add(new UserActivity(DateTime.Now, modifier));
+                    appNewOrder.ModifyBy.Add(userActivity);
                     return appNewOrder;
                 },
                 _args.ApplicationOrder.CreateUpdate,
@@ -145,7 +146,8 @@ namespace trifenix.agro.external.operations.entities.orders
             var applications = GetApplicationInOrder(input.Applications);
             var phenologicalPreOrders = input.PreOrdersId == null || !input.PreOrdersId.Any() ? new List<PhenologicalPreOrder>() :
                            await input.PreOrdersId.SelectElement(_args.PreOrder.GetPhenologicalPreOrder, "Existen identificadores de preordenes que no fueron encontrados");
-            var creator = await _args.GraphApi.GetUserInfo();
+            var creator = await _args.GraphApi.GetUserFromToken();
+            var userActivity = new UserActivity(DateTime.Now, creator);
             return new ApplicationOrder
             {
                 Id = id,
@@ -160,7 +162,7 @@ namespace trifenix.agro.external.operations.entities.orders
                 EndDate = input.EndDate,
                 Wetting = input.Wetting,
                 ApplicationInOrders = applications,
-                Creator = new UserActivity(DateTime.Now, creator),
+                Creator = userActivity,
                 PhenologicalPreOrders = phenologicalPreOrders
             };
         }
