@@ -17,7 +17,7 @@ namespace trifenix.agro.microsoftgraph.operations
 {
     public class GraphApi : IGraphApi {
 
-        private IConfidentialClientApplication _confidentialClientApplication;
+        private readonly IConfidentialClientApplication _confidentialClientApplication;
         private readonly IUserRepository _repoUsers;
         public ClaimsPrincipal AccessTokenClaims { get; set; }
 
@@ -56,7 +56,10 @@ namespace trifenix.agro.microsoftgraph.operations
                 SendInvitationMessage = true,
             };
             var invite = await graphServiceClient.Invitations.Request().AddAsync(invitation);
-            string objectId = await GetObjectIdFromEmail(email);
+            string objectId = String.Empty;
+            do {
+                objectId = await GetObjectIdFromEmail(email);
+            } while (String.IsNullOrEmpty(objectId));
             return objectId;
         }
 
@@ -71,7 +74,7 @@ namespace trifenix.agro.microsoftgraph.operations
             var responseBody = await response.Content.ReadAsStringAsync();
             dynamic json = JsonConvert.DeserializeObject(responseBody);
             JArray jArray = json.value?.ToObject<JArray>();
-            var jUser = jArray.FirstOrDefault(user => user.Value<string>("mail").Equals(email));
+            var jUser = jArray.FirstOrDefault(user => !String.IsNullOrEmpty(user.Value<string>("mail"))?user.Value<string>("mail").Equals(email):false);
             return jUser?.Value<string>("id");
         }
     }

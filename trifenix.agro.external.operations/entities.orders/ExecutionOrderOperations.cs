@@ -47,10 +47,8 @@ namespace trifenix.agro.external.operations.entities.orders
             return OperationHelper.GetElements(executionOrders);
         }
 
-        public async Task<ExtPostContainer<string>> SaveNewExecutionOrder(string idOrder, string idUserApplicator, string idNebulizer, string idTractor, string commentary)
-        {
-            //var creator = await _graphApi.GetUserFromToken();
-            UserApplicator creator = null;
+        public async Task<ExtPostContainer<string>> SaveNewExecutionOrder(string idOrder, string idUserApplicator, string idNebulizer, string idTractor, string commentary) {
+            var creator = await _graphApi.GetUserFromToken();
             var userActivity = new UserActivity(DateTime.Now, creator);
             ApplicationOrder order = await _repoOrders.GetApplicationOrder(idOrder);
             if (order == null)
@@ -94,8 +92,7 @@ namespace trifenix.agro.external.operations.entities.orders
         public async Task<ExtPostContainer<ExecutionOrder>> SaveEditExecutionOrder(string id, string idOrder, ExecutionStatus executionStatus, FinishStatus finishStatus, ClosedStatus closedStatus, string idUserApplicator, string idNebulizer, string idTractor)
         {
             var element = await _repo.GetExecutionOrder(id);
-            //var modifier = await _graphApi.GetUserFromToken();
-            UserApplicator modifier = null;
+            var modifier = await _graphApi.GetUserFromToken();
             var userActivity = new UserActivity(DateTime.Now, modifier);
             ApplicationOrder order = await _repoOrders.GetApplicationOrder(idOrder);
             if (order == null)
@@ -140,8 +137,7 @@ namespace trifenix.agro.external.operations.entities.orders
 
         public async Task<ExtPostContainer<ExecutionOrder>> AddCommentaryToExecutionOrder(string idExecutionOrder, string commentary) {
             var element = await _repo.GetExecutionOrder(idExecutionOrder);
-            //var modifier = await _graphApi.GetUserFromToken();
-            UserApplicator modifier = null;
+            var modifier = await _graphApi.GetUserFromToken();
             var userActivity = new UserActivity(DateTime.Now, modifier);
             if (String.IsNullOrWhiteSpace(commentary))
                 return OperationHelper.PostNotFoundElementException<ExecutionOrder>("El comentario no puede estar vacio.");
