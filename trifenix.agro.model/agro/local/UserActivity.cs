@@ -1,6 +1,7 @@
 ﻿using System;
 
-namespace trifenix.agro.microsoftgraph.model{
+namespace trifenix.agro.db.model.agro.local
+{
     public class UserActivity
     {
         public DateTime Date { get; }

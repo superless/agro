@@ -1,7 +1,7 @@
 ﻿using Cosmonaut;
 using Cosmonaut.Attributes;
 using System;
-using trifenix.agro.microsoftgraph.model;
+using trifenix.agro.db.model.agro.local;
 using trifenix.agro.weather.model;
 
 namespace trifenix.agro.db.model.agro

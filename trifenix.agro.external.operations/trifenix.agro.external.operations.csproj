@@ -9,6 +9,7 @@
     <ProjectReference Include="..\trifenix.agro.db.interfaces\trifenix.agro.db.interfaces.csproj" />
     <ProjectReference Include="..\trifenix.agro.external.interfaces\trifenix.agro.external.interfaces.csproj" />
     <ProjectReference Include="..\trifenix.agro.microsoftgraph.interfaces\trifenix.agro.microsoftgraph.interfaces.csproj" />
+    <ProjectReference Include="..\trifenix.agro.microsoftgraph.operations\trifenix.agro.microsoftgraph.operations.csproj" />
     <ProjectReference Include="..\trifenix.agro.model.external\trifenix.agro.model.external.csproj" />
     <ProjectReference Include="..\trifenix.agro.storage.interfaces\trifenix.agro.storage.interfaces.csproj" />
     <ProjectReference Include="..\trifenix.agro.util\trifenix.agro.util.csproj" />

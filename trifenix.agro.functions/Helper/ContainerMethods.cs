@@ -23,7 +23,7 @@ namespace trifenix.agro.functions.Helper
             var agroDb = new AgroRepository(ConfigManager.GetDbArguments);
             var season = await agroDb.Seasons.GetCurrentSeason();
             var uploadImage = new UploadImage(Environment.GetEnvironmentVariable("StorageConnectionStrings", EnvironmentVariableTarget.Process));
-            var graphApi = new GraphApi(claims);
+            var graphApi = new GraphApi(claims, agroDb.Users);
             var weatherApi = new WeatherApi(Environment.GetEnvironmentVariable("KeyWeatherApi", EnvironmentVariableTarget.Process));
             return new AgroManager(agroDb, season?.Id,uploadImage, graphApi, weatherApi);
         }

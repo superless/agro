@@ -2,7 +2,7 @@
 using Cosmonaut.Attributes;
 using System;
 using System.Collections.Generic;
-using trifenix.agro.microsoftgraph.model;
+using trifenix.agro.db.model.agro.local;
 
 namespace trifenix.agro.db.model.agro
 {

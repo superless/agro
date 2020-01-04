@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\trifenix.agro.microsoftgraph.model\trifenix.agro.microsoftgraph.model.csproj" />
+    <ProjectReference Include="..\trifenix.agro.model\trifenix.agro.db.model.csproj" />
   </ItemGroup>
 
 </Project>
