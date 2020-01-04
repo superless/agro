@@ -49,8 +49,7 @@ namespace trifenix.agro.external.operations.entities.main
             return OperationHelper.GetElements(targets);
         }
 
-        public async Task<ExtPostContainer<UserApplicator>> SaveEditUser(string id, string name, string rut, string email, string idJob, string[] idsRoles, string idNebulizer, string idTractor)
-        {
+        public async Task<ExtPostContainer<UserApplicator>> SaveEditUser(string id, string name, string rut, string email, string idJob, string[] idsRoles, string idNebulizer, string idTractor) {
             Job job = await _repoJob.GetJob(idJob);
             if (job == null)
                 return OperationHelper.PostNotFoundElementException<UserApplicator>($"No se encontró el cargo con id {idJob}", idJob);
@@ -98,7 +97,7 @@ namespace trifenix.agro.external.operations.entities.main
         }
 
         public async Task<ExtPostContainer<string>> SaveNewUser(string name, string rut, string email, string idJob, string[] idsRoles, string idNebulizer, string idTractor) {
-            //string objectId = await _graphApi.CreateUserIntoActiveDirectory(name, email);
+            string objectId = await _graphApi.CreateUserIntoActiveDirectory(name, email);
             Job job = await _repoJob.GetJob(idJob);
             if (job == null)
                 return OperationHelper.PostNotFoundElementException<string>($"No se encontró el cargo con id {idJob}", idJob);
@@ -134,7 +133,7 @@ namespace trifenix.agro.external.operations.entities.main
                     new UserApplicator
                     {
                         Id = s,
-                        //ObjectIdAAD = objectId,
+                        ObjectIdAAD = objectId,
                         Name = name,
                         Rut = rut,
                         Email = email,

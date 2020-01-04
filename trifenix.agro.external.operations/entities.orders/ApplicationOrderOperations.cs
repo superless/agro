@@ -18,8 +18,7 @@ using trifenix.agro.util;
 
 namespace trifenix.agro.external.operations.entities.orders
 {
-    public class ApplicationOrderOperations : IApplicationOrderOperations
-    {
+    public class ApplicationOrderOperations : IApplicationOrderOperations {
         private readonly ApplicationOrderArgs _args;
         public ApplicationOrderOperations(ApplicationOrderArgs args)
         {

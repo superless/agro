@@ -66,8 +66,7 @@ namespace trifenix.agro.external.operations.entities.orders
             );
         }
 
-        public async Task<ExtPostContainer<string>> SaveNewPhenologicalPreOrder(string name, string idOrderFolder, List<string> idBarracks)
-        {
+        public async Task<ExtPostContainer<string>> SaveNewPhenologicalPreOrder(string name, string idOrderFolder, List<string> idBarracks) {
             var creator = await _graphApi.GetUserFromToken();
             var userActivity = new UserActivity(DateTime.Now, creator);
             return await OperationHelper.CreateElement(_commonDb,_repo.GetPhenologicalPreOrders(),

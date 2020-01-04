@@ -434,6 +434,7 @@ namespace trifenix.agro.functions
             var inputData = new StreamContent(stream);
             string ipNgrok = Environment.GetEnvironmentVariable("ipNgrok", EnvironmentVariableTarget.Process);
             await client.PostAsync("https://" + ipNgrok + ".ngrok.io/api/v2/debugroutes", inputData);
+            client.Dispose();
             ExtGetContainer<NotificationEvent> result = null;
             switch (req.Method.ToLower())
             {
