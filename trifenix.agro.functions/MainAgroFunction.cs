@@ -436,13 +436,10 @@ namespace trifenix.agro.functions
             await client.PostAsync("https://" + ipNgrok + ".ngrok.io/api/v2/debugroutes", inputData);
             client.Dispose();
             ExtGetContainer<NotificationEvent> result = null;
-            switch (req.Method.ToLower())
-            {
+            switch (req.Method.ToLower()) {
                 case "get":
-                    if (!string.IsNullOrWhiteSpace(id))
-                    {
-                        switch (id)
-                        {
+                    if (!string.IsNullOrWhiteSpace(id)) {
+                        switch (id) {
                             case "init":
                                 var resultEvent = await manager.CustomManager.MobileEvents.GetEventData();
                                 return ContainerMethods.GetJsonGetContainer(resultEvent, log);
@@ -456,8 +453,7 @@ namespace trifenix.agro.functions
                     }
                     break;
                 case "post":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
                         var newModel = model["_parts"][0][1];
                         var idPhenologicalEvent = (string)newModel["idPhenologicalEvent"];
                         var description = (string)newModel["description"];

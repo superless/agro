@@ -133,14 +133,11 @@ namespace trifenix.agro.external.operations.entities.events
         /// <param name="base64">string de la imagen subida</param>
         /// <param name="description">descripción del evento notificado</param>
         /// <returns>contenedor con el identificador de la notificación</returns>
-        public async Task<ExtPostContainer<string>> SaveNewNotificationEvent(string idBarrack, string idPhenologicalEvent, string base64, string description, float lat, float lon)
-        {
-            if (string.IsNullOrWhiteSpace(idBarrack) || string.IsNullOrWhiteSpace(idPhenologicalEvent) || string.IsNullOrWhiteSpace(base64))
-            {
+        public async Task<ExtPostContainer<string>> SaveNewNotificationEvent(string idBarrack, string idPhenologicalEvent, string base64, string description, float lat, float lon) {
+            if (string.IsNullOrWhiteSpace(idBarrack) || string.IsNullOrWhiteSpace(idPhenologicalEvent) || string.IsNullOrWhiteSpace(base64)) {
                 return OperationHelper.PostNotFoundElementException<string>($"identificador de barrack o de evento fenologico o la imagen son nulos", idPhenologicalEvent);
             }
-            try
-            {
+            try {
                 var localBarrack = await _barrackRepository.GetBarrack(idBarrack);
                 if (localBarrack == null) return OperationHelper.PostNotFoundElementException<string>($"no se encontró cuartel con id {idBarrack}", idBarrack);
 

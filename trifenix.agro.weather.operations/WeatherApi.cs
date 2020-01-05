@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Net.Http;
 using System.Threading.Tasks;
+using trifenix.agro.translator.operations;
 using trifenix.agro.weather.interfaces;
 using trifenix.agro.weather.model;
 
@@ -15,6 +16,7 @@ namespace trifenix.agro.weather.operations {
 
         public async Task<Weather> GetWeather(float lat, float lon) {
             HttpClient client = new HttpClient();
+            GoogleTranslator translator = new GoogleTranslator();
             var requestMessage = new HttpRequestMessage(HttpMethod.Get, "https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&appid=" + _appId);
             var response = await client.SendAsync(requestMessage);
             client.Dispose();
@@ -30,7 +32,7 @@ namespace trifenix.agro.weather.operations {
             int hum = (int)json.main.humidity;
             int pressure = (int)json.main.pressure;
             string iconCode = (string)json.weather[0].icon;
-            return new Weather(cityName, lat, lon, main, desc, temp, speed, degree, cloud, hum, pressure, iconCode);
+            return new Weather(cityName, lat, lon, translator.TranslateText(main), translator.TranslateText(desc), temp, speed, degree, cloud, hum, pressure, iconCode);
         }
 
     }

@@ -1,5 +1,6 @@
 ﻿namespace trifenix.agro.weather.model {
     public class Weather {
+
         public Coordinates Coordinates;
         public Wind Wind;
         public string Main;
