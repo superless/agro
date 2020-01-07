@@ -137,6 +137,8 @@ namespace trifenix.agro.external.operations.entities.orders
         }
 
         private async Task<ApplicationOrder> GetApplicationOrder(string id, ApplicationOrderInput input) {
+
+            
             var varietyIds = input.Applications.Any(s => s.Doses != null)? input.Applications.Where(s => s.Doses != null).SelectMany(s => s.Doses.IdVarieties).Distinct() : new List<string>();
             var targetIds = input.Applications.Any(s => s.Doses != null) ? input.Applications.Where(s => s.Doses != null).SelectMany(s => s.Doses.idsApplicationTarget).Distinct(): new List<string>();
             var speciesIds = input.Applications.Any(s => s.Doses != null) ? input.Applications.Where(s => s.Doses != null).SelectMany(s => s.Doses.IdSpecies).Distinct() : new List<string>();
