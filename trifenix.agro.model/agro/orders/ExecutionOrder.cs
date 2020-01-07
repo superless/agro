@@ -14,18 +14,31 @@ namespace trifenix.agro.db.model.agro.orders
         public override string Id { get; set; }
         public ApplicationOrder Order { get; set; }
 
-        public ExecutionStatus ExecutionStatus;
+        public ProductToApply ProductToApply { get; set; }
 
-        private DateTime[] _executionStatusDate;
-        /// <summary>
-        /// Array que almacena la fecha en que inicio cada estado de ejecucion, indexado segun la enumeracion de estos.
-        /// </summary>
-        public DateTime[] ExecutionStatusDate {
-            get {
-                _executionStatusDate = _executionStatusDate ?? new DateTime[Enum.GetValues(typeof(ExecutionStatus)).Length];
-                return _executionStatusDate;
+        private ExecutionStatus _executionStatus;
+        public ExecutionStatus ExecutionStatus {
+            get => _executionStatus;
+            set { 
+                _executionStatus = value;
+                if ((int)_executionStatus == 1){
+                    InitDate = Order.InitDate;
+                    EndDate = Order.EndDate;
+                }
             }
-            set { _executionStatusDate = value; }
+        }
+
+        private Comments[] _statusInfo;
+        /// <summary>
+        /// Array que almacena el usuario, la fecha y un comentario para cada estado de ejecucion, indexado segun la enumeracion de estos.
+        /// </summary>
+        public Comments[] StatusInfo
+        {
+            get {
+                _statusInfo = _statusInfo ?? new Comments[Enum.GetValues(typeof(ExecutionStatus)).Length];
+                return _statusInfo;
+            }
+            set { _statusInfo = value; }
         }
 
         public FinishStatus FinishStatus;
@@ -70,12 +83,16 @@ namespace trifenix.agro.db.model.agro.orders
         public UserActivity _userActivity;
         public string _commentary;
 
-        public Comments(UserActivity UserActivity, string Commentary)
-        {
+        public Comments(UserActivity UserActivity, string Commentary = null) {
             _userActivity = UserActivity;
             _commentary = Commentary;
         }
 
+    }
+
+    public class ProductToApply {
+        public Product Product { get; set; }
+        public double QuantityByHectare { get; set; }
     }
 
     public enum FinishStatus {

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Claims;
+using System.Threading;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces.agro;
 using trifenix.agro.db.model.agro;
@@ -51,13 +52,14 @@ namespace trifenix.agro.microsoftgraph.operations
             var invitation = new Invitation {
                 InvitedUserDisplayName = name,
                 InvitedUserEmailAddress = email,
-                InvitedUserMessageInfo = new InvitedUserMessageInfo() { CustomizedMessageBody = "Bienvenido a Aresa" },
+                InvitedUserMessageInfo = new InvitedUserMessageInfo() { CustomizedMessageBody = "Bienvenido a Aresa"},
                 InviteRedirectUrl = "https://sprint3-jhm.trifenix.io/",
                 SendInvitationMessage = true,
             };
             var invite = await graphServiceClient.Invitations.Request().AddAsync(invitation);
             string objectId = String.Empty;
             do {
+                Thread.Sleep(1000);
                 objectId = await GetObjectIdFromEmail(email);
             } while (String.IsNullOrEmpty(objectId));
             return objectId;

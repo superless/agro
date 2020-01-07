@@ -123,6 +123,6 @@ namespace trifenix.agro.external.operations
         });
         public IPhenologicalPreOrderOperations PhenologicalPreOrders => new PhenologicalPreOrdersOperations(_repository.PhenologicalPreOrders, new CommonDbOperations<PhenologicalPreOrder>(), _idSeason, _graphApi);
 
-        public IExecutionOrderOperations ExecutionOrders => new ExecutionOrderOperations(_repository.ExecutionOrders, _repository.Orders, _repository.Users, _repository.Nebulizers, _repository.Tractors, new CommonDbOperations<ExecutionOrder>(), _graphApi);
+        public IExecutionOrderOperations ExecutionOrders => new ExecutionOrderOperations(_repository.ExecutionOrders, _repository.Orders, _repository.Users, _repository.Nebulizers, _repository.Products, _repository.Tractors, new CommonDbOperations<ExecutionOrder>(), _graphApi);
     }
 }
