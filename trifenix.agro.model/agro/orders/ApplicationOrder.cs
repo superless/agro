@@ -135,26 +135,16 @@ namespace trifenix.agro.db.model.agro.orders
             set { __idsSpecies = value; }
         }
 
-
-
-
     }
-
 
     public class ApplicationsInOrder {
 
         public string ProductId { get; set; }
 
-
         public double QuantityByHectare { get; set; }
-
-
 
         //nullable
         public Doses Doses { get; set; }
-
-
-
 
     }
 
@@ -162,7 +152,6 @@ namespace trifenix.agro.db.model.agro.orders
     public class BarrackOrderInstance {
 
         public Barrack Barrack { get; set; }
-
 
         //nullable
         private List<string> _eventsId;
@@ -175,13 +164,6 @@ namespace trifenix.agro.db.model.agro.orders
                 return _eventsId; }
             set { _eventsId = value; }
         }
-
-
-
-
-
-
-
 
     }
 }

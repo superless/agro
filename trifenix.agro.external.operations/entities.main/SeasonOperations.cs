@@ -51,9 +51,7 @@ namespace trifenix.agro.external.operations.entities.main
             );
         }
 
-        public async Task<ExtPostContainer<string>> SaveNewSeason(DateTime init, DateTime end)
-        {
-            //TODO: validar que no se pueda sobreponer fechas.
+        public async Task<ExtPostContainer<string>> SaveNewSeason(DateTime init, DateTime end) {
             return await OperationHelper.CreateElement(_commonDb, _repo.GetSeasons(),
                 async s => await _repo.CreateUpdateSeason(new Season
                 {

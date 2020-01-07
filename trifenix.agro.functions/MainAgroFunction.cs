@@ -515,6 +515,21 @@ namespace trifenix.agro.functions
         }
         #endregion
 
+        #region v2/ordersByExecutionStatus
+        [FunctionName("OrderByExecutionStatus")]
+        public static async Task<IActionResult> OrderByExecutionStatus([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/orders/getByExecutionStatus/{status}")] HttpRequest req, ExecutionStatus status, ILogger log) {
+            ClaimsPrincipal claims = await Auth.Validate(req);
+            if (claims == null)
+                return new UnauthorizedResult();
+            var manager = await ContainerMethods.AgroManager(claims);
+            ExtGetContainer<List<ExecutionOrder>> resultGetByStatus = await manager.ExecutionOrders.GetExecutionOrderOrders();
+            resultGetByStatus.Result = resultGetByStatus.Result.Where(execution => execution.ExecutionStatus == status).ToList();
+            ExtGetContainer<List<OutPutApplicationOrder>> resultGetAll = await manager.ApplicationOrders.GetApplicationOrders();
+            resultGetAll.Result = resultGetAll.Result.Where(order => resultGetByStatus.Result.Any(execution => execution.Order.Id.Equals(order.Id))).ToList();
+            return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
+        }
+        #endregion
+
         #region v2/sectors
         [FunctionName("SectorV2")]
         public static async Task<IActionResult> Sector([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/sectors/{id?}")] HttpRequest req, string id,ILogger log){
@@ -820,6 +835,19 @@ namespace trifenix.agro.functions
         }
         #endregion
 
+        #region v2/usersByRole
+        [FunctionName("UserByRole")]
+        public static async Task<IActionResult> UserByRole([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/users/getByRole/{roleName}")] HttpRequest req, string roleName, ILogger log) {
+            ClaimsPrincipal claims = await Auth.Validate(req);
+            if (claims == null)
+                return new UnauthorizedResult();
+            var manager = await ContainerMethods.AgroManager(claims);
+            ExtGetContainer<List<UserApplicator>> resultGetAllApplicator = await manager.Users.GetUsers();
+            resultGetAllApplicator.Result = resultGetAllApplicator.Result.Where(user => user.Roles.Any(role => role.Name.Equals(roleName))).ToList();
+            return ContainerMethods.GetJsonGetContainer(resultGetAllApplicator, log);
+        }
+        #endregion
+
         #region v2/userInfo
         [FunctionName("UserInfo")]
         public static async Task<IActionResult> UsersRoles([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/userinfo")] HttpRequest req, ILogger log){
@@ -898,7 +926,7 @@ namespace trifenix.agro.functions
 
         #region v2/executions
         [FunctionName("Executions")]
-        public static async Task<IActionResult> Executions([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/executions/{id?}")] HttpRequest req, string id, ILogger log){
+        public static async Task<IActionResult> Executions([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/executions/{id?}")] HttpRequest req, string id, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
@@ -916,24 +944,54 @@ namespace trifenix.agro.functions
                         string idOrder = (string)model["idOrder"];
                         string idUserApplicator = (string)model["idUserApplicator"];
                         string idNebulizer = (string)model["idNebulizer"];
+                        string idProduct = (string)model["idProduct"];
+                        double quantityByHectare = (double)model["quantityByHectare"];
                         string idTractor = (string)model["idTractor"];
                         string commentary = (string)model["commentary"];
-                        return await db.ExecutionOrders.SaveNewExecutionOrder(idOrder, idUserApplicator, idNebulizer, idTractor, commentary);
+                        return await db.ExecutionOrders.SaveNewExecutionOrder(idOrder, idUserApplicator, idNebulizer, idProduct, quantityByHectare, idTractor, commentary);
                     }, claims);
                 case "put":
                     return await ContainerMethods.ApiPostOperations<ExecutionOrder>(req.Body, log, async (db, model) => {
                         string idOrder = (string)model["idOrder"];
-                        ExecutionStatus executionStatus = (ExecutionStatus)model["executionStatus"];
-                        FinishStatus finishStatus = (FinishStatus)model["finishStatus"];
-                        ClosedStatus closedStatus = (ClosedStatus)model["closedStatus"];
                         string idUserApplicator = (string)model["idUserApplicator"];
                         string idNebulizer = (string)model["idNebulizer"];
+                        string idProduct = (string)model["idProduct"];
+                        double quantityByHectare = (double)model["quantityByHectare"];
                         string idTractor = (string)model["idTractor"];
-                        return await db.ExecutionOrders.SaveEditExecutionOrder(id, idOrder, executionStatus, finishStatus, closedStatus, idUserApplicator, idNebulizer, idTractor);
+                        return await db.ExecutionOrders.SaveEditExecutionOrder(id, idOrder, idUserApplicator, idNebulizer, idProduct, quantityByHectare, idTractor);
                     }, claims);
             }
             ExtGetContainer<List<ExecutionOrder>> resultGetAll = await manager.ExecutionOrders.GetExecutionOrderOrders();
             return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
+        }
+        #endregion
+
+        #region v2/executionsByStatus
+        [FunctionName("ExecutionByStatus")]
+        public static async Task<IActionResult> ExecutionByStatus([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/executions/getByStatus/{status}")] HttpRequest req, ExecutionStatus status, ILogger log) {
+            ClaimsPrincipal claims = await Auth.Validate(req);
+            if (claims == null)
+                return new UnauthorizedResult();
+            var manager = await ContainerMethods.AgroManager(claims);
+            ExtGetContainer<List<ExecutionOrder>> resultGetByStatus = await manager.ExecutionOrders.GetExecutionOrderOrders();
+            resultGetByStatus.Result = resultGetByStatus.Result.Where(execution => execution.ExecutionStatus == status).ToList();
+            return ContainerMethods.GetJsonGetContainer(resultGetByStatus, log);
+        }
+        #endregion
+
+        #region v2/Executions_ChangeStatus
+        [FunctionName("Execution_ChangeStatus")]
+        public static async Task<IActionResult> Execution_ChangeStatus([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "v2/executions/changeStatus/{idExecution}")] HttpRequest req, string idExecution, ILogger log) {
+            ClaimsPrincipal claims = await Auth.Validate(req);
+            if (claims == null)
+                return new UnauthorizedResult();
+            var manager = await ContainerMethods.AgroManager(claims);
+            return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
+                var type = (string)model["type"];
+                var value = (int)model["value"];
+                var commentary = (string)model["commentary"];
+                return await manager.ExecutionOrders.SetStatus(idExecution, type, value, commentary);
+            }, claims);
         }
         #endregion
 
@@ -952,7 +1010,7 @@ namespace trifenix.agro.functions
         #endregion
 
         [FunctionName("DebugRoute")]
-        public static async Task<IActionResult> DebugRoutes([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/debugroutes/{id?}")] HttpRequest req, ILogger log, string id){
+        public static async Task<IActionResult> DebugRoute([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/debugroute/{id?}")] HttpRequest req, ILogger log, string id){
             var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic result = JsonConvert.DeserializeObject(requestBody);
             return result;

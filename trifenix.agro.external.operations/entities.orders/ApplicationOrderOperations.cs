@@ -166,6 +166,10 @@ namespace trifenix.agro.external.operations.entities.orders
             };
         }
 
+             //TODO: Validaciones al momento de modificar orden
+             //Al modificar la fecha en la orden, no deben existir ejecuciones en proceso,  todas deben estar cerradas.   Posible duplicidad 
+             //No se puede modificar una orden que ya posee una ejecucion en proceso o una ejecucion exitosa (cerrada).           ^
+
         public async Task<ExtPostContainer<string>> SaveNewApplicationOrder(ApplicationOrderInput input)
         {
             return await OperationHelper.CreateElement(_args.CommonDb.ApplicationOrder, _args.ApplicationOrder.GetApplicationOrders(),
