@@ -39,8 +39,7 @@ namespace trifenix.agro.search
                 SearchFields = new List<string> { "description" },
                 Skip = skip == 0 ? 0 : skip,
                 Top = quantity,
-                IncludeTotalResultCount = true,
-                
+                IncludeTotalResultCount = true,                
                 OrderBy = new List<string>() { $"description {order}" }
 
             }); ; ;

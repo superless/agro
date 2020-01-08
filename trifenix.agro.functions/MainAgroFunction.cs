@@ -491,7 +491,7 @@ namespace trifenix.agro.functions
                 return new UnauthorizedResult();
             var manager = await ContainerMethods.AgroManager(claims);
             var orderDate = string.IsNullOrWhiteSpace(order) || order.ToLower().Equals("desc");
-            var result = manager.ApplicationOrders.GetApplicationOrdersByPage(search, page, quantity, orderDate);
+            var result = await manager.ApplicationOrders.GetApplicationOrdersByPage(search, page, quantity, orderDate);
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
 
