@@ -256,7 +256,7 @@ namespace trifenix.agro.external.operations.entities.orders
 
                 return  OperationHelper.GetElement(new OrderResult { 
                     Total = total,
-                    Notifications = outputOrders.ToArray()
+                    Orders = outputOrders.ToArray()
                 });
 
             }
