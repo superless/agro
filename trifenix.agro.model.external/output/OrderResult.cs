@@ -8,6 +8,6 @@ namespace trifenix.agro.model.external.output
     {
         public long Total { get; set; }
 
-        public OutPutApplicationOrder[] Notifications { get; set; }
+        public OutPutApplicationOrder[] Orders { get; set; }
     }
 }
