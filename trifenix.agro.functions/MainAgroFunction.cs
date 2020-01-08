@@ -483,7 +483,7 @@ namespace trifenix.agro.functions
 
         #region v2/orders
         [FunctionName("Orders")]
-        public static async Task<IActionResult> Orders([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/orders/{id?}")] HttpRequest req, string id,ILogger log){
+        public static async Task<IActionResult> Orders([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/orders/{id?}/{totalByPage?}/{desc?}")] HttpRequest req, string id, int? totalByPage, string desc, ILogger log){
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
@@ -494,6 +494,7 @@ namespace trifenix.agro.functions
                 case "get":
                     if (!string.IsNullOrWhiteSpace(id))
                     {
+                        if (int.TryParse(id, out var resultInt)) break;
                         result = await manager.ApplicationOrders.GetApplicationOrder(id);
                         return ContainerMethods.GetJsonGetContainer(result, log);
                     }
@@ -510,6 +511,22 @@ namespace trifenix.agro.functions
                         return await db.ApplicationOrders.SaveEditApplicationOrder(id, input);
                     }, claims);
             }
+            if (!string.IsNullOrWhiteSpace(id) && totalByPage.HasValue)
+            {
+                var isPage = int.TryParse(id, out var page);
+
+                if (!isPage) return new BadRequestResult();
+                var orderDate = string.IsNullOrWhiteSpace(desc) || desc.ToLower().Equals("desc");
+                if (!orderDate && !desc.ToLower().Equals("asc"))
+                    return new BadRequestResult();
+
+
+
+
+                ExtGetContainer<List<OutPutApplicationOrder>> resultGetByPageAll = await manager.ApplicationOrders.GetApplicationOrdersByPage(page, totalByPage??10, orderDate);
+                return ContainerMethods.GetJsonGetContainer(resultGetByPageAll, log);
+            }
+
             ExtGetContainer<List<OutPutApplicationOrder>> resultGetAll = await manager.ApplicationOrders.GetApplicationOrders();
             return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
         }

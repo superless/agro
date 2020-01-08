@@ -89,23 +89,7 @@ namespace trifenix.agro.external.operations.entities.orders
             }
         }
 
-        public async Task<ExtGetContainer<List<OutPutApplicationOrder>>> GetApplicationOrders()
-        {
-            try
-            {
-                var applicationOrderQuery = _args.ApplicationOrder.GetApplicationOrders();
-                var applicationOrders = await _args.CommonDb.ApplicationOrder.TolistAsync(applicationOrderQuery);
-                var outputOrders = applicationOrders.Select(GetOutputOrder).ToList();
-
-                return OperationHelper.GetElements(outputOrders);
-
-            }
-            catch (Exception e)
-            {
-
-                return OperationHelper.GetException<List<OutPutApplicationOrder>>(e, e.Message); 
-            }
-        }
+        
 
         public async Task<ExtPostContainer<OutPutApplicationOrder>> SaveEditApplicationOrder(string id, ApplicationOrderInput input)
         {
@@ -237,6 +221,45 @@ namespace trifenix.agro.external.operations.entities.orders
                 };
             }).ToList();
 
+        }
+
+        public async Task<ExtGetContainer<List<OutPutApplicationOrder>>> GetApplicationOrders()
+        {
+            try
+            {
+                var applicationOrderQuery = _args.ApplicationOrder.GetApplicationOrders();
+                var applicationOrders = await _args.CommonDb.ApplicationOrder.TolistAsync(applicationOrderQuery);
+                var outputOrders = applicationOrders.Select(GetOutputOrder).ToList();
+
+                return OperationHelper.GetElements(outputOrders);
+
+            }
+            catch (Exception e)
+            {
+
+                return OperationHelper.GetException<List<OutPutApplicationOrder>>(e, e.Message);
+            }
+        }
+        public async Task<ExtGetContainer<List<OutPutApplicationOrder>>> GetApplicationOrdersByPage(int page, int quantity, bool orderByDesc)
+        {
+            try
+            {
+                var applicationOrderQuery = _args.ApplicationOrder.GetApplicationOrders();
+                var paginatedOrders = _args.CommonDb.ApplicationOrder.WithPagination(applicationOrderQuery, page, quantity);
+
+                var applicationOrders =  orderByDesc? await _args.CommonDb.ApplicationOrder.TolistAsync(paginatedOrders.OrderByDescending(s=>s.Name)): await _args.CommonDb.ApplicationOrder.TolistAsync(paginatedOrders);
+
+                
+                var outputOrders = applicationOrders.Select(GetOutputOrder).ToList();
+
+                return OperationHelper.GetElements(outputOrders);
+
+            }
+            catch (Exception e)
+            {
+
+                return OperationHelper.GetException<List<OutPutApplicationOrder>>(e, e.Message);
+            }
         }
     }
 }
