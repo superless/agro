@@ -38,12 +38,12 @@ namespace trifenix.agro.external.operations.entities.orders
             _graphApi = graphApi;
         }
 
-        public async Task<ExtGetContainer<ExecutionOrder>> GetExecutionOrderOrder(string id) {
+        public async Task<ExtGetContainer<ExecutionOrder>> GetExecutionOrder(string id) {
             var executionOrder = await _repo.GetExecutionOrder(id);
             return OperationHelper.GetElement(executionOrder);
         }
 
-        public async Task<ExtGetContainer<List<ExecutionOrder>>> GetExecutionOrderOrders() {
+        public async Task<ExtGetContainer<List<ExecutionOrder>>> GetExecutionOrders() {
             var executionOrdersQuery = _repo.GetExecutionOrders();
             var executionOrders = await _commonDb.TolistAsync(executionOrdersQuery);
             return OperationHelper.GetElements(executionOrders);
@@ -159,11 +159,13 @@ namespace trifenix.agro.external.operations.entities.orders
         public async Task<ExtPostContainer<ExecutionOrder>> SetStatus(string idExecutionOrder, string type, int value, string commentary) {
             string error = "";
             if (string.IsNullOrWhiteSpace(idExecutionOrder)) error += "Es requerido 'idExecutionOrder' para crear una ejecucion.\n";
-            if (string.IsNullOrWhiteSpace(type)) error += "Es requerido 'type' para crear una ejecucion..\n";
+            if (string.IsNullOrWhiteSpace(type)) error += "Es requerido 'type' para crear una ejecucion.\n";
             if (!String.IsNullOrEmpty(error)) return OperationHelper.GetPostException<ExecutionOrder>(new Exception(error));
             ExecutionOrder execution = await _repo.GetExecutionOrder(idExecutionOrder);
             if (execution == null)
                 return OperationHelper.PostNotFoundElementException<ExecutionOrder>($"No se encontró la ejecucion con id {idExecutionOrder}", idExecutionOrder);
+            if (execution.FinishStatus != 0 && !type.ToLower().Equals("closed"))
+                return OperationHelper.GetPostException<ExecutionOrder>(new Exception($"No se puede modificar el estado {type}, ya que ha finalizado la ejecucion.\n"));
             var modifier = await _graphApi.GetUserFromToken();
             var userActivity = new UserActivity(DateTime.Now,modifier);
             switch (type.ToLower()) {

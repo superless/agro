@@ -7,9 +7,9 @@ namespace trifenix.agro.external.interfaces.entities.orders
 {
     public interface IExecutionOrderOperations { 
 
-        Task<ExtGetContainer<ExecutionOrder>> GetExecutionOrderOrder(string id);
+        Task<ExtGetContainer<ExecutionOrder>> GetExecutionOrder(string id);
 
-        Task<ExtGetContainer<List<ExecutionOrder>>> GetExecutionOrderOrders();
+        Task<ExtGetContainer<List<ExecutionOrder>>> GetExecutionOrders();
 
         Task<ExtPostContainer<string>> SaveNewExecutionOrder(string idOrder, string idUserApplicator, string idNebulizer, string idProduct, double quantityByHectare, string idTractor, string commentary);
 
