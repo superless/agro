@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using trifenix.agro.db;
 using trifenix.agro.db.applicationsReference.agro;
 using trifenix.agro.db.applicationsReference.common;
 using trifenix.agro.db.model.agro.orders;
+using trifenix.agro.search;
+using trifenix.agro.search.model;
 
 namespace trifenix.agro.console
 {
@@ -23,10 +26,19 @@ namespace trifenix.agro.console
 
             var ordersDb = await new CommonDbOperations<ApplicationOrder>().TolistAsync(orders);
 
+            var search = new AgroSearch("agrisearch", "F9189208F49AF7C3DFD34E45A89F19E4");
 
 
+            var ordersSearch = ordersDb.Select(odb => new OrderSearch {
+                Created = DateTime.Now,
+                Name = odb.Name,
+                OrderId = odb.Id
+            }).ToList();
 
-            Console.WriteLine(ordersDb.Count);
+            search.AddOrders(ordersSearch);
+
+
+            
 
         }
     }

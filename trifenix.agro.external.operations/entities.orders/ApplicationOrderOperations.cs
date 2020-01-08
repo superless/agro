@@ -14,6 +14,8 @@ using trifenix.agro.microsoftgraph.operations;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.model.external.output;
+using trifenix.agro.search;
+using trifenix.agro.search.model;
 using trifenix.agro.util;
 
 namespace trifenix.agro.external.operations.entities.orders
@@ -97,10 +99,19 @@ namespace trifenix.agro.external.operations.entities.orders
             var userActivity = new UserActivity(DateTime.Now, modifier);
             var order = await _args.ApplicationOrder.GetApplicationOrder(id);
             var appNewOrder = await GetApplicationOrder(id, input);
+            var searchLocal = new AgroSearch("agrisearch", "F9189208F49AF7C3DFD34E45A89F19E4");
             var result = await OperationHelper.EditElement(_args.CommonDb.ApplicationOrder, _args.ApplicationOrder.GetApplicationOrders(),
                 id,
                 order,
                 s => {
+                    searchLocal.AddOrders(new List<OrderSearch>
+                    {
+                        new OrderSearch{ 
+                            Created = DateTime.Now,
+                            Name = appNewOrder.Name,
+                            OrderId = appNewOrder.Id
+                        }
+                    });
                     appNewOrder.Creator = s.Creator;
                     appNewOrder.ModifyBy = s.ModifyBy;
                     appNewOrder.ModifyBy.Add(userActivity);
@@ -158,11 +169,26 @@ namespace trifenix.agro.external.operations.entities.orders
 
         public async Task<ExtPostContainer<string>> SaveNewApplicationOrder(ApplicationOrderInput input)
         {
-            return await OperationHelper.CreateElement(_args.CommonDb.ApplicationOrder, _args.ApplicationOrder.GetApplicationOrders(),
+            var searchLocal = new AgroSearch("agrisearch", "F9189208F49AF7C3DFD34E45A89F19E4");
+            
+
+            var newId = await OperationHelper.CreateElement(_args.CommonDb.ApplicationOrder, _args.ApplicationOrder.GetApplicationOrders(),
                        async s => await _args.ApplicationOrder.CreateUpdate(await GetApplicationOrder(s, input)),
                        s => s.Name.Equals(input.Name),
                        $"Ya existe orden de aplicacion con nombre: {input.Name}"
-                   ) ;
+                   );
+
+            searchLocal.AddOrders(new List<OrderSearch>
+            {
+                new OrderSearch{
+                    Created = DateTime.Now,
+                    Name = input.Name,
+                    OrderId = newId.IdRelated
+                }
+            });
+
+
+            return newId;
         }
 
         private List<ApplicationsInOrder> GetApplicationInOrder(ApplicationInOrderInput[] appInOrder) {
@@ -267,6 +293,20 @@ namespace trifenix.agro.external.operations.entities.orders
             }
         }
 
+        public ExtGetContainer<OrderResult> GetApplicationOrdersByPage(string search, int page, int quantity, bool desc)
+        {
+            var searchLocal = new AgroSearch("agrisearch", "F9189208F49AF7C3DFD34E45A89F19E4");
 
+
+            var ordersearch = searchLocal.GetOrders(search, page, quantity, desc);
+
+            var resultDb = ordersearch.Orders.Select(async s => await GetApplicationOrder(s.OrderId));
+
+            return OperationHelper.GetElement(new OrderResult
+            {
+                Total = ordersearch.Total,
+                Orders = resultDb.Select(s=>s.Result.Result).ToArray()
+            });
+        }
     }
 }
