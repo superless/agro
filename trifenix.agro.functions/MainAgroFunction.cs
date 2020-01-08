@@ -481,6 +481,21 @@ namespace trifenix.agro.functions
         }
         #endregion
 
+
+
+        [FunctionName("OrderFilter")]
+        public static async Task<IActionResult> OrderFilter([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/orders/search/{search}/{page}/{quantity}/{order}")] HttpRequest req, string search, int page, int quantity, string order, ILogger log)
+        {
+            ClaimsPrincipal claims = await Auth.Validate(req);
+            if (claims == null)
+                return new UnauthorizedResult();
+            var manager = await ContainerMethods.AgroManager(claims);
+            var orderDate = string.IsNullOrWhiteSpace(order) || order.ToLower().Equals("desc");
+            var result = manager.ApplicationOrders.GetApplicationOrdersByPage(search, page, quantity, orderDate);
+            return ContainerMethods.GetJsonGetContainer(result, log);
+        }
+
+
         #region v2/orders
         [FunctionName("Orders")]
         public static async Task<IActionResult> Orders([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/orders/{id?}/{totalByPage?}/{desc?}")] HttpRequest req, string id, int? totalByPage, string desc, ILogger log){
