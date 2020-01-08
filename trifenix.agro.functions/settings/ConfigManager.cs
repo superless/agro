@@ -19,8 +19,7 @@ namespace trifenix.agro.functions.settings
             EndPointUrl = GetSettings.CosmosDbUri,
             NameDb = GetSettings.CosmosDbName,
             PrimaryKey = GetSettings.CosmosDbPrimaryKey,
-            AzureSearchKey = GetSettings.AzureSearchKey,
-            AzureSearchName = GetSettings.AzureSearchName
+           
         };
 
     }
