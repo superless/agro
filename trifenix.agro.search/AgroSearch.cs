@@ -40,7 +40,8 @@ namespace trifenix.agro.search
                 Skip = skip == 0 ? 0 : skip,
                 Top = quantity,
                 IncludeTotalResultCount = true,                
-                OrderBy = new List<string>() { $"description {order}" }
+                OrderBy = new List<string>() { $"description {order}" },
+                Filter = $"filter=description eq '{search}'"
 
             }); ; ;
 
