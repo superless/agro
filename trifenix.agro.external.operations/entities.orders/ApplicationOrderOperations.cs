@@ -293,12 +293,17 @@ namespace trifenix.agro.external.operations.entities.orders
             }
         }
 
-        public ExtGetContainer<OrderResult> GetApplicationOrdersByPage(string search, int page, int quantity, bool desc)
+        public async Task<ExtGetContainer<OrderResult>> GetApplicationOrdersByPage(string search, int page, int quantity, bool desc)
         {
             var searchLocal = new AgroSearch("agrisearch", "F9189208F49AF7C3DFD34E45A89F19E4");
 
 
             var ordersearch = searchLocal.GetOrders(search, page, quantity, desc);
+
+            if (string.IsNullOrWhiteSpace(search))
+            {
+                return await GetApplicationOrdersByPage(page, quantity, desc);
+            }
 
             var resultDb = ordersearch.Orders.Select(async s => await GetApplicationOrder(s.OrderId));
 

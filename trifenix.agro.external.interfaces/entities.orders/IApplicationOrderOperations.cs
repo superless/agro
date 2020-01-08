@@ -22,7 +22,7 @@ namespace trifenix.agro.external.interfaces.entities.orders
 
         Task<ExtGetContainer<OrderResult>> GetApplicationOrdersByPage(int page, int quantity, bool orderByDesc);
 
-        ExtGetContainer<OrderResult> GetApplicationOrdersByPage(string search, int page, int quantity, bool desc);
+        Task<ExtGetContainer<OrderResult>> GetApplicationOrdersByPage(string search, int page, int quantity, bool desc);
 
 
 
