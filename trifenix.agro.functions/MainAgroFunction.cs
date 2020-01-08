@@ -519,11 +519,7 @@ namespace trifenix.agro.functions
                 var orderDate = string.IsNullOrWhiteSpace(desc) || desc.ToLower().Equals("desc");
                 if (!orderDate && !desc.ToLower().Equals("asc"))
                     return new BadRequestResult();
-
-
-
-
-                ExtGetContainer<List<OutPutApplicationOrder>> resultGetByPageAll = await manager.ApplicationOrders.GetApplicationOrdersByPage(page, totalByPage??10, orderDate);
+                var resultGetByPageAll = await manager.ApplicationOrders.GetApplicationOrdersByPage(page, totalByPage??10, orderDate);
                 return ContainerMethods.GetJsonGetContainer(resultGetByPageAll, log);
             }
 

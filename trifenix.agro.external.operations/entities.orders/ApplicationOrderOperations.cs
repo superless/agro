@@ -240,7 +240,7 @@ namespace trifenix.agro.external.operations.entities.orders
                 return OperationHelper.GetException<List<OutPutApplicationOrder>>(e, e.Message);
             }
         }
-        public async Task<ExtGetContainer<List<OutPutApplicationOrder>>> GetApplicationOrdersByPage(int page, int quantity, bool orderByDesc)
+        public async Task<ExtGetContainer<OrderResult>> GetApplicationOrdersByPage(int page, int quantity, bool orderByDesc)
         {
             try
             {
@@ -252,14 +252,21 @@ namespace trifenix.agro.external.operations.entities.orders
                 
                 var outputOrders = applicationOrders.Select(GetOutputOrder).ToList();
 
-                return OperationHelper.GetElements(outputOrders);
+                var total = await _args.ApplicationOrder.Total(_args.SeasonId);
+
+                return  OperationHelper.GetElement(new OrderResult { 
+                    Total = total,
+                    Notifications = outputOrders.ToArray()
+                });
 
             }
             catch (Exception e)
             {
 
-                return OperationHelper.GetException<List<OutPutApplicationOrder>>(e, e.Message);
+                return OperationHelper.GetException<OrderResult>(e, e.Message);
             }
         }
+
+
     }
 }

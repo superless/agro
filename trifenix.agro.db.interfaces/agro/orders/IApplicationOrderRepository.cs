@@ -14,5 +14,7 @@ namespace trifenix.agro.db.interfaces.agro.orders
         Task<ApplicationOrder> GetApplicationOrder(string id);
 
         IQueryable<ApplicationOrder> GetApplicationOrders();
+
+        Task<long> Total(string season);
     }
 }
