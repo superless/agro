@@ -35,7 +35,7 @@ namespace trifenix.agro.search
             var skip = (page - 1) * quantity;
             var indexClient = _search.Indexes.GetClient(IndexOrder);
             var order = desc ? "desc" : "asc";
-            var result = indexClient.Documents.Search<OrderSearch>(search, new SearchParameters {
+            var result = indexClient.Documents.Search<OrderSearch>(!string.IsNullOrWhiteSpace(search)?search:null, new SearchParameters {
                 SearchFields = new List<string> { "description" },
                 Skip = skip == 0 ? 0 : skip,
                 Top = quantity,
