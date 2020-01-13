@@ -158,9 +158,9 @@ namespace trifenix.agro.external.operations.entities.orders
 
         public async Task<ExtPostContainer<ExecutionOrder>> SetStatus(string idExecutionOrder, string type, int value, string commentary) {
             string error = "";
-            if (string.IsNullOrWhiteSpace(idExecutionOrder)) error += "Es requerido 'idExecutionOrder' para crear una ejecucion.\n";
-            if (string.IsNullOrWhiteSpace(type)) error += "Es requerido 'type' para crear una ejecucion.\n";
-            if (!String.IsNullOrEmpty(error)) return OperationHelper.GetPostException<ExecutionOrder>(new Exception(error));
+            if (string.IsNullOrWhiteSpace(idExecutionOrder)) error += "Es requerido 'idExecutionOrder' para identificar la ejecucion a modificar.\n";
+            if (string.IsNullOrWhiteSpace(type)) error += "Es requerido 'type' para identificar el tipo de estado a modificar en la ejecucion.\n";
+            if (!string.IsNullOrEmpty(error)) return OperationHelper.GetPostException<ExecutionOrder>(new Exception(error));
             ExecutionOrder execution = await _repo.GetExecutionOrder(idExecutionOrder);
             if (execution == null)
                 return OperationHelper.PostNotFoundElementException<ExecutionOrder>($"No se encontró la ejecucion con id {idExecutionOrder}", idExecutionOrder);
@@ -268,8 +268,8 @@ namespace trifenix.agro.external.operations.entities.orders
         * Al crear una ejecucion (En planificacion) es obligatoria la orden relacionada.
         * Al iniciar la ejecucion (En proceso) el usuario aplicador asignado es obligatorio.
         * El closedStatus solo puede ser seteado si el usuario posee el rol de "Administrador".
-        * Comentarios para cada estado, independiente de los comentarios transversales.*/
+        * Comentarios para cada estado, independiente de los comentarios transversales.
+        * Si la ejecucion ya finalizo(finishStatus != 0) solo se pueden recibir comentarios y cierre de ejecucion(set closedStatus to != 0) */
 
          //TODO: Validaciones faltantes
-         //Si la orden relacionada ya posee una ejecucion exitosa no se puede crear una nueva ejecucion.       
-         //Si la ejecucion ya finalizo (finishStatus != 0) solo se pueden recibir comentarios y cierre de ejecucion (set closedStatus to != 0)
+         //Si la orden relacionada ya posee una ejecucion exitosa no se puede crear una nueva ejecucion.
