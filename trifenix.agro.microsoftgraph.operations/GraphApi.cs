@@ -3,7 +3,6 @@ using Microsoft.Identity.Client;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -52,7 +51,7 @@ namespace trifenix.agro.microsoftgraph.operations
             var invitation = new Invitation {
                 InvitedUserDisplayName = name,
                 InvitedUserEmailAddress = email,
-                InvitedUserMessageInfo = new InvitedUserMessageInfo() { CustomizedMessageBody = "Bienvenido a Aresa"},
+                InvitedUserMessageInfo = new InvitedUserMessageInfo() { CustomizedMessageBody = "Bienvenido a Aresa", MessageLanguage = "es-es"},
                 InviteRedirectUrl = "https://sprint3-jhm.trifenix.io/",
                 SendInvitationMessage = true,
             };

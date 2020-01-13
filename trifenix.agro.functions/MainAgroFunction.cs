@@ -17,8 +17,6 @@ using System.Security.Claims;
 using trifenix.agro.model.external;
 using System.Collections.Generic;
 using System.IO;
-using System.Net.Http;
-using System.Text;
 using trifenix.agro.db.model.agro.orders;
 
 namespace trifenix.agro.functions
@@ -26,11 +24,6 @@ namespace trifenix.agro.functions
     public static class MainAgroFunction
     {
         private static readonly Email email = new Email();
-
-        //otra prueba
-
-
-        // cristian very good job adding id for every query. 
 
         #region v2/phenological_events
         [FunctionName("PhenologicalEventV2")]
