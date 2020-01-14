@@ -19,11 +19,8 @@ using System.Collections.Generic;
 using System.IO;
 using trifenix.agro.db.model.agro.orders;
 
-namespace trifenix.agro.functions
-{
-    public static class MainAgroFunction
-    {
-        private static readonly Email email = new Email();
+namespace trifenix.agro.functions {
+    public static class MainAgroFunction {
 
         #region v2/phenological_events
         [FunctionName("PhenologicalEventV2")]
@@ -418,6 +415,7 @@ namespace trifenix.agro.functions
             if (claims == null)
                 return new UnauthorizedResult();
             var manager = await ContainerMethods.AgroManager(claims);
+            Email email = new Email(manager.Users.GetUsers().Result.Result);
             //HttpClient client = new HttpClient();
             //var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             //dynamic body = JsonConvert.DeserializeObject(requestBody);
@@ -455,17 +453,17 @@ namespace trifenix.agro.functions
                         //var lat = (float)newModel["latitude"];
                         //var lon = (float)newModel["longitude"];
                         var response = await db.NotificationEvents.SaveNewNotificationEvent(barrack, idPhenologicalEvent, base64, description, 0F, 0F);
-                        //var evt = await db.NotificationEvents.GetEvent(response.IdRelated);
-                        //var url = evt.Result.PicturePath;
-                        //await email.SendEmail("Notificacion",
-                        //    $@"<html>
-                        //    <body>
-                        //        <p> Estimado(a), </p>
-                        //        <p> Llego una notificacion </p>
-                        //        <img src='{url}' style='width:50%;height:auto;'>
-                        //        <p> Atentamente,<br> -Aresa </br></p>
-                        //    </body>
-                        //</html>");
+                        var evt = await db.NotificationEvents.GetEvent(response.IdRelated);
+                        var url = evt.Result.PicturePath;
+                        email.SendEmail("Notificacion",
+                            $@"<html>
+                            <body>
+                                <p> Estimado(a), </p>
+                                <p> Llego una notificacion </p>
+                                <img src='{url}' style='width:50%;height:auto;'>
+                                <p> Atentamente,<br> -Aresa </br></p>
+                            </body>
+                        </html>");
                         return response;
                     }, claims);
             }
