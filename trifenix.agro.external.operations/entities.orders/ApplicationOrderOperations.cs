@@ -27,7 +27,8 @@ namespace trifenix.agro.external.operations.entities.orders
             _args = args;
         }
 
-        private OutPutApplicationOrder GetOutputOrder(ApplicationOrder appOrder) {
+        private OutPutApplicationOrder GetOutputOrder(ApplicationOrder appOrder)
+        {
             return new OutPutApplicationOrder
             {
                 Id = appOrder.Id,
@@ -36,10 +37,7 @@ namespace trifenix.agro.external.operations.entities.orders
                 InitDate = appOrder.InitDate,
                 EndDate = appOrder.EndDate,
                 SeasonId = appOrder.SeasonId,
-                ApplicationInOrders = appOrder.ApplicationInOrders.Select(async s =>
-                {
-
-
+                ApplicationInOrders = appOrder.ApplicationInOrders.Select(async s => {
                     return new OutPutApplicationInOrder
                     {
                         Doses = s.Doses,
@@ -49,12 +47,8 @@ namespace trifenix.agro.external.operations.entities.orders
                     };
                 }).Select(s => s.Result).ToList(),
                 PhenologicalPreOrders = appOrder.PhenologicalPreOrders,
-                Barracks = appOrder.Barracks.Select(async s =>
-                {
-
-                    var events = await s.EventsId.SelectElement(_args.Notifications.GetNotificationEvent, "identicadores de evento no encontrados");
-
-
+                Barracks = appOrder.Barracks.Select(async s => {
+                    var events = await s.EventsId.SelectElement(_args.Notifications.GetNotificationEvent, "Identicadores de evento no encontrados");
                     return new OutputBarrackInstance
                     {
                         Barrack = s.Barrack,
@@ -67,7 +61,6 @@ namespace trifenix.agro.external.operations.entities.orders
                             PhenologicalEvent = a.PhenologicalEvent,
                             PicturePath = a.PicturePath
                         }).ToList()
-
                     };
                 }).Select(s => s.Result).ToList()
             };
@@ -78,20 +71,14 @@ namespace trifenix.agro.external.operations.entities.orders
             try
             {
                 var appOrder = await _args.ApplicationOrder.GetApplicationOrder(id);
-
                 var newAppOrder = GetOutputOrder(appOrder);
-
-
                 return OperationHelper.GetElement(newAppOrder);
             }
             catch (Exception e)
             {
-
                 return OperationHelper.GetException<OutPutApplicationOrder>(e, e.Message);
             }
         }
-
-        
 
         public async Task<ExtPostContainer<OutPutApplicationOrder>> SaveEditApplicationOrder(string id, ApplicationOrderInput input)
         {
@@ -104,9 +91,8 @@ namespace trifenix.agro.external.operations.entities.orders
                 id,
                 order,
                 s => {
-                    searchLocal.AddOrders(new List<OrderSearch>
-                    {
-                        new OrderSearch{ 
+                    searchLocal.AddOrders(new List<OrderSearch> {
+                        new OrderSearch{
                             Created = DateTime.Now,
                             Name = appNewOrder.Name,
                             OrderId = appNewOrder.Id
@@ -131,17 +117,16 @@ namespace trifenix.agro.external.operations.entities.orders
             };
         }
 
-        private async Task<ApplicationOrder> GetApplicationOrder(string id, ApplicationOrderInput input) {
-
-            
-            var varietyIds = input.Applications.Any(s => s.Doses != null)? input.Applications.Where(s => s.Doses != null).SelectMany(s => s.Doses.IdVarieties).Distinct() : new List<string>();
-            var targetIds = input.Applications.Any(s => s.Doses != null) ? input.Applications.Where(s => s.Doses != null).SelectMany(s => s.Doses.idsApplicationTarget).Distinct(): new List<string>();
+        private async Task<ApplicationOrder> GetApplicationOrder(string id, ApplicationOrderInput input)
+        {
+            var varietyIds = input.Applications.Any(s => s.Doses != null) ? input.Applications.Where(s => s.Doses != null).SelectMany(s => s.Doses.IdVarieties).Distinct() : new List<string>();
+            var targetIds = input.Applications.Any(s => s.Doses != null) ? input.Applications.Where(s => s.Doses != null).SelectMany(s => s.Doses.idsApplicationTarget).Distinct() : new List<string>();
             var speciesIds = input.Applications.Any(s => s.Doses != null) ? input.Applications.Where(s => s.Doses != null).SelectMany(s => s.Doses.IdSpecies).Distinct() : new List<string>();
-            var certifiedEntitiesIds = input.Applications.Any(s=>s.Doses!=null)? input.Applications.Where(s=>s.Doses!=null).SelectMany(s => s.Doses.WaitingHarvest.Select(a => a.IdCertifiedEntity)).Distinct(): new List<string>();
+            var certifiedEntitiesIds = input.Applications.Any(s => s.Doses != null) ? input.Applications.Where(s => s.Doses != null).SelectMany(s => s.Doses.WaitingHarvest.Select(a => a.IdCertifiedEntity)).Distinct() : new List<string>();
             var barracksInstances = await GetBarracksIntance(input.BarracksInput);
             var applications = GetApplicationInOrder(input.Applications);
             var phenologicalPreOrders = input.PreOrdersId == null || !input.PreOrdersId.Any() ? new List<PhenologicalPreOrder>() :
-                           await input.PreOrdersId.SelectElement(_args.PreOrder.GetPhenologicalPreOrder, "Existen identificadores de preordenes que no fueron encontrados");
+            await input.PreOrdersId.SelectElement(_args.PreOrder.GetPhenologicalPreOrder, "Existen identificadores de preordenes que no fueron encontrados");
             var creator = await _args.GraphApi.GetUserFromToken();
             var userActivity = new UserActivity(DateTime.Now, creator);
             return new ApplicationOrder
@@ -163,40 +148,30 @@ namespace trifenix.agro.external.operations.entities.orders
             };
         }
 
-             //TODO: Validaciones al momento de modificar orden
-             //Al modificar la fecha en la orden, no deben existir ejecuciones en proceso,  todas deben estar cerradas.   Posible duplicidad 
-             //No se puede modificar una orden que ya posee una ejecucion en proceso o una ejecucion exitosa (cerrada).           ^
+        //TODO: Validaciones al momento de modificar orden
+        //Al modificar la fecha en la orden, no deben existir ejecuciones en proceso,  todas deben estar cerradas.   Posible duplicidad 
+        //No se puede modificar una orden que ya posee una ejecucion en proceso o una ejecucion exitosa (cerrada).           ^
 
         public async Task<ExtPostContainer<string>> SaveNewApplicationOrder(ApplicationOrderInput input)
         {
             var searchLocal = new AgroSearch("agrisearch", "F9189208F49AF7C3DFD34E45A89F19E4");
-            
-
             var newId = await OperationHelper.CreateElement(_args.CommonDb.ApplicationOrder, _args.ApplicationOrder.GetApplicationOrders(),
-                       async s => await _args.ApplicationOrder.CreateUpdate(await GetApplicationOrder(s, input)),
-                       s => s.Name.Equals(input.Name),
-                       $"Ya existe orden de aplicacion con nombre: {input.Name}"
-                   );
-
-            searchLocal.AddOrders(new List<OrderSearch>
-            {
-                new OrderSearch{
+            async s => await _args.ApplicationOrder.CreateUpdate(await GetApplicationOrder(s, input)),
+                s => s.Name.Equals(input.Name),
+                $"Ya existe orden de aplicacion con nombre: {input.Name}");
+            searchLocal.AddOrders(new List<OrderSearch> {
+                new OrderSearch {
                     Created = DateTime.Now,
                     Name = input.Name,
                     OrderId = newId.IdRelated
                 }
             });
-
-
             return newId;
         }
 
-        private List<ApplicationsInOrder> GetApplicationInOrder(ApplicationInOrderInput[] appInOrder) {
-
-            
-
-            return appInOrder.Select(async s =>
-            {
+        private List<ApplicationsInOrder> GetApplicationInOrder(ApplicationInOrderInput[] appInOrder)
+        {
+            return appInOrder.Select(async s => {
                 if (s.Doses == null)
                 {
                     return new ApplicationsInOrder
@@ -206,47 +181,34 @@ namespace trifenix.agro.external.operations.entities.orders
 
                     };
                 }
-
                 var dose = await GetDose(s.Doses);
                 return new ApplicationsInOrder
                 {
                     ProductId = s.ProductId,
                     QuantityByHectare = s.QuantityByHectare,
                     Doses = dose
-
                 };
-
-
             }).Select(s => s.Result).ToList();
         }
 
         private async Task<Doses> GetDose(DosesInput input)
         {
-
             var doses = new List<DosesInput> { input };
             var idCerts = input.WaitingHarvest.Select(s => s.IdCertifiedEntity).Distinct();
-
-
-            var dosesResult= await ModelCommonOperations.GetDoses(_args.DosesArgs.Variety, _args.DosesArgs.Target,
-                _args.DosesArgs.Specie, _args.DosesArgs.CertifiedEntity, doses.ToArray(), input.IdVarieties, input.idsApplicationTarget, input.IdSpecies, idCerts, _args.SeasonId);
-
+            var dosesResult = await ModelCommonOperations.GetDoses(_args.DosesArgs.Variety, _args.DosesArgs.Target, _args.DosesArgs.Specie, _args.DosesArgs.CertifiedEntity, doses.ToArray(), input.IdVarieties, input.idsApplicationTarget, input.IdSpecies, idCerts, _args.SeasonId);
             return dosesResult.First();
-
         }
 
-        private async Task<List<BarrackOrderInstance>> GetBarracksIntance(BarrackEventInput[] barracksInput) {
-           
+        private async Task<List<BarrackOrderInstance>> GetBarracksIntance(BarrackEventInput[] barracksInput)
+        {
             var barracks = await barracksInput.Select(s => s.IdBarrack).SelectElement(_args.Barracks.GetBarrack, "Uno de los identificadores de cuartel no fue encontrado");
-
-            return barracksInput.Select(s =>
-            {
+            return barracksInput.Select(s => {
                 return new BarrackOrderInstance
                 {
-                    Barrack = barracks.First(a=>a.Id.Equals(s.IdBarrack)),
+                    Barrack = barracks.First(a => a.Id.Equals(s.IdBarrack)),
                     EventsId = s.EventsId?.ToList()
                 };
             }).ToList();
-
         }
 
         public async Task<ExtGetContainer<List<OutPutApplicationOrder>>> GetApplicationOrders()
@@ -256,39 +218,31 @@ namespace trifenix.agro.external.operations.entities.orders
                 var applicationOrderQuery = _args.ApplicationOrder.GetApplicationOrders();
                 var applicationOrders = await _args.CommonDb.ApplicationOrder.TolistAsync(applicationOrderQuery);
                 var outputOrders = applicationOrders.Select(GetOutputOrder).ToList();
-
                 return OperationHelper.GetElements(outputOrders);
-
             }
             catch (Exception e)
             {
-
                 return OperationHelper.GetException<List<OutPutApplicationOrder>>(e, e.Message);
             }
         }
+
         public async Task<ExtGetContainer<OrderResult>> GetApplicationOrdersByPage(int page, int quantity, bool orderByDesc)
         {
             try
             {
                 var applicationOrderQuery = _args.ApplicationOrder.GetApplicationOrders();
                 var paginatedOrders = _args.CommonDb.ApplicationOrder.WithPagination(applicationOrderQuery, page, quantity);
-
-                var applicationOrders =  orderByDesc? await _args.CommonDb.ApplicationOrder.TolistAsync(paginatedOrders.OrderByDescending(s=>s.Name)): await _args.CommonDb.ApplicationOrder.TolistAsync(paginatedOrders);
-
-                
+                var applicationOrders = orderByDesc ? await _args.CommonDb.ApplicationOrder.TolistAsync(paginatedOrders.OrderByDescending(s => s.Name)) : await _args.CommonDb.ApplicationOrder.TolistAsync(paginatedOrders);
                 var outputOrders = applicationOrders.Select(GetOutputOrder).ToList();
-
                 var total = await _args.ApplicationOrder.Total(_args.SeasonId);
-
-                return  OperationHelper.GetElement(new OrderResult { 
+                return OperationHelper.GetElement(new OrderResult
+                {
                     Total = total,
                     Orders = outputOrders.ToArray()
                 });
-
             }
             catch (Exception e)
             {
-
                 return OperationHelper.GetException<OrderResult>(e, e.Message);
             }
         }
