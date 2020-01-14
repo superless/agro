@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\trifenix.agro.email.interfaces\trifenix.agro.email.interfaces.csproj" />
+    <ProjectReference Include="..\trifenix.agro.model\trifenix.agro.db.model.csproj" />
   </ItemGroup>
 
 </Project>
