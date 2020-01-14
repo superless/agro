@@ -14,10 +14,10 @@ namespace trifenix.agro.email.operations {
 
         public Email(List<UserApplicator> users) {
             Users = users;
-            initSMTPServer();
+            InitSMTPServer();
         }
 
-        private void initSMTPServer() {
+        private void InitSMTPServer() {
             Mail.From = new MailAddress("aresa.notificaciones@gmail.com", "Aresa");
             Mail.IsBodyHtml = true;
             SmtpServer.Port = 587;
@@ -26,7 +26,7 @@ namespace trifenix.agro.email.operations {
         }
         public IActionResult SendEmail(string subject, string htmlBody) {
             Mail.Subject = subject;
-            var receivers = getReceivers(new List<string> { "Administrador" });
+            var receivers = GetReceivers(new List<string> { "Administrador" });
             receivers.ForEach(delegate (MailAddress user) {
                 Mail.To.Add(user);
             });
@@ -41,7 +41,7 @@ namespace trifenix.agro.email.operations {
             }
         }
 
-        private List<MailAddress> getReceivers(List<string> roles) {
+        private List<MailAddress> GetReceivers(List<string> roles) {
             List<MailAddress> mails = new List<MailAddress>();
             Users.FindAll(user => user.Roles.Any(role => roles.Contains(role.Name))).ForEach(userReceiver => mails.Add(new MailAddress(userReceiver.Email)));
             return mails;
