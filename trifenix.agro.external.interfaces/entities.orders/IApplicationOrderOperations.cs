@@ -6,6 +6,7 @@ using trifenix.agro.db.model.agro.orders;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.model.external.output;
+using trifenix.agro.search.model;
 
 namespace trifenix.agro.external.interfaces.entities.orders
 {
@@ -25,6 +26,8 @@ namespace trifenix.agro.external.interfaces.entities.orders
         Task<ExtGetContainer<OrderResult>> GetApplicationOrdersByPage(string search, int page, int quantity, bool desc);
 
 
+
+        ExtGetContainer<OrderSearchContainer> GetOrderSearch(string search, int page, int quantity, bool desc);
 
 
 
