@@ -295,6 +295,7 @@ namespace trifenix.agro.external.operations.entities.orders
 
         public async Task<ExtGetContainer<OrderResult>> GetApplicationOrdersByPage(string search, int page, int quantity, bool desc)
         {
+            //TODO : poner las credenciales fuera.
             var searchLocal = new AgroSearch("agrisearch", "F9189208F49AF7C3DFD34E45A89F19E4");
 
 
@@ -312,6 +313,18 @@ namespace trifenix.agro.external.operations.entities.orders
                 Total = ordersearch.Total,
                 Orders = resultDb.Select(s=>s.Result.Result).ToArray()
             });
+        }
+
+       
+
+        public ExtGetContainer<OrderSearchContainer> GetOrderSearch(string search, int page, int quantity, bool desc)
+        {
+            //TODO : poner las credenciales fuera.
+            var searchLocal = new AgroSearch("agrisearch", "F9189208F49AF7C3DFD34E45A89F19E4");
+            var ordersearch = searchLocal.GetOrders(search, page, quantity, desc);
+
+            return OperationHelper.GetElement(ordersearch);
+
         }
     }
 }

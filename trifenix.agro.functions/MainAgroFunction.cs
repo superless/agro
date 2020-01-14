@@ -495,6 +495,18 @@ namespace trifenix.agro.functions
             return ContainerMethods.GetJsonGetContainer(result, log);
         }
 
+        [FunctionName("OrderSimpleFilter")]
+        public static async Task<IActionResult> OrderSimpleFilter([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/orders/search/simple/{search}/{page}/{quantity}/{order}")] HttpRequest req, string search, int page, int quantity, string order, ILogger log)
+        {
+            ClaimsPrincipal claims = await Auth.Validate(req);
+            if (claims == null)
+                return new UnauthorizedResult();
+            var manager = await ContainerMethods.AgroManager(claims);
+            var orderDate = string.IsNullOrWhiteSpace(order) || order.ToLower().Equals("desc");
+            var result = manager.ApplicationOrders.GetOrderSearch(search, page, quantity, orderDate);
+            return ContainerMethods.GetJsonGetContainer(result, log);
+        }
+
 
         #region v2/orders
         [FunctionName("Orders")]
