@@ -27,6 +27,8 @@ namespace trifenix.agro.external.operations.entities.orders
             _args = args;
         }
 
+
+
         private OutPutApplicationOrder GetOutputOrder(ApplicationOrder appOrder)
         {
             return new OutPutApplicationOrder
