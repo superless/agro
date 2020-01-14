@@ -17,8 +17,6 @@ using System.Security.Claims;
 using trifenix.agro.model.external;
 using System.Collections.Generic;
 using System.IO;
-using System.Net.Http;
-using System.Text;
 using trifenix.agro.db.model.agro.orders;
 
 namespace trifenix.agro.functions
@@ -26,11 +24,6 @@ namespace trifenix.agro.functions
     public static class MainAgroFunction
     {
         private static readonly Email email = new Email();
-
-        //otra prueba
-
-
-        // cristian very good job adding id for every query. 
 
         #region v2/phenological_events
         [FunctionName("PhenologicalEventV2")]
@@ -425,16 +418,16 @@ namespace trifenix.agro.functions
             if (claims == null)
                 return new UnauthorizedResult();
             var manager = await ContainerMethods.AgroManager(claims);
-            HttpClient client = new HttpClient();
-            var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic body = JsonConvert.DeserializeObject(requestBody);
-            var newBody = body["_parts"][0][1];
-            byte[] byteArray = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(newBody));
-            MemoryStream stream = new MemoryStream(byteArray);
-            var inputData = new StreamContent(stream);
-            string ipNgrok = Environment.GetEnvironmentVariable("ipNgrok", EnvironmentVariableTarget.Process);
-            await client.PostAsync("https://" + ipNgrok + ".ngrok.io/api/v2/debugroutes", inputData);
-            client.Dispose();
+            //HttpClient client = new HttpClient();
+            //var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            //dynamic body = JsonConvert.DeserializeObject(requestBody);
+            //var newBody = body["_parts"][0][1];
+            //byte[] byteArray = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(newBody));
+            //MemoryStream stream = new MemoryStream(byteArray);
+            //var inputData = new StreamContent(stream);
+            //string ipNgrok = Environment.GetEnvironmentVariable("ipNgrok", EnvironmentVariableTarget.Process);
+            //await client.PostAsync("https://" + ipNgrok + ".ngrok.io/api/v2/debugroutes", inputData);
+            //client.Dispose();
             ExtGetContainer<NotificationEvent> result = null;
             switch (req.Method.ToLower()) {
                 case "get":
@@ -459,20 +452,20 @@ namespace trifenix.agro.functions
                         var description = (string)newModel["description"];
                         var base64 = (string)newModel["base64"];
                         var barrack = (string)newModel["idBarrack"];
-                        var lat = (float)newModel["latitude"];
-                        var lon = (float)newModel["longitude"];
-                        var response = await db.NotificationEvents.SaveNewNotificationEvent(barrack, idPhenologicalEvent, base64, description, lat, lon);
-                        var evt = await db.NotificationEvents.GetEvent(response.IdRelated);
-                        var url = evt.Result.PicturePath;
-                        await email.SendEmail("Notificacion",
-                            $@"<html>
-                            <body>
-                                <p> Estimado(a), </p>
-                                <p> Llego una notificacion </p>
-                                <img src='{url}' style='width:50%;height:auto;'>
-                                <p> Atentamente,<br> -Aresa </br></p>
-                            </body>
-                        </html>");
+                        //var lat = (float)newModel["latitude"];
+                        //var lon = (float)newModel["longitude"];
+                        var response = await db.NotificationEvents.SaveNewNotificationEvent(barrack, idPhenologicalEvent, base64, description, 0F, 0F);
+                        //var evt = await db.NotificationEvents.GetEvent(response.IdRelated);
+                        //var url = evt.Result.PicturePath;
+                        //await email.SendEmail("Notificacion",
+                        //    $@"<html>
+                        //    <body>
+                        //        <p> Estimado(a), </p>
+                        //        <p> Llego una notificacion </p>
+                        //        <img src='{url}' style='width:50%;height:auto;'>
+                        //        <p> Atentamente,<br> -Aresa </br></p>
+                        //    </body>
+                        //</html>");
                         return response;
                     }, claims);
             }
@@ -562,7 +555,7 @@ namespace trifenix.agro.functions
             if (claims == null)
                 return new UnauthorizedResult();
             var manager = await ContainerMethods.AgroManager(claims);
-            ExtGetContainer<List<ExecutionOrder>> resultGetByStatus = await manager.ExecutionOrders.GetExecutionOrderOrders();
+            ExtGetContainer<List<ExecutionOrder>> resultGetByStatus = await manager.ExecutionOrders.GetExecutionOrders();
             resultGetByStatus.Result = resultGetByStatus.Result.Where(execution => execution.ExecutionStatus == status).ToList();
             ExtGetContainer<List<OutPutApplicationOrder>> resultGetAll = await manager.ApplicationOrders.GetApplicationOrders();
             resultGetAll.Result = resultGetAll.Result.Where(order => resultGetByStatus.Result.Any(execution => execution.Order.Id.Equals(order.Id))).ToList();
@@ -975,7 +968,7 @@ namespace trifenix.agro.functions
             switch (req.Method.ToLower()) {
                 case "get":
                     if (!string.IsNullOrWhiteSpace(id)) {
-                        result = await manager.ExecutionOrders.GetExecutionOrderOrder(id);
+                        result = await manager.ExecutionOrders.GetExecutionOrder(id);
                         return ContainerMethods.GetJsonGetContainer(result, log);
                     }
                     break;
@@ -1001,7 +994,7 @@ namespace trifenix.agro.functions
                         return await db.ExecutionOrders.SaveEditExecutionOrder(id, idOrder, idUserApplicator, idNebulizer, idProduct, quantityByHectare, idTractor);
                     }, claims);
             }
-            ExtGetContainer<List<ExecutionOrder>> resultGetAll = await manager.ExecutionOrders.GetExecutionOrderOrders();
+            ExtGetContainer<List<ExecutionOrder>> resultGetAll = await manager.ExecutionOrders.GetExecutionOrders();
             return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
         }
         #endregion
@@ -1013,7 +1006,7 @@ namespace trifenix.agro.functions
             if (claims == null)
                 return new UnauthorizedResult();
             var manager = await ContainerMethods.AgroManager(claims);
-            ExtGetContainer<List<ExecutionOrder>> resultGetByStatus = await manager.ExecutionOrders.GetExecutionOrderOrders();
+            ExtGetContainer<List<ExecutionOrder>> resultGetByStatus = await manager.ExecutionOrders.GetExecutionOrders();
             resultGetByStatus.Result = resultGetByStatus.Result.Where(execution => execution.ExecutionStatus == status).ToList();
             return ContainerMethods.GetJsonGetContainer(resultGetByStatus, log);
         }

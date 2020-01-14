@@ -151,7 +151,7 @@ namespace trifenix.agro.external.operations.entities.events
                 }
                 var creator = await _graphApi.GetUserFromToken();
                 var userActivity = new UserActivity(DateTime.Now, creator);
-                var weather = await _weatherApi.GetWeather(lat, lon);
+                //var weather = await _weatherApi.GetWeather(lat, lon);
                 return await OperationHelper.CreateElement(_commonDb, _repo.GetNotificationEvents(),
                    async s => await _repo.CreateUpdateNotificationEvent(new NotificationEvent
                    {
@@ -162,7 +162,7 @@ namespace trifenix.agro.external.operations.entities.events
                        PhenologicalEvent = localPhenological,
                        PicturePath = imgPath,
                        Creator = userActivity,
-                       Weather = weather
+                       //Weather = weather
                    }),
                    s => false,
                    $""
