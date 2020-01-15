@@ -987,8 +987,8 @@ namespace trifenix.agro.functions {
                         string idOrder = (string)model["idOrder"];
                         string idUserApplicator = (string)model["idUserApplicator"];
                         string idNebulizer = (string)model["idNebulizer"];
-                        var idProduct = JsonConvert.DeserializeObject<string[]>(model["idProduct"]);
-                        var quantityByHectare = JsonConvert.DeserializeObject<double[]>(model["quantityByHectare"]);
+                        var idProduct = JsonConvert.DeserializeObject<string[]>(((object)model["idProduct"]).ToString());
+                        var quantityByHectare = JsonConvert.DeserializeObject<double[]>(((object)model["quantityByHectare"]).ToString());
                         string idTractor = (string)model["idTractor"];
                         string commentary = (string)model["commentary"];
                         return await db.ExecutionOrders.SaveNewExecutionOrder(idOrder, idUserApplicator, idNebulizer, idProduct, quantityByHectare, idTractor, commentary);
@@ -998,8 +998,8 @@ namespace trifenix.agro.functions {
                         string idOrder = (string)model["idOrder"];
                         string idUserApplicator = (string)model["idUserApplicator"];
                         string idNebulizer = (string)model["idNebulizer"];
-                        var idProduct = JsonConvert.DeserializeObject<string[]>(model["idProduct"]);
-                        var quantityByHectare = JsonConvert.DeserializeObject<double[]>(model["quantityByHectare"]);
+                        var idProduct = JsonConvert.DeserializeObject<string[]>(((object)model["idProduct"]).ToString());
+                        var quantityByHectare = JsonConvert.DeserializeObject<double[]>(((object)model["quantityByHectare"]).ToString());
                         string idTractor = (string)model["idTractor"];
                         return await db.ExecutionOrders.SaveEditExecutionOrder(id, idOrder, idUserApplicator, idNebulizer, idProduct, quantityByHectare, idTractor);
                     }, claims);
