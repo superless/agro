@@ -987,8 +987,8 @@ namespace trifenix.agro.functions {
                         string idOrder = (string)model["idOrder"];
                         string idUserApplicator = (string)model["idUserApplicator"];
                         string idNebulizer = (string)model["idNebulizer"];
-                        string idProduct = (string)model["idProduct"];
-                        double quantityByHectare = (double)model["quantityByHectare"];
+                        var idProduct = JsonConvert.DeserializeObject<string[]>((string)model["idProduct"]);
+                        var quantityByHectare = JsonConvert.DeserializeObject<double[]>((string)model["quantityByHectare"]);
                         string idTractor = (string)model["idTractor"];
                         string commentary = (string)model["commentary"];
                         return await db.ExecutionOrders.SaveNewExecutionOrder(idOrder, idUserApplicator, idNebulizer, idProduct, quantityByHectare, idTractor, commentary);
@@ -998,8 +998,8 @@ namespace trifenix.agro.functions {
                         string idOrder = (string)model["idOrder"];
                         string idUserApplicator = (string)model["idUserApplicator"];
                         string idNebulizer = (string)model["idNebulizer"];
-                        string idProduct = (string)model["idProduct"];
-                        double quantityByHectare = (double)model["quantityByHectare"];
+                        var idProduct = JsonConvert.DeserializeObject<string[]>((string)model["idProduct"]);
+                        var quantityByHectare = JsonConvert.DeserializeObject<double[]>((string)model["quantityByHectare"]);
                         string idTractor = (string)model["idTractor"];
                         return await db.ExecutionOrders.SaveEditExecutionOrder(id, idOrder, idUserApplicator, idNebulizer, idProduct, quantityByHectare, idTractor);
                     }, claims);
