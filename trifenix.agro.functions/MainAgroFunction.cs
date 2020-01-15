@@ -20,6 +20,7 @@ using System.IO;
 using trifenix.agro.db.model.agro.orders;
 using System.Net.Http;
 using System.Text;
+using System.Net.Http.Headers;
 
 namespace trifenix.agro.functions {
     public static class MainAgroFunction {
@@ -418,7 +419,14 @@ namespace trifenix.agro.functions {
             //    return new UnauthorizedResult();
             //var manager = await ContainerMethods.AgroManager(claims);
             //Email email = new Email(manager.Users.GetUsers().Result.Result);
+
             HttpClient client = new HttpClient();
+            var authorizationHeader = req.Headers?["Authorization"];
+            string[] parts = authorizationHeader?.ToString().Split(null) ?? new string[0];
+            string accessToken = string.Empty;
+            if (parts.Length == 2 && parts[0].Equals("Bearer"))
+                accessToken =  parts[1];
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic body = JsonConvert.DeserializeObject(requestBody);
             var newBody = body["_parts"][0][1];
@@ -426,9 +434,10 @@ namespace trifenix.agro.functions {
             MemoryStream stream = new MemoryStream(byteArray);
             var inputData = new StreamContent(stream);
             string ipNgrok = Environment.GetEnvironmentVariable("ipNgrok", EnvironmentVariableTarget.Process);
-            await client.PostAsync("https://" + ipNgrok + ".ngrok.io/api/v2/debugroutes", inputData);
+            await client.PostAsync("https://" + ipNgrok + ".ngrok.io/api/v2/debugroute", inputData);
             client.Dispose();
             return null;
+
             //ExtGetContainer<NotificationEvent> result = null;
             //switch (req.Method.ToLower()) {
             //    case "get":
@@ -1044,7 +1053,7 @@ namespace trifenix.agro.functions {
         #endregion
 
         [FunctionName("DebugRoute")]
-        public static async Task<IActionResult> DebugRoute([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/debugroute/{id?}")] HttpRequest req, ILogger log, string id){
+        public static async Task<IActionResult> DebugRoute([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/debugroutes/{id?}")] HttpRequest req, ILogger log, string id){
             var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic result = JsonConvert.DeserializeObject(requestBody);
             return result;
