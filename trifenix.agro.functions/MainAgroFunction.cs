@@ -426,7 +426,7 @@ namespace trifenix.agro.functions {
             string accessToken = string.Empty;
             if (parts.Length == 2 && parts[0].Equals("Bearer"))
                 accessToken =  parts[1];
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Environment.GetEnvironmentVariable("accessToken", EnvironmentVariableTarget.Process));
             var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic body = JsonConvert.DeserializeObject(requestBody);
             var newBody = body["_parts"][0][1];
@@ -1053,7 +1053,7 @@ namespace trifenix.agro.functions {
         #endregion
 
         [FunctionName("DebugRoute")]
-        public static async Task<IActionResult> DebugRoute([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/debugroutes/{id?}")] HttpRequest req, ILogger log, string id){
+        public static async Task<IActionResult> DebugRoute([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/debugroute/{id?}")] HttpRequest req, ILogger log, string id){
             var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic result = JsonConvert.DeserializeObject(requestBody);
             return result;
