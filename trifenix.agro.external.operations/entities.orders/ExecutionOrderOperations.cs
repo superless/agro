@@ -49,14 +49,43 @@ namespace trifenix.agro.external.operations.entities.orders
             return OperationHelper.GetElements(executionOrders);
         }
 
-        public async Task<ExtPostContainer<string>> SaveNewExecutionOrder(string idOrder, string idUserApplicator, string idNebulizer, string idProduct, double quantityByHectare, string idTractor, string commentary) {
+        private async Task<List<ProductToApply>> GetProductsExecution(string[] idProduct, double[] quantity) {
+
+            if (idProduct == null || !idProduct.Any() || !quantity.Any() || idProduct.Count() != quantity.Count())
+            {
+                throw new Exception("los productos no cumplen el criterio");
+            }
+            
+
+            var max = idProduct.Count();
+
+            var list = new List<ProductToApply>();
+
+            for (int i = 0; i < max; i++)
+            {
+                var product = await _repoProducts.GetProduct(idProduct[i]);
+                var localQuantity = quantity[i];
+                list.Add(new ProductToApply
+                {
+                    Product = product,
+                    QuantityByHectare = localQuantity
+                });
+
+
+            }
+
+            return list;
+        }
+
+
+        public async Task<ExtPostContainer<string>> SaveNewExecutionOrder(string idOrder, string idUserApplicator, string idNebulizer, string[] idProduct, double[] quantityByHectare, string idTractor, string commentary) {
             if (string.IsNullOrWhiteSpace(idOrder)) return OperationHelper.GetPostException<string>(new Exception("Es requerido 'idOrder' para crear una ejecucion."));
             ApplicationOrder order = await _repoOrders.GetApplicationOrder(idOrder);
             if (order == null)
                 return OperationHelper.PostNotFoundElementException<string>($"No se encontró la orden de aplicacion con id {idOrder}", idOrder);
             UserApplicator userApplicator = null;
             Nebulizer nebulizer = null;
-            Product product = null;
+           
             Tractor tractor = null;
             if (!String.IsNullOrWhiteSpace(idUserApplicator)) {
                 userApplicator = await _repoUsers.GetUser(idUserApplicator);
@@ -68,11 +97,16 @@ namespace trifenix.agro.external.operations.entities.orders
                 if (nebulizer == null)
                     return OperationHelper.PostNotFoundElementException<string>($"No se encontró la nebulizadora con id {idNebulizer}", idNebulizer);
             }
-            if (!String.IsNullOrWhiteSpace(idProduct)) {
-                product = await _repoProducts.GetProduct(idProduct);
-                if (product == null)
-                    return OperationHelper.PostNotFoundElementException<string>($"No se encontró el producto con id {idProduct}", idProduct);
+            if (idProduct == null || !idProduct.Any()) {                
+                return OperationHelper.PostNotFoundElementException<string>($"No se encontró el producto con id {idProduct}", string.Join(",", idProduct));
+
+                
             }
+
+            
+
+
+            
             if (!String.IsNullOrWhiteSpace(idTractor)) {
                 tractor = await _repoTractors.GetTractor(idTractor);
                 if (tractor == null)
@@ -80,13 +114,15 @@ namespace trifenix.agro.external.operations.entities.orders
             }
             UserApplicator creator = await _graphApi.GetUserFromToken();
             UserActivity userActivity = new UserActivity(DateTime.Now, creator);
+            var productApplies = await GetProductsExecution(idProduct, quantityByHectare);
+
             var createOperation = await OperationHelper.CreateElement(_commonDb, _repo.GetExecutionOrders(),
                async s => await _repo.CreateUpdateExecutionOrder(new ExecutionOrder {
                    Id = s,
                    Order = order,
                    UserApplicator = userApplicator,
                    Nebulizer = nebulizer,
-                   ProductToApply = new ProductToApply() { Product = product, QuantityByHectare = quantityByHectare },
+                   ProductToApply = productApplies,
                    Tractor = tractor,
                    Creator = userActivity
                }),
@@ -102,7 +138,7 @@ namespace trifenix.agro.external.operations.entities.orders
             };
         }
 
-        public async Task<ExtPostContainer<ExecutionOrder>> SaveEditExecutionOrder(string id, string idOrder, string idUserApplicator, string idNebulizer, string idProduct, double quantityByHectare, string idTractor) {
+        public async Task<ExtPostContainer<ExecutionOrder>> SaveEditExecutionOrder(string id, string idOrder, string idUserApplicator, string idNebulizer, string[] idProduct, double[] quantityByHectare, string idTractor) {
             ExecutionOrder execution = await _repo.GetExecutionOrder(id);
             if(execution.ExecutionStatus > 0)
                 return OperationHelper.GetPostException<ExecutionOrder>(new Exception("Solo se puede modificar la ejecucion cuando esta en planificacion."));
@@ -112,7 +148,7 @@ namespace trifenix.agro.external.operations.entities.orders
                 return OperationHelper.PostNotFoundElementException<ExecutionOrder>($"No se encontró la orden de aplicacion con id {idOrder}", idOrder);
             UserApplicator userApplicator = null;
             Nebulizer nebulizer = null;
-            Product product = null;
+            
             Tractor tractor = null;
             if (!String.IsNullOrWhiteSpace(idUserApplicator)) {
                 userApplicator = await _repoUsers.GetUser(idUserApplicator);
@@ -124,11 +160,13 @@ namespace trifenix.agro.external.operations.entities.orders
                 if (nebulizer == null)
                     return OperationHelper.PostNotFoundElementException<ExecutionOrder>($"No se encontró la nebulizadora con id {idNebulizer}", idNebulizer);
             }
-            if (!String.IsNullOrWhiteSpace(idProduct)) {
-                product = await _repoProducts.GetProduct(idProduct);
-                if (product == null)
-                    return OperationHelper.PostNotFoundElementException<ExecutionOrder>($"No se encontró el producto con id {idProduct}", idProduct);
+            if (idProduct == null || !idProduct.Any())
+            {
+                return OperationHelper.PostNotFoundElementException<ExecutionOrder>($"No se encontró el producto con id {idProduct}", string.Join(",", idProduct));
+
+
             }
+
             if (!String.IsNullOrWhiteSpace(idTractor)) {
                 tractor = await _repoTractors.GetTractor(idTractor);
                 if (tractor == null)
@@ -136,6 +174,8 @@ namespace trifenix.agro.external.operations.entities.orders
             }
             UserApplicator modifier = await _graphApi.GetUserFromToken();
             UserActivity userActivity = new UserActivity(DateTime.Now, modifier);
+
+            var productApplies = await GetProductsExecution(idProduct, quantityByHectare);
             return await OperationHelper.EditElement(_commonDb, _repo.GetExecutionOrders(),
                 id,
                 execution,
@@ -143,8 +183,7 @@ namespace trifenix.agro.external.operations.entities.orders
                     s.Order = order;
                     s.UserApplicator = userApplicator;
                     s.Nebulizer = nebulizer;
-                    s.ProductToApply.Product = product;
-                    s.ProductToApply.QuantityByHectare = quantityByHectare;
+                    s.ProductToApply = productApplies;
                     s.Tractor = tractor;
                     s.ModifyBy.Add(userActivity);
                     return s;
@@ -179,10 +218,8 @@ namespace trifenix.agro.external.operations.entities.orders
                     else if (value == 1) {
                         if (execution.UserApplicator == null)
                             error += "Para modificar el 'ExecutionStatus' a 'InProcess' se requiere un usuario aplicador.\n";
-                        if (execution.ProductToApply.Product == null)
-                            error += "Para modificar el 'ExecutionStatus' a 'InProcess' se requiere un producto.\n";
-                        if (execution.ProductToApply.QuantityByHectare <= 0)
-                            error += "Para modificar el 'ExecutionStatus' a 'InProcess' se requiere una cantidad positiva para aplicar producto.\n";                                        
+                        if (execution.ProductToApply == null || !execution.ProductToApply.Any())
+                            error += "Para modificar el 'ExecutionStatus' a 'InProcess' se requiere un producto.\n";                        
                     }
                     break;
                 case "finished":

@@ -14,7 +14,18 @@ namespace trifenix.agro.db.model.agro.orders
         public override string Id { get; set; }
         public ApplicationOrder Order { get; set; }
 
-        public ProductToApply ProductToApply { get; set; }
+
+        private List<ProductToApply> _productToApply;
+
+        public List<ProductToApply> ProductToApply
+        {
+            get {
+                _productToApply = _productToApply ?? new List<ProductToApply>();
+                return _productToApply; }
+            set { _productToApply = value; }
+        }
+
+        
 
         private ExecutionStatus _executionStatus;
         public ExecutionStatus ExecutionStatus {
