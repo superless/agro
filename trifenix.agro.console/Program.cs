@@ -14,28 +14,28 @@ namespace trifenix.agro.console
     {
         static async Task Main(string[] args){
 
-            var db = new AgroRepository(new AgroDbArguments
-            {
-                EndPointUrl= "https://localhost:8081",
-                NameDb="agrodb",
-                PrimaryKey= "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw=="
-            });
+            //var db = new AgroRepository(new AgroDbArguments
+            //{
+            //    EndPointUrl= "https://localhost:8081",
+            //    NameDb="agrodb",
+            //    PrimaryKey= "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw=="
+            //});
 
 
-            var orders = db.Orders.GetApplicationOrders();
+            //var orders = db.Orders.GetApplicationOrders();
 
-            var ordersDb = await new CommonDbOperations<ApplicationOrder>().TolistAsync(orders);
+            //var ordersDb = await new CommonDbOperations<ApplicationOrder>().TolistAsync(orders);
 
-            var search = new AgroSearch("agrisearch", "F9189208F49AF7C3DFD34E45A89F19E4");
+            //var search = new AgroSearch("agrisearch", "F9189208F49AF7C3DFD34E45A89F19E4");
 
 
-            var ordersSearch = ordersDb.Select(odb => new OrderSearch {
-                Created = DateTime.Now,
-                Name = odb.Name,
-                OrderId = odb.Id
-            }).ToList();
+            //var ordersSearch = ordersDb.Select(odb => new OrderSearch {
+            //    Created = DateTime.Now,
+            //    Name = odb.Name,
+            //    OrderId = odb.Id
+            //}).ToList();
 
-            search.AddOrders(ordersSearch);
+            //search.AddOrders(ordersSearch);
 
 
             
