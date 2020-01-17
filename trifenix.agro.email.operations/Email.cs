@@ -26,7 +26,7 @@ namespace trifenix.agro.email.operations {
         }
         public IActionResult SendEmail(string subject, string htmlBody) {
             Mail.Subject = subject;
-            var receivers = GetReceivers(new List<string> { "Administrador" });
+            var receivers = GetReceivers(new List<string> { "Rol para notificaciones" });
             receivers.ForEach(delegate (MailAddress user) {
                 Mail.To.Add(user);
             });
