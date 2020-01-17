@@ -15,14 +15,12 @@ using trifenix.agro.model.external;
 using trifenix.agro.storage.interfaces;
 using trifenix.agro.weather.interfaces;
 
-namespace trifenix.agro.external.operations.entities.events
-{
+namespace trifenix.agro.external.operations.entities.events {
 
     /// <summary>
     /// Todos las funciones necesarias para interactuar con eventos registrados en el monitoreo.
     /// </summary>
-    public class NotificationEventOperations : INotificatonEventOperations
-    {
+    public class NotificationEventOperations : INotificatonEventOperations {
         private readonly IPhenologicalEventRepository _phenologicalRepository;
         private readonly ICommonDbOperations<NotificationEvent> _commonDb;
         private readonly IBarrackRepository _barrackRepository;
@@ -40,8 +38,7 @@ namespace trifenix.agro.external.operations.entities.events
         /// <param name="phenologicalRepository">repositorio de eventos fenológicos</param>
         /// <param name="phenologicalRepository">repositorio de eventos fenológicos</param>
         /// <param name="uploadImage">Objeto que permite obtener la imagen subida en la aplicación</param>
-        public NotificationEventOperations(INotificationEventRepository repo, IBarrackRepository barrackRepository, IPhenologicalEventRepository phenologicalRepository, ICommonDbOperations<NotificationEvent> commonDb, IUploadImage uploadImage, IGraphApi graphApi, IWeatherApi weatherApi)
-        {
+        public NotificationEventOperations(INotificationEventRepository repo, IBarrackRepository barrackRepository, IPhenologicalEventRepository phenologicalRepository, ICommonDbOperations<NotificationEvent> commonDb, IUploadImage uploadImage, IGraphApi graphApi, IWeatherApi weatherApi) {
             _repo = repo;
             _phenologicalRepository = phenologicalRepository;
             _commonDb = commonDb;
@@ -57,15 +54,12 @@ namespace trifenix.agro.external.operations.entities.events
         /// </summary>
         /// <param name="id">identificador del elemento</param>
         /// <returns>Contenedor con el id del elemento o el detalle del error.</returns>
-        public async Task<ExtGetContainer<NotificationEvent>> GetEvent(string id)
-        {
-            try
-            {
+        public async Task<ExtGetContainer<NotificationEvent>> GetEvent(string id) {
+            try {
                 var notEvent = await _repo.GetNotificationEvent(id);
                 return OperationHelper.GetElement(notEvent);
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 return OperationHelper.GetException<NotificationEvent>(e, e.Message);
             }
         }
@@ -75,21 +69,17 @@ namespace trifenix.agro.external.operations.entities.events
         /// obtiene todas las notificaciones de evento como lista en un contenedor
         /// </summary>
         /// <returns>contenedor con la lista de eventos</returns>
-        public async Task<ExtGetContainer<List<NotificationEvent>>> GetEvents()
-        {
-            try
-            {
+        public async Task<ExtGetContainer<List<NotificationEvent>>> GetEvents() {
+            try {
                 return await GetEventsWrapper(_repo.GetNotificationEvents());
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 return OperationHelper.GetException<List<NotificationEvent>>(e, e.Message);
             }
         }
 
         private async Task<ExtGetContainer<List<NotificationEvent>>> GetEventsWrapper(IQueryable<NotificationEvent> notificationQuery) {
-            if (notificationQuery == null)
-            {
+            if (notificationQuery == null) {
                 var message = "La base de datos retorna nulo para eventos";
                 return OperationHelper.GetException<List<NotificationEvent>>(new Exception(message), message);
             }
@@ -97,29 +87,20 @@ namespace trifenix.agro.external.operations.entities.events
             return OperationHelper.GetElements(notEvents);
         }
 
-        public async  Task<ExtGetContainer<List<NotificationEvent>>> GetEventsByBarrackId(string id)
-        {
-            
-            try
-            {
+        public async  Task<ExtGetContainer<List<NotificationEvent>>> GetEventsByBarrackId(string id) {
+            try {
                 return await GetEventsWrapper(_repo.GetNotificationEvents().Where(s => s.Barrack.Id.Equals(id)));
             }
-            catch (Exception e)
-            {
-
+            catch (Exception e) {
                 return OperationHelper.GetException<List<NotificationEvent>>(e, e.Message);
             }
         }
 
-        public async Task<ExtGetContainer<List<NotificationEvent>>> GetEventsByBarrackPhenologicalEventId(string idBarrack, string idPhenologicalId)
-        {
-            try
-            {
+        public async Task<ExtGetContainer<List<NotificationEvent>>> GetEventsByBarrackPhenologicalEventId(string idBarrack, string idPhenologicalId) {
+            try {
                 return await GetEventsWrapper(_repo.GetNotificationEvents().Where(s => s.Barrack.Id.Equals(idBarrack) && s.PhenologicalEvent.Id.Equals(idPhenologicalId)));
             }
-            catch (Exception e)
-            {
-
+            catch (Exception e) {
                 return OperationHelper.GetException<List<NotificationEvent>>(e, e.Message);
             }
         }
@@ -134,27 +115,23 @@ namespace trifenix.agro.external.operations.entities.events
         /// <param name="description">descripción del evento notificado</param>
         /// <returns>contenedor con el identificador de la notificación</returns>
         public async Task<ExtPostContainer<string>> SaveNewNotificationEvent(string idBarrack, string idPhenologicalEvent, string base64, string description, float lat, float lon) {
-            if (string.IsNullOrWhiteSpace(idBarrack) || string.IsNullOrWhiteSpace(idPhenologicalEvent) || string.IsNullOrWhiteSpace(base64)) {
+            if (string.IsNullOrWhiteSpace(idBarrack) || string.IsNullOrWhiteSpace(idPhenologicalEvent) || string.IsNullOrWhiteSpace(base64))
                 return OperationHelper.PostNotFoundElementException<string>($"identificador de barrack o de evento fenologico o la imagen son nulos", idPhenologicalEvent);
-            }
             try {
                 var localBarrack = await _barrackRepository.GetBarrack(idBarrack);
-                if (localBarrack == null) return OperationHelper.PostNotFoundElementException<string>($"no se encontró cuartel con id {idBarrack}", idBarrack);
-
+                if (localBarrack == null)
+                    return OperationHelper.PostNotFoundElementException<string>($"no se encontró cuartel con id {idBarrack}", idBarrack);
                 var localPhenological = await _phenologicalRepository.GetPhenologicalEvent(idPhenologicalEvent);
-                if (localPhenological == null) return OperationHelper.PostNotFoundElementException<string>($"no se encontró evento fenológico con id {idPhenologicalEvent}", idPhenologicalEvent);
-
+                if (localPhenological == null)
+                    return OperationHelper.PostNotFoundElementException<string>($"no se encontró evento fenológico con id {idPhenologicalEvent}", idPhenologicalEvent);
                 string imgPath = string.Empty;
                 if (_uploadImage != null)
-                {
                     imgPath = await _uploadImage.UploadImageBase64(base64);
-                }
                 var creator = await _graphApi.GetUserFromToken();
                 var userActivity = new UserActivity(DateTime.Now, creator);
                 //var weather = await _weatherApi.GetWeather(lat, lon);
                 return await OperationHelper.CreateElement(_commonDb, _repo.GetNotificationEvents(),
-                   async s => await _repo.CreateUpdateNotificationEvent(new NotificationEvent
-                   {
+                   async s => await _repo.CreateUpdateNotificationEvent(new NotificationEvent {
                        Id = s,
                        Barrack = localBarrack,
                        Created = DateTime.Now,
@@ -168,11 +145,9 @@ namespace trifenix.agro.external.operations.entities.events
                    $""
                );
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 return OperationHelper.GetPostException<string>(e);
             }
-
         }
         
     }

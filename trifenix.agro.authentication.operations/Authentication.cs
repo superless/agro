@@ -25,16 +25,16 @@ namespace trifenix.agro.authentication.operations {
         }
 
         public async Task<ClaimsPrincipal> ValidateAccessToken(string accessToken) {
-            string aadInstance = "https://login.microsoftonline.com/{0}/v2.0";
+            string aadInstance = "https://sts.windows.net/{0}/";
             string authority = string.Format(CultureInfo.InvariantCulture, aadInstance, _tenant);
             List<string> validIssuers = new List<string>() {
                 //$"https://login.microsoftonline.com/{_tenant}/",
                 //$"https://login.microsoftonline.com/{_tenant}/v2.0",
                 //$"https://login.microsoftonline.com/{_tenantID}/",
-                $"https://login.microsoftonline.com/{_tenantID}/v2.0"
+                //$"https://login.microsoftonline.com/{_tenantID}/v2.0"
                 //$"https://login.windows.net/{_tenant}/",
                 //$"https://login.microsoft.com/{_tenant}/",
-                //$"https://sts.windows.net/{_tenantID}/"
+                $"https://sts.windows.net/{_tenantID}/"
             };
             ConfigurationManager<OpenIdConnectConfiguration> configManager = new ConfigurationManager<OpenIdConnectConfiguration>(
                 $"{authority}/.well-known/openid-configuration", new OpenIdConnectConfigurationRetriever());

@@ -33,7 +33,7 @@ namespace trifenix.agro.microsoftgraph.operations
 
         public async Task<UserApplicator> GetUserFromToken() {
             try {
-                string objectIdAAD = AccessTokenClaims.FindFirst("oid").Value;
+                string objectIdAAD = AccessTokenClaims.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
                 var user = await _repoUsers.GetUserFromToken(objectIdAAD);
                 return user;
             }
