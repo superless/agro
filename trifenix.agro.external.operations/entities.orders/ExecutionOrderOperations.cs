@@ -49,43 +49,35 @@ namespace trifenix.agro.external.operations.entities.orders
             return OperationHelper.GetElements(executionOrders);
         }
 
-        private async Task<List<ProductToApply>> GetProductsExecution(string[] idProduct, double[] quantity) {
-
-            if (idProduct == null || !idProduct.Any() || !quantity.Any() || idProduct.Count() != quantity.Count())
-            {
-                throw new Exception("los productos no cumplen el criterio");
-            }
-            
-
-            var max = idProduct.Count();
-
+        private async Task<List<ProductToApply>> GetProductsExecution(string[] idsProduct, double[] quantities) {
+            if (idsProduct.Count() != quantities.Count())
+                throw new Exception("Los productos no cumplen el criterio.");
+            var max = idsProduct.Count();
             var list = new List<ProductToApply>();
-
-            for (int i = 0; i < max; i++)
-            {
-                var product = await _repoProducts.GetProduct(idProduct[i]);
-                var localQuantity = quantity[i];
-                list.Add(new ProductToApply
-                {
+            for (int i = 0; i < max; i++){
+                var product = await _repoProducts.GetProduct(idsProduct[i]);
+                var localQuantity = quantities[i];
+                list.Add(new ProductToApply {
                     Product = product,
                     QuantityByHectare = localQuantity
                 });
-
-
             }
-
             return list;
         }
 
 
-        public async Task<ExtPostContainer<string>> SaveNewExecutionOrder(string idOrder, string idUserApplicator, string idNebulizer, string[] idProduct, double[] quantityByHectare, string idTractor, string commentary) {
+        public async Task<ExtPostContainer<string>> SaveNewExecutionOrder(string idOrder, string idUserApplicator, string idNebulizer, string[] idsProduct, double[] quantitiesByHectare, string idTractor, string commentary) {
             if (string.IsNullOrWhiteSpace(idOrder)) return OperationHelper.GetPostException<string>(new Exception("Es requerido 'idOrder' para crear una ejecucion."));
             ApplicationOrder order = await _repoOrders.GetApplicationOrder(idOrder);
             if (order == null)
                 return OperationHelper.PostNotFoundElementException<string>($"No se encontró la orden de aplicacion con id {idOrder}", idOrder);
+            var executions = _repo.GetExecutionOrders().Where(execution => execution.Order.Id.Equals(order.Id));
+            if(executions.Any(execution => execution.ClosedStatus == (ClosedStatus)1))
+                return OperationHelper.GetPostException<string>(new Exception($"No se puede crear una nueva ejecucion para la orden {idOrder}, debido a que ya existe una ejecucion terminada exitosamente para esta orden."));
+            if (idsProduct == null || !idsProduct.Any())
+                return OperationHelper.GetPostException<string>(new Exception("Se requiere al menos un producto.")); 
             UserApplicator userApplicator = null;
             Nebulizer nebulizer = null;
-           
             Tractor tractor = null;
             if (!String.IsNullOrWhiteSpace(idUserApplicator)) {
                 userApplicator = await _repoUsers.GetUser(idUserApplicator);
@@ -97,16 +89,6 @@ namespace trifenix.agro.external.operations.entities.orders
                 if (nebulizer == null)
                     return OperationHelper.PostNotFoundElementException<string>($"No se encontró la nebulizadora con id {idNebulizer}", idNebulizer);
             }
-            if (idProduct == null || !idProduct.Any()) {                
-                return OperationHelper.PostNotFoundElementException<string>($"No se encontró el producto con id {idProduct}", string.Join(",", idProduct));
-
-                
-            }
-
-            
-
-
-            
             if (!String.IsNullOrWhiteSpace(idTractor)) {
                 tractor = await _repoTractors.GetTractor(idTractor);
                 if (tractor == null)
@@ -114,8 +96,7 @@ namespace trifenix.agro.external.operations.entities.orders
             }
             UserApplicator creator = await _graphApi.GetUserFromToken();
             UserActivity userActivity = new UserActivity(DateTime.Now, creator);
-            var productApplies = await GetProductsExecution(idProduct, quantityByHectare);
-
+            var productApplies = await GetProductsExecution(idsProduct, quantitiesByHectare);
             var createOperation = await OperationHelper.CreateElement(_commonDb, _repo.GetExecutionOrders(),
                async s => await _repo.CreateUpdateExecutionOrder(new ExecutionOrder {
                    Id = s,
@@ -138,7 +119,7 @@ namespace trifenix.agro.external.operations.entities.orders
             };
         }
 
-        public async Task<ExtPostContainer<ExecutionOrder>> SaveEditExecutionOrder(string id, string idOrder, string idUserApplicator, string idNebulizer, string[] idProduct, double[] quantityByHectare, string idTractor) {
+        public async Task<ExtPostContainer<ExecutionOrder>> SaveEditExecutionOrder(string id, string idOrder, string idUserApplicator, string idNebulizer, string[] idsProduct, double[] quantitiesByHectare, string idTractor) {
             ExecutionOrder execution = await _repo.GetExecutionOrder(id);
             if(execution.ExecutionStatus > 0)
                 return OperationHelper.GetPostException<ExecutionOrder>(new Exception("Solo se puede modificar la ejecucion cuando esta en planificacion."));
@@ -146,9 +127,9 @@ namespace trifenix.agro.external.operations.entities.orders
             ApplicationOrder order = await _repoOrders.GetApplicationOrder(idOrder);
             if (order == null)
                 return OperationHelper.PostNotFoundElementException<ExecutionOrder>($"No se encontró la orden de aplicacion con id {idOrder}", idOrder);
-            UserApplicator userApplicator = null;
+            if (idsProduct == null || !idsProduct.Any())
+                return OperationHelper.GetPostException<ExecutionOrder>(new Exception("Se requiere al menos un producto.")); UserApplicator userApplicator = null;
             Nebulizer nebulizer = null;
-            
             Tractor tractor = null;
             if (!String.IsNullOrWhiteSpace(idUserApplicator)) {
                 userApplicator = await _repoUsers.GetUser(idUserApplicator);
@@ -160,13 +141,6 @@ namespace trifenix.agro.external.operations.entities.orders
                 if (nebulizer == null)
                     return OperationHelper.PostNotFoundElementException<ExecutionOrder>($"No se encontró la nebulizadora con id {idNebulizer}", idNebulizer);
             }
-            if (idProduct == null || !idProduct.Any())
-            {
-                return OperationHelper.PostNotFoundElementException<ExecutionOrder>($"No se encontró el producto con id {idProduct}", string.Join(",", idProduct));
-
-
-            }
-
             if (!String.IsNullOrWhiteSpace(idTractor)) {
                 tractor = await _repoTractors.GetTractor(idTractor);
                 if (tractor == null)
@@ -174,8 +148,7 @@ namespace trifenix.agro.external.operations.entities.orders
             }
             UserApplicator modifier = await _graphApi.GetUserFromToken();
             UserActivity userActivity = new UserActivity(DateTime.Now, modifier);
-
-            var productApplies = await GetProductsExecution(idProduct, quantityByHectare);
+            var productApplies = await GetProductsExecution(idsProduct, quantitiesByHectare);
             return await OperationHelper.EditElement(_commonDb, _repo.GetExecutionOrders(),
                 id,
                 execution,
@@ -203,7 +176,9 @@ namespace trifenix.agro.external.operations.entities.orders
             ExecutionOrder execution = await _repo.GetExecutionOrder(idExecutionOrder);
             if (execution == null)
                 return OperationHelper.PostNotFoundElementException<ExecutionOrder>($"No se encontró la ejecucion con id {idExecutionOrder}", idExecutionOrder);
-            if (execution.FinishStatus != 0 && !type.ToLower().Equals("closed"))
+            if (execution.ClosedStatus != 0)
+                return OperationHelper.GetPostException<ExecutionOrder>(new Exception($"No se puede modificar el estado {type}, ya que se ha cerrado la ejecucion.\n"));
+            if (execution.FinishStatus != 0 && !(type.ToLower().Equals("closed") || (type.ToLower().Equals("execution") && value == 3)))
                 return OperationHelper.GetPostException<ExecutionOrder>(new Exception($"No se puede modificar el estado {type}, ya que ha finalizado la ejecucion.\n"));
             var modifier = await _graphApi.GetUserFromToken();
             var userActivity = new UserActivity(DateTime.Now,modifier);
@@ -229,7 +204,7 @@ namespace trifenix.agro.external.operations.entities.orders
                         error += "No se puede modificar el 'FinishStatus' mientras 'ExecutionStatus' aun no sea finalizado.\n";
                     break;
                 case "closed":
-                    if(modifier.Roles.Any(role => role.Name.Equals("Administrador")))
+                    if(!modifier.Roles.Any(role => role.Name.Equals("Administrador")))
                         error += "El 'ClosedStatus' solo puede ser modificado por un usuario con el rol 'Administrador'.\n";
                     else if (!Enum.IsDefined(typeof(ClosedStatus), value))
                         error += "El nuevo valor de estado no esta definido en 'ClosedStatus'.\n";
@@ -292,21 +267,19 @@ namespace trifenix.agro.external.operations.entities.orders
     }
 }
 
-        /*Ejecucion
-        * Anadir campos (producto,cantidad) relacionados a la orden.
-        * Es necesario crear una ruta para obtener lista de usuarios aplicadores
-        * Es necesario crear una ruta para obtener ejecuciones en proceso (Transversal a las ordenes)
-        * Es necesario crear una ruta para obtener ordenes que contengan ejecuciones en proceso
-        * Cuando la ejecucion cambie su executionStatus a 1:InProcess, se copiaran la fecha inicial y final de la orden a si misma.
-        * Cada vez que se setee el executionStatus (Inicialmente y sus sucesivos cambios), se debe almacenar la fecha (ExecutionStatusDate)
-        * El nuevo executionStatus debe ser siempre igual o superior al anterior (Como maximo en una unidad, ya que este estado es serial)
-        * EL finishStatus solo se puede setear cuando el executionStatus tiene el valor 2:EndProcess
-        * El closedStatus solo se puede setear cuando el executionStatus tiene el valor 3:Closed
-        * Al crear una ejecucion (En planificacion) es obligatoria la orden relacionada.
-        * Al iniciar la ejecucion (En proceso) el usuario aplicador asignado es obligatorio.
-        * El closedStatus solo puede ser seteado si el usuario posee el rol de "Administrador".
-        * Comentarios para cada estado, independiente de los comentarios transversales.
-        * Si la ejecucion ya finalizo(finishStatus != 0) solo se pueden recibir comentarios y cierre de ejecucion(set closedStatus to != 0) */
-
-         //TODO: Validaciones faltantes
-         //Si la orden relacionada ya posee una ejecucion exitosa no se puede crear una nueva ejecucion.
+/*Ejecucion
+* Anadir campos (producto,cantidad) relacionados a la orden.
+* Es necesario crear una ruta para obtener lista de usuarios aplicadores
+* Es necesario crear una ruta para obtener ejecuciones en proceso (Transversal a las ordenes)
+* Es necesario crear una ruta para obtener ordenes que contengan ejecuciones en proceso
+* Cuando la ejecucion cambie su executionStatus a 1:InProcess, se copiaran la fecha inicial y final de la orden a si misma.
+* Cada vez que se setee el executionStatus (Inicialmente y sus sucesivos cambios), se debe almacenar la fecha (ExecutionStatusDate)
+* El nuevo executionStatus debe ser siempre igual o superior al anterior (Como maximo en una unidad, ya que este estado es serial)
+* EL finishStatus solo se puede setear cuando el executionStatus tiene el valor 2:EndProcess
+* El closedStatus solo se puede setear cuando el executionStatus tiene el valor 3:Closed
+* Al crear una ejecucion (En planificacion) es obligatoria la orden relacionada.
+* Al iniciar la ejecucion (En proceso) el usuario aplicador asignado es obligatorio.
+* El closedStatus solo puede ser seteado si el usuario posee el rol de "Administrador".
+* Comentarios para cada estado, independiente de los comentarios transversales.
+* Si la ejecucion ya finalizo(finishStatus != 0) solo se pueden recibir comentarios y cierre de ejecucion(set closedStatus to != 0)
+* Si la orden relacionada ya posee una ejecucion exitosa no se puede crear una nueva ejecucion.*/

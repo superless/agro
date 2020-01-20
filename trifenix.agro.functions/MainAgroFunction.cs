@@ -878,9 +878,9 @@ namespace trifenix.agro.functions {
             if (claims == null)
                 return new UnauthorizedResult();
             var manager = await ContainerMethods.AgroManager(claims);
-            ExtGetContainer<List<UserApplicator>> resultGetAllApplicator = await manager.Users.GetUsers();
-            resultGetAllApplicator.Result = resultGetAllApplicator.Result.Where(user => user.Roles.Any(role => role.Name.Equals(roleName))).ToList();
-            return ContainerMethods.GetJsonGetContainer(resultGetAllApplicator, log);
+            ExtGetContainer<List<UserApplicator>> resultGetAllByRole = await manager.Users.GetUsers();
+            resultGetAllByRole.Result = resultGetAllByRole.Result.Where(user => user.Roles.Any(role => role.Name.Equals(roleName))).ToList();
+            return ContainerMethods.GetJsonGetContainer(resultGetAllByRole, log);
         }
         #endregion
 
@@ -980,8 +980,8 @@ namespace trifenix.agro.functions {
                         string idOrder = (string)model["idOrder"];
                         string idUserApplicator = (string)model["idUserApplicator"];
                         string idNebulizer = (string)model["idNebulizer"];
-                        var idProduct = JsonConvert.DeserializeObject<string[]>(((object)model["idProduct"]).ToString());
-                        var quantityByHectare = JsonConvert.DeserializeObject<double[]>(((object)model["quantityByHectare"]).ToString());
+                        string[] idProduct = JsonConvert.DeserializeObject<string[]>(((object)model["idProduct"]).ToString());
+                        double[] quantityByHectare = JsonConvert.DeserializeObject<double[]>(((object)model["quantityByHectare"]).ToString());
                         string idTractor = (string)model["idTractor"];
                         string commentary = (string)model["commentary"];
                         return await db.ExecutionOrders.SaveNewExecutionOrder(idOrder, idUserApplicator, idNebulizer, idProduct, quantityByHectare, idTractor, commentary);
@@ -991,8 +991,8 @@ namespace trifenix.agro.functions {
                         string idOrder = (string)model["idOrder"];
                         string idUserApplicator = (string)model["idUserApplicator"];
                         string idNebulizer = (string)model["idNebulizer"];
-                        var idProduct = JsonConvert.DeserializeObject<string[]>(((object)model["idProduct"]).ToString());
-                        var quantityByHectare = JsonConvert.DeserializeObject<double[]>(((object)model["quantityByHectare"]).ToString());
+                        string[] idProduct = JsonConvert.DeserializeObject<string[]>(((object)model["idProduct"]).ToString());
+                        double[] quantityByHectare = JsonConvert.DeserializeObject<double[]>(((object)model["quantityByHectare"]).ToString());
                         string idTractor = (string)model["idTractor"];
                         return await db.ExecutionOrders.SaveEditExecutionOrder(id, idOrder, idUserApplicator, idNebulizer, idProduct, quantityByHectare, idTractor);
                     }, claims);
@@ -1004,13 +1004,13 @@ namespace trifenix.agro.functions {
 
         #region v2/executionsByStatus
         [FunctionName("ExecutionByStatus")]
-        public static async Task<IActionResult> ExecutionByStatus([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/executions/getByStatus/{status}")] HttpRequest req, ExecutionStatus status, ILogger log) {
+        public static async Task<IActionResult> ExecutionByStatus([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/executions/getByStatus/{status}")] HttpRequest req, int status, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
             var manager = await ContainerMethods.AgroManager(claims);
             ExtGetContainer<List<ExecutionOrder>> resultGetByStatus = await manager.ExecutionOrders.GetExecutionOrders();
-            resultGetByStatus.Result = resultGetByStatus.Result.Where(execution => execution.ExecutionStatus == status).ToList();
+            resultGetByStatus.Result = resultGetByStatus.Result.Where(execution => execution.ExecutionStatus == (ExecutionStatus)status).ToList();
             return ContainerMethods.GetJsonGetContainer(resultGetByStatus, log);
         }
         #endregion

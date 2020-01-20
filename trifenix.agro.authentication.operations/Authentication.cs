@@ -31,7 +31,7 @@ namespace trifenix.agro.authentication.operations {
                 //$"https://login.microsoftonline.com/{_tenant}/",
                 //$"https://login.microsoftonline.com/{_tenant}/v2.0",
                 //$"https://login.microsoftonline.com/{_tenantID}/",
-                //$"https://login.microsoftonline.com/{_tenantID}/v2.0"
+                $"https://login.microsoftonline.com/{_tenantID}/v2.0",
                 //$"https://login.windows.net/{_tenant}/",
                 //$"https://login.microsoft.com/{_tenant}/",
                 $"https://sts.windows.net/{_tenantID}/"
