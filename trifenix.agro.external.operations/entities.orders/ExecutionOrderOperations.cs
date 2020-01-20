@@ -72,7 +72,7 @@ namespace trifenix.agro.external.operations.entities.orders
             if (order == null)
                 return OperationHelper.PostNotFoundElementException<string>($"No se encontró la orden de aplicacion con id {idOrder}", idOrder);
             var executions = _repo.GetExecutionOrders().Where(execution => execution.Order.Id.Equals(order.Id));
-            if(executions.Any(execution => execution.ClosedStatus == (ClosedStatus)1))
+            if(executions.Count(execution => execution.ClosedStatus == (ClosedStatus)1) > 0)
                 return OperationHelper.GetPostException<string>(new Exception($"No se puede crear una nueva ejecucion para la orden {idOrder}, debido a que ya existe una ejecucion terminada exitosamente para esta orden."));
             if (idsProduct == null || !idsProduct.Any())
                 return OperationHelper.GetPostException<string>(new Exception("Se requiere al menos un producto.")); 
