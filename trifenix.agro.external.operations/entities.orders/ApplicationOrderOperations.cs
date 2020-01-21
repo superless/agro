@@ -19,8 +19,13 @@ using trifenix.agro.util;
 namespace trifenix.agro.external.operations.entities.orders {
     public class ApplicationOrderOperations : IApplicationOrderOperations {
         private readonly ApplicationOrderArgs _args;
+        private readonly string nameOfSearchService;
+        private readonly string keyOfSearchService;
+
         public ApplicationOrderOperations(ApplicationOrderArgs args) {
             _args = args;
+            nameOfSearchService = "agrosearch";
+            keyOfSearchService = "016DAA5EF1158FEEEE58DA60996D5981";
         }
 
         private OutPutApplicationOrder GetOutputOrder(ApplicationOrder appOrder) {
@@ -73,7 +78,7 @@ namespace trifenix.agro.external.operations.entities.orders {
             var userActivity = new UserActivity(DateTime.Now, modifier);
             var order = await _args.ApplicationOrder.GetApplicationOrder(id);
             var appNewOrder = await GetApplicationOrder(id, input);
-            var searchLocal = new AgroSearch("agrisearch", "F9189208F49AF7C3DFD34E45A89F19E4");
+            var searchLocal = new AgroSearch(nameOfSearchService, keyOfSearchService);
             var result = await OperationHelper.EditElement(_args.CommonDb.ApplicationOrder, _args.ApplicationOrder.GetApplicationOrders(),
                 id,
                 order,
@@ -137,7 +142,7 @@ namespace trifenix.agro.external.operations.entities.orders {
         //No se puede modificar una orden que ya posee una ejecucion en proceso o una ejecucion exitosa (cerrada).           ^
 
         public async Task<ExtPostContainer<string>> SaveNewApplicationOrder(ApplicationOrderInput input) {
-            var searchLocal = new AgroSearch("agrisearch", "F9189208F49AF7C3DFD34E45A89F19E4");
+            var searchLocal = new AgroSearch(nameOfSearchService, keyOfSearchService);
             var newId = await OperationHelper.CreateElement(_args.CommonDb.ApplicationOrder, _args.ApplicationOrder.GetApplicationOrders(),
             async s => await _args.ApplicationOrder.CreateUpdate(await GetApplicationOrder(s, input)),
                 s => s.Name.Equals(input.Name),
@@ -218,7 +223,7 @@ namespace trifenix.agro.external.operations.entities.orders {
 
         public async Task<ExtGetContainer<OrderResult>> GetApplicationOrdersByPage(string search, int page, int quantity, bool desc) {
             //TODO : poner las credenciales fuera.
-            var searchLocal = new AgroSearch("agrisearch", "F9189208F49AF7C3DFD34E45A89F19E4");
+            var searchLocal = new AgroSearch(nameOfSearchService, keyOfSearchService);
             var ordersearch = searchLocal.GetOrders(search, page, quantity, desc);
             if (string.IsNullOrWhiteSpace(search))
                 return await GetApplicationOrdersByPage(page, quantity, desc);
@@ -231,7 +236,7 @@ namespace trifenix.agro.external.operations.entities.orders {
 
         public ExtGetContainer<OrderSearchContainer> GetOrderSearch(string search, int page, int quantity, bool desc) {
             //TODO : poner las credenciales fuera.
-            var searchLocal = new AgroSearch("agrisearch", "F9189208F49AF7C3DFD34E45A89F19E4");
+            var searchLocal = new AgroSearch(nameOfSearchService, keyOfSearchService);
             var ordersearch = searchLocal.GetOrders(search, page, quantity, desc);
             return OperationHelper.GetElement(ordersearch);
         }
