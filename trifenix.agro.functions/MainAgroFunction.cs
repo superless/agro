@@ -1075,7 +1075,7 @@ namespace trifenix.agro.functions {
             dynamic json = JsonConvert.DeserializeObject(responseBody);
             client.Dispose();
             string accessToken = json.access_token;
-            return ContainerMethods.GetJsonGetContainer(OperationHelper.GetElement<string>(accessToken), log);
+            return ContainerMethods.GetJsonGetContainer(OperationHelper.GetElement(accessToken), log);
         }
         #endregion
 
