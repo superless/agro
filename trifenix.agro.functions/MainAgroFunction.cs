@@ -18,7 +18,7 @@ using trifenix.agro.model.external;
 using System.Collections.Generic;
 using System.IO;
 using trifenix.agro.db.model.agro.orders;
-//using System.Net.Http;
+using System.Net.Http;
 //using System.Text;
 //using System.Net.Http.Headers;
 
@@ -1075,7 +1075,7 @@ namespace trifenix.agro.functions {
             dynamic json = JsonConvert.DeserializeObject(responseBody);
             client.Dispose();
             string accessToken = json.access_token;
-            return ContainerMethods.GetJsonGetContainer(accessToken, log);
+            return ContainerMethods.GetJsonGetContainer(OperationHelper.GetElement<string>(accessToken), log);
         }
         #endregion
 
