@@ -1045,6 +1045,40 @@ namespace trifenix.agro.functions {
         }
         #endregion
 
+        #region Login
+        [FunctionName("login")]
+        public static async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequest req, ILogger log) {
+            var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            dynamic credenciales = JsonConvert.DeserializeObject(requestBody);
+
+            string clientId = "a81f0ad4-912b-46d3-ba3e-7bf605693242";
+            string scope = "https://sprint3-jhm.trifenix.io/App.access";
+            string clientSecret = "gUjIa4F=NXlAwwMCF2j2SFMMj3?m@=FM";
+            string username = (string)credenciales["username"];
+            string password = (string)credenciales["password"];
+            string grantType = "password";
+            string endPoint = "https://login.microsoftonline.com/jhmad.onmicrosoft.com/oauth2/v2.0/token";
+
+            HttpClient client = new HttpClient();
+            var parametros = new Dictionary<string, string> {
+                {"client_id",clientId},
+                {"scope",scope},
+                {"client_secret",clientSecret},
+                {"username",username},
+                {"password",password},
+                {"grant_type",grantType}
+            };
+            var requestMessage = new HttpRequestMessage(HttpMethod.Post, endPoint);
+            requestMessage.Content = new FormUrlEncodedContent(parametros);
+            var response = await client.SendAsync(requestMessage);
+            var responseBody = await response.Content.ReadAsStringAsync();
+            dynamic json = JsonConvert.DeserializeObject(responseBody);
+            client.Dispose();
+            string accessToken = json.access_token;
+            return ContainerMethods.GetJsonGetContainer(accessToken, log);
+        }
+        #endregion
+
         [FunctionName("DebugRoute")]
         public static async Task<IActionResult> DebugRoute([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/debugroute/{id?}")] HttpRequest req, ILogger log, string id){
             var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
