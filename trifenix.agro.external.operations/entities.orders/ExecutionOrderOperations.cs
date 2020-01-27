@@ -31,8 +31,9 @@ namespace trifenix.agro.external.operations.entities.orders
         private readonly IGraphApi _graphApi;
         private readonly string _idSeason;
         private readonly AgroSearch _searchServiceInstance;
+        private readonly string entityName = "ExecutionOrder";
 
-        public ExecutionOrderOperations(IExecutionOrderRepository repo, IApplicationOrderRepository repoOrders, IUserRepository repoUsers, INebulizerRepository repoNebulizers, IProductRepository repoProducts, ITractorRepository repoTractors, ICommonDbOperations<ExecutionOrder> commonDb, IGraphApi graphApi, string idSeason) {
+        public ExecutionOrderOperations(IExecutionOrderRepository repo, IApplicationOrderRepository repoOrders, IUserRepository repoUsers, INebulizerRepository repoNebulizers, IProductRepository repoProducts, ITractorRepository repoTractors, ICommonDbOperations<ExecutionOrder> commonDb, IGraphApi graphApi, string idSeason, AgroSearch searchServiceInstance) {
             _repo = repo;
             _repoOrders = repoOrders;
             _repoUsers = repoUsers;
@@ -42,11 +43,7 @@ namespace trifenix.agro.external.operations.entities.orders
             _commonDb = commonDb;
             _graphApi = graphApi;
             _idSeason = idSeason;
-            _searchServiceInstance = new AgroSearch(
-                Environment.GetEnvironmentVariable("SearchServiceName", EnvironmentVariableTarget.Process),
-                Environment.GetEnvironmentVariable("SearchServiceKey", EnvironmentVariableTarget.Process),
-                Environment.GetEnvironmentVariable("SearchIndexName", EnvironmentVariableTarget.Process),
-                "ExecutionOrder");
+            _searchServiceInstance = searchServiceInstance;
         }
 
         public async Task<ExtGetContainer<ExecutionOrder>> GetExecutionOrder(string id) {
@@ -124,7 +121,7 @@ namespace trifenix.agro.external.operations.entities.orders
             _searchServiceInstance.AddEntities(new List<EntitySearch> {
                 new EntitySearch {
                     Created = DateTime.Now,
-                    EntityName = _searchServiceInstance._entityName,
+                    EntityName = entityName,
                     Name = executionName,
                     Id = createOperation.IdRelated
                 }
@@ -174,7 +171,7 @@ namespace trifenix.agro.external.operations.entities.orders
                     _searchServiceInstance.AddEntities(new List<EntitySearch> {
                         new EntitySearch{
                             Created = DateTime.Now,
-                            EntityName = _searchServiceInstance._entityName,
+                            EntityName = entityName,
                             Name = executionName,
                             Id = s.Id
                         }
@@ -309,7 +306,7 @@ namespace trifenix.agro.external.operations.entities.orders
         public async Task<ExtGetContainer<SearchResult<ExecutionOrder>>> GetExecutionOrdersByPage(string textToSearch, int page, int quantity, bool desc) {
             if (string.IsNullOrWhiteSpace(textToSearch))
                 return await GetExecutionOrdersByPage(page, quantity, desc);
-            EntitiesSearchContainer entitySearch = _searchServiceInstance.GetSearchFilteredByEntityName(textToSearch, page, quantity, desc);
+            EntitiesSearchContainer entitySearch = _searchServiceInstance.GetSearchFilteredByEntityName(entityName, textToSearch, page, quantity, desc);
             var resultDb = entitySearch.Entities.Select(async s => await GetExecutionOrder(s.Id));
             return OperationHelper.GetElement(new SearchResult<ExecutionOrder> {
                 Total = entitySearch.Total,
@@ -318,7 +315,7 @@ namespace trifenix.agro.external.operations.entities.orders
         }
 
         public ExtGetContainer<EntitiesSearchContainer> GetIndexElements(string textToSearch, int page, int quantity, bool desc) {
-            EntitiesSearchContainer entitySearch = _searchServiceInstance.GetSearchFilteredByEntityName(textToSearch, page, quantity, desc);
+            EntitiesSearchContainer entitySearch = _searchServiceInstance.GetSearchFilteredByEntityName(entityName, textToSearch, page, quantity, desc);
             return OperationHelper.GetElement(entitySearch);
         }
 

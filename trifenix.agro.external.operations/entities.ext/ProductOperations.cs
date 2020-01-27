@@ -19,8 +19,7 @@ using trifenix.agro.search.model;
 
 namespace trifenix.agro.external.operations.entities.ext
 {
-    public class ProductOperations : IProductOperations
-    {
+    public class ProductOperations : IProductOperations {
         private readonly IIngredientRepository _ingredientRepository;
         private readonly IProductRepository _productRepository;
         private readonly IApplicationTargetRepository _targetRepository;
@@ -30,8 +29,9 @@ namespace trifenix.agro.external.operations.entities.ext
         private readonly ICommonDbOperations<Product> _commonDb;
         private readonly string _idSeason;
         private readonly AgroSearch _searchServiceInstance;
+        private readonly string entityName = "Product";
 
-        public ProductOperations(IIngredientRepository ingredientRepository, IProductRepository productRepository, IApplicationTargetRepository targetRepository, ICertifiedEntityRepository certifiedEntityRepository, IVarietyRepository varietyRepository, ISpecieRepository specieRepository, ICommonDbOperations<Product> commonDb, string idSeason) {
+        public ProductOperations(IIngredientRepository ingredientRepository, IProductRepository productRepository, IApplicationTargetRepository targetRepository, ICertifiedEntityRepository certifiedEntityRepository, IVarietyRepository varietyRepository, ISpecieRepository specieRepository, ICommonDbOperations<Product> commonDb, string idSeason, AgroSearch searchServiceInstance) {
             _ingredientRepository = ingredientRepository;
             _productRepository = productRepository;
             _targetRepository = targetRepository;
@@ -40,11 +40,7 @@ namespace trifenix.agro.external.operations.entities.ext
             _specieRepository = specieRepository;
             _commonDb = commonDb;
             _idSeason = idSeason;
-            _searchServiceInstance = new AgroSearch(
-                Environment.GetEnvironmentVariable("SearchServiceName", EnvironmentVariableTarget.Process),
-                Environment.GetEnvironmentVariable("SearchServiceKey", EnvironmentVariableTarget.Process),
-                Environment.GetEnvironmentVariable("SearchIndexName", EnvironmentVariableTarget.Process),
-                "Product");
+            _searchServiceInstance = searchServiceInstance;
         }
 
         private ExtPostErrorContainer<T> GetException<T>(string message) => OperationHelper.GetPostException<T>(new Exception(message));
@@ -83,7 +79,7 @@ namespace trifenix.agro.external.operations.entities.ext
                         _searchServiceInstance.AddEntities(new List<EntitySearch> {
                             new EntitySearch{
                                 Created = DateTime.Now,
-                                EntityName = _searchServiceInstance._entityName,
+                                EntityName = entityName,
                                 Name = commercialName,
                                 Id = s.Id
                             }
@@ -156,7 +152,7 @@ namespace trifenix.agro.external.operations.entities.ext
                 _searchServiceInstance.AddEntities(new List<EntitySearch> {
                     new EntitySearch{
                         Created = DateTime.Now,
-                        EntityName = _searchServiceInstance._entityName,
+                        EntityName = entityName,
                         Name = commercialName,
                         Id = id.IdRelated
                     }
@@ -212,7 +208,7 @@ namespace trifenix.agro.external.operations.entities.ext
         public async Task<ExtGetContainer<SearchResult<Product>>> GetProductsByPage(string textToSearch, int page, int quantity, bool desc) {
             if (string.IsNullOrWhiteSpace(textToSearch))
                 return await GetProductsByPage(page, quantity, desc);
-            EntitiesSearchContainer entitySearch = _searchServiceInstance.GetSearchFilteredByEntityName(textToSearch, page, quantity, desc);
+            EntitiesSearchContainer entitySearch = _searchServiceInstance.GetSearchFilteredByEntityName(entityName, textToSearch, page, quantity, desc);
             var resultDb = entitySearch.Entities.Select(async s => await GetProduct(s.Id));
             return OperationHelper.GetElement(new SearchResult<Product> {
                 Total = entitySearch.Total,
@@ -221,7 +217,7 @@ namespace trifenix.agro.external.operations.entities.ext
         }
 
         public ExtGetContainer<EntitiesSearchContainer> GetIndexElements(string textToSearch, int page, int quantity, bool desc) {
-            EntitiesSearchContainer entitySearch = _searchServiceInstance.GetSearchFilteredByEntityName(textToSearch, page, quantity, desc);
+            EntitiesSearchContainer entitySearch = _searchServiceInstance.GetSearchFilteredByEntityName(entityName, textToSearch, page, quantity, desc);
             return OperationHelper.GetElement(entitySearch);
         }
     }

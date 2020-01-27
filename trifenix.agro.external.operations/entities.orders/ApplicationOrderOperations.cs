@@ -20,13 +20,10 @@ namespace trifenix.agro.external.operations.entities.orders {
     public class ApplicationOrderOperations : IApplicationOrderOperations {
         private readonly ApplicationOrderArgs _args;
         private readonly AgroSearch _searchServiceInstance;
-        public ApplicationOrderOperations(ApplicationOrderArgs args) {
+        private readonly string entityName = "ApplicationOrder";
+        public ApplicationOrderOperations(ApplicationOrderArgs args, AgroSearch searchServiceInstance) {
             _args = args;
-            _searchServiceInstance = new AgroSearch(
-                Environment.GetEnvironmentVariable("SearchServiceName", EnvironmentVariableTarget.Process),
-                Environment.GetEnvironmentVariable("SearchServiceKey", EnvironmentVariableTarget.Process),
-                Environment.GetEnvironmentVariable("SearchIndexName", EnvironmentVariableTarget.Process),
-                "ApplicationOrder");
+            _searchServiceInstance = searchServiceInstance;
         }
 
         private OutPutApplicationOrder GetOutputOrder(ApplicationOrder appOrder) {
@@ -86,7 +83,7 @@ namespace trifenix.agro.external.operations.entities.orders {
                     _searchServiceInstance.AddEntities(new List<EntitySearch> {
                         new EntitySearch{
                             Created = DateTime.Now,
-                            EntityName = _searchServiceInstance._entityName,
+                            EntityName = entityName,
                             Name = appNewOrder.Name,
                             Id = appNewOrder.Id
                         }
@@ -150,7 +147,7 @@ namespace trifenix.agro.external.operations.entities.orders {
             _searchServiceInstance.AddEntities(new List<EntitySearch> {
                 new EntitySearch {
                     Created = DateTime.Now,
-                    EntityName = _searchServiceInstance._entityName,
+                    EntityName = entityName,
                     Name = input.Name,
                     Id = newId.IdRelated
                 }
@@ -225,7 +222,7 @@ namespace trifenix.agro.external.operations.entities.orders {
         public async Task<ExtGetContainer<SearchResult<OutPutApplicationOrder>>> GetApplicationOrdersByPage(string textToSearch, int page, int quantity, bool desc) {
             if (string.IsNullOrWhiteSpace(textToSearch))
                 return await GetApplicationOrdersByPage(page, quantity, desc);
-            EntitiesSearchContainer entitySearch = _searchServiceInstance.GetSearchFilteredByEntityName(textToSearch, page, quantity, desc);
+            EntitiesSearchContainer entitySearch = _searchServiceInstance.GetSearchFilteredByEntityName(entityName, textToSearch, page, quantity, desc);
             var resultDb = entitySearch.Entities.Select(async s => await GetApplicationOrder(s.Id));
             return OperationHelper.GetElement(new SearchResult<OutPutApplicationOrder> {
                 Total = entitySearch.Total,
@@ -234,7 +231,7 @@ namespace trifenix.agro.external.operations.entities.orders {
         }
 
         public ExtGetContainer<EntitiesSearchContainer> GetIndexElements(string textToSearch, int page, int quantity, bool desc) {
-            EntitiesSearchContainer entitySearch = _searchServiceInstance.GetSearchFilteredByEntityName(textToSearch, page, quantity, desc);
+            EntitiesSearchContainer entitySearch = _searchServiceInstance.GetSearchFilteredByEntityName(entityName, textToSearch, page, quantity, desc);
             return OperationHelper.GetElement(entitySearch);
         }
 

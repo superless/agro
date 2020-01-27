@@ -1,4 +1,5 @@
-﻿using trifenix.agro.db.applicationsReference.common;
+﻿using System;
+using trifenix.agro.db.applicationsReference.common;
 using trifenix.agro.db.interfaces.agro;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.db.model.agro.orders;
@@ -15,6 +16,7 @@ using trifenix.agro.external.operations.entities.main;
 using trifenix.agro.external.operations.entities.orders;
 using trifenix.agro.external.operations.entities.orders.args;
 using trifenix.agro.microsoftgraph.interfaces;
+using trifenix.agro.search;
 using trifenix.agro.storage.interfaces;
 using trifenix.agro.weather.interfaces;
 
@@ -28,14 +30,16 @@ namespace trifenix.agro.external.operations
         private readonly IUploadImage _uploadImage;
         private readonly IGraphApi _graphApi;
         private readonly IWeatherApi _weatherApi;
+        private readonly AgroSearch _searchServiceInstance;
 
-        public AgroManager(IAgroRepository repository, string idSeason, IUploadImage uploadImage, IGraphApi graphApi, IWeatherApi weatherApi)
+        public AgroManager(IAgroRepository repository, string idSeason, IUploadImage uploadImage, IGraphApi graphApi, IWeatherApi weatherApi, AgroSearch searchServiceInstance)
         {
             _repository = repository;
             _idSeason = idSeason;
             _uploadImage = uploadImage;
             _graphApi = graphApi;
             _weatherApi = weatherApi;
+            _searchServiceInstance = searchServiceInstance;
         }
 
         public IPhenologicalOperations PhenologicalEvents => new PhenologicalEventOperations(_repository.PhenologicalEvents, new CommonDbOperations<PhenologicalEvent>());
@@ -70,15 +74,17 @@ namespace trifenix.agro.external.operations
 
         public IVarietyOperations Varieties => new VarietyOperations(_repository.Varieties, _repository.Species, new CommonDbOperations<Variety>());
 
-        public IProductOperations Products => new ProductOperations(_repository.Ingredients,
+        public IProductOperations Products => new ProductOperations(
+            _repository.Ingredients,
             _repository.Products,            
             _repository.Targets,
             _repository.CertifiedEntities,
             _repository.Varieties,
             _repository.Species,
             new CommonDbOperations<Product>(),
-            _idSeason
-            );
+            _idSeason,
+            _searchServiceInstance
+        );
 
         public ICertifiedEntityOperations CertifiedEntities => new CertifiedEntityOperations(_repository.CertifiedEntities, new CommonDbOperations<CertifiedEntity>());
 
@@ -105,7 +111,7 @@ namespace trifenix.agro.external.operations
             },
             PreOrder = _repository.PhenologicalPreOrders,
             SeasonId = _idSeason
-        });
+        }, _searchServiceInstance);
         public INotificatonEventOperations NotificationEvents => new NotificationEventOperations(_repository.NotificationEvents, _repository.Barracks, _repository.PhenologicalEvents, new CommonDbOperations<NotificationEvent>(), _uploadImage, _graphApi, _weatherApi);
         public IOrderFolderOperations OrderFolder => new OrderFolderOperations(new OrderFolderArgs
         {
@@ -123,6 +129,6 @@ namespace trifenix.agro.external.operations
         });
         public IPhenologicalPreOrderOperations PhenologicalPreOrders => new PhenologicalPreOrdersOperations(_repository.PhenologicalPreOrders, new CommonDbOperations<PhenologicalPreOrder>(), _idSeason, _graphApi);
 
-        public IExecutionOrderOperations ExecutionOrders => new ExecutionOrderOperations(_repository.ExecutionOrders, _repository.Orders, _repository.Users, _repository.Nebulizers, _repository.Products, _repository.Tractors, new CommonDbOperations<ExecutionOrder>(), _graphApi, _idSeason);
+        public IExecutionOrderOperations ExecutionOrders => new ExecutionOrderOperations(_repository.ExecutionOrders, _repository.Orders, _repository.Users, _repository.Nebulizers, _repository.Products, _repository.Tractors, new CommonDbOperations<ExecutionOrder>(), _graphApi, _idSeason, _searchServiceInstance);
     }
 }
