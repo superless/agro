@@ -1,62 +1,49 @@
 ﻿using Microsoft.Azure.Search;
 using Microsoft.Azure.Search.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using trifenix.agro.search.model;
 
-namespace trifenix.agro.search
-{
-    public class AgroSearch
-    {
+namespace trifenix.agro.search {
+    public class AgroSearch {
+
         private SearchServiceClient _search;
-
-        public string IndexOrder { get { return "orders"; } }
-
-        public AgroSearch(string name, string key)
-        {
-            _search = new SearchServiceClient(name, new SearchCredentials(key));
-            if (_search.Indexes.Exists(IndexOrder)) return;
-            _search.Indexes.CreateOrUpdate(new Index { Name = IndexOrder, Fields = FieldBuilder.BuildForType<OrderSearch>() });
+        private readonly string _indexName;
+        public readonly string _entityName;
+        public AgroSearch(string SearchServiceName, string SearchServiceKey, string SearchIndexName, string EntityName) {
+            _search = new SearchServiceClient(SearchServiceName, new SearchCredentials(SearchServiceKey));
+            _entityName = EntityName;
+            _indexName = SearchIndexName;
+            if (_search.Indexes.Exists(_indexName))
+                return;
+            _search.Indexes.CreateOrUpdate(new Index { Name = _indexName, Fields = FieldBuilder.BuildForType<EntitySearch>() });
         }
         
 
-        public void AddOrders(List<OrderSearch> orders) {
-            var indexClient = _search.Indexes.GetClient(IndexOrder);
-            var actions = orders.Select(o => IndexAction.MergeOrUpload(o));
+        public void AddEntities(List<EntitySearch> entities) {
+            var indexClient = _search.Indexes.GetClient(_indexName);
+            var actions = entities.Select(o => IndexAction.MergeOrUpload(o));
             var batch = IndexBatch.New(actions);
-
             indexClient.Documents.Index(batch);
         }
 
-        public OrderSearchContainer GetOrders(string search, int page, int quantity, bool desc ) {
-
+        public EntitiesSearchContainer GetSearchFilteredByEntityName(string search, int page, int quantity, bool desc) {
             var skip = (page - 1) * quantity;
-            var indexClient = _search.Indexes.GetClient(IndexOrder);
+            var indexClient = _search.Indexes.GetClient(_indexName);
             var order = desc ? "desc" : "asc";
-            var result = indexClient.Documents.Search<OrderSearch>(!string.IsNullOrWhiteSpace(search)?search:null, new SearchParameters {
-                SearchFields = new List<string> { "description" },
-                Skip = skip == 0 ? 0 : skip,
+            var result = indexClient.Documents.Search<EntitySearch>(!string.IsNullOrWhiteSpace(search)?search:null, new SearchParameters {
+                Filter = $"EntityName eq '{_entityName}'",
+                SearchFields = new [] { "IdentificadorDeEntidad" },
+                Skip = skip,
                 Top = quantity,
                 IncludeTotalResultCount = true,                
-                OrderBy = new List<string>() { $"description {order}" }
-
-            }); ; ;
-
-            return new OrderSearchContainer
-            {
+                OrderBy = new[] { $"IdentificadorDeEntidad {order}" }
+            });
+            return new EntitiesSearchContainer {
                 Total = result.Count ?? 0,
-                Orders = result.Results.Select(v => v.Document).ToArray()
-
+                Entities = result.Results.Select(v => v.Document).ToArray()
             };
         }
-
-       
-
-
-
-
 
     }
 }

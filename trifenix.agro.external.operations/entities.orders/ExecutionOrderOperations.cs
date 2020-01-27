@@ -13,6 +13,9 @@ using trifenix.agro.external.interfaces.entities.orders;
 using trifenix.agro.external.operations.helper;
 using trifenix.agro.microsoftgraph.interfaces;
 using trifenix.agro.model.external;
+using trifenix.agro.model.external.output;
+using trifenix.agro.search;
+using trifenix.agro.search.model;
 
 namespace trifenix.agro.external.operations.entities.orders
 {
@@ -26,8 +29,10 @@ namespace trifenix.agro.external.operations.entities.orders
         private readonly ITractorRepository _repoTractors;
         private readonly ICommonDbOperations<ExecutionOrder> _commonDb;
         private readonly IGraphApi _graphApi;
+        private readonly string _idSeason;
+        private readonly AgroSearch _searchServiceInstance;
 
-        public ExecutionOrderOperations(IExecutionOrderRepository repo, IApplicationOrderRepository repoOrders, IUserRepository repoUsers, INebulizerRepository repoNebulizers, IProductRepository repoProducts, ITractorRepository repoTractors, ICommonDbOperations<ExecutionOrder> commonDb, IGraphApi graphApi) {
+        public ExecutionOrderOperations(IExecutionOrderRepository repo, IApplicationOrderRepository repoOrders, IUserRepository repoUsers, INebulizerRepository repoNebulizers, IProductRepository repoProducts, ITractorRepository repoTractors, ICommonDbOperations<ExecutionOrder> commonDb, IGraphApi graphApi, string idSeason) {
             _repo = repo;
             _repoOrders = repoOrders;
             _repoUsers = repoUsers;
@@ -36,6 +41,12 @@ namespace trifenix.agro.external.operations.entities.orders
             _repoTractors = repoTractors;
             _commonDb = commonDb;
             _graphApi = graphApi;
+            _idSeason = idSeason;
+            _searchServiceInstance = new AgroSearch(
+                Environment.GetEnvironmentVariable("SearchServiceName", EnvironmentVariableTarget.Process),
+                Environment.GetEnvironmentVariable("SearchServiceKey", EnvironmentVariableTarget.Process),
+                Environment.GetEnvironmentVariable("SearchIndexName", EnvironmentVariableTarget.Process),
+                "ExecutionOrder");
         }
 
         public async Task<ExtGetContainer<ExecutionOrder>> GetExecutionOrder(string id) {
@@ -66,7 +77,7 @@ namespace trifenix.agro.external.operations.entities.orders
         }
 
 
-        public async Task<ExtPostContainer<string>> SaveNewExecutionOrder(string idOrder, string idUserApplicator, string idNebulizer, string[] idsProduct, double[] quantitiesByHectare, string idTractor, string commentary) {
+        public async Task<ExtPostContainer<string>> SaveNewExecutionOrder(string idOrder, string executionName, string idUserApplicator, string idNebulizer, string[] idsProduct, double[] quantitiesByHectare, string idTractor, string commentary) {
             if (string.IsNullOrWhiteSpace(idOrder)) return OperationHelper.GetPostException<string>(new Exception("Es requerido 'idOrder' para crear una ejecucion."));
             ApplicationOrder order = await _repoOrders.GetApplicationOrder(idOrder);
             if (order == null)
@@ -100,6 +111,7 @@ namespace trifenix.agro.external.operations.entities.orders
             var createOperation = await OperationHelper.CreateElement(_commonDb, _repo.GetExecutionOrders(),
                async s => await _repo.CreateUpdateExecutionOrder(new ExecutionOrder {
                    Id = s,
+                   Name = executionName,
                    Order = order,
                    UserApplicator = userApplicator,
                    Nebulizer = nebulizer,
@@ -107,19 +119,25 @@ namespace trifenix.agro.external.operations.entities.orders
                    Tractor = tractor,
                    Creator = userActivity
                }),
-               s => false,
-               ""
-            );
+               s => s.Name.Equals(executionName),
+               $"Ya existe ejecucion con nombre: {executionName}");
+            _searchServiceInstance.AddEntities(new List<EntitySearch> {
+                new EntitySearch {
+                    Created = DateTime.Now,
+                    EntityName = _searchServiceInstance._entityName,
+                    Name = executionName,
+                    Id = createOperation.IdRelated
+                }
+            });
             var setStatusOperation = await SetStatus(createOperation.IdRelated, "execution", 0, commentary);
-            return new ExtPostContainer<string>
-            {
+            return new ExtPostContainer<string> {
                 IdRelated = setStatusOperation.IdRelated,
                 Result = setStatusOperation.IdRelated,
                 MessageResult = ExtMessageResult.Ok
             };
         }
 
-        public async Task<ExtPostContainer<ExecutionOrder>> SaveEditExecutionOrder(string id, string idOrder, string idUserApplicator, string idNebulizer, string[] idsProduct, double[] quantitiesByHectare, string idTractor) {
+        public async Task<ExtPostContainer<ExecutionOrder>> SaveEditExecutionOrder(string id, string executionName, string idOrder, string idUserApplicator, string idNebulizer, string[] idsProduct, double[] quantitiesByHectare, string idTractor) {
             ExecutionOrder execution = await _repo.GetExecutionOrder(id);
             if(execution.ExecutionStatus > 0)
                 return OperationHelper.GetPostException<ExecutionOrder>(new Exception("Solo se puede modificar la ejecucion cuando esta en planificacion."));
@@ -153,6 +171,15 @@ namespace trifenix.agro.external.operations.entities.orders
                 id,
                 execution,
                 s => {
+                    _searchServiceInstance.AddEntities(new List<EntitySearch> {
+                        new EntitySearch{
+                            Created = DateTime.Now,
+                            EntityName = _searchServiceInstance._entityName,
+                            Name = executionName,
+                            Id = s.Id
+                        }
+                    });
+                    s.Name = executionName;
                     s.Order = order;
                     s.UserApplicator = userApplicator;
                     s.Nebulizer = nebulizer;
@@ -163,9 +190,8 @@ namespace trifenix.agro.external.operations.entities.orders
                 },
                 _repo.CreateUpdateExecutionOrder,
                  $"No existe orden de ejecucion con id: {id}",
-                s => false,
-                ""
-            );
+                s => s.Name.Equals(executionName) && executionName != execution.Name,
+               $"Ya existe ejecucion con nombre: {executionName}");
         }
 
         public async Task<ExtPostContainer<ExecutionOrder>> SetStatus(string idExecutionOrder, string type, int value, string commentary) {
@@ -262,6 +288,38 @@ namespace trifenix.agro.external.operations.entities.orders
                 s => false,
                 ""
             );
+        }
+
+        public async Task<ExtGetContainer<SearchResult<ExecutionOrder>>> GetExecutionOrdersByPage(int page, int quantity, bool orderByDesc) {
+            try {
+                var executionsList = _repo.GetExecutionOrders();
+                var paginatedExecutions = _commonDb.WithPagination(executionsList, page, quantity);
+                var executionOrders = orderByDesc ? await _commonDb.TolistAsync(paginatedExecutions.OrderByDescending(s => s.Name)) : await _commonDb.TolistAsync(paginatedExecutions);
+                var total = await _repo.Total(_idSeason);
+                return OperationHelper.GetElement(new SearchResult<ExecutionOrder> {
+                    Total = total,
+                    Elements = executionOrders.ToArray()
+                });
+            }
+            catch (Exception e) {
+                return OperationHelper.GetException<SearchResult<ExecutionOrder>>(e);
+            }
+        }
+
+        public async Task<ExtGetContainer<SearchResult<ExecutionOrder>>> GetExecutionOrdersByPage(string textToSearch, int page, int quantity, bool desc) {
+            if (string.IsNullOrWhiteSpace(textToSearch))
+                return await GetExecutionOrdersByPage(page, quantity, desc);
+            EntitiesSearchContainer entitySearch = _searchServiceInstance.GetSearchFilteredByEntityName(textToSearch, page, quantity, desc);
+            var resultDb = entitySearch.Entities.Select(async s => await GetExecutionOrder(s.Id));
+            return OperationHelper.GetElement(new SearchResult<ExecutionOrder> {
+                Total = entitySearch.Total,
+                Elements = resultDb.Select(s => s.Result.Result).ToArray()
+            });
+        }
+
+        public ExtGetContainer<EntitiesSearchContainer> GetIndexElements(string textToSearch, int page, int quantity, bool desc) {
+            EntitiesSearchContainer entitySearch = _searchServiceInstance.GetSearchFilteredByEntityName(textToSearch, page, quantity, desc);
+            return OperationHelper.GetElement(entitySearch);
         }
 
     }

@@ -39,7 +39,7 @@ namespace trifenix.agro.external.operations.entities.fields
             }
             catch (Exception e)
             {
-                return OperationHelper.GetException<Barrack>(e, e.Message);
+                return OperationHelper.GetException<Barrack>(e);
             }
         }
 
@@ -54,7 +54,7 @@ namespace trifenix.agro.external.operations.entities.fields
             }
             catch (Exception e)
             {
-                return OperationHelper.GetException<List<Barrack>>(e, e.Message);
+                return OperationHelper.GetException<List<Barrack>>(e);
             }
         }
 

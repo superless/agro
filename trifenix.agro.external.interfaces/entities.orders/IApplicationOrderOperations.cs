@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using trifenix.agro.db.model.agro.orders;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.model.external.output;
@@ -21,16 +18,11 @@ namespace trifenix.agro.external.interfaces.entities.orders
 
         Task<ExtGetContainer<List<OutPutApplicationOrder>>> GetApplicationOrders();
 
-        Task<ExtGetContainer<OrderResult>> GetApplicationOrdersByPage(int page, int quantity, bool orderByDesc);
+        Task<ExtGetContainer<SearchResult<OutPutApplicationOrder>>> GetApplicationOrdersByPage(int page, int quantity, bool orderByDesc);
 
-        Task<ExtGetContainer<OrderResult>> GetApplicationOrdersByPage(string search, int page, int quantity, bool desc);
+        Task<ExtGetContainer<SearchResult<OutPutApplicationOrder>>> GetApplicationOrdersByPage(string textToSearch, int page, int quantity, bool desc);
 
-
-
-        ExtGetContainer<OrderSearchContainer> GetOrderSearch(string search, int page, int quantity, bool desc);
-
-
-
+        ExtGetContainer<EntitiesSearchContainer> GetIndexElements(string textToSearch, int page, int quantity, bool desc);
 
     }
 }

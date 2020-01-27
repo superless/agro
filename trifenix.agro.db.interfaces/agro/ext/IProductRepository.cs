@@ -11,7 +11,9 @@ namespace trifenix.agro.db.interfaces.agro.ext
         Task<Product> GetProduct(string id);
 
         IQueryable<Product> GetProducts();
-    }
 
+        Task<long> Total(string season);
+
+    }
 
 }
