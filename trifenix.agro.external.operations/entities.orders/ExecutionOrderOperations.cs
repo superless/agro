@@ -108,6 +108,7 @@ namespace trifenix.agro.external.operations.entities.orders
             var createOperation = await OperationHelper.CreateElement(_commonDb, _repo.GetExecutionOrders(),
                async s => await _repo.CreateUpdateExecutionOrder(new ExecutionOrder {
                    Id = s,
+                   SeasonId = _idSeason,
                    Name = executionName,
                    Order = order,
                    UserApplicator = userApplicator,

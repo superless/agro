@@ -12,6 +12,9 @@ namespace trifenix.agro.db.model.agro.orders
         /// Identificador de la entidad
         /// </summary>
         public override string Id { get; set; }
+
+        public string SeasonId { get; set; }
+
         public string Name { get; set; }
         public ApplicationOrder Order { get; set; }
 

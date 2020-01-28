@@ -11,6 +11,7 @@ namespace trifenix.agro.db.applicationsReference.agro.ext {
         public ProductRepository(IMainDb<Product> db) {
             _db = db;
         }
+
         public async Task<string> CreateUpdateProduct(Product product) {
             return await _db.CreateUpdate(product);
         }
@@ -23,8 +24,5 @@ namespace trifenix.agro.db.applicationsReference.agro.ext {
             return _db.GetEntities();
         }
 
-        public async Task<long> Total(string season) {
-            return await _db.Store.QuerySingleAsync<long>($"SELECT value count(1) FROM c where c.SeasonId = '{season}'");
-        }
     }
 }

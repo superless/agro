@@ -194,7 +194,7 @@ namespace trifenix.agro.external.operations.entities.ext
                 var productsList = _productRepository.GetProducts();
                 var paginatedProducts = _commonDb.WithPagination(productsList, page, quantity);
                 var products = orderByDesc ? await _commonDb.TolistAsync(paginatedProducts.OrderByDescending(s => s.CommercialName)) : await _commonDb.TolistAsync(paginatedProducts);
-                var total = await _productRepository.Total(_idSeason);
+                var total = productsList.Count();
                 return OperationHelper.GetElement(new SearchResult<Product> {
                     Total = total,
                     Elements = products.ToArray()
