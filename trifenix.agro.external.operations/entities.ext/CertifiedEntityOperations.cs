@@ -33,7 +33,7 @@ namespace trifenix.agro.external.operations.entities.ext
             catch (Exception e)
             {
 
-                return OperationHelper.GetException<List<CertifiedEntity>>(e, e.Message);
+                return OperationHelper.GetException<List<CertifiedEntity>>(e);
             }
 
 
@@ -50,7 +50,7 @@ namespace trifenix.agro.external.operations.entities.ext
             catch (Exception e)
             {
 
-                return OperationHelper.GetException<CertifiedEntity>(e, e.Message);
+                return OperationHelper.GetException<CertifiedEntity>(e);
             }
         }
 

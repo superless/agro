@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using trifenix.agro.db.model.agro.orders;
 using trifenix.agro.model.external;
+using trifenix.agro.model.external.output;
+using trifenix.agro.search.model;
 
 namespace trifenix.agro.external.interfaces.entities.orders
 {
@@ -11,13 +13,19 @@ namespace trifenix.agro.external.interfaces.entities.orders
 
         Task<ExtGetContainer<List<ExecutionOrder>>> GetExecutionOrders();
 
-        Task<ExtPostContainer<string>> SaveNewExecutionOrder(string idOrder, string idUserApplicator, string idNebulizer, string[] idProduct, double[] quantityByHectare, string idTractor, string commentary);
+        Task<ExtPostContainer<string>> SaveNewExecutionOrder(string idOrder, string executionName, string idUserApplicator, string idNebulizer, string[] idProduct, double[] quantityByHectare, string idTractor, string commentary);
+
+        Task<ExtPostContainer<ExecutionOrder>> SaveEditExecutionOrder(string id, string executionName, string idOrder, string idUserApplicator, string idNebulizer, string[] idProduct, double[] quantityByHectare, string idTractor);
 
         Task<ExtPostContainer<ExecutionOrder>> SetStatus(string idExecutionOrder, string typeOfStatus, int newValueOfStatus, string commentary);
 
         Task<ExtPostContainer<ExecutionOrder>> AddCommentaryToExecutionOrder(string idExecutionOrder, string commentary);
 
-        Task<ExtPostContainer<ExecutionOrder>> SaveEditExecutionOrder(string id, string idOrder, string idUserApplicator, string idNebulizer, string[] idProduct, double[] quantityByHectare, string idTractor);
+        ExtGetContainer<EntitiesSearchContainer> GetIndexElements(string textToSearch, int page, int quantity, bool desc);
+
+        Task<ExtGetContainer<SearchResult<ExecutionOrder>>> GetExecutionOrdersByPage(int page, int quantity, bool desc);
+
+        Task<ExtGetContainer<SearchResult<ExecutionOrder>>> GetExecutionOrdersByPage(string textToSearch, int page, int quantity, bool desc);
 
     }
 }

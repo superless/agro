@@ -12,8 +12,11 @@ namespace trifenix.agro.db.model.agro.orders
         /// Identificador de la entidad
         /// </summary>
         public override string Id { get; set; }
-        public ApplicationOrder Order { get; set; }
 
+        public string SeasonId { get; set; }
+
+        public string Name { get; set; }
+        public ApplicationOrder Order { get; set; }
 
         private List<ProductToApply> _productToApply;
 
@@ -24,8 +27,6 @@ namespace trifenix.agro.db.model.agro.orders
                 return _productToApply; }
             set { _productToApply = value; }
         }
-
-        
 
         private ExecutionStatus _executionStatus;
         public ExecutionStatus ExecutionStatus {

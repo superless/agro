@@ -209,13 +209,13 @@ namespace trifenix.agro.external.operations.helper
             };
         }
 
-        public static ExtGetErrorContainer<T> GetException<T>(Exception exc, string message)
+        public static ExtGetErrorContainer<T> GetException<T>(Exception exc)
         {
             return new ExtGetErrorContainer<T>
             {
                 
                 InternalException = exc,
-                ErrorMessage = message,
+                ErrorMessage = exc.Message,
                 StatusResult = ExtGetDataResult.Error
             };
         }

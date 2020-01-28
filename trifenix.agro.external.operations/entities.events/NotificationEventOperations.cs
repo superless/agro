@@ -60,7 +60,7 @@ namespace trifenix.agro.external.operations.entities.events {
                 return OperationHelper.GetElement(notEvent);
             }
             catch (Exception e) {
-                return OperationHelper.GetException<NotificationEvent>(e, e.Message);
+                return OperationHelper.GetException<NotificationEvent>(e);
             }
         }
 
@@ -74,14 +74,14 @@ namespace trifenix.agro.external.operations.entities.events {
                 return await GetEventsWrapper(_repo.GetNotificationEvents());
             }
             catch (Exception e) {
-                return OperationHelper.GetException<List<NotificationEvent>>(e, e.Message);
+                return OperationHelper.GetException<List<NotificationEvent>>(e);
             }
         }
 
         private async Task<ExtGetContainer<List<NotificationEvent>>> GetEventsWrapper(IQueryable<NotificationEvent> notificationQuery) {
             if (notificationQuery == null) {
                 var message = "La base de datos retorna nulo para eventos";
-                return OperationHelper.GetException<List<NotificationEvent>>(new Exception(message), message);
+                return OperationHelper.GetException<List<NotificationEvent>>(new Exception(message));
             }
             var notEvents = await _commonDb.TolistAsync(notificationQuery);
             return OperationHelper.GetElements(notEvents);
@@ -92,7 +92,7 @@ namespace trifenix.agro.external.operations.entities.events {
                 return await GetEventsWrapper(_repo.GetNotificationEvents().Where(s => s.Barrack.Id.Equals(id)));
             }
             catch (Exception e) {
-                return OperationHelper.GetException<List<NotificationEvent>>(e, e.Message);
+                return OperationHelper.GetException<List<NotificationEvent>>(e);
             }
         }
 
@@ -101,7 +101,7 @@ namespace trifenix.agro.external.operations.entities.events {
                 return await GetEventsWrapper(_repo.GetNotificationEvents().Where(s => s.Barrack.Id.Equals(idBarrack) && s.PhenologicalEvent.Id.Equals(idPhenologicalId)));
             }
             catch (Exception e) {
-                return OperationHelper.GetException<List<NotificationEvent>>(e, e.Message);
+                return OperationHelper.GetException<List<NotificationEvent>>(e);
             }
         }
 
