@@ -191,10 +191,10 @@ namespace trifenix.agro.external.operations.entities.ext
 
         public async Task<ExtGetContainer<SearchResult<Product>>> GetProductsByPage(int page, int quantity, bool orderByDesc) {
             try {
-                var productsList = _productRepository.GetProducts();
-                var paginatedProducts = _commonDb.WithPagination(productsList, page, quantity);
+                var productsQuery = _productRepository.GetProducts();
+                var paginatedProducts = _commonDb.WithPagination(productsQuery, page, quantity);
                 var products = orderByDesc ? await _commonDb.TolistAsync(paginatedProducts.OrderByDescending(s => s.CommercialName)) : await _commonDb.TolistAsync(paginatedProducts);
-                var total = productsList.Count();
+                var total = productsQuery.Count();
                 return OperationHelper.GetElement(new SearchResult<Product> {
                     Total = total,
                     Elements = products.ToArray()

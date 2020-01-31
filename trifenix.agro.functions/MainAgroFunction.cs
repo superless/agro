@@ -1048,7 +1048,7 @@ namespace trifenix.agro.functions {
 
         #region v2/Executions_ChangeStatus
         [FunctionName("Execution_ChangeStatus")]
-        public static async Task<IActionResult> Execution_ChangeStatus([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "v2/executions/changeStatus/{idExecution}")] HttpRequest req, string idExecution, ILogger log) {
+        public static async Task<IActionResult> Execution_ChangeStatus([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "v2/execution/changeStatus/{idExecution}")] HttpRequest req, string idExecution, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
@@ -1064,14 +1064,14 @@ namespace trifenix.agro.functions {
 
         #region v2/executionsAddCommentary
         [FunctionName("ExecutionsAddCommentary")]
-        public static async Task<IActionResult> ExecutionsAddCommentary([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "v2/executions/add_commentary/{id}")] HttpRequest req, string id, ILogger log) {
+        public static async Task<IActionResult> ExecutionsAddCommentary([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "v2/execution/add_commentary/{idExecution}")] HttpRequest req, string idExecution, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
             var manager = await ContainerMethods.AgroManager(claims);
             return await ContainerMethods.ApiPostOperations<ExecutionOrder>(req.Body, log, async (db, model) => {
                 string commentary = (string)model["commentary"];
-                return await db.ExecutionOrders.AddCommentaryToExecutionOrder(id, commentary);
+                return await db.ExecutionOrders.AddCommentaryToExecutionOrder(idExecution, commentary);
             }, claims);
         }
         #endregion

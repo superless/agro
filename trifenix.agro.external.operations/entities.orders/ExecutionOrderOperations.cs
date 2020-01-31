@@ -290,8 +290,8 @@ namespace trifenix.agro.external.operations.entities.orders
 
         public async Task<ExtGetContainer<SearchResult<ExecutionOrder>>> GetExecutionOrdersByPage(int page, int quantity, bool orderByDesc) {
             try {
-                var executionsList = _repo.GetExecutionOrders();
-                var paginatedExecutions = _commonDb.WithPagination(executionsList, page, quantity);
+                var executionOrderQuery = _repo.GetExecutionOrders();
+                var paginatedExecutions = _commonDb.WithPagination(executionOrderQuery, page, quantity);
                 var executionOrders = orderByDesc ? await _commonDb.TolistAsync(paginatedExecutions.OrderByDescending(s => s.Name)) : await _commonDb.TolistAsync(paginatedExecutions);
                 var total = await _repo.Total(_idSeason);
                 return OperationHelper.GetElement(new SearchResult<ExecutionOrder> {

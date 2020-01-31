@@ -8,6 +8,8 @@ namespace trifenix.agro.model.external.Input
     {
         public string Name { get; set; }
 
+        public bool isPhenological { get; set; }
+
         public DateTime InitDate { get; set; }
         public DateTime EndDate { get; set; }
 

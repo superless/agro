@@ -14,6 +14,8 @@ namespace trifenix.agro.db.model.agro.orders
         /// </summary>
         public override string Id { get; set; }
 
+        public bool isPhenological { get; set; }
+
         public string Name { get; set; }
         public DateTime InitDate { get; set; }
         public DateTime EndDate { get; set; }
