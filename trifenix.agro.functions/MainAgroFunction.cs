@@ -531,7 +531,7 @@ namespace trifenix.agro.functions {
 
         #region v2/orders
         [FunctionName("Orders")]
-        public static async Task<IActionResult> Orders([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/orders/{id?}/{totalByPage?}/{desc?}")] HttpRequest req, string id, int? totalByPage, string desc, ILogger log){
+        public static async Task<IActionResult> Orders([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/orders/{idOrPageNumber?}/{totalByPage?}/{desc?}/{type?}")] HttpRequest req, string idOrPageNumber, int? totalByPage, string desc, string type, ILogger log){
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
@@ -539,9 +539,9 @@ namespace trifenix.agro.functions {
             ExtGetContainer<OutPutApplicationOrder> result = null;
             switch (req.Method.ToLower()) {
                 case "get":
-                    if (!string.IsNullOrWhiteSpace(id)) {
-                        if (int.TryParse(id, out var resultInt)) break;
-                        result = await manager.ApplicationOrders.GetApplicationOrder(id);
+                    if (!string.IsNullOrWhiteSpace(idOrPageNumber)) {
+                        if (int.TryParse(idOrPageNumber, out var resultInt)) break;
+                        result = await manager.ApplicationOrders.GetApplicationOrder(idOrPageNumber);
                         return ContainerMethods.GetJsonGetContainer(result, log);
                     }
                     break;
@@ -553,16 +553,16 @@ namespace trifenix.agro.functions {
                 case "put":
                     return await ContainerMethods.ApiPostOperations<OutPutApplicationOrder>(req.Body, log, async (db, model) => {
                         var input = JsonConvert.DeserializeObject<ApplicationOrderInput>(model.ToString());
-                        return await db.ApplicationOrders.SaveEditApplicationOrder(id, input);
+                        return await db.ApplicationOrders.SaveEditApplicationOrder(idOrPageNumber, input);
                     }, claims);
             }
-            if (!string.IsNullOrWhiteSpace(id) && totalByPage.HasValue) {
-                var isPage = int.TryParse(id, out var page);
+            if (!string.IsNullOrWhiteSpace(idOrPageNumber) && totalByPage.HasValue) {
+                var isPage = int.TryParse(idOrPageNumber, out var page);
                 if (!isPage) return new BadRequestResult();
                 var orderDate = string.IsNullOrWhiteSpace(desc) || desc.ToLower().Equals("desc");
-                if (!orderDate && !desc.ToLower().Equals("asc"))
+                if ((!orderDate && !desc.ToLower().Equals("asc")) || !"all phenological not_phenological".Split().Contains(type.ToLower()))
                     return new BadRequestResult();
-                var resultGetByPageAll = await manager.ApplicationOrders.GetApplicationOrdersByPage(page, totalByPage??10, orderDate);
+                var resultGetByPageAll = await manager.ApplicationOrders.GetApplicationOrdersByPage(page, totalByPage??10, orderDate, type.Equals("all")?(bool?)null:type.Equals("phenological"));
                 return ContainerMethods.GetJsonGetContainer(resultGetByPageAll, log);
             }
             ExtGetContainer<List<OutPutApplicationOrder>> resultGetAll = await manager.ApplicationOrders.GetApplicationOrders();

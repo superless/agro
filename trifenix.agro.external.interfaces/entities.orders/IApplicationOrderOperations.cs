@@ -18,7 +18,7 @@ namespace trifenix.agro.external.interfaces.entities.orders
 
         Task<ExtGetContainer<List<OutPutApplicationOrder>>> GetApplicationOrders();
 
-        Task<ExtGetContainer<SearchResult<OutPutApplicationOrder>>> GetApplicationOrdersByPage(int page, int quantity, bool orderByDesc);
+        Task<ExtGetContainer<SearchResult<OutPutApplicationOrder>>> GetApplicationOrdersByPage(int page, int quantity, bool orderByDesc, bool? type);
 
         Task<ExtGetContainer<SearchResult<OutPutApplicationOrder>>> GetApplicationOrdersByPage(string textToSearch, int page, int quantity, bool desc);
 
