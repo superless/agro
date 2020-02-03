@@ -109,7 +109,7 @@ namespace trifenix.agro.external.operations.entities.orders
                async s => await _repo.CreateUpdateExecutionOrder(new ExecutionOrder {
                    Id = s,
                    SeasonId = _idSeason,
-                   Name = executionName,
+                   Name = executionName?? order.Name,
                    Order = order,
                    UserApplicator = userApplicator,
                    Nebulizer = nebulizer,
@@ -119,6 +119,8 @@ namespace trifenix.agro.external.operations.entities.orders
                }),
                s => s.Name.Equals(executionName),
                $"Ya existe ejecucion con nombre: {executionName}");
+            if (createOperation.GetType() == typeof(ExtPostErrorContainer<string>))
+                return OperationHelper.GetPostException<string>(new Exception(createOperation.Message));
             _searchServiceInstance.AddEntities(new List<EntitySearch> {
                 new EntitySearch {
                     Created = DateTime.Now,
