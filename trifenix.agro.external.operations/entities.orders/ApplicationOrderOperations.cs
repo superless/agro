@@ -213,7 +213,7 @@ namespace trifenix.agro.external.operations.entities.orders {
                 var applicationOrders = orderByDesc ? await _args.CommonDb.ApplicationOrder.TolistAsync(paginatedOrders.OrderByDescending(s => s.Name)) : await _args.CommonDb.ApplicationOrder.TolistAsync(paginatedOrders);
                 var outputOrders = applicationOrders.Select(GetOutputOrder).ToList();
                 return OperationHelper.GetElement(new SearchResult<OutPutApplicationOrder> {
-                    Total = outputOrders.Count,
+                    Total = applicationOrderQuery.Count(),
                     Elements = outputOrders.ToArray()
                 });
             }
@@ -228,7 +228,7 @@ namespace trifenix.agro.external.operations.entities.orders {
             EntitiesSearchContainer entitySearch = _searchServiceInstance.GetSearchFilteredByEntityName(entityName, textToSearch, page, quantity, desc);
             var resultDb = entitySearch.Entities.Select(async s => await GetApplicationOrder(s.Id)).Where(order => order.Result.Result.SeasonId.Equals(_args.SeasonId));
             return OperationHelper.GetElement(new SearchResult<OutPutApplicationOrder> {
-                Total = resultDb.Count(),
+                Total = entitySearch.Total,
                 Elements = resultDb.Select(s=>s.Result.Result).ToArray()
             });
         }
