@@ -204,15 +204,16 @@ namespace trifenix.agro.external.operations.entities.orders {
             }
         }
 
-        public async Task<ExtGetContainer<SearchResult<OutPutApplicationOrder>>> GetApplicationOrdersByPage(int page, int quantity, bool orderByDesc) {
+        public async Task<ExtGetContainer<SearchResult<OutPutApplicationOrder>>> GetApplicationOrdersByPage(int page, int quantity, bool orderByDesc, bool? type) {
             try {
-                var applicationOrderQuery = _args.ApplicationOrder.GetApplicationOrders();
+                var applicationOrderQuery = _args.ApplicationOrder.GetApplicationOrders().Where(order => order.SeasonId.Equals(_args.SeasonId));
+                if (type.HasValue)
+                    applicationOrderQuery = applicationOrderQuery.Where(order => order.isPhenological == type);
                 var paginatedOrders = _args.CommonDb.ApplicationOrder.WithPagination(applicationOrderQuery, page, quantity);
                 var applicationOrders = orderByDesc ? await _args.CommonDb.ApplicationOrder.TolistAsync(paginatedOrders.OrderByDescending(s => s.Name)) : await _args.CommonDb.ApplicationOrder.TolistAsync(paginatedOrders);
                 var outputOrders = applicationOrders.Select(GetOutputOrder).ToList();
-                var total = await _args.ApplicationOrder.Total(_args.SeasonId);
                 return OperationHelper.GetElement(new SearchResult<OutPutApplicationOrder> {
-                    Total = total,
+                    Total = outputOrders.Count,
                     Elements = outputOrders.ToArray()
                 });
             }
@@ -223,17 +224,18 @@ namespace trifenix.agro.external.operations.entities.orders {
 
         public async Task<ExtGetContainer<SearchResult<OutPutApplicationOrder>>> GetApplicationOrdersByPage(string textToSearch, int page, int quantity, bool desc) {
             if (string.IsNullOrWhiteSpace(textToSearch))
-                return await GetApplicationOrdersByPage(page, quantity, desc);
+                return await GetApplicationOrdersByPage(page, quantity, desc, null);
             EntitiesSearchContainer entitySearch = _searchServiceInstance.GetSearchFilteredByEntityName(entityName, textToSearch, page, quantity, desc);
-            var resultDb = entitySearch.Entities.Select(async s => await GetApplicationOrder(s.Id));
+            var resultDb = entitySearch.Entities.Select(async s => await GetApplicationOrder(s.Id)).Where(order => order.Result.Result.SeasonId.Equals(_args.SeasonId));
             return OperationHelper.GetElement(new SearchResult<OutPutApplicationOrder> {
-                Total = entitySearch.Total,
+                Total = resultDb.Count(),
                 Elements = resultDb.Select(s=>s.Result.Result).ToArray()
             });
         }
 
         public ExtGetContainer<EntitiesSearchContainer> GetIndexElements(string textToSearch, int page, int quantity, bool desc) {
-            EntitiesSearchContainer entitySearch = _searchServiceInstance.GetSearchFilteredByEntityName(entityName, textToSearch, page, quantity, desc);
+            EntitySearch[] entitySearchFilteresBySeason = _searchServiceInstance.GetSearchFilteredByEntityName(entityName, textToSearch, page, quantity, desc).Entities.Where(order => GetApplicationOrder(order.Id).Result.Result.SeasonId.Equals(_args.SeasonId)).ToArray();
+            EntitiesSearchContainer entitySearch = new EntitiesSearchContainer { Entities = entitySearchFilteresBySeason, Total = entitySearchFilteresBySeason.Count()};
             return OperationHelper.GetElement(entitySearch);
         }
 
