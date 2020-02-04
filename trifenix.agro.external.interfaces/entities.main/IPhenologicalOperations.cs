@@ -11,8 +11,8 @@ namespace trifenix.agro.external.interfaces.entities.main
     {
         Task<ExtPostContainer<string>> SaveNewPhenologicalEvent(string name, DateTime startDate, DateTime endDate);
 
-        Task<ExtPostContainer<PhenologicalEvent>> SaveEditPhenologicalEvent(string currentId, string name, DateTime startDate, DateTime endDate);
+        Task<ExtPostContainer<Event>> SaveEditPhenologicalEvent(string currentId, string name, DateTime startDate, DateTime endDate);
 
-        Task<ExtGetContainer<List<PhenologicalEvent>>> GetPhenologicalEvents();
+        Task<ExtGetContainer<List<Event>>> GetPhenologicalEvents();
     }
 }

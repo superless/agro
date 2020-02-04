@@ -41,8 +41,9 @@ namespace trifenix.agro.external.operations
             _weatherApi = weatherApi;
             _searchServiceInstance = searchServiceInstance;
         }
+        public string IdSeason { get => _idSeason; }
 
-        public IPhenologicalOperations PhenologicalEvents => new PhenologicalEventOperations(_repository.PhenologicalEvents, new CommonDbOperations<PhenologicalEvent>());
+        public IPhenologicalOperations PhenologicalEvents => new PhenologicalEventOperations(_repository.PhenologicalEvents, new CommonDbOperations<Event>());
 
         public IApplicationTargetOperations ApplicationTargets => new ApplicationTargetOperations(_repository.Targets, new CommonDbOperations<ApplicationTarget>());
 

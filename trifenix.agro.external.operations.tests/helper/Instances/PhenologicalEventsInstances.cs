@@ -7,8 +7,8 @@ namespace trifenix.agro.external.operations.tests.helper.Instances
 {
     public static class PhenologicalEventsInstances {
         public static Mock<IPhenologicalEventRepository> GetInstance(Results result) =>
-            MoqGenerator.GetMoqResult<IPhenologicalEventRepository, PhenologicalEvent>(result,
-                (s) => s.CreateUpdatePhenologicalEvent(It.IsAny<PhenologicalEvent>()),
+            MoqGenerator.GetMoqResult<IPhenologicalEventRepository, Event>(result,
+                (s) => s.CreateUpdatePhenologicalEvent(It.IsAny<Event>()),
                 (s) => s.GetPhenologicalEvent(It.IsAny<string>()),
                 s => s.GetPhenologicalEvents());
 

@@ -4,10 +4,9 @@ using trifenix.agro.external.interfaces.entities.fields;
 using trifenix.agro.external.interfaces.entities.main;
 using trifenix.agro.external.interfaces.entities.orders;
 
-namespace trifenix.agro.external.interfaces
-{
-    public interface IAgroManager
-    {
+namespace trifenix.agro.external.interfaces {
+    public interface IAgroManager {
+        string IdSeason { get; }
         IPhenologicalOperations PhenologicalEvents { get; }
 
         IApplicationTargetOperations ApplicationTargets { get; }

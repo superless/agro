@@ -11,7 +11,7 @@ namespace trifenix.agro.db.model.agro
     {
         public override string Id { get; set; }
 
-        public PhenologicalEvent PhenologicalEvent { get; set; }
+        public Event PhenologicalEvent { get; set; }
 
         public UserActivity Creator { get; set; }
 

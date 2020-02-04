@@ -9,23 +9,23 @@ namespace trifenix.agro.db.applicationsReference.agro
     public class PhenologicalEventRepository : IPhenologicalEventRepository
     {
 
-        private readonly IMainDb<PhenologicalEvent> _db;
-        public PhenologicalEventRepository(IMainDb<PhenologicalEvent> db)
+        private readonly IMainDb<Event> _db;
+        public PhenologicalEventRepository(IMainDb<Event> db)
         {
             _db = db;
         }
 
-        public async Task<string> CreateUpdatePhenologicalEvent(PhenologicalEvent phenologicalEvent)
+        public async Task<string> CreateUpdatePhenologicalEvent(Event phenologicalEvent)
         {
             return await _db.CreateUpdate(phenologicalEvent);
         }
 
-        public async Task<PhenologicalEvent> GetPhenologicalEvent(string uniqueId)
+        public async Task<Event> GetPhenologicalEvent(string uniqueId)
         {
             return await _db.GetEntity(uniqueId);
         }
 
-        public IQueryable<PhenologicalEvent> GetPhenologicalEvents()
+        public IQueryable<Event> GetPhenologicalEvents()
         {
             return _db.GetEntities();
         }

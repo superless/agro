@@ -163,7 +163,7 @@ namespace trifenix.agro.external.operations.entities.orders
     public class ElementsFolder {
         public bool Success { get; set; }
 
-        public PhenologicalEvent PhenologicalEvent { get; set; }
+        public Event PhenologicalEvent { get; set; }
         public ApplicationTarget Target { get; set; }
 
         public IngredientCategory Category { get; set; }
