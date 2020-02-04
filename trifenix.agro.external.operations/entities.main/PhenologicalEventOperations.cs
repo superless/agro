@@ -16,22 +16,22 @@ namespace trifenix.agro.external.operations.entities.main
     public class PhenologicalEventOperations : IPhenologicalOperations
     {
         private readonly IPhenologicalEventRepository _repo;
-        private readonly ICommonDbOperations<PhenologicalEvent> _commonDb;
+        private readonly ICommonDbOperations<Event> _commonDb;
 
-        public PhenologicalEventOperations(IPhenologicalEventRepository repo, ICommonDbOperations<PhenologicalEvent> commonDb)
+        public PhenologicalEventOperations(IPhenologicalEventRepository repo, ICommonDbOperations<Event> commonDb)
         {
             _repo = repo;
             _commonDb = commonDb;
         }
 
-        public async Task<ExtGetContainer<List<PhenologicalEvent>>> GetPhenologicalEvents()
+        public async Task<ExtGetContainer<List<Event>>> GetPhenologicalEvents()
         {
             var phenologicalsQuery = _repo.GetPhenologicalEvents();
             var phenologicalEvents = await _commonDb.TolistAsync(phenologicalsQuery);
             return OperationHelper.GetElements(phenologicalEvents);
         }
 
-        public async Task<ExtPostContainer<PhenologicalEvent>> SaveEditPhenologicalEvent(string currentId, string name, DateTime startDate, DateTime endDate)
+        public async Task<ExtPostContainer<Event>> SaveEditPhenologicalEvent(string currentId, string name, DateTime startDate, DateTime endDate)
         {
             var element = await _repo.GetPhenologicalEvent(currentId);
             return await OperationHelper.EditElement(_commonDb, _repo.GetPhenologicalEvents(),
@@ -53,7 +53,7 @@ namespace trifenix.agro.external.operations.entities.main
         public async Task<ExtPostContainer<string>> SaveNewPhenologicalEvent(string name, DateTime startDate, DateTime endDate)
         {
             return await OperationHelper.CreateElement(_commonDb, _repo.GetPhenologicalEvents(),
-                async s => await _repo.CreateUpdatePhenologicalEvent(new PhenologicalEvent {
+                async s => await _repo.CreateUpdatePhenologicalEvent(new Event {
                     Id = s,
                     Name = name,
                     InitDate = startDate,

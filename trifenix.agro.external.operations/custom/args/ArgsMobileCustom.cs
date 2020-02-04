@@ -40,7 +40,7 @@ namespace trifenix.agro.external.operations.custom.args
     public class ArgsCommonMobileDb {
         public ICommonDbOperations<Barrack> Barrack { get; set; }
 
-        public ICommonDbOperations<PhenologicalEvent> Phenological { get; set; }
+        public ICommonDbOperations<Event> Phenological { get; set; }
 
         public ICommonDbOperations<PhenologicalPreOrder> PhenologicalPreOrder { get; set; }
 

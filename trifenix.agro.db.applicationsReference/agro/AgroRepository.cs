@@ -36,7 +36,7 @@ namespace trifenix.agro.db.applicationsReference.agro
 
         public IIngredientRepository Ingredients => new IngredientRepository(new MainDb<Ingredient>(DbArguments));
 
-        public IPhenologicalEventRepository PhenologicalEvents => new PhenologicalEventRepository(new MainDb<PhenologicalEvent>(DbArguments));
+        public IPhenologicalEventRepository PhenologicalEvents => new PhenologicalEventRepository(new MainDb<Event>(DbArguments));
 
         public ISpecieRepository Species => new SpecieRepository(new MainDb<Specie>(DbArguments));
 

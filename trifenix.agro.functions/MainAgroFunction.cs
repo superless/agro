@@ -32,7 +32,7 @@ namespace trifenix.agro.functions {
             if (claims == null)
                 return new UnauthorizedResult();
             var manager = await ContainerMethods.AgroManager(claims);
-            ExtGetContainer<List<PhenologicalEvent>> result = null;
+            ExtGetContainer<List<Event>> result = null;
             switch (req.Method.ToLower()){
                 case "get":
                     result = await manager.PhenologicalEvents.GetPhenologicalEvents();
@@ -418,70 +418,107 @@ namespace trifenix.agro.functions {
         #endregion
 
         #region v2/notification_events
-        [FunctionName("NotificationEvents")]
-        public static async Task<IActionResult> NotificationEvents([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "v2/notification_events/{id?}")] HttpRequest req, string id,ILogger log){
+        //[FunctionName("NotificationEvents")]
+        //public static async Task<IActionResult> NotificationEvents([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "v2/notification_events/{id?}")] HttpRequest req, string id,ILogger log){
+        //    ClaimsPrincipal claims = await Auth.Validate(req);
+        //    if (claims == null)
+        //        return new UnauthorizedResult();
+        //    var manager = await ContainerMethods.AgroManager(claims);
+        //    Email email = new Email(manager.Users.GetUsers().Result.Result);
+        //    //HttpClient client = new HttpClient();
+        //    //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Environment.GetEnvironmentVariable("accessToken", EnvironmentVariableTarget.Process));
+        //    //var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+        //    //dynamic body = JsonConvert.DeserializeObject(requestBody);
+        //    //var newBody = body["_parts"][0][1];
+        //    //byte[] byteArray = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(newBody));
+        //    //MemoryStream stream = new MemoryStream(byteArray);
+        //    //var inputData = new StreamContent(stream);
+        //    //string ipNgrok = Environment.GetEnvironmentVariable("ipNgrok", EnvironmentVariableTarget.Process);
+        //    //await client.PostAsync("https://" + ipNgrok + ".ngrok.io/api/v2/debugroute", inputData);
+        //    //client.Dispose();
+        //    //return null;
+        //    ExtGetContainer<NotificationEvent> result = null;
+        //    switch (req.Method.ToLower()) {
+        //        case "get":
+        //            if (!string.IsNullOrWhiteSpace(id)) {
+        //                switch (id) {
+        //                    case "init":
+        //                        var resultEvent = await manager.CustomManager.MobileEvents.GetEventData();
+        //                        return ContainerMethods.GetJsonGetContainer(resultEvent, log);
+        //                    case "ts":
+        //                        var resultTs = await manager.CustomManager.MobileEvents.GetMobileEventTimestamp();
+        //                        return ContainerMethods.GetJsonGetContainer(resultTs, log);
+        //                    default:
+        //                        result = await manager.NotificationEvents.GetEvent(id);
+        //                        return ContainerMethods.GetJsonGetContainer(result, log);
+        //                }
+        //            }
+        //            break;
+        //        case "post":
+        //            return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
+        //                var newModel = model["_parts"][0][1];
+        //                var idPhenologicalEvent = (string)newModel["idPhenologicalEvent"];
+        //                var description = (string)newModel["description"];
+        //                var base64 = (string)newModel["base64"];
+        //                var barrack = (string)newModel["idBarrack"];
+        //                //var lat = (float)newModel["latitude"];
+        //                //var lon = (float)newModel["longitude"];
+        //                var response = await db.NotificationEvents.SaveNewNotificationEvent(barrack, idPhenologicalEvent, base64, description, 0F, 0F);
+        //                var evt = await db.NotificationEvents.GetEvent(response.IdRelated);
+        //                var url = evt.Result.PicturePath;
+        //                email.SendEmail("Notificacion",
+        //                    $@"<html>
+        //                    <body>
+        //                        <p> Estimado(a), </p>
+        //                        <p> Llego una notificacion </p>
+        //                        <img src='{url}' style='width:50%;height:auto;'>
+        //                        <p> Atentamente,<br> -Aresa </br></p>
+        //                    </body>
+        //                </html>");
+        //                return response;
+        //            }, claims);
+        //    }
+        //    ExtGetContainer<List<NotificationEvent>> resultGetAll = await manager.NotificationEvents.GetEvents();
+        //    return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
+        //}
+        #endregion
+
+        [FunctionName("NotificationEventsV2")]
+        public static async Task<IActionResult> NotificationEvents([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/notification_events/{idSector?}/{idSpecie?}/{idVariety?}")] HttpRequest req, string idSector, string idSpecie, string idVariety, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
             var manager = await ContainerMethods.AgroManager(claims);
-            Email email = new Email(manager.Users.GetUsers().Result.Result);
-            //HttpClient client = new HttpClient();
-            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Environment.GetEnvironmentVariable("accessToken", EnvironmentVariableTarget.Process));
-            //var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            //dynamic body = JsonConvert.DeserializeObject(requestBody);
-            //var newBody = body["_parts"][0][1];
-            //byte[] byteArray = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(newBody));
-            //MemoryStream stream = new MemoryStream(byteArray);
-            //var inputData = new StreamContent(stream);
-            //string ipNgrok = Environment.GetEnvironmentVariable("ipNgrok", EnvironmentVariableTarget.Process);
-            //await client.PostAsync("https://" + ipNgrok + ".ngrok.io/api/v2/debugroute", inputData);
-            //client.Dispose();
-            //return null;
-            ExtGetContainer<NotificationEvent> result = null;
             switch (req.Method.ToLower()) {
                 case "get":
-                    if (!string.IsNullOrWhiteSpace(id)) {
-                        switch (id) {
-                            case "init":
-                                var resultEvent = await manager.CustomManager.MobileEvents.GetEventData();
-                                return ContainerMethods.GetJsonGetContainer(resultEvent, log);
-                            case "ts":
-                                var resultTs = await manager.CustomManager.MobileEvents.GetMobileEventTimestamp();
-                                return ContainerMethods.GetJsonGetContainer(resultTs, log);
-                            default:
-                                result = await manager.NotificationEvents.GetEvent(id);
-                                return ContainerMethods.GetJsonGetContainer(result, log);
+                    List<Barrack> barracks;
+                    if (string.IsNullOrEmpty(idSector)) {
+                        List<Sector> sectors = manager.Sectors.GetSectors().Result.Result;
+                        return ContainerMethods.GetJsonGetContainer(OperationHelper.GetElement(sectors.Select(sector => new OutputMobileEntity { Id = sector.Id, EntityName = sector.CosmosEntityName, Name = sector.Name })), log);
+                    }
+                    else {
+                        barracks = manager.Barracks.GetBarracks().Result.Result.Where(barrack => barrack.PlotLand.Sector.Id.Equals(idSector) && barrack.SeasonId.Equals(manager.IdSeason)).ToList();
+                        if (string.IsNullOrEmpty(idSpecie)) {
+                            List<Specie> species = barracks.Select(barrack => barrack.Variety.Specie).GroupBy(specie => specie.Name).Select(specie => specie.First()).ToList();
+                            return ContainerMethods.GetJsonGetContainer(OperationHelper.GetElement(species.Select(specie => new OutputMobileEntity { Id = specie.Id, EntityName = specie.CosmosEntityName, Name = specie.Name })), log);
+                        }
+                        else {
+                            barracks = barracks.Where(barrack => barrack.Variety.Specie.Id.Equals(idSpecie)).ToList();
+                            if (string.IsNullOrEmpty(idVariety)) {
+                                List<Variety> varieties = barracks.Select(barrack => barrack.Variety).GroupBy(variety => variety.Name).Select(variety => variety.First()).ToList();
+                                return ContainerMethods.GetJsonGetContainer(OperationHelper.GetElement(varieties.Select(variety => new OutputMobileEntity { Id = variety.Id, EntityName = variety.CosmosEntityName, Name = variety.Name })), log);
+                            }
+                            else {
+                                barracks = barracks.Where(barrack => barrack.Variety.Id.Equals(idVariety)).ToList();
+                                return ContainerMethods.GetJsonGetContainer(OperationHelper.GetElement(barracks.Select(barrack => new OutputMobileEntity { Id = barrack.Id, EntityName = barrack.CosmosEntityName, Name = barrack.Name })), log);
+                            }
                         }
                     }
-                    break;
                 case "post":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
-                        var newModel = model["_parts"][0][1];
-                        var idPhenologicalEvent = (string)newModel["idPhenologicalEvent"];
-                        var description = (string)newModel["description"];
-                        var base64 = (string)newModel["base64"];
-                        var barrack = (string)newModel["idBarrack"];
-                        //var lat = (float)newModel["latitude"];
-                        //var lon = (float)newModel["longitude"];
-                        var response = await db.NotificationEvents.SaveNewNotificationEvent(barrack, idPhenologicalEvent, base64, description, 0F, 0F);
-                        var evt = await db.NotificationEvents.GetEvent(response.IdRelated);
-                        var url = evt.Result.PicturePath;
-                        email.SendEmail("Notificacion",
-                            $@"<html>
-                            <body>
-                                <p> Estimado(a), </p>
-                                <p> Llego una notificacion </p>
-                                <img src='{url}' style='width:50%;height:auto;'>
-                                <p> Atentamente,<br> -Aresa </br></p>
-                            </body>
-                        </html>");
-                        return response;
-                    }, claims);
+                    break;
             }
-            ExtGetContainer<List<NotificationEvent>> resultGetAll = await manager.NotificationEvents.GetEvents();
-            return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
+            return null;
         }
-        #endregion
 
         [FunctionName("EntityFilter")]
         public static async Task<IActionResult> EntityFilter([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/{entityName}/search/{textToSearch}/{page}/{quantity}/{order}")] HttpRequest req, string entityName, string textToSearch, int page, int quantity, string order, ILogger log) {

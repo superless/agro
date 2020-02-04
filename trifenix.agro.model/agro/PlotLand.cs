@@ -18,7 +18,5 @@ namespace trifenix.agro.db.model.agro
 
         public Sector Sector { get; set; }
 
-
-
     }
 }

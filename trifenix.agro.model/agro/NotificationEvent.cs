@@ -29,7 +29,7 @@ namespace trifenix.agro.db.model.agro
         /// <summary>
         /// Evento fenológico asignado a la notificación.
         /// </summary>
-        public PhenologicalEvent PhenologicalEvent { get; set; }
+        public Event PhenologicalEvent { get; set; }
 
         public UserActivity Creator { get; set; }
 
