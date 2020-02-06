@@ -20,7 +20,7 @@ namespace trifenix.agro.external.interfaces.entities.ext
 
         Task<ExtGetContainer<Product>> GetProduct(string id);
 
-        ExtGetContainer<EntitiesSearchContainer> GetIndexElements(string textToSearch, int page, int quantity, bool desc);
+        ExtGetContainer<EntitiesSearchContainer> GetIndexElements(string textToSearch, int? page, int? quantity, bool? desc);
 
         Task<ExtGetContainer<SearchResult<Product>>> GetProductsByPage(int page, int quantity, bool desc);
 

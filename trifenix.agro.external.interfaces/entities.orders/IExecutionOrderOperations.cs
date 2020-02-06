@@ -21,9 +21,9 @@ namespace trifenix.agro.external.interfaces.entities.orders
 
         Task<ExtPostContainer<ExecutionOrder>> AddCommentaryToExecutionOrder(string idExecutionOrder, string commentary);
 
-        ExtGetContainer<EntitiesSearchContainer> GetIndexElements(string textToSearch, int? status, int page, int quantity, bool desc);
+        ExtGetContainer<EntitiesSearchContainer> GetIndexElements(string textToSearch, int? status, int? page, int? quantity, bool? desc);
         
-        ExtGetContainer<SearchResult<ExecutionOrder>> GetPaginatedExecutions(string textToSearch, int? status, int page, int quantity, bool desc);
+        ExtGetContainer<SearchResult<ExecutionOrder>> GetPaginatedExecutions(string textToSearch, int? status, int? page, int? quantity, bool? desc);
 
     }
 }

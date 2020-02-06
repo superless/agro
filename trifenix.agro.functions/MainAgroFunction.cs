@@ -524,7 +524,7 @@ namespace trifenix.agro.functions {
         }
 
         [FunctionName("EntityFilter")]
-        public static async Task<IActionResult> EntityFilter([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/{entityName}/search/{textToSearch}/{page}/{quantity}/{order}/{typeOrStatus}")] HttpRequest req, string entityName, string textToSearch, int page, int quantity, string order, string typeOrStatus, ILogger log) {
+        public static async Task<IActionResult> EntityFilter([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/{entityName}/search/{textToSearch}/{page}/{quantity}/{order}/{typeOrStatus?}")] HttpRequest req, string entityName, string textToSearch, int page, int quantity, string order, string typeOrStatus, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
@@ -545,7 +545,7 @@ namespace trifenix.agro.functions {
         }
 
         [FunctionName("IndexElementsFilter")]
-        public static async Task<IActionResult> IndexElementsFilter([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/{entityName}/search/indexElements/{textToSearch}/{page}/{quantity}/{order}/{typeOrStatus}")] HttpRequest req, string entityName, string textToSearch, int page, int quantity, string order, string typeOrStatus, ILogger log) {
+        public static async Task<IActionResult> IndexElementsFilter([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/{entityName}/search/indexElements/{textToSearch}/{page}/{quantity}/{order}/{typeOrStatus?}")] HttpRequest req, string entityName, string textToSearch, int page, int quantity, string order, string typeOrStatus, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();

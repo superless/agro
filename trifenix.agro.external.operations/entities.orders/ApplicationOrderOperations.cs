@@ -204,7 +204,7 @@ namespace trifenix.agro.external.operations.entities.orders {
             }
         }
         
-        public ExtGetContainer<SearchResult<OutPutApplicationOrder>> GetPaginatedOrders(string textToSearch, bool? type, int page, int quantity, bool desc) {
+        public ExtGetContainer<SearchResult<OutPutApplicationOrder>> GetPaginatedOrders(string textToSearch, bool? type, int? page, int? quantity, bool? desc) {
             var filters = new Filters { EntityName = entityName, SeasonId = _args.SeasonId };
             if (type.HasValue)
                 filters.Type = type;
@@ -216,7 +216,7 @@ namespace trifenix.agro.external.operations.entities.orders {
             });
         }
 
-        public ExtGetContainer<EntitiesSearchContainer> GetIndexElements(string textToSearch, bool? type, int page, int quantity, bool desc) {
+        public ExtGetContainer<EntitiesSearchContainer> GetIndexElements(string textToSearch, bool? type, int? page, int? quantity, bool? desc) {
             var filters = new Filters { EntityName = entityName, SeasonId = _args.SeasonId };
             if (type.HasValue)
                 filters.Type = type;

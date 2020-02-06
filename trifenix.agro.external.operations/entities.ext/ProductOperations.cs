@@ -217,7 +217,7 @@ namespace trifenix.agro.external.operations.entities.ext
             });
         }
 
-        public ExtGetContainer<EntitiesSearchContainer> GetIndexElements(string textToSearch, int page, int quantity, bool desc) {
+        public ExtGetContainer<EntitiesSearchContainer> GetIndexElements(string textToSearch, int? page, int? quantity, bool? desc) {
             var filters = new Filters { EntityName = entityName };
             EntitiesSearchContainer entitySearch = _searchServiceInstance.GetSearchFilteredByEntityName(filters, textToSearch, page, quantity, desc);
             return OperationHelper.GetElement(entitySearch);
