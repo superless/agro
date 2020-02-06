@@ -290,7 +290,7 @@ namespace trifenix.agro.external.operations.entities.orders
             );
         }
         
-        public ExtGetContainer<SearchResult<ExecutionOrder>> GetPaginatedExecutions(string textToSearch, int? status, int page, int quantity, bool desc) {
+        public ExtGetContainer<SearchResult<ExecutionOrder>> GetPaginatedExecutions(string textToSearch, int? status, int? page, int? quantity, bool? desc) {
             var filters = new Filters { EntityName = entityName, SeasonId = _idSeason };
             if (status.HasValue)
                 filters.Status = status;
@@ -302,7 +302,7 @@ namespace trifenix.agro.external.operations.entities.orders
             });
         }
 
-        public ExtGetContainer<EntitiesSearchContainer> GetIndexElements(string textToSearch, int? status, int page, int quantity, bool desc) {
+        public ExtGetContainer<EntitiesSearchContainer> GetIndexElements(string textToSearch, int? status, int? page, int? quantity, bool? desc) {
             var filters = new Filters { EntityName = entityName, SeasonId = _idSeason };
             if (status.HasValue)
                 filters.Status = status;
