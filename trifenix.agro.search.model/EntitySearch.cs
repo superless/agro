@@ -23,10 +23,10 @@ namespace trifenix.agro.search.model {
         public string SeasonId { get; set; }
 
         [IsSortable, IsFilterable]
-        public int Status { get; set; }
+        public int? Status { get; set; }
         
         [IsFilterable]
-        public bool Type { get; set; }
+        public bool? Type { get; set; }
     }
 
     public class EntitiesSearchContainer {

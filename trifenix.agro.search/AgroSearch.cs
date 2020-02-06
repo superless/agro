@@ -68,7 +68,7 @@ namespace trifenix.agro.search {
         public string SeasonId { get; set; }
         public int? Status { get; set; }
         public bool? Type { get; set; }
-        public override string ToString() => $"EntityName eq '{EntityName}'" + (!string.IsNullOrWhiteSpace(SeasonId)?$" and SeasonId eq '{SeasonId}'":"") + (Status.HasValue?$" and Status eq {Status}":"") + (Type.HasValue?$" and Type eq {Type}":"");
+        public override string ToString() => $"EntityName eq '{EntityName}'" + (!string.IsNullOrWhiteSpace(SeasonId)?$" and SeasonId eq '{SeasonId}'":"") + (Status.HasValue?$" and Status eq {Status}":"") + (Type.HasValue?" and " + (Type.Value?"Type": "not Type"):"");
 
     }
 
