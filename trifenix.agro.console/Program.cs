@@ -17,12 +17,12 @@ namespace trifenix.agro.console {
     class Program {
         static async Task Main(string[] args){
 
-            var db = new AgroRepository(new AgroDbArguments
-            {
-                EndPointUrl = "https://agricola-db.documents.azure.com:443/",
-                NameDb = "agrodb",
-                PrimaryKey = "1hrGHt13NgzgOTahFZXDmtugRg5rld9Y9TstCNXg4arZbdOlK4I6h2EOD51Ezgpxe5wsQUxGKaODgET1LSsS4Q=="
-            });
+            //var db = new AgroRepository(new AgroDbArguments
+            //{
+            //    EndPointUrl = "https://agricola-db.documents.azure.com:443/",
+            //    NameDb = "agrodb",
+            //    PrimaryKey = "1hrGHt13NgzgOTahFZXDmtugRg5rld9Y9TstCNXg4arZbdOlK4I6h2EOD51Ezgpxe5wsQUxGKaODgET1LSsS4Q=="
+            //});
 
             //var query = db.Orders.GetApplicationOrders();
             //var errorList = new List<string>();

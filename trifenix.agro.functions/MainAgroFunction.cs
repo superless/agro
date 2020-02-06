@@ -530,11 +530,19 @@ namespace trifenix.agro.functions {
                 return new UnauthorizedResult();
             var manager = await ContainerMethods.AgroManager(claims);
             var orderDate = string.IsNullOrWhiteSpace(order) || order.ToLower().Equals("desc");
+            if (textToSearch.Equals("null"))
+                textToSearch = null;
             switch (entityName.ToLower()) {
                 case "orders":
-                    ExtGetContainer<SearchResult<OutPutApplicationOrder>> ordersResult = manager.ApplicationOrders.GetPaginatedOrders(textToSearch, typeOrStatus.Equals("Phenological"), page, quantity, orderDate);
+                    if (string.IsNullOrWhiteSpace(typeOrStatus))
+                        typeOrStatus = "all";
+                    if (!"all phenological not_phenological".Split().Contains(typeOrStatus.ToLower()))
+                        return new BadRequestResult();
+                    ExtGetContainer<SearchResult<OutPutApplicationOrder>> ordersResult = manager.ApplicationOrders.GetPaginatedOrders(textToSearch, typeOrStatus.Equals("all") ? (bool?)null : typeOrStatus.Equals("phenological"), page, quantity, orderDate);
                     return ContainerMethods.GetJsonGetContainer(ordersResult, log);
                 case "executions":
+                    if (!int.TryParse(typeOrStatus, out var resultInt))
+                        return new BadRequestResult();
                     ExtGetContainer<SearchResult<ExecutionOrder>> executionsResult = manager.ExecutionOrders.GetPaginatedExecutions(textToSearch, int.Parse(typeOrStatus), page, quantity, orderDate);
                     return ContainerMethods.GetJsonGetContainer(executionsResult, log);
                 case "products":
@@ -545,21 +553,25 @@ namespace trifenix.agro.functions {
         }
 
         [FunctionName("IndexElementsFilter")]
-        public static async Task<IActionResult> IndexElementsFilter([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/{entityName}/search/indexElements/{textToSearch}/{page}/{quantity}/{order}/{typeOrStatus?}")] HttpRequest req, string entityName, string textToSearch, int page, int quantity, string order, string typeOrStatus, ILogger log) {
+        public static async Task<IActionResult> IndexElementsFilter([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/{entityName}/indexElements/search/{textToSearch}/{page}/{quantity}/{order}/{typeOrStatus?}")] HttpRequest req, string entityName, string textToSearch, int page, int quantity, string order, string typeOrStatus, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
             var manager = await ContainerMethods.AgroManager(claims);
             var orderDate = string.IsNullOrWhiteSpace(order) || order.ToLower().Equals("desc");
+            if (textToSearch.Equals("null"))
+                textToSearch = null;
             ExtGetContainer<EntitiesSearchContainer> result;
             switch (entityName.ToLower()) {
                 case "orders":
+                    if (string.IsNullOrWhiteSpace(typeOrStatus))
+                        typeOrStatus = "all";
                     if (!"all phenological not_phenological".Split().Contains(typeOrStatus.ToLower()))
                         return new BadRequestResult();
                     result = manager.ApplicationOrders.GetIndexElements(textToSearch, typeOrStatus.Equals("all") ? (bool?)null : typeOrStatus.Equals("phenological"), page, quantity, orderDate);
                     break;
                 case "executions":
-                    if (int.TryParse(typeOrStatus, out var resultInt))
+                    if (!int.TryParse(typeOrStatus, out var resultInt))
                         return new BadRequestResult();
                     result = manager.ExecutionOrders.GetIndexElements(textToSearch, int.Parse(typeOrStatus), page, quantity, orderDate);
                     break;
@@ -604,6 +616,8 @@ namespace trifenix.agro.functions {
                 var isPage = int.TryParse(idOrPageNumber, out var page);
                 if (!isPage) return new BadRequestResult();
                 var orderDate = string.IsNullOrWhiteSpace(desc) || desc.ToLower().Equals("desc");
+                if (string.IsNullOrWhiteSpace(type))
+                    type = "all";
                 if ((!orderDate && !desc.ToLower().Equals("asc")) || !"all phenological not_phenological".Split().Contains(type.ToLower()))
                     return new BadRequestResult();
                 var resultGetByPageAll = manager.ApplicationOrders.GetPaginatedOrders(null, type.Equals("all")?(bool?)null:type.Equals("phenological"), page, totalByPage??10, orderDate);
