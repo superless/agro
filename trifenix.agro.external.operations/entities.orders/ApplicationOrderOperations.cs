@@ -203,40 +203,25 @@ namespace trifenix.agro.external.operations.entities.orders {
                 return OperationHelper.GetException<List<OutPutApplicationOrder>>(e);
             }
         }
-
-        public async Task<ExtGetContainer<SearchResult<OutPutApplicationOrder>>> GetApplicationOrdersByPage(int page, int quantity, bool orderByDesc, bool? type) {
-            try {
-                var applicationOrderQuery = _args.ApplicationOrder.GetApplicationOrders().Where(order => order.SeasonId.Equals(_args.SeasonId));
-                if (type.HasValue)
-                    applicationOrderQuery = applicationOrderQuery.Where(order => order.isPhenological == type);
-                var paginatedOrders = _args.CommonDb.ApplicationOrder.WithPagination(applicationOrderQuery, page, quantity);
-                var applicationOrders = orderByDesc ? await _args.CommonDb.ApplicationOrder.TolistAsync(paginatedOrders.OrderByDescending(s => s.Name)) : await _args.CommonDb.ApplicationOrder.TolistAsync(paginatedOrders);
-                var outputOrders = applicationOrders.Select(GetOutputOrder).ToList();
-                return OperationHelper.GetElement(new SearchResult<OutPutApplicationOrder> {
-                    Total = applicationOrderQuery.Count(),
-                    Elements = outputOrders.ToArray()
-                });
-            }
-            catch (Exception e) {
-                return OperationHelper.GetException<SearchResult<OutPutApplicationOrder>>(e);
-            }
-        }
-
-        public async Task<ExtGetContainer<SearchResult<OutPutApplicationOrder>>> GetApplicationOrdersByPage(string textToSearch, int page, int quantity, bool desc) {
-            if (string.IsNullOrWhiteSpace(textToSearch))
-                return await GetApplicationOrdersByPage(page, quantity, desc, null);
-            EntitiesSearchContainer entitySearch = _searchServiceInstance.GetSearchFilteredByEntityName(entityName, textToSearch, page, quantity, desc);
-            var resultDb = entitySearch.Entities.Select(async s => await GetApplicationOrder(s.Id)).Where(order => order.Result.Result.SeasonId.Equals(_args.SeasonId));
+        
+        public ExtGetContainer<SearchResult<OutPutApplicationOrder>> GetPaginatedOrders(string textToSearch, bool? type, int page, int quantity, bool desc) {
+            var filters = new Filters { EntityName = entityName, SeasonId = _args.SeasonId };
+            if (type.HasValue)
+                filters.Type = type;
+            EntitiesSearchContainer entitySearch = _searchServiceInstance.GetSearchFilteredByEntityName(filters, textToSearch, page, quantity, desc);
+            var resultDb = entitySearch.Entities.Select(async order => await GetApplicationOrder(order.Id));
             return OperationHelper.GetElement(new SearchResult<OutPutApplicationOrder> {
                 Total = entitySearch.Total,
                 Elements = resultDb.Select(s=>s.Result.Result).ToArray()
             });
         }
 
-        public ExtGetContainer<EntitiesSearchContainer> GetIndexElements(string textToSearch, int page, int quantity, bool desc) {
-            EntitySearch[] entitySearchFilteresBySeason = _searchServiceInstance.GetSearchFilteredByEntityName(entityName, textToSearch, page, quantity, desc).Entities.Where(order => GetApplicationOrder(order.Id).Result.Result.SeasonId.Equals(_args.SeasonId)).ToArray();
-            EntitiesSearchContainer entitySearch = new EntitiesSearchContainer { Entities = entitySearchFilteresBySeason, Total = entitySearchFilteresBySeason.Count()};
-            return OperationHelper.GetElement(entitySearch);
+        public ExtGetContainer<EntitiesSearchContainer> GetIndexElements(string textToSearch, bool? type, int page, int quantity, bool desc) {
+            var filters = new Filters { EntityName = entityName, SeasonId = _args.SeasonId };
+            if (type.HasValue)
+                filters.Type = type;
+            EntitiesSearchContainer entitySearchFilteresBySeason = _searchServiceInstance.GetSearchFilteredByEntityName(filters, textToSearch, page, quantity, desc);
+            return OperationHelper.GetElement(entitySearchFilteresBySeason);
         }
 
     }

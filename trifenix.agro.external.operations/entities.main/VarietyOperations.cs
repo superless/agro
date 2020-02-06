@@ -31,10 +31,9 @@ namespace trifenix.agro.external.operations.entities.main
             return OperationHelper.GetElements(varieties);
         }
 
-        public async Task<ExtGetContainer<Variety>> GetVariety(string id)
-        {
-            var order = await _repo.GetVariety(id);
-            return OperationHelper.GetElement(order);
+        public async Task<ExtGetContainer<Variety>> GetVariety(string id) {
+            var variety = await _repo.GetVariety(id);
+            return OperationHelper.GetElement(variety);
         }
 
         public async Task<ExtPostContainer<Variety>> SaveEditVariety(string id, string name, string abbreviation, string idSpecie)

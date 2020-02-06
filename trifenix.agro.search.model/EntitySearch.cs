@@ -16,9 +16,17 @@ namespace trifenix.agro.search.model {
         [IsFilterable]
         public string Id { get; set; }
 
-
         [IsSearchable, IsSortable, JsonProperty("IdentificadorDeEntidad")]
         public string Name { get; set; }
+
+        [IsSortable, IsFilterable]
+        public string SeasonId { get; set; }
+
+        [IsSortable, IsFilterable]
+        public int Status { get; set; }
+        
+        [IsFilterable]
+        public bool Type { get; set; }
     }
 
     public class EntitiesSearchContainer {

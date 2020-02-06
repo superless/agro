@@ -289,27 +289,12 @@ namespace trifenix.agro.external.operations.entities.orders
                 ""
             );
         }
-
-        public async Task<ExtGetContainer<SearchResult<ExecutionOrder>>> GetExecutionOrdersByPage(int page, int quantity, bool orderByDesc) {
-            try {
-                var executionOrderQuery = _repo.GetExecutionOrders();
-                var paginatedExecutions = _commonDb.WithPagination(executionOrderQuery, page, quantity);
-                var executionOrders = orderByDesc ? await _commonDb.TolistAsync(paginatedExecutions.OrderByDescending(s => s.Name)) : await _commonDb.TolistAsync(paginatedExecutions);
-                var total = await _repo.Total(_idSeason);
-                return OperationHelper.GetElement(new SearchResult<ExecutionOrder> {
-                    Total = total,
-                    Elements = executionOrders.ToArray()
-                });
-            }
-            catch (Exception e) {
-                return OperationHelper.GetException<SearchResult<ExecutionOrder>>(e);
-            }
-        }
-
-        public async Task<ExtGetContainer<SearchResult<ExecutionOrder>>> GetExecutionOrdersByPage(string textToSearch, int page, int quantity, bool desc) {
-            if (string.IsNullOrWhiteSpace(textToSearch))
-                return await GetExecutionOrdersByPage(page, quantity, desc);
-            EntitiesSearchContainer entitySearch = _searchServiceInstance.GetSearchFilteredByEntityName(entityName, textToSearch, page, quantity, desc);
+        
+        public ExtGetContainer<SearchResult<ExecutionOrder>> GetPaginatedExecutions(string textToSearch, int? status, int page, int quantity, bool desc) {
+            var filters = new Filters { EntityName = entityName, SeasonId = _idSeason };
+            if (status.HasValue)
+                filters.Status = status;
+            EntitiesSearchContainer entitySearch = _searchServiceInstance.GetSearchFilteredByEntityName(filters, textToSearch, page, quantity, desc);
             var resultDb = entitySearch.Entities.Select(async s => await GetExecutionOrder(s.Id));
             return OperationHelper.GetElement(new SearchResult<ExecutionOrder> {
                 Total = entitySearch.Total,
@@ -317,8 +302,11 @@ namespace trifenix.agro.external.operations.entities.orders
             });
         }
 
-        public ExtGetContainer<EntitiesSearchContainer> GetIndexElements(string textToSearch, int page, int quantity, bool desc) {
-            EntitiesSearchContainer entitySearch = _searchServiceInstance.GetSearchFilteredByEntityName(entityName, textToSearch, page, quantity, desc);
+        public ExtGetContainer<EntitiesSearchContainer> GetIndexElements(string textToSearch, int? status, int page, int quantity, bool desc) {
+            var filters = new Filters { EntityName = entityName, SeasonId = _idSeason };
+            if (status.HasValue)
+                filters.Status = status;
+            EntitiesSearchContainer entitySearch = _searchServiceInstance.GetSearchFilteredByEntityName(filters, textToSearch, page, quantity, desc);
             return OperationHelper.GetElement(entitySearch);
         }
 
