@@ -12,7 +12,9 @@ namespace trifenix.agro.external.interfaces.entities.main
         Task<ExtPostContainer<Specie>> SaveEditSpecie(string id, string name, string abbreviation);
 
         Task<ExtGetContainer<List<Specie>>> GetSpecies();
-        
+
+        Task<ExtGetContainer<Specie>> GetSpecie(string id);
+
     }
 
 }

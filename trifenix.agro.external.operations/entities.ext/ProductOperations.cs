@@ -208,7 +208,8 @@ namespace trifenix.agro.external.operations.entities.ext
         public async Task<ExtGetContainer<SearchResult<Product>>> GetProductsByPage(string textToSearch, int page, int quantity, bool desc) {
             if (string.IsNullOrWhiteSpace(textToSearch))
                 return await GetProductsByPage(page, quantity, desc);
-            EntitiesSearchContainer entitySearch = _searchServiceInstance.GetSearchFilteredByEntityName(entityName, textToSearch, page, quantity, desc);
+            var filters = new Filters { EntityName = entityName };
+            EntitiesSearchContainer entitySearch = _searchServiceInstance.GetSearchFilteredByEntityName(filters, textToSearch, page, quantity, desc);
             var resultDb = entitySearch.Entities.Select(async s => await GetProduct(s.Id));
             return OperationHelper.GetElement(new SearchResult<Product> {
                 Total = entitySearch.Total,
@@ -217,7 +218,8 @@ namespace trifenix.agro.external.operations.entities.ext
         }
 
         public ExtGetContainer<EntitiesSearchContainer> GetIndexElements(string textToSearch, int page, int quantity, bool desc) {
-            EntitiesSearchContainer entitySearch = _searchServiceInstance.GetSearchFilteredByEntityName(entityName, textToSearch, page, quantity, desc);
+            var filters = new Filters { EntityName = entityName };
+            EntitiesSearchContainer entitySearch = _searchServiceInstance.GetSearchFilteredByEntityName(filters, textToSearch, page, quantity, desc);
             return OperationHelper.GetElement(entitySearch);
         }
     }

@@ -17,12 +17,10 @@ namespace trifenix.agro.external.interfaces.entities.orders
         Task<ExtGetContainer<OutPutApplicationOrder>> GetApplicationOrder(string id);
 
         Task<ExtGetContainer<List<OutPutApplicationOrder>>> GetApplicationOrders();
+        
+        ExtGetContainer<SearchResult<OutPutApplicationOrder>> GetPaginatedOrders(string textToSearch, bool? type, int page, int quantity, bool desc);
 
-        Task<ExtGetContainer<SearchResult<OutPutApplicationOrder>>> GetApplicationOrdersByPage(int page, int quantity, bool orderByDesc, bool? type);
-
-        Task<ExtGetContainer<SearchResult<OutPutApplicationOrder>>> GetApplicationOrdersByPage(string textToSearch, int page, int quantity, bool desc);
-
-        ExtGetContainer<EntitiesSearchContainer> GetIndexElements(string textToSearch, int page, int quantity, bool desc);
+        ExtGetContainer<EntitiesSearchContainer> GetIndexElements(string textToSearch, bool? type, int page, int quantity, bool desc);
 
     }
 }

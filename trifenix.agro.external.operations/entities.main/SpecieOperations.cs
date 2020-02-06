@@ -19,6 +19,10 @@ namespace trifenix.agro.external.operations.entities.main
             _commonDb = commonDb;
         }
 
+        public async Task<ExtGetContainer<Specie>> GetSpecie(string id) {
+            var specie = await _repo.GetSpecie(id);
+            return OperationHelper.GetElement(specie);
+        }
         public async Task<ExtGetContainer<List<Specie>>> GetSpecies()
         {
             var speciesQuery = _repo.GetSpecies();
