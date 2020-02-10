@@ -600,6 +600,7 @@ namespace trifenix.agro.functions {
                 textToSearch = null;
             if (!string.IsNullOrWhiteSpace(abbSpecie) && abbSpecie.ToLower().Equals("all"))
                 abbSpecie = null;
+            else abbSpecie = abbSpecie.ToUpper();
             bool? isPhenological = null;
             if (!string.IsNullOrWhiteSpace(type) && !asc.ToLower().Equals("all")) {
                 if (type.ToLower().Equals("phenological")) isPhenological = true;
@@ -783,6 +784,7 @@ namespace trifenix.agro.functions {
                 textToSearch = null;
             if (!string.IsNullOrWhiteSpace(abbSpecie) && abbSpecie.ToLower().Equals("all"))
                 abbSpecie = null;
+            else abbSpecie = abbSpecie.ToUpper();
             bool? order = null;
             if (!string.IsNullOrWhiteSpace(asc) && !asc.ToLower().Equals("not_order")) {
                 if (asc.ToLower().Equals("asc")) order = true;
@@ -1071,6 +1073,7 @@ namespace trifenix.agro.functions {
                 textToSearch = null;
             if (!string.IsNullOrWhiteSpace(abbSpecie) && abbSpecie.ToLower().Equals("all"))
                 abbSpecie = null;
+            else abbSpecie = abbSpecie.ToUpper();
             int? statusToFilter = null;
             if (!string.IsNullOrWhiteSpace(status) && !status.ToLower().Equals("all")) {
                 if (int.TryParse(status, out int outResult)) statusToFilter = outResult;
