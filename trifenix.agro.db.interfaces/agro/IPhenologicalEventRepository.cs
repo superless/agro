@@ -9,10 +9,10 @@ namespace trifenix.agro.db.interfaces.agro
 {
     public  interface IPhenologicalEventRepository
     {
-        Task<string> CreateUpdatePhenologicalEvent(Event phenologicalEvent);
+        Task<string> CreateUpdatePhenologicalEvent(PhenologicalEvent phenologicalEvent);
 
-        Task<Event> GetPhenologicalEvent(string uniqueId);
+        Task<PhenologicalEvent> GetPhenologicalEvent(string uniqueId);
 
-        IQueryable<Event> GetPhenologicalEvents();
+        IQueryable<PhenologicalEvent> GetPhenologicalEvents();
     }
 }

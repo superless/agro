@@ -28,7 +28,7 @@ namespace trifenix.agro.external.operations.custom {
             return OperationHelper.GetElement(init);
         }
 
-        private async Task<EventInitData> GetEventInitData(List<Barrack> barracks, List<Event> phenologicalEvents) {
+        private async Task<EventInitData> GetEventInitData(List<Barrack> barracks, List<PhenologicalEvent> phenologicalEvents) {
             var tsResult = await GetMobileEventTimestamp();
             var sectors = GetSectors(barracks);
             return new EventInitData {
@@ -45,7 +45,7 @@ namespace trifenix.agro.external.operations.custom {
 
         public async Task<ExtGetContainer<long>> GetMobileEventTimestamp() {
             var tsBarracks = await _args.TimeStampDbQuery.GetTimestamps<Barrack>();
-            var tsPhenological = await _args.TimeStampDbQuery.GetTimestamps<Event>();
+            var tsPhenological = await _args.TimeStampDbQuery.GetTimestamps<PhenologicalEvent>();
             return OperationHelper.GetElement(tsBarracks.Union(tsPhenological).Max());
         }
 
