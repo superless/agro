@@ -526,7 +526,7 @@ namespace trifenix.agro.functions {
                 return new UnauthorizedResult();
             var manager = await ContainerMethods.AgroManager(claims);
             bool? isPhenological = null;
-            if (!string.IsNullOrWhiteSpace(type) && !asc.ToLower().Equals("all"))
+            if (!string.IsNullOrWhiteSpace(type) && !type.ToLower().Equals("all"))
             {
                 if (type.ToLower().Equals("phenological")) isPhenological = true;
                 else if (type.ToLower().Equals("not_phenological")) isPhenological = false;
