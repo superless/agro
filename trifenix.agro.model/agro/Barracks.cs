@@ -1,15 +1,11 @@
 ﻿using Cosmonaut;
 using Cosmonaut.Attributes;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace trifenix.agro.db.model.agro
-{
+namespace trifenix.agro.db.model.agro {
 
     [SharedCosmosCollection("agro", "Barrack")]
-    public class Barrack : DocumentBase, ISharedCosmosEntity
-    {
+    public class Barrack : DocumentBase, ISharedCosmosEntity {
         public override string Id { get; set; }
 
         public string SeasonId { get; set; }
@@ -42,6 +38,5 @@ namespace trifenix.agro.db.model.agro
         public Rootstock Rootstock { get; set; }
 
     }
-
 
 }

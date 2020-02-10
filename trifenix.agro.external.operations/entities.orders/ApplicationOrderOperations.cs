@@ -12,16 +12,17 @@ using trifenix.agro.external.operations.helper;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.model.external.output;
-using trifenix.agro.search;
+using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
+using trifenix.agro.search.operations;
 using trifenix.agro.util;
 
 namespace trifenix.agro.external.operations.entities.orders {
-    public class ApplicationOrderOperations : IApplicationOrderOperations {
+    public class ApplicationOrderOperations<T> : IApplicationOrderOperations where T : ApplicationOrder{
         private readonly ApplicationOrderArgs _args;
-        private readonly AgroSearch _searchServiceInstance;
-        private readonly string entityName = "ApplicationOrder";
-        public ApplicationOrderOperations(ApplicationOrderArgs args, AgroSearch searchServiceInstance) {
+        private readonly IAgroSearch _searchServiceInstance;
+        private readonly string entityName = typeof(T).Name;
+        public ApplicationOrderOperations(ApplicationOrderArgs args, IAgroSearch searchServiceInstance) {
             _args = args;
             _searchServiceInstance = searchServiceInstance;
         }
@@ -31,7 +32,7 @@ namespace trifenix.agro.external.operations.entities.orders {
                 Id = appOrder.Id,
                 Wetting = appOrder.Wetting,
                 Name = appOrder.Name,
-                isPhenological = appOrder.isPhenological,
+                isPhenological = appOrder.IsPhenological,
                 InitDate = appOrder.InitDate,
                 EndDate = appOrder.EndDate,
                 SeasonId = appOrder.SeasonId,
@@ -75,18 +76,18 @@ namespace trifenix.agro.external.operations.entities.orders {
         public async Task<ExtPostContainer<OutPutApplicationOrder>> SaveEditApplicationOrder(string id, ApplicationOrderInput input) {
             var modifier = await _args.GraphApi.GetUserFromToken();
             var userActivity = new UserActivity(DateTime.Now, modifier);
-            var order = await _args.ApplicationOrder.GetApplicationOrder(id);
+            T order = (T)await _args.ApplicationOrder.GetApplicationOrder(id);
             var appNewOrder = await GetApplicationOrder(id, input);
-            var result = await OperationHelper.EditElement(_args.CommonDb.ApplicationOrder, _args.ApplicationOrder.GetApplicationOrders(),
+            var editOperation = await OperationHelper.EditElement(_args.CommonDb.ApplicationOrder, _args.ApplicationOrder.GetApplicationOrders(),
                 id,
                 order,
                 s => {
                     _searchServiceInstance.AddEntities(new List<EntitySearch> {
                         new EntitySearch{
-                            Created = DateTime.Now,
-                            EntityName = entityName,
-                            Name = appNewOrder.Name,
-                            Id = appNewOrder.Id
+                            Id = id,
+                            Name = input.Name,
+                            Specie = _args.Barracks.GetBarrack(input.BarracksInput.FirstOrDefault()?.IdBarrack).Result.Variety.Specie.Abbreviation,
+                            Type = input.isPhenological
                         }
                     });
                     appNewOrder.Creator = s.Creator;
@@ -99,15 +100,17 @@ namespace trifenix.agro.external.operations.entities.orders {
                 s => s.Name.Equals(input.Name) && input.Name != order.Name,
                 $"Ya existe orden de aplicacion con nombre : {input.Name}"
             );
+            if (editOperation.GetType() == typeof(ExtPostErrorContainer<string>))
+                return OperationHelper.GetPostException<OutPutApplicationOrder>(new Exception(editOperation.Message));
             return new ExtPostContainer<OutPutApplicationOrder> {
-                IdRelated = result.IdRelated,
-                Message = result.Message,
-                MessageResult = result.MessageResult,
+                IdRelated = editOperation.IdRelated,
+                Message = editOperation.Message,
+                MessageResult = editOperation.MessageResult,
                 Result = GetOutputOrder(appNewOrder)
             };
         }
 
-        private async Task<ApplicationOrder> GetApplicationOrder(string id, ApplicationOrderInput input) {
+        private async Task<T> GetApplicationOrder(string id, ApplicationOrderInput input) {
             var varietyIds = input.Applications.Any(s => s.Doses != null) ? input.Applications.Where(s => s.Doses != null).SelectMany(s => s.Doses.IdVarieties).Distinct() : new List<string>();
             var targetIds = input.Applications.Any(s => s.Doses != null) ? input.Applications.Where(s => s.Doses != null).SelectMany(s => s.Doses.idsApplicationTarget).Distinct() : new List<string>();
             var speciesIds = input.Applications.Any(s => s.Doses != null) ? input.Applications.Where(s => s.Doses != null).SelectMany(s => s.Doses.IdSpecies).Distinct() : new List<string>();
@@ -118,23 +121,24 @@ namespace trifenix.agro.external.operations.entities.orders {
             await input.PreOrdersId.SelectElement(_args.PreOrder.GetPhenologicalPreOrder, "Existen identificadores de preordenes que no fueron encontrados");
             var creator = await _args.GraphApi.GetUserFromToken();
             var userActivity = new UserActivity(DateTime.Now, creator);
-            return new ApplicationOrder {
-                Id = id,
-                IdsCertifiedEntities = certifiedEntitiesIds?.ToList(),
-                IdsSpecies = speciesIds?.ToList(),
-                Barracks = barracksInstances,
-                IdsTargets = targetIds?.ToList(),
-                IdVarieties = varietyIds?.ToList(),
-                SeasonId = _args.SeasonId,
-                Name = input.Name,
-                isPhenological = input.isPhenological,
-                InitDate = input.InitDate,
-                EndDate = input.EndDate,
-                Wetting = input.Wetting,
-                ApplicationInOrders = applications,
-                Creator = userActivity,
-                PhenologicalPreOrders = phenologicalPreOrders
-            };
+            return (T)Activator.CreateInstance(typeof(T), new object[] {
+                id,
+                certifiedEntitiesIds?.ToList(),
+                speciesIds?.ToList(),
+                barracksInstances,
+                targetIds?.ToList(),
+                varietyIds?.ToList(),
+                _args.SeasonId,
+                input.Name,
+                input.isPhenological,
+                input.InitDate,
+                input.EndDate,
+                input.Wetting,
+                applications,
+                userActivity,
+                phenologicalPreOrders
+            });
+                
         }
 
         //TODO: Validaciones al momento de modificar orden
@@ -142,19 +146,24 @@ namespace trifenix.agro.external.operations.entities.orders {
         //No se puede modificar una orden que ya posee una ejecucion en proceso o una ejecucion exitosa (cerrada).           ^
 
         public async Task<ExtPostContainer<string>> SaveNewApplicationOrder(ApplicationOrderInput input) {
-            var newId = await OperationHelper.CreateElement(_args.CommonDb.ApplicationOrder, _args.ApplicationOrder.GetApplicationOrders(),
-            async s => await _args.ApplicationOrder.CreateUpdate(await GetApplicationOrder(s, input)),
-                s => s.Name.Equals(input.Name),
-                $"Ya existe orden de aplicacion con nombre: {input.Name}");
+            var createOperation = await OperationHelper.CreateElement(_args.CommonDb.ApplicationOrder, _args.ApplicationOrder.GetApplicationOrders(),
+                async s => await _args.ApplicationOrder.CreateUpdate(await GetApplicationOrder(s, input)),
+                    s => s.Name.Equals(input.Name),
+                    $"Ya existe orden de aplicacion con nombre: {input.Name}");
+            if (createOperation.GetType() == typeof(ExtPostErrorContainer<string>))
+                return OperationHelper.GetPostException<string>(new Exception(createOperation.Message));
             _searchServiceInstance.AddEntities(new List<EntitySearch> {
                 new EntitySearch {
+                    Id = createOperation.IdRelated,
+                    SeasonId = _args.SeasonId,
                     Created = DateTime.Now,
                     EntityName = entityName,
                     Name = input.Name,
-                    Id = newId.IdRelated
+                    Specie = _args.Barracks.GetBarrack(input.BarracksInput.FirstOrDefault()?.IdBarrack).Result.Variety.Specie.Abbreviation,
+                    Type = input.isPhenological
                 }
             });
-            return newId;
+            return createOperation;
         }
 
         private List<ApplicationsInOrder> GetApplicationInOrder(ApplicationInOrderInput[] appInOrder) {
@@ -204,11 +213,14 @@ namespace trifenix.agro.external.operations.entities.orders {
             }
         }
         
-        public ExtGetContainer<SearchResult<OutPutApplicationOrder>> GetPaginatedOrders(string textToSearch, bool? type, int? page, int? quantity, bool? desc) {
+        public ExtGetContainer<SearchResult<OutPutApplicationOrder>> GetPaginatedOrders(string textToSearch, string abbSpecie, bool? type, int? page, int? quantity, bool? desc) {
             var filters = new Filters { EntityName = entityName, SeasonId = _args.SeasonId };
+            if (!string.IsNullOrWhiteSpace(abbSpecie))
+                filters.Specie = abbSpecie;
             if (type.HasValue)
                 filters.Type = type;
-            EntitiesSearchContainer entitySearch = _searchServiceInstance.GetSearchFilteredByEntityName(filters, textToSearch, page, quantity, desc);
+            var parameters = new Parameters { Filters = filters, TextToSearch = textToSearch, Page = page, Quantity = quantity, Desc = desc };
+            EntitiesSearchContainer entitySearch = _searchServiceInstance.GetPaginatedEntities(parameters);
             var resultDb = entitySearch.Entities.Select(async order => await GetApplicationOrder(order.Id));
             return OperationHelper.GetElement(new SearchResult<OutPutApplicationOrder> {
                 Total = entitySearch.Total,
@@ -216,11 +228,14 @@ namespace trifenix.agro.external.operations.entities.orders {
             });
         }
 
-        public ExtGetContainer<EntitiesSearchContainer> GetIndexElements(string textToSearch, bool? type, int? page, int? quantity, bool? desc) {
+        public ExtGetContainer<EntitiesSearchContainer> GetIndexElements(string textToSearch, string abbSpecie, bool? type, int? page, int? quantity, bool? desc) {
             var filters = new Filters { EntityName = entityName, SeasonId = _args.SeasonId };
+            if (!string.IsNullOrWhiteSpace(abbSpecie))
+                filters.Specie = abbSpecie;
             if (type.HasValue)
                 filters.Type = type;
-            EntitiesSearchContainer entitySearchFilteresBySeason = _searchServiceInstance.GetSearchFilteredByEntityName(filters, textToSearch, page, quantity, desc);
+            var parameters = new Parameters { Filters = filters, TextToSearch = textToSearch, Page = page, Quantity = quantity, Desc = desc };
+            EntitiesSearchContainer entitySearchFilteresBySeason = _searchServiceInstance.GetPaginatedEntities(parameters);
             return OperationHelper.GetElement(entitySearchFilteresBySeason);
         }
 

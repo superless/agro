@@ -14,7 +14,7 @@ namespace trifenix.agro.db.model.agro.orders
         /// </summary>
         public override string Id { get; set; }
 
-        public bool isPhenological { get; set; }
+        public bool IsPhenological { get; set; }
 
         public string Name { get; set; }
         public DateTime InitDate { get; set; }
@@ -135,6 +135,24 @@ namespace trifenix.agro.db.model.agro.orders
                 return __idsSpecies;
             }
             set { __idsSpecies = value; }
+        }
+
+        public ApplicationOrder(string id, List<string> certifiedEntitiesIds, List<string>  speciesIds, List<BarrackOrderInstance> barracksInstances, List<string>  targetIds, List<string> varietyIds, string seasonId, string name, bool isPhenological, DateTime initDate, DateTime endDate, double wetting, List<ApplicationsInOrder> applications, UserActivity creator, List<PhenologicalPreOrder> phenologicalPreOrders) {
+            Id = id;
+            IdsCertifiedEntities = certifiedEntitiesIds;
+            IdsSpecies = speciesIds;
+            Barracks = barracksInstances;
+            IdsTargets = targetIds;
+            IdVarieties = varietyIds;
+            SeasonId = seasonId;
+            Name = name;
+            IsPhenological = isPhenological;
+            InitDate = initDate;
+            EndDate = endDate;
+            Wetting = wetting;
+            ApplicationInOrders = applications;
+            Creator = creator;
+            PhenologicalPreOrders = phenologicalPreOrders;
         }
 
     }

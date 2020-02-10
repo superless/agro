@@ -14,24 +14,24 @@ using trifenix.agro.external.operations.helper;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.model.external.output;
-using trifenix.agro.search;
+using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
+using trifenix.agro.search.operations;
 
-namespace trifenix.agro.external.operations.entities.ext
-{
-    public class ProductOperations : IProductOperations {
+namespace trifenix.agro.external.operations.entities.ext {
+    public class ProductOperations <T> : IProductOperations <T> where T : Product {
         private readonly IIngredientRepository _ingredientRepository;
         private readonly IProductRepository _productRepository;
         private readonly IApplicationTargetRepository _targetRepository;
         private readonly ICertifiedEntityRepository _certifiedEntityRepository;
         private readonly IVarietyRepository _varietyRepository;
         private readonly ISpecieRepository _specieRepository;
-        private readonly ICommonDbOperations<Product> _commonDb;
+        private readonly ICommonDbOperations<T> _commonDb;
         private readonly string _idSeason;
-        private readonly AgroSearch _searchServiceInstance;
-        private readonly string entityName = "Product";
+        private readonly IAgroSearch _searchServiceInstance;
+        private readonly string entityName = typeof(T).Name;
 
-        public ProductOperations(IIngredientRepository ingredientRepository, IProductRepository productRepository, IApplicationTargetRepository targetRepository, ICertifiedEntityRepository certifiedEntityRepository, IVarietyRepository varietyRepository, ISpecieRepository specieRepository, ICommonDbOperations<Product> commonDb, string idSeason, AgroSearch searchServiceInstance) {
+        public ProductOperations(IIngredientRepository ingredientRepository, IProductRepository productRepository, IApplicationTargetRepository targetRepository, ICertifiedEntityRepository certifiedEntityRepository, IVarietyRepository varietyRepository, ISpecieRepository specieRepository, ICommonDbOperations<T> commonDb, string idSeason, IAgroSearch searchServiceInstance) {
             _ingredientRepository = ingredientRepository;
             _productRepository = productRepository;
             _targetRepository = targetRepository;
@@ -45,17 +45,17 @@ namespace trifenix.agro.external.operations.entities.ext
 
         private ExtPostErrorContainer<T> GetException<T>(string message) => OperationHelper.GetPostException<T>(new Exception(message));
 
-        public async Task<ExtPostContainer<Product>> CreateEditProduct(string id, string commercialName, string idActiveIngredient, string brand, DosesInput[] doses, MeasureType measureType, int quantity, KindOfProductContainer kindOfProduct) {
-            if (string.IsNullOrWhiteSpace(commercialName)) return GetException<Product>("nombre comercial obligatorio");
-            if (string.IsNullOrWhiteSpace(idActiveIngredient)) return GetException<Product>("Ingrediente activo es obligatorio");
-            if (string.IsNullOrWhiteSpace(brand)) return GetException<Product>("Marca del producto es obligatoria");
+        public async Task<ExtPostContainer<T>> SaveEditProduct(string id, string commercialName, string idActiveIngredient, string brand, DosesInput[] doses, MeasureType measureType, int quantity, KindOfProductContainer kindOfProduct) {
+            if (string.IsNullOrWhiteSpace(commercialName)) return GetException<T>("nombre comercial obligatorio");
+            if (string.IsNullOrWhiteSpace(idActiveIngredient)) return GetException<T>("Ingrediente activo es obligatorio");
+            if (string.IsNullOrWhiteSpace(brand)) return GetException<T>("Marca del producto es obligatoria");
             try {
-                var product = await _productRepository.GetProduct(id);
+                T product = (T)await _productRepository.GetProduct(id);
                 if (product == null)
-                    return OperationHelper.PostNotFoundElementException<Product>($"no se encontró producto con id {id}");
+                    return OperationHelper.PostNotFoundElementException<T>($"no se encontró producto con id {id}");
                 var ingredient = await _ingredientRepository.GetIngredient(idActiveIngredient);
                 if (ingredient == null)
-                    return OperationHelper.PostNotFoundElementException<Product>("No existe ingrediente", idActiveIngredient);
+                    return OperationHelper.PostNotFoundElementException<T>("No existe ingrediente", idActiveIngredient);
                 List<Doses> localDoses = null;
                 IEnumerable<string> varietyIds = null;
                 IEnumerable<string> sicknessIds = null;
@@ -70,18 +70,15 @@ namespace trifenix.agro.external.operations.entities.ext
                         localDoses = await GetDoses(doses, varietyIds, sicknessIds, speciesIds, certifiedEntitiesIds);
                     }
                     catch (Exception e) {
-                        return OperationHelper.GetPostException<Product>(e);
+                        return OperationHelper.GetPostException<T>(e);
                     }
                 }
-                return await OperationHelper.EditElement<Product>(_commonDb, _productRepository.GetProducts(), id,
+                return await OperationHelper.EditElement<T>(_commonDb, (IQueryable<T>)_productRepository.GetProducts(), id,
                     product,
                     s => {
                         _searchServiceInstance.AddEntities(new List<EntitySearch> {
                             new EntitySearch{
-                                Created = DateTime.Now,
-                                EntityName = entityName,
-                                Name = commercialName,
-                                Id = s.Id
+                                Name = commercialName
                             }
                         });
                         s.ActiveIngredient = ingredient;
@@ -103,7 +100,7 @@ namespace trifenix.agro.external.operations.entities.ext
                     $"Este nombre comercial ya existe");
             }
             catch (Exception e) {
-                return OperationHelper.GetPostException<Product>(e);
+                return OperationHelper.GetPostException<T>(e);
             }
         }
 
@@ -132,32 +129,34 @@ namespace trifenix.agro.external.operations.entities.ext
                         return OperationHelper.GetPostException<string>(e);
                     }
                 }
-                var id = await OperationHelper.CreateElement(_commonDb, _productRepository.GetProducts(),
-                       async s => await _productRepository.CreateUpdateProduct(new Product {
-                           Id = s,
-                           ActiveIngredient = ingredient,
-                           Brand = brand,
-                           CommercialName = commercialName,
-                           Doses = localDoses,
-                           IdsCertifiedEntities = certifiedEntitiesIds?.ToList(),
-                           IdsTargets = sicknessIds?.ToList(),
-                           IdsSpecies = speciesIds?.ToList(),
-                           IdVarieties = varietyIds?.ToList(),
-                           KindOfContainer = kindOfProduct,
-                           QuantityByContainer = quantity,
-                           MeasureType = measureType
-                       }),
-                       s => s.CommercialName.Equals(commercialName),
-                       $"ya existe producto con nombre : {commercialName}");
+                var createOperation = await OperationHelper.CreateElement<T>(_commonDb, (IQueryable<T>)_productRepository.GetProducts(),
+                    async s => await _productRepository.CreateUpdateProduct(new Product {
+                        Id = s,
+                        ActiveIngredient = ingredient,
+                        Brand = brand,
+                        CommercialName = commercialName,
+                        Doses = localDoses,
+                        IdsCertifiedEntities = certifiedEntitiesIds?.ToList(),
+                        IdsTargets = sicknessIds?.ToList(),
+                        IdsSpecies = speciesIds?.ToList(),
+                        IdVarieties = varietyIds?.ToList(),
+                        KindOfContainer = kindOfProduct,
+                        QuantityByContainer = quantity,
+                        MeasureType = measureType
+                    }),
+                    s => s.CommercialName.Equals(commercialName),
+                    $"ya existe producto con nombre : {commercialName}");
+                if (createOperation.GetType() == typeof(ExtPostErrorContainer<string>))
+                    return OperationHelper.GetPostException<string>(new Exception(createOperation.Message));
                 _searchServiceInstance.AddEntities(new List<EntitySearch> {
                     new EntitySearch{
+                        Id = createOperation.IdRelated,
                         Created = DateTime.Now,
                         EntityName = entityName,
-                        Name = commercialName,
-                        Id = id.IdRelated
+                        Name = commercialName
                     }
-                    });
-                return id;
+                });
+                return createOperation;
             }
             catch (Exception e) {
                 return OperationHelper.GetPostException<string>(e);
@@ -168,50 +167,33 @@ namespace trifenix.agro.external.operations.entities.ext
             return await ModelCommonOperations.GetDoses(_varietyRepository, _targetRepository, _specieRepository, _certifiedEntityRepository, input, varietyIds, targetsId, speciesIds, certifiedEntitiesIds, _idSeason);
         }
         
-        public async Task<ExtGetContainer<List<Product>>> GetProducts() {
+        public async Task<ExtGetContainer<List<T>>> GetProducts() {
             try {
-                var productsQuery = _productRepository.GetProducts();
+                var productsQuery = (IQueryable<T>)_productRepository.GetProducts();
                 var products = await _commonDb.TolistAsync(productsQuery);
                 return OperationHelper.GetElements(products);
             }
             catch (Exception e) {
-                return OperationHelper.GetException<List<Product>>(e);
+                return OperationHelper.GetException<List<T>>(e);
             }
         }
 
-        public async Task<ExtGetContainer<Product>> GetProduct(string id) {
+        public async Task<ExtGetContainer<T>> GetProduct(string id) {
             try {
-                var product = await _productRepository.GetProduct(id);
+                T product = (T)await _productRepository.GetProduct(id);
                 return OperationHelper.GetElement(product);
             }
             catch (Exception e) {
-                return OperationHelper.GetException<Product>(e);
+                return OperationHelper.GetException<T>(e);
             }
         }
 
-        public async Task<ExtGetContainer<SearchResult<Product>>> GetProductsByPage(int page, int quantity, bool orderByDesc) {
-            try {
-                var productsQuery = _productRepository.GetProducts();
-                var paginatedProducts = _commonDb.WithPagination(productsQuery, page, quantity);
-                var products = orderByDesc ? await _commonDb.TolistAsync(paginatedProducts.OrderByDescending(s => s.CommercialName)) : await _commonDb.TolistAsync(paginatedProducts);
-                var total = productsQuery.Count();
-                return OperationHelper.GetElement(new SearchResult<Product> {
-                    Total = total,
-                    Elements = products.ToArray()
-                });
-            }
-            catch (Exception e) {
-                return OperationHelper.GetException<SearchResult<Product>>(e);
-            }
-        }
-
-        public async Task<ExtGetContainer<SearchResult<Product>>> GetProductsByPage(string textToSearch, int page, int quantity, bool desc) {
-            if (string.IsNullOrWhiteSpace(textToSearch))
-                return await GetProductsByPage(page, quantity, desc);
+        public ExtGetContainer<SearchResult<T>> GetPaginatedProducts(string textToSearch, int? page, int? quantity, bool? desc) {
             var filters = new Filters { EntityName = entityName };
-            EntitiesSearchContainer entitySearch = _searchServiceInstance.GetSearchFilteredByEntityName(filters, textToSearch, page, quantity, desc);
+            var parameters = new Parameters { Filters = filters, TextToSearch = textToSearch, Page = page, Quantity = quantity, Desc = desc };
+            EntitiesSearchContainer entitySearch = _searchServiceInstance.GetPaginatedEntities(parameters);
             var resultDb = entitySearch.Entities.Select(async s => await GetProduct(s.Id));
-            return OperationHelper.GetElement(new SearchResult<Product> {
+            return OperationHelper.GetElement(new SearchResult<T> {
                 Total = entitySearch.Total,
                 Elements = resultDb.Select(s => s.Result.Result).ToArray()
             });
@@ -219,9 +201,11 @@ namespace trifenix.agro.external.operations.entities.ext
 
         public ExtGetContainer<EntitiesSearchContainer> GetIndexElements(string textToSearch, int? page, int? quantity, bool? desc) {
             var filters = new Filters { EntityName = entityName };
-            EntitiesSearchContainer entitySearch = _searchServiceInstance.GetSearchFilteredByEntityName(filters, textToSearch, page, quantity, desc);
+            var parameters = new Parameters { Filters = filters, TextToSearch = textToSearch, Page = page, Quantity = quantity, Desc = desc };
+            EntitiesSearchContainer entitySearch = _searchServiceInstance.GetPaginatedEntities(parameters);
             return OperationHelper.GetElement(entitySearch);
         }
+
     }
     
 }
