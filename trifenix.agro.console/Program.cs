@@ -200,6 +200,15 @@ namespace trifenix.agro.console {
 
 
 
+
+            //List<string> lines = File.ReadAllLines(@"C:\Users\Trifenix\Desktop\Log - ApplicationOrder.txt").Where(line => line.Contains("ApplicationOrder")).Select(line => line.Split()[1]).ToList();
+            //foreach (string line in lines) {
+            //    Console.WriteLine(line);
+            //}
+            //Console.WriteLine("Total de Ordenes: " + lines.Count);
+
+
+
             //List<string> SpecieNames = species.Select(sp => sp.Name).ToList();
             //List<string> SpecieAbb = species.Select(sp => sp.Abbreviation).ToList();
 

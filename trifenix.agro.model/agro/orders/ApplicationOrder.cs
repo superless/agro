@@ -155,6 +155,7 @@ namespace trifenix.agro.db.model.agro.orders
             PhenologicalPreOrders = phenologicalPreOrders;
         }
 
+        public ApplicationOrder(){}
     }
 
     public class ApplicationsInOrder {
@@ -167,7 +168,6 @@ namespace trifenix.agro.db.model.agro.orders
         public Doses Doses { get; set; }
 
     }
-
 
     public class BarrackOrderInstance {
 
