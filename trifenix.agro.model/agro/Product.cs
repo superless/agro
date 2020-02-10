@@ -4,8 +4,7 @@ using System.Collections.Generic;
 using trifenix.agro.db.model.agro.enums;
 using trifenix.agro.db.model.agro.local;
 
-namespace trifenix.agro.db.model.agro
-{
+namespace trifenix.agro.db.model.agro {
 
     /// <summary>
     /// Producto Quimico usado por las órdenes
@@ -122,12 +121,5 @@ namespace trifenix.agro.db.model.agro
 
         public KindOfProductContainer KindOfContainer { get; set; }
 
-
-
-
-
-
-
-
-}
+    }
 }

@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.db.interfaces
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.util.extensions", "trifenix.util.extensions\trifenix.util.extensions.csproj", "{29B4CFDF-7E42-4BB4-8FCE-EF6024C65963}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.search", "trifenix.agro.search\trifenix.agro.search.csproj", "{31A4A9F0-DF40-42AC-B091-DC1D6434F039}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.search.operations", "trifenix.agro.search\trifenix.agro.search.operations.csproj", "{31A4A9F0-DF40-42AC-B091-DC1D6434F039}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.db", "1.db", "{AA188391-3994-421D-A7CE-2A0622569EE1}"
 EndProject
@@ -93,9 +93,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.weather.model
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "14. translator", "14. translator", "{76A52D17-54BF-45DF-AECD-231DE2DB4F94}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "trifenix.agro.translator.interfaces", "trifenix.agro.translator.interfaces\trifenix.agro.translator.interfaces.csproj", "{9F75E333-BD51-40DC-A81E-18D7BC377AE2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.translator.interfaces", "trifenix.agro.translator.interfaces\trifenix.agro.translator.interfaces.csproj", "{9F75E333-BD51-40DC-A81E-18D7BC377AE2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "trifenix.agro.translator.operations", "trifenix.agro.translator.operations\trifenix.agro.translator.operations.csproj", "{B3A5137D-2E94-4748-AE56-A8E5BBB170A5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.translator.operations", "trifenix.agro.translator.operations\trifenix.agro.translator.operations.csproj", "{B3A5137D-2E94-4748-AE56-A8E5BBB170A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "trifenix.agro.search.interfaces", "trifenix.agro.agrosearch.interfaces\trifenix.agro.search.interfaces.csproj", "{156F7E0F-8EAE-4B18-9F5D-9B94F473C35A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -227,6 +229,10 @@ Global
 		{B3A5137D-2E94-4748-AE56-A8E5BBB170A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B3A5137D-2E94-4748-AE56-A8E5BBB170A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B3A5137D-2E94-4748-AE56-A8E5BBB170A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{156F7E0F-8EAE-4B18-9F5D-9B94F473C35A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{156F7E0F-8EAE-4B18-9F5D-9B94F473C35A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{156F7E0F-8EAE-4B18-9F5D-9B94F473C35A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{156F7E0F-8EAE-4B18-9F5D-9B94F473C35A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -265,6 +271,7 @@ Global
 		{11D1F139-A32E-4677-8852-B938745243FD} = {4DEC3786-2B9C-4263-B6E2-4439FAED41F6}
 		{9F75E333-BD51-40DC-A81E-18D7BC377AE2} = {76A52D17-54BF-45DF-AECD-231DE2DB4F94}
 		{B3A5137D-2E94-4748-AE56-A8E5BBB170A5} = {76A52D17-54BF-45DF-AECD-231DE2DB4F94}
+		{156F7E0F-8EAE-4B18-9F5D-9B94F473C35A} = {23EE7E3F-8A26-4F35-8C77-0B2E727B3079}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2C0C9D82-464E-4741-8541-CDC460278FEC}
