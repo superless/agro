@@ -8,6 +8,7 @@
   <ItemGroup>
     <ProjectReference Include="..\trifenix.agro.common.tests.fakes\trifenix.agro.common.tests.fakes.csproj" />
     <ProjectReference Include="..\trifenix.agro.db.applicationsReference\trifenix.agro.db.applicationsReference.csproj" />
+    <ProjectReference Include="..\trifenix.agro.functions\trifenix.agro.functions.csproj" />
     <ProjectReference Include="..\trifenix.agro.search\trifenix.agro.search.operations.csproj" />
   </ItemGroup>
 

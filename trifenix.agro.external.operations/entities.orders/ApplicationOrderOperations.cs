@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using trifenix.agro.db;
-using trifenix.agro.db.applicationsReference.agro;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.db.model.agro.local;
 using trifenix.agro.db.model.agro.orders;
@@ -240,14 +238,11 @@ namespace trifenix.agro.external.operations.entities.orders {
             return OperationHelper.GetElement(entitySearchFilteresBySeason);
         }
 
-        //public void UpdateOrder(List<string> ids) {
-        //    var db = new AgroRepository(new AgroDbArguments {
-        //        EndPointUrl = "https://agricola-db.documents.azure.com:443/",
-        //        NameDb = "agrodb",
-        //        PrimaryKey = "1hrGHt13NgzgOTahFZXDmtugRg5rld9Y9TstCNXg4arZbdOlK4I6h2EOD51Ezgpxe5wsQUxGKaODgET1LSsS4Q=="
-        //    });
+        //public void UpdateOrder(List<string> ids, AgroRepository db) {
         //    ApplicationOrder order = null;
+        //    int i = 0;
         //    ids.ForEach(id => {
+        //        Console.WriteLine(++i);
         //        order = _args.ApplicationOrder.GetApplicationOrder(id).Result;
         //        order.Barracks = order.Barracks.Select(barrackOrderInstance => {
         //            barrackOrderInstance.Barrack = db.Barracks.GetBarrack(barrackOrderInstance.Barrack.Id).Result;

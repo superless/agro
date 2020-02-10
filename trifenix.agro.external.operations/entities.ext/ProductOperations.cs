@@ -16,7 +16,6 @@ using trifenix.agro.model.external.Input;
 using trifenix.agro.model.external.output;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
-using trifenix.agro.search.operations;
 
 namespace trifenix.agro.external.operations.entities.ext {
     public class ProductOperations <T> : IProductOperations <T> where T : Product {

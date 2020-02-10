@@ -12,6 +12,8 @@ using trifenix.agro.db.applicationsReference.agro.orders;
 using trifenix.agro.db.applicationsReference.common;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.db.model.agro.orders;
+using trifenix.agro.external.operations;
+using trifenix.agro.functions.settings;
 using trifenix.agro.search;
 using trifenix.agro.search.model;
 
@@ -148,67 +150,6 @@ namespace trifenix.agro.console {
             #endregion
 
             #region ScriptEncuentraInconsistencias
-            //List<string> barrackErrors = new List<string>();
-
-            //List<string> SpecieNames = species.Select(sp => sp.Name).ToList();
-            //List<string> SpecieAbb = species.Select(sp => sp.Abbreviation).ToList();
-
-            //List<string> VarietyNames = varieties.Select(sp => sp.Name).ToList();
-            //List<string> VarietyAbb = varieties.Select(sp => sp.Abbreviation).ToList();
-
-            //Specie specie;
-            //Variety variety;
-
-            //int i = 0;
-            //Console.WriteLine("Total de barracks: " + barracks.Count);
-            //barracks.ForEach(barrack =>
-            //{
-            //    Console.WriteLine(++i);
-            //    variety = db.Varieties.GetVariety(barrack.Variety.Id).Result;
-            //    if (variety == null)
-            //        barrackErrors.Add("No existe variedad con este id -> " + barrack.Id);
-            //    else
-            //    {
-            //        if (!VarietyNames.Contains(barrack.Variety.Name))
-            //            barrackErrors.Add("Nombre de variedad no existe -> " + barrack.Id);
-            //        if (!VarietyAbb.Contains(barrack.Variety.Abbreviation))
-            //            barrackErrors.Add("Abreviacion de variedad no existe -> " + barrack.Id);
-            //    }
-            //    specie = db.Species.GetSpecie(barrack.Variety.Specie.Id).Result;
-            //    if (specie == null)
-            //        barrackErrors.Add("No existe especie con este id -> " + barrack.Id);
-            //    else
-            //    {
-            //        if (!SpecieNames.Contains(barrack.Variety.Specie.Name))
-            //            barrackErrors.Add("Nombre de especie no existe -> " + barrack.Id);
-            //        if (!SpecieAbb.Contains(barrack.Variety.Specie.Abbreviation))
-            //            barrackErrors.Add("Abreviacion de especie no existe -> " + barrack.Id);
-            //    }
-            //});
-
-            //Console.WriteLine("\nBarracks con problemas:");
-            //barrackErrors.ToList().ForEach(barrack => Console.WriteLine(barrack));
-            #endregion
-
-            #region EliminaElementosDbCondicionalmente
-            //CosmosStore<Barrack> store = new CosmosStore<Barrack>(new CosmosStoreSettings("agrodb", "https://agricola-db.documents.azure.com:443/", "1hrGHt13NgzgOTahFZXDmtugRg5rld9Y9TstCNXg4arZbdOlK4I6h2EOD51Ezgpxe5wsQUxGKaODgET1LSsS4Q=="));
-            //await store.RemoveAsync(barrack => !"CIRUELA DURAZNOS KIWIS NECTARINES CEREZAS MANZANA".Split().Contains(barrack.Variety.Specie.Name));
-            #endregion
-
-
-
-
-
-
-
-            //List<string> lines = File.ReadAllLines(@"C:\Users\Trifenix\Desktop\Log - ApplicationOrder.txt").Where(line => line.Contains("ApplicationOrder")).Select(line => line.Split()[1]).ToList();
-            //foreach (string line in lines) {
-            //    Console.WriteLine(line);
-            //}
-            //Console.WriteLine("Total de Ordenes: " + lines.Count);
-
-
-
             //List<string> SpecieNames = species.Select(sp => sp.Name).ToList();
             //List<string> SpecieAbb = species.Select(sp => sp.Abbreviation).ToList();
 
@@ -266,10 +207,26 @@ namespace trifenix.agro.console {
             //        errors = errors.Concat(orderErrors).ToList();
             //    }
             //});
-
             //File.WriteAllLines("C:/Users/Trifenix/Desktop/CompleteLog.txt", errors);
             //Console.WriteLine("\nOrden con problemas: (" + orderWithProblem + ")");
             //errors.ForEach(error => Console.WriteLine(error));
+            #endregion
+
+            #region EliminaElementosDbCondicionalmente
+            //CosmosStore<Barrack> store = new CosmosStore<Barrack>(new CosmosStoreSettings("agrodb", "https://agricola-db.documents.azure.com:443/", "1hrGHt13NgzgOTahFZXDmtugRg5rld9Y9TstCNXg4arZbdOlK4I6h2EOD51Ezgpxe5wsQUxGKaODgET1LSsS4Q=="));
+            //await store.RemoveAsync(barrack => !"CIRUELA DURAZNOS KIWIS NECTARINES CEREZAS MANZANA".Split().Contains(barrack.Variety.Specie.Name));
+            #endregion
+
+            #region LecturaLog (Actualizar entidades erroneas)
+            //List<string> lines = File.ReadAllLines(@"C:\Users\Trifenix\Desktop\Log - ApplicationOrder.txt").Where(line => line.Contains("ApplicationOrder")).Select(line => line.Split()[1]).ToList();
+            //foreach (string line in lines) {
+            //    Console.WriteLine(line);
+            //}
+            //Console.WriteLine("Total de Ordenes: " + lines.Count);
+            //var season = await db.Seasons.GetCurrentSeason();
+            //var agro = new AgroManager(db, season?.Id, null, null, null, null);
+            //agro.ApplicationOrders.UpdateOrder(lines, db);
+            #endregion
 
             timer.Stop();
             Console.WriteLine("Tiempo transcurrido: {0}", timer.Elapsed.ToString("hh\\:mm\\:ss"));
