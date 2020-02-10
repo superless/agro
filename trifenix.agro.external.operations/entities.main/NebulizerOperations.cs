@@ -7,26 +7,29 @@ using trifenix.agro.external.interfaces.entities.main;
 using trifenix.agro.external.operations.helper;
 using trifenix.agro.model.external;
 
-namespace trifenix.agro.external.operations.entities.main
-{
-    public class NebulizerOperations : INebulizerOperations
-    {
+namespace trifenix.agro.external.operations.entities.main {
+    public class NebulizerOperations : INebulizerOperations {
+
         private readonly INebulizerRepository _repo;
         private readonly ICommonDbOperations<Nebulizer> _commonDb;
-        public NebulizerOperations(INebulizerRepository repo, ICommonDbOperations<Nebulizer> commonDb)
-        {
+
+        public NebulizerOperations(INebulizerRepository repo, ICommonDbOperations<Nebulizer> commonDb) {
             _repo = repo;
             _commonDb = commonDb;
         }
-        public async Task<ExtGetContainer<List<Nebulizer>>> GetNebulizers()
-        {
+
+        public async Task<ExtGetContainer<Nebulizer>> GetNebulizer(string idNebulizer) {
+            var nebulizer = await _repo.GetNebulizer(idNebulizer);
+            return OperationHelper.GetElement(nebulizer);
+        }
+
+        public async Task<ExtGetContainer<List<Nebulizer>>> GetNebulizers() {
             var queryTargets = _repo.GetNebulizers();
             var targets = await _commonDb.TolistAsync(queryTargets);
             return OperationHelper.GetElements(targets);
         }
 
-        public async Task<ExtPostContainer<Nebulizer>> SaveEditNebulizer(string id, string brand, string code)
-        {
+        public async Task<ExtPostContainer<Nebulizer>> SaveEditNebulizer(string id, string brand, string code) {
             var element = await _repo.GetNebulizer(id);
             return await OperationHelper.EditElement(_commonDb, _repo.GetNebulizers(),
                 id,
@@ -43,11 +46,9 @@ namespace trifenix.agro.external.operations.entities.main
             );
         }
 
-        public async Task<ExtPostContainer<string>> SaveNewNebulizer(string brand, string code)
-        {
+        public async Task<ExtPostContainer<string>> SaveNewNebulizer(string brand, string code) {
             return await OperationHelper.CreateElement(_commonDb,_repo.GetNebulizers(),
-                async s => await _repo.CreateUpdateNebulizer(new Nebulizer
-                {
+                async s => await _repo.CreateUpdateNebulizer(new Nebulizer {
                     Id = s,
                     Brand = brand,
                     Code = code
@@ -56,5 +57,6 @@ namespace trifenix.agro.external.operations.entities.main
                 $"Ya existe nebulizadora con codigo: {code}"
             );
         }
+
     }
 }

@@ -14,13 +14,13 @@ using System;
 using trifenix.agro.db.model.agro.enums;
 using trifenix.agro.db.model.agro.orders;
 using trifenix.agro.db.model.agro;
-using trifenix.agro.email.operations;
 using trifenix.agro.external.operations.helper;
 using trifenix.agro.functions.Helper;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.model.external.output;
 using trifenix.agro.model.external;
 using trifenix.agro.search.model;
+using trifenix.agro.email.operations;
 
 namespace trifenix.agro.functions {
     public static class MainAgroFunction {
@@ -32,7 +32,7 @@ namespace trifenix.agro.functions {
             if (claims == null)
                 return new UnauthorizedResult();
             var manager = await ContainerMethods.AgroManager(claims);
-            ExtGetContainer<List<Event>> result = null;
+            ExtGetContainer<List<PhenologicalEvent>> result = null;
             switch (req.Method.ToLower()){
                 case "get":
                     result = await manager.PhenologicalEvents.GetPhenologicalEvents();
@@ -482,43 +482,81 @@ namespace trifenix.agro.functions {
         //}
         #endregion
 
-        [FunctionName("NotificationEventsV2")]
-        public static async Task<IActionResult> NotificationEvents([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/notification_events/{idSector?}/{idSpecie?}/{idVariety?}")] HttpRequest req, string idSector, string idSpecie, string idVariety, ILogger log) {
+        [FunctionName("FiltersToBarracks")]
+        public static async Task<IActionResult> FiltersToBarracks([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/filtersToBarracks/{idSector?}/{idSpecie?}/{idVariety?}")] HttpRequest req, string idSector, string idSpecie, string idVariety, ILogger log) {
+            ClaimsPrincipal claims = await Auth.Validate(req);
+            if (claims == null)
+                return new UnauthorizedResult();
+            var manager = await ContainerMethods.AgroManager(claims);
+            List<Barrack> barracks;
+            if (string.IsNullOrEmpty(idSector)) {
+                List<Sector> sectors = manager.Sectors.GetSectors().Result.Result;
+                return ContainerMethods.GetJsonGetContainer(OperationHelper.GetElement(sectors.Select(sector => new OutputMobileEntity { Id = sector.Id, EntityName = sector.CosmosEntityName, Name = sector.Name })), log);
+            }
+            else {
+                barracks = manager.Barracks.GetBarracks().Result.Result.Where(barrack => barrack.PlotLand.Sector.Id.Equals(idSector) && barrack.SeasonId.Equals(manager.IdSeason)).ToList();
+                if (string.IsNullOrEmpty(idSpecie)) {
+                    List<Specie> species = barracks.Select(barrack => barrack.Variety.Specie).GroupBy(specie => specie.Name).Select(specie => specie.First()).ToList();
+                    return ContainerMethods.GetJsonGetContainer(OperationHelper.GetElement(species.Select(specie => new OutputMobileEntity { Id = specie.Id, EntityName = specie.CosmosEntityName, Name = specie.Name })), log);
+                }
+                else {
+                    barracks = barracks.Where(barrack => barrack.Variety.Specie.Id.Equals(idSpecie)).ToList();
+                    if (string.IsNullOrEmpty(idVariety)) {
+                        List<Variety> varieties = barracks.Select(barrack => barrack.Variety).GroupBy(variety => variety.Name).Select(variety => variety.First()).ToList();
+                        return ContainerMethods.GetJsonGetContainer(OperationHelper.GetElement(varieties.Select(variety => new OutputMobileEntity { Id = variety.Id, EntityName = variety.CosmosEntityName, Name = variety.Name })), log);
+                    }
+                    else {
+                        barracks = barracks.Where(barrack => barrack.Variety.Id.Equals(idVariety)).ToList();
+                        return ContainerMethods.GetJsonGetContainer(OperationHelper.GetElement(barracks.Select(barrack => new OutputMobileEntity { Id = barrack.Id, EntityName = barrack.CosmosEntityName, Name = barrack.Name })), log);
+                    }
+                }
+            }
+        }
+
+        [FunctionName("NotificationEvents")]
+        public static async Task<IActionResult> NotificationEvents([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "v2/notificationEvents/{idNotificationEvent?}")] HttpRequest req, string idNotificationEvent, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
             var manager = await ContainerMethods.AgroManager(claims);
             switch (req.Method.ToLower()) {
                 case "get":
-                    List<Barrack> barracks;
-                    if (string.IsNullOrEmpty(idSector)) {
-                        List<Sector> sectors = manager.Sectors.GetSectors().Result.Result;
-                        return ContainerMethods.GetJsonGetContainer(OperationHelper.GetElement(sectors.Select(sector => new OutputMobileEntity { Id = sector.Id, EntityName = sector.CosmosEntityName, Name = sector.Name })), log);
+                    if (!string.IsNullOrWhiteSpace(idNotificationEvent)) {
+                        var result = await manager.NotificationEvents.GetEvent(idNotificationEvent);
+                        return ContainerMethods.GetJsonGetContainer(result, log);
                     }
                     else {
-                        barracks = manager.Barracks.GetBarracks().Result.Result.Where(barrack => barrack.PlotLand.Sector.Id.Equals(idSector) && barrack.SeasonId.Equals(manager.IdSeason)).ToList();
-                        if (string.IsNullOrEmpty(idSpecie)) {
-                            List<Specie> species = barracks.Select(barrack => barrack.Variety.Specie).GroupBy(specie => specie.Name).Select(specie => specie.First()).ToList();
-                            return ContainerMethods.GetJsonGetContainer(OperationHelper.GetElement(species.Select(specie => new OutputMobileEntity { Id = specie.Id, EntityName = specie.CosmosEntityName, Name = specie.Name })), log);
-                        }
-                        else {
-                            barracks = barracks.Where(barrack => barrack.Variety.Specie.Id.Equals(idSpecie)).ToList();
-                            if (string.IsNullOrEmpty(idVariety)) {
-                                List<Variety> varieties = barracks.Select(barrack => barrack.Variety).GroupBy(variety => variety.Name).Select(variety => variety.First()).ToList();
-                                return ContainerMethods.GetJsonGetContainer(OperationHelper.GetElement(varieties.Select(variety => new OutputMobileEntity { Id = variety.Id, EntityName = variety.CosmosEntityName, Name = variety.Name })), log);
-                            }
-                            else {
-                                barracks = barracks.Where(barrack => barrack.Variety.Id.Equals(idVariety)).ToList();
-                                return ContainerMethods.GetJsonGetContainer(OperationHelper.GetElement(barracks.Select(barrack => new OutputMobileEntity { Id = barrack.Id, EntityName = barrack.CosmosEntityName, Name = barrack.Name })), log);
-                            }
-                        }
+                        var resultAll = await manager.NotificationEvents.GetEvents();
+                        return ContainerMethods.GetJsonGetContainer(resultAll, log);
                     }
                 case "post":
-                    break;
+                    Email email = new Email(manager.Users.GetUsers().Result.Result);
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
+                        var idPhenologicalEvent = (string)model["idPhenologicalEvent"];
+                        var eventType = (int)model["eventType"];
+                        var barrack = (string)model["idBarrack"];
+                        var base64 = (string)model["base64"];
+                        var description = (string)model["description"];
+                        //var lat = (float)newModel["latitude"];
+                        //var lon = (float)newModel["longitude"];
+                        var response = await db.NotificationEvents.SaveNewNotificationEvent(idPhenologicalEvent, eventType, barrack, base64, description, 0F, 0F);
+                        var evt = await db.NotificationEvents.GetEvent(response.IdRelated);
+                        var url = evt.Result.PicturePath;
+                        email.SendEmail("Notificacion",
+                            $@"<html>
+                                <body>
+                                    <p> Estimado(a), </p>
+                                    <p> Llego una notificacion </p>
+                                    <img src='{url}' style='width:50%;height:auto;'>
+                                    <p> Atentamente,<br> -Aresa </br></p>
+                                </body>
+                            </html>");
+                        return response;
+                    }, claims);
             }
-            return null;
+            return new BadRequestResult();
         }
-        
+
         [FunctionName("IndexElementsFilter")]
         public static async Task<IActionResult> IndexElementsFilter([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/{entityName}/indexElements/{abbSpecie?}/{type?}/{status?}/{textToSearch?}/{asc?}/{totalByPage?}/{page?}")] HttpRequest req, string entityName, string abbSpecie, string type, string status, string textToSearch, string asc, int? totalByPage, int? page, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
@@ -968,65 +1006,69 @@ namespace trifenix.agro.functions {
 
         #region v2/nebulizers
         [FunctionName("Nebulizers")]
-        public static async Task<IActionResult> Nebulizers([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/nebulizers/{id?}")] HttpRequest req, ILogger log, string id){
+        public static async Task<IActionResult> Nebulizers([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/nebulizers/{id?}")] HttpRequest req, string id, ILogger log){
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
             var manager = await ContainerMethods.AgroManager(claims);
-            ExtGetContainer<List<Nebulizer>> result = null;
-            switch (req.Method.ToLower())
-            {
+            switch (req.Method.ToLower()) {
                 case "get":
-                    result = await manager.Nebulizers.GetNebulizers();
-                    break;
+                    if (!string.IsNullOrWhiteSpace(id)) {
+                        var result = await manager.Nebulizers.GetNebulizer(id);
+                        return ContainerMethods.GetJsonGetContainer(result, log);
+                    }
+                    else {
+                        var resultAll = await manager.Nebulizers.GetNebulizers();
+                        return ContainerMethods.GetJsonGetContainer(resultAll, log);
+                    }
                 case "post":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
                         var brand = (string)model["brand"];
                         var code = (string)model["code"];
                         return await db.Nebulizers.SaveNewNebulizer(brand, code);
                     }, claims);
                 case "put":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
                         var brand = (string)model["brand"];
                         var code = (string)model["code"];
                         return await db.Nebulizers.SaveEditNebulizer(id, brand, code);
                     }, claims);
             }
-            return ContainerMethods.GetJsonGetContainer(result, log);
+            return new BadRequestResult();
         }
         #endregion
 
         #region v2/tractors
         [FunctionName("Tractors")]
-        public static async Task<IActionResult> Tractors([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/tractors/{id?}")] HttpRequest req, ILogger log, string id){
+        public static async Task<IActionResult> Tractors([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/tractors/{id?}")] HttpRequest req, string id, ILogger log){
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
             var manager = await ContainerMethods.AgroManager(claims);
-            ExtGetContainer<List<Tractor>> result = null;
-            switch (req.Method.ToLower())
-            {
+            switch (req.Method.ToLower()) {
                 case "get":
-                    result = await manager.Tractors.GetTractors();
-                    break;
+                    if (!string.IsNullOrWhiteSpace(id)) {
+                        var result = await manager.Tractors.GetTractor(id);
+                        return ContainerMethods.GetJsonGetContainer(result, log);
+                    }
+                    else {
+                        var resultAll = await manager.Tractors.GetTractors();
+                        return ContainerMethods.GetJsonGetContainer(resultAll, log);
+                    }
                 case "post":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
                         var brand = (string)model["brand"];
                         var code = (string)model["code"];
                         return await db.Tractors.SaveNewTractor(brand, code);
                     }, claims);
                 case "put":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
                         var brand = (string)model["brand"];
                         var code = (string)model["code"];
                         return await db.Tractors.SaveEditTractor(id, brand, code);
                     }, claims);
             }
-            return ContainerMethods.GetJsonGetContainer(result, log);
+            return new BadRequestResult();
         }
         #endregion
 

@@ -82,7 +82,7 @@ namespace trifenix.agro.model.external.output
     public class OutputOrderNotificationEvent {
         public string Id { get; set; }
 
-        public Event PhenologicalEvent { get; set; }
+        public PhenologicalEvent PhenologicalEvent { get; set; }
 
         /// <summary>
         /// Ruta o Url en internet de la imagen subida.
