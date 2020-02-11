@@ -55,7 +55,7 @@ namespace trifenix.agro.microsoftgraph.operations
                 InviteRedirectUrl = "https://sprint3-jhm.trifenix.io/",
                 SendInvitationMessage = true,
             };
-            var invite = await graphServiceClient.Invitations.Request().AddAsync(invitation);
+            await graphServiceClient.Invitations.Request().AddAsync(invitation);
             string objectId = String.Empty;
             do {
                 Thread.Sleep(1000);

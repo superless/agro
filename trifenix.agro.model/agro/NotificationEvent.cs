@@ -31,6 +31,8 @@ namespace trifenix.agro.db.model.agro
         /// </summary>
         public PhenologicalEvent PhenologicalEvent { get; set; }
 
+        public int eventType { get; set; }
+
         public UserActivity Creator { get; set; }
 
         /// <summary>

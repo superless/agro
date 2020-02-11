@@ -7,10 +7,8 @@ using trifenix.agro.external.interfaces.custom;
 using trifenix.agro.external.operations.custom;
 using trifenix.agro.external.operations.custom.args;
 
-namespace trifenix.agro.external.operations
-{
-    public class CustomManager : ICustomManager
-    {
+namespace trifenix.agro.external.operations {
+    public class CustomManager : ICustomManager {
         private readonly ITimeStampDbQueries tsRepo;
         private readonly ICommonDbOperations<Barrack> dbBarrackOper;
         private readonly ICommonDbOperations<PhenologicalEvent> dbPhenologicalOper;
@@ -20,8 +18,7 @@ namespace trifenix.agro.external.operations
         private readonly string idSeason;
         private readonly IAgroRepository agroRepository;
 
-        public CustomManager(IAgroRepository agroRepository, string idSeason)
-        {
+        public CustomManager(IAgroRepository agroRepository, string idSeason) {
             tsRepo = new TimeStampDbQueries(agroRepository.DbArguments);
             dbBarrackOper = new CommonDbOperations<Barrack>();
             dbPhenologicalOper = new CommonDbOperations<PhenologicalEvent>();
@@ -30,7 +27,6 @@ namespace trifenix.agro.external.operations
             dbOrderFolder = new CommonDbOperations<OrderFolder>();
             this.idSeason = idSeason;
             this.agroRepository = agroRepository;
-
         }
         
 

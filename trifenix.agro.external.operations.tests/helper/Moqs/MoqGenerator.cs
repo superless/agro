@@ -7,20 +7,11 @@ using System.Threading.Tasks;
 using trifenix.agro.common.tests.fakes;
 using trifenix.agro.db;
 
-namespace trifenix.agro.external.operations.tests.helper.Moqs
-{
-    public static class MoqGenerator
-    {
-        public static Mock<T> GetMoqResult<T, T2>(Results result, Expression<Func<T, Task<string>>> create, 
-            Expression<Func<T, Task<T2>>> getElement, Expression<Func<T, IQueryable<T2>>> getElements ) where T : class where T2 : DocumentBase
-        {
+namespace trifenix.agro.external.operations.tests.helper.Moqs {
+    public static class MoqGenerator {
+        public static Mock<T> GetMoqResult<T, T2>(Results result, Expression<Func<T, Task<string>>> create, Expression<Func<T, Task<T2>>> getElement, Expression<Func<T, IQueryable<T2>>> getElements ) where T : class where T2 : DocumentBase {
             var mock = new Mock<T>();
-           
-
-            
-
-            switch (result)
-            {
+            switch (result) {
                 case Results.Nullables:
                     mock.Setup(create).ReturnsAsync((string)null);
                     mock.Setup(getElement).ReturnsAsync((T2)null);

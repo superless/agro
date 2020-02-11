@@ -5,10 +5,9 @@ using trifenix.agro.db.interfaces.agro.ext;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.external.operations.entities.ext;
 using trifenix.agro.external.operations.tests.helper.Moqs;
-using trifenix.agro.search;
 
 namespace trifenix.agro.external.operations.tests.helper.Instances {
-    public static class ProductInstances {
+    public static class ProductInstances <T> where T : Product {
         public static Mock<IProductRepository> GetInstance(Results result) =>
             MoqGenerator.GetMoqResult<IProductRepository, Product>(
                 result, 
@@ -16,44 +15,41 @@ namespace trifenix.agro.external.operations.tests.helper.Instances {
                 (s) => s.GetProduct(It.IsAny<string>()), 
                 s => s.GetProducts());
 
-        public static ProductOperations GetProductOperations(ProductEnumInstances instance) {
-            string SearchServiceName = "agrosearch";
-            string SearchServiceKey = "016DAA5EF1158FEEEE58DA60996D5981";
-            string SearchIndexName = "entities";
+        public static ProductOperations<T> GetProductOperations(ProductEnumInstances instance) {
             switch (instance) {
                 case ProductEnumInstances.DefaultInstance:
-                    return new ProductOperations(
+                    return new ProductOperations<T>(
                         IngredientsInstances.GetInstance(Results.Values).Object,
                         GetInstance(Results.Values).Object,
                         ApplicationTargetInstances.GetInstance(Results.Values).Object,
                         CertifiedEntitiesInstances.GetInstance(Results.Values).Object,
                         VarietyInstances.GetInstance(Results.Values).Object,
                         SpeciesInstances.GetInstance(Results.Values).Object,
-                        CommonDbInstances<Product>.GetInstance(Results.Nullables).Object,
+                        CommonDbInstances<T>.GetInstance(Results.Nullables).Object,
                         FakeGenerator.CreateString(),
-                        new AgroSearch(SearchServiceName, SearchServiceKey, SearchIndexName));
+                        AgroSearchInstances.GetInstance().Object);
                 case ProductEnumInstances.InstanceNoIngredientOnDb:
-                    return new ProductOperations(
+                    return new ProductOperations<T>(
                         IngredientsInstances.GetInstance(Results.Empty).Object,
                         GetInstance(Results.Values).Object,
                         ApplicationTargetInstances.GetInstance(Results.Values).Object,
                         CertifiedEntitiesInstances.GetInstance(Results.Values).Object,
                         VarietyInstances.GetInstance(Results.Values).Object,
                         SpeciesInstances.GetInstance(Results.Values).Object,
-                        CommonDbInstances<Product>.GetInstance(Results.Values).Object,
+                        CommonDbInstances<T>.GetInstance(Results.Values).Object,
                         FakeGenerator.CreateString(),
-                        new AgroSearch(SearchServiceName, SearchServiceKey, SearchIndexName));
+                        AgroSearchInstances.GetInstance().Object);
                 case ProductEnumInstances.DefaultInstanceNullIds:
-                    return new ProductOperations(
+                    return new ProductOperations<T>(
                         IngredientsInstances.GetInstance(Results.Values).Object,
                         GetInstance(Results.Values).Object,
                         ApplicationTargetInstances.GetInstance(Results.Nullables).Object,
                         CertifiedEntitiesInstances.GetInstance(Results.Nullables).Object,
                         VarietyInstances.GetInstance(Results.Nullables).Object,
                         SpeciesInstances.GetInstance(Results.Nullables).Object,
-                        CommonDbInstances<Product>.GetInstance(Results.Nullables).Object,
+                        CommonDbInstances<T>.GetInstance(Results.Nullables).Object,
                         FakeGenerator.CreateString(),
-                        new AgroSearch(SearchServiceName,SearchServiceKey,SearchIndexName));
+                        AgroSearchInstances.GetInstance().Object);
             }
             throw new Exception("Bad parameters!");
         }

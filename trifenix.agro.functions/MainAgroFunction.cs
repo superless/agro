@@ -14,13 +14,13 @@ using System;
 using trifenix.agro.db.model.agro.enums;
 using trifenix.agro.db.model.agro.orders;
 using trifenix.agro.db.model.agro;
-using trifenix.agro.email.operations;
 using trifenix.agro.external.operations.helper;
 using trifenix.agro.functions.Helper;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.model.external.output;
 using trifenix.agro.model.external;
 using trifenix.agro.search.model;
+using trifenix.agro.email.operations;
 
 namespace trifenix.agro.functions {
     public static class MainAgroFunction {
@@ -66,8 +66,7 @@ namespace trifenix.agro.functions {
                 return new UnauthorizedResult();
             var manager = await ContainerMethods.AgroManager(claims);
             ExtGetContainer<List<Season>> result = null;
-            switch (req.Method.ToLower())
-            {
+            switch (req.Method.ToLower()) {
                 case "get":
                     result = await manager.Seasons.GetSeasons();
                     break;
@@ -79,8 +78,7 @@ namespace trifenix.agro.functions {
                         return await db.Seasons.SaveNewSeason(initDate, endDate);
                     }, claims);
                 case "put":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
                         var initDate = (DateTime)model["startDate"];
                         var endDate = (DateTime)model["endDate"];
                         var current = (bool)model["current"];
@@ -93,16 +91,18 @@ namespace trifenix.agro.functions {
 
         #region v2/specie
         [FunctionName("SpecieV2")]
-        public static async Task<IActionResult> SpecieV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/species/{id?}")] HttpRequest req, string id,ILogger log){
+        public static async Task<IActionResult> SpecieV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/species/{id?}")] HttpRequest req, string id, ILogger log){
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
             var manager = await ContainerMethods.AgroManager(claims);
-            ExtGetContainer<List<Specie>> result = null;
-            switch (req.Method.ToLower())
-            {
+            ExtGetContainer<Specie> result = null;
+            switch (req.Method.ToLower()) {
                 case "get":
-                    result = await manager.Species.GetSpecies();
+                    if (!string.IsNullOrWhiteSpace(id)) {
+                        result = await manager.Species.GetSpecie(id);
+                        return ContainerMethods.GetJsonGetContainer(result, log);
+                    }
                     break;
                 case "post":
                     return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
@@ -119,7 +119,8 @@ namespace trifenix.agro.functions {
                         return await db.Species.SaveEditSpecie(id, name, abbreviation);
                     }, claims);
             }
-            return ContainerMethods.GetJsonGetContainer(result, log);
+            ExtGetContainer<List<Specie>> resultGetAll = await manager.Species.GetSpecies();
+            return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
         }
         #endregion
 
@@ -327,7 +328,7 @@ namespace trifenix.agro.functions {
 
         #region v2/products
         [FunctionName("Product")]
-        public static async Task<IActionResult> Product([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/products/{id?}/{totalByPage?}/{desc?}")] HttpRequest req, string id, int? totalByPage, string desc, ILogger log){
+        public static async Task<IActionResult> Product([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/products/{idProduct?}/{textToSearch?}/{asc?}/{totalByPage?}/{page?}")] HttpRequest req, string idProduct, string textToSearch, string asc, int? totalByPage, int? page, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
@@ -335,9 +336,8 @@ namespace trifenix.agro.functions {
             ExtGetContainer<Product> result = null;
             switch (req.Method.ToLower()) {
                 case "get":
-                    if (!string.IsNullOrWhiteSpace(id)) {
-                        if (int.TryParse(id, out var resultInt)) break;
-                        result = await manager.Products.GetProduct(id);
+                    if (!string.IsNullOrWhiteSpace(idProduct) && !idProduct.ToLower().Equals("all")) {
+                        result = await manager.Products.GetProduct(idProduct);
                         return ContainerMethods.GetJsonGetContainer(result, log);
                     }
                     break;
@@ -363,20 +363,19 @@ namespace trifenix.agro.functions {
                         var kindOfBottle = (KindOfProductContainer)Convert.ToInt32(model["kindOfBottle"]);
                         var dosesStr = ((object)model["doses"])?.ToString();
                         var doses = !string.IsNullOrWhiteSpace(dosesStr) ? JsonConvert.DeserializeObject<DosesInput[]>(dosesStr) : null;
-                        return await db.Products.CreateEditProduct(id, commercialName, idActiveIngredient, brand, doses, measureType, quantity, kindOfBottle);
+                        return await db.Products.SaveEditProduct(idProduct, commercialName, idActiveIngredient, brand, doses, measureType, quantity, kindOfBottle);
                     }, claims);
             }
-            if (!string.IsNullOrWhiteSpace(id) && totalByPage.HasValue) {
-                var isPage = int.TryParse(id, out var page);
-                if (!isPage) return new BadRequestResult();
-                var orderDate = string.IsNullOrWhiteSpace(desc) || desc.ToLower().Equals("desc");
-                if (!orderDate && !desc.ToLower().Equals("asc"))
-                    return new BadRequestResult();
-                var resultGetByPageAll = await manager.Products.GetProductsByPage(page, totalByPage ?? 10, orderDate);
-                return ContainerMethods.GetJsonGetContainer(resultGetByPageAll, log);
+            if (!string.IsNullOrWhiteSpace(textToSearch) && textToSearch.Equals("*"))
+                textToSearch = null;
+            bool? order = null;
+            if (!string.IsNullOrWhiteSpace(asc) && !asc.ToLower().Equals("not_order")) {
+                if (asc.ToLower().Equals("asc")) order = true;
+                else if (asc.ToLower().Equals("desc")) order = false;
+                else return new BadRequestResult();
             }
-            ExtGetContainer<List<Product>> resultGetAll = await manager.Products.GetProducts();
-            return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
+            var resultGetByPageAll = manager.Products.GetPaginatedProducts(textToSearch, page, totalByPage, order);
+            return ContainerMethods.GetJsonGetContainer(resultGetByPageAll, log);
         }
         #endregion
 
@@ -418,120 +417,200 @@ namespace trifenix.agro.functions {
         #endregion
 
         #region v2/notification_events
-        [FunctionName("NotificationEvents")]
-        public static async Task<IActionResult> NotificationEvents([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "v2/notification_events/{id?}")] HttpRequest req, string id,ILogger log){
+        //[FunctionName("NotificationEvents")]
+        //public static async Task<IActionResult> NotificationEvents([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "v2/notification_events/{id?}")] HttpRequest req, string id,ILogger log){
+        //    ClaimsPrincipal claims = await Auth.Validate(req);
+        //    if (claims == null)
+        //        return new UnauthorizedResult();
+        //    var manager = await ContainerMethods.AgroManager(claims);
+        //    Email email = new Email(manager.Users.GetUsers().Result.Result);
+        //    //HttpClient client = new HttpClient();
+        //    //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Environment.GetEnvironmentVariable("accessToken", EnvironmentVariableTarget.Process));
+        //    //var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+        //    //dynamic body = JsonConvert.DeserializeObject(requestBody);
+        //    //var newBody = body["_parts"][0][1];
+        //    //byte[] byteArray = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(newBody));
+        //    //MemoryStream stream = new MemoryStream(byteArray);
+        //    //var inputData = new StreamContent(stream);
+        //    //string ipNgrok = Environment.GetEnvironmentVariable("ipNgrok", EnvironmentVariableTarget.Process);
+        //    //await client.PostAsync("https://" + ipNgrok + ".ngrok.io/api/v2/debugroute", inputData);
+        //    //client.Dispose();
+        //    //return null;
+        //    ExtGetContainer<NotificationEvent> result = null;
+        //    switch (req.Method.ToLower()) {
+        //        case "get":
+        //            if (!string.IsNullOrWhiteSpace(id)) {
+        //                switch (id) {
+        //                    case "init":
+        //                        var resultEvent = await manager.CustomManager.MobileEvents.GetEventData();
+        //                        return ContainerMethods.GetJsonGetContainer(resultEvent, log);
+        //                    case "ts":
+        //                        var resultTs = await manager.CustomManager.MobileEvents.GetMobileEventTimestamp();
+        //                        return ContainerMethods.GetJsonGetContainer(resultTs, log);
+        //                    default:
+        //                        result = await manager.NotificationEvents.GetEvent(id);
+        //                        return ContainerMethods.GetJsonGetContainer(result, log);
+        //                }
+        //            }
+        //            break;
+        //        case "post":
+        //            return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
+        //                var newModel = model["_parts"][0][1];
+        //                var idPhenologicalEvent = (string)newModel["idPhenologicalEvent"];
+        //                var description = (string)newModel["description"];
+        //                var base64 = (string)newModel["base64"];
+        //                var barrack = (string)newModel["idBarrack"];
+        //                //var lat = (float)newModel["latitude"];
+        //                //var lon = (float)newModel["longitude"];
+        //                var response = await db.NotificationEvents.SaveNewNotificationEvent(barrack, idPhenologicalEvent, base64, description, 0F, 0F);
+        //                var evt = await db.NotificationEvents.GetEvent(response.IdRelated);
+        //                var url = evt.Result.PicturePath;
+        //                email.SendEmail("Notificacion",
+        //                    $@"<html>
+        //                    <body>
+        //                        <p> Estimado(a), </p>
+        //                        <p> Llego una notificacion </p>
+        //                        <img src='{url}' style='width:50%;height:auto;'>
+        //                        <p> Atentamente,<br> -Aresa </br></p>
+        //                    </body>
+        //                </html>");
+        //                return response;
+        //            }, claims);
+        //    }
+        //    ExtGetContainer<List<NotificationEvent>> resultGetAll = await manager.NotificationEvents.GetEvents();
+        //    return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
+        //}
+        #endregion
+
+        [FunctionName("FiltersToBarracks")]
+        public static async Task<IActionResult> FiltersToBarracks([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/filtersToBarracks/{idSector?}/{idSpecie?}/{idVariety?}")] HttpRequest req, string idSector, string idSpecie, string idVariety, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
             var manager = await ContainerMethods.AgroManager(claims);
-            Email email = new Email(manager.Users.GetUsers().Result.Result);
-            //HttpClient client = new HttpClient();
-            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Environment.GetEnvironmentVariable("accessToken", EnvironmentVariableTarget.Process));
-            //var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            //dynamic body = JsonConvert.DeserializeObject(requestBody);
-            //var newBody = body["_parts"][0][1];
-            //byte[] byteArray = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(newBody));
-            //MemoryStream stream = new MemoryStream(byteArray);
-            //var inputData = new StreamContent(stream);
-            //string ipNgrok = Environment.GetEnvironmentVariable("ipNgrok", EnvironmentVariableTarget.Process);
-            //await client.PostAsync("https://" + ipNgrok + ".ngrok.io/api/v2/debugroute", inputData);
-            //client.Dispose();
-            //return null;
-            ExtGetContainer<NotificationEvent> result = null;
+            List<Barrack> barracks;
+            if (string.IsNullOrEmpty(idSector)) {
+                List<Sector> sectors = manager.Sectors.GetSectors().Result.Result;
+                return ContainerMethods.GetJsonGetContainer(OperationHelper.GetElement(sectors.Select(sector => new OutputMobileEntity { Id = sector.Id, EntityName = sector.CosmosEntityName, Name = sector.Name })), log);
+            }
+            else {
+                barracks = manager.Barracks.GetBarracks().Result.Result.Where(barrack => barrack.PlotLand.Sector.Id.Equals(idSector) && barrack.SeasonId.Equals(manager.IdSeason)).ToList();
+                if (string.IsNullOrEmpty(idSpecie)) {
+                    List<Specie> species = barracks.Select(barrack => barrack.Variety.Specie).GroupBy(specie => specie.Name).Select(specie => specie.First()).ToList();
+                    return ContainerMethods.GetJsonGetContainer(OperationHelper.GetElement(species.Select(specie => new OutputMobileEntity { Id = specie.Id, EntityName = specie.CosmosEntityName, Name = specie.Name })), log);
+                }
+                else {
+                    barracks = barracks.Where(barrack => barrack.Variety.Specie.Id.Equals(idSpecie)).ToList();
+                    if (string.IsNullOrEmpty(idVariety)) {
+                        List<Variety> varieties = barracks.Select(barrack => barrack.Variety).GroupBy(variety => variety.Name).Select(variety => variety.First()).ToList();
+                        return ContainerMethods.GetJsonGetContainer(OperationHelper.GetElement(varieties.Select(variety => new OutputMobileEntity { Id = variety.Id, EntityName = variety.CosmosEntityName, Name = variety.Name })), log);
+                    }
+                    else {
+                        barracks = barracks.Where(barrack => barrack.Variety.Id.Equals(idVariety)).ToList();
+                        return ContainerMethods.GetJsonGetContainer(OperationHelper.GetElement(barracks.Select(barrack => new OutputMobileEntity { Id = barrack.Id, EntityName = barrack.CosmosEntityName, Name = barrack.Name })), log);
+                    }
+                }
+            }
+        }
+
+        [FunctionName("NotificationEvents")]
+        public static async Task<IActionResult> NotificationEvents([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "v2/notificationEvents/{idNotificationEvent?}")] HttpRequest req, string idNotificationEvent, ILogger log) {
+            ClaimsPrincipal claims = await Auth.Validate(req);
+            if (claims == null)
+                return new UnauthorizedResult();
+            var manager = await ContainerMethods.AgroManager(claims);
             switch (req.Method.ToLower()) {
                 case "get":
-                    if (!string.IsNullOrWhiteSpace(id)) {
-                        switch (id) {
-                            case "init":
-                                var resultEvent = await manager.CustomManager.MobileEvents.GetEventData();
-                                return ContainerMethods.GetJsonGetContainer(resultEvent, log);
-                            case "ts":
-                                var resultTs = await manager.CustomManager.MobileEvents.GetMobileEventTimestamp();
-                                return ContainerMethods.GetJsonGetContainer(resultTs, log);
-                            default:
-                                result = await manager.NotificationEvents.GetEvent(id);
-                                return ContainerMethods.GetJsonGetContainer(result, log);
-                        }
+                    if (!string.IsNullOrWhiteSpace(idNotificationEvent)) {
+                        var result = await manager.NotificationEvents.GetEvent(idNotificationEvent);
+                        return ContainerMethods.GetJsonGetContainer(result, log);
                     }
-                    break;
+                    else {
+                        var resultAll = await manager.NotificationEvents.GetEvents();
+                        return ContainerMethods.GetJsonGetContainer(resultAll, log);
+                    }
                 case "post":
+                    Email email = new Email(manager.Users.GetUsers().Result.Result);
                     return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
-                        var newModel = model["_parts"][0][1];
-                        var idPhenologicalEvent = (string)newModel["idPhenologicalEvent"];
-                        var description = (string)newModel["description"];
-                        var base64 = (string)newModel["base64"];
-                        var barrack = (string)newModel["idBarrack"];
+                        var idPhenologicalEvent = (string)model["idPhenologicalEvent"];
+                        var eventType = (int)model["eventType"];
+                        var barrack = (string)model["idBarrack"];
+                        var base64 = (string)model["base64"];
+                        var description = (string)model["description"];
                         //var lat = (float)newModel["latitude"];
                         //var lon = (float)newModel["longitude"];
-                        var response = await db.NotificationEvents.SaveNewNotificationEvent(barrack, idPhenologicalEvent, base64, description, 0F, 0F);
+                        var response = await db.NotificationEvents.SaveNewNotificationEvent(idPhenologicalEvent, eventType, barrack, base64, description, 0F, 0F);
                         var evt = await db.NotificationEvents.GetEvent(response.IdRelated);
                         var url = evt.Result.PicturePath;
                         email.SendEmail("Notificacion",
                             $@"<html>
-                            <body>
-                                <p> Estimado(a), </p>
-                                <p> Llego una notificacion </p>
-                                <img src='{url}' style='width:50%;height:auto;'>
-                                <p> Atentamente,<br> -Aresa </br></p>
-                            </body>
-                        </html>");
+                                <body>
+                                    <p> Estimado(a), </p>
+                                    <p> Llego una notificacion </p>
+                                    <img src='{url}' style='width:50%;height:auto;'>
+                                    <p> Atentamente,<br> -Aresa </br></p>
+                                </body>
+                            </html>");
                         return response;
                     }, claims);
             }
-            ExtGetContainer<List<NotificationEvent>> resultGetAll = await manager.NotificationEvents.GetEvents();
-            return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
-        }
-        #endregion
-
-        [FunctionName("EntityFilter")]
-        public static async Task<IActionResult> EntityFilter([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/{entityName}/search/{textToSearch}/{page}/{quantity}/{order}")] HttpRequest req, string entityName, string textToSearch, int page, int quantity, string order, ILogger log) {
-            ClaimsPrincipal claims = await Auth.Validate(req);
-            if (claims == null)
-                return new UnauthorizedResult();
-            var manager = await ContainerMethods.AgroManager(claims);
-            var orderDate = string.IsNullOrWhiteSpace(order) || order.ToLower().Equals("desc");
-            switch (entityName.ToLower()) {
-                case "orders":
-                    ExtGetContainer<SearchResult<OutPutApplicationOrder>> ordersResult = await manager.ApplicationOrders.GetApplicationOrdersByPage(textToSearch, page, quantity, orderDate);
-                    return ContainerMethods.GetJsonGetContainer(ordersResult, log);
-                case "executions":
-                    ExtGetContainer<SearchResult<ExecutionOrder>> executionsResult = await manager.ExecutionOrders.GetExecutionOrdersByPage(textToSearch, page, quantity, orderDate);
-                    return ContainerMethods.GetJsonGetContainer(executionsResult, log);
-                case "products":
-                    ExtGetContainer<SearchResult<Product>> productsResult = await manager.Products.GetProductsByPage(textToSearch, page, quantity, orderDate);
-                    return ContainerMethods.GetJsonGetContainer(productsResult, log);
-            }
-            return ContainerMethods.GetJsonGetContainer(OperationHelper.GetException<ExecutionOrder>(new Exception($"No existe entityName: {entityName}")), log);
+            return new BadRequestResult();
         }
 
         [FunctionName("IndexElementsFilter")]
-        public static async Task<IActionResult> IndexElementsFilter([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/{entityName}/search/indexElements/{textToSearch}/{page}/{quantity}/{order}")] HttpRequest req, string entityName, string textToSearch, int page, int quantity, string order, ILogger log) {
+        public static async Task<IActionResult> IndexElementsFilter([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/{entityName}/indexElements/{abbSpecie?}/{type?}/{status?}/{textToSearch?}/{asc?}/{totalByPage?}/{page?}")] HttpRequest req, string entityName, string abbSpecie, string type, string status, string textToSearch, string asc, int? totalByPage, int? page, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
             var manager = await ContainerMethods.AgroManager(claims);
-            var orderDate = string.IsNullOrWhiteSpace(order) || order.ToLower().Equals("desc");
+            bool? isPhenological = null;
+            if (!string.IsNullOrWhiteSpace(type) && !type.ToLower().Equals("all"))
+            {
+                if (type.ToLower().Equals("phenological")) isPhenological = true;
+                else if (type.ToLower().Equals("not_phenological")) isPhenological = false;
+                else return new BadRequestResult();
+            }
+            int? statusToFilter = null;
+            if (!string.IsNullOrWhiteSpace(status) && !status.ToLower().Equals("all")) {
+                if (int.TryParse(status, out int outResult)) statusToFilter = outResult;
+                else return new BadRequestResult();
+            }
+            if (!string.IsNullOrWhiteSpace(textToSearch) && textToSearch.Equals("*"))
+                textToSearch = null;
+            bool? order = null;
+            if (!string.IsNullOrWhiteSpace(asc) && !asc.ToLower().Equals("not_order"))
+            {
+                if (asc.ToLower().Equals("asc")) order = true;
+                else if (asc.ToLower().Equals("desc")) order = false;
+                else return new BadRequestResult();
+            }
+            if (!string.IsNullOrWhiteSpace(abbSpecie) && abbSpecie.ToLower().Equals("all"))
+                abbSpecie = null;
             ExtGetContainer<EntitiesSearchContainer> result;
             switch (entityName.ToLower()) {
                 case "orders":
-                    result = manager.ApplicationOrders.GetIndexElements(textToSearch, page, quantity, orderDate);
+                    result = manager.ApplicationOrders.GetIndexElements(textToSearch, abbSpecie, isPhenological, page, totalByPage, order);
                     break;
                 case "executions":
-                    result = manager.ExecutionOrders.GetIndexElements(textToSearch, page, quantity, orderDate);
+                    result = manager.ExecutionOrders.GetIndexElements(textToSearch, abbSpecie, statusToFilter, page, totalByPage, order);
                     break;
                 case "products":
-                    result = manager.Products.GetIndexElements(textToSearch, page, quantity, orderDate);
+                    result = manager.Products.GetIndexElements(textToSearch, page, totalByPage, order);
+                    break;
+                case "barracks":
+                    result = manager.Barracks.GetIndexElements(textToSearch, abbSpecie, page, totalByPage, order);
                     break;
                 default:
                     return ContainerMethods.GetJsonGetContainer(OperationHelper.GetException<ExecutionOrder>(new Exception($"No existe entityName: {entityName}")), log);
             }
             return ContainerMethods.GetJsonGetContainer(result, log);
+            
+            
         }
-
 
         #region v2/orders
         [FunctionName("Orders")]
-        public static async Task<IActionResult> Orders([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/orders/{id?}/{totalByPage?}/{desc?}")] HttpRequest req, string id, int? totalByPage, string desc, ILogger log){
+        public static async Task<IActionResult> Orders([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/orders/{idOrder?}/{abbSpecie?}/{type?}/{textToSearch?}/{asc?}/{totalByPage?}/{page?}")] HttpRequest req, string idOrder, string abbSpecie, string type, string textToSearch, string asc, int? totalByPage, int? page, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
@@ -539,9 +618,8 @@ namespace trifenix.agro.functions {
             ExtGetContainer<OutPutApplicationOrder> result = null;
             switch (req.Method.ToLower()) {
                 case "get":
-                    if (!string.IsNullOrWhiteSpace(id)) {
-                        if (int.TryParse(id, out var resultInt)) break;
-                        result = await manager.ApplicationOrders.GetApplicationOrder(id);
+                    if (!string.IsNullOrWhiteSpace(idOrder) && !idOrder.ToLower().Equals("all")) {
+                        result = await manager.ApplicationOrders.GetApplicationOrder(idOrder);
                         return ContainerMethods.GetJsonGetContainer(result, log);
                     }
                     break;
@@ -553,20 +631,28 @@ namespace trifenix.agro.functions {
                 case "put":
                     return await ContainerMethods.ApiPostOperations<OutPutApplicationOrder>(req.Body, log, async (db, model) => {
                         var input = JsonConvert.DeserializeObject<ApplicationOrderInput>(model.ToString());
-                        return await db.ApplicationOrders.SaveEditApplicationOrder(id, input);
+                        return await db.ApplicationOrders.SaveEditApplicationOrder(idOrder, input);
                     }, claims);
             }
-            if (!string.IsNullOrWhiteSpace(id) && totalByPage.HasValue) {
-                var isPage = int.TryParse(id, out var page);
-                if (!isPage) return new BadRequestResult();
-                var orderDate = string.IsNullOrWhiteSpace(desc) || desc.ToLower().Equals("desc");
-                if (!orderDate && !desc.ToLower().Equals("asc"))
-                    return new BadRequestResult();
-                var resultGetByPageAll = await manager.ApplicationOrders.GetApplicationOrdersByPage(page, totalByPage??10, orderDate);
-                return ContainerMethods.GetJsonGetContainer(resultGetByPageAll, log);
+            if (!string.IsNullOrWhiteSpace(textToSearch) && textToSearch.Equals("*"))
+                textToSearch = null;
+            if (!string.IsNullOrWhiteSpace(abbSpecie) && abbSpecie.ToLower().Equals("all"))
+                abbSpecie = null;
+            else abbSpecie = abbSpecie.ToUpper();
+            bool? isPhenological = null;
+            if (!string.IsNullOrWhiteSpace(type) && !asc.ToLower().Equals("all")) {
+                if (type.ToLower().Equals("phenological")) isPhenological = true;
+                else if (type.ToLower().Equals("not_phenological")) isPhenological = false;
+                else return new BadRequestResult();
             }
-            ExtGetContainer<List<OutPutApplicationOrder>> resultGetAll = await manager.ApplicationOrders.GetApplicationOrders();
-            return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
+            bool? order = null;
+            if (!string.IsNullOrWhiteSpace(asc) && !asc.ToLower().Equals("not_order")) {
+                if (asc.ToLower().Equals("asc")) order = true;
+                else if (asc.ToLower().Equals("desc")) order = false;
+                else return new BadRequestResult();
+            }
+            var resultGetByPageAll = manager.ApplicationOrders.GetPaginatedOrders(textToSearch, abbSpecie, isPhenological, page, totalByPage, order);
+            return ContainerMethods.GetJsonGetContainer(resultGetByPageAll, log);
         }
         #endregion
 
@@ -665,26 +751,22 @@ namespace trifenix.agro.functions {
                 return new UnauthorizedResult();
             var manager = await ContainerMethods.AgroManager(claims);
             ExtGetContainer<Variety> result = null;
-            switch (req.Method.ToLower())
-            {
+            switch (req.Method.ToLower()) {
                 case "get":
-                    if (!string.IsNullOrWhiteSpace(id))
-                    {
+                    if (!string.IsNullOrWhiteSpace(id)) {
                         result = await manager.Varieties.GetVariety(id);
                         return ContainerMethods.GetJsonGetContainer(result, log);
                     }
                     break;
                 case "post":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
                         var name = (string)model["name"];
                         var idSpecie = (string)model["idSpecie"];
                         var abbreviation = (string)model["abbreviation"];
                         return await db.Varieties.SaveNewVariety(name, abbreviation, idSpecie);
                     }, claims);
                 case "put":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
                         var name = (string)model["name"];
                         var idSpecie = (string)model["idSpecie"];
                         var abbreviation = (string)model["abbreviation"];
@@ -698,24 +780,21 @@ namespace trifenix.agro.functions {
 
         #region v2/barracks
         [FunctionName("BarracksV2")]
-        public static async Task<IActionResult> BarracksV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/barracks/{id?}")] HttpRequest req, string id,ILogger log){
+        public static async Task<IActionResult> BarracksV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/barracks/{idBarrack?}/{abbSpecie?}/{textToSearch?}/{asc?}/{totalByPage?}/{page?}")] HttpRequest req, string idBarrack, string abbSpecie, string textToSearch, string asc, int? totalByPage, int? page, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
             var manager = await ContainerMethods.AgroManager(claims);
             ExtGetContainer<Barrack> result = null;
-            switch (req.Method.ToLower())
-            {
+            switch (req.Method.ToLower()) {
                 case "get":
-                    if (!string.IsNullOrWhiteSpace(id))
-                    {
-                        result = await manager.Barracks.GetBarrack(id);
+                    if (!string.IsNullOrWhiteSpace(idBarrack) && !idBarrack.ToLower().Equals("all")) {
+                        result = await manager.Barracks.GetBarrack(idBarrack);
                         return ContainerMethods.GetJsonGetContainer(result, log);
                     }
                     break;
                 case "post":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
                         var name = (string)model["name"];
                         var numberOfPlants = (int)model["numberOfPlants"];
                         var plantingYear = (int)model["plantingYear"];
@@ -727,8 +806,7 @@ namespace trifenix.agro.functions {
                         return await db.Barracks.SaveNewBarrack(name, idPlotland, hectares, plantingYear, idVariety, numberOfPlants, idPollinator, idRootstock);
                     }, claims);
                 case "put":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
                         var name = (string)model["name"];
                         var numberOfPlants = (int)model["numberOfPlants"];
                         var plantingYear = (int)model["plantingYear"];
@@ -737,11 +815,22 @@ namespace trifenix.agro.functions {
                         var idVariety = (string)model["idVariety"];
                         var idPollinator = (string)model["idPollinator"];
                         var idRootstock = (string)model["idRootstock"];
-                        return await db.Barracks.SaveEditBarrack(id, name, idPlotland, hectares, plantingYear, idVariety, numberOfPlants, idPollinator, idRootstock);
+                        return await db.Barracks.SaveEditBarrack(idBarrack, name, idPlotland, hectares, plantingYear, idVariety, numberOfPlants, idPollinator, idRootstock);
                     }, claims);
             }
-            ExtGetContainer<List<Barrack>> resultGetAll = await manager.Barracks.GetBarracks();
-            return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
+            if (!string.IsNullOrWhiteSpace(textToSearch) && textToSearch.Equals("*"))
+                textToSearch = null;
+            if (!string.IsNullOrWhiteSpace(abbSpecie) && abbSpecie.ToLower().Equals("all"))
+                abbSpecie = null;
+            else abbSpecie = abbSpecie.ToUpper();
+            bool? order = null;
+            if (!string.IsNullOrWhiteSpace(asc) && !asc.ToLower().Equals("not_order")) {
+                if (asc.ToLower().Equals("asc")) order = true;
+                else if (asc.ToLower().Equals("desc")) order = false;
+                else return new BadRequestResult();
+            }
+            var resultGetByPageAll = manager.Barracks.GetPaginatedBarracks(textToSearch, abbSpecie, page, totalByPage, order);
+            return ContainerMethods.GetJsonGetContainer(resultGetByPageAll, log);
         }
         #endregion
 
@@ -917,71 +1006,75 @@ namespace trifenix.agro.functions {
 
         #region v2/nebulizers
         [FunctionName("Nebulizers")]
-        public static async Task<IActionResult> Nebulizers([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/nebulizers/{id?}")] HttpRequest req, ILogger log, string id){
+        public static async Task<IActionResult> Nebulizers([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/nebulizers/{id?}")] HttpRequest req, string id, ILogger log){
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
             var manager = await ContainerMethods.AgroManager(claims);
-            ExtGetContainer<List<Nebulizer>> result = null;
-            switch (req.Method.ToLower())
-            {
+            switch (req.Method.ToLower()) {
                 case "get":
-                    result = await manager.Nebulizers.GetNebulizers();
-                    break;
+                    if (!string.IsNullOrWhiteSpace(id)) {
+                        var result = await manager.Nebulizers.GetNebulizer(id);
+                        return ContainerMethods.GetJsonGetContainer(result, log);
+                    }
+                    else {
+                        var resultAll = await manager.Nebulizers.GetNebulizers();
+                        return ContainerMethods.GetJsonGetContainer(resultAll, log);
+                    }
                 case "post":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
                         var brand = (string)model["brand"];
                         var code = (string)model["code"];
                         return await db.Nebulizers.SaveNewNebulizer(brand, code);
                     }, claims);
                 case "put":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
                         var brand = (string)model["brand"];
                         var code = (string)model["code"];
                         return await db.Nebulizers.SaveEditNebulizer(id, brand, code);
                     }, claims);
             }
-            return ContainerMethods.GetJsonGetContainer(result, log);
+            return new BadRequestResult();
         }
         #endregion
 
         #region v2/tractors
         [FunctionName("Tractors")]
-        public static async Task<IActionResult> Tractors([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/tractors/{id?}")] HttpRequest req, ILogger log, string id){
+        public static async Task<IActionResult> Tractors([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/tractors/{id?}")] HttpRequest req, string id, ILogger log){
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
             var manager = await ContainerMethods.AgroManager(claims);
-            ExtGetContainer<List<Tractor>> result = null;
-            switch (req.Method.ToLower())
-            {
+            switch (req.Method.ToLower()) {
                 case "get":
-                    result = await manager.Tractors.GetTractors();
-                    break;
+                    if (!string.IsNullOrWhiteSpace(id)) {
+                        var result = await manager.Tractors.GetTractor(id);
+                        return ContainerMethods.GetJsonGetContainer(result, log);
+                    }
+                    else {
+                        var resultAll = await manager.Tractors.GetTractors();
+                        return ContainerMethods.GetJsonGetContainer(resultAll, log);
+                    }
                 case "post":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
                         var brand = (string)model["brand"];
                         var code = (string)model["code"];
                         return await db.Tractors.SaveNewTractor(brand, code);
                     }, claims);
                 case "put":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
                         var brand = (string)model["brand"];
                         var code = (string)model["code"];
                         return await db.Tractors.SaveEditTractor(id, brand, code);
                     }, claims);
             }
-            return ContainerMethods.GetJsonGetContainer(result, log);
+            return new BadRequestResult();
         }
         #endregion
 
         #region v2/executions
         [FunctionName("Executions")]
-        public static async Task<IActionResult> Executions([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/executions/{id?}/{totalByPage?}/{desc?}")] HttpRequest req, string id, int? totalByPage, string desc, ILogger log) {
+        public static async Task<IActionResult> Executions([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/executions/{idExecution?}/{abbSpecie?}/{status?}/{textToSearch?}/{asc?}/{totalByPage?}/{page?}")] HttpRequest req, string idExecution, string abbSpecie, string status, string textToSearch, string asc, int? totalByPage, int? page, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
@@ -989,9 +1082,8 @@ namespace trifenix.agro.functions {
             ExtGetContainer<ExecutionOrder> result = null;
             switch (req.Method.ToLower()) {
                 case "get":
-                    if (!string.IsNullOrWhiteSpace(id)) {
-                        if (int.TryParse(id, out var resultInt)) break;
-                        result = await manager.ExecutionOrders.GetExecutionOrder(id);
+                    if (!string.IsNullOrWhiteSpace(idExecution) && !idExecution.ToLower().Equals("all")) {
+                        result = await manager.ExecutionOrders.GetExecutionOrder(idExecution);
                         return ContainerMethods.GetJsonGetContainer(result, log);
                     }
                     break;
@@ -1016,39 +1108,33 @@ namespace trifenix.agro.functions {
                         double[] quantityByHectare = JsonConvert.DeserializeObject<double[]>(((object)model["quantityByHectare"]).ToString());
                         string idTractor = (string)model["idTractor"];
                         string executionName = (string)model["executionName"];
-                        return await db.ExecutionOrders.SaveEditExecutionOrder(id, executionName, idOrder, idUserApplicator, idNebulizer, idProduct, quantityByHectare, idTractor);
+                        return await db.ExecutionOrders.SaveEditExecutionOrder(idExecution, idOrder, executionName, idUserApplicator, idNebulizer, idProduct, quantityByHectare, idTractor);
                     }, claims);
             }
-            if (!string.IsNullOrWhiteSpace(id) && totalByPage.HasValue) {
-                var isPage = int.TryParse(id, out var page);
-                if (!isPage) return new BadRequestResult();
-                var orderDate = string.IsNullOrWhiteSpace(desc) || desc.ToLower().Equals("desc");
-                if (!orderDate && !desc.ToLower().Equals("asc"))
-                    return new BadRequestResult();
-                var resultGetByPageAll = await manager.ExecutionOrders.GetExecutionOrdersByPage(page, totalByPage ?? 10, orderDate);
-                return ContainerMethods.GetJsonGetContainer(resultGetByPageAll, log);
+            if (!string.IsNullOrWhiteSpace(textToSearch) && textToSearch.Equals("*"))
+                textToSearch = null;
+            if (!string.IsNullOrWhiteSpace(abbSpecie) && abbSpecie.ToLower().Equals("all"))
+                abbSpecie = null;
+            else abbSpecie = abbSpecie.ToUpper();
+            int? statusToFilter = null;
+            if (!string.IsNullOrWhiteSpace(status) && !status.ToLower().Equals("all")) {
+                if (int.TryParse(status, out int outResult)) statusToFilter = outResult;
+                else return new BadRequestResult();
             }
-            ExtGetContainer<List<ExecutionOrder>> resultGetAll = await manager.ExecutionOrders.GetExecutionOrders();
-            return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
-        }
-        #endregion
-
-        #region v2/executionsByStatus
-        [FunctionName("ExecutionByStatus")]
-        public static async Task<IActionResult> ExecutionByStatus([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/executions/getByStatus/{status}")] HttpRequest req, int status, ILogger log) {
-            ClaimsPrincipal claims = await Auth.Validate(req);
-            if (claims == null)
-                return new UnauthorizedResult();
-            var manager = await ContainerMethods.AgroManager(claims);
-            ExtGetContainer<List<ExecutionOrder>> resultGetByStatus = await manager.ExecutionOrders.GetExecutionOrders();
-            resultGetByStatus.Result = resultGetByStatus.Result.Where(execution => execution.ExecutionStatus == (ExecutionStatus)status).ToList();
-            return ContainerMethods.GetJsonGetContainer(resultGetByStatus, log);
+            bool? order = null;
+            if (!string.IsNullOrWhiteSpace(asc) && !asc.ToLower().Equals("not_order")) {
+                if (asc.ToLower().Equals("asc")) order = true;
+                else if (asc.ToLower().Equals("desc")) order = false;
+                else return new BadRequestResult();
+            }
+            var resultGetByPageAll = manager.ExecutionOrders.GetPaginatedExecutions(textToSearch, abbSpecie, statusToFilter, page, totalByPage, order);
+            return ContainerMethods.GetJsonGetContainer(resultGetByPageAll, log);
         }
         #endregion
 
         #region v2/Executions_ChangeStatus
         [FunctionName("Execution_ChangeStatus")]
-        public static async Task<IActionResult> Execution_ChangeStatus([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "v2/executions/changeStatus/{idExecution}")] HttpRequest req, string idExecution, ILogger log) {
+        public static async Task<IActionResult> Execution_ChangeStatus([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "v2/execution/changeStatus/{idExecution}")] HttpRequest req, string idExecution, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
@@ -1064,14 +1150,13 @@ namespace trifenix.agro.functions {
 
         #region v2/executionsAddCommentary
         [FunctionName("ExecutionsAddCommentary")]
-        public static async Task<IActionResult> ExecutionsAddCommentary([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "v2/executions/add_commentary/{id}")] HttpRequest req, string id, ILogger log) {
+        public static async Task<IActionResult> ExecutionsAddCommentary([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "v2/execution/add_commentary/{idExecution}")] HttpRequest req, string idExecution, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
-            var manager = await ContainerMethods.AgroManager(claims);
             return await ContainerMethods.ApiPostOperations<ExecutionOrder>(req.Body, log, async (db, model) => {
                 string commentary = (string)model["commentary"];
-                return await db.ExecutionOrders.AddCommentaryToExecutionOrder(id, commentary);
+                return await db.ExecutionOrders.AddCommentaryToExecutionOrder(idExecution, commentary);
             }, claims);
         }
         #endregion

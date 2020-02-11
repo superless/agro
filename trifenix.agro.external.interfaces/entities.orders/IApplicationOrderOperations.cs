@@ -5,10 +5,8 @@ using trifenix.agro.model.external.Input;
 using trifenix.agro.model.external.output;
 using trifenix.agro.search.model;
 
-namespace trifenix.agro.external.interfaces.entities.orders
-{
-    public interface IApplicationOrderOperations
-    {
+namespace trifenix.agro.external.interfaces.entities.orders {
+    public interface IApplicationOrderOperations {
 
         Task<ExtPostContainer<string>> SaveNewApplicationOrder(ApplicationOrderInput input);
 
@@ -18,11 +16,11 @@ namespace trifenix.agro.external.interfaces.entities.orders
 
         Task<ExtGetContainer<List<OutPutApplicationOrder>>> GetApplicationOrders();
 
-        Task<ExtGetContainer<SearchResult<OutPutApplicationOrder>>> GetApplicationOrdersByPage(int page, int quantity, bool orderByDesc);
+        ExtGetContainer<EntitiesSearchContainer> GetIndexElements(string textToSearch, string abbSpecie, bool? type, int? page, int? quantity, bool? desc);
 
-        Task<ExtGetContainer<SearchResult<OutPutApplicationOrder>>> GetApplicationOrdersByPage(string textToSearch, int page, int quantity, bool desc);
+        ExtGetContainer<SearchResult<OutPutApplicationOrder>> GetPaginatedOrders(string textToSearch, string abbSpecie, bool? type, int? page, int? quantity, bool? desc);
 
-        ExtGetContainer<EntitiesSearchContainer> GetIndexElements(string textToSearch, int page, int quantity, bool desc);
+        //void UpdateOrder(List<string> ids, AgroRepository db);
 
     }
 }

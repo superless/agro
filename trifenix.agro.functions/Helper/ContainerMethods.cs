@@ -11,7 +11,7 @@ using trifenix.agro.external.operations;
 using trifenix.agro.functions.settings;
 using trifenix.agro.microsoftgraph.operations;
 using trifenix.agro.model.external;
-using trifenix.agro.search;
+using trifenix.agro.search.operations;
 using trifenix.agro.storage.operations;
 using trifenix.agro.weather.operations;
 

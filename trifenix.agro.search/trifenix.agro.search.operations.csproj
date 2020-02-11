@@ -5,8 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\trifenix.agro.db.applicationsReference\trifenix.agro.db.applicationsReference.csproj" />
-    <ProjectReference Include="..\trifenix.agro.model.external\trifenix.agro.model.external.csproj" />
+    <PackageReference Include="Microsoft.Azure.Search" Version="10.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\trifenix.agro.agrosearch.interfaces\trifenix.agro.search.interfaces.csproj" />
     <ProjectReference Include="..\trifenix.agro.search.model\trifenix.agro.search.model.csproj" />
   </ItemGroup>
 

@@ -4,34 +4,27 @@ using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.orders;
 using trifenix.agro.db.model.agro.orders;
 
-namespace trifenix.agro.db.applicationsReference.agro.orders
-{
-    public class ExecutionOrderRepository : IExecutionOrderRepository
-    {
+namespace trifenix.agro.db.applicationsReference.agro.orders {
+    public class ExecutionOrderRepository : IExecutionOrderRepository {
 
         private readonly IMainDb<ExecutionOrder> _db;
-        public ExecutionOrderRepository(IMainDb<ExecutionOrder> db) 
-        {
+        public ExecutionOrderRepository(IMainDb<ExecutionOrder> db) {
             _db = db;
         }
 
-        public async Task<string> CreateUpdateExecutionOrder(ExecutionOrder executionOrder)
-        {
+        public async Task<string> CreateUpdateExecutionOrder(ExecutionOrder executionOrder) {
             return await _db.CreateUpdate(executionOrder);
         }
 
-        public async Task<ExecutionOrder> GetExecutionOrder(string id)
-        {
+        public async Task<ExecutionOrder> GetExecutionOrder(string id) {
             return await _db.GetEntity(id);
         }
 
-        public IQueryable<ExecutionOrder> GetExecutionOrders()
-        {
+        public IQueryable<ExecutionOrder> GetExecutionOrders() {
             return _db.GetEntities();
         }
 
-        public async Task<long> Total(string season)
-        {
+        public async Task<long> Total(string season) {
             return await _db.Store.QuerySingleAsync<long>($"SELECT value count(1) FROM c where c.SeasonId = '{season}'");
         }
     }

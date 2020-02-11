@@ -114,29 +114,33 @@ namespace trifenix.agro.external.operations.entities.events {
         /// <param name="base64">string de la imagen subida</param>
         /// <param name="description">descripción del evento notificado</param>
         /// <returns>contenedor con el identificador de la notificación</returns>
-        public async Task<ExtPostContainer<string>> SaveNewNotificationEvent(string idBarrack, string idPhenologicalEvent, string base64, string description, float lat, float lon) {
-            if (string.IsNullOrWhiteSpace(idBarrack) || string.IsNullOrWhiteSpace(idPhenologicalEvent) || string.IsNullOrWhiteSpace(base64))
-                return OperationHelper.PostNotFoundElementException<string>($"identificador de barrack o de evento fenologico o la imagen son nulos", idPhenologicalEvent);
+        public async Task<ExtPostContainer<string>> SaveNewNotificationEvent(string idPhenologicalEvent, int eventType, string idBarrack, string base64, string description, float lat, float lon) {
+            if (string.IsNullOrWhiteSpace(idPhenologicalEvent) && eventType == 0) return OperationHelper.GetPostException<string>(new Exception("Es requerido 'idPhenologicalEvent'"));
+            if (string.IsNullOrWhiteSpace(idBarrack)) return OperationHelper.GetPostException<string>(new Exception("Es requerido 'idBarrack'"));
+            if (string.IsNullOrWhiteSpace(base64)) return OperationHelper.GetPostException<string>(new Exception("Es requerido 'base64'"));
+            
             try {
-                var localBarrack = await _barrackRepository.GetBarrack(idBarrack);
-                if (localBarrack == null)
-                    return OperationHelper.PostNotFoundElementException<string>($"no se encontró cuartel con id {idBarrack}", idBarrack);
-                var localPhenological = await _phenologicalRepository.GetPhenologicalEvent(idPhenologicalEvent);
-                if (localPhenological == null)
-                    return OperationHelper.PostNotFoundElementException<string>($"no se encontró evento fenológico con id {idPhenologicalEvent}", idPhenologicalEvent);
-                string imgPath = string.Empty;
-                if (_uploadImage != null)
-                    imgPath = await _uploadImage.UploadImageBase64(base64);
+                PhenologicalEvent phenologicalEvent = null;
+                if(eventType == 0) {
+                    phenologicalEvent = await _phenologicalRepository.GetPhenologicalEvent(idPhenologicalEvent);
+                    if(phenologicalEvent == null)
+                        return OperationHelper.PostNotFoundElementException<string>($"No se encontró evento fenológico con id {idPhenologicalEvent}", idPhenologicalEvent);
+                }
+                Barrack barrack = await _barrackRepository.GetBarrack(idBarrack);
+                if (barrack == null)
+                    return OperationHelper.PostNotFoundElementException<string>($"No se encontró cuartel con id {idBarrack}", idBarrack);
+                string imgPath = await _uploadImage.UploadImageBase64(base64);
                 var creator = await _graphApi.GetUserFromToken();
                 var userActivity = new UserActivity(DateTime.Now, creator);
                 //var weather = await _weatherApi.GetWeather(lat, lon);
                 return await OperationHelper.CreateElement(_commonDb, _repo.GetNotificationEvents(),
                    async s => await _repo.CreateUpdateNotificationEvent(new NotificationEvent {
                        Id = s,
-                       Barrack = localBarrack,
+                       Barrack = barrack,
                        Created = DateTime.Now,
                        Description = description,
-                       PhenologicalEvent = localPhenological,
+                       PhenologicalEvent = phenologicalEvent,
+                       eventType = eventType,
                        PicturePath = imgPath,
                        Creator = userActivity,
                        //Weather = weather

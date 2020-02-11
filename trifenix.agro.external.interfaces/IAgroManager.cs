@@ -1,13 +1,14 @@
-﻿using trifenix.agro.external.interfaces.entities.events;
+﻿using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model.agro.orders;
+using trifenix.agro.external.interfaces.entities.events;
 using trifenix.agro.external.interfaces.entities.ext;
 using trifenix.agro.external.interfaces.entities.fields;
 using trifenix.agro.external.interfaces.entities.main;
 using trifenix.agro.external.interfaces.entities.orders;
 
-namespace trifenix.agro.external.interfaces
-{
-    public interface IAgroManager
-    {
+namespace trifenix.agro.external.interfaces {
+    public interface IAgroManager {
+        string IdSeason { get; }
         IPhenologicalOperations PhenologicalEvents { get; }
 
         IApplicationTargetOperations ApplicationTargets { get; }
@@ -38,7 +39,7 @@ namespace trifenix.agro.external.interfaces
 
         IPlotLandOperations PlotLands { get; }
 
-        IBarrackOperations Barracks { get; }
+        IBarrackOperations<Barrack> Barracks { get; }
 
         IPhenologicalPreOrderOperations PhenologicalPreOrders { get; }
 
@@ -46,7 +47,7 @@ namespace trifenix.agro.external.interfaces
 
         IVarietyOperations Varieties { get; }
 
-        IProductOperations Products { get; }
+        IProductOperations<Product> Products { get; }
 
         ICertifiedEntityOperations CertifiedEntities { get; }
 
@@ -54,7 +55,7 @@ namespace trifenix.agro.external.interfaces
 
         IApplicationOrderOperations ApplicationOrders { get; }
 
-        IExecutionOrderOperations ExecutionOrders { get; }
+        IExecutionOrderOperations<ExecutionOrder> ExecutionOrders { get; }
 
     }
 }
