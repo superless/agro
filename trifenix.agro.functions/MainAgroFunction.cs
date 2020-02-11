@@ -557,6 +557,29 @@ namespace trifenix.agro.functions {
             return new BadRequestResult();
         }
 
+
+
+        [FunctionName("searchProducts")]
+        public static async Task<IActionResult> SearchProducts([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/search/products")] HttpRequest req, ILogger log)
+        {
+            ClaimsPrincipal claims = await Auth.Validate(req);
+            if (claims == null)
+                return new UnauthorizedResult();
+
+
+            var manager = await ContainerMethods.AgroManager(claims);
+
+            var products = manager.Products.GetIndexElements("", null, null, null);
+
+
+            return ContainerMethods.GetJsonGetContainer(new ExtGetContainer<List<Element>> { 
+                StatusResult = ExtGetDataResult.Success,
+                Result = products.Result.Entities.Select(s => new Element { Id = s.Id, Name = s.Name, Created = s.Created }).ToList()
+            }, log);
+
+        }
+
+
         [FunctionName("IndexElementsFilter")]
         public static async Task<IActionResult> IndexElementsFilter([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/{entityName}/indexElements/{abbSpecie?}/{type?}/{status?}/{textToSearch?}/{asc?}/{totalByPage?}/{page?}")] HttpRequest req, string entityName, string abbSpecie, string type, string status, string textToSearch, string asc, int? totalByPage, int? page, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
