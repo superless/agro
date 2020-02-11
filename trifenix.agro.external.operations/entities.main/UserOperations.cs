@@ -8,6 +8,7 @@ using trifenix.agro.external.interfaces.entities.main;
 using trifenix.agro.external.operations.helper;
 using trifenix.agro.microsoftgraph.interfaces;
 using trifenix.agro.model.external;
+using trifenix.userActivity.interfaces.model;
 
 namespace trifenix.agro.external.operations.entities.main
 {
@@ -53,7 +54,7 @@ namespace trifenix.agro.external.operations.entities.main
             Job job = await _repoJob.GetJob(idJob);
             if (job == null)
                 return OperationHelper.PostNotFoundElementException<UserApplicator>($"No se encontró el cargo con id {idJob}", idJob);
-            List<Role> roles = new List<Role>();
+            List<IRole> roles = new List<IRole>();
             Role role;
             foreach (string idRole in idsRoles)
             {
@@ -101,7 +102,7 @@ namespace trifenix.agro.external.operations.entities.main
             Job job = await _repoJob.GetJob(idJob);
             if (job == null)
                 return OperationHelper.PostNotFoundElementException<string>($"No se encontró el cargo con id {idJob}", idJob);
-            List<Role> roles = new List<Role>();
+            List<IRole> roles = new List<IRole>();
             Role role;
             foreach (string idRole in idsRoles)
             {
