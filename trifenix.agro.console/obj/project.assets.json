@@ -3283,7 +3283,8 @@
         "dependencies": {
           "Cosmonaut": "2.11.3",
           "trifenix.agro.db": "1.0.0",
-          "trifenix.agro.weather.model": "1.0.0"
+          "trifenix.agro.weather.model": "1.0.0",
+          "trifenix.userActivity.interfaces": "1.0.0"
         },
         "compile": {
           "bin/placeholder/trifenix.agro.db.model.dll": {}
@@ -3588,6 +3589,16 @@
         },
         "runtime": {
           "bin/placeholder/trifenix.agro.weather.operations.dll": {}
+        }
+      },
+      "trifenix.userActivity.interfaces/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "compile": {
+          "bin/placeholder/trifenix.userActivity.interfaces.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/trifenix.userActivity.interfaces.dll": {}
         }
       },
       "trifenix.util.exceptions/1.0.0": {
@@ -10345,6 +10356,11 @@
       "type": "project",
       "path": "../trifenix.agro.weather.operations/trifenix.agro.weather.operations.csproj",
       "msbuildProject": "../trifenix.agro.weather.operations/trifenix.agro.weather.operations.csproj"
+    },
+    "trifenix.userActivity.interfaces/1.0.0": {
+      "type": "project",
+      "path": "../trifenix.userActivity.interfaces/trifenix.userActivity.interfaces.csproj",
+      "msbuildProject": "../trifenix.userActivity.interfaces/trifenix.userActivity.interfaces.csproj"
     },
     "trifenix.util.exceptions/1.0.0": {
       "type": "project",
