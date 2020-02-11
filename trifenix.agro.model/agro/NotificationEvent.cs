@@ -1,6 +1,7 @@
 ﻿using Cosmonaut;
 using Cosmonaut.Attributes;
 using System;
+using trifenix.agro.db.model.agro.enums;
 using trifenix.agro.db.model.agro.local;
 using trifenix.agro.weather.model;
 
@@ -31,7 +32,7 @@ namespace trifenix.agro.db.model.agro
         /// </summary>
         public PhenologicalEvent PhenologicalEvent { get; set; }
 
-        public int eventType { get; set; }
+        public NotificationType NotificationType { get; set; }
 
         public UserActivity Creator { get; set; }
 

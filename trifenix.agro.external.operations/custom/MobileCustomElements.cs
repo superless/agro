@@ -107,7 +107,7 @@ namespace trifenix.agro.external.operations.custom {
         }
 
         private IEnumerable<OutPutNotificationPreOrder> GetNotificationPreOrders(List<NotificationEvent> notifications) {
-            return notifications.Select(async s => {
+            return notifications.Where(notification => notification.NotificationType == 0).Select(async s => {
                 var preOrders = await GetOutPutPhenologicalPreOrders(s.PhenologicalEvent.Id, s.Barrack.Id);
                 return new OutPutNotificationPreOrder {
                     Id = s.Id,

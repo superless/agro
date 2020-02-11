@@ -533,7 +533,7 @@ namespace trifenix.agro.functions {
                     Email email = new Email(manager.Users.GetUsers().Result.Result);
                     return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
                         var idPhenologicalEvent = (string)model["idPhenologicalEvent"];
-                        var eventType = (int)model["eventType"];
+                        var eventType = (NotificationType)model["eventType"];
                         var barrack = (string)model["idBarrack"];
                         var base64 = (string)model["base64"];
                         var description = (string)model["description"];
