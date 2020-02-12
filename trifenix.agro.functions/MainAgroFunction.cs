@@ -1227,14 +1227,14 @@ namespace trifenix.agro.functions {
                 case "post":
                     return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
                         var name = (string)model["name"];
-                        var idRazonSocial = (string)model["idRazonSocial"];
-                        return await db.CostCenters.SaveNewCostCenter(name, idRazonSocial);
+                        var idReason = (string)model["idReason"];
+                        return await db.CostCenters.SaveNewCostCenter(name, idReason);
                     }, claims);
                 case "put":
                     return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
                         var name = (string)model["name"];
-                        var idRazonSocial = (string)model["idRazonSocial"];
-                        return await db.CostCenters.SaveEditCostCenter(id, name, idRazonSocial);
+                        var idReason = (string)model["idReason"];
+                        return await db.CostCenters.SaveEditCostCenter(id, name, idReason);
                     }, claims);
             }
             return new BadRequestResult();
