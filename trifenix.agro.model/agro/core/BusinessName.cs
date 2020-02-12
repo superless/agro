@@ -1,6 +1,6 @@
 ﻿using Cosmonaut;
 using Cosmonaut.Attributes;
-using trifenix.userActivity.interfaces.model;
+using trifenix.agro.db.model.agro.local;
 
 namespace trifenix.agro.db.model.agro.core {
 
@@ -14,7 +14,7 @@ namespace trifenix.agro.db.model.agro.core {
         public string WebPage { get; set; }
         public string Giro { get; set; }
         public string Phone { get; set; }
-        public IUserActivity Modify { get; set; }
+        public UserActivity Modify { get; set; }
     }
 
 }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro;
@@ -25,8 +26,13 @@ namespace trifenix.agro.db.applicationsReference.agro {
         }
 
         public async Task<UserApplicator> GetUserFromToken(string objectId) {
-            var user = await _db.Store.QuerySingleAsync($"select * from c where c.ObjectIdAAD = '{objectId}'");
-            return user;
+            try
+            {
+                var user = await _db.Store.QuerySingleAsync($"select * from c where c.ObjectIdAAD = '{objectId}'");
+                return user;
+            } catch(Exception e) {
+                throw e;
+            }
         }
     }
 }
