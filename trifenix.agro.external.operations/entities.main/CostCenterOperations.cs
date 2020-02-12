@@ -24,17 +24,17 @@ namespace trifenix.agro.external.operations.entities.main {
             _commonDb = commonDb;
             _graphApi = graphApi;
         }
-        public async Task<ExtPostContainer<string>> SaveNewCostCenter(string name, string idRazonSocial) {
-            BusinessName businessName = await _repoBusinessName.GetBusinessName(idRazonSocial);
+        public async Task<ExtPostContainer<string>> SaveNewCostCenter(string name, string idReason) {
+            BusinessName businessName = await _repoBusinessName.GetBusinessName(idReason);
             if (businessName == null)
-                return OperationHelper.PostNotFoundElementException<string>($"No se encontró la razon social con id {idRazonSocial}", idRazonSocial);
+                return OperationHelper.PostNotFoundElementException<string>($"No se encontró la razon social con id {idReason}", idReason);
             UserApplicator modifier = await _graphApi.GetUserFromToken();
             UserActivity userActivity = new UserActivity(DateTime.Now, modifier); 
             return await OperationHelper.CreateElement(_commonDb, _repo.GetCostCenters(),
                 async s => await _repo.CreateUpdateCostCenter(new CostCenter {
                     Id = s,
                     Name = name,
-                    IdReason = idRazonSocial,
+                    IdReason = idReason,
                     Modify = userActivity
                 }),
                 s => s.Name.Equals(name),
@@ -42,13 +42,13 @@ namespace trifenix.agro.external.operations.entities.main {
             );
         }
 
-        public async Task<ExtPostContainer<CostCenter>> SaveEditCostCenter(string idCostCenter, string name, string idRazonSocial) {
+        public async Task<ExtPostContainer<CostCenter>> SaveEditCostCenter(string idCostCenter, string name, string idReason) {
             CostCenter costCenter = await _repo.GetCostCenter(idCostCenter);
             if (costCenter == null)
                 return OperationHelper.PostNotFoundElementException<CostCenter>($"No se encontró el centro de costo con id {idCostCenter}", idCostCenter);
-            BusinessName businessName = await _repoBusinessName.GetBusinessName(idRazonSocial);
+            BusinessName businessName = await _repoBusinessName.GetBusinessName(idReason);
             if (businessName == null)
-                return OperationHelper.PostNotFoundElementException<CostCenter>($"No se encontró la razon social con id {idRazonSocial}", idRazonSocial);
+                return OperationHelper.PostNotFoundElementException<CostCenter>($"No se encontró la razon social con id {idReason}", idReason);
             UserApplicator modifier = await _graphApi.GetUserFromToken();
             UserActivity userActivity = new UserActivity(DateTime.Now, modifier);
             return await OperationHelper.EditElement(_commonDb, _repo.GetCostCenters(),
@@ -56,7 +56,7 @@ namespace trifenix.agro.external.operations.entities.main {
                 costCenter,
                 s => {
                     s.Name = name;
-                    s.IdReason = idRazonSocial;
+                    s.IdReason = idReason;
                     s.Modify = userActivity;
                     return s;
                 },
