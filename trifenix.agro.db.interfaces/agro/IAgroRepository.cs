@@ -57,5 +57,9 @@ namespace trifenix.agro.db.interfaces.agro
 
         IExecutionOrderRepository ExecutionOrders { get; }
 
+        IBusinessNameRepository BusinessNames { get; }
+
+        ICostCenterRepository CostCenters { get; }
+
     }
 }

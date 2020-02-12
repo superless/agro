@@ -1,5 +1,6 @@
 ﻿using trifenix.agro.db.model.agro;
 using trifenix.agro.db.model.agro.orders;
+using trifenix.agro.external.interfaces.entities.core;
 using trifenix.agro.external.interfaces.entities.events;
 using trifenix.agro.external.interfaces.entities.ext;
 using trifenix.agro.external.interfaces.entities.fields;
@@ -56,6 +57,10 @@ namespace trifenix.agro.external.interfaces {
         IApplicationOrderOperations ApplicationOrders { get; }
 
         IExecutionOrderOperations<ExecutionOrder> ExecutionOrders { get; }
+
+         IBusinessNameOperations BusinessNames { get; }
+
+        ICostCenterOperations CostCenters { get; }
 
     }
 }

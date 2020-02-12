@@ -8,10 +8,8 @@ using trifenix.agro.external.interfaces.entities.main;
 using trifenix.agro.external.operations.helper;
 using trifenix.agro.model.external;
 
-namespace trifenix.agro.external.operations.entities.main
-{
-    public class RoleOperations : IRoleOperations
-    {
+namespace trifenix.agro.external.operations.entities.main {
+    public class RoleOperations : IRoleOperations {
         private readonly IRoleRepository _repo;
         private readonly ICommonDbOperations<Role> _commonDb;
         public RoleOperations(IRoleRepository repo, ICommonDbOperations<Role> commonDb)
@@ -19,6 +17,12 @@ namespace trifenix.agro.external.operations.entities.main
             _repo = repo;
             _commonDb = commonDb;
         }
+
+        public async Task<ExtGetContainer<Role>> GetRole(string id) {
+            var role = await _repo.GetRole(id);
+            return OperationHelper.GetElement(role);
+        }
+
         public async Task<ExtGetContainer<List<Role>>> GetRoles()
         {
             var queryTargets = _repo.GetRoles();

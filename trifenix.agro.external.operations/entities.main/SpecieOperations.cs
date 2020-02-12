@@ -47,7 +47,7 @@ namespace trifenix.agro.external.operations.entities.main {
                 },
                 _repo.CreateUpdateSpecie,
                  $"No existe especie con id : {idSpecie}",
-                s => (s.Name.Equals(name) && specie.Name != name) || (s.Abbreviation.Equals(abbreviation) && specie.Abbreviation != abbreviation),
+                s => (s.Name.Equals(name) && !specie.Name.Equals(name)) || (s.Abbreviation.Equals(abbreviation) && !specie.Abbreviation.Equals(abbreviation)),
                 $"Ya existe especie con nombre: {name} o abreviación: {abbreviation}. Ambos campos deben ser unicos."
             );
         }
