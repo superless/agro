@@ -1,6 +1,6 @@
 ﻿using Cosmonaut;
 using Cosmonaut.Attributes;
-using trifenix.userActivity.interfaces.model;
+using trifenix.agro.db.model.agro.local;
 
 namespace trifenix.agro.db.model.agro.core {
 
@@ -9,8 +9,8 @@ namespace trifenix.agro.db.model.agro.core {
 
         public override string Id { get; set; }
         public string Name { get; set; }
-        public string IdRazonSocial { get; set; }
-        public IUserActivity Modify { get; set; }
+        public string IdReason { get; set; }
+        public UserActivity Modify { get; set; }
 
     }
 }

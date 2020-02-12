@@ -34,7 +34,7 @@ namespace trifenix.agro.external.operations.entities.main {
                 async s => await _repo.CreateUpdateCostCenter(new CostCenter {
                     Id = s,
                     Name = name,
-                    IdRazonSocial = idRazonSocial,
+                    IdReason = idRazonSocial,
                     Modify = userActivity
                 }),
                 s => s.Name.Equals(name),
@@ -56,7 +56,7 @@ namespace trifenix.agro.external.operations.entities.main {
                 costCenter,
                 s => {
                     s.Name = name;
-                    s.IdRazonSocial = idRazonSocial;
+                    s.IdReason = idRazonSocial;
                     s.Modify = userActivity;
                     return s;
                 },
