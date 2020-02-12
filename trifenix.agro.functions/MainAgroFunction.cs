@@ -1191,7 +1191,7 @@ namespace trifenix.agro.functions {
 
         #region v2/businessName
         [FunctionName("BusinessName")]
-        public static async Task<IActionResult> BusinessName([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/businessName/{id?}")] HttpRequest req, string id, ILogger log) {
+        public static async Task<IActionResult> BusinessName([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/businessNames/{id?}")] HttpRequest req, string id, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
@@ -1232,28 +1232,35 @@ namespace trifenix.agro.functions {
         #endregion
         #region v2/costCenter
         [FunctionName("CostCenter")]
-        public static async Task<IActionResult> CostCenter([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/costCenter/{id?}")] HttpRequest req, string id, ILogger log) {
+        public static async Task<IActionResult> CostCenter([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/costCenters/{id?}")] HttpRequest req, string id, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
             var manager = await ContainerMethods.AgroManager(claims);
-            ExtGetContainer<List<Role>> result = null;
             switch (req.Method.ToLower()) {
                 case "get":
-                    result = await manager.Roles.GetRoles();
-                    break;
+                    if (!string.IsNullOrWhiteSpace(id)) {
+                        var result = await manager.CostCenters.GetCostCenter(id);
+                        return ContainerMethods.GetJsonGetContainer(result, log);
+                    }
+                    else {
+                        var resultAll = await manager.CostCenters.GetCostCenters();
+                        return ContainerMethods.GetJsonGetContainer(resultAll, log);
+                    }
                 case "post":
                     return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
                         var name = (string)model["name"];
-                        return await db.Roles.SaveNewRole(name);
+                        var idRazonSocial = (string)model["idRazonSocial"];
+                        return await db.CostCenters.SaveNewCostCenter(name, idRazonSocial);
                     }, claims);
                 case "put":
                     return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
                         var name = (string)model["name"];
-                        return await db.Roles.SaveEditRole(id, name);
+                        var idRazonSocial = (string)model["idRazonSocial"];
+                        return await db.CostCenters.SaveEditCostCenter(id, name, idRazonSocial);
                     }, claims);
             }
-            return ContainerMethods.GetJsonGetContainer(result, log);
+            return new BadRequestResult();
         }
         #endregion
 

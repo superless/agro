@@ -49,8 +49,7 @@ namespace trifenix.agro.external.operations.entities.main {
                     s.Email = email;
                     s.WebPage = webPage;
                     s.Giro = giro;
-                    s.ModifiedAt = userActivity.Date;
-                    s.LastModifier = userActivity.User;
+                    s.Modify = userActivity;
                     return s;
                 },
                 _repo.CreateUpdateBusinessName,
@@ -73,8 +72,7 @@ namespace trifenix.agro.external.operations.entities.main {
                     Email = email,
                     WebPage = webPage,
                     Giro = giro,
-                    ModifiedAt = userActivity.Date,
-                    LastModifier = userActivity.User
+                    Modify = userActivity
                 }),
                 s => s.Name.Equals(name) || s.Rut.Equals(rut),
                 $"Ya existe rol social con nombre: {name} o rut: {rut}. Ambos campos deben ser unicos."
