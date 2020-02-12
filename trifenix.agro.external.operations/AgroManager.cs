@@ -131,6 +131,6 @@ namespace trifenix.agro.external.operations {
 
         public IBusinessNameOperations BusinessNames => new BusinessNameOperations(_repository.BusinessNames, new CommonDbOperations<BusinessName>(), _graphApi);
 
-        public ICostCenterOperations CostCenters => new CostCenterOperations(_repository.CostCenters, new CommonDbOperations<CostCenter>());
+        public ICostCenterOperations CostCenters => new CostCenterOperations(_repository.CostCenters, _repository.BusinessNames, new CommonDbOperations<CostCenter>(), _graphApi);
     }
 }
