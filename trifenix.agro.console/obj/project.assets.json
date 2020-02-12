@@ -10383,19 +10383,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\aleja\\.nuget\\packages\\": {}
+    "C:\\Users\\Trifenix\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.console\\trifenix.agro.console.csproj",
+      "projectUniqueName": "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.console\\trifenix.agro.console.csproj",
       "projectName": "trifenix.agro.console",
-      "projectPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.console\\trifenix.agro.console.csproj",
-      "packagesPath": "C:\\Users\\aleja\\.nuget\\packages\\",
-      "outputPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.console\\obj\\",
+      "projectPath": "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.console\\trifenix.agro.console.csproj",
+      "packagesPath": "C:\\Users\\Trifenix\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.console\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\aleja\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Trifenix\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -10408,17 +10408,17 @@
       "frameworks": {
         "netcoreapp2.2": {
           "projectReferences": {
-            "D:\\aresa\\developments\\cloud.app\\trifenix.agro.common.tests.fakes\\trifenix.agro.common.tests.fakes.csproj": {
-              "projectPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.common.tests.fakes\\trifenix.agro.common.tests.fakes.csproj"
+            "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.common.tests.fakes\\trifenix.agro.common.tests.fakes.csproj": {
+              "projectPath": "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.common.tests.fakes\\trifenix.agro.common.tests.fakes.csproj"
             },
-            "D:\\aresa\\developments\\cloud.app\\trifenix.agro.db.applicationsReference\\trifenix.agro.db.applicationsReference.csproj": {
-              "projectPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.db.applicationsReference\\trifenix.agro.db.applicationsReference.csproj"
+            "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.db.applicationsReference\\trifenix.agro.db.applicationsReference.csproj": {
+              "projectPath": "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.db.applicationsReference\\trifenix.agro.db.applicationsReference.csproj"
             },
-            "D:\\aresa\\developments\\cloud.app\\trifenix.agro.functions\\trifenix.agro.functions.csproj": {
-              "projectPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.functions\\trifenix.agro.functions.csproj"
+            "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.functions\\trifenix.agro.functions.csproj": {
+              "projectPath": "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.functions\\trifenix.agro.functions.csproj"
             },
-            "D:\\aresa\\developments\\cloud.app\\trifenix.agro.search\\trifenix.agro.search.operations.csproj": {
-              "projectPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.search\\trifenix.agro.search.operations.csproj"
+            "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.search\\trifenix.agro.search.operations.csproj": {
+              "projectPath": "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.search\\trifenix.agro.search.operations.csproj"
             }
           }
         }
@@ -10449,7 +10449,7 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
       }
     }
   },

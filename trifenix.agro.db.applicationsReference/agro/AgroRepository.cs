@@ -8,6 +8,7 @@ using trifenix.agro.db.interfaces.agro.ext;
 using trifenix.agro.db.interfaces.agro.fields;
 using trifenix.agro.db.interfaces.agro.orders;
 using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model.agro.core;
 using trifenix.agro.db.model.agro.orders;
 
 namespace trifenix.agro.db.applicationsReference.agro
@@ -65,6 +66,10 @@ namespace trifenix.agro.db.applicationsReference.agro
         public IApplicationOrderRepository Orders => new ApplicationOrderRepository(new MainDb<ApplicationOrder>(DbArguments));
 
         public IExecutionOrderRepository ExecutionOrders => new ExecutionOrderRepository(new MainDb<ExecutionOrder>(DbArguments));
+
+        public IBusinessNameRepository BusinessNames => new BusinessNameRepository(new MainDb<BusinessName>(DbArguments));
+
+        public ICostCenterRepository CostCenters => new CostCenterRepository(new MainDb<CostCenter>(DbArguments));
 
     }
 }

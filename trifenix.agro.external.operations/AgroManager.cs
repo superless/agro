@@ -1,8 +1,10 @@
 ﻿using trifenix.agro.db.applicationsReference.common;
 using trifenix.agro.db.interfaces.agro;
 using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model.agro.core;
 using trifenix.agro.db.model.agro.orders;
 using trifenix.agro.external.interfaces;
+using trifenix.agro.external.interfaces.entities.core;
 using trifenix.agro.external.interfaces.entities.events;
 using trifenix.agro.external.interfaces.entities.ext;
 using trifenix.agro.external.interfaces.entities.fields;
@@ -126,6 +128,9 @@ namespace trifenix.agro.external.operations {
         public IPhenologicalPreOrderOperations PhenologicalPreOrders => new PhenologicalPreOrdersOperations(_repository.PhenologicalPreOrders, new CommonDbOperations<PhenologicalPreOrder>(), _idSeason, _graphApi);
 
         public IExecutionOrderOperations<ExecutionOrder> ExecutionOrders => new ExecutionOrderOperations<ExecutionOrder>(_repository.ExecutionOrders, _repository.Orders, _repository.Users, _repository.Nebulizers, _repository.Products, _repository.Tractors, new CommonDbOperations<ExecutionOrder>(), _graphApi, _idSeason, _searchServiceInstance);
-    
+
+        public IBusinessNameOperations BusinessNames => new BusinessNameOperations(_repository.BusinessNames, new CommonDbOperations<BusinessName>(), _graphApi);
+
+        public ICostCenterOperations CostCenters => new CostCenterOperations(_repository.CostCenters, new CommonDbOperations<CostCenter>());
     }
 }
