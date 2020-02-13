@@ -212,13 +212,6 @@ namespace trifenix.agro.external.operations.entities.orders {
             }
         }
         
-<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Agro-Dev
-        public async Task<ExtGetContainer<SearchResult<OutPutApplicationOrder>>> GetApplicationOrdersByPage(string textToSearch, int page, int quantity, bool desc) {
-            if (string.IsNullOrWhiteSpace(textToSearch))
-                return await GetApplicationOrdersByPage(page, quantity, desc);
-            EntitiesSearchContainer entitySearch = _searchServiceInstance.GetSearchFilteredByEntityName(entityName, textToSearch, page, quantity, desc);
-            var resultDb = entitySearch.Entities.Select(async s => await GetApplicationOrder(s.Id));
-========================================================================
         public ExtGetContainer<SearchResult<OutPutApplicationOrder>> GetPaginatedOrders(string textToSearch, string abbSpecie, bool? type, int? page, int? quantity, bool? desc) {
             var filters = new Filters { EntityName = entityName, SeasonId = _args.SeasonId };
             if (!string.IsNullOrWhiteSpace(abbSpecie))
@@ -228,18 +221,12 @@ namespace trifenix.agro.external.operations.entities.orders {
             var parameters = new Parameters { Filters = filters, TextToSearch = textToSearch, Page = page, Quantity = quantity, Desc = desc };
             EntitiesSearchContainer entitySearch = _searchServiceInstance.GetPaginatedEntities(parameters);
             var resultDb = entitySearch.Entities.Select(async order => await GetApplicationOrder(order.Id));
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> sprint3
             return OperationHelper.GetElement(new SearchResult<OutPutApplicationOrder> {
                 Total = entitySearch.Total,
                 Elements = resultDb.Select(s=>s.Result.Result).ToArray()
             });
         }
 
-<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Agro-Dev
-        public ExtGetContainer<EntitiesSearchContainer> GetIndexElements(string textToSearch, int page, int quantity, bool desc) {
-            EntitiesSearchContainer entitySearch = _searchServiceInstance.GetSearchFilteredByEntityName(entityName, textToSearch, page, quantity, desc);
-            return OperationHelper.GetElement(entitySearch);
-========================================================================
         public ExtGetContainer<EntitiesSearchContainer> GetIndexElements(string textToSearch, string abbSpecie, bool? type, int? page, int? quantity, bool? desc) {
             var filters = new Filters { EntityName = entityName, SeasonId = _args.SeasonId };
             if (!string.IsNullOrWhiteSpace(abbSpecie))
@@ -249,22 +236,7 @@ namespace trifenix.agro.external.operations.entities.orders {
             var parameters = new Parameters { Filters = filters, TextToSearch = textToSearch, Page = page, Quantity = quantity, Desc = desc };
             EntitiesSearchContainer entitySearchFilteresBySeason = _searchServiceInstance.GetPaginatedEntities(parameters);
             return OperationHelper.GetElement(entitySearchFilteresBySeason);
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> sprint3
         }
-
-        //public void UpdateOrder(List<string> ids, AgroRepository db) {
-        //    ApplicationOrder order = null;
-        //    int i = 0;
-        //    ids.ForEach(id => {
-        //        Console.WriteLine(++i);
-        //        order = _args.ApplicationOrder.GetApplicationOrder(id).Result;
-        //        order.Barracks = order.Barracks.Select(barrackOrderInstance => {
-        //            barrackOrderInstance.Barrack = db.Barracks.GetBarrack(barrackOrderInstance.Barrack.Id).Result;
-        //            return barrackOrderInstance;
-        //        }).ToList();
-        //        _args.ApplicationOrder.CreateUpdate(order);
-        //    });
-        //}
 
     }
 }
