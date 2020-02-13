@@ -4,7 +4,7 @@ using System;
 
 namespace trifenix.agro.db.model.agro {
 
-    [SharedCosmosCollection("agro", "Event")]
+    [SharedCosmosCollection("agro", "PhenologicalEvent")]
     public class PhenologicalEvent : DocumentBase, ISharedCosmosEntity {
 
         public override string Id { get; set; }

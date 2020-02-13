@@ -21,19 +21,20 @@ using trifenix.agro.model.external.output;
 using trifenix.agro.model.external;
 using trifenix.agro.search.model;
 using trifenix.agro.email.operations;
+using trifenix.agro.db.model.agro.core;
 
 namespace trifenix.agro.functions {
     public static class MainAgroFunction {
 
         #region v2/phenological_events
         [FunctionName("PhenologicalEventV2")]
-        public static async Task<IActionResult> PhenologicalEventV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/phenological_events/{id?}")] HttpRequest req, string id,ILogger log){
+        public static async Task<IActionResult> PhenologicalEventV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/phenological_events/{id?}")] HttpRequest req, string id, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
             var manager = await ContainerMethods.AgroManager(claims);
             ExtGetContainer<List<PhenologicalEvent>> result = null;
-            switch (req.Method.ToLower()){
+            switch (req.Method.ToLower()) {
                 case "get":
                     result = await manager.PhenologicalEvents.GetPhenologicalEvents();
                     break;
@@ -60,7 +61,7 @@ namespace trifenix.agro.functions {
 
         #region v2/seasons
         [FunctionName("SeasonV2")]
-        public static async Task<IActionResult> SeasonV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/seasons/{id?}")] HttpRequest req, string id,ILogger log){
+        public static async Task<IActionResult> SeasonV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/seasons/{id?}")] HttpRequest req, string id, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
@@ -91,7 +92,7 @@ namespace trifenix.agro.functions {
 
         #region v2/specie
         [FunctionName("SpecieV2")]
-        public static async Task<IActionResult> SpecieV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/species/{id?}")] HttpRequest req, string id, ILogger log){
+        public static async Task<IActionResult> SpecieV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/species/{id?}")] HttpRequest req, string id, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
@@ -126,7 +127,7 @@ namespace trifenix.agro.functions {
 
         #region v2/rootstock
         [FunctionName("RootstockV2")]
-        public static async Task<IActionResult> RootstockV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/rootstock/{id?}")] HttpRequest req, string id,ILogger log){
+        public static async Task<IActionResult> RootstockV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/rootstock/{id?}")] HttpRequest req, string id, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
@@ -158,13 +159,13 @@ namespace trifenix.agro.functions {
 
         #region v2/certified_entities
         [FunctionName("CertifiedEntity")]
-        public static async Task<IActionResult> CertifiedEntity([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/certified_entities/{id?}")] HttpRequest req, string id,ILogger log){
+        public static async Task<IActionResult> CertifiedEntity([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/certified_entities/{id?}")] HttpRequest req, string id, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
             var manager = await ContainerMethods.AgroManager(claims);
             ExtGetContainer<CertifiedEntity> result = null;
-            switch (req.Method.ToLower()){
+            switch (req.Method.ToLower()) {
                 case "get":
                     if (!string.IsNullOrWhiteSpace(id))
                     {
@@ -194,13 +195,13 @@ namespace trifenix.agro.functions {
 
         #region v2/ingredient_categories
         [FunctionName("CategoryIngredientsV2")]
-        public static async Task<IActionResult> CategoryIngredientsV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/ingredient_categories/{id?}")] HttpRequest req, string id,ILogger log){
+        public static async Task<IActionResult> CategoryIngredientsV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/ingredient_categories/{id?}")] HttpRequest req, string id, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
             var manager = await ContainerMethods.AgroManager(claims);
             ExtGetContainer<List<IngredientCategory>> result = null;
-            switch (req.Method.ToLower()){
+            switch (req.Method.ToLower()) {
                 case "get":
                     result = await manager.IngredientCategories.GetIngredientCategories();
                     break;
@@ -223,7 +224,7 @@ namespace trifenix.agro.functions {
 
         #region v2/ingredients
         [FunctionName("IngredientsV2")]
-        public static async Task<IActionResult> IngredientsV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/ingredients/{id?}")] HttpRequest req, string id,ILogger log){
+        public static async Task<IActionResult> IngredientsV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/ingredients/{id?}")] HttpRequest req, string id, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
@@ -255,7 +256,7 @@ namespace trifenix.agro.functions {
 
         #region v2/targets
         [FunctionName("TargetV2")]
-        public static async Task<IActionResult> TargetV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/targets/{id?}")] HttpRequest req, string id,ILogger log){
+        public static async Task<IActionResult> TargetV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/targets/{id?}")] HttpRequest req, string id, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
@@ -285,7 +286,7 @@ namespace trifenix.agro.functions {
 
         #region v2/order_folders
         [FunctionName("OrderFolder")]
-        public static async Task<IActionResult> OrderFolder([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/order_folders/{id?}")] HttpRequest req, string id,ILogger log){
+        public static async Task<IActionResult> OrderFolder([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/order_folders/{id?}")] HttpRequest req, string id, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
@@ -381,7 +382,7 @@ namespace trifenix.agro.functions {
 
         #region v2/custom_notification_events
         [FunctionName("CustomNotificationEvents")]
-        public static async Task<IActionResult> CustomNotificationEvents([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/custom_notification_events/{idSpecie}/{page}/{totalByPage}/{desc?}")] HttpRequest req, string idSpecie, int page, int totalByPage, string desc,ILogger log){
+        public static async Task<IActionResult> CustomNotificationEvents([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/custom_notification_events/{idSpecie}/{page}/{totalByPage}/{desc?}")] HttpRequest req, string idSpecie, int page, int totalByPage, string desc, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
@@ -396,7 +397,7 @@ namespace trifenix.agro.functions {
 
         #region v2/notification/barrack/{idBarrack}
         [FunctionName("CustomNotificationBarrack")]
-        public static async Task<IActionResult> CustomNotificationBarrack([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/notification/barrack/{idBarrack}")] HttpRequest req, string idBarrack,ILogger log){
+        public static async Task<IActionResult> CustomNotificationBarrack([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/notification/barrack/{idBarrack}")] HttpRequest req, string idBarrack, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
@@ -407,7 +408,7 @@ namespace trifenix.agro.functions {
 
         #region v2/notification/barrack/{idBarrack}/phenological/{idPhenological}
         [FunctionName("CustomNotificationBarrackPhenologicalEvent")]
-        public static async Task<IActionResult> CustomNotificationBarrackPhenologicalEvent([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/notification/barrack/{idBarrack}/phenological/{idPhenological}")] HttpRequest req, string idBarrack, string idPhenological, ILogger log){
+        public static async Task<IActionResult> CustomNotificationBarrackPhenologicalEvent([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/notification/barrack/{idBarrack}/phenological/{idPhenological}")] HttpRequest req, string idBarrack, string idPhenological, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
@@ -533,7 +534,7 @@ namespace trifenix.agro.functions {
                     Email email = new Email(manager.Users.GetUsers().Result.Result);
                     return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
                         var idPhenologicalEvent = (string)model["idPhenologicalEvent"];
-                        var eventType = (int)model["eventType"];
+                        var eventType = (NotificationType)model["eventType"];
                         var barrack = (string)model["idBarrack"];
                         var base64 = (string)model["base64"];
                         var description = (string)model["description"];
@@ -556,6 +557,29 @@ namespace trifenix.agro.functions {
             }
             return new BadRequestResult();
         }
+
+
+
+        [FunctionName("searchProducts")]
+        public static async Task<IActionResult> SearchProducts([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/search/products")] HttpRequest req, ILogger log)
+        {
+            ClaimsPrincipal claims = await Auth.Validate(req);
+            if (claims == null)
+                return new UnauthorizedResult();
+
+
+            var manager = await ContainerMethods.AgroManager(claims);
+
+            var products = manager.Products.GetIndexElements("", null, null, null);
+
+
+            return ContainerMethods.GetJsonGetContainer(new ExtGetContainer<List<Element>> { 
+                StatusResult = ExtGetDataResult.Success,
+                Result = products.Result.Entities.Select(s => new Element { Id = s.Id, Name = s.Name, Created = s.Created }).ToList()
+            }, log);
+
+        }
+
 
         [FunctionName("IndexElementsFilter")]
         public static async Task<IActionResult> IndexElementsFilter([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/{entityName}/indexElements/{abbSpecie?}/{type?}/{status?}/{textToSearch?}/{asc?}/{totalByPage?}/{page?}")] HttpRequest req, string entityName, string abbSpecie, string type, string status, string textToSearch, string asc, int? totalByPage, int? page, ILogger log) {
@@ -604,8 +628,8 @@ namespace trifenix.agro.functions {
                     return ContainerMethods.GetJsonGetContainer(OperationHelper.GetException<ExecutionOrder>(new Exception($"No existe entityName: {entityName}")), log);
             }
             return ContainerMethods.GetJsonGetContainer(result, log);
-            
-            
+
+
         }
 
         #region v2/orders
@@ -673,7 +697,7 @@ namespace trifenix.agro.functions {
 
         #region v2/sectors
         [FunctionName("SectorV2")]
-        public static async Task<IActionResult> Sector([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/sectors/{id?}")] HttpRequest req, string id,ILogger log){
+        public static async Task<IActionResult> Sector([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/sectors/{id?}")] HttpRequest req, string id, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
@@ -708,7 +732,7 @@ namespace trifenix.agro.functions {
 
         #region v2/plotlands
         [FunctionName("PlotLandsV2")]
-        public static async Task<IActionResult> PlotLandsV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/plotlands/{id?}")] HttpRequest req, string id,ILogger log){
+        public static async Task<IActionResult> PlotLandsV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/plotlands/{id?}")] HttpRequest req, string id, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
@@ -745,7 +769,7 @@ namespace trifenix.agro.functions {
 
         #region v2/varieties
         [FunctionName("VarietiesV2")]
-        public static async Task<IActionResult> VarietiesV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/varieties/{id?}")] HttpRequest req, string id,ILogger log){
+        public static async Task<IActionResult> VarietiesV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/varieties/{id?}")] HttpRequest req, string id, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
@@ -836,7 +860,7 @@ namespace trifenix.agro.functions {
 
         #region v2/phenological_preorders
         [FunctionName("PhenologicalPreOrders")]
-        public static async Task<IActionResult> PhenologicalPreOrders([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/phenological_preorders/{id?}")] HttpRequest req, string id,ILogger log){
+        public static async Task<IActionResult> PhenologicalPreOrders([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/phenological_preorders/{id?}")] HttpRequest req, string id, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
@@ -878,17 +902,21 @@ namespace trifenix.agro.functions {
 
         #region v2/roles
         [FunctionName("Roles")]
-        public static async Task<IActionResult> Roles([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/roles/{id?}")] HttpRequest req, ILogger log, string id){
+        public static async Task<IActionResult> Roles([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/roles/{id?}")] HttpRequest req, ILogger log, string id) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
             var manager = await ContainerMethods.AgroManager(claims);
-            ExtGetContainer<List<Role>> result = null;
-            switch (req.Method.ToLower())
-            {
+            switch (req.Method.ToLower()) {
                 case "get":
-                    result = await manager.Roles.GetRoles();
-                    break;
+                    if (!string.IsNullOrWhiteSpace(id)) {
+                        var result = await manager.Roles.GetRole(id);
+                        return ContainerMethods.GetJsonGetContainer(result, log);
+                    }
+                    else {
+                        var resultAll = await manager.Nebulizers.GetNebulizers();
+                        return ContainerMethods.GetJsonGetContainer(resultAll, log);
+                    }
                 case "post":
                     return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
                     {
@@ -902,13 +930,13 @@ namespace trifenix.agro.functions {
                         return await db.Roles.SaveEditRole(id, name);
                     }, claims);
             }
-            return ContainerMethods.GetJsonGetContainer(result, log);
+            return new BadRequestResult();
         }
         #endregion
 
         #region v2/jobs
         [FunctionName("Jobs")]
-        public static async Task<IActionResult> Jobs([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/jobs/{id?}")] HttpRequest req, ILogger log, string id){
+        public static async Task<IActionResult> Jobs([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/jobs/{id?}")] HttpRequest req, ILogger log, string id) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
@@ -938,7 +966,7 @@ namespace trifenix.agro.functions {
 
         #region v2/users
         [FunctionName("Users")]
-        public static async Task<IActionResult> Users([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/users/{id?}")] HttpRequest req, string id, ILogger log){
+        public static async Task<IActionResult> Users([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/users/{id?}")] HttpRequest req, string id, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
@@ -994,7 +1022,7 @@ namespace trifenix.agro.functions {
 
         #region v2/userInfo
         [FunctionName("UserInfo")]
-        public static async Task<IActionResult> UsersRoles([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/userinfo")] HttpRequest req, ILogger log){
+        public static async Task<IActionResult> UsersRoles([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/userinfo")] HttpRequest req, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
@@ -1006,7 +1034,7 @@ namespace trifenix.agro.functions {
 
         #region v2/nebulizers
         [FunctionName("Nebulizers")]
-        public static async Task<IActionResult> Nebulizers([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/nebulizers/{id?}")] HttpRequest req, string id, ILogger log){
+        public static async Task<IActionResult> Nebulizers([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/nebulizers/{id?}")] HttpRequest req, string id, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
@@ -1040,7 +1068,7 @@ namespace trifenix.agro.functions {
 
         #region v2/tractors
         [FunctionName("Tractors")]
-        public static async Task<IActionResult> Tractors([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/tractors/{id?}")] HttpRequest req, string id, ILogger log){
+        public static async Task<IActionResult> Tractors([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/tractors/{id?}")] HttpRequest req, string id, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
@@ -1160,6 +1188,82 @@ namespace trifenix.agro.functions {
             }, claims);
         }
         #endregion
+
+        #region v2/businessName
+        [FunctionName("BusinessName")]
+        public static async Task<IActionResult> BusinessName([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/businessNames/{id?}")] HttpRequest req, string id, ILogger log) {
+            ClaimsPrincipal claims = await Auth.Validate(req);
+            if (claims == null)
+                return new UnauthorizedResult();
+            var manager = await ContainerMethods.AgroManager(claims);
+            switch (req.Method.ToLower()) {
+                case "get":
+                    if (!string.IsNullOrWhiteSpace(id)) {
+                        var result = await manager.BusinessNames.GetBusinessName(id);
+                        return ContainerMethods.GetJsonGetContainer(result, log);
+                    }
+                    else {
+                        var resultAll = await manager.BusinessNames.GetBusinessNames();
+                        return ContainerMethods.GetJsonGetContainer(resultAll, log);
+                    }
+                case "post":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
+                        var name = (string)model["name"];
+                        var rut = (string)model["rut"];
+                        var phone = (string)model["phone"];
+                        var email = (string)model["email"];
+                        var webPage = (string)model["webPage"];
+                        var giro = (string)model["giro"];
+                        return await db.BusinessNames.SaveNewBusinessName(name,rut,phone,email,webPage,giro);
+                    }, claims);
+                case "put":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
+                        var name = (string)model["name"];
+                        var rut = (string)model["rut"];
+                        var phone = (string)model["phone"];
+                        var email = (string)model["email"];
+                        var webPage = (string)model["webPage"];
+                        var giro = (string)model["giro"];
+                        return await db.BusinessNames.SaveEditBusinessName(id, name, rut, phone, email, webPage, giro);
+                    }, claims);
+            }
+            return new BadRequestResult();
+        }
+        #endregion
+        #region v2/costCenter
+        [FunctionName("CostCenter")]
+        public static async Task<IActionResult> CostCenter([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/costCenters/{id?}")] HttpRequest req, string id, ILogger log) {
+            ClaimsPrincipal claims = await Auth.Validate(req);
+            if (claims == null)
+                return new UnauthorizedResult();
+            var manager = await ContainerMethods.AgroManager(claims);
+            switch (req.Method.ToLower()) {
+                case "get":
+                    if (!string.IsNullOrWhiteSpace(id)) {
+                        var result = await manager.CostCenters.GetCostCenter(id);
+                        return ContainerMethods.GetJsonGetContainer(result, log);
+                    }
+                    else {
+                        var resultAll = await manager.CostCenters.GetCostCenters();
+                        return ContainerMethods.GetJsonGetContainer(resultAll, log);
+                    }
+                case "post":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
+                        var name = (string)model["name"];
+                        var idReason = (string)model["idReason"];
+                        return await db.CostCenters.SaveNewCostCenter(name, idReason);
+                    }, claims);
+                case "put":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
+                        var name = (string)model["name"];
+                        var idReason = (string)model["idReason"];
+                        return await db.CostCenters.SaveEditCostCenter(id, name, idReason);
+                    }, claims);
+            }
+            return new BadRequestResult();
+        }
+        #endregion
+
 
         #region Login
         [FunctionName("login")]

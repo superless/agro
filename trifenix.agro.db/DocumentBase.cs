@@ -12,4 +12,11 @@ namespace trifenix.agro.db {
         }
 
     }
+
+    public class HeredoDeDocumentBase : DocumentBase
+    {
+        public override string Id { get; set; }
+
+
+    }
 }

@@ -1,6 +1,7 @@
 ﻿using Cosmonaut;
 using Cosmonaut.Attributes;
 using System.Collections.Generic;
+using trifenix.agro.db.model.agro.enums;
 using trifenix.agro.db.model.agro.local;
 
 namespace trifenix.agro.db.model.agro

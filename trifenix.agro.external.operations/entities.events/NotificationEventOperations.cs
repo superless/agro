@@ -7,6 +7,7 @@ using trifenix.agro.db.interfaces.agro.events;
 using trifenix.agro.db.interfaces.agro.fields;
 using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model.agro.enums;
 using trifenix.agro.db.model.agro.local;
 using trifenix.agro.external.interfaces.entities.events;
 using trifenix.agro.external.operations.helper;
@@ -114,14 +115,14 @@ namespace trifenix.agro.external.operations.entities.events {
         /// <param name="base64">string de la imagen subida</param>
         /// <param name="description">descripción del evento notificado</param>
         /// <returns>contenedor con el identificador de la notificación</returns>
-        public async Task<ExtPostContainer<string>> SaveNewNotificationEvent(string idPhenologicalEvent, int eventType, string idBarrack, string base64, string description, float lat, float lon) {
-            if (string.IsNullOrWhiteSpace(idPhenologicalEvent) && eventType == 0) return OperationHelper.GetPostException<string>(new Exception("Es requerido 'idPhenologicalEvent'"));
+        public async Task<ExtPostContainer<string>> SaveNewNotificationEvent(string idPhenologicalEvent, NotificationType NotificationType, string idBarrack, string base64, string description, float lat, float lon) {
+            if (string.IsNullOrWhiteSpace(idPhenologicalEvent) && NotificationType == 0) return OperationHelper.GetPostException<string>(new Exception("Es requerido 'idPhenologicalEvent'"));
             if (string.IsNullOrWhiteSpace(idBarrack)) return OperationHelper.GetPostException<string>(new Exception("Es requerido 'idBarrack'"));
             if (string.IsNullOrWhiteSpace(base64)) return OperationHelper.GetPostException<string>(new Exception("Es requerido 'base64'"));
             
             try {
                 PhenologicalEvent phenologicalEvent = null;
-                if(eventType == 0) {
+                if(NotificationType == 0) {
                     phenologicalEvent = await _phenologicalRepository.GetPhenologicalEvent(idPhenologicalEvent);
                     if(phenologicalEvent == null)
                         return OperationHelper.PostNotFoundElementException<string>($"No se encontró evento fenológico con id {idPhenologicalEvent}", idPhenologicalEvent);
@@ -140,7 +141,7 @@ namespace trifenix.agro.external.operations.entities.events {
                        Created = DateTime.Now,
                        Description = description,
                        PhenologicalEvent = phenologicalEvent,
-                       eventType = eventType,
+                       NotificationType = NotificationType,
                        PicturePath = imgPath,
                        Creator = userActivity,
                        //Weather = weather

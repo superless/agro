@@ -97,7 +97,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.translator.in
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.translator.operations", "trifenix.agro.translator.operations\trifenix.agro.translator.operations.csproj", "{B3A5137D-2E94-4748-AE56-A8E5BBB170A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "trifenix.agro.search.interfaces", "trifenix.agro.agrosearch.interfaces\trifenix.agro.search.interfaces.csproj", "{156F7E0F-8EAE-4B18-9F5D-9B94F473C35A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.search.interfaces", "trifenix.agro.agrosearch.interfaces\trifenix.agro.search.interfaces.csproj", "{156F7E0F-8EAE-4B18-9F5D-9B94F473C35A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

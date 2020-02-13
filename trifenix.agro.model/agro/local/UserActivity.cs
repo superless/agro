@@ -1,16 +1,23 @@
-﻿using System;
+﻿using Cosmonaut.Attributes;
+using System;
 
 namespace trifenix.agro.db.model.agro.local
 {
+
+
+    [SharedCosmosCollection("agro", "UserActivity")]
     public class UserActivity
     {
         public DateTime Date { get; }
-        public UserApplicator User { get; }
+        public User User { get; }
+        public string EntityName { get; set; }
 
         public UserActivity(DateTime date, UserApplicator user)
         {
             Date = date;
             User = user;
         }
+
+
     }
 }

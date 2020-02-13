@@ -2,11 +2,9 @@
 using Cosmonaut.Attributes;
 using System.Collections.Generic;
 
-namespace trifenix.agro.db.model.agro
-{
+namespace trifenix.agro.db.model.agro {
     [SharedCosmosCollection("agro", "User")]
-    public class User : DocumentBase, ISharedCosmosEntity
-    {
+    public class User : DocumentBase, ISharedCosmosEntity {
     
         public override string Id { get; set; }
 

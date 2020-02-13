@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model.agro.enums;
 using trifenix.agro.enums;
 using trifenix.agro.external.interfaces.custom;
 using trifenix.agro.external.operations.custom.args;
@@ -108,16 +110,19 @@ namespace trifenix.agro.external.operations.custom {
 
         private IEnumerable<OutPutNotificationPreOrder> GetNotificationPreOrders(List<NotificationEvent> notifications) {
             return notifications.Select(async s => {
-                var preOrders = await GetOutPutPhenologicalPreOrders(s.PhenologicalEvent.Id, s.Barrack.Id);
+                OutPutPhenologicalPreOrder[] preOrders = Array.Empty<OutPutPhenologicalPreOrder>();
+                if(s.NotificationType ==  NotificationType.Phenological)
+                    preOrders = await GetOutPutPhenologicalPreOrders(s.PhenologicalEvent.Id, s.Barrack.Id);
                 return new OutPutNotificationPreOrder {
                     Id = s.Id,
                     Barrack = s.Barrack,
                     CosmosEntityName = s.CosmosEntityName,
                     Created = s.Created,
                     Description = s.Description,
-                    PhenologicalEvent = s.PhenologicalEvent,
+                    //TODO: Cambiar en front, debe soportar el valor null.
+                    PhenologicalEvent = s.PhenologicalEvent??new PhenologicalEvent { Name = "Evento No fenológico" },
                     PicturePath = s.PicturePath,
-                    PreOrders = preOrders.ToArray()
+                    PreOrders = preOrders
                 };
             }).Select(s => s.Result);
         }

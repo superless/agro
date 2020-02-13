@@ -1,7 +1,4 @@
-﻿
-
-namespace trifenix.agro.db.model.agro.enums
-{
+﻿namespace trifenix.agro.db.model.agro.enums {
     public enum KindOfProductContainer {
         Bottle = 0,
         Box = 1,
