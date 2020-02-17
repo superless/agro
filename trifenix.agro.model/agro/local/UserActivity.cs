@@ -10,7 +10,14 @@ namespace trifenix.agro.db.model.agro.local
     {
         public DateTime Date { get; }
         public User User { get; }
+        
         public string EntityName { get; set; }
+
+
+
+        public string IdEntity { get; set; }
+
+        
 
         public UserActivity(DateTime date, UserApplicator user)
         {

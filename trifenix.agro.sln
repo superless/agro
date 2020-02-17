@@ -99,6 +99,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.translator.op
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.search.interfaces", "trifenix.agro.agrosearch.interfaces\trifenix.agro.search.interfaces.csproj", "{156F7E0F-8EAE-4B18-9F5D-9B94F473C35A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "15. swagger", "15. swagger", "{3590DF9D-A45B-4CEB-B6DB-3AFAE216899A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "trifenix.agro.swagger.model", "trifenix.agro.swagger.model\trifenix.agro.swagger.model.csproj", "{2185F20F-20E9-4CE4-B8B3-ABAD6030CDE9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -233,6 +237,10 @@ Global
 		{156F7E0F-8EAE-4B18-9F5D-9B94F473C35A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{156F7E0F-8EAE-4B18-9F5D-9B94F473C35A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{156F7E0F-8EAE-4B18-9F5D-9B94F473C35A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2185F20F-20E9-4CE4-B8B3-ABAD6030CDE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2185F20F-20E9-4CE4-B8B3-ABAD6030CDE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2185F20F-20E9-4CE4-B8B3-ABAD6030CDE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2185F20F-20E9-4CE4-B8B3-ABAD6030CDE9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -272,6 +280,7 @@ Global
 		{9F75E333-BD51-40DC-A81E-18D7BC377AE2} = {76A52D17-54BF-45DF-AECD-231DE2DB4F94}
 		{B3A5137D-2E94-4748-AE56-A8E5BBB170A5} = {76A52D17-54BF-45DF-AECD-231DE2DB4F94}
 		{156F7E0F-8EAE-4B18-9F5D-9B94F473C35A} = {23EE7E3F-8A26-4F35-8C77-0B2E727B3079}
+		{2185F20F-20E9-4CE4-B8B3-ABAD6030CDE9} = {3590DF9D-A45B-4CEB-B6DB-3AFAE216899A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2C0C9D82-464E-4741-8541-CDC460278FEC}
