@@ -698,7 +698,7 @@ namespace trifenix.agro.functions {
             ExtGetContainer<List<ExecutionOrder>> resultGetByStatus = await manager.ExecutionOrders.GetExecutionOrders();
             resultGetByStatus.Result = resultGetByStatus.Result.Where(execution => execution.ExecutionStatus == (ExecutionStatus)status).ToList();
             ExtGetContainer<List<OutPutApplicationOrder>> resultGetAll = await manager.ApplicationOrders.GetApplicationOrders();
-            resultGetAll.Result = resultGetAll.Result.Where(order => resultGetByStatus.Result.Any(execution => execution.Order.Id.Equals(order.Id))).ToList();
+            resultGetAll.Result = resultGetAll.Result.Where(order => resultGetByStatus.Result.Any(execution => execution.Order.Equals(order.Id))).ToList();
             return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
         }
         #endregion
@@ -1114,10 +1114,15 @@ namespace trifenix.agro.functions {
         [FunctionName("Executions")]
         public static async Task<IActionResult> Executions([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/executions/{idExecution?}/{abbSpecie?}/{status?}/{textToSearch?}/{asc?}/{totalByPage?}/{page?}")] HttpRequest req, string idExecution, string abbSpecie, string status, string textToSearch, string asc, int? totalByPage, int? page, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
+            
             if (claims == null)
                 return new UnauthorizedResult();
+
             var manager = await ContainerMethods.AgroManager(claims);
+
             ExtGetContainer<ExecutionOrder> result = null;
+
+
             switch (req.Method.ToLower()) {
                 case "get":
                     if (!string.IsNullOrWhiteSpace(idExecution) && !idExecution.ToLower().Equals("all")) {
@@ -1176,7 +1181,9 @@ namespace trifenix.agro.functions {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
+
             var manager = await ContainerMethods.AgroManager(claims);
+
             return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
                 var type = (string)model["type"];
                 var value = (int)model["value"];
