@@ -74,19 +74,33 @@ namespace trifenix.agro.external.operations.entities.orders
         }
 
         public async Task<ExtPostContainer<string>> SaveNewExecutionOrder(string idOrder, string executionName, string idUserApplicator, string idNebulizer, string[] idsProduct, double[] quantitiesByHectare, string idTractor, string commentary) {
+
+
             if (string.IsNullOrWhiteSpace(idOrder)) return OperationHelper.GetPostException<string>(new Exception("Es requerido 'idOrder' para crear una ejecucion."));
+
             if (string.IsNullOrWhiteSpace(executionName)) return OperationHelper.GetPostException<string>(new Exception("Es requerido 'executionName' para crear una ejecucion."));
+
+
             ApplicationOrder order = await _repoOrders.GetApplicationOrder(idOrder);
+
             if (order == null)
                 return OperationHelper.PostNotFoundElementException<string>($"No se encontró la orden de aplicacion con id {idOrder}", idOrder);
-            var executions = _repo.GetExecutionOrders().Where(execution => execution.Order.Id.Equals(order.Id));
+
+            var executions = _repo.GetExecutionOrders().Where(execution => execution.Order.Equals(order.Id));
+
             if(executions.Count(execution => execution.ClosedStatus == (ClosedStatus)1) > 0)
                 return OperationHelper.GetPostException<string>(new Exception($"No se puede crear una nueva ejecucion para la orden {idOrder}, debido a que ya existe una ejecucion terminada exitosamente para esta orden."));
+
+
             if (idsProduct == null || !idsProduct.Any())
-                return OperationHelper.GetPostException<string>(new Exception("Se requiere al menos un producto.")); 
+                return OperationHelper.GetPostException<string>(new Exception("Se requiere al menos un producto."));
+            
+
+
             UserApplicator userApplicator = null;
             Nebulizer nebulizer = null;
             Tractor tractor = null;
+
             if (!String.IsNullOrWhiteSpace(idUserApplicator)) {
                 userApplicator = await _repoUsers.GetUser(idUserApplicator);
                 if (userApplicator == null)
@@ -115,7 +129,7 @@ namespace trifenix.agro.external.operations.entities.orders
                    Id = s,
                    SeasonId = _idSeason,
                    Name = executionName?? order.Name,
-                   Order = order,
+                   Order = order.Id,
                    UserApplicator = userApplicator,
                    Nebulizer = nebulizer,
                    ProductToApply = productApplies,
@@ -138,6 +152,8 @@ namespace trifenix.agro.external.operations.entities.orders
                 }
             });
             var setStatusOperation = await SetStatus(createOperation.IdRelated, "execution", 0, commentary);
+
+
             return new ExtPostContainer<string> {
                 IdRelated = setStatusOperation.IdRelated,
                 Result = setStatusOperation.IdRelated,
@@ -191,7 +207,7 @@ namespace trifenix.agro.external.operations.entities.orders
                         }
                     });
                     s.Name = executionName;
-                    s.Order = order;
+                    s.Order = order.Id;
                     s.UserApplicator = userApplicator;
                     s.Nebulizer = nebulizer;
                     s.ProductToApply = productApplies;
@@ -261,7 +277,10 @@ namespace trifenix.agro.external.operations.entities.orders
                     switch (typeOfStatus.ToLower()) {
                         case "execution":
                             s.ExecutionStatus = (ExecutionStatus)newValueOfStatus;
+                            s.InitDate = s.ExecutionStatus == ExecutionStatus.InProcess ? DateTime.Now : s.InitDate;
+                            s.EndDate = s.ExecutionStatus == ExecutionStatus.EndProcess ? DateTime.Now : s.EndDate;
                             s.StatusInfo[newValueOfStatus] = new Comments(userActivity, commentary);
+
                             break;
                         case "finished":
                             s.FinishStatus = (FinishStatus)newValueOfStatus;
