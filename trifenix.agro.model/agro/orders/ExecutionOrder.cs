@@ -16,7 +16,7 @@ namespace trifenix.agro.db.model.agro.orders
         public string SeasonId { get; set; }
 
         public string Name { get; set; }
-        public ApplicationOrder Order { get; set; }
+        public string Order { get; set; }
 
         private List<ProductToApply> _productToApply;
 
@@ -28,17 +28,9 @@ namespace trifenix.agro.db.model.agro.orders
             set { _productToApply = value; }
         }
 
-        private ExecutionStatus _executionStatus;
-        public ExecutionStatus ExecutionStatus {
-            get => _executionStatus;
-            set { 
-                _executionStatus = value;
-                if ((int)_executionStatus == 1){
-                    InitDate = Order.InitDate;
-                    EndDate = Order.EndDate;
-                }
-            }
-        }
+
+        public ExecutionStatus ExecutionStatus { get; set; }
+
 
         private Comments[] _statusInfo;
         /// <summary>
