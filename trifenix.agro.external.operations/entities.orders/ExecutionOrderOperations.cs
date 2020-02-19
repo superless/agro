@@ -52,9 +52,7 @@ namespace trifenix.agro.external.operations.entities.orders
         }
 
         public async Task<ExtGetContainer<List<T>>> GetExecutionOrders(string idOrder = null) {
-            var executionOrdersQuery = (IQueryable<T>)_repo.GetExecutionOrders();
-            if (!string.IsNullOrWhiteSpace(idOrder))
-                executionOrdersQuery = executionOrdersQuery.Where(execution => execution.Order.Id.Equals(idOrder));
+            var executionOrdersQuery = (IQueryable<T>)_repo.GetExecutionOrders(idOrder);
             var executionOrders = await _commonDb.TolistAsync(executionOrdersQuery);
             return OperationHelper.GetElements(executionOrders);
         }
@@ -118,7 +116,7 @@ namespace trifenix.agro.external.operations.entities.orders
                    Correlative = order.InnerCorrelative,
                    SeasonId = _idSeason,
                    Name = executionName?? order.Name,
-                   Order = order,
+                   Order = order.Id,
                    UserApplicator = userApplicator,
                    Nebulizer = nebulizer,
                    ProductToApply = productApplies,
@@ -196,7 +194,7 @@ namespace trifenix.agro.external.operations.entities.orders
                         }
                     });
                     s.Name = executionName;
-                    s.Order = order;
+                    s.Order = order.Id;
                     s.UserApplicator = userApplicator;
                     s.Nebulizer = nebulizer;
                     s.ProductToApply = productApplies;

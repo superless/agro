@@ -23,7 +23,7 @@ namespace trifenix.agro.db.applicationsReference.agro.orders {
         public IQueryable<ExecutionOrder> GetExecutionOrders(string idOrder = null) {
             var executions = _db.GetEntities();
             if(!string.IsNullOrWhiteSpace(idOrder))
-                executions = executions.Where(execution => execution.Order.Id.Equals(idOrder));
+                executions = executions.Where(execution => execution.Order.Equals(idOrder));
             return executions;
         }
 
