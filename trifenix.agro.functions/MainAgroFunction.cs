@@ -14,14 +14,13 @@ using System;
 using trifenix.agro.db.model.agro.enums;
 using trifenix.agro.db.model.agro.orders;
 using trifenix.agro.db.model.agro;
+using trifenix.agro.email.operations;
 using trifenix.agro.external.operations.helper;
 using trifenix.agro.functions.Helper;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.model.external.output;
 using trifenix.agro.model.external;
 using trifenix.agro.search.model;
-using trifenix.agro.email.operations;
-using trifenix.agro.db.model.agro.core;
 
 namespace trifenix.agro.functions {
     public static class MainAgroFunction {
@@ -561,23 +560,16 @@ namespace trifenix.agro.functions {
 
 
         [FunctionName("searchProducts")]
-        public static async Task<IActionResult> SearchProducts([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/search/products")] HttpRequest req, ILogger log)
-        {
+        public static async Task<IActionResult> SearchProducts([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/search/products")] HttpRequest req, ILogger log){
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
-
-
             var manager = await ContainerMethods.AgroManager(claims);
-
             var products = manager.Products.GetIndexElements("", null, null, null);
-
-
             return ContainerMethods.GetJsonGetContainer(new ExtGetContainer<List<Element>> { 
                 StatusResult = ExtGetDataResult.Success,
                 Result = products.Result.Entities.Select(s => new Element { Id = s.Id, Name = s.Name, Created = s.Created }).ToList()
             }, log);
-
         }
 
 
@@ -1184,7 +1176,7 @@ namespace trifenix.agro.functions {
                 return new UnauthorizedResult();
             return await ContainerMethods.ApiPostOperations<ExecutionOrder>(req.Body, log, async (db, model) => {
                 string commentary = (string)model["commentary"];
-                return await db.ExecutionOrders.AddCommentaryToExecutionOrder(idExecution, commentary);
+                return await db.ExecutionOrders.AddCommentary(idExecution, commentary);
             }, claims);
         }
         #endregion

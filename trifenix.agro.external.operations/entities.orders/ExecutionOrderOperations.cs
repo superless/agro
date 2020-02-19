@@ -51,8 +51,10 @@ namespace trifenix.agro.external.operations.entities.orders
             return OperationHelper.GetElement(executionOrder);
         }
 
-        public async Task<ExtGetContainer<List<T>>> GetExecutionOrders() {
+        public async Task<ExtGetContainer<List<T>>> GetExecutionOrders(string idOrder = null) {
             var executionOrdersQuery = (IQueryable<T>)_repo.GetExecutionOrders();
+            if (!string.IsNullOrWhiteSpace(idOrder))
+                executionOrdersQuery = executionOrdersQuery.Where(execution => execution.Order.Id.Equals(idOrder));
             var executionOrders = await _commonDb.TolistAsync(executionOrdersQuery);
             return OperationHelper.GetElements(executionOrders);
         }
@@ -79,7 +81,7 @@ namespace trifenix.agro.external.operations.entities.orders
             ApplicationOrder order = await _repoOrders.GetApplicationOrder(idOrder);
             if (order == null)
                 return OperationHelper.PostNotFoundElementException<string>($"No se encontró la orden de aplicacion con id {idOrder}", idOrder);
-            var executions = _repo.GetExecutionOrders().Where(execution => execution.Order.Id.Equals(order.Id));
+            var executions = _repo.GetExecutionOrders(order.Id);
             if(executions.Count(execution => execution.ClosedStatus == (ClosedStatus)1) > 0)
                 return OperationHelper.GetPostException<string>(new Exception($"No se puede crear una nueva ejecucion para la orden {idOrder}, debido a que ya existe una ejecucion terminada exitosamente para esta orden."));
             if (idsProduct == null || !idsProduct.Any())
@@ -110,9 +112,10 @@ namespace trifenix.agro.external.operations.entities.orders
             }catch(Exception e) {
                 return OperationHelper.GetPostException<string>(e);
             }
-            var createOperation = await OperationHelper.CreateElement<T>(_commonDb, (IQueryable<T>)_repo.GetExecutionOrders(),
+            var createOperation = await OperationHelper.CreateElement(_commonDb, (IQueryable<T>)_repo.GetExecutionOrders(),
                async s => await _repo.CreateUpdateExecutionOrder(new ExecutionOrder {
                    Id = s,
+                   Correlative = order.InnerCorrelative,
                    SeasonId = _idSeason,
                    Name = executionName?? order.Name,
                    Order = order,
@@ -126,6 +129,8 @@ namespace trifenix.agro.external.operations.entities.orders
                $"Ya existe ejecucion con nombre: {executionName}");
             if (createOperation.GetType() == typeof(ExtPostErrorContainer<string>))
                 return OperationHelper.GetPostException<string>(new Exception(createOperation.Message));
+            order.InnerCorrelative++;
+            await _repoOrders.CreateUpdate(order);
             _searchServiceInstance.AddEntities(new List<EntitySearch> {
                 new EntitySearch {
                     Id = createOperation.IdRelated,
@@ -286,7 +291,7 @@ namespace trifenix.agro.external.operations.entities.orders
             return editOperation;
         }
 
-        public async Task<ExtPostContainer<T>> AddCommentaryToExecutionOrder(string idExecutionOrder, string commentary) {
+        public async Task<ExtPostContainer<T>> AddCommentary(string idExecutionOrder, string commentary) {
             if (String.IsNullOrWhiteSpace(idExecutionOrder)) return OperationHelper.GetPostException<T>(new Exception("Es requerido 'idExecutionOrder'."));
             if (String.IsNullOrWhiteSpace(commentary)) return OperationHelper.GetPostException<T>(new Exception("El comentario no puede estar vacio."));
             T execution = (T)await _repo.GetExecutionOrder(idExecutionOrder);

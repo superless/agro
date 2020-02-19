@@ -1,7 +1,11 @@
 ﻿using Cosmonaut;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,7 +17,6 @@ using trifenix.agro.db.applicationsReference.common;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.db.model.agro.orders;
 using trifenix.agro.external.operations;
-
 using trifenix.agro.search;
 using trifenix.agro.search.model;
 
@@ -22,7 +25,7 @@ namespace trifenix.agro.console {
         static async Task Main(string[] args)
         {
             Stopwatch timer = Stopwatch.StartNew();
-
+            
             #region Reflexion
             //Console.WriteLine("typeof(Barrack).Name:            " + typeof(Barrack).Name);
             //Console.WriteLine("typeof(Barrack).FullName:        " + typeof(Barrack).FullName);
@@ -233,4 +236,5 @@ namespace trifenix.agro.console {
 
         }
     }
+
 }

@@ -91,24 +91,7 @@ namespace trifenix.agro.external.operations {
         public ICustomManager CustomManager => new CustomManager(_repository, _idSeason);
 
 
-        public IApplicationOrderOperations ApplicationOrders => new ApplicationOrderOperations<ApplicationOrder>(new ApplicationOrderArgs {
-            ApplicationOrder = _repository.Orders,
-            GraphApi = _graphApi,
-            Barracks = _repository.Barracks,
-            Product = _repository.Products,
-            Notifications = _repository.NotificationEvents,
-            CommonDb = new ApplicationOrderCommonDbArgs {
-                ApplicationOrder = new CommonDbOperations<ApplicationOrder>()
-            },
-            DosesArgs = new DosesArgs {
-                CertifiedEntity = _repository.CertifiedEntities,
-                Specie = _repository.Species,
-                Target = _repository.Targets,
-                Variety = _repository.Varieties
-            },
-            PreOrder = _repository.PhenologicalPreOrders,
-            SeasonId = _idSeason
-        }, _searchServiceInstance);
+        public IApplicationOrderOperations ApplicationOrders => new ApplicationOrderOperations<ApplicationOrder>(_repository.Orders, _repository.Targets, _repository.Barracks, _repository.CertifiedEntities, new CommonDbOperations<ApplicationOrder>(), _repository.ExecutionOrders, _graphApi, _repository.NotificationEvents, _repository.PhenologicalPreOrders, _repository.Products, _repository.Species, _repository.Varieties, IdSeason, _searchServiceInstance);
 
         public INotificatonEventOperations NotificationEvents => new NotificationEventOperations(_repository.NotificationEvents, _repository.Barracks, _repository.PhenologicalEvents, new CommonDbOperations<NotificationEvent>(), _uploadImage, _graphApi, _weatherApi);
         

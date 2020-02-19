@@ -20,8 +20,11 @@ namespace trifenix.agro.db.applicationsReference.agro.orders {
             return await _db.GetEntity(id);
         }
 
-        public IQueryable<ExecutionOrder> GetExecutionOrders() {
-            return _db.GetEntities();
+        public IQueryable<ExecutionOrder> GetExecutionOrders(string idOrder = null) {
+            var executions = _db.GetEntities();
+            if(!string.IsNullOrWhiteSpace(idOrder))
+                executions = executions.Where(execution => execution.Order.Id.Equals(idOrder));
+            return executions;
         }
 
         public async Task<long> Total(string season) {
