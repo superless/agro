@@ -12,8 +12,7 @@ namespace trifenix.agro.external.operations.entities.main {
     public class RoleOperations : IRoleOperations {
         private readonly IRoleRepository _repo;
         private readonly ICommonDbOperations<Role> _commonDb;
-        public RoleOperations(IRoleRepository repo, ICommonDbOperations<Role> commonDb)
-        {
+        public RoleOperations(IRoleRepository repo, ICommonDbOperations<Role> commonDb) {
             _repo = repo;
             _commonDb = commonDb;
         }

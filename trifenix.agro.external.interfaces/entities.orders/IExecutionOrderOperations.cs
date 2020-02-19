@@ -10,7 +10,7 @@ namespace trifenix.agro.external.interfaces.entities.orders
 
         Task<ExtGetContainer<T>> GetExecutionOrder(string id);
 
-        Task<ExtGetContainer<List<T>>> GetExecutionOrders();
+        Task<ExtGetContainer<List<T>>> GetExecutionOrders(string idOrder = null);
 
         Task<ExtPostContainer<string>> SaveNewExecutionOrder(string idOrder, string executionName, string idUserApplicator, string idNebulizer, string[] idsProduct, double[] quantitiesByHectare, string idTractor, string commentary);
 
@@ -18,7 +18,7 @@ namespace trifenix.agro.external.interfaces.entities.orders
 
         Task<ExtPostContainer<T>> SetStatus(string idExecutionOrder, string typeOfStatus, int newValueOfStatus, string commentary);
 
-        Task<ExtPostContainer<T>> AddCommentaryToExecutionOrder(string idExecutionOrder, string commentary);
+        Task<ExtPostContainer<T>> AddCommentary(string idExecutionOrder, string commentary);
 
         ExtGetContainer<EntitiesSearchContainer> GetIndexElements(string textToSearch, string abbSpecie, int? status, int? page, int? quantity, bool? desc);
         

@@ -12,4 +12,13 @@ namespace trifenix.agro.db.model.agro {
         public string Abbreviation { get; set; }
     }
 
+    public enum Species {
+        CI,     //Ciruela
+        DU,     //Durazno
+        KI,     //Kiwi
+        NE,     //Nectarin
+        CE,     //Cereza
+        MANZA   //Manzana
+    }
+
 }

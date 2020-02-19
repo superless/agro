@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.db.model.agro.orders;
 
@@ -9,6 +8,10 @@ namespace trifenix.agro.model.external.output
     public class OutPutApplicationOrder {
 
         public string Id { get; set; }
+
+        public int Correlative { get; set; }
+
+        public string Specie { get; set; }
 
         public string Name { get; set; }
 

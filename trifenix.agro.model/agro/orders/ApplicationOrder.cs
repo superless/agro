@@ -4,20 +4,24 @@ using System;
 using System.Collections.Generic;
 using trifenix.agro.db.model.agro.local;
 
-namespace trifenix.agro.db.model.agro.orders
-{
+namespace trifenix.agro.db.model.agro.orders {
     [SharedCosmosCollection("agro", "ApplicationOrder")]
-    public class ApplicationOrder : DocumentBase, ISharedCosmosEntity
-    {
+    public class ApplicationOrder : DocumentBase, ISharedCosmosEntity {
         /// <summary>
         /// Identificador de la entidad
         /// </summary>
         public override string Id { get; set; }
 
+        public int Correlative { get; set; }
+
+        public int InnerCorrelative { get; set; }
+
         public bool IsPhenological { get; set; }
 
         public string Name { get; set; }
+
         public DateTime InitDate { get; set; }
+
         public DateTime EndDate { get; set; }
 
         private List<BarrackOrderInstance> _barracks;
@@ -32,9 +36,7 @@ namespace trifenix.agro.db.model.agro.orders
 
         public string SeasonId { get; set; }
 
-
         public double Wetting { get; set; }
-
 
         private List<ApplicationsInOrder> _applicationsInOrder;
 
@@ -105,45 +107,33 @@ namespace trifenix.agro.db.model.agro.orders
             set { _idsTargets = value; }
         }
 
-        private List<string> _idVarieties;
+        private List<string> _varietyAbb;
 
 
         /// <summary>
         /// variedades dentro de las dosis
         /// </summary>
-        public List<string> IdVarieties
-        {
-            get
-            {
-                _idVarieties = _idVarieties ?? new List<string>();
-                return _idVarieties;
+        public List<string> VarietyAbb {
+            get {
+                _varietyAbb = _varietyAbb ?? new List<string>();
+                return _varietyAbb;
             }
-            set { _idVarieties = value; }
+            set { _varietyAbb = value; }
         }
-
-        private List<string> __idsSpecies;
-
-
+        
         /// <summary>
-        /// especies dentro de las dosis
+        /// Especie dentro de los cuarteles
         /// </summary>
-        public List<string> IdsSpecies
-        {
-            get
-            {
-                __idsSpecies = __idsSpecies ?? new List<string>();
-                return __idsSpecies;
-            }
-            set { __idsSpecies = value; }
-        }
+        public string SpecieAbb { get; set; }
 
-        public ApplicationOrder(string id, List<string> certifiedEntitiesIds, List<string>  speciesIds, List<BarrackOrderInstance> barracksInstances, List<string>  targetIds, List<string> varietyIds, string seasonId, string name, bool isPhenological, DateTime initDate, DateTime endDate, double wetting, List<ApplicationsInOrder> applications, UserActivity creator, List<PhenologicalPreOrder> phenologicalPreOrders) {
+        public ApplicationOrder(string id, int correlative, List<string> certifiedEntitiesIds, string specieAbb, List<BarrackOrderInstance> barracksInstances, List<string>  targetIds, List<string> varietyAbb, string seasonId, string name, bool isPhenological, DateTime initDate, DateTime endDate, double wetting, List<ApplicationsInOrder> applications, UserActivity creator, List<PhenologicalPreOrder> phenologicalPreOrders) {
             Id = id;
+            Correlative = correlative;
             IdsCertifiedEntities = certifiedEntitiesIds;
-            IdsSpecies = speciesIds;
+            SpecieAbb = specieAbb;
             Barracks = barracksInstances;
             IdsTargets = targetIds;
-            IdVarieties = varietyIds;
+            VarietyAbb = varietyAbb;
             SeasonId = seasonId;
             Name = name;
             IsPhenological = isPhenological;

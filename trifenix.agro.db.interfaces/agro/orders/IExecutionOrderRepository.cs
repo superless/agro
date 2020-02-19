@@ -10,7 +10,7 @@ namespace trifenix.agro.db.interfaces.agro.orders
 
         Task<ExecutionOrder> GetExecutionOrder(string id);
 
-        IQueryable<ExecutionOrder> GetExecutionOrders();
+        IQueryable<ExecutionOrder> GetExecutionOrders(string idOrder = null);
 
         Task<long> Total(string season);
     }
