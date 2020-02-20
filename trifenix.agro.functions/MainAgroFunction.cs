@@ -1319,6 +1319,7 @@ namespace trifenix.agro.functions {
             var ordersQuery = db.Orders.GetApplicationOrders();
             var dbOrderOperations = new CommonDbOperations<ApplicationOrder>();
             List<ApplicationOrder> orders = (await dbOrderOperations.TolistAsync(ordersQuery)).Where(order => order.InnerCorrelative == 0).ToList();
+            log.LogInformation("Existen " + orders.Count + " ordenes sin actualizar.");
             orders.ToList().ForEach(order => {
                 order.InnerCorrelative = db.ExecutionOrders.GetExecutionOrders(order.Id).Count() + 1;
                 db.Orders.CreateUpdate(order);
