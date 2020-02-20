@@ -16,8 +16,8 @@ namespace trifenix.agro.authentication.operations {
         private readonly string _tenant;
         private readonly string _tenantID;
 
-        //Usuario test: sebastian.murray@trifenix.com
-        //Password:     trifeniX216
+        //Usuario test: cristian.rojas@alumnos.uv.cl
+        //Password:     Tricking4life
         public Authentication(string clientID, string tenant, string tenantID) {
             _clientID = clientID;     //Id aplicacion registrada en Azure Active Directory      //a81f0ad4-912b-46d3-ba3e-7bf605693242
             _tenant = tenant;         //Nombre inquilino en Azure Active Directory              //jhmad.onmicrosoft.com

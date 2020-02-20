@@ -25,7 +25,7 @@ namespace trifenix.agro.console {
         static async Task Main(string[] args)
         {
             Stopwatch timer = Stopwatch.StartNew();
-            
+
             #region Reflexion
             //Console.WriteLine("typeof(Barrack).Name:            " + typeof(Barrack).Name);
             //Console.WriteLine("typeof(Barrack).FullName:        " + typeof(Barrack).FullName);
@@ -77,9 +77,9 @@ namespace trifenix.agro.console {
             #endregion
 
             #region ActualizaElementosDb
-            //var orders = db.Orders.GetApplicationOrders();
-            //orders.ToList().ForEach(order => {
-            //    order.isPhenological = order.PhenologicalPreOrders.Count != 0;
+            //orders.ToList().ForEach(order =>
+            //{
+            //    order.InnerCorrelative = db.ExecutionOrders.GetExecutionOrders(order.Id).Count()+1;
             //    db.Orders.CreateUpdate(order);
             //});
             #endregion

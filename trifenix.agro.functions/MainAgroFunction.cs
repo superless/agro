@@ -21,6 +21,10 @@ using trifenix.agro.model.external.Input;
 using trifenix.agro.model.external.output;
 using trifenix.agro.model.external;
 using trifenix.agro.search.model;
+using trifenix.agro.db;
+using trifenix.agro.db.applicationsReference.agro;
+using trifenix.agro.db.applicationsReference.common;
+using System.Diagnostics;
 
 namespace trifenix.agro.functions {
     public static class MainAgroFunction {
@@ -1292,10 +1296,35 @@ namespace trifenix.agro.functions {
         #endregion
 
         [FunctionName("DebugRoute")]
-        public static async Task<IActionResult> DebugRoute([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/debugroute/{id?}")] HttpRequest req, ILogger log, string id){
+        public static async Task<IActionResult> DebugRoute([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/debugroute/{id?}")] HttpRequest req, ILogger log, string id) {
+            ClaimsPrincipal claims = await Auth.Validate(req);
+            if (claims == null)
+                return new UnauthorizedResult();
             var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic result = JsonConvert.DeserializeObject(requestBody);
             return result;
+        }
+
+        [FunctionName("ScriptRoute")]
+        public static async Task<IActionResult> ScriptRoute([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/scriptRoute")] HttpRequest req, ILogger log) {
+            ClaimsPrincipal claims = await Auth.Validate(req);
+            if (claims == null)
+                return new UnauthorizedResult();
+            Stopwatch timer = Stopwatch.StartNew();
+            var db = new AgroRepository(new AgroDbArguments {
+                EndPointUrl = "https://agricola-db.documents.azure.com:443/",
+                NameDb = "agrodb",
+                PrimaryKey = "1hrGHt13NgzgOTahFZXDmtugRg5rld9Y9TstCNXg4arZbdOlK4I6h2EOD51Ezgpxe5wsQUxGKaODgET1LSsS4Q=="
+            });
+            var ordersQuery = db.Orders.GetApplicationOrders();
+            var dbOrderOperations = new CommonDbOperations<ApplicationOrder>();
+            List<ApplicationOrder> orders = (await dbOrderOperations.TolistAsync(ordersQuery)).Where(order => order.InnerCorrelative == 0).ToList();
+            orders.ToList().ForEach(order => {
+                order.InnerCorrelative = db.ExecutionOrders.GetExecutionOrders(order.Id).Count() + 1;
+                db.Orders.CreateUpdate(order);
+            });
+            timer.Stop();
+            return new ObjectResult($"Tiempo transcurrido: {timer.Elapsed.ToString("hh\\:mm\\:ss")}");
         }
 
     }
