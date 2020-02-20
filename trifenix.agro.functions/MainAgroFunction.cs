@@ -1267,13 +1267,13 @@ namespace trifenix.agro.functions {
             var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic credenciales = JsonConvert.DeserializeObject(requestBody);
 
-            string clientId = "a81f0ad4-912b-46d3-ba3e-7bf605693242";
-            string scope = "https://sprint3-jhm.trifenix.io/App.access";
-            string clientSecret = "gUjIa4F=NXlAwwMCF2j2SFMMj3?m@=FM";
+            string clientId = "34d9266f-43f9-4fb2-8cdd-ae21be551342";
+            string scope = "https://agro-dev.trifenix.io/App.access";
+            string clientSecret = "B._H_uAwEdg7K1FzVboS3S/oF4IKNbtf";
             string username = (string)credenciales["username"];
             string password = (string)credenciales["password"];
             string grantType = "password";
-            string endPoint = "https://login.microsoftonline.com/jhmad.onmicrosoft.com/oauth2/v2.0/token";
+            string endPoint = "https://login.microsoftonline.com/jhmdev.onmicrosoft.com/oauth2/v2.0/token";
 
             HttpClient client = new HttpClient();
             var parametros = new Dictionary<string, string> {
@@ -1296,7 +1296,7 @@ namespace trifenix.agro.functions {
         #endregion
 
         [FunctionName("DebugRoute")]
-        public static async Task<IActionResult> DebugRoute([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/debugroute/{id?}")] HttpRequest req, ILogger log, string id) {
+        public static async Task<IActionResult> DebugRoute([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "debugRoute/{id?}")] HttpRequest req, ILogger log, string id) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
@@ -1306,7 +1306,7 @@ namespace trifenix.agro.functions {
         }
 
         [FunctionName("ScriptRoute")]
-        public static async Task<IActionResult> ScriptRoute([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/scriptRoute")] HttpRequest req, ILogger log) {
+        public static async Task<IActionResult> ScriptRoute([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "scriptRoute")] HttpRequest req, ILogger log) {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
