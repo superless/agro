@@ -10,7 +10,7 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces.agro;
-using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model;
 using trifenix.agro.microsoftgraph.interfaces;
 
 namespace trifenix.agro.microsoftgraph.operations
@@ -75,7 +75,7 @@ namespace trifenix.agro.microsoftgraph.operations
             var responseBody = await response.Content.ReadAsStringAsync();
             dynamic json = JsonConvert.DeserializeObject(responseBody);
             JArray jArray = json.value?.ToObject<JArray>();
-            var jUser = jArray.FirstOrDefault(user => !String.IsNullOrEmpty(user.Value<string>("mail"))?user.Value<string>("mail").Equals(email):false);
+            var jUser = jArray.FirstOrDefault(user => !String.IsNullOrEmpty(user.Value<string>("mail")) && user.Value<string>("mail").Equals(email));
             return jUser?.Value<string>("id");
         }
     }

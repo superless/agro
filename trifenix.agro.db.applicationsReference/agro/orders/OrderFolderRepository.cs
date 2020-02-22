@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro;
 using trifenix.agro.db.interfaces.agro.orders;
-using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model;
 
 namespace trifenix.agro.db.applicationsReference.agro.orders
 {

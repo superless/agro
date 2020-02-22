@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model;
 using trifenix.agro.external.interfaces.entities.main;
 using trifenix.agro.model.external;
 using Cosmonaut.Extensions;

@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using trifenix.agro.db.applicationsReference.agro;
-using trifenix.agro.db.interfaces.agro;
+﻿using trifenix.agro.db.interfaces.agro;
 using trifenix.agro.db.interfaces.agro.events;
 using trifenix.agro.db.interfaces.agro.orders;
 using trifenix.agro.db.interfaces.common;
-using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model;
 using trifenix.agro.microsoftgraph.interfaces;
 
-namespace trifenix.agro.external.operations.entities.orders.args
-{
-    public class OrderFolderArgs
-    {
+namespace trifenix.agro.external.operations.entities.orders.args {
+    public class OrderFolderArgs {
         public IPhenologicalEventRepository PhenologicalEvent { get; set; }
 
         public IApplicationTargetRepository Target { get; set; }

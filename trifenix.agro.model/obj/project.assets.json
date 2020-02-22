@@ -1473,6 +1473,16 @@
           "bin/placeholder/trifenix.agro.db.dll": {}
         }
       },
+      "trifenix.agro.enums/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "compile": {
+          "bin/placeholder/trifenix.agro.enums.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/trifenix.agro.enums.dll": {}
+        }
+      },
       "trifenix.agro.translator.interfaces/1.0.0": {
         "type": "project",
         "framework": ".NETStandard,Version=v2.0",
@@ -5156,6 +5166,11 @@
       "path": "../trifenix.agro.db/trifenix.agro.db.csproj",
       "msbuildProject": "../trifenix.agro.db/trifenix.agro.db.csproj"
     },
+    "trifenix.agro.enums/1.0.0": {
+      "type": "project",
+      "path": "../trifenix.agro.enums/trifenix.agro.enums.csproj",
+      "msbuildProject": "../trifenix.agro.enums/trifenix.agro.enums.csproj"
+    },
     "trifenix.agro.translator.interfaces/1.0.0": {
       "type": "project",
       "path": "../trifenix.agro.translator.interfaces/trifenix.agro.translator.interfaces.csproj",
@@ -5176,7 +5191,9 @@
     ".NETStandard,Version=v2.0": [
       "Cosmonaut >= 2.11.3",
       "NETStandard.Library >= 2.0.3",
+      "System.Collections >= 4.3.0",
       "trifenix.agro.db >= 1.0.0",
+      "trifenix.agro.enums >= 1.0.0",
       "trifenix.agro.weather.model >= 1.0.0"
     ]
   },
@@ -5209,6 +5226,9 @@
             "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.db\\trifenix.agro.db.csproj": {
               "projectPath": "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.db\\trifenix.agro.db.csproj"
             },
+            "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.enums\\trifenix.agro.enums.csproj": {
+              "projectPath": "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.enums\\trifenix.agro.enums.csproj"
+            },
             "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.weather.model\\trifenix.agro.weather.model.csproj": {
               "projectPath": "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.weather.model\\trifenix.agro.weather.model.csproj"
             }
@@ -5233,6 +5253,10 @@
             "target": "Package",
             "version": "[2.0.3, )",
             "autoReferenced": true
+          },
+          "System.Collections": {
+            "target": "Package",
+            "version": "[4.3.0, )"
           }
         },
         "imports": [

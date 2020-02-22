@@ -1,7 +1,7 @@
 ﻿using trifenix.agro.db.applicationsReference.common;
 using trifenix.agro.db.interfaces.agro;
 using trifenix.agro.db.interfaces.common;
-using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model;
 using trifenix.agro.external.interfaces;
 using trifenix.agro.external.interfaces.custom;
 using trifenix.agro.external.operations.custom;

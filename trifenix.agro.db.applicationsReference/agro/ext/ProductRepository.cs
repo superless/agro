@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.ext;
-using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model;
 
 namespace trifenix.agro.db.applicationsReference.agro.ext {
     public class ProductRepository : IProductRepository {

@@ -3445,7 +3445,9 @@
         "framework": ".NETStandard,Version=v2.0",
         "dependencies": {
           "Cosmonaut": "2.11.3",
+          "System.Collections": "4.3.0",
           "trifenix.agro.db": "1.0.0",
+          "trifenix.agro.enums": "1.0.0",
           "trifenix.agro.weather.model": "1.0.0"
         },
         "compile": {

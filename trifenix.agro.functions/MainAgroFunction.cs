@@ -11,9 +11,8 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System;
-using trifenix.agro.db.model.agro.enums;
 using trifenix.agro.db.model.agro.orders;
-using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model;
 using trifenix.agro.email.operations;
 using trifenix.agro.external.operations.helper;
 using trifenix.agro.functions.Helper;
@@ -21,10 +20,8 @@ using trifenix.agro.model.external.Input;
 using trifenix.agro.model.external.output;
 using trifenix.agro.model.external;
 using trifenix.agro.search.model;
-using trifenix.agro.db;
-using trifenix.agro.db.applicationsReference.agro;
-using trifenix.agro.db.applicationsReference.common;
 using System.Diagnostics;
+using trifenix.agro.enums;
 
 namespace trifenix.agro.functions {
     public static class MainAgroFunction {
@@ -1313,11 +1310,13 @@ namespace trifenix.agro.functions {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
+            Console.WriteLine("Hora de inicio: {0}", DateTime.Now.ToString("hh\\:mm\\:ss"));
             Stopwatch timer = Stopwatch.StartNew();
             //
             //      Aqui va el cuerpo de la funcion
             //
             timer.Stop();
+            Console.WriteLine("Hora de termino: {0}", DateTime.Now.ToString("hh\\:mm\\:ss"));
             return new ObjectResult($"Tiempo transcurrido: {timer.Elapsed.ToString("hh\\:mm\\:ss")}");
         }
 

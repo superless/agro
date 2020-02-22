@@ -1166,6 +1166,9 @@
               "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.db\\trifenix.agro.db.csproj": {
                 "projectPath": "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.db\\trifenix.agro.db.csproj"
               },
+              "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.enums\\trifenix.agro.enums.csproj": {
+                "projectPath": "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.enums\\trifenix.agro.enums.csproj"
+              },
               "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.weather.model\\trifenix.agro.weather.model.csproj": {
                 "projectPath": "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.weather.model\\trifenix.agro.weather.model.csproj"
               }
@@ -1190,6 +1193,10 @@
               "target": "Package",
               "version": "[2.0.3, )",
               "autoReferenced": true
+            },
+            "System.Collections": {
+              "target": "Package",
+              "version": "[4.3.0, )"
             }
           },
           "imports": [

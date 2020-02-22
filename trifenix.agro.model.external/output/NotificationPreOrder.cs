@@ -1,5 +1,5 @@
 ﻿using System;
-using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model;
 
 namespace trifenix.agro.model.external.output
 {

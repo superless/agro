@@ -1,7 +1,7 @@
 ﻿using Moq;
 using System;
 using trifenix.agro.db.interfaces.agro.events;
-using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model;
 using trifenix.agro.external.operations.entities.events;
 using trifenix.agro.external.operations.tests.helper.Moqs;
 

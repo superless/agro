@@ -12,6 +12,7 @@ namespace trifenix.agro.db.interfaces.agro {
         IBusinessNameRepository BusinessNames { get; }
         ICertifiedEntityRepository CertifiedEntities { get; }
         ICostCenterRepository CostCenters { get; }
+        ICounterRepository Counter { get; }
         IExecutionOrderRepository ExecutionOrders { get; }
         IIngredientCategoryRepository Categories { get; }
         IIngredientRepository Ingredients { get; }
@@ -31,7 +32,6 @@ namespace trifenix.agro.db.interfaces.agro {
         ITractorRepository Tractors { get; }
         IUserRepository Users { get; }
         IVarietyRepository Varieties { get; }
-
 
     }
 }

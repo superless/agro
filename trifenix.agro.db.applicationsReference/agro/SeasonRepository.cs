@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces.agro;
-using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model;
 using Cosmonaut.Exceptions;
 using Cosmonaut.Extensions;
 using trifenix.agro.db.interfaces;

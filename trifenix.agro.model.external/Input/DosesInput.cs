@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using trifenix.agro.db.model.agro.local;
+using trifenix.agro.db.model.local;
 
 namespace trifenix.agro.model.external.Input
 {

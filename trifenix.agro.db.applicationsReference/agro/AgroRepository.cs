@@ -7,7 +7,7 @@ using trifenix.agro.db.interfaces.agro.events;
 using trifenix.agro.db.interfaces.agro.ext;
 using trifenix.agro.db.interfaces.agro.fields;
 using trifenix.agro.db.interfaces.agro.orders;
-using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model;
 using trifenix.agro.db.model.agro.core;
 using trifenix.agro.db.model.agro.orders;
 
@@ -23,6 +23,7 @@ namespace trifenix.agro.db.applicationsReference.agro {
         public IBusinessNameRepository BusinessNames => new BusinessNameRepository(new MainDb<BusinessName>(DbArguments));
         public ICertifiedEntityRepository CertifiedEntities => new CertifiedEntityRepository(new MainDb<CertifiedEntity>(DbArguments));
         public ICostCenterRepository CostCenters => new CostCenterRepository(new MainDb<CostCenter>(DbArguments));
+        public ICounterRepository Counter => new CounterRepository(new MainDb<Counter>(DbArguments));
         public IExecutionOrderRepository ExecutionOrders => new ExecutionOrderRepository(new MainDb<ExecutionOrder>(DbArguments));
         public IIngredientCategoryRepository Categories => new IngredientCategoryRepository(new MainDb<IngredientCategory>(DbArguments));
         public IIngredientRepository Ingredients => new IngredientRepository(new MainDb<Ingredient>(DbArguments));

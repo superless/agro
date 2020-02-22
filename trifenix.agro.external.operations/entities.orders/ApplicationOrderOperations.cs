@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System;
-using trifenix.agro.db.model.agro.local;
+using trifenix.agro.db.model.local;
 using trifenix.agro.db.model.agro.orders;
-using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model;
 using trifenix.agro.external.interfaces.entities.orders;
 using trifenix.agro.external.operations.common;
 using trifenix.agro.external.operations.helper;

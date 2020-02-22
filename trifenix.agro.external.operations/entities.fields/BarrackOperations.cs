@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using trifenix.agro.db.interfaces.agro;
 using trifenix.agro.db.interfaces.agro.fields;
 using trifenix.agro.db.interfaces.common;
-using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model;
 using trifenix.agro.external.interfaces.entities.fields;
 using trifenix.agro.external.operations.helper;
 using trifenix.agro.model.external;

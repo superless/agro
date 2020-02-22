@@ -1,5 +1,5 @@
 ﻿using Moq;
-using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model;
 using trifenix.agro.microsoftgraph.interfaces;
 
 namespace trifenix.agro.external.operations.tests.helper.Instances

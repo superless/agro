@@ -14,7 +14,7 @@ using trifenix.agro.db.applicationsReference;
 using trifenix.agro.db.applicationsReference.agro;
 using trifenix.agro.db.applicationsReference.agro.orders;
 using trifenix.agro.db.applicationsReference.common;
-using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model;
 using trifenix.agro.db.model.agro.orders;
 using trifenix.agro.external.operations;
 using trifenix.agro.search;
@@ -23,8 +23,8 @@ using trifenix.agro.search.model;
 namespace trifenix.agro.console {
     class Program {
         static async Task Main(string[] args) {
-            Stopwatch timer = Stopwatch.StartNew();
             Console.WriteLine("Hora de inicio: {0}", DateTime.Now.ToString("hh\\:mm\\:ss"));
+            Stopwatch timer = Stopwatch.StartNew();
 
             #region Reflexion
             //Console.WriteLine("typeof(Barrack).Name:            " + typeof(Barrack).Name);

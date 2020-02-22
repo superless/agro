@@ -3,7 +3,7 @@ using trifenix.agro.db.interfaces.agro.events;
 using trifenix.agro.db.interfaces.agro.fields;
 using trifenix.agro.db.interfaces.agro.orders;
 using trifenix.agro.db.interfaces.common;
-using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model;
 
 namespace trifenix.agro.external.operations.custom.args
 {

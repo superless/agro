@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces.agro;
 using trifenix.agro.db.interfaces.agro.ext;
-using trifenix.agro.db.model.agro.local;
+using trifenix.agro.db.model.local;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.util;
 

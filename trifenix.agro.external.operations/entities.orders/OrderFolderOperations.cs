@@ -2,39 +2,34 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using trifenix.agro.db.model.agro;
-using trifenix.agro.db.model.agro.enums;
-using trifenix.agro.db.model.agro.local;
+using trifenix.agro.db.model;
+using trifenix.agro.db.model;
+using trifenix.agro.db.model.local;
+using trifenix.agro.enums;
 using trifenix.agro.external.interfaces.entities.orders;
 using trifenix.agro.external.operations.entities.orders.args;
 using trifenix.agro.external.operations.helper;
 using trifenix.agro.model.external;
 
-namespace trifenix.agro.external.operations.entities.orders
-{
-    public class OrderFolderOperations : IOrderFolderOperations
-    {
+namespace trifenix.agro.external.operations.entities.orders {
+    public class OrderFolderOperations : IOrderFolderOperations {
         private readonly OrderFolderArgs _args;
 
-        public OrderFolderOperations(OrderFolderArgs args)
-        {
+        public OrderFolderOperations(OrderFolderArgs args) {
             _args = args;
         }        
 
-        public async Task<ExtGetContainer<OrderFolder>> GetOrderFolder(string id)
-        {
+        public async Task<ExtGetContainer<OrderFolder>> GetOrderFolder(string id) {
             var order = await _args.OrderFolder.GetOrderFolder(id);
             return OperationHelper.GetElement(order);
         }
 
-        public async Task<ExtGetContainer<List<OrderFolder>>> GetOrderFolders()
-        {
+        public async Task<ExtGetContainer<List<OrderFolder>>> GetOrderFolders() {
             var orderFoldersQuery = _args.OrderFolder.GetOrderFolders();
             var orderFolders = await _args.CommonDb.TolistAsync(orderFoldersQuery);
             var notificationsQuery = _args.NotificationEvent.GetNotificationEvents();
             var notifications = await _args.CommonDbNotifications.TolistAsync(notificationsQuery.Where(s => s.Barrack.SeasonId == _args.IdSeason));
-            var orders = orderFolders.Select(s =>
-            {
+            var orders = orderFolders.Select(s => {
                 var nw = DateTime.Now;
                 var stage = notifications.Any(a => a.PhenologicalEvent.Id.Equals(s.PhenologicalEvent.Id)) ? PhenologicalStage.Success : nw > s.PhenologicalEvent.InitDate ? PhenologicalStage.Warning : PhenologicalStage.Waiting;
                 s.Stage = stage;

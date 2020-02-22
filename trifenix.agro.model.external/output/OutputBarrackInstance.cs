@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model;
 using trifenix.agro.db.model.agro.orders;
 
 namespace trifenix.agro.model.external.output

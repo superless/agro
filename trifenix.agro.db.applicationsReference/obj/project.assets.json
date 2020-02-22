@@ -1491,7 +1491,9 @@
         "framework": ".NETStandard,Version=v2.0",
         "dependencies": {
           "Cosmonaut": "2.11.3",
+          "System.Collections": "4.3.0",
           "trifenix.agro.db": "1.0.0",
+          "trifenix.agro.enums": "1.0.0",
           "trifenix.agro.weather.model": "1.0.0"
         },
         "compile": {
@@ -1499,6 +1501,16 @@
         },
         "runtime": {
           "bin/placeholder/trifenix.agro.db.model.dll": {}
+        }
+      },
+      "trifenix.agro.enums/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "compile": {
+          "bin/placeholder/trifenix.agro.enums.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/trifenix.agro.enums.dll": {}
         }
       },
       "trifenix.agro.translator.interfaces/1.0.0": {
@@ -5243,6 +5255,11 @@
       "type": "project",
       "path": "../trifenix.agro.model/trifenix.agro.db.model.csproj",
       "msbuildProject": "../trifenix.agro.model/trifenix.agro.db.model.csproj"
+    },
+    "trifenix.agro.enums/1.0.0": {
+      "type": "project",
+      "path": "../trifenix.agro.enums/trifenix.agro.enums.csproj",
+      "msbuildProject": "../trifenix.agro.enums/trifenix.agro.enums.csproj"
     },
     "trifenix.agro.translator.interfaces/1.0.0": {
       "type": "project",
