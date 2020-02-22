@@ -1302,6 +1302,9 @@ namespace trifenix.agro.functions {
                 return new UnauthorizedResult();
             var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic result = JsonConvert.DeserializeObject(requestBody);
+            //
+            //      Aqui va el cuerpo de la funcion
+            //
             return result;
         }
 
@@ -1311,19 +1314,9 @@ namespace trifenix.agro.functions {
             if (claims == null)
                 return new UnauthorizedResult();
             Stopwatch timer = Stopwatch.StartNew();
-            var db = new AgroRepository(new AgroDbArguments {
-                EndPointUrl = "https://agricola-db.documents.azure.com:443/",
-                NameDb = "agrodb",
-                PrimaryKey = "1hrGHt13NgzgOTahFZXDmtugRg5rld9Y9TstCNXg4arZbdOlK4I6h2EOD51Ezgpxe5wsQUxGKaODgET1LSsS4Q=="
-            });
-            var ordersQuery = db.Orders.GetApplicationOrders();
-            var dbOrderOperations = new CommonDbOperations<ApplicationOrder>();
-            List<ApplicationOrder> orders = (await dbOrderOperations.TolistAsync(ordersQuery)).Where(order => order.InnerCorrelative == 0).ToList();
-            log.LogInformation("Existen " + orders.Count + " ordenes sin actualizar.");
-            orders.ToList().ForEach(order => {
-                order.InnerCorrelative = db.ExecutionOrders.GetExecutionOrders(order.Id).Count() + 1;
-                db.Orders.CreateUpdate(order);
-            });
+            //
+            //      Aqui va el cuerpo de la funcion
+            //
             timer.Stop();
             return new ObjectResult($"Tiempo transcurrido: {timer.Elapsed.ToString("hh\\:mm\\:ss")}");
         }

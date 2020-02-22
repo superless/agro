@@ -22,9 +22,9 @@ using trifenix.agro.search.model;
 
 namespace trifenix.agro.console {
     class Program {
-        static async Task Main(string[] args)
-        {
+        static async Task Main(string[] args) {
             Stopwatch timer = Stopwatch.StartNew();
+            Console.WriteLine("Hora de inicio: {0}", DateTime.Now.ToString("hh\\:mm\\:ss"));
 
             #region Reflexion
             //Console.WriteLine("typeof(Barrack).Name:            " + typeof(Barrack).Name);
@@ -77,9 +77,15 @@ namespace trifenix.agro.console {
             #endregion
 
             #region ActualizaElementosDb
-            //orders.ToList().ForEach(order =>
-            //{
-            //    order.InnerCorrelative = db.ExecutionOrders.GetExecutionOrders(order.Id).Count()+1;
+            //int indice = 0;
+            //float porcentaje = 0;
+            //int cantidad = orders.Count;
+            //float incremento = (float)100 / cantidad;
+            //Console.WriteLine("Existen " + cantidad + " ApplicationOrder sin actualizar.");
+            //orders.ToList().ForEach(order => {
+            //    Console.WriteLine(Math.Round(porcentaje, 2) + "% -> Indice: " + ++indice);
+            //    porcentaje += incremento;
+            //    order.InnerCorrelative = db.ExecutionOrders.GetExecutionOrders(order.Id).Count() + 1;
             //    db.Orders.CreateUpdate(order);
             //});
             #endregion
@@ -232,6 +238,7 @@ namespace trifenix.agro.console {
             #endregion
 
             timer.Stop();
+            Console.WriteLine("Hora de termino: {0}", DateTime.Now.ToString("hh\\:mm\\:ss"));
             Console.WriteLine("Tiempo transcurrido: {0}", timer.Elapsed.ToString("hh\\:mm\\:ss"));
 
         }
