@@ -15,6 +15,6 @@ namespace trifenix.agro.db.model.agro.local
         /// <summary>
         /// Entidad certificadora (opcional), si es indicado en la etiqueta, probablemente no sea de una entidad certificadora.
         /// </summary>
-        public CertifiedEntity CertifiedEntity { get; set; }
+        public string IdCertifiedEntity { get; set; }
     }
 }

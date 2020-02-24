@@ -4,16 +4,16 @@ using Cosmonaut.Attributes;
 namespace trifenix.agro.db.model.agro
 {
     [SharedCosmosCollection("agro", "Variety")]
-    public class Variety : DocumentBase, ISharedCosmosEntity
+    public class Variety : DocumentBaseName, ISharedCosmosEntity
     {
     
         public override string Id { get; set; }
 
-        public string Name { get; set; }
+        public override string Name { get; set; }
 
         public string Abbreviation { get; set; }
 
-        public Specie Specie { get; set; }
+        public string IdSpecie { get; set; }
 
     }
 }

@@ -10,9 +10,9 @@ namespace trifenix.agro.db.applicationsReference.agro.orders
     {
 
         private readonly IMainDb<PhenologicalPreOrder> _db;
-        public PhenologicalPreOrderRepository(IMainDb<PhenologicalPreOrder> db) 
+        public PhenologicalPreOrderRepository(AgroDbArguments dbArguments) 
         {
-            _db = db;
+            _db = new MainDb<PhenologicalPreOrder>(dbArguments);
         }
 
         public async Task<string> CreateUpdatePhenologicalPreOrder(PhenologicalPreOrder preOrder)

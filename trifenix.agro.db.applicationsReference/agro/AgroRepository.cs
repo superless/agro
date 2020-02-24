@@ -2,6 +2,7 @@
 using trifenix.agro.db.applicationsReference.agro.ext;
 using trifenix.agro.db.applicationsReference.agro.fields;
 using trifenix.agro.db.applicationsReference.agro.orders;
+using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro;
 using trifenix.agro.db.interfaces.agro.events;
 using trifenix.agro.db.interfaces.agro.ext;
@@ -21,55 +22,89 @@ namespace trifenix.agro.db.applicationsReference.agro
             DbArguments = dbArguments;
         }
 
-        public IApplicationTargetRepository Targets => new ApplicationTargetRepository(new MainDb<ApplicationTarget>(DbArguments));
+        public IMainGenericDb<Sector> Sectors => new SectorRepository(DbArguments);
 
-        public IJobRepository Jobs => new JobRepository(new MainDb<Job>(DbArguments));
+        public IMainGenericDb<Specie> Species => new SpecieRepository(DbArguments);
 
-        public IRoleRepository Roles => new RoleRepository(new MainDb<Role>(DbArguments));
+        public IMainGenericDb<PlotLand> PlotLands => new PlotLandRepository(DbArguments);
 
-        public IUserRepository Users => new UserRepository(new MainDb<UserApplicator>(DbArguments));
 
-        public INebulizerRepository Nebulizers => new NebulizerRepository(new MainDb<Nebulizer>(DbArguments));
+        public IMainGenericDb<Variety> Varieties => new VarietyRepository(DbArguments);
 
-        public ITractorRepository Tractors => new TractorRepository(new MainDb<Tractor>(DbArguments));
 
-        public IIngredientCategoryRepository Categories => new IngredientCategoryRepository(new MainDb<IngredientCategory>(DbArguments));
+        public IMainGenericDb<ApplicationTarget> Targets => new ApplicationTargetRepository(DbArguments);
 
-        public IIngredientRepository Ingredients => new IngredientRepository(new MainDb<Ingredient>(DbArguments));
+        public IMainGenericDb<PhenologicalEvent> PhenologicalEvents => new PhenologicalEventRepository(DbArguments);
 
-        public IPhenologicalEventRepository PhenologicalEvents => new PhenologicalEventRepository(new MainDb<PhenologicalEvent>(DbArguments));
+        public IMainGenericDb<CertifiedEntity> CertifiedEntities => new CertifiedEntityRepository(DbArguments);
 
-        public ISpecieRepository Species => new SpecieRepository(new MainDb<Specie>(DbArguments));
 
-        public IRootstockRepository Rootstocks => new RootstockRepository(new MainDb<Rootstock>(DbArguments));
+        public IMainGenericDb<IngredientCategory> Categories => new IngredientCategoryRepository(DbArguments);
 
-        public ISeasonRepository Seasons => new SeasonRepository(new MainDb<Season>(DbArguments));
+        public IMainGenericDb<Ingredient> Ingredients => new IngredientRepository(DbArguments);
 
-        public IOrderFolderRepository OrderFolder => new OrderFolderRepository(new MainDb<OrderFolder>(DbArguments));
 
-        public IPhenologicalPreOrderRepository PhenologicalPreOrders => new PhenologicalPreOrderRepository(new MainDb<PhenologicalPreOrder>(DbArguments));
+        public IMainGenericDb<Product> Products => new ProductRepository(DbArguments);
 
-        public INotificationEventRepository NotificationEvents => new NotificationEventRepository(new MainDb<NotificationEvent>(DbArguments));
+        public IMainGenericDb<Doses> Doses => new DosesRepository(DbArguments);
 
-        public IBarrackRepository Barracks => new BarrackRepository(new MainDb<Barrack>(DbArguments));
 
-        public IPlotLandRepository PlotLands => new PlotLandRepository(new MainDb<PlotLand>(DbArguments));
+        public IMainGenericDb<Role> Roles => new RoleRepository(DbArguments);
 
-        public ISectorRepository Sectors => new SectorRepository(new MainDb<Sector>(DbArguments));
 
-        public IVarietyRepository Varieties => new VarietyRepository(new MainDb<Variety>(DbArguments));
+        public IMainGenericDb<Job> Jobs => new JobRepository(DbArguments);
 
-        public IProductRepository Products => new ProductRepository(new MainDb<Product>(DbArguments));
+        
 
-        public ICertifiedEntityRepository CertifiedEntities => new CertifiedEntityRepository(new MainDb<CertifiedEntity>(DbArguments));
+        public IMainGenericDb<UserApplicator> Users => new UserRepository(DbArguments);
 
-        public IApplicationOrderRepository Orders => new ApplicationOrderRepository(new MainDb<ApplicationOrder>(DbArguments));
+        public IMainGenericDb<Nebulizer> Nebulizers => new NebulizerRepository(DbArguments);
 
-        public IExecutionOrderRepository ExecutionOrders => new ExecutionOrderRepository(new MainDb<ExecutionOrder>(DbArguments));
 
-        public IBusinessNameRepository BusinessNames => new BusinessNameRepository(new MainDb<BusinessName>(DbArguments));
+        
 
-        public ICostCenterRepository CostCenters => new CostCenterRepository(new MainDb<CostCenter>(DbArguments));
+        public IMainGenericDb<Tractor> Tractors => new TractorRepository(DbArguments);
 
+
+        public IMainGenericDb<BusinessName> BusinessNames => new BusinessNameRepository(DbArguments);
+
+        public IMainGenericDb<CostCenter> CostCenters => new CostCenterRepository(DbArguments);
+
+
+
+
+
+
+        public IRootstockRepository Rootstocks => new RootstockRepository(DbArguments);
+
+        public ISeasonRepository Seasons => new SeasonRepository(DbArguments);
+
+        public IOrderFolderRepository OrderFolder => new OrderFolderRepository(DbArguments);
+
+        public IPhenologicalPreOrderRepository PhenologicalPreOrders => new PhenologicalPreOrderRepository(DbArguments);
+
+        public INotificationEventRepository NotificationEvents => new NotificationEventRepository(DbArguments);
+
+        public IBarrackRepository Barracks => new BarrackRepository(DbArguments);
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        public IApplicationOrderRepository Orders => new ApplicationOrderRepository(DbArguments);
+
+        public IExecutionOrderRepository ExecutionOrders => new ExecutionOrderRepository(DbArguments);
+
+        
+
+        public ICommentRepository Comments => new CommentRepository(DbArguments);
+
+        public IMainDb<UserActivity> UserActivity => new UserActivityRepository(DbArguments);
     }
 }

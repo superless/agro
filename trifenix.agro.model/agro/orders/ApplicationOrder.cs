@@ -137,7 +137,7 @@ namespace trifenix.agro.db.model.agro.orders
             set { __idsSpecies = value; }
         }
 
-        public ApplicationOrder(string id, List<string> certifiedEntitiesIds, List<string>  speciesIds, List<BarrackOrderInstance> barracksInstances, List<string>  targetIds, List<string> varietyIds, string seasonId, string name, bool isPhenological, DateTime initDate, DateTime endDate, double wetting, List<ApplicationsInOrder> applications, UserActivity creator, List<PhenologicalPreOrder> phenologicalPreOrders) {
+        public ApplicationOrder(string id, List<string> certifiedEntitiesIds, List<string>  speciesIds, List<BarrackOrderInstance> barracksInstances, List<string>  targetIds, List<string> varietyIds, string seasonId, string name, bool isPhenological, DateTime initDate, DateTime endDate, double wetting, List<ApplicationsInOrder> applications, List<PhenologicalPreOrder> phenologicalPreOrders) {
             Id = id;
             IdsCertifiedEntities = certifiedEntitiesIds;
             IdsSpecies = speciesIds;
@@ -151,7 +151,6 @@ namespace trifenix.agro.db.model.agro.orders
             EndDate = endDate;
             Wetting = wetting;
             ApplicationInOrders = applications;
-            Creator = creator;
             PhenologicalPreOrders = phenologicalPreOrders;
         }
 

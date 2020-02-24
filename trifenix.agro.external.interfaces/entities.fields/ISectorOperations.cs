@@ -11,14 +11,9 @@ namespace trifenix.agro.external.interfaces.entities.fields
     {
         Task<ExtPostContainer<string>> SaveNewSector(string name);
 
-        Task<ExtPostContainer<Sector>> SaveEditSector(string id, string name);
-
-        Task<ExtGetContainer<List<Sector>>> GetSectors();
-
+        Task<ExtPostContainer<string>> SaveEditSector(string id, string name);
         Task<ExtGetContainer<Sector>> GetSector(string id);
-
-
-
-
     }
+
+
 }

@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using trifenix.agro.common.tests.fakes;
 using trifenix.agro.db.model.agro;
-using trifenix.agro.db.model.agro.enums;
+using trifenix.agro.enums;
 using trifenix.agro.external.operations.tests.helper.Instances;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;

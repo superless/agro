@@ -9,28 +9,10 @@ using trifenix.agro.db.model.agro;
 
 namespace trifenix.agro.db.applicationsReference.agro
 {
-    public class ApplicationTargetRepository : IApplicationTargetRepository
+    public class ApplicationTargetRepository : MainGenericDb<ApplicationTarget>, IMainGenericDb<ApplicationTarget>
     {
-
-        private readonly IMainDb<ApplicationTarget> _db;
-        public ApplicationTargetRepository(IMainDb<ApplicationTarget> db) 
+        public ApplicationTargetRepository(AgroDbArguments args) : base(args)
         {
-            _db = db;
-        }
-
-        public async Task<string> CreateUpdateTargetApp(ApplicationTarget target)
-        {
-            return await _db.CreateUpdate(target);
-        }
-
-        public async Task<ApplicationTarget> GetTarget(string id)
-        {
-            return await _db.GetEntity(id);
-        }
-
-        public IQueryable<ApplicationTarget> GetTargets()
-        {
-            return _db.GetEntities();
         }
     }
 }

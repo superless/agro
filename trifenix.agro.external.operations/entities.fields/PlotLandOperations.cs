@@ -1,92 +1,62 @@
-﻿using Cosmonaut.Extensions;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using trifenix.agro.db.interfaces.agro.fields;
-using trifenix.agro.db.interfaces.common;
+using trifenix.agro.db.interfaces;
+using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.model.agro;
-using trifenix.agro.external.interfaces.entities.fields;
-using trifenix.agro.external.operations.helper;
+using trifenix.agro.enums;
+using trifenix.agro.external.interfaces;
+using trifenix.agro.external.operations.res;
 using trifenix.agro.model.external;
+using trifenix.agro.model.external.Input;
+using trifenix.agro.search.interfaces;
+using trifenix.agro.search.model;
 
 namespace trifenix.agro.external.operations.entities.fields
 {
-    public class PlotLandOperations : IPlotLandOperations
+    public class PlotLandOperations : MainReadOperationName<PlotLand, PlotLandInput>, IGenericOperation<PlotLand, PlotLandInput>
     {
-
-        private readonly IPlotLandRepository _repo;
-        private readonly ISectorRepository _repoSector;
-        private readonly string _idSeason;
-        private readonly ICommonDbOperations<PlotLand> _commonDb;
-        public PlotLandOperations(IPlotLandRepository repoPlotLand, ISectorRepository repoSector, ICommonDbOperations<PlotLand> commonDb, string idSeason  )
+        public PlotLandOperations(IMainGenericDb<PlotLand> repo, IExistElement existElement, IAgroSearch search) : base(repo, existElement, search)
         {
-            _repo = repoPlotLand;
-            _repoSector = repoSector;
-            _idSeason = idSeason;
-            _commonDb = commonDb;
-        }
-        public async Task<ExtGetContainer<PlotLand>> GetPlotLand(string id)
-        {
-            var plotLand = await _repo.GetPlotLand(id);
-            return OperationHelper.GetElement(plotLand);
         }
 
-        public async Task<ExtGetContainer<List<PlotLand>>> GetPlotLands()
+        public async Task<ExtPostContainer<string>> Save(PlotLandInput input)
         {
-            var queryPlotands = _repo.GetPlotLands();
-            var plotLands = await _commonDb.TolistAsync(queryPlotands);
-            return OperationHelper.GetElements(plotLands);
+            var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
 
-        }
-
-        public async Task<ExtPostContainer<PlotLand>> SaveEditPlotLand(string id, string name, string idSector)
-        {
-            var sector = await _repoSector.GetSector(idSector);
-            if (sector == null)
+            var plotLand = new PlotLand
             {
-                return OperationHelper.PostNotFoundElementException<PlotLand>($"no existe sector con id {idSector}", idSector);
-            }
+                Id = id,
+                Name = input.Name,
+                IdSector = input.IdSector
+            };
 
-            var element = await _repo.GetPlotLand(id);
+            var valida = await Validate(input);
+            if (!valida) throw new Exception(string.Format(ErrorMessages.NotValid, plotLand.CosmosEntityName));
 
-            return await OperationHelper.EditElement(_commonDb, _repo.GetPlotLands(),
-                id,
-                element,
-                s => {
-                    s.Name = name;
-                    s.SeasonId = _idSeason;
-                    s.Sector = sector;
-                    return s;
-                },
-                _repo.CreateUpdateSector,
-                 $"No existe Parcela con id :{id}",
-                s => s.Name.Equals(name) && name!=element.Name,
-                $"Ya existe parcela con nombre: {name}"
-            );
-        }
+            var existsSector = await existElement.ExistsElement<PlotLand>("IdSector", input.IdSector);
+            if (!existsSector) throw new Exception(string.Format(ErrorMessages.NotValidId, "Sector"));
 
 
-        
-        public async Task<ExtPostContainer<string>> SaveNewPlotLand(string name, string idSector)
-        {
-            var sector = await _repoSector.GetSector(idSector);
-            if (sector == null)
+            await repo.CreateUpdate(plotLand);
+
+            search.AddSimpleEntities(new List<SimpleSearch>
             {
-                return OperationHelper.PostNotFoundElementException<string>($"no existe sector con id {idSector}", idSector);
-            }
-            return await OperationHelper.CreateElement(_commonDb,_repo.GetPlotLands(),
-                async s => await _repo.CreateUpdateSector(new PlotLand
-                {
-                    Id = s,
-                    Name = name,
-                    SeasonId = _idSeason,
-                    Sector = sector
-                }),
-                s => s.Name.Equals(name),
-                $"Ya existe parcela con nombre: {name}"
-            );
+                new SimpleSearch{
+                    Created = DateTime.Now,
+                    Id = id,
+                    Name = input.Name,
+                    EntityName = plotLand.CosmosEntityName
+                }
+            });
 
+
+            return new ExtPostContainer<string>
+            {
+                IdRelated = id,
+                MessageResult = ExtMessageResult.Ok,
+                Result = id
+            };
         }
     }
 }

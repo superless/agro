@@ -13,9 +13,9 @@ namespace trifenix.agro.db.applicationsReference.agro.events
 
         private readonly IMainDb<NotificationEvent> _db;
 
-        public NotificationEventRepository(IMainDb<NotificationEvent> db) 
+        public NotificationEventRepository(AgroDbArguments dbArguments)
         {
-            _db = db;
+            _db = new MainDb<NotificationEvent>(dbArguments);
         }
 
         public async Task<string> CreateUpdateNotificationEvent(NotificationEvent notificationEvent)
@@ -33,10 +33,7 @@ namespace trifenix.agro.db.applicationsReference.agro.events
             return _db.GetEntities();
         }
 
-        public async Task<long> Total()
-        {
-            return await _db.GetTotalElements();
-        }
+       
 
         public async Task<long> Total(string season, string idSpecie)
         {

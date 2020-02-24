@@ -14,9 +14,9 @@ namespace trifenix.agro.db.applicationsReference.agro.orders
     {
 
         private readonly IMainDb<OrderFolder> _db;
-        public OrderFolderRepository(IMainDb<OrderFolder> db) 
+        public OrderFolderRepository(AgroDbArguments dbArguments) 
         {
-            _db = db;
+            _db = new MainDb<OrderFolder>(dbArguments);
         }
 
 

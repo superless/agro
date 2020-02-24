@@ -14,9 +14,9 @@ namespace trifenix.agro.db.applicationsReference.agro
     public class SeasonRepository : ISeasonRepository
     {
         private readonly IMainDb<Season> _db;
-        public SeasonRepository(IMainDb<Season> db)
+        public SeasonRepository(AgroDbArguments dbArguments)
         {
-            _db = db;
+            _db = new MainDb<Season>(dbArguments);
         }
         public async Task<string> CreateUpdateSeason(Season season)
         {

@@ -10,6 +10,6 @@ namespace trifenix.agro.db.interfaces.agro.orders {
 
         IQueryable<ApplicationOrder> GetApplicationOrders();
 
-        Task<long> Total(string season);
+        
     }
 }

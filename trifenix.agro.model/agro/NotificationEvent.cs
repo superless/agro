@@ -1,8 +1,9 @@
 ﻿using Cosmonaut;
 using Cosmonaut.Attributes;
 using System;
-using trifenix.agro.db.model.agro.enums;
+
 using trifenix.agro.db.model.agro.local;
+using trifenix.agro.enums;
 using trifenix.agro.weather.model;
 
 namespace trifenix.agro.db.model.agro
@@ -33,8 +34,7 @@ namespace trifenix.agro.db.model.agro
         public PhenologicalEvent PhenologicalEvent { get; set; }
 
         public NotificationType NotificationType { get; set; }
-
-        public UserActivity Creator { get; set; }
+        
 
         /// <summary>
         /// Ruta o Url en internet de la imagen subida.

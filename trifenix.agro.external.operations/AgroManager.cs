@@ -1,5 +1,7 @@
-﻿using trifenix.agro.db.applicationsReference.common;
+﻿using trifenix.agro.db.applicationsReference.agro.Common;
+using trifenix.agro.db.applicationsReference.common;
 using trifenix.agro.db.interfaces.agro;
+using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.db.model.agro.core;
 using trifenix.agro.db.model.agro.orders;
@@ -17,6 +19,7 @@ using trifenix.agro.external.operations.entities.main;
 using trifenix.agro.external.operations.entities.orders;
 using trifenix.agro.external.operations.entities.orders.args;
 using trifenix.agro.microsoftgraph.interfaces;
+using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.storage.interfaces;
 using trifenix.agro.weather.interfaces;
@@ -25,69 +28,93 @@ namespace trifenix.agro.external.operations {
     public class AgroManager : IAgroManager {
 
         private readonly IAgroRepository _repository;
-        private readonly string _idSeason;
+        
         private readonly IUploadImage _uploadImage;
         private readonly IGraphApi _graphApi;
         private readonly IWeatherApi _weatherApi;
         private readonly IAgroSearch _searchServiceInstance;
 
-        public AgroManager(IAgroRepository repository, string idSeason, IUploadImage uploadImage, IGraphApi graphApi, IWeatherApi weatherApi, IAgroSearch searchServiceInstance) {
-            _repository = repository;
-            _idSeason = idSeason;
+        public AgroManager(IAgroRepository repository,  IUploadImage uploadImage, IGraphApi graphApi, IWeatherApi weatherApi, IAgroSearch searchServiceInstance) {
+            _repository = repository;            
             _uploadImage = uploadImage;
-            _graphApi = graphApi;
+            
             _weatherApi = weatherApi;
             _searchServiceInstance = searchServiceInstance;
+            GraphApi = graphApi;
+
         }
 
-        public string IdSeason { get => _idSeason; }
+        public IGraphApi GraphApi { get; }
 
-        public IPhenologicalOperations PhenologicalEvents => new PhenologicalEventOperations(_repository.PhenologicalEvents, new CommonDbOperations<PhenologicalEvent>());
+        public IGenericFullReadOperation<UserActivity, UserActivityInput> UserActivity => new UserActivityOperations(_repository.UserActivity, new CommonDbOperations<UserActivity>(), GraphApi);
 
-        public IApplicationTargetOperations ApplicationTargets => new ApplicationTargetOperations(_repository.Targets, new CommonDbOperations<ApplicationTarget>());
+        public IExistElement ExistsElements => new CosmosExistElement(_repository.DbArguments);
 
-        public IJobOperations Jobs => new JobOperations(_repository.Jobs, new CommonDbOperations<Job>());
+        public IGenericOperation<Sector, SectorInput> Sectors => new SectorOperations(_repository.Sectors, ExistsElements, _searchServiceInstance);
+        public IGenericOperation<PlotLand, PlotLandInput> PlotLands => new PlotLandOperations(_repository.PlotLands, ExistsElements, _searchServiceInstance);
 
-        public IRoleOperations Roles => new RoleOperations(_repository.Roles, new CommonDbOperations<Role>());
 
-        public IUserOperations Users => new UserOperations(_repository.Users, _graphApi,  _repository.Jobs, _repository.Roles, _repository.Nebulizers, _repository.Tractors, new CommonDbOperations<UserApplicator>());
+        public IGenericOperation<Specie, SpecieInput> Species => new SpecieOperations(_repository.Species, ExistsElements, _searchServiceInstance);
 
-        public INebulizerOperations Nebulizers => new NebulizerOperations(_repository.Nebulizers, new CommonDbOperations<Nebulizer>());
+        public IGenericOperation<Variety, VarietyInput> Varieties => new VarietyOperations(_repository.Varieties, ExistsElements, _searchServiceInstance);
+
+
+        public IGenericOperation<ApplicationTarget, TargetInput> ApplicationTargets => new ApplicationTargetOperations(_repository.Targets, ExistsElements, _searchServiceInstance);
+
+
+
+        public IGenericOperation<PhenologicalEvent, PhenologicalEventInput> PhenologicalEvents => new PhenologicalEventOperations(_repository.PhenologicalEvents, ExistsElements, _searchServiceInstance);
+
+
+        public IGenericOperation<CertifiedEntity, CertifiedEntityInput> CertifiedEntities => new CertifiedEntityOperations(_repository.CertifiedEntities, ExistsElements, _searchServiceInstance);
+
+        public IGenericOperation<IngredientCategory, IngredientCategoryInput> IngredientCategories => new IngredientCategoryOperations(_repository.Categories, ExistsElements, _searchServiceInstance);
+
+        public IGenericOperation<Ingredient, IngredientInput> Ingredients => new IngredientOperations(_repository.Ingredients, ExistsElements, _searchServiceInstance);
+
+
+        public IGenericOperation<Product, ProductInput> Products => new ProductOperations(_repository.Products, ExistsElements, _searchServiceInstance, Doses);
+
+
+        public IGenericOperation<Doses, DosesInput> Doses => new DosesOperations(_repository.Doses, ExistsElements, _searchServiceInstance);
+
+        public IGenericOperation<Role, RoleInput> Roles => new RoleOperations(_repository.Roles, _searchServiceInstance);
+
+
+
+        public IGenericOperation<Job, JobInput> Jobs => new JobOperations(_repository.Jobs, ExistsElements, _searchServiceInstance);
+
         
-        public ITractorOperations Tractors => new TractorOperations(_repository.Tractors, new CommonDbOperations<Tractor>());
 
-        public ISpecieOperations Species => new SpecieOperations(_repository.Species, new CommonDbOperations<Specie>());
+        public IGenericOperation<UserApplicator, UserApplicatorInput> Users => new UserOperations(_repository.Users, ExistsElements, _searchServiceInstance, 
+            GraphApi);
+
+
+        public IGenericOperation<Nebulizer, NebulizerInput> Nebulizers => new NebulizerOperations(_repository.Nebulizers, ExistsElements, _searchServiceInstance);
+        
+
+
+        public IGenericOperation<Tractor, TractorInput> Tractors => new TractorOperations(_repository.Tractors, ExistsElements, _searchServiceInstance);
+
+
+
+        public IGenericOperation<BusinessName, BusinessNameInput> BusinessNames => new BusinessNameOperations(_repository.BusinessNames, ExistsElements, _searchServiceInstance);
+
+        public IGenericOperation<CostCenter, CostCenterInput> CostCenters => new CostCenterOperations(_repository.CostCenters, ExistsElements, _searchServiceInstance);
 
         public IRootstockOperations Rootstock => new RootstockOperations(_repository.Rootstocks, new CommonDbOperations<Rootstock>());
 
-        public IIngredientCategoryOperations IngredientCategories => new IngredientCategoryOperations(_repository.Categories, new CommonDbOperations<IngredientCategory>());
+        
 
-        public IIngredientsOperations Ingredients => new IngredientOperations(_repository.Ingredients, _repository.Categories, new CommonDbOperations<Ingredient>());
+        
 
         public ISeasonOperations Seasons => new SeasonOperations(_repository.Seasons, new CommonDbOperations<Season>());
         
-        public ISectorOperations Sectors => new SectorOperations(_repository.Sectors, new CommonDbOperations<Sector>(), _idSeason);
-
-        public IPlotLandOperations PlotLands => new PlotLandOperations(_repository.PlotLands, _repository.Sectors, new CommonDbOperations<PlotLand>(), _idSeason);
+       
 
         public IBarrackOperations<Barrack> Barracks => new BarrackOperations<Barrack>(_repository.Barracks, _repository.Rootstocks, _repository.PlotLands, _repository.Varieties, new CommonDbOperations<Barrack>(), _idSeason, _searchServiceInstance);
 
-        public IVarietyOperations Varieties => new VarietyOperations(_repository.Varieties, _repository.Species, new CommonDbOperations<Variety>());
-
-        public IProductOperations<Product> Products => new ProductOperations<Product>(
-            _repository.Ingredients,
-            _repository.Products,            
-            _repository.Targets,
-            _repository.CertifiedEntities,
-            _repository.Varieties,
-            _repository.Species,
-            new CommonDbOperations<Product>(),
-            _idSeason,
-            _searchServiceInstance
-        );
-
-        public ICertifiedEntityOperations CertifiedEntities => new CertifiedEntityOperations(_repository.CertifiedEntities, new CommonDbOperations<CertifiedEntity>());
-
+        
         public ICustomManager CustomManager => new CustomManager(_repository, _idSeason);
 
 
@@ -127,10 +154,12 @@ namespace trifenix.agro.external.operations {
         });
         public IPhenologicalPreOrderOperations PhenologicalPreOrders => new PhenologicalPreOrdersOperations(_repository.PhenologicalPreOrders, new CommonDbOperations<PhenologicalPreOrder>(), _idSeason, _graphApi);
 
-        public IExecutionOrderOperations<ExecutionOrder> ExecutionOrders => new ExecutionOrderOperations<ExecutionOrder>(_repository.ExecutionOrders, _repository.Orders, _repository.Users, _repository.Nebulizers, _repository.Products, _repository.Tractors, new CommonDbOperations<ExecutionOrder>(), _graphApi, _idSeason, _searchServiceInstance);
+        //public IExecutionOrderOperations<ExecutionOrder> ExecutionOrders => new ExecutionOrderOperations<ExecutionOrder>(_repository.ExecutionOrders, _repository.Orders, _repository.Users, _repository.Nebulizers, _repository.Products, _repository.Tractors, new CommonDbOperations<ExecutionOrder>(), _graphApi, _idSeason, _searchServiceInstance);
 
-        public IBusinessNameOperations BusinessNames => new BusinessNameOperations(_repository.BusinessNames, new CommonDbOperations<BusinessName>(), _graphApi);
+        
 
-        public ICostCenterOperations CostCenters => new CostCenterOperations(_repository.CostCenters, _repository.BusinessNames, new CommonDbOperations<CostCenter>(), _graphApi);
+        
+
+        
     }
 }

@@ -9,9 +9,9 @@ namespace trifenix.agro.db.applicationsReference.agro.orders
     public class ApplicationOrderRepository : IApplicationOrderRepository
     {
         private readonly IMainDb<ApplicationOrder> _db;
-        public ApplicationOrderRepository(IMainDb<ApplicationOrder> db)
+        public ApplicationOrderRepository(AgroDbArguments dbArguments)
         {
-            _db = db;
+            _db = new MainDb<ApplicationOrder>(dbArguments);
         }
 
         public async Task<string> CreateUpdate(ApplicationOrder order)
@@ -29,9 +29,12 @@ namespace trifenix.agro.db.applicationsReference.agro.orders
             return _db.GetEntities();
         }
 
-        public async Task<long> Total(string season)
+        public async Task<bool> Exists(string id)
         {
-            return await _db.Store.QuerySingleAsync<long>($"SELECT value count(1) FROM c where c.SeasonId = '{season}'");
+            var result = await _db.Store.QuerySingleAsync<long>($"SELECT value count(1) FROM c where c.Id = '{id}'");
+
+            return result != 0;
+
         }
     }
 }

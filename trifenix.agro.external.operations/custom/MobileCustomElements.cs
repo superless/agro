@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using trifenix.agro.db.model.agro;
-using trifenix.agro.db.model.agro.enums;
 using trifenix.agro.enums;
 using trifenix.agro.external.interfaces.custom;
 using trifenix.agro.external.operations.custom.args;

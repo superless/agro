@@ -1473,6 +1473,16 @@
           "bin/placeholder/trifenix.agro.db.dll": {}
         }
       },
+      "trifenix.agro.enums/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "compile": {
+          "bin/placeholder/trifenix.agro.enums.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/trifenix.agro.enums.dll": {}
+        }
+      },
       "trifenix.agro.translator.interfaces/1.0.0": {
         "type": "project",
         "framework": ".NETStandard,Version=v2.0",
@@ -5156,6 +5166,11 @@
       "path": "../trifenix.agro.db/trifenix.agro.db.csproj",
       "msbuildProject": "../trifenix.agro.db/trifenix.agro.db.csproj"
     },
+    "trifenix.agro.enums/1.0.0": {
+      "type": "project",
+      "path": "../trifenix.agro.enums/trifenix.agro.enums.csproj",
+      "msbuildProject": "../trifenix.agro.enums/trifenix.agro.enums.csproj"
+    },
     "trifenix.agro.translator.interfaces/1.0.0": {
       "type": "project",
       "path": "../trifenix.agro.translator.interfaces/trifenix.agro.translator.interfaces.csproj",
@@ -5177,6 +5192,7 @@
       "Cosmonaut >= 2.11.3",
       "NETStandard.Library >= 2.0.3",
       "trifenix.agro.db >= 1.0.0",
+      "trifenix.agro.enums >= 1.0.0",
       "trifenix.agro.weather.model >= 1.0.0"
     ]
   },
@@ -5208,6 +5224,9 @@
           "projectReferences": {
             "D:\\aresa\\developments\\cloud.app\\trifenix.agro.db\\trifenix.agro.db.csproj": {
               "projectPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.db\\trifenix.agro.db.csproj"
+            },
+            "D:\\aresa\\developments\\cloud.app\\trifenix.agro.enums\\trifenix.agro.enums.csproj": {
+              "projectPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.enums\\trifenix.agro.enums.csproj"
             },
             "D:\\aresa\\developments\\cloud.app\\trifenix.agro.weather.model\\trifenix.agro.weather.model.csproj": {
               "projectPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.weather.model\\trifenix.agro.weather.model.csproj"

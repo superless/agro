@@ -6,9 +6,18 @@ namespace trifenix.agro.search.interfaces {
 
         void AddEntities(List<EntitySearch> entities);
 
+
+        void AddSimpleEntities(List<SimpleSearch> simpleEntities);
+
+
+        void AddComments(List<CommentSearch> comments);
+
         EntitiesSearchContainer GetPaginatedEntities(Parameters parameters);
 
         void DeleteEntities(List<EntitySearch> entities);
 
+        void DeleteComments(List<CommentSearch> comments);
+
+        void DeleteComments(List<SimpleSearch> simpleEntities);
     }
 }

@@ -6,9 +6,9 @@
         {
             CosmosEntityName = "User";
         }
-        public Nebulizer Nebulizer { get; set; }
+        public string IdNebulizer { get; set; }
 
-        public Tractor Tractor { get; set; }
+        public string IdTractor { get; set; }
 
     }
 }

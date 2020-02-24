@@ -13,7 +13,7 @@ namespace trifenix.agro.db.interfaces.agro.events
 
         IQueryable<NotificationEvent> GetNotificationEvents();
 
-        Task<long> Total();
+        
 
         Task<long> Total(string season, string idSpecie);
     }

@@ -6,28 +6,10 @@ using trifenix.agro.db.model.agro;
 
 namespace trifenix.agro.db.applicationsReference.agro
 {
-    public class JobRepository : IJobRepository
+    public class JobRepository : MainGenericDb<Job>, IMainGenericDb<Job>
     {
-
-        private readonly IMainDb<Job> _db;
-        public JobRepository(IMainDb<Job> db) 
+        public JobRepository(AgroDbArguments args) : base(args)
         {
-            _db = db;
-        }
-
-        public async Task<string> CreateUpdateJob(Job job)
-        {
-            return await _db.CreateUpdate(job);
-        }
-
-        public async Task<Job> GetJob(string id)
-        {
-            return await _db.GetEntity(id);
-        }
-
-        public IQueryable<Job> GetJobs()
-        {
-            return _db.GetEntities();
         }
     }
 }

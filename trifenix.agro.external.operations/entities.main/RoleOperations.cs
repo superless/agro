@@ -1,65 +1,53 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using trifenix.agro.db.interfaces.agro;
-using trifenix.agro.db.interfaces.common;
+using trifenix.agro.db.interfaces;
 using trifenix.agro.db.model.agro;
-using trifenix.agro.external.interfaces.entities.main;
-using trifenix.agro.external.operations.helper;
+using trifenix.agro.external.interfaces;
 using trifenix.agro.model.external;
+using trifenix.agro.model.external.Input;
+using trifenix.agro.search.interfaces;
+using trifenix.agro.search.model;
 
-namespace trifenix.agro.external.operations.entities.main {
-    public class RoleOperations : IRoleOperations {
-        private readonly IRoleRepository _repo;
-        private readonly ICommonDbOperations<Role> _commonDb;
-        public RoleOperations(IRoleRepository repo, ICommonDbOperations<Role> commonDb)
+namespace trifenix.agro.external.operations.entities.main
+{
+    public class RoleOperations : MainReadOperation<Role>, IGenericOperation<Role, RoleInput>
+    {
+        private readonly IAgroSearch search;
+
+        public RoleOperations(IMainGenericDb<Role> repo, IAgroSearch search) : base(repo)
         {
-            _repo = repo;
-            _commonDb = commonDb;
+            this.search = search;
         }
 
-        public async Task<ExtGetContainer<Role>> GetRole(string id) {
-            var role = await _repo.GetRole(id);
-            return OperationHelper.GetElement(role);
-        }
-
-        public async Task<ExtGetContainer<List<Role>>> GetRoles()
+        public async Task<ExtPostContainer<string>> Save(RoleInput input)
         {
-            var queryTargets = _repo.GetRoles();
-            var targets = await _commonDb.TolistAsync(queryTargets);
-            return OperationHelper.GetElements(targets);
-        }
+            var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
 
-        public async Task<ExtPostContainer<Role>> SaveEditRole(string id, string name)
-        {
-            var element = await _repo.GetRole(id);
-            return await OperationHelper.EditElement(_commonDb, _repo.GetRoles(), 
-                id,
-                element,
-                s => {
-                    s.Name = name;
-                    return s;
-                },
-                _repo.CreateUpdateRole,
-                 $"No existe objetivo aplicación con id: {id}",
-                s => s.Name.Equals(name) && name != element.Name,
-                $"Ya existe rol con nombre: {name}"
-            );
+            var role = new Role
+            {
+                Id = id,
+                Name = input.Name
+            };
+            await repo.CreateUpdate(role);
 
-        }
+            search.AddSimpleEntities(new List<SimpleSearch>
+            {
+                new SimpleSearch{
+                    Created = DateTime.Now,
+                    Id = id,
+                    Name = input.Name,
+                    EntityName = role.CosmosEntityName
+                }
+            });
 
-        public async Task<ExtPostContainer<string>> SaveNewRole(string name)
-        {
-            return await OperationHelper.CreateElement(_commonDb,_repo.GetRoles(),
-                async s => await _repo.CreateUpdateRole(new Role
-                {
-                    Id = s,
-                    Name = name
-                }),
-                s => s.Name.Equals(name),
-                $"Ya existe rol con nombre: {name}"
 
-            );
+            return new ExtPostContainer<string>
+            {
+                IdRelated = id,
+                MessageResult = ExtMessageResult.Ok,
+                Result = id
+            };
         }
     }
 }

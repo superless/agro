@@ -17,19 +17,9 @@ namespace trifenix.agro.db.model.agro
 
         public string OrderFolderId { get; set; }
 
-        public UserActivity Creator { get; set; }
+        
 
-        private List<UserActivity> _modifyBy;
-        public List<UserActivity> ModifyBy
-        {
-            get
-            {
-                _modifyBy = _modifyBy ?? new List<UserActivity>();
-                return _modifyBy;
-            }
-            set { _modifyBy = value; }
-        }
-
+        
         private List<string> _barracksId;
 
         public List<string> BarracksId

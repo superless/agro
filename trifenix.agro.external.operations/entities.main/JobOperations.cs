@@ -1,59 +1,57 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using trifenix.agro.db.interfaces.agro;
-using trifenix.agro.db.interfaces.common;
+using trifenix.agro.db.interfaces;
+using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.model.agro;
-using trifenix.agro.external.interfaces.entities.main;
-using trifenix.agro.external.operations.helper;
+using trifenix.agro.enums;
+using trifenix.agro.external.interfaces;
+using trifenix.agro.external.operations.res;
 using trifenix.agro.model.external;
+using trifenix.agro.model.external.Input;
+using trifenix.agro.search.interfaces;
+using trifenix.agro.search.model;
 
 namespace trifenix.agro.external.operations.entities.main
 {
-    public class JobOperations : IJobOperations
+    public class JobOperations : MainReadOperationName<Job, JobInput>, IGenericOperation<Job, JobInput>
     {
-        private readonly IJobRepository _repo;
-        private readonly ICommonDbOperations<Job> _commonDb;
-        public JobOperations(IJobRepository repo, ICommonDbOperations<Job> commonDb)
+        public JobOperations(IMainGenericDb<Job> repo, IExistElement existElement, IAgroSearch search) : base(repo, existElement, search)
         {
-            _repo = repo;
-            _commonDb = commonDb;
-        }
-        public async Task<ExtGetContainer<List<Job>>> GetJobs()
-        {
-            var queryTargets = _repo.GetJobs();
-            var targets = await _commonDb.TolistAsync(queryTargets);
-            return OperationHelper.GetElements(targets);
         }
 
-        public async Task<ExtPostContainer<Job>> SaveEditJob(string id, string name)
+        public async Task<ExtPostContainer<string>> Save(JobInput input)
         {
-            var element = await _repo.GetJob(id);
-            return await OperationHelper.EditElement(_commonDb, _repo.GetJobs(), 
-                id,
-                element,
-                s => {
-                    s.Name = name;
-                    return s;
-                },
-                _repo.CreateUpdateJob,
-                 $"No existe objetivo aplicación con id: {id}",
-                s => s.Name.Equals(name) && name != element.Name,
-                $"Ya existe cargo con nombre: {name}"
-            );
+            var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
 
-        }
+            var job = new Job
+            {
+                Id = id,
+                Name = input.Name
+            };
 
-        public async Task<ExtPostContainer<string>> SaveNewJob(string name)
-        {
-            return await OperationHelper.CreateElement(_commonDb,_repo.GetJobs(),
-                async s => await _repo.CreateUpdateJob(new Job
-                {
-                    Id = s,
-                    Name = name
-                }),
-                s => s.Name.Equals(name),
-                $"Ya existe cargo con nombre: {name}"
-            );
+            var valida = await Validate(input);
+            if (!valida) throw new Exception(string.Format(ErrorMessages.NotValid, job.CosmosEntityName));
+
+            await repo.CreateUpdate(job);
+
+            search.AddSimpleEntities(new List<SimpleSearch>
+            {
+                new SimpleSearch{
+                    Created = DateTime.Now,
+                    Id = id,
+                    Name = input.Name,
+                    EntityName = job.CosmosEntityName
+                }
+            });
+
+
+            return new ExtPostContainer<string>
+            {
+                IdRelated = id,
+                MessageResult = ExtMessageResult.Ok,
+                Result = id
+            };
         }
     }
 }

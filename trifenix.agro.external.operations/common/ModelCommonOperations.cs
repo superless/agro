@@ -31,7 +31,7 @@ namespace trifenix.agro.external.operations.common
                 Varieties = i.IdVarieties.Select(s => varieties.First(a => a.Id.Equals(s))).ToList(),
                 Species = i.IdSpecies.Select(s => species.First(a => a.Id.Equals(s))).ToList(),
                 WettingRecommendedByHectares = i.WettingRecommendedByHectares,
-                IdSeason = idSeason,
+                
                 DosesApplicatedTo = i.DosesApplicatedTo,
                 DosesQuantityMin = i.DosesQuantityMin,
                 DosesQuantityMax = i.DosesQuantityMax,

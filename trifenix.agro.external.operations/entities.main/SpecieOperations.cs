@@ -1,70 +1,70 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using trifenix.agro.db.interfaces.agro;
-using trifenix.agro.db.interfaces.common;
+using trifenix.agro.db.interfaces;
+using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.model.agro;
-using trifenix.agro.external.interfaces.entities.main;
-using trifenix.agro.external.operations.helper;
+using trifenix.agro.enums;
+using trifenix.agro.external.interfaces;
+using trifenix.agro.external.operations.res;
 using trifenix.agro.model.external;
+using trifenix.agro.model.external.Input;
+using trifenix.agro.search.interfaces;
+using trifenix.agro.search.model;
 
-namespace trifenix.agro.external.operations.entities.main {
-    public class SpecieOperations : ISpecieOperations {
-
-        private readonly ISpecieRepository _repo;
-        private readonly ICommonDbOperations<Specie> _commonDb;
-
-        public SpecieOperations(ISpecieRepository repo, ICommonDbOperations<Specie> commonDb) {
-            _repo = repo;
-            _commonDb = commonDb;
+namespace trifenix.agro.external.operations.entities.main
+{
+    public class SpecieOperations : MainReadOperationName<Specie, SpecieInput>, IGenericOperation<Specie, SpecieInput>
+    {
+        public SpecieOperations(IMainGenericDb<Specie> repo, IExistElement existElement, IAgroSearch search) : base(repo, existElement, search)
+        {
         }
 
-        public async Task<ExtGetContainer<Specie>> GetSpecie(string id) {
-            var specie = await _repo.GetSpecie(id);
-            return OperationHelper.GetElement(specie);
-        }
+        public async Task<ExtPostContainer<string>> Save(SpecieInput input)
+        {
+            var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
 
-        public async Task<ExtGetContainer<List<Specie>>> GetSpecies() {
-            var speciesQuery = _repo.GetSpecies();
-            var species = await _commonDb.TolistAsync(speciesQuery);
-            return OperationHelper.GetElements(species);
-        }
+            var specie = new Specie
+            {
+                Id = id,
+                Name = input.Name,
+                Abbreviation = input.Abbreviation
+            };
+            await repo.CreateUpdate(specie);
 
-        public async Task<ExtPostContainer<Specie>> SaveEditSpecie(string idSpecie, string name, string abbreviation) {
-            if (string.IsNullOrWhiteSpace(idSpecie)) return OperationHelper.GetPostException<Specie>(new Exception("Es requerido 'idSpecie'."));
-            if (string.IsNullOrWhiteSpace(name)) return OperationHelper.GetPostException<Specie>(new Exception("Es requerido 'name'."));
-            if (string.IsNullOrWhiteSpace(abbreviation)) return OperationHelper.GetPostException<Specie>(new Exception("Es requerido 'abbreviation'."));
-            Specie specie = await _repo.GetSpecie(idSpecie);
-            if (specie == null)
-                return OperationHelper.PostNotFoundElementException<Specie>($"No se encontró la especie con id {idSpecie}", idSpecie);
-            return await OperationHelper.EditElement(_commonDb, _repo.GetSpecies(), 
-                idSpecie, 
-                specie, 
-                s => {
-                    s.Name = name;
-                    s.Abbreviation = abbreviation;
-                    return s;
-                },
-                _repo.CreateUpdateSpecie,
-                 $"No existe especie con id : {idSpecie}",
-                s => (s.Name.Equals(name) && !specie.Name.Equals(name)) || (s.Abbreviation.Equals(abbreviation) && !specie.Abbreviation.Equals(abbreviation)),
-                $"Ya existe especie con nombre: {name} o abreviación: {abbreviation}. Ambos campos deben ser unicos."
-            );
-        }
+            var valida = await Validate(input);
+            if (!valida) throw new Exception(string.Format(ErrorMessages.NotValid, specie.CosmosEntityName));
+            if (string.IsNullOrWhiteSpace(input.Id))
+            {
+                var validaAbbv = await existElement.ExistsElement<Specie>("Abbreviation", input.Abbreviation);
+                if (validaAbbv) throw new Exception(string.Format(ErrorMessages.NotValidAbbreviation, specie.CosmosEntityName));
 
-        public async Task<ExtPostContainer<string>> SaveNewSpecie(string name, string abbreviation) {
-            if (string.IsNullOrWhiteSpace(name)) return OperationHelper.GetPostException<string>(new Exception("Es requerido 'name' para crear una especie."));
-            if (string.IsNullOrWhiteSpace(abbreviation)) return OperationHelper.GetPostException<string>(new Exception("Es requerido 'abbreviation' para crear una especie."));
-            return await OperationHelper.CreateElement(_commonDb, _repo.GetSpecies(), 
-                async s => await _repo.CreateUpdateSpecie(new Specie {
-                    Id = s,
-                    Name = name,
-                    Abbreviation = abbreviation
-                }),
-                s => s.Name.Equals(name) || s.Abbreviation.Equals(abbreviation),
-                $"Ya existe especie con nombre: {name} o abreviación: {abbreviation}. Ambos campos deben ser unicos."
-            );
-        }
+            }
+            else {
+                var validaAbbv = await existElement.ExistsEditElement<Specie>(input.Id, "Abbreviation", input.Abbreviation);
+                if (validaAbbv) throw new Exception(string.Format(ErrorMessages.NotValidAbbreviation, specie.CosmosEntityName));
+            }
+            
 
+
+            search.AddSimpleEntities(new List<SimpleSearch>
+            {
+                new SimpleSearch{
+                    Created = DateTime.Now,
+                    Id = id,
+                    Name = input.Name,
+                    Abbreviation = input.Abbreviation,
+                    EntityName = specie.CosmosEntityName
+                }
+            });
+
+
+            return new ExtPostContainer<string>
+            {
+                IdRelated = id,
+                MessageResult = ExtMessageResult.Ok,
+                Result = id
+            };
+        }
     }
 }

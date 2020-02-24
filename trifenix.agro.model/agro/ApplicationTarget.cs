@@ -5,11 +5,11 @@ namespace trifenix.agro.db.model.agro
 {
 
     [SharedCosmosCollection("agro", "ApplicationTarget")]
-    public class ApplicationTarget : DocumentBase, ISharedCosmosEntity
+    public class ApplicationTarget : DocumentBaseName, ISharedCosmosEntity
     {
         public override string Id { get; set; }
 
-        public string Name { get; set; }
+        public override string Name { get; set; }
 
 
 

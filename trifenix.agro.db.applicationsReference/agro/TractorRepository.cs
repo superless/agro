@@ -6,28 +6,10 @@ using trifenix.agro.db.model.agro;
 
 namespace trifenix.agro.db.applicationsReference.agro
 {
-    public class TractorRepository : ITractorRepository
+    public class TractorRepository : MainGenericDb<Tractor>, IMainGenericDb<Tractor>
     {
-
-        private readonly IMainDb<Tractor> _db;
-        public TractorRepository(IMainDb<Tractor> db) 
+        public TractorRepository(AgroDbArguments args) : base(args)
         {
-            _db = db;
-        }
-
-        public async Task<string> CreateUpdateTractor(Tractor Tractor)
-        {
-            return await _db.CreateUpdate(Tractor);
-        }
-
-        public async Task<Tractor> GetTractor(string id)
-        {
-            return await _db.GetEntity(id);
-        }
-
-        public IQueryable<Tractor> GetTractors()
-        {
-            return _db.GetEntities();
         }
     }
 }

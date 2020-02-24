@@ -1,63 +1,77 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro;
+using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model.agro;
+using trifenix.agro.enums;
+using trifenix.agro.external.interfaces;
 using trifenix.agro.external.interfaces.entities.main;
 using trifenix.agro.external.operations.helper;
+using trifenix.agro.external.operations.res;
 using trifenix.agro.model.external;
+using trifenix.agro.model.external.Input;
+using trifenix.agro.search.interfaces;
+using trifenix.agro.search.model;
 
 namespace trifenix.agro.external.operations.entities.main
 {
 
 
-    public class ApplicationTargetOperations : IApplicationTargetOperations
+    public class ApplicationTargetOperations : MainReadOperationName<ApplicationTarget, TargetInput>, IGenericOperation<ApplicationTarget, TargetInput>
     {
-        private readonly IApplicationTargetRepository _repo;
-        private readonly ICommonDbOperations<ApplicationTarget> _commonDb;
-        public ApplicationTargetOperations(IApplicationTargetRepository repo, ICommonDbOperations<ApplicationTarget> commonDb)
+        public ApplicationTargetOperations(IMainGenericDb<ApplicationTarget> repo, IExistElement existElement, IAgroSearch search) : base(repo, existElement, search)
         {
-            _repo = repo;
-            _commonDb = commonDb;
-        }
-        public async Task<ExtGetContainer<List<ApplicationTarget>>> GetAplicationsTarget()
-        {
-            var queryTargets = _repo.GetTargets();
-            var targets = await _commonDb.TolistAsync(queryTargets);
-            return OperationHelper.GetElements(targets);
         }
 
-        public async Task<ExtPostContainer<ApplicationTarget>> SaveEditApplicationTarget(string id, string name)
+        public async Task<ExtPostContainer<string>> Save(TargetInput input)
         {
-            var element = await _repo.GetTarget(id);
-            return await OperationHelper.EditElement(_commonDb, _repo.GetTargets(),
-                id,
-                element,
-                s => {
-                    s.Name = name;
-                    return s;
-                },
-                _repo.CreateUpdateTargetApp,
-                 $"No existe objetivo aplicación con id: {id}",
-                s => s.Name.Equals(name) && name != element.Name,
-                $"Ya existe aplicacion target con nombre: {name}"
-            );
+            var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
 
-        }
+            var target = new ApplicationTarget
+            {
+                Id = id,
+                Name = input.Name
+            };
 
-        public async Task<ExtPostContainer<string>> SaveNewApplicationTarget(string name)
-        {
-            return await OperationHelper.CreateElement(_commonDb,_repo.GetTargets(),
-                async s => await _repo.CreateUpdateTargetApp(new ApplicationTarget
-                {
-                    Id = s,
-                    Name = name
-                }),
-                s => s.Name.Equals(name),
-                $"Ya existe aplicacion target con nombre: {name}"
+            var valida = await Validate(input);
+            if (!valida) throw new Exception(string.Format(ErrorMessages.NotValid, target.CosmosEntityName));
+            if (string.IsNullOrWhiteSpace(input.Id))
+            {
+                var validaAbbv = await existElement.ExistsElement<ApplicationTarget>("Abbreviation", input.Abbreviation);
+                if (validaAbbv) throw new Exception(string.Format(ErrorMessages.NotValidAbbreviation, target.CosmosEntityName));
 
-            );
+            }
+            else
+            {
+                var validaAbbv = await existElement.ExistsEditElement<ApplicationTarget>(input.Id, "Abbreviation", input.Abbreviation);
+                if (validaAbbv) throw new Exception(string.Format(ErrorMessages.NotValidAbbreviation, target.CosmosEntityName));
+            }
+
+
+            await repo.CreateUpdate(target);
+
+
+            search.AddSimpleEntities(new List<SimpleSearch>
+            {
+                new SimpleSearch{
+                    Created = DateTime.Now,
+                    Id = id,
+                    Name = input.Name,
+                    Abbreviation = input.Abbreviation,
+                    EntityName = target.CosmosEntityName
+                }
+            });
+
+
+            return new ExtPostContainer<string>
+            {
+                IdRelated = id,
+                MessageResult = ExtMessageResult.Ok,
+                Result = id
+            };
         }
     }
 }

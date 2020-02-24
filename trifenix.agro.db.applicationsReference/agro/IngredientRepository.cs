@@ -9,28 +9,11 @@ using trifenix.agro.db.model.agro;
 
 namespace trifenix.agro.db.applicationsReference.agro
 {
-    public class IngredientRepository : IIngredientRepository
+    public class IngredientRepository : MainGenericDb<Ingredient>, IMainGenericDb<Ingredient>
     {
-        private readonly IMainDb<Ingredient> _db;
-
-        public IngredientRepository(IMainDb<Ingredient> db) 
+        public IngredientRepository(AgroDbArguments args) : base(args)
         {
-            _db = db;
-        }
-
-        public async Task<string> CreateUpdateIngredient(Ingredient ingredient)
-        {
-            return await _db.CreateUpdate(ingredient);
-        }
-
-        public async Task<Ingredient> GetIngredient(string id)
-        {
-            return await _db.GetEntity(id);
-        }
-
-        public IQueryable<Ingredient> GetIngredients()
-        {
-            return _db.GetEntities();
         }
     }
+}
 }

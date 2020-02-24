@@ -1,44 +1,75 @@
-﻿using trifenix.agro.db.model.agro;
-using trifenix.agro.db.model.agro.orders;
+﻿using trifenix.agro.db.interfaces.agro.common;
+using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model.agro.core;
 using trifenix.agro.external.interfaces.entities.core;
 using trifenix.agro.external.interfaces.entities.events;
 using trifenix.agro.external.interfaces.entities.ext;
 using trifenix.agro.external.interfaces.entities.fields;
 using trifenix.agro.external.interfaces.entities.main;
 using trifenix.agro.external.interfaces.entities.orders;
+using trifenix.agro.microsoftgraph.interfaces;
+using trifenix.agro.model.external.Input;
 
 namespace trifenix.agro.external.interfaces {
     public interface IAgroManager {
-        string IdSeason { get; }
-        IPhenologicalOperations PhenologicalEvents { get; }
 
-        IApplicationTargetOperations ApplicationTargets { get; }
+        IGenericOperation<Sector, SectorInput> Sectors { get; }
 
-        IJobOperations Jobs { get; }
 
-        IRoleOperations Roles { get; }
+        IGenericFullReadOperation<UserActivity, UserActivityInput> UserActivity { get; }
 
-        IUserOperations Users { get; }
 
-        ITractorOperations Tractors { get; }
+        IGenericOperation<PlotLand, PlotLandInput> PlotLands { get; }
 
-        INebulizerOperations Nebulizers { get; }
 
-        ISpecieOperations Species { get; }
+        IGenericOperation<Specie, SpecieInput> Species { get; }
+
+        IGenericOperation<Variety, VarietyInput> Varieties { get; }
+
+
+        IGenericOperation<ApplicationTarget, TargetInput> ApplicationTargets { get; }
+
+        IGenericOperation<PhenologicalEvent, PhenologicalEventInput> PhenologicalEvents { get; }
+
+        IGenericOperation<CertifiedEntity, CertifiedEntityInput> CertifiedEntities { get; }
+
+
+        IGenericOperation<IngredientCategory, IngredientCategoryInput> IngredientCategories { get; }
+
+        IGenericOperation<Ingredient, IngredientInput> Ingredients { get; }
+
+        IGenericOperation<Product, ProductInput> Products { get; }
+
+        IGenericOperation<Doses, DosesInput> Doses { get; }
+
+        IGenericOperation<Job, JobInput> Jobs { get; }
+        IGenericOperation<Role, RoleInput> Roles { get; }
+
+        IGenericOperation<UserApplicator, UserApplicatorInput> Users { get; }
+
+        IGenericOperation<Nebulizer, NebulizerInput> Nebulizers { get; }
+
+        IGenericOperation<Tractor, TractorInput> Tractors { get; }
+
+
+        IGenericOperation<BusinessName, BusinessNameInput> BusinessNames { get; }
+
+        IGenericOperation<CostCenter, CostCenterInput> CostCenters { get; }
+
 
         IRootstockOperations Rootstock { get; }
 
-        IIngredientCategoryOperations IngredientCategories { get; }
+        
 
-        IIngredientsOperations Ingredients { get; }
+        
 
         ISeasonOperations Seasons { get; }
 
         IOrderFolderOperations OrderFolder { get; }
 
-        ISectorOperations Sectors { get; }
+        
 
-        IPlotLandOperations PlotLands { get; }
+        
 
         IBarrackOperations<Barrack> Barracks { get; }
 
@@ -46,21 +77,23 @@ namespace trifenix.agro.external.interfaces {
 
         INotificatonEventOperations NotificationEvents { get; }
 
-        IVarietyOperations Varieties { get; }
+        
 
-        IProductOperations<Product> Products { get; }
+        
 
-        ICertifiedEntityOperations CertifiedEntities { get; }
+        
 
         ICustomManager CustomManager { get; }
 
         IApplicationOrderOperations ApplicationOrders { get; }
 
-        IExecutionOrderOperations<ExecutionOrder> ExecutionOrders { get; }
+        //IExecutionOrderOperations<ExecutionOrder> ExecutionOrders { get; }
 
-         IBusinessNameOperations BusinessNames { get; }
+         
 
-        ICostCenterOperations CostCenters { get; }
 
+        IGraphApi GraphApi { get; }
+
+        IExistElement ExistsElements { get; }
     }
 }

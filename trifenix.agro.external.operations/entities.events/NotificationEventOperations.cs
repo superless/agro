@@ -7,8 +7,8 @@ using trifenix.agro.db.interfaces.agro.events;
 using trifenix.agro.db.interfaces.agro.fields;
 using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model.agro;
-using trifenix.agro.db.model.agro.enums;
 using trifenix.agro.db.model.agro.local;
+using trifenix.agro.enums;
 using trifenix.agro.external.interfaces.entities.events;
 using trifenix.agro.external.operations.helper;
 using trifenix.agro.microsoftgraph.interfaces;
@@ -131,8 +131,7 @@ namespace trifenix.agro.external.operations.entities.events {
                 if (barrack == null)
                     return OperationHelper.PostNotFoundElementException<string>($"No se encontró cuartel con id {idBarrack}", idBarrack);
                 string imgPath = await _uploadImage.UploadImageBase64(base64);
-                var creator = await _graphApi.GetUserFromToken();
-                var userActivity = new UserActivity(DateTime.Now, creator);
+                var creator = await _graphApi.GetUserFromToken();                
                 //var weather = await _weatherApi.GetWeather(lat, lon);
                 return await OperationHelper.CreateElement(_commonDb, _repo.GetNotificationEvents(),
                    async s => await _repo.CreateUpdateNotificationEvent(new NotificationEvent {
@@ -142,8 +141,7 @@ namespace trifenix.agro.external.operations.entities.events {
                        Description = description,
                        PhenologicalEvent = phenologicalEvent,
                        NotificationType = NotificationType,
-                       PicturePath = imgPath,
-                       Creator = userActivity,
+                       PicturePath = imgPath
                        //Weather = weather
                    }),
                    s => false,

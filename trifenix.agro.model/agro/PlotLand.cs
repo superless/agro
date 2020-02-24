@@ -8,15 +8,11 @@ namespace trifenix.agro.db.model.agro
 {
 
     [SharedCosmosCollection("agro", "PlotLand")]
-    public class PlotLand : DocumentBase, ISharedCosmosEntity
+    public class PlotLand : DocumentBaseName, ISharedCosmosEntity
     {
         public override string Id { get; set; }
-
-        public string SeasonId { get; set; }
-
-        public string Name { get; set; }
-
-        public Sector Sector { get; set; }
+        public override string Name { get; set; }
+        public string IdSector { get; set; }
 
     }
 }

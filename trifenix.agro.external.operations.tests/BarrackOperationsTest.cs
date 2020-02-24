@@ -1,6 +1,7 @@
 ﻿using Moq;
 using System.Threading.Tasks;
 using trifenix.agro.db.model.agro;
+using trifenix.agro.enums;
 using trifenix.agro.external.operations.tests.helper.Instances;
 using trifenix.agro.model.external;
 using Xunit;

@@ -6,6 +6,7 @@ using System.IO;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using trifenix.agro.db.applicationsReference.agro;
+using trifenix.agro.enums;
 using trifenix.agro.external.interfaces;
 using trifenix.agro.external.operations;
 using trifenix.agro.functions.settings;
@@ -22,15 +23,19 @@ namespace trifenix.agro.functions.Helper
         public static async Task<IAgroManager> AgroManager(ClaimsPrincipal claims){
            
             var agroDb = new AgroRepository(ConfigManager.GetDbArguments);
-            var season = await agroDb.Seasons.GetCurrentSeason();
+
             var uploadImage = new UploadImage(Environment.GetEnvironmentVariable("StorageConnectionStrings", EnvironmentVariableTarget.Process));
+
             var graphApi = new GraphApi(claims, agroDb.Users);
+
             var weatherApi = new WeatherApi(Environment.GetEnvironmentVariable("KeyWeatherApi", EnvironmentVariableTarget.Process));
+
             var searchServiceInstance = new AgroSearch(
                 Environment.GetEnvironmentVariable("SearchServiceName", EnvironmentVariableTarget.Process),
-                Environment.GetEnvironmentVariable("SearchServiceKey", EnvironmentVariableTarget.Process),
-                Environment.GetEnvironmentVariable("SearchIndexName", EnvironmentVariableTarget.Process));
-            return new AgroManager(agroDb, season?.Id,uploadImage, graphApi, weatherApi, searchServiceInstance);
+                Environment.GetEnvironmentVariable("SearchServiceKey", EnvironmentVariableTarget.Process)
+            );
+
+            return new AgroManager(agroDb, uploadImage, graphApi, weatherApi, searchServiceInstance);
         }
 
         public static async Task<JsonResult> ApiPostOperations<T>(Stream body, ILogger log, Func<IAgroManager, dynamic, Task<ExtPostContainer<T>>> create, ClaimsPrincipal claims) 

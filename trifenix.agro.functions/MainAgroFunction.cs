@@ -11,7 +11,7 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System;
-using trifenix.agro.db.model.agro.enums;
+
 using trifenix.agro.db.model.agro.orders;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.external.operations.helper;
@@ -25,42 +25,13 @@ using trifenix.agro.db.model.agro.core;
 using AzureFunctions.Extensions.Swashbuckle.Attribute;
 using trifenix.agro.swagger.model.input;
 using System.Net;
+using trifenix.agro.enums;
 
 namespace trifenix.agro.functions {
     public static class MainAgroFunction {
 
-        #region v2/phenological_events
-        [FunctionName("PhenologicalEventV2")]
-        public static async Task<IActionResult> PhenologicalEventV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/phenological_events/{id?}")] HttpRequest req, string id, ILogger log) {
-            ClaimsPrincipal claims = await Auth.Validate(req);
-            if (claims == null)
-                return new UnauthorizedResult();
-            var manager = await ContainerMethods.AgroManager(claims);
-            ExtGetContainer<List<PhenologicalEvent>> result = null;
-            switch (req.Method.ToLower()) {
-                case "get":
-                    result = await manager.PhenologicalEvents.GetPhenologicalEvents();
-                    break;
-                case "post":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
-                        var name = (string)model["name"];
-                        var initDate = (DateTime)model["startDate"];
-                        var endDate = (DateTime)model["endDate"];
-                        return await db.PhenologicalEvents.SaveNewPhenologicalEvent(name, initDate, endDate);
-                    }, claims);
-                case "put":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
-                        var name = (string)model["name"];
-                        var initDate = (DateTime)model["startDate"];
-                        var endDate = (DateTime)model["endDate"];
-                        return await db.PhenologicalEvents.SaveEditPhenologicalEvent(id, name, initDate, endDate);
-                    }, claims);
-            }
-            return ContainerMethods.GetJsonGetContainer(result, log);
-        }
-        #endregion
+
+
 
         #region v2/seasons
         [FunctionName("SeasonV2")]
@@ -87,200 +58,6 @@ namespace trifenix.agro.functions {
                         var endDate = (DateTime)model["endDate"];
                         var current = (bool)model["current"];
                         return await db.Seasons.SaveEditSeason(id, initDate, endDate, current);
-                    }, claims);
-            }
-            return ContainerMethods.GetJsonGetContainer(result, log);
-        }
-        #endregion
-
-        #region v2/specie
-        [FunctionName("SpecieV2")]
-        public static async Task<IActionResult> SpecieV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/species/{id?}")] HttpRequest req, string id, ILogger log) {
-            ClaimsPrincipal claims = await Auth.Validate(req);
-            if (claims == null)
-                return new UnauthorizedResult();
-            var manager = await ContainerMethods.AgroManager(claims);
-            ExtGetContainer<Specie> result = null;
-            switch (req.Method.ToLower()) {
-                case "get":
-                    if (!string.IsNullOrWhiteSpace(id)) {
-                        result = await manager.Species.GetSpecie(id);
-                        return ContainerMethods.GetJsonGetContainer(result, log);
-                    }
-                    break;
-                case "post":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
-                        var name = (string)model["name"];
-                        var abbreviation = (string)model["abbreviation"];
-                        return await db.Species.SaveNewSpecie(name, abbreviation);
-                    }, claims);
-                case "put":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
-                        var name = (string)model["name"];
-                        var abbreviation = (string)model["abbreviation"];
-                        return await db.Species.SaveEditSpecie(id, name, abbreviation);
-                    }, claims);
-            }
-            ExtGetContainer<List<Specie>> resultGetAll = await manager.Species.GetSpecies();
-            return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
-        }
-        #endregion
-
-        #region v2/rootstock
-        [FunctionName("RootstockV2")]
-        public static async Task<IActionResult> RootstockV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/rootstock/{id?}")] HttpRequest req, string id, ILogger log) {
-            ClaimsPrincipal claims = await Auth.Validate(req);
-            if (claims == null)
-                return new UnauthorizedResult();
-            var manager = await ContainerMethods.AgroManager(claims);
-            ExtGetContainer<List<Rootstock>> result = null;
-            switch (req.Method.ToLower())
-            {
-                case "get":
-                    result = await manager.Rootstock.GetRootstocks();
-                    break;
-                case "post":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
-                        var name = (string)model["name"];
-                        var abbreviation = (string)model["abbreviation"];
-                        return await db.Rootstock.SaveNewRootstock(name, abbreviation);
-                    }, claims);
-                case "put":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
-                        var name = (string)model["name"];
-                        var abbreviation = (string)model["abbreviation"];
-                        return await db.Rootstock.SaveEditRootstock(id, name, abbreviation);
-                    }, claims);
-            }
-            return ContainerMethods.GetJsonGetContainer(result, log);
-        }
-        #endregion
-
-        #region v2/certified_entities
-        [FunctionName("CertifiedEntity")]
-        public static async Task<IActionResult> CertifiedEntity([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/certified_entities/{id?}")] HttpRequest req, string id, ILogger log) {
-            ClaimsPrincipal claims = await Auth.Validate(req);
-            if (claims == null)
-                return new UnauthorizedResult();
-            var manager = await ContainerMethods.AgroManager(claims);
-            ExtGetContainer<CertifiedEntity> result = null;
-            switch (req.Method.ToLower()) {
-                case "get":
-                    if (!string.IsNullOrWhiteSpace(id))
-                    {
-                        result = await manager.CertifiedEntities.GetCertifiedEntity(id);
-                        return ContainerMethods.GetJsonGetContainer(result, log);
-                    }
-                    break;
-                case "post":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
-                        var name = (string)model["name"];
-                        var abbreviation = (string)model["abbreviation"];
-                        return await db.CertifiedEntities.SaveNewCertifiedEntity(name, abbreviation);
-                    }, claims);
-                case "put":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
-                        var name = (string)model["name"];
-                        var abbreviation = (string)model["abbreviation"];
-                        return await db.CertifiedEntities.SaveEditCertifiedEntity(id, name, abbreviation);
-                    }, claims);
-            }
-            ExtGetContainer<List<CertifiedEntity>> resultGetAll = await manager.CertifiedEntities.GetCertifiedEntities();
-            return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
-        }
-        #endregion
-
-        #region v2/ingredient_categories
-        [FunctionName("CategoryIngredientsV2")]
-        public static async Task<IActionResult> CategoryIngredientsV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/ingredient_categories/{id?}")] HttpRequest req, string id, ILogger log) {
-            ClaimsPrincipal claims = await Auth.Validate(req);
-            if (claims == null)
-                return new UnauthorizedResult();
-            var manager = await ContainerMethods.AgroManager(claims);
-            ExtGetContainer<List<IngredientCategory>> result = null;
-            switch (req.Method.ToLower()) {
-                case "get":
-                    result = await manager.IngredientCategories.GetIngredientCategories();
-                    break;
-                case "post":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
-                        var name = (string)model["name"];
-                        return await db.IngredientCategories.SaveNewIngredientCategory(name);
-                    }, claims);
-                case "put":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
-                        var name = (string)model["name"];
-                        return await db.IngredientCategories.SaveEditIngredientCategory(id, name);
-                    }, claims);
-            }
-            return ContainerMethods.GetJsonGetContainer(result, log);
-        }
-        #endregion
-
-        #region v2/ingredients
-        [FunctionName("IngredientsV2")]
-        public static async Task<IActionResult> IngredientsV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/ingredients/{id?}")] HttpRequest req, string id, ILogger log) {
-            ClaimsPrincipal claims = await Auth.Validate(req);
-            if (claims == null)
-                return new UnauthorizedResult();
-            var manager = await ContainerMethods.AgroManager(claims);
-            ExtGetContainer<List<Ingredient>> result = null;
-            switch (req.Method.ToLower())
-            {
-                case "get":
-                    result = await manager.Ingredients.GetIngredients();
-                    break;
-                case "post":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
-                        var name = (string)model["name"];
-                        var idCategory = (string)model["idCategory"];
-                        return await db.Ingredients.SaveNewIngredient(name, idCategory);
-                    }, claims);
-                case "put":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
-                        var name = (string)model["name"];
-                        var idCategory = (string)model["idCategory"];
-                        return await db.Ingredients.SaveEditIngredient(id, name, idCategory);
-                    }, claims);
-            }
-            return ContainerMethods.GetJsonGetContainer(result, log);
-        }
-        #endregion
-
-        #region v2/targets
-        [FunctionName("TargetV2")]
-        public static async Task<IActionResult> TargetV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/targets/{id?}")] HttpRequest req, string id, ILogger log) {
-            ClaimsPrincipal claims = await Auth.Validate(req);
-            if (claims == null)
-                return new UnauthorizedResult();
-            var manager = await ContainerMethods.AgroManager(claims);
-            ExtGetContainer<List<ApplicationTarget>> result = null;
-            switch (req.Method.ToLower())
-            {
-                case "get":
-                    result = await manager.ApplicationTargets.GetAplicationsTarget();
-                    break;
-                case "post":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
-                        var name = (string)model["name"];
-                        return await db.ApplicationTargets.SaveNewApplicationTarget(name);
-                    }, claims);
-                case "put":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
-                        var name = (string)model["name"];
-                        return await db.ApplicationTargets.SaveEditApplicationTarget(id, name);
                     }, claims);
             }
             return ContainerMethods.GetJsonGetContainer(result, log);
@@ -327,60 +104,6 @@ namespace trifenix.agro.functions {
             }
             ExtGetContainer<List<OrderFolder>> resultGetAll = await manager.OrderFolder.GetOrderFolders();
             return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
-        }
-        #endregion
-
-        #region v2/products
-        [FunctionName("Product")]
-        [SwaggerIgnore]
-        public static async Task<IActionResult> Product([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/products/{idProduct?}/{textToSearch?}/{asc?}/{totalByPage?}/{page?}")] HttpRequest req, string idProduct, string textToSearch, string asc, int? totalByPage, int? page, ILogger log) {
-            ClaimsPrincipal claims = await Auth.Validate(req);
-            if (claims == null)
-                return new UnauthorizedResult();
-            var manager = await ContainerMethods.AgroManager(claims);
-            ExtGetContainer<Product> result = null;
-            switch (req.Method.ToLower()) {
-                case "get":
-                    if (!string.IsNullOrWhiteSpace(idProduct) && !idProduct.ToLower().Equals("all")) {
-                        result = await manager.Products.GetProduct(idProduct);
-                        return ContainerMethods.GetJsonGetContainer(result, log);
-                    }
-                    break;
-                case "post":
-                    return await ContainerMethods.ApiPostOperations<string>(req.Body, log, async (db, model) => {
-                        var commercialName = (string)model["commercialName"];
-                        var idActiveIngredient = (string)model["idActiveIngredient"];
-                        var brand = (string)model["brand"];
-                        var measureType = (MeasureType)Convert.ToInt32(model["measureType"]);
-                        var quantity = (int)model["quantity"];
-                        var kindOfBottle = (KindOfProductContainer)Convert.ToInt32(model["kindOfBottle"]);
-                        var dosesStr = ((object)model["doses"])?.ToString();
-                        var doses = !string.IsNullOrWhiteSpace(dosesStr) ? JsonConvert.DeserializeObject<DosesInput[]>(dosesStr) : null;
-                        return await db.Products.CreateProduct(commercialName, idActiveIngredient, brand, doses, measureType, quantity, kindOfBottle);
-                    }, claims);
-                case "put":
-                    return await ContainerMethods.ApiPostOperations<Product>(req.Body, log, async (db, model) => {
-                        var commercialName = (string)model["commercialName"];
-                        var idActiveIngredient = (string)model["idActiveIngredient"];
-                        var brand = (string)model["brand"];
-                        var measureType = (MeasureType)Convert.ToInt32(model["measureType"]);
-                        var quantity = (int)model["quantity"];
-                        var kindOfBottle = (KindOfProductContainer)Convert.ToInt32(model["kindOfBottle"]);
-                        var dosesStr = ((object)model["doses"])?.ToString();
-                        var doses = !string.IsNullOrWhiteSpace(dosesStr) ? JsonConvert.DeserializeObject<DosesInput[]>(dosesStr) : null;
-                        return await db.Products.SaveEditProduct(idProduct, commercialName, idActiveIngredient, brand, doses, measureType, quantity, kindOfBottle);
-                    }, claims);
-            }
-            if (!string.IsNullOrWhiteSpace(textToSearch) && textToSearch.Equals("*"))
-                textToSearch = null;
-            bool? order = null;
-            if (!string.IsNullOrWhiteSpace(asc) && !asc.ToLower().Equals("not_order")) {
-                if (asc.ToLower().Equals("asc")) order = true;
-                else if (asc.ToLower().Equals("desc")) order = false;
-                else return new BadRequestResult();
-            }
-            var resultGetByPageAll = manager.Products.GetPaginatedProducts(textToSearch, page, totalByPage, order);
-            return ContainerMethods.GetJsonGetContainer(resultGetByPageAll, log);
         }
         #endregion
 
@@ -487,6 +210,143 @@ namespace trifenix.agro.functions {
         //}
         #endregion
 
+        
+
+
+
+        #region v2/barracks
+        [SwaggerIgnore]
+        [FunctionName("BarracksV2")]
+        public static async Task<IActionResult> BarracksV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/barracks/{idBarrack?}/{abbSpecie?}/{textToSearch?}/{asc?}/{totalByPage?}/{page?}")] HttpRequest req, string idBarrack, string abbSpecie, string textToSearch, string asc, int? totalByPage, int? page, ILogger log)
+        {
+            ClaimsPrincipal claims = await Auth.Validate(req);
+            if (claims == null)
+                return new UnauthorizedResult();
+            var manager = await ContainerMethods.AgroManager(claims);
+            ExtGetContainer<Barrack> result = null;
+            switch (req.Method.ToLower())
+            {
+                case "get":
+                    if (!string.IsNullOrWhiteSpace(idBarrack) && !idBarrack.ToLower().Equals("all"))
+                    {
+                        result = await manager.Barracks.GetBarrack(idBarrack);
+                        return ContainerMethods.GetJsonGetContainer(result, log);
+                    }
+                    break;
+                case "post":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
+                        var name = (string)model["name"];
+                        var numberOfPlants = (int)model["numberOfPlants"];
+                        var plantingYear = (int)model["plantingYear"];
+                        var hectares = float.Parse((string)model["hectares"]);
+                        var idPlotland = (string)model["idPlotland"];
+                        var idVariety = (string)model["idVariety"];
+                        var idPollinator = (string)model["idPollinator"];
+                        var idRootstock = (string)model["idRootstock"];
+                        return await db.Barracks.SaveNewBarrack(name, idPlotland, hectares, plantingYear, idVariety, numberOfPlants, idPollinator, idRootstock);
+                    }, claims);
+                case "put":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
+                        var name = (string)model["name"];
+                        var numberOfPlants = (int)model["numberOfPlants"];
+                        var plantingYear = (int)model["plantingYear"];
+                        var hectares = float.Parse((string)model["hectares"]);
+                        var idPlotland = (string)model["idPlotland"];
+                        var idVariety = (string)model["idVariety"];
+                        var idPollinator = (string)model["idPollinator"];
+                        var idRootstock = (string)model["idRootstock"];
+                        return await db.Barracks.SaveEditBarrack(idBarrack, name, idPlotland, hectares, plantingYear, idVariety, numberOfPlants, idPollinator, idRootstock);
+                    }, claims);
+            }
+            if (!string.IsNullOrWhiteSpace(textToSearch) && textToSearch.Equals("*"))
+                textToSearch = null;
+            if (!string.IsNullOrWhiteSpace(abbSpecie) && abbSpecie.ToLower().Equals("all"))
+                abbSpecie = null;
+            else abbSpecie = abbSpecie.ToUpper();
+            bool? order = null;
+            if (!string.IsNullOrWhiteSpace(asc) && !asc.ToLower().Equals("not_order"))
+            {
+                if (asc.ToLower().Equals("asc")) order = true;
+                else if (asc.ToLower().Equals("desc")) order = false;
+                else return new BadRequestResult();
+            }
+            var resultGetByPageAll = manager.Barracks.GetPaginatedBarracks(textToSearch, abbSpecie, page, totalByPage, order);
+            return ContainerMethods.GetJsonGetContainer(resultGetByPageAll, log);
+        }
+        #endregion
+
+        #region v2/phenological_preorders
+        [FunctionName("PhenologicalPreOrders")]
+        public static async Task<IActionResult> PhenologicalPreOrders([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/phenological_preorders/{id?}")] HttpRequest req, string id, ILogger log)
+        {
+            ClaimsPrincipal claims = await Auth.Validate(req);
+            if (claims == null)
+                return new UnauthorizedResult();
+            var manager = await ContainerMethods.AgroManager(claims);
+            ExtGetContainer<PhenologicalPreOrder> result = null;
+            switch (req.Method.ToLower())
+            {
+                case "get":
+                    if (!string.IsNullOrWhiteSpace(id))
+                    {
+                        result = await manager.PhenologicalPreOrders.GetPhenologicalPreOrder(id);
+                        return ContainerMethods.GetJsonGetContainer(result, log);
+                    }
+                    break;
+                case "post":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var name = (string)model["name"];
+                        var idFolder = (string)model["idOrderFolder"];
+                        var arr = (string)model["idBarracks"].ToString();
+                        var idBarracks = JsonConvert.DeserializeObject<string[]>(arr);
+
+                        return await db.PhenologicalPreOrders.SaveNewPhenologicalPreOrder(name, idFolder, idBarracks.ToList());
+                    }, claims);
+                case "put":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var name = (string)model["name"];
+                        var idFolder = (string)model["idOrderFolder"];
+                        var arr = (string)model["idBarracks"].ToString();
+                        var idBarracks = JsonConvert.DeserializeObject<string[]>(arr);
+                        return await db.PhenologicalPreOrders.SaveEditPhenologicalPreOrder(id, name, idFolder, idBarracks.ToList());
+                    }, claims);
+            }
+            ExtGetContainer<List<PhenologicalPreOrder>> resultGetAll = await manager.PhenologicalPreOrders.GetPhenologicalPreOrders();
+            return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
+        }
+        #endregion
+
+        #region v2/usersByRole
+        [FunctionName("UserByRole")]
+        public static async Task<IActionResult> UserByRole([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/users/getByRole/{roleName}")] HttpRequest req, string roleName, ILogger log)
+        {
+            ClaimsPrincipal claims = await Auth.Validate(req);
+            if (claims == null)
+                return new UnauthorizedResult();
+            var manager = await ContainerMethods.AgroManager(claims);
+            ExtGetContainer<List<UserApplicator>> resultGetAllByRole = await manager.Users.GetUsers();
+            resultGetAllByRole.Result = resultGetAllByRole.Result.Where(user => user.Roles.Any(role => role.Name.Equals(roleName))).ToList();
+            return ContainerMethods.GetJsonGetContainer(resultGetAllByRole, log);
+        }
+        #endregion
+
+        #region v2/userInfo
+        [FunctionName("UserInfo")]
+        public static async Task<IActionResult> UsersRoles([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/userinfo")] HttpRequest req, ILogger log)
+        {
+            ClaimsPrincipal claims = await Auth.Validate(req);
+            if (claims == null)
+                return new UnauthorizedResult();
+            var manager = await ContainerMethods.AgroManager(claims);
+            ExtGetContainer<UserApplicator> result = await manager.Users.GetUserFromToken();
+            return ContainerMethods.GetJsonGetContainer(result, log);
+        }
+        #endregion
+
+
+
 
         [SwaggerIgnore]
         [FunctionName("FiltersToBarracks")]
@@ -587,57 +447,57 @@ namespace trifenix.agro.functions {
         }
 
 
-        [SwaggerIgnore]
-        [FunctionName("IndexElementsFilter")]
-        public static async Task<IActionResult> IndexElementsFilter([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/{entityName}/indexElements/{abbSpecie?}/{type?}/{status?}/{textToSearch?}/{asc?}/{totalByPage?}/{page?}")] HttpRequest req, string entityName, string abbSpecie, string type, string status, string textToSearch, string asc, int? totalByPage, int? page, ILogger log) {
-            ClaimsPrincipal claims = await Auth.Validate(req);
-            if (claims == null)
-                return new UnauthorizedResult();
-            var manager = await ContainerMethods.AgroManager(claims);
-            bool? isPhenological = null;
-            if (!string.IsNullOrWhiteSpace(type) && !type.ToLower().Equals("all"))
-            {
-                if (type.ToLower().Equals("phenological")) isPhenological = true;
-                else if (type.ToLower().Equals("not_phenological")) isPhenological = false;
-                else return new BadRequestResult();
-            }
-            int? statusToFilter = null;
-            if (!string.IsNullOrWhiteSpace(status) && !status.ToLower().Equals("all")) {
-                if (int.TryParse(status, out int outResult)) statusToFilter = outResult;
-                else return new BadRequestResult();
-            }
-            if (!string.IsNullOrWhiteSpace(textToSearch) && textToSearch.Equals("*"))
-                textToSearch = null;
-            bool? order = null;
-            if (!string.IsNullOrWhiteSpace(asc) && !asc.ToLower().Equals("not_order"))
-            {
-                if (asc.ToLower().Equals("asc")) order = true;
-                else if (asc.ToLower().Equals("desc")) order = false;
-                else return new BadRequestResult();
-            }
-            if (!string.IsNullOrWhiteSpace(abbSpecie) && abbSpecie.ToLower().Equals("all"))
-                abbSpecie = null;
-            ExtGetContainer<EntitiesSearchContainer> result;
-            switch (entityName.ToLower()) {
-                case "orders":
-                    result = manager.ApplicationOrders.GetIndexElements(textToSearch, abbSpecie, isPhenological, page, totalByPage, order);
-                    break;
-                case "executions":
-                    result = manager.ExecutionOrders.GetIndexElements(textToSearch, abbSpecie, statusToFilter, page, totalByPage, order);
-                    break;
-                case "products":
-                    result = manager.Products.GetIndexElements(textToSearch, page, totalByPage, order);
-                    break;
-                case "barracks":
-                    result = manager.Barracks.GetIndexElements(textToSearch, abbSpecie, page, totalByPage, order);
-                    break;
-                default:
-                    return ContainerMethods.GetJsonGetContainer(OperationHelper.GetException<ExecutionOrder>(new Exception($"No existe entityName: {entityName}")), log);
-            }
-            return ContainerMethods.GetJsonGetContainer(result, log);
+        //[SwaggerIgnore]
+        //[FunctionName("IndexElementsFilter")]
+        //public static async Task<IActionResult> IndexElementsFilter([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/{entityName}/indexElements/{abbSpecie?}/{type?}/{status?}/{textToSearch?}/{asc?}/{totalByPage?}/{page?}")] HttpRequest req, string entityName, string abbSpecie, string type, string status, string textToSearch, string asc, int? totalByPage, int? page, ILogger log) {
+        //    ClaimsPrincipal claims = await Auth.Validate(req);
+        //    if (claims == null)
+        //        return new UnauthorizedResult();
+        //    var manager = await ContainerMethods.AgroManager(claims);
+        //    bool? isPhenological = null;
+        //    if (!string.IsNullOrWhiteSpace(type) && !type.ToLower().Equals("all"))
+        //    {
+        //        if (type.ToLower().Equals("phenological")) isPhenological = true;
+        //        else if (type.ToLower().Equals("not_phenological")) isPhenological = false;
+        //        else return new BadRequestResult();
+        //    }
+        //    int? statusToFilter = null;
+        //    if (!string.IsNullOrWhiteSpace(status) && !status.ToLower().Equals("all")) {
+        //        if (int.TryParse(status, out int outResult)) statusToFilter = outResult;
+        //        else return new BadRequestResult();
+        //    }
+        //    if (!string.IsNullOrWhiteSpace(textToSearch) && textToSearch.Equals("*"))
+        //        textToSearch = null;
+        //    bool? order = null;
+        //    if (!string.IsNullOrWhiteSpace(asc) && !asc.ToLower().Equals("not_order"))
+        //    {
+        //        if (asc.ToLower().Equals("asc")) order = true;
+        //        else if (asc.ToLower().Equals("desc")) order = false;
+        //        else return new BadRequestResult();
+        //    }
+        //    if (!string.IsNullOrWhiteSpace(abbSpecie) && abbSpecie.ToLower().Equals("all"))
+        //        abbSpecie = null;
+        //    ExtGetContainer<EntitiesSearchContainer> result;
+        //    switch (entityName.ToLower()) {
+        //        case "orders":
+        //            result = manager.ApplicationOrders.GetIndexElements(textToSearch, abbSpecie, isPhenological, page, totalByPage, order);
+        //            break;
+        //        case "executions":
+        //            result = manager.ExecutionOrders.GetIndexElements(textToSearch, abbSpecie, statusToFilter, page, totalByPage, order);
+        //            break;
+        //        case "products":
+        //            result = manager.Products.GetIndexElements(textToSearch, page, totalByPage, order);
+        //            break;
+        //        case "barracks":
+        //            result = manager.Barracks.GetIndexElements(textToSearch, abbSpecie, page, totalByPage, order);
+        //            break;
+        //        default:
+        //            return ContainerMethods.GetJsonGetContainer(OperationHelper.GetException<ExecutionOrder>(new Exception($"No existe entityName: {entityName}")), log);
+        //    }
+        //    return ContainerMethods.GetJsonGetContainer(result, log);
 
 
-        }
+        //}
 
         #region v2/orders
         [SwaggerIgnore]
@@ -688,598 +548,125 @@ namespace trifenix.agro.functions {
         }
         #endregion
 
-        #region v2/ordersByExecutionStatus
-        [FunctionName("OrderByExecutionStatus")]
-        public static async Task<IActionResult> OrderByExecutionStatus([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/orders/getByExecutionStatus/{status}")] HttpRequest req, int status, ILogger log) {
-            ClaimsPrincipal claims = await Auth.Validate(req);
-            if (claims == null)
-                return new UnauthorizedResult();
-            var manager = await ContainerMethods.AgroManager(claims);
-            ExtGetContainer<List<ExecutionOrder>> resultGetByStatus = await manager.ExecutionOrders.GetExecutionOrders();
-            resultGetByStatus.Result = resultGetByStatus.Result.Where(execution => execution.ExecutionStatus == (ExecutionStatus)status).ToList();
-            ExtGetContainer<List<OutPutApplicationOrder>> resultGetAll = await manager.ApplicationOrders.GetApplicationOrders();
-            resultGetAll.Result = resultGetAll.Result.Where(order => resultGetByStatus.Result.Any(execution => execution.Order.Equals(order.Id))).ToList();
-            return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
-        }
-        #endregion
+        //#region v2/ordersByExecutionStatus
+        //[FunctionName("OrderByExecutionStatus")]
+        //public static async Task<IActionResult> OrderByExecutionStatus([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/orders/getByExecutionStatus/{status}")] HttpRequest req, int status, ILogger log) {
+        //    ClaimsPrincipal claims = await Auth.Validate(req);
+        //    if (claims == null)
+        //        return new UnauthorizedResult();
+        //    var manager = await ContainerMethods.AgroManager(claims);
+        //    ExtGetContainer<List<ExecutionOrder>> resultGetByStatus = await manager.ExecutionOrders.GetExecutionOrders();
+        //    resultGetByStatus.Result = resultGetByStatus.Result.Where(execution => execution.ExecutionStatus == (ExecutionStatus)status).ToList();
+        //    ExtGetContainer<List<OutPutApplicationOrder>> resultGetAll = await manager.ApplicationOrders.GetApplicationOrders();
+        //    resultGetAll.Result = resultGetAll.Result.Where(order => resultGetByStatus.Result.Any(execution => execution.IdOrder.Equals(order.Id))).ToList();
+        //    return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
+        //}
+        //#endregion
 
-        #region v2/sectors
-        [FunctionName("SectorV2")]
-        public static async Task<IActionResult> Sector([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/sectors/{id?}")] HttpRequest req, string id, ILogger log) {
-            ClaimsPrincipal claims = await Auth.Validate(req);
-            if (claims == null)
-                return new UnauthorizedResult();
-            var manager = await ContainerMethods.AgroManager(claims);
-            ExtGetContainer<Sector> result = null;
-            switch (req.Method.ToLower())
-            {
-                case "get":
-                    if (!string.IsNullOrWhiteSpace(id))
-                    {
-                        result = await manager.Sectors.GetSector(id);
-                        return ContainerMethods.GetJsonGetContainer(result, log);
-                    }
-                    break;
-                case "post":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
-                        var name = (string)model["name"];
-                        return await db.Sectors.SaveNewSector(name);
-                    }, claims);
-                case "put":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
-                        var name = (string)model["name"];
-                        return await db.Sectors.SaveEditSector(id, name);
-                    }, claims);
-            }
-            ExtGetContainer<List<Sector>> resultGetAll = await manager.Sectors.GetSectors();
-            return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
-        }
-        #endregion
+        
 
-        #region v2/plotlands
-        [FunctionName("PlotLandsV2")]
-        public static async Task<IActionResult> PlotLandsV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/plotlands/{id?}")] HttpRequest req, string id, ILogger log) {
-            ClaimsPrincipal claims = await Auth.Validate(req);
-            if (claims == null)
-                return new UnauthorizedResult();
-            var manager = await ContainerMethods.AgroManager(claims);
-            ExtGetContainer<PlotLand> result = null;
-            switch (req.Method.ToLower())
-            {
-                case "get":
-                    if (!string.IsNullOrWhiteSpace(id))
-                    {
-                        result = await manager.PlotLands.GetPlotLand(id);
-                        return ContainerMethods.GetJsonGetContainer(result, log);
-                    }
-                    break;
-                case "post":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
-                        var name = (string)model["name"];
-                        var idSector = (string)model["idSector"];
-                        return await db.PlotLands.SaveNewPlotLand(name, idSector);
-                    }, claims);
-                case "put":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
-                        var name = (string)model["name"];
-                        var idSector = (string)model["idSector"];
-                        return await db.PlotLands.SaveEditPlotLand(id, name, idSector);
-                    }, claims);
-            }
-            ExtGetContainer<List<PlotLand>> resultGetAll = await manager.PlotLands.GetPlotLands();
-            return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
-        }
-        #endregion
+        
 
-        #region v2/varieties
-        [FunctionName("VarietiesV2")]
-        public static async Task<IActionResult> VarietiesV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/varieties/{id?}")] HttpRequest req, string id, ILogger log) {
-            ClaimsPrincipal claims = await Auth.Validate(req);
-            if (claims == null)
-                return new UnauthorizedResult();
-            var manager = await ContainerMethods.AgroManager(claims);
-            ExtGetContainer<Variety> result = null;
-            switch (req.Method.ToLower()) {
-                case "get":
-                    if (!string.IsNullOrWhiteSpace(id)) {
-                        result = await manager.Varieties.GetVariety(id);
-                        return ContainerMethods.GetJsonGetContainer(result, log);
-                    }
-                    break;
-                case "post":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
-                        var name = (string)model["name"];
-                        var idSpecie = (string)model["idSpecie"];
-                        var abbreviation = (string)model["abbreviation"];
-                        return await db.Varieties.SaveNewVariety(name, abbreviation, idSpecie);
-                    }, claims);
-                case "put":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
-                        var name = (string)model["name"];
-                        var idSpecie = (string)model["idSpecie"];
-                        var abbreviation = (string)model["abbreviation"];
-                        return await db.Varieties.SaveEditVariety(id, name, abbreviation, idSpecie);
-                    }, claims);
-            }
-            ExtGetContainer<List<Variety>> resultGetAll = await manager.Varieties.GetVarieties();
-            return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
-        }
-        #endregion
+        
 
-        #region v2/barracks
-        [SwaggerIgnore]
-        [FunctionName("BarracksV2")]
-        public static async Task<IActionResult> BarracksV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/barracks/{idBarrack?}/{abbSpecie?}/{textToSearch?}/{asc?}/{totalByPage?}/{page?}")] HttpRequest req, string idBarrack, string abbSpecie, string textToSearch, string asc, int? totalByPage, int? page, ILogger log) {
-            ClaimsPrincipal claims = await Auth.Validate(req);
-            if (claims == null)
-                return new UnauthorizedResult();
-            var manager = await ContainerMethods.AgroManager(claims);
-            ExtGetContainer<Barrack> result = null;
-            switch (req.Method.ToLower()) {
-                case "get":
-                    if (!string.IsNullOrWhiteSpace(idBarrack) && !idBarrack.ToLower().Equals("all")) {
-                        result = await manager.Barracks.GetBarrack(idBarrack);
-                        return ContainerMethods.GetJsonGetContainer(result, log);
-                    }
-                    break;
-                case "post":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
-                        var name = (string)model["name"];
-                        var numberOfPlants = (int)model["numberOfPlants"];
-                        var plantingYear = (int)model["plantingYear"];
-                        var hectares = float.Parse((string)model["hectares"]);
-                        var idPlotland = (string)model["idPlotland"];
-                        var idVariety = (string)model["idVariety"];
-                        var idPollinator = (string)model["idPollinator"];
-                        var idRootstock = (string)model["idRootstock"];
-                        return await db.Barracks.SaveNewBarrack(name, idPlotland, hectares, plantingYear, idVariety, numberOfPlants, idPollinator, idRootstock);
-                    }, claims);
-                case "put":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
-                        var name = (string)model["name"];
-                        var numberOfPlants = (int)model["numberOfPlants"];
-                        var plantingYear = (int)model["plantingYear"];
-                        var hectares = float.Parse((string)model["hectares"]);
-                        var idPlotland = (string)model["idPlotland"];
-                        var idVariety = (string)model["idVariety"];
-                        var idPollinator = (string)model["idPollinator"];
-                        var idRootstock = (string)model["idRootstock"];
-                        return await db.Barracks.SaveEditBarrack(idBarrack, name, idPlotland, hectares, plantingYear, idVariety, numberOfPlants, idPollinator, idRootstock);
-                    }, claims);
-            }
-            if (!string.IsNullOrWhiteSpace(textToSearch) && textToSearch.Equals("*"))
-                textToSearch = null;
-            if (!string.IsNullOrWhiteSpace(abbSpecie) && abbSpecie.ToLower().Equals("all"))
-                abbSpecie = null;
-            else abbSpecie = abbSpecie.ToUpper();
-            bool? order = null;
-            if (!string.IsNullOrWhiteSpace(asc) && !asc.ToLower().Equals("not_order")) {
-                if (asc.ToLower().Equals("asc")) order = true;
-                else if (asc.ToLower().Equals("desc")) order = false;
-                else return new BadRequestResult();
-            }
-            var resultGetByPageAll = manager.Barracks.GetPaginatedBarracks(textToSearch, abbSpecie, page, totalByPage, order);
-            return ContainerMethods.GetJsonGetContainer(resultGetByPageAll, log);
-        }
-        #endregion
 
-        #region v2/phenological_preorders
-        [FunctionName("PhenologicalPreOrders")]
-        public static async Task<IActionResult> PhenologicalPreOrders([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/phenological_preorders/{id?}")] HttpRequest req, string id, ILogger log) {
-            ClaimsPrincipal claims = await Auth.Validate(req);
-            if (claims == null)
-                return new UnauthorizedResult();
-            var manager = await ContainerMethods.AgroManager(claims);
-            ExtGetContainer<PhenologicalPreOrder> result = null;
-            switch (req.Method.ToLower())
-            {
-                case "get":
-                    if (!string.IsNullOrWhiteSpace(id))
-                    {
-                        result = await manager.PhenologicalPreOrders.GetPhenologicalPreOrder(id);
-                        return ContainerMethods.GetJsonGetContainer(result, log);
-                    }
-                    break;
-                case "post":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
-                        var name = (string)model["name"];
-                        var idFolder = (string)model["idOrderFolder"];
-                        var arr = (string)model["idBarracks"].ToString();
-                        var idBarracks = JsonConvert.DeserializeObject<string[]>(arr);
-
-                        return await db.PhenologicalPreOrders.SaveNewPhenologicalPreOrder(name, idFolder, idBarracks.ToList());
-                    }, claims);
-                case "put":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
-                        var name = (string)model["name"];
-                        var idFolder = (string)model["idOrderFolder"];
-                        var arr = (string)model["idBarracks"].ToString();
-                        var idBarracks = JsonConvert.DeserializeObject<string[]>(arr);
-                        return await db.PhenologicalPreOrders.SaveEditPhenologicalPreOrder(id, name, idFolder, idBarracks.ToList());
-                    }, claims);
-            }
-            ExtGetContainer<List<PhenologicalPreOrder>> resultGetAll = await manager.PhenologicalPreOrders.GetPhenologicalPreOrders();
-            return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
-        }
-        #endregion
-
-        #region v2/roles
-        [FunctionName("Roles")]
-        public static async Task<IActionResult> Roles([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/roles/{id?}")] HttpRequest req, ILogger log, string id) {
-            ClaimsPrincipal claims = await Auth.Validate(req);
-            if (claims == null)
-                return new UnauthorizedResult();
-            var manager = await ContainerMethods.AgroManager(claims);
-            switch (req.Method.ToLower()) {
-                case "get":
-                    if (!string.IsNullOrWhiteSpace(id)) {
-                        var result = await manager.Roles.GetRole(id);
-                        return ContainerMethods.GetJsonGetContainer(result, log);
-                    }
-                    else {
-                        var resultAll = await manager.Nebulizers.GetNebulizers();
-                        return ContainerMethods.GetJsonGetContainer(resultAll, log);
-                    }
-                case "post":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
-                        var name = (string)model["name"];
-                        return await db.Roles.SaveNewRole(name);
-                    }, claims);
-                case "put":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
-                        var name = (string)model["name"];
-                        return await db.Roles.SaveEditRole(id, name);
-                    }, claims);
-            }
-            return new BadRequestResult();
-        }
-        #endregion
-
-        #region v2/jobs
-        [FunctionName("Jobs")]
-        public static async Task<IActionResult> Jobs([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/jobs/{id?}")] HttpRequest req, ILogger log, string id) {
-            ClaimsPrincipal claims = await Auth.Validate(req);
-            if (claims == null)
-                return new UnauthorizedResult();
-            var manager = await ContainerMethods.AgroManager(claims);
-            ExtGetContainer<List<Job>> result = null;
-            switch (req.Method.ToLower())
-            {
-                case "get":
-                    result = await manager.Jobs.GetJobs();
-                    break;
-                case "post":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
-                        var name = (string)model["name"];
-                        return await db.Jobs.SaveNewJob(name);
-                    }, claims);
-                case "put":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
-                        var name = (string)model["name"];
-                        return await db.Jobs.SaveEditJob(id, name);
-                    }, claims);
-            }
-            return ContainerMethods.GetJsonGetContainer(result, log);
-        }
-        #endregion
-
-        #region v2/users
-        [FunctionName("Users")]
-        public static async Task<IActionResult> Users([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/users/{id?}")] HttpRequest req, string id, ILogger log) {
-            ClaimsPrincipal claims = await Auth.Validate(req);
-            if (claims == null)
-                return new UnauthorizedResult();
-            var manager = await ContainerMethods.AgroManager(claims);
-            ExtGetContainer<UserApplicator> result = null;
-            switch (req.Method.ToLower()) {
-                case "get":
-                    if (!string.IsNullOrWhiteSpace(id)) {
-                        result = await manager.Users.GetUser(id);
-                        return ContainerMethods.GetJsonGetContainer(result, log);
-                    }
-                    break;
-                case "post":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
-                        var name = (string)model?["name"];
-                        var rut = (string)model?["rut"];
-                        var email = (string)model?["email"];
-                        var idJob = (string)model?["idJob"];
-                        var idsRoles = (string[])model?["idsRoles"]?.ToObject<string[]>();
-                        var idTractor = (string)model?["idTractor"];
-                        var idNebulizer = (string)model?["idNebulizer"];
-                        return await db.Users.SaveNewUser(name, rut, email, idJob, idsRoles, idNebulizer, idTractor);
-                    }, claims);
-                case "put":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
-                        var name = (string)model["name"];
-                        var rut = (string)model["rut"];
-                        var email = (string)model["email"];
-                        var idJob = (string)model["idJob"];
-                        var idsRoles = (string[])model["idsRoles"].ToObject<string[]>();
-                        var idTractor = (string)model["idTractor"];
-                        var idNebulizer = (string)model["idNebulizer"];
-                        return await db.Users.SaveEditUser(id, name, rut, email, idJob, idsRoles, idNebulizer, idTractor);
-                    }, claims);
-            }
-            ExtGetContainer<List<UserApplicator>> resultGetAll = await manager.Users.GetUsers();
-            return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
-        }
-        #endregion
-
-        #region v2/usersByRole
-        [FunctionName("UserByRole")]
-        public static async Task<IActionResult> UserByRole([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/users/getByRole/{roleName}")] HttpRequest req, string roleName, ILogger log) {
-            ClaimsPrincipal claims = await Auth.Validate(req);
-            if (claims == null)
-                return new UnauthorizedResult();
-            var manager = await ContainerMethods.AgroManager(claims);
-            ExtGetContainer<List<UserApplicator>> resultGetAllByRole = await manager.Users.GetUsers();
-            resultGetAllByRole.Result = resultGetAllByRole.Result.Where(user => user.Roles.Any(role => role.Name.Equals(roleName))).ToList();
-            return ContainerMethods.GetJsonGetContainer(resultGetAllByRole, log);
-        }
-        #endregion
-
-        #region v2/userInfo
-        [FunctionName("UserInfo")]
-        public static async Task<IActionResult> UsersRoles([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/userinfo")] HttpRequest req, ILogger log) {
-            ClaimsPrincipal claims = await Auth.Validate(req);
-            if (claims == null)
-                return new UnauthorizedResult();
-            var manager = await ContainerMethods.AgroManager(claims);
-            ExtGetContainer<UserApplicator> result = await manager.Users.GetUserFromToken();
-            return ContainerMethods.GetJsonGetContainer(result, log);
-        }
-        #endregion
-
-        #region v2/nebulizers
-        [FunctionName("Nebulizers")]
-        public static async Task<IActionResult> Nebulizers([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/nebulizers/{id?}")] HttpRequest req, string id, ILogger log) {
-            ClaimsPrincipal claims = await Auth.Validate(req);
-            if (claims == null)
-                return new UnauthorizedResult();
-            var manager = await ContainerMethods.AgroManager(claims);
-            switch (req.Method.ToLower()) {
-                case "get":
-                    if (!string.IsNullOrWhiteSpace(id)) {
-                        var result = await manager.Nebulizers.GetNebulizer(id);
-                        return ContainerMethods.GetJsonGetContainer(result, log);
-                    }
-                    else {
-                        var resultAll = await manager.Nebulizers.GetNebulizers();
-                        return ContainerMethods.GetJsonGetContainer(resultAll, log);
-                    }
-                case "post":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
-                        var brand = (string)model["brand"];
-                        var code = (string)model["code"];
-                        return await db.Nebulizers.SaveNewNebulizer(brand, code);
-                    }, claims);
-                case "put":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
-                        var brand = (string)model["brand"];
-                        var code = (string)model["code"];
-                        return await db.Nebulizers.SaveEditNebulizer(id, brand, code);
-                    }, claims);
-            }
-            return new BadRequestResult();
-        }
-        #endregion
-
-        #region v2/tractors
-        [FunctionName("Tractors")]
-        public static async Task<IActionResult> Tractors([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/tractors/{id?}")] HttpRequest req, string id, ILogger log) {
-            ClaimsPrincipal claims = await Auth.Validate(req);
-            if (claims == null)
-                return new UnauthorizedResult();
-            var manager = await ContainerMethods.AgroManager(claims);
-            switch (req.Method.ToLower()) {
-                case "get":
-                    if (!string.IsNullOrWhiteSpace(id)) {
-                        var result = await manager.Tractors.GetTractor(id);
-                        return ContainerMethods.GetJsonGetContainer(result, log);
-                    }
-                    else {
-                        var resultAll = await manager.Tractors.GetTractors();
-                        return ContainerMethods.GetJsonGetContainer(resultAll, log);
-                    }
-                case "post":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
-                        var brand = (string)model["brand"];
-                        var code = (string)model["code"];
-                        return await db.Tractors.SaveNewTractor(brand, code);
-                    }, claims);
-                case "put":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
-                        var brand = (string)model["brand"];
-                        var code = (string)model["code"];
-                        return await db.Tractors.SaveEditTractor(id, brand, code);
-                    }, claims);
-            }
-            return new BadRequestResult();
-        }
-        #endregion
-
-        #region v2/executions
-        [SwaggerIgnore]
-        [FunctionName("Executions")]
-        public static async Task<IActionResult> Executions([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/executions/{idExecution?}/{abbSpecie?}/{status?}/{textToSearch?}/{asc?}/{totalByPage?}/{page?}")] HttpRequest req, string idExecution, string abbSpecie, string status, string textToSearch, string asc, int? totalByPage, int? page, ILogger log) {
-            ClaimsPrincipal claims = await Auth.Validate(req);
+        //#region v2/executions
+        //[SwaggerIgnore]
+        //[FunctionName("Executions")]
+        //public static async Task<IActionResult> Executions([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/executions/{idExecution?}/{abbSpecie?}/{status?}/{textToSearch?}/{asc?}/{totalByPage?}/{page?}")] HttpRequest req, string idExecution, string abbSpecie, string status, string textToSearch, string asc, int? totalByPage, int? page, ILogger log) {
+        //    ClaimsPrincipal claims = await Auth.Validate(req);
             
-            if (claims == null)
-                return new UnauthorizedResult();
+        //    if (claims == null)
+        //        return new UnauthorizedResult();
 
-            var manager = await ContainerMethods.AgroManager(claims);
+        //    var manager = await ContainerMethods.AgroManager(claims);
 
-            ExtGetContainer<ExecutionOrder> result = null;
+        //    ExtGetContainer<ExecutionOrder> result = null;
 
 
-            switch (req.Method.ToLower()) {
-                case "get":
-                    if (!string.IsNullOrWhiteSpace(idExecution) && !idExecution.ToLower().Equals("all")) {
-                        result = await manager.ExecutionOrders.GetExecutionOrder(idExecution);
-                        return ContainerMethods.GetJsonGetContainer(result, log);
-                    }
-                    break;
-                case "post":
-                    return await ContainerMethods.ApiPostOperations<string>(req.Body, log, async (db, model) => {
-                        string idOrder = (string)model["idOrder"];
-                        string idUserApplicator = (string)model["idUserApplicator"];
-                        string idNebulizer = (string)model["idNebulizer"];
-                        string[] idProduct = JsonConvert.DeserializeObject<string[]>(((object)model["idProduct"]).ToString());
-                        double[] quantityByHectare = JsonConvert.DeserializeObject<double[]>(((object)model["quantityByHectare"]).ToString());
-                        string idTractor = (string)model["idTractor"];
-                        string commentary = (string)model["commentary"];
-                        string executionName = (string)model["executionName"];
-                        return await db.ExecutionOrders.SaveNewExecutionOrder(idOrder, executionName, idUserApplicator, idNebulizer, idProduct, quantityByHectare, idTractor, commentary);
-                    }, claims);
-                case "put":
-                    return await ContainerMethods.ApiPostOperations<ExecutionOrder>(req.Body, log, async (db, model) => {
-                        string idOrder = (string)model["idOrder"];
-                        string idUserApplicator = (string)model["idUserApplicator"];
-                        string idNebulizer = (string)model["idNebulizer"];
-                        string[] idProduct = JsonConvert.DeserializeObject<string[]>(((object)model["idProduct"]).ToString());
-                        double[] quantityByHectare = JsonConvert.DeserializeObject<double[]>(((object)model["quantityByHectare"]).ToString());
-                        string idTractor = (string)model["idTractor"];
-                        string executionName = (string)model["executionName"];
-                        return await db.ExecutionOrders.SaveEditExecutionOrder(idExecution, idOrder, executionName, idUserApplicator, idNebulizer, idProduct, quantityByHectare, idTractor);
-                    }, claims);
-            }
-            if (!string.IsNullOrWhiteSpace(textToSearch) && textToSearch.Equals("*"))
-                textToSearch = null;
-            if (!string.IsNullOrWhiteSpace(abbSpecie) && abbSpecie.ToLower().Equals("all"))
-                abbSpecie = null;
-            else abbSpecie = abbSpecie.ToUpper();
-            int? statusToFilter = null;
-            if (!string.IsNullOrWhiteSpace(status) && !status.ToLower().Equals("all")) {
-                if (int.TryParse(status, out int outResult)) statusToFilter = outResult;
-                else return new BadRequestResult();
-            }
-            bool? order = null;
-            if (!string.IsNullOrWhiteSpace(asc) && !asc.ToLower().Equals("not_order")) {
-                if (asc.ToLower().Equals("asc")) order = true;
-                else if (asc.ToLower().Equals("desc")) order = false;
-                else return new BadRequestResult();
-            }
-            var resultGetByPageAll = manager.ExecutionOrders.GetPaginatedExecutions(textToSearch, abbSpecie, statusToFilter, page, totalByPage, order);
-            return ContainerMethods.GetJsonGetContainer(resultGetByPageAll, log);
-        }
-        #endregion
+        //    switch (req.Method.ToLower()) {
+        //        case "get":
+        //            if (!string.IsNullOrWhiteSpace(idExecution) && !idExecution.ToLower().Equals("all")) {
+        //                result = await manager.ExecutionOrders.GetExecutionOrder(idExecution);
+        //                return ContainerMethods.GetJsonGetContainer(result, log);
+        //            }
+        //            break;
+        //        case "post":
+        //            return await ContainerMethods.ApiPostOperations<string>(req.Body, log, async (db, model) => {
+        //                string idOrder = (string)model["idOrder"];
+        //                string idUserApplicator = (string)model["idUserApplicator"];
+        //                string idNebulizer = (string)model["idNebulizer"];
+        //                string[] idProduct = JsonConvert.DeserializeObject<string[]>(((object)model["idProduct"]).ToString());
+        //                double[] quantityByHectare = JsonConvert.DeserializeObject<double[]>(((object)model["quantityByHectare"]).ToString());
+        //                string idTractor = (string)model["idTractor"];
+        //                string commentary = (string)model["commentary"];
+        //                string executionName = (string)model["executionName"];
+        //                return await db.ExecutionOrders.SaveNewExecutionOrder(idOrder, executionName, idUserApplicator, idNebulizer, idProduct, quantityByHectare, idTractor, commentary);
+        //            }, claims);
+        //        case "put":
+        //            return await ContainerMethods.ApiPostOperations<ExecutionOrder>(req.Body, log, async (db, model) => {
+        //                string idOrder = (string)model["idOrder"];
+        //                string idUserApplicator = (string)model["idUserApplicator"];
+        //                string idNebulizer = (string)model["idNebulizer"];
+        //                string[] idProduct = JsonConvert.DeserializeObject<string[]>(((object)model["idProduct"]).ToString());
+        //                double[] quantityByHectare = JsonConvert.DeserializeObject<double[]>(((object)model["quantityByHectare"]).ToString());
+        //                string idTractor = (string)model["idTractor"];
+        //                string executionName = (string)model["executionName"];
+        //                return await db.ExecutionOrders.SaveEditExecutionOrder(idExecution, idOrder, executionName, idUserApplicator, idNebulizer, idProduct, quantityByHectare, idTractor);
+        //            }, claims);
+        //    }
+        //    if (!string.IsNullOrWhiteSpace(textToSearch) && textToSearch.Equals("*"))
+        //        textToSearch = null;
+        //    if (!string.IsNullOrWhiteSpace(abbSpecie) && abbSpecie.ToLower().Equals("all"))
+        //        abbSpecie = null;
+        //    else abbSpecie = abbSpecie.ToUpper();
+        //    int? statusToFilter = null;
+        //    if (!string.IsNullOrWhiteSpace(status) && !status.ToLower().Equals("all")) {
+        //        if (int.TryParse(status, out int outResult)) statusToFilter = outResult;
+        //        else return new BadRequestResult();
+        //    }
+        //    bool? order = null;
+        //    if (!string.IsNullOrWhiteSpace(asc) && !asc.ToLower().Equals("not_order")) {
+        //        if (asc.ToLower().Equals("asc")) order = true;
+        //        else if (asc.ToLower().Equals("desc")) order = false;
+        //        else return new BadRequestResult();
+        //    }
+        //    var resultGetByPageAll = manager.ExecutionOrders.GetPaginatedExecutions(textToSearch, abbSpecie, statusToFilter, page, totalByPage, order);
+        //    return ContainerMethods.GetJsonGetContainer(resultGetByPageAll, log);
+        //}
+        //#endregion
 
-        #region v2/Executions_ChangeStatus
-        [FunctionName("Execution_ChangeStatus")]
-        public static async Task<IActionResult> Execution_ChangeStatus([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "v2/execution/changeStatus/{idExecution}")] HttpRequest req, string idExecution, ILogger log) {
-            ClaimsPrincipal claims = await Auth.Validate(req);
-            if (claims == null)
-                return new UnauthorizedResult();
+        //#region v2/Executions_ChangeStatus
+        //[FunctionName("Execution_ChangeStatus")]
+        //public static async Task<IActionResult> Execution_ChangeStatus([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "v2/execution/changeStatus/{idExecution}")] HttpRequest req, string idExecution, ILogger log) {
+        //    ClaimsPrincipal claims = await Auth.Validate(req);
+        //    if (claims == null)
+        //        return new UnauthorizedResult();
 
-            var manager = await ContainerMethods.AgroManager(claims);
+        //    var manager = await ContainerMethods.AgroManager(claims);
 
-            return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
-                var type = (string)model["type"];
-                var value = (int)model["value"];
-                var commentary = (string)model["commentary"];
-                return await manager.ExecutionOrders.SetStatus(idExecution, type, value, commentary);
-            }, claims);
-        }
-        #endregion
+        //    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
+        //        var type = (string)model["type"];
+        //        var value = (int)model["value"];
+        //        var commentary = (string)model["commentary"];
+        //        return await manager.ExecutionOrders.SetStatus(idExecution, type, value, commentary);
+        //    }, claims);
+        //}
+        //#endregion
 
-        #region v2/executionsAddCommentary
-        [FunctionName("ExecutionsAddCommentary")]
-        public static async Task<IActionResult> ExecutionsAddCommentary([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "v2/execution/add_commentary/{idExecution}")] HttpRequest req, string idExecution, ILogger log) {
-            ClaimsPrincipal claims = await Auth.Validate(req);
-            if (claims == null)
-                return new UnauthorizedResult();
-            return await ContainerMethods.ApiPostOperations<ExecutionOrder>(req.Body, log, async (db, model) => {
-                string commentary = (string)model["commentary"];
-                return await db.ExecutionOrders.AddCommentaryToExecutionOrder(idExecution, commentary);
-            }, claims);
-        }
-        #endregion
+        //#region v2/executionsAddCommentary
+        //[FunctionName("ExecutionsAddCommentary")]
+        //public static async Task<IActionResult> ExecutionsAddCommentary([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "v2/execution/add_commentary/{idExecution}")] HttpRequest req, string idExecution, ILogger log) {
+        //    ClaimsPrincipal claims = await Auth.Validate(req);
+        //    if (claims == null)
+        //        return new UnauthorizedResult();
+        //    return await ContainerMethods.ApiPostOperations<ExecutionOrder>(req.Body, log, async (db, model) => {
+        //        string commentary = (string)model["commentary"];
+        //        return await db.ExecutionOrders.AddCommentaryToExecutionOrder(idExecution, commentary);
+        //    }, claims);
+        //}
+        //#endregion
 
-        #region v2/businessName
-        [FunctionName("BusinessName")]
-        public static async Task<IActionResult> BusinessName([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/businessNames/{id?}")] HttpRequest req, string id, ILogger log) {
-            ClaimsPrincipal claims = await Auth.Validate(req);
-            if (claims == null)
-                return new UnauthorizedResult();
-            var manager = await ContainerMethods.AgroManager(claims);
-            switch (req.Method.ToLower()) {
-                case "get":
-                    if (!string.IsNullOrWhiteSpace(id)) {
-                        var result = await manager.BusinessNames.GetBusinessName(id);
-                        return ContainerMethods.GetJsonGetContainer(result, log);
-                    }
-                    else {
-                        var resultAll = await manager.BusinessNames.GetBusinessNames();
-                        return ContainerMethods.GetJsonGetContainer(resultAll, log);
-                    }
-                case "post":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
-                        var name = (string)model["name"];
-                        var rut = (string)model["rut"];
-                        var phone = (string)model["phone"];
-                        var email = (string)model["email"];
-                        var webPage = (string)model["webPage"];
-                        var giro = (string)model["giro"];
-                        return await db.BusinessNames.SaveNewBusinessName(name,rut,phone,email,webPage,giro);
-                    }, claims);
-                case "put":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
-                        var name = (string)model["name"];
-                        var rut = (string)model["rut"];
-                        var phone = (string)model["phone"];
-                        var email = (string)model["email"];
-                        var webPage = (string)model["webPage"];
-                        var giro = (string)model["giro"];
-                        return await db.BusinessNames.SaveEditBusinessName(id, name, rut, phone, email, webPage, giro);
-                    }, claims);
-            }
-            return new BadRequestResult();
-        }
-        #endregion
-        #region v2/costCenter
-        [FunctionName("CostCenter")]
-        public static async Task<IActionResult> CostCenter([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/costCenters/{id?}")] HttpRequest req, string id, ILogger log) {
-            ClaimsPrincipal claims = await Auth.Validate(req);
-            if (claims == null)
-                return new UnauthorizedResult();
-            var manager = await ContainerMethods.AgroManager(claims);
-            switch (req.Method.ToLower()) {
-                case "get":
-                    if (!string.IsNullOrWhiteSpace(id)) {
-                        var result = await manager.CostCenters.GetCostCenter(id);
-                        return ContainerMethods.GetJsonGetContainer(result, log);
-                    }
-                    else {
-                        var resultAll = await manager.CostCenters.GetCostCenters();
-                        return ContainerMethods.GetJsonGetContainer(resultAll, log);
-                    }
-                case "post":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
-                        var name = (string)model["name"];
-                        var idReason = (string)model["idReason"];
-                        return await db.CostCenters.SaveNewCostCenter(name, idReason);
-                    }, claims);
-                case "put":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
-                        var name = (string)model["name"];
-                        var idReason = (string)model["idReason"];
-                        return await db.CostCenters.SaveEditCostCenter(id, name, idReason);
-                    }, claims);
-            }
-            return new BadRequestResult();
-        }
-        #endregion
 
 
         #region Login
@@ -1336,6 +723,41 @@ namespace trifenix.agro.functions {
             dynamic result = JsonConvert.DeserializeObject(requestBody);
             return result;
         }
+
+
+
+        #region v2/rootstock
+        [FunctionName("RootstockV2")]
+        public static async Task<IActionResult> RootstockV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/rootstock/{id?}")] HttpRequest req, string id, ILogger log)
+        {
+            ClaimsPrincipal claims = await Auth.Validate(req);
+            if (claims == null)
+                return new UnauthorizedResult();
+            var manager = await ContainerMethods.AgroManager(claims);
+            ExtGetContainer<List<Rootstock>> result = null;
+            switch (req.Method.ToLower())
+            {
+                case "get":
+                    result = await manager.Rootstock.GetRootstocks();
+                    break;
+                case "post":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var name = (string)model["name"];
+                        var abbreviation = (string)model["abbreviation"];
+                        return await db.Rootstock.SaveNewRootstock(name, abbreviation);
+                    }, claims);
+                case "put":
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var name = (string)model["name"];
+                        var abbreviation = (string)model["abbreviation"];
+                        return await db.Rootstock.SaveEditRootstock(id, name, abbreviation);
+                    }, claims);
+            }
+            return ContainerMethods.GetJsonGetContainer(result, log);
+        }
+        #endregion
 
     }
 }

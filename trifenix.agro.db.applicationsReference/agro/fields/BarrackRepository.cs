@@ -10,9 +10,9 @@ namespace trifenix.agro.db.applicationsReference.agro.fields
     {
 
         private readonly IMainDb<Barrack> _db;
-        public BarrackRepository(IMainDb<Barrack> db) 
+        public BarrackRepository(AgroDbArguments dbArguments)
         {
-            _db = db;
+            _db = new MainDb<Barrack>(dbArguments);
         }
 
         public async Task<string> CreateUpdateBarrack(Barrack barrack)

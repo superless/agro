@@ -46,7 +46,7 @@ namespace trifenix.agro.external.operations.entities.orders
         {
             var element = await _repo.GetPhenologicalPreOrder(id);
             var modifier = await _graphApi.GetUserFromToken();
-            var userActivity = new UserActivity(DateTime.Now, modifier);
+            
             return await OperationHelper.EditElement(_commonDb, _repo.GetPhenologicalPreOrders(),
                 id,
                 element,
@@ -55,7 +55,6 @@ namespace trifenix.agro.external.operations.entities.orders
                     s.SeasonId = _idSeason;
                     s.BarracksId = idBarracks;
                     s.OrderFolderId = idOrderFolder;
-                    s.ModifyBy.Add(userActivity);
                     s.Created = DateTime.Now;
                     return s;
                 },
@@ -68,7 +67,7 @@ namespace trifenix.agro.external.operations.entities.orders
 
         public async Task<ExtPostContainer<string>> SaveNewPhenologicalPreOrder(string name, string idOrderFolder, List<string> idBarracks) {
             var creator = await _graphApi.GetUserFromToken();
-            var userActivity = new UserActivity(DateTime.Now, creator);
+            
             return await OperationHelper.CreateElement(_commonDb,_repo.GetPhenologicalPreOrders(),
                async s => await _repo.CreateUpdatePhenologicalPreOrder(new PhenologicalPreOrder
                {
@@ -78,7 +77,6 @@ namespace trifenix.agro.external.operations.entities.orders
                    BarracksId = idBarracks,
                    Created = DateTime.Now,
                    OrderFolderId = idOrderFolder,
-                   Creator = userActivity
                }),
                s => s.Name.Equals(name),
                $"ya existe preorden fenologica con nombre {name}"

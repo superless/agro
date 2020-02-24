@@ -402,6 +402,9 @@
         "frameworks": {
           "netstandard2.0": {
             "projectReferences": {
+              "D:\\aresa\\developments\\cloud.app\\trifenix.agro.microsoftgraph.interfaces\\trifenix.agro.microsoftgraph.interfaces.csproj": {
+                "projectPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.microsoftgraph.interfaces\\trifenix.agro.microsoftgraph.interfaces.csproj"
+              },
               "D:\\aresa\\developments\\cloud.app\\trifenix.agro.model\\trifenix.agro.db.model.csproj": {
                 "projectPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.model\\trifenix.agro.db.model.csproj"
               }
@@ -711,6 +714,9 @@
               "D:\\aresa\\developments\\cloud.app\\trifenix.agro.db.applicationsReference\\trifenix.agro.db.applicationsReference.csproj": {
                 "projectPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.db.applicationsReference\\trifenix.agro.db.applicationsReference.csproj"
               },
+              "D:\\aresa\\developments\\cloud.app\\trifenix.agro.microsoftgraph.interfaces\\trifenix.agro.microsoftgraph.interfaces.csproj": {
+                "projectPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.microsoftgraph.interfaces\\trifenix.agro.microsoftgraph.interfaces.csproj"
+              },
               "D:\\aresa\\developments\\cloud.app\\trifenix.agro.model.external\\trifenix.agro.model.external.csproj": {
                 "projectPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.model.external\\trifenix.agro.model.external.csproj"
               },
@@ -907,6 +913,14 @@
             "AzureFunctions.Extensions.Swashbuckle": {
               "target": "Package",
               "version": "[1.4.4, )"
+            },
+            "Microsoft.Azure.Functions.Extensions": {
+              "target": "Package",
+              "version": "[1.0.0, )"
+            },
+            "Microsoft.Azure.WebJobs.Extensions.DurableTask": {
+              "target": "Package",
+              "version": "[2.1.1, )"
             },
             "Microsoft.NET.Sdk.Functions": {
               "target": "Package",
@@ -1166,6 +1180,9 @@
               "D:\\aresa\\developments\\cloud.app\\trifenix.agro.db\\trifenix.agro.db.csproj": {
                 "projectPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.db\\trifenix.agro.db.csproj"
               },
+              "D:\\aresa\\developments\\cloud.app\\trifenix.agro.enums\\trifenix.agro.enums.csproj": {
+                "projectPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.enums\\trifenix.agro.enums.csproj"
+              },
               "D:\\aresa\\developments\\cloud.app\\trifenix.agro.weather.model\\trifenix.agro.weather.model.csproj": {
                 "projectPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.weather.model\\trifenix.agro.weather.model.csproj"
               }
@@ -1294,6 +1311,9 @@
             "projectReferences": {
               "D:\\aresa\\developments\\cloud.app\\trifenix.agro.agrosearch.interfaces\\trifenix.agro.search.interfaces.csproj": {
                 "projectPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.agrosearch.interfaces\\trifenix.agro.search.interfaces.csproj"
+              },
+              "D:\\aresa\\developments\\cloud.app\\trifenix.agro.enums\\trifenix.agro.enums.csproj": {
+                "projectPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.enums\\trifenix.agro.enums.csproj"
               },
               "D:\\aresa\\developments\\cloud.app\\trifenix.agro.search.model\\trifenix.agro.search.model.csproj": {
                 "projectPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.search.model\\trifenix.agro.search.model.csproj"

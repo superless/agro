@@ -4,7 +4,10 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using trifenix.agro.search.model.@base;
 
-namespace trifenix.agro.search.model {
+namespace trifenix.agro.search.model
+{
+
+
     public class EntitySearch : BaseSearch {
 
         public override DateTime Created { get; set; }  //Todos
@@ -16,11 +19,15 @@ namespace trifenix.agro.search.model {
         [IsFilterable]
         public string Id { get; set; }                  //Todos
 
-        [IsSearchable, IsSortable, JsonProperty("IdentificadorDeEntidad")]
+        [IsSearchable, IsSortable]
         public string Name { get; set; }                //Todos
+
+
 
         [IsSortable, IsFilterable]
         public string SeasonId { get; set; }            //Orden, Ejecucion, Barrack
+
+
 
         [IsSortable, IsFilterable]
         public int? Status { get; set; }                //Ejecucion
@@ -28,9 +35,63 @@ namespace trifenix.agro.search.model {
         [IsFilterable]
         public bool? Type { get; set; }                 //Orden
 
+
+
         [IsFilterable]
         public string Specie { get; set; }              //Orden, Ejecucion, Barrack
+
+      
+        public IdsRelated[] IdsRelated { get; set; } 
+
+        
+        public ElementRelated[] ElementsRelated { get; set; } //Orden, Ejecucion, PreOrden, 
+
+
+        public NumberEntityRelated[] NumbersRelated { get; set; }
+
     }
+
+    public class IdsRelated {
+
+        [IsSortable, IsFilterable]
+        public int EntityIndex { get; set; }
+
+
+        [IsSortable, IsFilterable]
+        public string EntityId { get; set; }
+
+
+    }
+
+    public class ElementRelated
+    {
+        [IsSortable, IsFilterable]
+        public int EntityIndex { get; set; }
+
+
+        [IsSearchable, IsSortable]
+        public string Name { get; set; }
+
+
+    }
+
+    public class NumberEntityRelated
+    {
+        [IsSortable, IsFilterable]
+        public int EntityIndex { get; set; }
+
+
+        [IsSearchable, IsSortable, IsFilterable]
+        public double Number { get; set; }
+
+
+    }
+
+
+
+
+
+
 
     public class EntitiesSearchContainer {
 

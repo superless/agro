@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cosmonaut;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,29 +10,11 @@ using trifenix.agro.db.model.agro;
 
 namespace trifenix.agro.db.applicationsReference.agro.fields
 {
-    public class SectorRepository : ISectorRepository
+    public class SectorRepository : MainGenericDb<Sector>, IMainGenericDb<Sector>
     {
-
-        private readonly IMainDb<Sector> _db;
-
-        public SectorRepository(IMainDb<Sector> db) 
+        public SectorRepository(AgroDbArguments dbArguments):base(dbArguments)
         {
-            _db = db;
-        }
-
-        public async Task<string> CreateUpdateSector(Sector sector)
-        {
-            return await _db.CreateUpdate(sector);
-        }
-
-        public async Task<Sector> GetSector(string id)
-        {
-            return await _db.GetEntity(id);
-        }
-
-        public IQueryable<Sector> GetSectors()
-        {
-            return _db.GetEntities();
+            
         }
     }
 }

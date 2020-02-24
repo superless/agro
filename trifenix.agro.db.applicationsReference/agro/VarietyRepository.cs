@@ -9,28 +9,10 @@ using trifenix.agro.db.model.agro;
 
 namespace trifenix.agro.db.applicationsReference.agro
 {
-    public class VarietyRepository : IVarietyRepository
+    public class VarietyRepository : MainGenericDb<Variety>, IMainGenericDb<Variety>
     {
-
-        private readonly IMainDb<Variety> _db;
-        public VarietyRepository(IMainDb<Variety> db)
+        public VarietyRepository(AgroDbArguments args) : base(args)
         {
-            _db = db;
-        }
-
-        public async Task<string> CreateUpdateVariety(Variety variety)
-        {
-            return await _db.CreateUpdate(variety);
-        }
-
-        public IQueryable<Variety> GetVarieties()
-        {
-            return _db.GetEntities();
-        }
-
-        public async Task<Variety> GetVariety(string id)
-        {
-            return await _db.GetEntity(id);
         }
     }
 }

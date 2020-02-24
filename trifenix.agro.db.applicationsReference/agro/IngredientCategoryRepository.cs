@@ -6,28 +6,10 @@ using trifenix.agro.db.model.agro;
 
 namespace trifenix.agro.db.applicationsReference.agro
 {
-    public class IngredientCategoryRepository : IIngredientCategoryRepository
+    public class IngredientCategoryRepository : MainGenericDb<IngredientCategory>, IMainGenericDb<IngredientCategory>
     {
-        private readonly IMainDb<IngredientCategory> _db;
-
-        public IngredientCategoryRepository(IMainDb<IngredientCategory> db) 
+        public IngredientCategoryRepository(AgroDbArguments args) : base(args)
         {
-            _db = db;
-        }
-
-        public async Task<string> CreateUpdateIngredientCategory(IngredientCategory category)
-        {
-            return await _db.CreateUpdate(category);
-        }
-
-        public async Task<IngredientCategory> GetIngredientCategory(string uniqueId)
-        {
-            return await _db.GetEntity(uniqueId);
-        }
-
-        public IQueryable<IngredientCategory> GetIngredientCategories()
-        {
-            return _db.GetEntities();
         }
     }
 }

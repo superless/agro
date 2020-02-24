@@ -10,9 +10,9 @@ namespace trifenix.agro.db.applicationsReference.agro
     {
 
         private readonly IMainDb<Rootstock> _db;
-        public RootstockRepository(IMainDb<Rootstock> db)         
+        public RootstockRepository(AgroDbArguments dbArguments)         
         {
-            _db = db;
+            _db = new MainDb<Rootstock>(dbArguments);
         }
 
         public async Task<string> CreateUpdateRootstock(Rootstock rootstock)

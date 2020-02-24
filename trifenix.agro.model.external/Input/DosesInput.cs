@@ -1,10 +1,15 @@
 ﻿using System.Collections.Generic;
 using trifenix.agro.db.model.agro.local;
+using trifenix.agro.enums;
 
 namespace trifenix.agro.model.external.Input
 {
-    public class DosesInput
+    public class DosesInput : InputBase
     {
+
+        public string IdProduct { get; set; }
+
+
         public string[] IdVarieties { get; set; }
 
         public string[] IdSpecies { get; set; }
@@ -24,21 +29,12 @@ namespace trifenix.agro.model.external.Input
         
         public int WettingRecommendedByHectares { get; set; }
 
-        private List<WaitingHarvestInput> _waitingToHarvest;
+        public WaitingHarvestInput[] WaitingToHarvest;
 
-        public List<WaitingHarvestInput> WaitingHarvest
-        {
-            get
-            {
-                _waitingToHarvest = _waitingToHarvest ?? new List<WaitingHarvestInput>();
-                return _waitingToHarvest;
-            }
-            set { _waitingToHarvest = value; }
-        }
+       
+        public double DosesQuantityMin { get; set; }
 
-        public int DosesQuantityMin { get; set; }
-
-        public int DosesQuantityMax { get; set; }
+        public double DosesQuantityMax { get; set; }
 
         public int? WaitingDaysLabel { get; set; }
 

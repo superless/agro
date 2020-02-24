@@ -6,28 +6,10 @@ using trifenix.agro.db.model.agro;
 
 namespace trifenix.agro.db.applicationsReference.agro
 {
-    public class RoleRepository : IRoleRepository
+    public class RoleRepository : MainGenericDb<Role>, IMainGenericDb<Role>
     {
-
-        private readonly IMainDb<Role> _db;
-        public RoleRepository(IMainDb<Role> db) 
+        public RoleRepository(AgroDbArguments args) : base(args)
         {
-            _db = db;
-        }
-
-        public async Task<string> CreateUpdateRole(Role Role)
-        {
-            return await _db.CreateUpdate(Role);
-        }
-
-        public async Task<Role> GetRole(string id)
-        {
-            return await _db.GetEntity(id);
-        }
-
-        public IQueryable<Role> GetRoles()
-        {
-            return _db.GetEntities();
         }
     }
 }

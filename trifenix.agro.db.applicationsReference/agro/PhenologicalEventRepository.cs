@@ -6,28 +6,10 @@ using trifenix.agro.db.model.agro;
 
 namespace trifenix.agro.db.applicationsReference.agro
 {
-    public class PhenologicalEventRepository : IPhenologicalEventRepository
+    public class PhenologicalEventRepository : MainGenericDb<PhenologicalEvent>, IMainGenericDb<PhenologicalEvent>
     {
-
-        private readonly IMainDb<PhenologicalEvent> _db;
-        public PhenologicalEventRepository(IMainDb<PhenologicalEvent> db)
+        public PhenologicalEventRepository(AgroDbArguments args) : base(args)
         {
-            _db = db;
-        }
-
-        public async Task<string> CreateUpdatePhenologicalEvent(PhenologicalEvent phenologicalEvent)
-        {
-            return await _db.CreateUpdate(phenologicalEvent);
-        }
-
-        public async Task<PhenologicalEvent> GetPhenologicalEvent(string uniqueId)
-        {
-            return await _db.GetEntity(uniqueId);
-        }
-
-        public IQueryable<PhenologicalEvent> GetPhenologicalEvents()
-        {
-            return _db.GetEntities();
         }
     }
 }
