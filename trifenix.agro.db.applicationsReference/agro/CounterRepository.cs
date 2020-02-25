@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro;
@@ -17,7 +19,7 @@ namespace trifenix.agro.db.applicationsReference.agro {
         }
 
         public Counter GetCounter() {
-            return _db.GetEntities().FirstOrDefault();
+            return _db.GetEntities().AsEnumerable().FirstOrDefault()??new Counter { Id = Guid.NewGuid().ToString("N"), Count = new Dictionary<string, Dictionary<string, int>>() };
         }
 
     }

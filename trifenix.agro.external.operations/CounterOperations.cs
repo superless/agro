@@ -17,19 +17,17 @@ namespace trifenix.agro.external.operations {
             return counter;
         }
 
-        public int GetCorrelativePosition(string entity, string specieAbb) {
+        public int GetCorrelativePosition<T>(string specieAbb) {
+            string entity = typeof(T).Name;
             var counter = _repo.GetCounter();
-            if (counter.Count.ContainsKey(entity))
-                if (counter.Count[entity].ContainsKey(specieAbb))
-                    return counter.Count[entity][specieAbb];
-                else
-                    return -2;
-            else
-                return -1;
+            if (!counter.Count.ContainsKey(entity) || !counter.Count[entity].ContainsKey(specieAbb))
+                IncreaseCorrelativePosition<T>(specieAbb);
+            return counter.Count[entity][specieAbb];
         }
 
-        public void IncreaseCorrelativePosition(string entity, string specieAbb) {
-            var counter = _repo.GetCounter() ?? new Counter();
+        public async void IncreaseCorrelativePosition<T>(string specieAbb) {
+            string entity = typeof(T).Name;
+            var counter = _repo.GetCounter();
             if (counter.Count.ContainsKey(entity))
                 if (counter.Count[entity].ContainsKey(specieAbb))
                     counter.Count[entity][specieAbb]++;
@@ -37,21 +35,24 @@ namespace trifenix.agro.external.operations {
                     counter.Count[entity].Add(specieAbb,1);
             else
                 counter.Count.Add(entity, new Dictionary<string,int> { { specieAbb, 1 } });
+            await _repo.CreateUpdateCounter(counter);
         }
 
-        public bool RemoveEntityFromCounter(string entity) {
+        public bool RemoveEntityFromCounter<T>() {
+            string entity = typeof(T).Name;
             var counter = _repo.GetCounter();
-            return counter.Count.Remove(entity);
+            bool flag = counter.Count.Remove(entity);
+            if (flag) _repo.CreateUpdateCounter(counter);
+            return flag;
         }
 
         public bool RemoveSpecieFromCounter(string specieAbb) {
             var counter = _repo.GetCounter();
             bool flag = false;
-            foreach (var entity in counter.Count.Values) {
-                if (entity.ContainsKey(specieAbb)) {
+            foreach (var entity in counter.Count.Values)
+                if (entity.ContainsKey(specieAbb))
                     flag = entity.Remove(specieAbb);
-                }
-            }
+            if(flag) _repo.CreateUpdateCounter(counter);
             return flag;
         }
 

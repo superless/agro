@@ -3,9 +3,15 @@
 namespace trifenix.agro.external.interfaces {
     public interface ICounterOperations {
 
-        //Task<ExtPostContainer<string>> SaveNewApplicationOrder(ApplicationOrderInput input);
-
         Counter GetCounter();
+
+        int GetCorrelativePosition<T>(string specieAbb);
+
+        void IncreaseCorrelativePosition<T>(string specieAbb);
+
+        bool RemoveEntityFromCounter<T>();
+
+        bool RemoveSpecieFromCounter(string specieAbb);
 
     }
 }

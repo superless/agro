@@ -11,7 +11,7 @@ namespace trifenix.agro.model.external.output
 
         public int Correlative { get; set; }
 
-        public string Specie { get; set; }
+        public string SpecieAbb { get; set; }
 
         public string Name { get; set; }
 

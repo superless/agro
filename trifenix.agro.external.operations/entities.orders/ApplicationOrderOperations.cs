@@ -21,6 +21,7 @@ using trifenix.agro.db.interfaces.agro.ext;
 using trifenix.agro.db.interfaces.agro.events;
 using trifenix.agro.db.interfaces.agro;
 using trifenix.agro.util;
+using trifenix.agro.external.interfaces;
 
 namespace trifenix.agro.external.operations.entities.orders {
     public class ApplicationOrderOperations<T> : IApplicationOrderOperations where T : ApplicationOrder{
@@ -30,6 +31,7 @@ namespace trifenix.agro.external.operations.entities.orders {
         private readonly IBarrackRepository Barracks;
         private readonly ICertifiedEntityRepository CertifiedEntity;
         private readonly ICommonDbOperations<T> CommonDb;
+        private readonly ICounterOperations CounterOp;
         private readonly IExecutionOrderRepository Execution;
         private readonly IGraphApi GraphApi;
         private readonly INotificationEventRepository Notifications;
@@ -41,12 +43,13 @@ namespace trifenix.agro.external.operations.entities.orders {
         private readonly string EntityName;
         private readonly string SeasonId;
 
-        public ApplicationOrderOperations(IApplicationOrderRepository _applicationOrder, IApplicationTargetRepository _target, IBarrackRepository _barracks, ICertifiedEntityRepository _certifiedEntity, ICommonDbOperations<T> _commonDb, IExecutionOrderRepository _execution, IGraphApi _graphApi, INotificationEventRepository _notifications, IPhenologicalPreOrderRepository _preOrder, IProductRepository _product, ISpecieRepository _specie, IVarietyRepository _variety, string _seasonId, IAgroSearch _searchServiceInstance) {
+        public ApplicationOrderOperations(IApplicationOrderRepository _applicationOrder, IApplicationTargetRepository _target, IBarrackRepository _barracks, ICertifiedEntityRepository _certifiedEntity, ICommonDbOperations<T> _commonDb, ICounterOperations _counterOp, IExecutionOrderRepository _execution, IGraphApi _graphApi, INotificationEventRepository _notifications, IPhenologicalPreOrderRepository _preOrder, IProductRepository _product, ISpecieRepository _specie, IVarietyRepository _variety, string _seasonId, IAgroSearch _searchServiceInstance) {
             ApplicationOrder = _applicationOrder;
             Target = _target;
             Barracks = _barracks;
             CertifiedEntity = _certifiedEntity;
             CommonDb = _commonDb;
+            CounterOp = _counterOp;
             Execution = _execution;
             GraphApi = _graphApi;
             Notifications = _notifications;
@@ -63,7 +66,7 @@ namespace trifenix.agro.external.operations.entities.orders {
             new OutPutApplicationOrder {
                 Id = appOrder.Id,
                 Correlative = appOrder.Correlative,
-                Specie = appOrder.SpecieAbb,
+                SpecieAbb = appOrder.SpecieAbb,
                 Wetting = appOrder.Wetting,
                 Name = appOrder.Name,
                 isPhenological = appOrder.IsPhenological,
@@ -111,7 +114,7 @@ namespace trifenix.agro.external.operations.entities.orders {
             var userActivity = new UserActivity(DateTime.Now, modifier);
             T order = (T)await ApplicationOrder.GetApplicationOrder(id);
             var newAppOrder = await GetApplicationOrder(id, input);
-            //bool changedSpecie = !order.SpecieAbb.Equals(newAppOrder.SpecieAbb);
+            bool changedSpecie = !order.SpecieAbb.Equals(newAppOrder.SpecieAbb);
             var executions = GetExecutionsInOrder(id);
             //TODO: Validaciones al momento de modificar orden
             //LISTO ->  Al modificar la fecha en la orden, no deben existir ejecuciones en proceso,  todas deben estar cerradas.   Posible duplicidad 
@@ -125,8 +128,8 @@ namespace trifenix.agro.external.operations.entities.orders {
                     newAppOrder.Creator = s.Creator;
                     newAppOrder.ModifyBy = s.ModifyBy;
                     newAppOrder.ModifyBy.Add(userActivity);
-                    //if (changedSpecie)
-                    //    newAppOrder.Correlative = CommonDb.GetCorrelativePosition(newAppOrder.SpecieAbb);
+                    if (changedSpecie)
+                        newAppOrder.Correlative = CounterOp.GetCorrelativePosition<T>(newAppOrder.SpecieAbb);
                     return newAppOrder;
                 },
                 ApplicationOrder.CreateUpdate,
@@ -136,8 +139,8 @@ namespace trifenix.agro.external.operations.entities.orders {
             );
             if (editOperation.GetType() == typeof(ExtPostErrorContainer<string>))
                 return OperationHelper.GetPostException<OutPutApplicationOrder>(new Exception(editOperation.Message));
-            //if (changedSpecie)
-            //    CommonDb.IncreaseCorrelativePosition(newAppOrder.SpecieAbb);
+            if (changedSpecie)
+                CounterOp.IncreaseCorrelativePosition<T>(newAppOrder.SpecieAbb);
             SearchServiceInstance.AddEntities(new List<EntitySearch> {
                 new EntitySearch{
                     Id = id,
@@ -158,7 +161,7 @@ namespace trifenix.agro.external.operations.entities.orders {
             var targetIds = input.Applications.Any(s => s.Doses != null) ? input.Applications.Where(s => s.Doses != null).SelectMany(s => s.Doses.idsApplicationTarget).Distinct() : new List<string>();
             var varietyAbb = new List<string> { Barracks.GetBarrack(input.BarracksInput.FirstOrDefault()?.IdBarrack).Result.Variety?.Abbreviation };
             var specieAbb = Barracks.GetBarrack(input.BarracksInput.FirstOrDefault()?.IdBarrack).Result.Variety.Specie.Abbreviation;
-            //int correlative = CommonDb.GetCorrelativePosition(specieAbb);
+            int correlative = CounterOp.GetCorrelativePosition<T>(specieAbb);
             var certifiedEntitiesIds = input.Applications.Any(s => s.Doses != null) ? input.Applications.Where(s => s.Doses != null).SelectMany(s => s.Doses.WaitingHarvest.Select(a => a.IdCertifiedEntity)).Distinct() : new List<string>();
             var barracksInstances = await GetBarracksIntance(input.BarracksInput);
             var applications = GetApplicationInOrder(input.Applications);
@@ -168,7 +171,7 @@ namespace trifenix.agro.external.operations.entities.orders {
             var userActivity = new UserActivity(DateTime.Now, creator);
             return (T)Activator.CreateInstance(typeof(T), new object[] {
                 id,
-                0,
+                correlative,
                 certifiedEntitiesIds?.ToList(),
                 specieAbb,
                 barracksInstances,
@@ -210,12 +213,7 @@ namespace trifenix.agro.external.operations.entities.orders {
                     Type = input.isPhenological
                 }
             });
-            //try {
-            //    CommonDb.IncreaseCorrelativePosition(specieAbb);
-            //}
-            //catch (Exception e) {
-            //    return OperationHelper.PostNotFoundElementException<string>(e.Message);
-            //}
+            CounterOp.IncreaseCorrelativePosition<T>(specieAbb);
             return createOperation;
         }
 

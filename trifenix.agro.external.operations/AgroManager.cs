@@ -42,7 +42,7 @@ namespace trifenix.agro.external.operations {
 
         public string IdSeason { get => _idSeason; }
 
-        public IApplicationOrderOperations ApplicationOrders => new ApplicationOrderOperations<ApplicationOrder>(_repository.Orders, _repository.Targets, _repository.Barracks, _repository.CertifiedEntities, new CommonDbOperations<ApplicationOrder>(), _repository.ExecutionOrders, _graphApi, _repository.NotificationEvents, _repository.PhenologicalPreOrders, _repository.Products, _repository.Species, _repository.Varieties, IdSeason, _searchServiceInstance);
+        public IApplicationOrderOperations ApplicationOrders => new ApplicationOrderOperations<ApplicationOrder>(_repository.Orders, _repository.Targets, _repository.Barracks, _repository.CertifiedEntities, new CommonDbOperations<ApplicationOrder>(), new CounterOperations(_repository.Counter), _repository.ExecutionOrders, _graphApi, _repository.NotificationEvents, _repository.PhenologicalPreOrders, _repository.Products, _repository.Species, _repository.Varieties, IdSeason, _searchServiceInstance);
         public IApplicationTargetOperations ApplicationTargets => new ApplicationTargetOperations(_repository.Targets, new CommonDbOperations<ApplicationTarget>());
         public IBarrackOperations<Barrack> Barracks => new BarrackOperations<Barrack>(_repository.Barracks, _repository.Rootstocks, _repository.PlotLands, _repository.Varieties, new CommonDbOperations<Barrack>(), _idSeason, _searchServiceInstance);
         public IBusinessNameOperations BusinessNames => new BusinessNameOperations(_repository.BusinessNames, new CommonDbOperations<BusinessName>(), _graphApi);

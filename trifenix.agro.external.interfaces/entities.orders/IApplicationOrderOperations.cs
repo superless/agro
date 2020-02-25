@@ -20,7 +20,5 @@ namespace trifenix.agro.external.interfaces.entities.orders {
 
         ExtGetContainer<SearchResult<OutPutApplicationOrder>> GetPaginatedOrders(string textToSearch, string abbSpecie, bool? type, int? page, int? quantity, bool? desc);
 
-        //void UpdateOrder(List<string> ids, AgroRepository db);
-
     }
 }

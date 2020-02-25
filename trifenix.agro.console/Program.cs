@@ -236,7 +236,7 @@ namespace trifenix.agro.console {
             //var agro = new AgroManager(db, season?.Id, null, null, null, null);
             //agro.ApplicationOrders.UpdateOrder(lines, db);
             #endregion
-
+            
             timer.Stop();
             Console.WriteLine("Hora de termino: {0}", DateTime.Now.ToString("hh\\:mm\\:ss"));
             Console.WriteLine("Tiempo transcurrido: {0}", timer.Elapsed.ToString("hh\\:mm\\:ss"));
