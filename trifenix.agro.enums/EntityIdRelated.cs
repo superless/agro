@@ -12,7 +12,8 @@
         TRACTOR = 8,
         NEBULIZER = 9,
         ROLE = 10,
-        AAD = 11
+        AAD = 11,
+        SEASON = 12
 
 
     }
@@ -21,13 +22,15 @@
     {
         PRODUCT_BRAND = 0,
         USER_RUT = 1,
+        USER_EMAIL=10,
         NEBULIZER_BRAND=2,
         NEBULIZER_CODE = 3,
         TRACTOR_BRAND = 4,
         TRACTOR_CODE = 5,
         BUSINESSNAME_EMAIL=6,
         BUSINESSNAME_RUT = 7,
-        BUSINESSNAME_GIRO = 7,
+        BUSINESSNAME_GIRO = 8,
+        SPECIE_CODE = 9
 
 
 
@@ -37,9 +40,16 @@
 
     public enum NumberRelated
     {
-
+        ORDER_TYPE= 1
 
     }
+
+    public enum OrderType { 
+        DEFAULT =0,
+        PHENOLOGICAL =1
+    }
+
+
 
 
 }

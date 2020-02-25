@@ -82,7 +82,7 @@ namespace trifenix.agro.search.model
 
 
         [IsSearchable, IsSortable, IsFilterable]
-        public double Number { get; set; }
+        public int Number { get; set; }
 
 
     }

@@ -13,5 +13,9 @@ namespace trifenix.agro.db.model.agro {
 
         public bool Current { get; set; }
 
+        public string IdCostCenter { get; set; }
+
+
+
     }
 }

@@ -3,14 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces;
-using trifenix.agro.db.interfaces.agro;
 using trifenix.agro.db.interfaces.agro.common;
-using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.enums;
 using trifenix.agro.external.interfaces;
-using trifenix.agro.external.interfaces.entities.main;
-using trifenix.agro.external.operations.helper;
 using trifenix.agro.external.operations.res;
 using trifenix.agro.microsoftgraph.interfaces;
 using trifenix.agro.model.external;
@@ -92,6 +88,15 @@ namespace trifenix.agro.external.operations.entities.main
                 {
                     EntityIndex = (int)EntityRelated.USER_RUT,
                     Name = input.Rut
+                });
+            }
+
+            if (!string.IsNullOrWhiteSpace(input.Email))
+            {
+                list.Add(new ElementRelated
+                {
+                    EntityIndex = (int)EntityRelated.USER_EMAIL,
+                    Name = input.Email
                 });
             }
             return list.ToArray();

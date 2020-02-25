@@ -8,8 +8,6 @@ namespace trifenix.agro.model.external.Input
     {
         
 
-        
-
         public string Rut { get; set; }
 
         public string Email { get; set; }
