@@ -49,6 +49,7 @@ namespace trifenix.agro.db.interfaces.agro
 
         IMainGenericDb<CostCenter> CostCenters { get; }
 
+        IMainGenericDb<Season> Seasons { get; }
 
 
 
@@ -57,7 +58,7 @@ namespace trifenix.agro.db.interfaces.agro
 
         IRootstockRepository Rootstocks { get; }
 
-        ISeasonRepository Seasons { get; }
+        
 
 
         

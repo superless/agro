@@ -30,7 +30,4 @@
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="init\" />
-  </ItemGroup>
 </Project>

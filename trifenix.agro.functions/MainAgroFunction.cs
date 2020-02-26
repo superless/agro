@@ -34,34 +34,7 @@ namespace trifenix.agro.functions {
 
 
         #region v2/seasons
-        [FunctionName("SeasonV2")]
-        public static async Task<IActionResult> SeasonV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/seasons/{id?}")] HttpRequest req, string id, ILogger log) {
-            ClaimsPrincipal claims = await Auth.Validate(req);
-            if (claims == null)
-                return new UnauthorizedResult();
-            var manager = await ContainerMethods.AgroManager(claims);
-            ExtGetContainer<List<Season>> result = null;
-            switch (req.Method.ToLower()) {
-                case "get":
-                    result = await manager.Seasons.GetSeasons();
-                    break;
-                case "post":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
-                        var initDate = (DateTime)model["startDate"];
-                        var endDate = (DateTime)model["endDate"];
-                        return await db.Seasons.SaveNewSeason(initDate, endDate);
-                    }, claims);
-                case "put":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
-                        var initDate = (DateTime)model["startDate"];
-                        var endDate = (DateTime)model["endDate"];
-                        var current = (bool)model["current"];
-                        return await db.Seasons.SaveEditSeason(id, initDate, endDate, current);
-                    }, claims);
-            }
-            return ContainerMethods.GetJsonGetContainer(result, log);
-        }
+        
         #endregion
 
         #region v2/order_folders
@@ -70,6 +43,8 @@ namespace trifenix.agro.functions {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
+
+
             var manager = await ContainerMethods.AgroManager(claims);
             ExtGetContainer<OrderFolder> result = null;
             switch (req.Method.ToLower())

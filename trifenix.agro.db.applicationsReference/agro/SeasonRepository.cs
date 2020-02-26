@@ -11,31 +11,10 @@ using trifenix.agro.db.interfaces;
 
 namespace trifenix.agro.db.applicationsReference.agro
 {
-    public class SeasonRepository : ISeasonRepository
+    public class SeasonRepository : MainGenericDb<Season>, IMainGenericDb<Season>
     {
-        private readonly IMainDb<Season> _db;
-        public SeasonRepository(AgroDbArguments dbArguments)
+        public SeasonRepository(AgroDbArguments args) : base(args)
         {
-            _db = new MainDb<Season>(dbArguments);
-        }
-        public async Task<string> CreateUpdateSeason(Season season)
-        {
-            return await _db.CreateUpdate(season);
-        }
-
-        public async Task<Season> GetCurrentSeason()
-        {
-            return await _db.GetEntities().FirstOrDefaultAsync(s => s.Current);
-        }
-
-        public async Task<Season> GetSeason(string id)
-        {
-            return await _db.GetEntity(id);
-        }
-
-        public IQueryable<Season> GetSeasons()
-        {
-            return _db.GetEntities();
         }
     }
 }

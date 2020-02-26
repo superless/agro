@@ -159,6 +159,13 @@ namespace trifenix.agro.functions
             return result.JsonResult;
         }
 
+        [FunctionName("SeasonV3")]
+        public static async Task<IActionResult> SeasonV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "seasons/{id?}")] HttpRequest req, string id, ILogger log)
+        {
+            var result = await GenericMantainer<CostCenterInput, CostCenter>.SendInternalHttp(req, log, s => s.CostCenters, id);
+
+            return result.JsonResult;
+        }
 
 
 

@@ -71,13 +71,16 @@ namespace trifenix.agro.db.applicationsReference.agro
         public IMainGenericDb<CostCenter> CostCenters => new CostCenterRepository(DbArguments);
 
 
+        public IMainGenericDb<Season> Seasons => new SeasonRepository(DbArguments);
+
 
 
 
 
         public IRootstockRepository Rootstocks => new RootstockRepository(DbArguments);
 
-        public ISeasonRepository Seasons => new SeasonRepository(DbArguments);
+        
+
 
         public IOrderFolderRepository OrderFolder => new OrderFolderRepository(DbArguments);
 

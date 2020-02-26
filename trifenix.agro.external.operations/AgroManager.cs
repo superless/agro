@@ -1,4 +1,6 @@
-﻿using trifenix.agro.db.applicationsReference.agro.Common;
+﻿using trifenix.agro.db;
+using trifenix.agro.db.applicationsReference;
+using trifenix.agro.db.applicationsReference.agro.Common;
 using trifenix.agro.db.applicationsReference.common;
 using trifenix.agro.db.interfaces.agro;
 using trifenix.agro.db.interfaces.agro.common;
@@ -27,15 +29,15 @@ using trifenix.agro.weather.interfaces;
 namespace trifenix.agro.external.operations {
     public class AgroManager : IAgroManager {
 
-        private readonly IAgroRepository _repository;
         
+        private readonly AgroDbArguments arguments;
         private readonly IUploadImage _uploadImage;
         private readonly IGraphApi _graphApi;
         private readonly IWeatherApi _weatherApi;
         private readonly IAgroSearch _searchServiceInstance;
 
-        public AgroManager(IAgroRepository repository,  IUploadImage uploadImage, IGraphApi graphApi, IWeatherApi weatherApi, IAgroSearch searchServiceInstance) {
-            _repository = repository;            
+        public AgroManager(AgroDbArguments arguments,  IUploadImage uploadImage, IGraphApi graphApi, IWeatherApi weatherApi, IAgroSearch searchServiceInstance) {
+            this.arguments = arguments;
             _uploadImage = uploadImage;
             
             _weatherApi = weatherApi;
@@ -46,69 +48,74 @@ namespace trifenix.agro.external.operations {
 
         public IGraphApi GraphApi { get; }
 
-        public IGenericFullReadOperation<UserActivity, UserActivityInput> UserActivity => new UserActivityOperations(_repository.UserActivity, new CommonDbOperations<UserActivity>(), GraphApi);
+        public IGenericFullReadOperation<UserActivity, UserActivityInput> UserActivity => new UserActivityOperations(new MainDb<UserActivity>(arguments), new CommonDbOperations<UserActivity>(), GraphApi);
 
-        public IExistElement ExistsElements => new CosmosExistElement(_repository.DbArguments);
-
-        public IGenericOperation<Sector, SectorInput> Sectors => new SectorOperations(_repository.Sectors, ExistsElements, _searchServiceInstance);
-        public IGenericOperation<PlotLand, PlotLandInput> PlotLands => new PlotLandOperations(_repository.PlotLands, ExistsElements, _searchServiceInstance);
+        public IExistElement ExistsElements => new CosmosExistElement(arguments);
 
 
-        public IGenericOperation<Specie, SpecieInput> Species => new SpecieOperations(_repository.Species, ExistsElements, _searchServiceInstance);
-
-        public IGenericOperation<Variety, VarietyInput> Varieties => new VarietyOperations(_repository.Varieties, ExistsElements, _searchServiceInstance);
-
-
-        public IGenericOperation<ApplicationTarget, TargetInput> ApplicationTargets => new ApplicationTargetOperations(_repository.Targets, ExistsElements, _searchServiceInstance);
+        public IGenericOperation<Sector, SectorInput> Sectors => new SectorOperations(new MainGenericDb<Sector>(arguments), ExistsElements, _searchServiceInstance);
+        public IGenericOperation<PlotLand, PlotLandInput> PlotLands => new PlotLandOperations(new MainGenericDb<PlotLand>(arguments), ExistsElements, _searchServiceInstance);
 
 
+        public IGenericOperation<Specie, SpecieInput> Species => new SpecieOperations(new MainGenericDb<Specie>(arguments), ExistsElements, _searchServiceInstance);
 
-        public IGenericOperation<PhenologicalEvent, PhenologicalEventInput> PhenologicalEvents => new PhenologicalEventOperations(_repository.PhenologicalEvents, ExistsElements, _searchServiceInstance);
-
-
-        public IGenericOperation<CertifiedEntity, CertifiedEntityInput> CertifiedEntities => new CertifiedEntityOperations(_repository.CertifiedEntities, ExistsElements, _searchServiceInstance);
-
-        public IGenericOperation<IngredientCategory, IngredientCategoryInput> IngredientCategories => new IngredientCategoryOperations(_repository.Categories, ExistsElements, _searchServiceInstance);
-
-        public IGenericOperation<Ingredient, IngredientInput> Ingredients => new IngredientOperations(_repository.Ingredients, ExistsElements, _searchServiceInstance);
+        public IGenericOperation<Variety, VarietyInput> Varieties => new VarietyOperations(new MainGenericDb<Variety>(arguments), ExistsElements, _searchServiceInstance);
 
 
-        public IGenericOperation<Product, ProductInput> Products => new ProductOperations(_repository.Products, ExistsElements, _searchServiceInstance, Doses);
-
-
-        public IGenericOperation<Doses, DosesInput> Doses => new DosesOperations(_repository.Doses, ExistsElements, _searchServiceInstance);
-
-        public IGenericOperation<Role, RoleInput> Roles => new RoleOperations(_repository.Roles, _searchServiceInstance);
+        public IGenericOperation<ApplicationTarget, TargetInput> ApplicationTargets => new ApplicationTargetOperations(new MainGenericDb<ApplicationTarget>(arguments), ExistsElements, _searchServiceInstance);
 
 
 
-        public IGenericOperation<Job, JobInput> Jobs => new JobOperations(_repository.Jobs, ExistsElements, _searchServiceInstance);
+        public IGenericOperation<PhenologicalEvent, PhenologicalEventInput> PhenologicalEvents => new PhenologicalEventOperations(new MainGenericDb<PhenologicalEvent>(arguments), ExistsElements, _searchServiceInstance);
+
+
+        public IGenericOperation<CertifiedEntity, CertifiedEntityInput> CertifiedEntities => new CertifiedEntityOperations(new MainGenericDb<CertifiedEntity>(arguments), ExistsElements, _searchServiceInstance);
+
+        public IGenericOperation<IngredientCategory, IngredientCategoryInput> IngredientCategories => new IngredientCategoryOperations(new MainGenericDb<IngredientCategory>(arguments), ExistsElements, _searchServiceInstance);
+
+        public IGenericOperation<Ingredient, IngredientInput> Ingredients => new IngredientOperations(new MainGenericDb<Ingredient>(arguments), ExistsElements, _searchServiceInstance);
+
+
+        public IGenericOperation<Product, ProductInput> Products => new ProductOperations(new MainGenericDb<Product>(arguments), ExistsElements, _searchServiceInstance, Doses);
+
+
+        public IGenericOperation<Doses, DosesInput> Doses => new DosesOperations(new MainGenericDb<Doses>(arguments), ExistsElements, _searchServiceInstance);
+
+        public IGenericOperation<Role, RoleInput> Roles => new RoleOperations(new MainGenericDb<Role>(arguments), _searchServiceInstance);
+
+
+
+        public IGenericOperation<Job, JobInput> Jobs => new JobOperations(new MainGenericDb<Job>(arguments), ExistsElements, _searchServiceInstance);
 
         
 
-        public IGenericOperation<UserApplicator, UserApplicatorInput> Users => new UserOperations(_repository.Users, ExistsElements, _searchServiceInstance, 
+        public IGenericOperation<UserApplicator, UserApplicatorInput> Users => new UserOperations(new MainGenericDb<UserApplicator>(arguments), ExistsElements, _searchServiceInstance, 
             GraphApi);
 
 
-        public IGenericOperation<Nebulizer, NebulizerInput> Nebulizers => new NebulizerOperations(_repository.Nebulizers, ExistsElements, _searchServiceInstance);
+        public IGenericOperation<Nebulizer, NebulizerInput> Nebulizers => new NebulizerOperations(new MainGenericDb<Nebulizer>(arguments), ExistsElements, _searchServiceInstance);
         
 
 
-        public IGenericOperation<Tractor, TractorInput> Tractors => new TractorOperations(_repository.Tractors, ExistsElements, _searchServiceInstance);
+        public IGenericOperation<Tractor, TractorInput> Tractors => new TractorOperations(new MainGenericDb<Tractor>(arguments), ExistsElements, _searchServiceInstance);
 
 
 
-        public IGenericOperation<BusinessName, BusinessNameInput> BusinessNames => new BusinessNameOperations(_repository.BusinessNames, ExistsElements, _searchServiceInstance);
+        public IGenericOperation<BusinessName, BusinessNameInput> BusinessNames => new BusinessNameOperations(new MainGenericDb<BusinessName>(arguments), ExistsElements, _searchServiceInstance);
 
-        public IGenericOperation<CostCenter, CostCenterInput> CostCenters => new CostCenterOperations(_repository.CostCenters, ExistsElements, _searchServiceInstance);
+        public IGenericOperation<CostCenter, CostCenterInput> CostCenters => new CostCenterOperations(new MainGenericDb<CostCenter>(arguments), ExistsElements, _searchServiceInstance);
 
-        public IRootstockOperations Rootstock => new RootstockOperations(_repository.Rootstocks, new CommonDbOperations<Rootstock>());
+
+        public IGenericOperation<Season, SeasonInput> Seasons => new SeasonOperations(new MainGenericDb<Season>(arguments), ExistsElements, _searchServiceInstance);
+
+
+        public IRootstockOperations Rootstock => new RootstockOperations(new MainGenericDb<Rootstock>(arguments), ExistsElements, _searchServiceInstance);
 
         
 
         
 
-        public ISeasonOperations Seasons => new SeasonOperations(_repository.Seasons, new CommonDbOperations<Season>());
+        
         
        
 

@@ -86,6 +86,14 @@ namespace trifenix.agro.external.operations.entities.ext
 
             if (!validaProduct) throw new Exception("el identificador de producto para dosis no se encuentra en la base de datos");
 
+            if (!string.IsNullOrWhiteSpace(input.Id))
+            {
+                var validaIdExists = await existElement.ExistsElement<Doses>(input.Id);
+                if (!validaIdExists) throw new Exception("No existe el id de la dosis a modificar");
+            }
+
+
+
 
             var doses = new Doses
             {

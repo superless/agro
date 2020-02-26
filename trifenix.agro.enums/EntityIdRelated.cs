@@ -13,7 +13,9 @@
         NEBULIZER = 9,
         ROLE = 10,
         AAD = 11,
-        SEASON = 12
+        SEASON = 12,
+        COSTCENTER = 13,
+
 
 
     }
@@ -40,7 +42,8 @@
 
     public enum NumberRelated
     {
-        ORDER_TYPE= 1
+        ORDER_TYPE= 1,
+        SEASON_CURRENT=2,
 
     }
 

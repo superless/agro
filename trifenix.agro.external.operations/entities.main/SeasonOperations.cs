@@ -1,68 +1,85 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using trifenix.agro.db.model.agro;
-using trifenix.agro.external.interfaces.entities.main;
 using trifenix.agro.model.external;
-using Cosmonaut.Extensions;
-using trifenix.agro.db.interfaces.agro;
-using System.Linq;
-using trifenix.agro.external.operations.helper;
-using trifenix.agro.db.interfaces.common;
+using trifenix.agro.model.external.Input;
+using trifenix.agro.external.interfaces;
+using trifenix.agro.db.interfaces;
+using trifenix.agro.db.interfaces.agro.common;
+using trifenix.agro.search.interfaces;
+using trifenix.agro.search.model;
+using trifenix.agro.external.operations.res;
+using trifenix.agro.enums;
 
 namespace trifenix.agro.external.operations.entities.main
 {
-    public class SeasonOperations : ISeasonOperations
+    public class SeasonOperations : MainReadOperation<Season>, IGenericOperation<Season, SeasonInput>
     {
-
-        private readonly ISeasonRepository _repo;
-        private readonly ICommonDbOperations<Season> _commonDb;
-
-        public SeasonOperations(ISeasonRepository repo, ICommonDbOperations<Season> commonDb)
+        public SeasonOperations(IMainGenericDb<Season> repo, IExistElement existElement, IAgroSearch search) : base(repo, existElement, search)
         {
-            _repo = repo;
-            _commonDb = commonDb;
-        }
-        public async Task<ExtGetContainer<List<Season>>> GetSeasons()
-        {
-            var seasonsQuery = _repo.GetSeasons();
-            var seasons = await _commonDb.TolistAsync(seasonsQuery);
-            return OperationHelper.GetElements(seasons);
         }
 
-        public async Task<ExtPostContainer<Season>> SaveEditSeason(string id, DateTime init, DateTime end, bool current)
+        public async Task<ExtPostContainer<string>> Save(SeasonInput input)
         {
-            var element = await _repo.GetSeason(id);
+            var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
 
-            return await OperationHelper.EditElement(_commonDb, _repo.GetSeasons(),
-                id,
-                element,
-                s => {
-                    s.Start = init;
-                    s.End = end;
-                    s.Current = current;
-                    return s;
-                },
-                _repo.CreateUpdateSeason,
-                 $"No existe temporada con id : {id}",
-                s => (init.CompareTo(s.Start) >= 0 && init.CompareTo(s.End) <= 0) || (end.CompareTo(s.Start) >= 0 && end.CompareTo(s.End) <= 0),
-                $"No se puede sobreponer fecha"
-            );
-        }
+            var current = !input.Current.HasValue ? true : input.Current.Value;
 
-        public async Task<ExtPostContainer<string>> SaveNewSeason(DateTime init, DateTime end) {
-            return await OperationHelper.CreateElement(_commonDb, _repo.GetSeasons(),
-                async s => await _repo.CreateUpdateSeason(new Season
-                {
-                    Id = s,
-                    Start = init,
-                    End = end,
-                    Current = true
-                }),
-                s => (init.CompareTo(s.Start) >= 0 && init.CompareTo(s.End) <= 0) || (end.CompareTo(s.Start) >= 0 && end.CompareTo(s.End) <= 0),
-                $"No se puede sobreponer fecha"
-            );
+
+            var costCenter = new Season
+            {
+                Id = id,
+                Current = current,
+                Start = input.StartDate,
+                End = input.EndDate,
+                IdCostCenter = input.IdCostCenter
+            };
+
+
+            var validaCostCenter = await existElement.ExistsElement<Season>("IdCostCenter", input.IdCostCenter);
+
+            if (!validaCostCenter) throw new Exception(string.Format(ErrorMessages.NotValidId, "Centro de Costos"));
+
+            if (!string.IsNullOrWhiteSpace(input.Id))
+            {
+                var validaId = await existElement.ExistsElement<Season>(input.Id);
+
+                if (!validaId) throw new Exception("No existe la temporada a modificar");
+            }
+
+
+            await repo.CreateUpdate(costCenter);
+
+            search.AddEntities(new List<EntitySearch>
+            {
+                new EntitySearch{
+                    Created = DateTime.Now,
+                    Id = id,
+                    EntityName = costCenter.CosmosEntityName,
+                    NumbersRelated = new NumberEntityRelated[]{ 
+                        new NumberEntityRelated{ 
+                            EntityIndex = (int)NumberRelated.SEASON_CURRENT,
+                            Number = current?1:0
+                        }
+                    },
+                    IdsRelated = new IdsRelated[]{ 
+                        new IdsRelated{ 
+                            EntityIndex = (int)EntityIdRelated.COSTCENTER,
+                            EntityId = input.IdCostCenter
+                        }
+                    }
+                    
+                }
+            });
+
+
+            return new ExtPostContainer<string>
+            {
+                IdRelated = id,
+                MessageResult = ExtMessageResult.Ok,
+                Result = id
+            };
         }
     }
 }
