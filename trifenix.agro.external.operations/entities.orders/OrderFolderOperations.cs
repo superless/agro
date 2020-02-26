@@ -94,22 +94,22 @@ namespace trifenix.agro.external.operations.entities.orders
 
 
 
-            search.AddEntities(new List<EntitySearch>
+            search.AddElements(new List<EntitySearch>
             {
                 new EntitySearch{
                     Created = DateTime.Now,
                     Id = id,
-                    IdsRelated = new IdsRelated[]{ 
-                        new IdsRelated{EntityIndex = (int)EntityRelated.TARGET, EntityId = input.IdApplicationTarget  },
-                        new IdsRelated{EntityIndex = (int)EntityRelated.CATEGORY_INGREDIENT, EntityId = input.IdApplicationTarget  },
-                        new IdsRelated{EntityIndex = (int)EntityRelated.PHENOLOGICAL_EVENT, EntityId = input.IdPhenologicalEvent },
-                        new IdsRelated{ EntityIndex = (int)EntityRelated.INGREDIENT, EntityId = input.IdIngredient },
-                        new IdsRelated{ EntityIndex = (int)EntityRelated.SPECIE, EntityId = input.IdSpecie}
+                    RelatedIds = new RelatedId[]{ 
+                        new RelatedId{ EntityIndex = (int)EntityRelated.TARGET, EntityId = input.IdApplicationTarget  },
+                        new RelatedId{ EntityIndex = (int)EntityRelated.CATEGORY_INGREDIENT, EntityId = input.IdCategoryIngredient  },
+                        new RelatedId{ EntityIndex = (int)EntityRelated.PHENOLOGICAL_EVENT, EntityId = input.IdPhenologicalEvent },
+                        new RelatedId{ EntityIndex = (int)EntityRelated.INGREDIENT, EntityId = input.IdIngredient },
+                        new RelatedId{ EntityIndex = (int)EntityRelated.SPECIE, EntityId = input.IdSpecie}
                     },
-                    ElementsRelated = new ElementRelated[]{ 
-                        new ElementRelated{ 
-                            EntityIndex = (int)PropertyRelated.SPECIE_CODE,
-                            Name = specieAbbv
+                    RelatedProperties = new Property[]{ 
+                        new Property{ 
+                            PropertyIndex = (int)PropertyRelated.GENERIC_ABBREVIATION,
+                            Value = specieAbbv
                         }
                     }
                     

@@ -40,13 +40,24 @@ namespace trifenix.agro.external.operations.entities.fields
 
             await repo.CreateUpdate(plotLand);
 
-            search.AddSimpleEntities(new List<SimpleSearch>
+            search.AddElements(new List<EntitySearch>
             {
-                new SimpleSearch{
-                    Created = DateTime.Now,
+                new EntitySearch{
                     Id = id,
-                    Name = input.Name,
-                    EntityName = plotLand.CosmosEntityName
+                    EntityIndex = (int)EntityRelated.PLOTLAND,
+                    Created = DateTime.Now,
+                    RelatedProperties = new Property[] {
+                        new Property {
+                            PropertyIndex = (int)PropertyRelated.GENERIC_NAME,
+                            Value = input.Name
+                        }
+                    },
+                    RelatedIds = new RelatedId[]{
+                        new RelatedId{
+                            EntityIndex = (int)EntityRelated.SECTOR,
+                            EntityId = input.IdSector
+                        }
+                    }
                 }
             });
 

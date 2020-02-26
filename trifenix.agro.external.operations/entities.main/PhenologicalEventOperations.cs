@@ -1,18 +1,11 @@
-﻿using Cosmonaut.Extensions;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces;
-using trifenix.agro.db.interfaces.agro;
 using trifenix.agro.db.interfaces.agro.common;
-using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.enums;
 using trifenix.agro.external.interfaces;
-using trifenix.agro.external.interfaces.entities.main;
-using trifenix.agro.external.operations.helper;
 using trifenix.agro.external.operations.res;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
@@ -46,13 +39,26 @@ namespace trifenix.agro.external.operations.entities.main
 
             await repo.CreateUpdate(phenologicalEvent);
 
-            search.AddElements(new List<SimpleSearch>
+            search.AddElements(new List<EntitySearch>
             {
-                new SimpleSearch{
-                    Created = DateTime.Now,
+                new EntitySearch{
                     Id = id,
-                    Name = input.Name,
-                    EntityName = phenologicalEvent.CosmosEntityName
+                    EntityIndex = (int)EntityRelated.PHENOLOGICAL_EVENT,
+                    Created = DateTime.Now,
+                    RelatedProperties = new Property[] {
+                        new Property {
+                            PropertyIndex = (int)PropertyRelated.GENERIC_NAME,
+                            Value = input.Name
+                        },
+                        new Property {
+                            PropertyIndex = (int)PropertyRelated.GENERIC_START_DATE,
+                            Value = string.Format("{0:MM/dd/yyyy}", input.StartDate)
+                        },
+                        new Property {
+                            PropertyIndex = (int)PropertyRelated.GENERIC_END_DATE,
+                            Value = string.Format("{0:MM/dd/yyyy}", input.EndDate)
+                        }
+                    }
                 }
             });
 

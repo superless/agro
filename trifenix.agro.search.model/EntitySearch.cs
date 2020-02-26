@@ -16,15 +16,15 @@ namespace trifenix.agro.search.model {
         [IsSortable]
         public DateTime Created { get; set; }                       //Todos
 
-        public IdsRelated[] IdsRelated { get; set; } 
+        public RelatedId[] RelatedIds { get; set; } 
         
-        public ElementRelated[] ElementsRelated { get; set; }       //Orden, Ejecucion, PreOrden, 
+        public Property[] RelatedProperties { get; set; }       //Orden, Ejecucion, PreOrden, 
 
-        public NumberEntityRelated[] NumbersRelated { get; set; }
+        public RelatedEnumValue[] RelatedEnumValues { get; set; }
 
     }
 
-    public class IdsRelated {
+    public class RelatedId {
 
         [IsFilterable, IsSortable]
         public int EntityIndex { get; set; }
@@ -34,23 +34,23 @@ namespace trifenix.agro.search.model {
 
     }
 
-    public class ElementRelated {
+    public class Property {
 
         [IsFilterable, IsSortable]
-        public int EntityIndex { get; set; }
+        public int PropertyIndex { get; set; }
 
         [IsSearchable, IsSortable]
-        public string Name { get; set; }
+        public string Value { get; set; }
 
     }
 
-    public class NumberEntityRelated {
+    public class RelatedEnumValue {
 
         [IsFilterable, IsSortable]
-        public int EntityIndex { get; set; }
+        public int EnumerationIndex { get; set; }
 
         [IsFilterable, IsSortable]
-        public int Number { get; set; }
+        public int Value { get; set; }
 
     }
 

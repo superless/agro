@@ -1,39 +1,42 @@
 ﻿namespace trifenix.agro.enums {
 
-    public enum EntityRelated { 
-        CERTIFIED_ENTITY = 0,
-        SPECIE=1,
-        TARGET=2,
-        VARIETY=3,
-        INGREDIENT=4,
-        BARRACK =5,
-        PRODUCT=6,
-        JOB = 7,
-        TRACTOR = 8,
-        NEBULIZER = 9,
-        ROLE = 10,
-        AAD = 11,
-        SEASON = 12,
-        COSTCENTER = 13,
-        CATEGORY_INGREDIENT=14,
-        PHENOLOGICAL_EVENT=15,
-        DOSES=16
+    public enum EntityRelated {
+        AAD,
+        BARRACK,
+        BUSINESSNAME,
+        CATEGORY_INGREDIENT,
+        CERTIFIED_ENTITY,
+        COSTCENTER,
+        DOSES,
+        INGREDIENT,
+        JOB,
+        NEBULIZER,
+        PHENOLOGICAL_EVENT,
+        PLOTLAND,
+        PRODUCT,
+        ROLE,
+        ROOTSTOCK,
+        SEASON,
+        SECTOR,
+        SPECIE,
+        TARGET,
+        TRACTOR,
+        USER,
+        VARIETY,
+
 
     }
 
     public enum PropertyRelated {
-        PRODUCT_BRAND = 0,
-        USER_RUT = 1,
-        USER_EMAIL=2,
-        NEBULIZER_BRAND=3,
-        NEBULIZER_CODE = 4,
-        TRACTOR_BRAND = 5,
-        TRACTOR_CODE = 6,
-        BUSINESSNAME_EMAIL=7,
-        BUSINESSNAME_RUT = 8,
-        BUSINESSNAME_GIRO = 9,
-        SPECIE_CODE = 10,
-        GENERIC_NAME = 11,
+        BUSINESSNAME_GIRO,
+        GENERIC_ABBREVIATION,
+        GENERIC_BRAND,
+        GENERIC_CODE,
+        GENERIC_EMAIL,
+        GENERIC_END_DATE,
+        GENERIC_NAME,
+        GENERIC_RUT,
+        GENERIC_START_DATE,
 
     }
 
@@ -46,6 +49,11 @@
     public enum OrderType { 
         DEFAULT =0,
         PHENOLOGICAL =1
+    }
+
+    public enum CurrentSeason {
+        NOT_CURRENT = 0,
+        CURRENT = 1
     }
 
 }

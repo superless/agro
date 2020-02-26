@@ -22,10 +22,10 @@ namespace trifenix.agro.external.operations.entities.ext
         {
         }
 
-        private IdsRelated[] GetIdsRelated(DosesInput input)
+        private RelatedId[] GetIdsRelated(DosesInput input)
         {
-            var list = new List<IdsRelated>();
-            list.Add(new IdsRelated
+            var list = new List<RelatedId>();
+            list.Add(new RelatedId
             {
                 EntityId = input.IdProduct,
                 EntityIndex = (int)EntityRelated.PRODUCT
@@ -33,7 +33,7 @@ namespace trifenix.agro.external.operations.entities.ext
 
             if (input.idsApplicationTarget != null && input.idsApplicationTarget.Any())
             {
-                list.AddRange(input.idsApplicationTarget.Select(s=>new IdsRelated { 
+                list.AddRange(input.idsApplicationTarget.Select(s=>new RelatedId { 
                     EntityId = s,
                     EntityIndex = (int)EntityRelated.TARGET
                 }));
@@ -41,7 +41,7 @@ namespace trifenix.agro.external.operations.entities.ext
 
             if (input.IdSpecies != null && input.IdSpecies.Any())
             {
-                list.AddRange(input.IdSpecies.Select(s => new IdsRelated
+                list.AddRange(input.IdSpecies.Select(s => new RelatedId
                 {
                     EntityId = s,
                     EntityIndex = (int)EntityRelated.SPECIE
@@ -50,7 +50,7 @@ namespace trifenix.agro.external.operations.entities.ext
 
             if (input.IdVarieties != null && input.IdVarieties.Any())
             {
-                list.AddRange(input.IdVarieties.Select(s => new IdsRelated
+                list.AddRange(input.IdVarieties.Select(s => new RelatedId
                 {
                     EntityId = s,
                     EntityIndex = (int)EntityRelated.VARIETY
@@ -59,7 +59,7 @@ namespace trifenix.agro.external.operations.entities.ext
 
             if (input.WaitingToHarvest != null && input.WaitingToHarvest.Any())
             {
-                list.AddRange(input.WaitingToHarvest.Select(s=>s.IdCertifiedEntity).Select(s => new IdsRelated
+                list.AddRange(input.WaitingToHarvest.Select(s=>s.IdCertifiedEntity).Select(s => new RelatedId
                 {
                     EntityId = s,
                     EntityIndex = (int)EntityRelated.CERTIFIED_ENTITY
@@ -120,10 +120,10 @@ namespace trifenix.agro.external.operations.entities.ext
             search.AddElements(new List<EntitySearch>
             {
                 new EntitySearch{
+                    Id = id,
+                    EntityIndex = (int)EntityRelated.DOSES,
                     Created = DateTime.Now,
-                    EntityIndex = doses.CosmosEntityName,
-                    IdsRelated = GetIdsRelated(input),
-                    Id = id
+                    RelatedIds = GetIdsRelated(input),
                 }
             });
 

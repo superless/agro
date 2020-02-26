@@ -29,25 +29,36 @@ namespace trifenix.agro.external.operations.entities.main
             {
                 Id = id,
                 Name = input.Name,
-                IdBusinessName = input.IdReason
+                IdBusinessName = input.IdBusinessName
             };
 
             var valida = await Validate(input);
             if (!valida) throw new Exception(string.Format(ErrorMessages.NotValid, costCenter.CosmosEntityName));
 
-            var existsSector = await existElement.ExistsElement<CostCenter>("IdBusinessName", input.IdReason);
+            var existsSector = await existElement.ExistsElement<CostCenter>("IdBusinessName", input.IdBusinessName);
             if (!existsSector) throw new Exception(string.Format(ErrorMessages.NotValidId, "Razón social"));
 
 
             await repo.CreateUpdate(costCenter);
 
-            search.AddSimpleEntities(new List<SimpleSearch>
+            search.AddElements(new List<EntitySearch>
             {
-                new SimpleSearch{
-                    Created = DateTime.Now,
+                new EntitySearch{
                     Id = id,
-                    Name = input.Name,
-                    EntityName = costCenter.CosmosEntityName
+                    EntityIndex = (int)EntityRelated.COSTCENTER,
+                    Created = DateTime.Now,
+                    RelatedProperties = new Property[] {
+                        new Property {
+                            PropertyIndex = (int)PropertyRelated.GENERIC_NAME,
+                            Value = input.Name
+                        }
+                    },
+                    RelatedIds = new RelatedId[]{
+                        new RelatedId{
+                            EntityIndex = (int)EntityRelated.BUSINESSNAME,
+                            EntityId = input.IdBusinessName
+                        }
+                    },
                 }
             });
 
