@@ -35,13 +35,18 @@ namespace trifenix.agro.external.operations.entities.main
 
             await repo.CreateUpdate(job);
 
-            search.AddSimpleEntities(new List<SimpleSearch>
+            search.AddElements(new List<EntitySearch>
             {
-                new SimpleSearch{
-                    Created = DateTime.Now,
+                new EntitySearch{
                     Id = id,
-                    Name = input.Name,
-                    EntityName = job.CosmosEntityName
+                    EntityIndex = (int)EntityRelated.JOB,
+                    Created = DateTime.Now,
+                    RelatedProperties = new Property[] {
+                        new Property {
+                            PropertyIndex = (int)PropertyRelated.GENERIC_NAME,
+                            Value = input.Name
+                        }
+                    },
                 }
             });
 

@@ -26,12 +26,12 @@ namespace trifenix.agro.external.operations.entities.main
         }
 
 
-        private IdsRelated[] GetIdsRelated(UserApplicator input) {
+        private RelatedId[] GetIdsRelated(UserApplicator input) {
 
-            var list = new List<IdsRelated>();
+            var list = new List<RelatedId>();
             if (!string.IsNullOrWhiteSpace(input.IdJob))
             {
-                list.Add(new IdsRelated { 
+                list.Add(new RelatedId { 
                     EntityIndex = (int)EntityRelated.JOB,
                     EntityId = input.IdJob
                 });
@@ -39,7 +39,7 @@ namespace trifenix.agro.external.operations.entities.main
 
             if (!string.IsNullOrWhiteSpace(input.IdTractor))
             {
-                list.Add(new IdsRelated
+                list.Add(new RelatedId
                 {
                     EntityIndex = (int)EntityRelated.TRACTOR,
                     EntityId = input.IdTractor
@@ -48,7 +48,7 @@ namespace trifenix.agro.external.operations.entities.main
 
             if (!string.IsNullOrWhiteSpace(input.IdNebulizer))
             {
-                list.Add(new IdsRelated
+                list.Add(new RelatedId
                 {
                     EntityIndex = (int)EntityRelated.NEBULIZER,
                     EntityId = input.IdNebulizer
@@ -58,7 +58,7 @@ namespace trifenix.agro.external.operations.entities.main
             {
                 foreach (var idRol in input.IdsRoles)
                 {
-                    list.Add(new IdsRelated
+                    list.Add(new RelatedId
                     {
                         EntityIndex = (int)EntityRelated.ROLE,
                         EntityId = idRol
@@ -68,7 +68,7 @@ namespace trifenix.agro.external.operations.entities.main
 
             if (!string.IsNullOrWhiteSpace(input.ObjectIdAAD))
             {
-                list.Add(new IdsRelated
+                list.Add(new RelatedId
                 {
                     EntityIndex = (int)EntityRelated.AAD,
                     EntityId = input.ObjectIdAAD
@@ -78,25 +78,25 @@ namespace trifenix.agro.external.operations.entities.main
             return list.ToArray();
         }
 
-        private ElementRelated[] GetElementRelated(UserApplicator input)
+        private Property[] GetElementRelated(UserApplicator input)
         {
 
-            var list = new List<ElementRelated>();
+            var list = new List<Property>();
             if (!string.IsNullOrWhiteSpace(input.Rut))
             {
-                list.Add(new ElementRelated
+                list.Add(new Property
                 {
-                    EntityIndex = (int)PropertyRelated.USER_RUT,
-                    Name = input.Rut
+                    PropertyIndex = (int)PropertyRelated.GENERIC_RUT,
+                    Value = input.Rut
                 });
             }
 
             if (!string.IsNullOrWhiteSpace(input.Email))
             {
-                list.Add(new ElementRelated
+                list.Add(new Property
                 {
-                    EntityIndex = (int)PropertyRelated.USER_EMAIL,
-                    Name = input.Email
+                    PropertyIndex = (int)PropertyRelated.GENERIC_EMAIL,
+                    Value = input.Email
                 });
             }
             return list.ToArray();
@@ -175,12 +175,11 @@ namespace trifenix.agro.external.operations.entities.main
             search.AddElements(new List<EntitySearch>
             {
                 new EntitySearch{
-                   EntityIndex = userApp.CosmosEntityName,
-                   ElementsRelated = GetElementRelated(userApp),
-                   Created = DateTime.Now,
-                   Id = userApp.Id,
-                   IdsRelated = GetIdsRelated(userApp),
-                   Name = userApp.Name,
+                    Id = userApp.Id,
+                    EntityIndex = (int)EntityRelated.USER,
+                    Created = DateTime.Now,
+                    RelatedProperties = GetElementRelated(userApp),
+                    RelatedIds = GetIdsRelated(userApp)
                 }
             });
 

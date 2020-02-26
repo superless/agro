@@ -6,7 +6,6 @@ using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.enums;
 using trifenix.agro.external.interfaces;
-using trifenix.agro.external.operations.helper;
 using trifenix.agro.external.operations.res;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
@@ -37,13 +36,18 @@ namespace trifenix.agro.external.operations.entities.fields
 
             await repo.CreateUpdate(sector);
 
-            search.AddSimpleEntities(new List<SimpleSearch>
+            search.AddElements(new List<EntitySearch>
             {
-                new SimpleSearch{ 
-                    Created = DateTime.Now,
+                new EntitySearch{
                     Id = id,
-                    Name = input.Name,
-                    EntityName = sector.CosmosEntityName
+                    EntityIndex = (int)EntityRelated.SECTOR,
+                    Created = DateTime.Now,
+                    RelatedProperties = new Property[] {
+                        new Property {
+                            PropertyIndex = (int)PropertyRelated.GENERIC_NAME,
+                            Value = input.Name
+                        }
+                    }
                 }
             });
 

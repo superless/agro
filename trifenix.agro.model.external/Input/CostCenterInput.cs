@@ -3,7 +3,7 @@
     public class CostCenterInput : InputBaseName
     {
        
-        public string IdReason { get; set; }
+        public string IdBusinessName { get; set; }
 
     }
 }

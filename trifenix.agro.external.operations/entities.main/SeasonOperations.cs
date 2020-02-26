@@ -24,7 +24,7 @@ namespace trifenix.agro.external.operations.entities.main
         {
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
 
-            var current = !input.Current.HasValue ? true : input.Current.Value;
+            var current = !input.Current.HasValue || input.Current.Value;
 
 
             var costCenter = new Season
@@ -54,22 +54,31 @@ namespace trifenix.agro.external.operations.entities.main
             search.AddElements(new List<EntitySearch>
             {
                 new EntitySearch{
-                    Created = DateTime.Now,
                     Id = id,
-                    EntityIndex = costCenter.CosmosEntityName,
-                    NumbersRelated = new NumberEntityRelated[]{ 
-                        new NumberEntityRelated{ 
-                            EntityIndex = (int)EnumerationRelated.SEASON_CURRENT,
-                            Number = current?1:0
+                    EntityIndex = (int)EntityRelated.SEASON,
+                    Created = DateTime.Now,
+                    RelatedProperties = new Property[] {
+                        new Property {
+                            PropertyIndex = (int)PropertyRelated.GENERIC_START_DATE,
+                            Value = string.Format("{0:MM/dd/yyyy}", input.StartDate)
+                        },
+                        new Property {
+                            PropertyIndex = (int)PropertyRelated.GENERIC_END_DATE,
+                            Value = string.Format("{0:MM/dd/yyyy}", input.EndDate)
                         }
                     },
-                    IdsRelated = new IdsRelated[]{ 
-                        new IdsRelated{ 
+                    RelatedIds = new RelatedId[]{
+                        new RelatedId{
                             EntityIndex = (int)EntityRelated.COSTCENTER,
                             EntityId = input.IdCostCenter
                         }
+                    },
+                    RelatedEnumValues = new RelatedEnumValue[]{ 
+                        new RelatedEnumValue{ 
+                            EnumerationIndex = (int)EnumerationRelated.SEASON_CURRENT,
+                            Value = (int)(current?CurrentSeason.CURRENT:CurrentSeason.NOT_CURRENT)
+                        }
                     }
-                    
                 }
             });
 

@@ -58,13 +58,27 @@ namespace trifenix.agro.external.operations.entities.main
                     Id = id,
                     EntityIndex = (int)EntityRelated.VARIETY,
                     Created = DateTime.Now,
-                    ElementsRelated = new ElementRelated[] { { EntityIndex = (int)PropertyRelated.GENERIC_NA, Name = input.Name },{ EntityIndex = (int)PropertyRelated.SPECIE_CODE, Name = input.Abbreviation } }
+                    RelatedProperties = new Property[] {
+                        new Property {
+                            PropertyIndex = (int)PropertyRelated.GENERIC_NAME,
+                            Value = input.Name
+                        },
+                        new Property {
+                            PropertyIndex = (int)PropertyRelated.GENERIC_ABBREVIATION,
+                            Value = input.Abbreviation
+                        }
+                    },
+                    RelatedIds = new RelatedId[]{
+                        new RelatedId{
+                            EntityIndex = (int)EntityRelated.SPECIE,
+                            EntityId = input.IdSpecie
+                        }
+                    }
                 }
             });
 
 
-            return new ExtPostContainer<string>
-            {
+            return new ExtPostContainer<string> {
                 IdRelated = id,
                 MessageResult = ExtMessageResult.Ok,
                 Result = id

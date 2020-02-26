@@ -47,14 +47,22 @@ namespace trifenix.agro.external.operations.entities.main
 
 
 
-            search.AddSimpleEntities(new List<SimpleSearch>
+            search.AddElements(new List<EntitySearch>
             {
-                new SimpleSearch{
-                    Created = DateTime.Now,
+                new EntitySearch{
                     Id = id,
-                    Name = input.Name,
-                    Abbreviation = input.Abbreviation,
-                    EntityName = specie.CosmosEntityName
+                    EntityIndex = (int)EntityRelated.ROOTSTOCK,
+                    Created = DateTime.Now,
+                    RelatedProperties = new Property[] {
+                        new Property {
+                            PropertyIndex = (int)PropertyRelated.GENERIC_NAME,
+                            Value = input.Name
+                        },
+                        new Property {
+                            PropertyIndex = (int)PropertyRelated.GENERIC_ABBREVIATION,
+                            Value = input.Abbreviation
+                        }
+                    }
                 }
             });
 

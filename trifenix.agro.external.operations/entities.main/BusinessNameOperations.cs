@@ -62,7 +62,7 @@ namespace trifenix.agro.external.operations.entities.main
                 Name = input.Name,
                 Email = input.Email,
                 Giro = input.Giro,
-                Phone = input.Giro,
+                Phone = input.Phone,
                 Rut = input.Rut,
                 WebPage = input.WebPage
             };
@@ -81,16 +81,23 @@ namespace trifenix.agro.external.operations.entities.main
             search.AddElements(new List<EntitySearch>
             {
                 new EntitySearch{
-                    Created = DateTime.Now,
                     Id = id,
-                    Name = input.Name,
-                    EntityIndex = businessName.CosmosEntityName,
-                    ElementsRelated = new List<ElementRelated>{ 
-                        new ElementRelated{ EntityIndex=(int)PropertyRelated.BUSINESSNAME_RUT, Name = input.Rut },
-                        new ElementRelated{ EntityIndex=(int)PropertyRelated.BUSINESSNAME_GIRO, Name = input.Giro },
-                        new ElementRelated{ EntityIndex=(int)PropertyRelated.BUSINESSNAME_EMAIL, Name = input.Email },
-
-                    }.ToArray()
+                    EntityIndex = (int)EntityRelated.BUSINESSNAME,
+                    Created = DateTime.Now,
+                    RelatedProperties = new Property[] {
+                        new Property {
+                            PropertyIndex = (int)PropertyRelated.GENERIC_RUT,
+                            Value = input.Rut
+                        },
+                        new Property {
+                            PropertyIndex = (int)PropertyRelated.BUSINESSNAME_GIRO,
+                            Value = input.Giro
+                        },
+                        new Property {
+                            PropertyIndex = (int)PropertyRelated.GENERIC_EMAIL,
+                            Value = input.Email
+                        }
+                    }
                 }
             });
 

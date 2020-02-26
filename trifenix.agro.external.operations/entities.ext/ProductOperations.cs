@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.common;
@@ -26,23 +25,20 @@ namespace trifenix.agro.external.operations.entities.ext
             this.dosesOperation = dosesOperation;
         }
 
-        private IdsRelated[] GetIdsRelated(ProductInput input) {
+        private RelatedId[] GetIdsRelated(ProductInput input) {
 
-            var list = new List<IdsRelated>();
+            var list = new List<RelatedId>();
             if (!string.IsNullOrWhiteSpace(input.IdActiveIngredient))
             {
-                list.Add(new IdsRelated { EntityIndex = (int)EntityRelated.INGREDIENT, EntityId = input.IdActiveIngredient });
+                list.Add(new RelatedId { EntityIndex = (int)EntityRelated.INGREDIENT, EntityId = input.IdActiveIngredient });
             }
             return list.ToArray();
         }
 
-        private ElementRelated[] GetElementRelated(ProductInput input) {
-            var list = new List<ElementRelated>();
+        private Property[] GetElementRelated(ProductInput input) {
+            var list = new List<Property>();
             if (!string.IsNullOrWhiteSpace(input.Brand))
-            {
-                list.Add(new ElementRelated { EntityIndex = (int)PropertyRelated.PRODUCT_BRAND, Name = input.Brand });
-            }
-
+                list.Add(new Property { PropertyIndex = (int)PropertyRelated.GENERIC_BRAND, Value = input.Brand });
             return list.ToArray();
 
         }
@@ -105,12 +101,11 @@ namespace trifenix.agro.external.operations.entities.ext
             search.AddElements(new List<EntitySearch>
             {
                 new EntitySearch{
-                    Created = DateTime.Now,
                     Id = id,
-                    ElementsRelated = GetElementRelated(input),
-                    IdsRelated = GetIdsRelated(input),
-                    Name = input.Name,
-                    EntityIndex = product.CosmosEntityName
+                    EntityIndex = (int)EntityRelated.PRODUCT,
+                    Created = DateTime.Now,
+                    RelatedProperties = GetElementRelated(input),
+                    RelatedIds = GetIdsRelated(input)
                 }
             });
 

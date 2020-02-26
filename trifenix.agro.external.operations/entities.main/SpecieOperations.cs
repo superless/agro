@@ -46,17 +46,25 @@ namespace trifenix.agro.external.operations.entities.main
                 var validaAbbv = await existElement.ExistsEditElement<Specie>(input.Id, "Abbreviation", input.Abbreviation);
                 if (validaAbbv) throw new Exception(string.Format(ErrorMessages.NotValidAbbreviation, specie.CosmosEntityName));
             }
-            
 
 
-            search.AddSimpleEntities(new List<SimpleSearch>
+
+            search.AddElements(new List<EntitySearch>
             {
-                new SimpleSearch{
-                    Created = DateTime.Now,
+                new EntitySearch{
                     Id = id,
-                    Name = input.Name,
-                    Abbreviation = input.Abbreviation,
-                    EntityName = specie.CosmosEntityName
+                    EntityIndex = (int)EntityRelated.SPECIE,
+                    Created = DateTime.Now,
+                    RelatedProperties = new Property[] {
+                        new Property {
+                            PropertyIndex = (int)PropertyRelated.GENERIC_NAME,
+                            Value = input.Name
+                        },
+                        new Property {
+                            PropertyIndex = (int)PropertyRelated.GENERIC_ABBREVIATION,
+                            Value = input.Abbreviation
+                        }
+                    }
                 }
             });
 

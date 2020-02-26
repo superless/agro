@@ -7,7 +7,6 @@ using trifenix.agro.db.interfaces.agro.events;
 using trifenix.agro.db.interfaces.agro.fields;
 using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model.agro;
-using trifenix.agro.db.model.agro.local;
 using trifenix.agro.enums;
 using trifenix.agro.external.interfaces.entities.events;
 using trifenix.agro.external.operations.helper;
