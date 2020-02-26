@@ -7,7 +7,7 @@ namespace trifenix.agro.model.external.Input
 
         public string IdPlotLand { get; set; }
 
-        public float Hectares { get; set; }
+        public double Hectares { get; set; }
 
         public int PlantingYear { get; set; }
 

@@ -17,6 +17,7 @@
         COSTCENTER = 13,
         CATEGORY_INGREDIENT=14,
         PHENOLOGICAL_EVENT=15,
+        DOSES=16
 
     }
 

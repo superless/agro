@@ -1,25 +1,11 @@
-﻿using Cosmonaut;
-using Cosmonaut.Attributes;
-using System;
-
-using trifenix.agro.db.model.agro.local;
+﻿using System;
 using trifenix.agro.enums;
 using trifenix.agro.weather.model;
 
-namespace trifenix.agro.db.model.agro
+namespace trifenix.agro.model.external.Input
 {
-
-    /// <summary>
-    /// Entidad correspondiente a los mensajes enviados por los dispositivos móviles, en caso de ocurrir un
-    /// evento fenológico.
-    /// </summary>
-    [SharedCosmosCollection("agro", "NotificationEvent")]
-    public class NotificationEvent : DocumentBase, ISharedCosmosEntity
-    {
-        /// <summary>
-        /// Identificador de la Notificación
-        /// </summary>
-        public override string Id { get; set; }
+    public class NotificationEventInput : InputBase {
+        
 
 
         /// <summary>
@@ -34,7 +20,7 @@ namespace trifenix.agro.db.model.agro
         public string IdPhenologicalEvent { get; set; }
 
         public NotificationType NotificationType { get; set; }
-        
+
 
         /// <summary>
         /// Ruta o Url en internet de la imagen subida.
@@ -52,11 +38,13 @@ namespace trifenix.agro.db.model.agro
         /// </summary>
         public DateTime Created { get; set; }
 
-        public Weather Weather { get; set; }
 
         public float? Lat { get; set; }
 
         public float? Long { get; set; }
 
+
     }
+
+    
 }

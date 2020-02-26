@@ -1,8 +1,8 @@
 ﻿using Cosmonaut;
 using Cosmonaut.Attributes;
-using System.Collections.Generic;
 
-namespace trifenix.agro.db.model.agro {
+namespace trifenix.agro.db.model.agro
+{
 
     [SharedCosmosCollection("agro", "Barrack")]
     public class Barrack : DocumentBaseName, ISharedCosmosEntity {
@@ -14,7 +14,7 @@ namespace trifenix.agro.db.model.agro {
 
         public string IdPlotLand { get; set; }
 
-        public float Hectares { get; set; }
+        public double Hectares { get; set; }
 
         public int PlantingYear { get; set; }
 

@@ -46,7 +46,7 @@ namespace trifenix.agro.external.operations.entities.main
 
             await repo.CreateUpdate(phenologicalEvent);
 
-            search.AddSimpleEntities(new List<SimpleSearch>
+            search.AddElements(new List<SimpleSearch>
             {
                 new SimpleSearch{
                     Created = DateTime.Now,

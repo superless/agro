@@ -37,51 +37,7 @@ namespace trifenix.agro.functions {
         
         #endregion
 
-        #region v2/order_folders
-        [FunctionName("OrderFolder")]
-        public static async Task<IActionResult> OrderFolder([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/order_folders/{id?}")] HttpRequest req, string id, ILogger log) {
-            ClaimsPrincipal claims = await Auth.Validate(req);
-            if (claims == null)
-                return new UnauthorizedResult();
-
-
-            var manager = await ContainerMethods.AgroManager(claims);
-            ExtGetContainer<OrderFolder> result = null;
-            switch (req.Method.ToLower())
-            {
-                case "get":
-                    if (!string.IsNullOrWhiteSpace(id))
-                    {
-                        result = await manager.OrderFolder.GetOrderFolder(id);
-                        return ContainerMethods.GetJsonGetContainer(result, log);
-                    }
-                    break;
-                case "post":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
-                        var idPhenologicalEvent = (string)model["idPhenologicalEvent"];
-                        var idApplicationTarget = (string)model["idApplicationTarget"];
-                        var categoryId = (string)model["idCategory"];
-                        var idSpecie = (string)model["idSpecie"];
-                        var idIngredient = (string)model["idIngredient"];
-                        return await db.OrderFolder.SaveNewOrderFolder(idPhenologicalEvent, idApplicationTarget, categoryId, idSpecie, idIngredient);
-                    }, claims);
-                case "put":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
-                        var idPhenologicalEvent = (string)model["idPhenologicalEvent"];
-                        var idApplicationTarget = (string)model["idApplicationTarget"];
-                        var idCategory = (string)model["idCategory"];
-                        var idSpecie = (string)model["idSpecie"];
-                        var idIngredient = (string)model["idIngredient"];
-                        return await db.OrderFolder.SaveEditOrderFolder(id, idPhenologicalEvent, idApplicationTarget, idCategory, idSpecie, idIngredient);
-                    }, claims);
-            }
-            ExtGetContainer<List<OrderFolder>> resultGetAll = await manager.OrderFolder.GetOrderFolders();
-            return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
-        }
-        #endregion
-
+       
         #region v2/custom_notification_events
         [FunctionName("CustomNotificationEvents")]
         public static async Task<IActionResult> CustomNotificationEvents([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v2/custom_notification_events/{idSpecie}/{page}/{totalByPage}/{desc?}")] HttpRequest req, string idSpecie, int page, int totalByPage, string desc, ILogger log) {
@@ -120,135 +76,81 @@ namespace trifenix.agro.functions {
         #endregion
 
         #region v2/notification_events
-        //[FunctionName("NotificationEvents")]
-        //public static async Task<IActionResult> NotificationEvents([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "v2/notification_events/{id?}")] HttpRequest req, string id,ILogger log){
-        //    ClaimsPrincipal claims = await Auth.Validate(req);
-        //    if (claims == null)
-        //        return new UnauthorizedResult();
-        //    var manager = await ContainerMethods.AgroManager(claims);
-        //    Email email = new Email(manager.Users.GetUsers().Result.Result);
-        //    //HttpClient client = new HttpClient();
-        //    //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Environment.GetEnvironmentVariable("accessToken", EnvironmentVariableTarget.Process));
-        //    //var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-        //    //dynamic body = JsonConvert.DeserializeObject(requestBody);
-        //    //var newBody = body["_parts"][0][1];
-        //    //byte[] byteArray = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(newBody));
-        //    //MemoryStream stream = new MemoryStream(byteArray);
-        //    //var inputData = new StreamContent(stream);
-        //    //string ipNgrok = Environment.GetEnvironmentVariable("ipNgrok", EnvironmentVariableTarget.Process);
-        //    //await client.PostAsync("https://" + ipNgrok + ".ngrok.io/api/v2/debugroute", inputData);
-        //    //client.Dispose();
-        //    //return null;
-        //    ExtGetContainer<NotificationEvent> result = null;
-        //    switch (req.Method.ToLower()) {
-        //        case "get":
-        //            if (!string.IsNullOrWhiteSpace(id)) {
-        //                switch (id) {
-        //                    case "init":
-        //                        var resultEvent = await manager.CustomManager.MobileEvents.GetEventData();
-        //                        return ContainerMethods.GetJsonGetContainer(resultEvent, log);
-        //                    case "ts":
-        //                        var resultTs = await manager.CustomManager.MobileEvents.GetMobileEventTimestamp();
-        //                        return ContainerMethods.GetJsonGetContainer(resultTs, log);
-        //                    default:
-        //                        result = await manager.NotificationEvents.GetEvent(id);
-        //                        return ContainerMethods.GetJsonGetContainer(result, log);
-        //                }
-        //            }
-        //            break;
-        //        case "post":
-        //            return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
-        //                var newModel = model["_parts"][0][1];
-        //                var idPhenologicalEvent = (string)newModel["idPhenologicalEvent"];
-        //                var description = (string)newModel["description"];
-        //                var base64 = (string)newModel["base64"];
-        //                var barrack = (string)newModel["idBarrack"];
-        //                //var lat = (float)newModel["latitude"];
-        //                //var lon = (float)newModel["longitude"];
-        //                var response = await db.NotificationEvents.SaveNewNotificationEvent(barrack, idPhenologicalEvent, base64, description, 0F, 0F);
-        //                var evt = await db.NotificationEvents.GetEvent(response.IdRelated);
-        //                var url = evt.Result.PicturePath;
-        //                email.SendEmail("Notificacion",
-        //                    $@"<html>
-        //                    <body>
-        //                        <p> Estimado(a), </p>
-        //                        <p> Llego una notificacion </p>
-        //                        <img src='{url}' style='width:50%;height:auto;'>
-        //                        <p> Atentamente,<br> -Aresa </br></p>
-        //                    </body>
-        //                </html>");
-        //                return response;
-        //            }, claims);
-        //    }
-        //    ExtGetContainer<List<NotificationEvent>> resultGetAll = await manager.NotificationEvents.GetEvents();
-        //    return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
-        //}
-        #endregion
-
-        
-
-
-
-        #region v2/barracks
-        [SwaggerIgnore]
-        [FunctionName("BarracksV2")]
-        public static async Task<IActionResult> BarracksV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/barracks/{idBarrack?}/{abbSpecie?}/{textToSearch?}/{asc?}/{totalByPage?}/{page?}")] HttpRequest req, string idBarrack, string abbSpecie, string textToSearch, string asc, int? totalByPage, int? page, ILogger log)
+        [FunctionName("NotificationEvents")]
+        public static async Task<IActionResult> NotificationEvents([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "v2/notification_events/{id?}")] HttpRequest req, string id, ILogger log)
         {
             ClaimsPrincipal claims = await Auth.Validate(req);
             if (claims == null)
                 return new UnauthorizedResult();
             var manager = await ContainerMethods.AgroManager(claims);
-            ExtGetContainer<Barrack> result = null;
+            Email email = new Email(manager.Users.GetUsers().Result.Result);
+            //HttpClient client = new HttpClient();
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Environment.GetEnvironmentVariable("accessToken", EnvironmentVariableTarget.Process));
+            //var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            //dynamic body = JsonConvert.DeserializeObject(requestBody);
+            //var newBody = body["_parts"][0][1];
+            //byte[] byteArray = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(newBody));
+            //MemoryStream stream = new MemoryStream(byteArray);
+            //var inputData = new StreamContent(stream);
+            //string ipNgrok = Environment.GetEnvironmentVariable("ipNgrok", EnvironmentVariableTarget.Process);
+            //await client.PostAsync("https://" + ipNgrok + ".ngrok.io/api/v2/debugroute", inputData);
+            //client.Dispose();
+            //return null;
+            ExtGetContainer<NotificationEvent> result = null;
             switch (req.Method.ToLower())
             {
                 case "get":
-                    if (!string.IsNullOrWhiteSpace(idBarrack) && !idBarrack.ToLower().Equals("all"))
+                    if (!string.IsNullOrWhiteSpace(id))
                     {
-                        result = await manager.Barracks.GetBarrack(idBarrack);
-                        return ContainerMethods.GetJsonGetContainer(result, log);
+                        switch (id)
+                        {
+                            case "init":
+                                var resultEvent = await manager.CustomManager.MobileEvents.GetEventData();
+                                return ContainerMethods.GetJsonGetContainer(resultEvent, log);
+                            case "ts":
+                                var resultTs = await manager.CustomManager.MobileEvents.GetMobileEventTimestamp();
+                                return ContainerMethods.GetJsonGetContainer(resultTs, log);
+                            default:
+                                result = await manager.NotificationEvents.GetEvent(id);
+                                return ContainerMethods.GetJsonGetContainer(result, log);
+                        }
                     }
                     break;
                 case "post":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
-                        var name = (string)model["name"];
-                        var numberOfPlants = (int)model["numberOfPlants"];
-                        var plantingYear = (int)model["plantingYear"];
-                        var hectares = float.Parse((string)model["hectares"]);
-                        var idPlotland = (string)model["idPlotland"];
-                        var idVariety = (string)model["idVariety"];
-                        var idPollinator = (string)model["idPollinator"];
-                        var idRootstock = (string)model["idRootstock"];
-                        return await db.Barracks.SaveNewBarrack(name, idPlotland, hectares, plantingYear, idVariety, numberOfPlants, idPollinator, idRootstock);
-                    }, claims);
-                case "put":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
-                        var name = (string)model["name"];
-                        var numberOfPlants = (int)model["numberOfPlants"];
-                        var plantingYear = (int)model["plantingYear"];
-                        var hectares = float.Parse((string)model["hectares"]);
-                        var idPlotland = (string)model["idPlotland"];
-                        var idVariety = (string)model["idVariety"];
-                        var idPollinator = (string)model["idPollinator"];
-                        var idRootstock = (string)model["idRootstock"];
-                        return await db.Barracks.SaveEditBarrack(idBarrack, name, idPlotland, hectares, plantingYear, idVariety, numberOfPlants, idPollinator, idRootstock);
+                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
+                    {
+                        var newModel = model["_parts"][0][1];
+                        var idPhenologicalEvent = (string)newModel["idPhenologicalEvent"];
+                        var description = (string)newModel["description"];
+                        var base64 = (string)newModel["base64"];
+                        var barrack = (string)newModel["idBarrack"];
+                        //var lat = (float)newModel["latitude"];
+                        //var lon = (float)newModel["longitude"];
+                        var response = await db.NotificationEvents.SaveNewNotificationEvent(barrack, idPhenologicalEvent, base64, description, 0F, 0F);
+                        var evt = await db.NotificationEvents.GetEvent(response.IdRelated);
+                        var url = evt.Result.PicturePath;
+                        email.SendEmail("Notificacion",
+                            $@"<html>
+                            <body>
+                                <p> Estimado(a), </p>
+                                <p> Llego una notificacion </p>
+                                <img src='{url}' style='width:50%;height:auto;'>
+                                <p> Atentamente,<br> -Aresa </br></p>
+                            </body>
+                        </html>");
+                        return response;
                     }, claims);
             }
-            if (!string.IsNullOrWhiteSpace(textToSearch) && textToSearch.Equals("*"))
-                textToSearch = null;
-            if (!string.IsNullOrWhiteSpace(abbSpecie) && abbSpecie.ToLower().Equals("all"))
-                abbSpecie = null;
-            else abbSpecie = abbSpecie.ToUpper();
-            bool? order = null;
-            if (!string.IsNullOrWhiteSpace(asc) && !asc.ToLower().Equals("not_order"))
-            {
-                if (asc.ToLower().Equals("asc")) order = true;
-                else if (asc.ToLower().Equals("desc")) order = false;
-                else return new BadRequestResult();
-            }
-            var resultGetByPageAll = manager.Barracks.GetPaginatedBarracks(textToSearch, abbSpecie, page, totalByPage, order);
-            return ContainerMethods.GetJsonGetContainer(resultGetByPageAll, log);
+            ExtGetContainer<List<NotificationEvent>> resultGetAll = await manager.NotificationEvents.GetEvents();
+            return ContainerMethods.GetJsonGetContainer(resultGetAll, log);
         }
         #endregion
+
+
+
+
+
+
 
         #region v2/phenological_preorders
         [FunctionName("PhenologicalPreOrders")]

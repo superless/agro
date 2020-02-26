@@ -13,17 +13,7 @@
         private string _urlIcon;
         public string UrlIcon { get => _urlIcon; set => _urlIcon = "https://openweathermap.org/themes/openweathermap/assets/vendor/owm/img/widgets/" + value + ".png"; }
 
-        public Weather(string cityName, float lat, float lon, string main, string desc, float temp, float speed, int degree, int cloud, int hum, int pressure, string iconCode) {
-            Coordinates = new Coordinates() { CityName = cityName, Latitude = lat, Longitude = lon };
-            Wind = new Wind() { Speed = speed, Degree = degree };
-            Main = main;
-            Description = desc;
-            TemperatureCelcius = temp;
-            CloudsPercentage = cloud;
-            HumidityPercentage = hum;
-            PressureHectoPascal = pressure;
-            UrlIcon = iconCode;
-        }
+        
     }
 
     public class Coordinates {

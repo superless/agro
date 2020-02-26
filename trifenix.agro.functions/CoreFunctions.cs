@@ -175,7 +175,19 @@ namespace trifenix.agro.functions
             return result.JsonResult;
         }
 
+        [FunctionName("OrderFolder")]
+        public static async Task<IActionResult> OrderFolder([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/order_folders/{id?}")] HttpRequest req, string id, ILogger log)
+        {
+            var result = await GenericMantainer<OrderFolderInput, OrderFolder>.SendInternalHttp(req, log, s => s.OrderFolder, id);
+            return result.JsonResult;
+        }
 
+        [FunctionName("Barracks")]
+        public static async Task<IActionResult> BarracksV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/barracks/{id?}")] HttpRequest req, string id, ILogger log)
+        {
+            var result = await GenericMantainer<BarrackInput, Barrack>.SendInternalHttp(req, log, s => s.Barracks, id);
+            return result.JsonResult;
+        }
 
 
 

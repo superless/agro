@@ -116,11 +116,15 @@ namespace trifenix.agro.external.operations
         public IGenericOperation<OrderFolder, OrderFolderInput> OrderFolder => new OrderFolderOperations(new MainGenericDb<OrderFolder>(arguments), ExistsElements, _searchServiceInstance, CommonQueries);
 
 
-        public IGenericOperation<Barrack, BarrackInput> Barracks => new BarrackOperations<Barrack>(new MainGenericDb<Barrack>(arguments), ExistsElements, _searchServiceInstance, CommonQueries);
+        public IGenericOperation<Barrack, BarrackInput> Barracks => new BarrackOperations(new MainGenericDb<Barrack>(arguments), ExistsElements, _searchServiceInstance, CommonQueries);
 
-        public IBarrackOperations<Barrack> Barracks => new BarrackOperations<Barrack>(_repository.Barracks, _repository.Rootstocks, _repository.PlotLands, _repository.Varieties, new CommonDbOperations<Barrack>(), _idSeason, _searchServiceInstance);
 
-        
+
+        public IGenericOperation<NotificationEvent, NotificationEventInput> NotificationEvents => new NotificationEventOperations(new MainGenericDb<NotificationEvent>(arguments), ExistsElements, _searchServiceInstance, CommonQueries, _uploadImage, _weatherApi);
+
+
+
+
         public ICustomManager CustomManager => new CustomManager(_repository, _idSeason);
 
 
@@ -143,7 +147,7 @@ namespace trifenix.agro.external.operations
             SeasonId = _idSeason
         }, _searchServiceInstance);
 
-        public INotificatonEventOperations NotificationEvents => new NotificationEventOperations(_repository.NotificationEvents, _repository.Barracks, _repository.PhenologicalEvents, new CommonDbOperations<NotificationEvent>(), _uploadImage, _graphApi, _weatherApi);
+        
         
         
         public IPhenologicalPreOrderOperations PhenologicalPreOrders => new PhenologicalPreOrdersOperations(_repository.PhenologicalPreOrders, new CommonDbOperations<PhenologicalPreOrder>(), _idSeason, _graphApi);

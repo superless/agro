@@ -62,26 +62,15 @@ namespace trifenix.agro.external.interfaces {
 
         IGenericOperation<OrderFolder, OrderFolderInput> OrderFolder { get; }
 
+        IGenericOperation<Barrack, BarrackInput> Barracks { get; }
 
-        
+        IGenericOperation<NotificationEvent, NotificationEventInput> NotificationEvents { get; }
 
-        
 
-        
-
-        
-
-        
-
-        
-
-        
-
-        IBarrackOperations<Barrack> Barracks { get; }
 
         IPhenologicalPreOrderOperations PhenologicalPreOrders { get; }
 
-        INotificatonEventOperations NotificationEvents { get; }
+        
 
         
 
