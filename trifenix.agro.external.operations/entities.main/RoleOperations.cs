@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces;
+using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.model.agro;
+using trifenix.agro.enums;
 using trifenix.agro.external.interfaces;
+using trifenix.agro.external.operations.res;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
@@ -11,13 +14,10 @@ using trifenix.agro.search.model;
 
 namespace trifenix.agro.external.operations.entities.main
 {
-    public class RoleOperations : MainReadOperation<Role>, IGenericOperation<Role, RoleInput>
+    public class RoleOperations : MainReadOperationName<Role, RoleInput>, IGenericOperation<Role, RoleInput>
     {
-        private readonly IAgroSearch search;
-
-        public RoleOperations(IMainGenericDb<Role> repo, IAgroSearch search) : base(repo)
+        public RoleOperations(IMainGenericDb<Role> repo, IExistElement existElement, IAgroSearch search) : base(repo, existElement, search)
         {
-            this.search = search;
         }
 
         public async Task<ExtPostContainer<string>> Save(RoleInput input)
@@ -40,6 +40,9 @@ namespace trifenix.agro.external.operations.entities.main
                     EntityName = role.CosmosEntityName
                 }
             });
+
+            var valida = await Validate(input);
+            if (!valida) throw new Exception(string.Format(ErrorMessages.NotValid, role.CosmosEntityName));
 
 
             return new ExtPostContainer<string>

@@ -12,15 +12,15 @@ namespace trifenix.agro.db.model.agro
     {
         public override string Id { get; set; }
 
-        public PhenologicalEvent PhenologicalEvent { get; set; }
+        public string IdPhenologicalEvent { get; set; }
 
         
 
         
 
-        public ApplicationTarget ApplicationTarget { get; set; }
+        public string IdApplicationTarget { get; set; }
 
-        public Specie Specie { get; set; }
+        public string IdSpecie { get; set; }
 
         public Rootstock Rootstock { get; set; }
 

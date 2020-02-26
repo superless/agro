@@ -1,8 +1,7 @@
 ﻿namespace trifenix.agro.model.external.Input
 {
-    public class RoleInput : InputBase
+    public class RoleInput : InputBaseName
     {
-        public string Name { get; set; }
-
+      
     }
 }

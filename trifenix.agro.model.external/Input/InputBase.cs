@@ -12,6 +12,7 @@ namespace trifenix.agro.model.external.Input
 
     public abstract class InputBaseName : InputBase
     {
+        
         public string Name { get; set; }
 
         

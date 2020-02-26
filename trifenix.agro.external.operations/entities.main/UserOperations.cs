@@ -133,6 +133,7 @@ namespace trifenix.agro.external.operations.entities.main
                 foreach (var idRol in input.IdsRoles)
                 {
                     var exists = await existElement.ExistsElement<Role>(idRol);
+                    
                     if (!exists) throw new Exception(string.Format(ErrorMessages.NotValid, "Rol"));
                 }
             }

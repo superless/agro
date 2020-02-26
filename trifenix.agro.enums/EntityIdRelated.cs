@@ -32,7 +32,8 @@
         BUSINESSNAME_EMAIL=6,
         BUSINESSNAME_RUT = 7,
         BUSINESSNAME_GIRO = 8,
-        SPECIE_CODE = 9
+        SPECIE_CODE = 9,
+        GENERIC_NA=11
 
 
 
