@@ -28,14 +28,14 @@ namespace trifenix.agro.external.operations.entities.ext
             list.Add(new IdsRelated
             {
                 EntityId = input.IdProduct,
-                EntityIndex = (int)EntityIdRelated.PRODUCT
+                EntityIndex = (int)EntityRelated.PRODUCT
             });
 
             if (input.idsApplicationTarget != null && input.idsApplicationTarget.Any())
             {
                 list.AddRange(input.idsApplicationTarget.Select(s=>new IdsRelated { 
                     EntityId = s,
-                    EntityIndex = (int)EntityIdRelated.TARGET
+                    EntityIndex = (int)EntityRelated.TARGET
                 }));
             }
 
@@ -44,7 +44,7 @@ namespace trifenix.agro.external.operations.entities.ext
                 list.AddRange(input.IdSpecies.Select(s => new IdsRelated
                 {
                     EntityId = s,
-                    EntityIndex = (int)EntityIdRelated.SPECIE
+                    EntityIndex = (int)EntityRelated.SPECIE
                 }));
             }
 
@@ -53,7 +53,7 @@ namespace trifenix.agro.external.operations.entities.ext
                 list.AddRange(input.IdVarieties.Select(s => new IdsRelated
                 {
                     EntityId = s,
-                    EntityIndex = (int)EntityIdRelated.VARIETY
+                    EntityIndex = (int)EntityRelated.VARIETY
                 }));
             }
 
@@ -62,7 +62,7 @@ namespace trifenix.agro.external.operations.entities.ext
                 list.AddRange(input.WaitingToHarvest.Select(s=>s.IdCertifiedEntity).Select(s => new IdsRelated
                 {
                     EntityId = s,
-                    EntityIndex = (int)EntityIdRelated.CERTIFIED_ENTITY
+                    EntityIndex = (int)EntityRelated.CERTIFIED_ENTITY
                 }));
             }
             return list.ToArray();

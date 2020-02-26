@@ -58,12 +58,12 @@ namespace trifenix.agro.external.interfaces {
 
 
         IGenericOperation<Season, SeasonInput> Seasons { get; }
+        IGenericOperation<Rootstock, RootStockInput> Rootstock { get; }
+
+        IGenericOperation<OrderFolder, OrderFolderInput> OrderFolder { get; }
 
 
-        IOrderFolderOperations OrderFolder { get; }
-
-
-        IRootstockOperations Rootstock { get; }
+        
 
         
 

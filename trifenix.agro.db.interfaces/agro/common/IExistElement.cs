@@ -18,7 +18,5 @@ namespace trifenix.agro.db.interfaces.agro.common
         Task<bool> ExistsElement<T>(string namePropCheck, string valueCheck) where T : DocumentBase;
 
         Task<bool> ExistsElement<T>(string namePropCheck, int valueCheck) where T : DocumentBase;
-
-
     }
 }

@@ -168,6 +168,13 @@ namespace trifenix.agro.functions
         }
 
 
+        [FunctionName("RootstockV2")]
+        public static async Task<IActionResult> RootstockV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "rootstock/{id?}")] HttpRequest req, string id, ILogger log)
+        {
+            var result = await GenericMantainer<RootStockInput, Rootstock>.SendInternalHttp(req, log, s => s.Rootstock, id);
+            return result.JsonResult;
+        }
+
 
 
 

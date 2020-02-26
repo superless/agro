@@ -700,39 +700,5 @@ namespace trifenix.agro.functions {
         }
 
 
-
-        #region v2/rootstock
-        [FunctionName("RootstockV2")]
-        public static async Task<IActionResult> RootstockV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/rootstock/{id?}")] HttpRequest req, string id, ILogger log)
-        {
-            ClaimsPrincipal claims = await Auth.Validate(req);
-            if (claims == null)
-                return new UnauthorizedResult();
-            var manager = await ContainerMethods.AgroManager(claims);
-            ExtGetContainer<List<Rootstock>> result = null;
-            switch (req.Method.ToLower())
-            {
-                case "get":
-                    result = await manager.Rootstock.GetRootstocks();
-                    break;
-                case "post":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
-                        var name = (string)model["name"];
-                        var abbreviation = (string)model["abbreviation"];
-                        return await db.Rootstock.SaveNewRootstock(name, abbreviation);
-                    }, claims);
-                case "put":
-                    return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) =>
-                    {
-                        var name = (string)model["name"];
-                        var abbreviation = (string)model["abbreviation"];
-                        return await db.Rootstock.SaveEditRootstock(id, name, abbreviation);
-                    }, claims);
-            }
-            return ContainerMethods.GetJsonGetContainer(result, log);
-        }
-        #endregion
-
     }
 }

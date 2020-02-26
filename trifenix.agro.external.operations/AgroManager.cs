@@ -51,6 +51,9 @@ namespace trifenix.agro.external.operations
         public IExistElement ExistsElements => new CosmosExistElement(arguments);
 
 
+        public ICommonQueries CommonQueries => new CommonQueries(arguments);
+
+
         public IGenericOperation<Sector, SectorInput> Sectors => new SectorOperations(new MainGenericDb<Sector>(arguments), ExistsElements, _searchServiceInstance);
         public IGenericOperation<PlotLand, PlotLandInput> PlotLands => new PlotLandOperations(new MainGenericDb<PlotLand>(arguments), ExistsElements, _searchServiceInstance);
 
@@ -107,15 +110,13 @@ namespace trifenix.agro.external.operations
         public IGenericOperation<Season, SeasonInput> Seasons => new SeasonOperations(new MainGenericDb<Season>(arguments), ExistsElements, _searchServiceInstance);
 
 
-        public IRootstockOperations Rootstock => new RootstockOperations(new MainGenericDb<Rootstock>(arguments), ExistsElements, _searchServiceInstance);
+        public IGenericOperation<Rootstock, RootStockInput> Rootstock => new RootstockOperations(new MainGenericDb<Rootstock>(arguments), ExistsElements, _searchServiceInstance);
 
-        
 
-        
+        public IGenericOperation<OrderFolder, OrderFolderInput> OrderFolder => new OrderFolderOperations(new MainGenericDb<OrderFolder>(arguments), ExistsElements, _searchServiceInstance, CommonQueries);
 
-        
-        
-       
+
+        public IGenericOperation<Barrack, BarrackInput> Barracks => new BarrackOperations<Barrack>(new MainGenericDb<Barrack>(arguments), ExistsElements, _searchServiceInstance, CommonQueries);
 
         public IBarrackOperations<Barrack> Barracks => new BarrackOperations<Barrack>(_repository.Barracks, _repository.Rootstocks, _repository.PlotLands, _repository.Varieties, new CommonDbOperations<Barrack>(), _idSeason, _searchServiceInstance);
 
@@ -144,19 +145,7 @@ namespace trifenix.agro.external.operations
 
         public INotificatonEventOperations NotificationEvents => new NotificationEventOperations(_repository.NotificationEvents, _repository.Barracks, _repository.PhenologicalEvents, new CommonDbOperations<NotificationEvent>(), _uploadImage, _graphApi, _weatherApi);
         
-        public IOrderFolderOperations OrderFolder => new OrderFolderOperations(new OrderFolderArgs {
-            Ingredient = _repository.Ingredients,
-            IngredientCategory = _repository.Categories,
-            OrderFolder = _repository.OrderFolder,
-            GraphApi = _graphApi,
-            PhenologicalEvent = _repository.PhenologicalEvents,
-            Specie = _repository.Species,
-            Target = _repository.Targets,
-            IdSeason = _idSeason,
-            NotificationEvent = _repository.NotificationEvents,
-            CommonDb = new CommonDbOperations<OrderFolder>(),
-            CommonDbNotifications = new CommonDbOperations<NotificationEvent>()
-        });
+        
         public IPhenologicalPreOrderOperations PhenologicalPreOrders => new PhenologicalPreOrdersOperations(_repository.PhenologicalPreOrders, new CommonDbOperations<PhenologicalPreOrder>(), _idSeason, _graphApi);
 
         //public IExecutionOrderOperations<ExecutionOrder> ExecutionOrders => new ExecutionOrderOperations<ExecutionOrder>(_repository.ExecutionOrders, _repository.Orders, _repository.Users, _repository.Nebulizers, _repository.Products, _repository.Tractors, new CommonDbOperations<ExecutionOrder>(), _graphApi, _idSeason, _searchServiceInstance);

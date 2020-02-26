@@ -31,7 +31,7 @@ namespace trifenix.agro.external.operations.entities.ext
             var list = new List<IdsRelated>();
             if (!string.IsNullOrWhiteSpace(input.IdActiveIngredient))
             {
-                list.Add(new IdsRelated { EntityIndex = (int)EntityIdRelated.INGREDIENT, EntityId = input.IdActiveIngredient });
+                list.Add(new IdsRelated { EntityIndex = (int)EntityRelated.INGREDIENT, EntityId = input.IdActiveIngredient });
             }
             return list.ToArray();
         }
@@ -40,7 +40,7 @@ namespace trifenix.agro.external.operations.entities.ext
             var list = new List<ElementRelated>();
             if (!string.IsNullOrWhiteSpace(input.Brand))
             {
-                list.Add(new ElementRelated { EntityIndex = (int)EntityRelated.PRODUCT_BRAND, Name = input.Brand });
+                list.Add(new ElementRelated { EntityIndex = (int)PropertyRelated.PRODUCT_BRAND, Name = input.Brand });
             }
 
             return list.ToArray();
