@@ -51,13 +51,13 @@ namespace trifenix.agro.external.operations.entities.main {
 
             await repo.CreateUpdate(nebulizer);
 
-            search.AddEntities(new List<EntitySearch>
+            search.AddElements(new List<EntitySearch>
             {
                 new EntitySearch{
                     Created = DateTime.Now,
                     Id = id,
                     Name = input.Code,
-                    EntityName = nebulizer.CosmosEntityName,
+                    EntityIndex = nebulizer.CosmosEntityName,
                     ElementsRelated = new List<ElementRelated>(){ 
                         new ElementRelated{ EntityIndex = (int)EntityRelated.NEBULIZER_BRAND, Name = input.Brand },
                         new ElementRelated{ EntityIndex = (int)EntityRelated.NEBULIZER_CODE, Name = input.Code },

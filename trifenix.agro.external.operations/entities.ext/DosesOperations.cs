@@ -117,11 +117,11 @@ namespace trifenix.agro.external.operations.entities.ext
             };
             await repo.CreateUpdate(doses);
 
-            search.AddEntities(new List<EntitySearch>
+            search.AddElements(new List<EntitySearch>
             {
                 new EntitySearch{
                     Created = DateTime.Now,
-                    EntityName = doses.CosmosEntityName,
+                    EntityIndex = doses.CosmosEntityName,
                     IdsRelated = GetIdsRelated(input),
                     Id = id
                 }

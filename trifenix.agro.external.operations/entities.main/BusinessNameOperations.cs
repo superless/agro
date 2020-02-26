@@ -78,13 +78,13 @@ namespace trifenix.agro.external.operations.entities.main
 
             await repo.CreateUpdate(businessName);
 
-            search.AddEntities(new List<EntitySearch>
+            search.AddElements(new List<EntitySearch>
             {
                 new EntitySearch{
                     Created = DateTime.Now,
                     Id = id,
                     Name = input.Name,
-                    EntityName = businessName.CosmosEntityName,
+                    EntityIndex = businessName.CosmosEntityName,
                     ElementsRelated = new List<ElementRelated>{ 
                         new ElementRelated{ EntityIndex=(int)EntityRelated.BUSINESSNAME_RUT, Name = input.Rut },
                         new ElementRelated{ EntityIndex=(int)EntityRelated.BUSINESSNAME_GIRO, Name = input.Giro },

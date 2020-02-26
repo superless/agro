@@ -9,9 +9,9 @@ namespace trifenix.agro.external.operations.tests.helper.Instances {
     public static class AgroSearchInstances {
         public static Mock<IAgroSearch> GetInstance(){
             var mockWeatherApi = new Mock<IAgroSearch>();
-            mockWeatherApi.Setup(s => s.AddEntities(It.IsAny<List<EntitySearch>>()));
+            mockWeatherApi.Setup(s => s.AddElements(It.IsAny<List<EntitySearch>>()));
             mockWeatherApi.Setup(s => s.GetPaginatedEntities(It.IsAny<Parameters>())).Returns(new EntitiesSearchContainer());
-            mockWeatherApi.Setup(s => s.DeleteEntities(It.IsAny<List<EntitySearch>>()));
+            mockWeatherApi.Setup(s => s.DeleteElements(It.IsAny<List<EntitySearch>>()));
             return mockWeatherApi;
         }
     }

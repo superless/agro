@@ -81,7 +81,7 @@ namespace trifenix.agro.external.operations.entities.orders {
                 id,
                 order,
                 s => {
-                    _searchServiceInstance.AddEntities(new List<EntitySearch> {
+                    _searchServiceInstance.AddElements(new List<EntitySearch> {
                         new EntitySearch{
                             Id = id,
                             Name = input.Name,
@@ -149,12 +149,12 @@ namespace trifenix.agro.external.operations.entities.orders {
                     $"Ya existe orden de aplicacion con nombre: {input.Name}");
             if (createOperation.GetType() == typeof(ExtPostErrorContainer<string>))
                 return OperationHelper.GetPostException<string>(new Exception(createOperation.Message));
-            _searchServiceInstance.AddEntities(new List<EntitySearch> {
+            _searchServiceInstance.AddElements(new List<EntitySearch> {
                 new EntitySearch {
                     Id = createOperation.IdRelated,
                     SeasonId = _args.SeasonId,
                     Created = DateTime.Now,
-                    EntityName = entityName,
+                    EntityIndex = entityName,
                     Name = input.Name,
                     Specie = _args.Barracks.GetBarrack(input.BarracksInput.FirstOrDefault()?.IdBarrack).Result.Variety.Specie.Abbreviation,
                     Type = input.isPhenological

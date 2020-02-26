@@ -1,18 +1,17 @@
 ﻿using Microsoft.Azure.Search;
 using System;
 using System.ComponentModel.DataAnnotations;
-using trifenix.agro.search.model.@base;
 
 namespace trifenix.agro.search.model
 {
-    public class SimpleSearch : BaseSearch {
+    public class SimpleSearch {
 
         
         [Key]
         [IsFilterable]
         public string Id { get; set; }
 
-        public override DateTime Created { get; set; }
+        public DateTime Created { get; set; }
 
 
         [IsSearchable, IsSortable, IsFilterable]
@@ -23,9 +22,6 @@ namespace trifenix.agro.search.model
 
         [IsFilterable]
         public string EntityName { get; set; }
-
-
-
 
     }
 

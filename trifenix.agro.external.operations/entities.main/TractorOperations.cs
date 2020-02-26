@@ -53,13 +53,13 @@ Neb
 
             await repo.CreateUpdate(tractor);
 
-            search.AddEntities(new List<EntitySearch>
+            search.AddElements(new List<EntitySearch>
             {
                 new EntitySearch{
                     Created = DateTime.Now,
                     Id = id,
                     Name = input.Code,
-                    EntityName = tractor.CosmosEntityName,
+                    EntityIndex = tractor.CosmosEntityName,
                     ElementsRelated = new List<ElementRelated>(){
                         new ElementRelated{ EntityIndex = (int)EntityRelated.TRACTOR_BRAND, Name = input.Brand },
                         new ElementRelated{ EntityIndex = (int)EntityRelated.TRACTOR_CODE, Name = input.Code },

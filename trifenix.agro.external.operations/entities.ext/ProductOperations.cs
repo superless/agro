@@ -102,7 +102,7 @@ namespace trifenix.agro.external.operations.entities.ext
                 }
             }
 
-            search.AddEntities(new List<EntitySearch>
+            search.AddElements(new List<EntitySearch>
             {
                 new EntitySearch{
                     Created = DateTime.Now,
@@ -110,7 +110,7 @@ namespace trifenix.agro.external.operations.entities.ext
                     ElementsRelated = GetElementRelated(input),
                     IdsRelated = GetIdsRelated(input),
                     Name = input.Name,
-                    EntityName = product.CosmosEntityName
+                    EntityIndex = product.CosmosEntityName
                 }
             });
 

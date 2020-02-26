@@ -1,12 +1,11 @@
 ﻿using Microsoft.Azure.Search;
 using System;
 using System.ComponentModel.DataAnnotations;
-using trifenix.agro.search.model.@base;
 
 namespace trifenix.agro.search.model
 {
 
-    public class CommentSearch : BaseSearch
+    public class CommentSearch
     {
         [Key]
         [IsFilterable]
@@ -14,7 +13,7 @@ namespace trifenix.agro.search.model
 
 
         
-        public override DateTime Created { get; set; }
+        public DateTime Created { get; set; }
 
 
 

@@ -172,10 +172,10 @@ namespace trifenix.agro.external.operations.entities.main
 
             await repo.CreateUpdate(userApp);
 
-            search.AddEntities(new List<EntitySearch>
+            search.AddElements(new List<EntitySearch>
             {
                 new EntitySearch{
-                   EntityName = userApp.CosmosEntityName,
+                   EntityIndex = userApp.CosmosEntityName,
                    ElementsRelated = GetElementRelated(userApp),
                    Created = DateTime.Now,
                    Id = userApp.Id,

@@ -72,12 +72,12 @@ namespace trifenix.agro.external.operations.entities.fields {
             );
             if (createOperation.GetType() == typeof(ExtPostErrorContainer<string>))
                 return OperationHelper.GetPostException<string>(new Exception(createOperation.Message));
-            _searchServiceInstance.AddEntities(new List<EntitySearch> {
+            _searchServiceInstance.AddElements(new List<EntitySearch> {
                 new EntitySearch {
                     Id = createOperation.IdRelated,
                     SeasonId = _idSeason,
                     Created = DateTime.Now,
-                    EntityName = entityName,
+                    EntityIndex = entityName,
                     Name = name,
                     Specie = elements.Variety.Specie.Abbreviation
                 }
@@ -92,7 +92,7 @@ namespace trifenix.agro.external.operations.entities.fields {
             return await OperationHelper.EditElement<T>(_commonDb, (IQueryable<T>)_repo.GetBarracks(), id,
                 barrack,
                 s => {
-                    _searchServiceInstance.AddEntities(new List<EntitySearch> {
+                    _searchServiceInstance.AddElements(new List<EntitySearch> {
                         new EntitySearch{
                             Id = s.Id,
                             Name = name,

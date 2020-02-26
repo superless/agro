@@ -51,12 +51,12 @@ namespace trifenix.agro.external.operations.entities.main
 
             await repo.CreateUpdate(costCenter);
 
-            search.AddEntities(new List<EntitySearch>
+            search.AddElements(new List<EntitySearch>
             {
                 new EntitySearch{
                     Created = DateTime.Now,
                     Id = id,
-                    EntityName = costCenter.CosmosEntityName,
+                    EntityIndex = costCenter.CosmosEntityName,
                     NumbersRelated = new NumberEntityRelated[]{ 
                         new NumberEntityRelated{ 
                             EntityIndex = (int)NumberRelated.SEASON_CURRENT,
