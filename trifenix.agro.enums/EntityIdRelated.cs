@@ -16,6 +16,8 @@
         SEASON = 12,
         COSTCENTER = 13,
         CATEGORY_INGREDIENT=14,
+        PHENOLOGICAL_EVENT=15,
+
 
 
 
@@ -34,8 +36,8 @@
         BUSINESSNAME_EMAIL=6,
         BUSINESSNAME_RUT = 7,
         BUSINESSNAME_GIRO = 8,
-        SPECIE_CODE = 9,
-        GENERIC_NA=11
+        SPECIE_CODE = 9
+        
 
 
 
