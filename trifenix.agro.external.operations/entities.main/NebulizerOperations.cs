@@ -59,8 +59,8 @@ namespace trifenix.agro.external.operations.entities.main {
                     Name = input.Code,
                     EntityIndex = nebulizer.CosmosEntityName,
                     ElementsRelated = new List<ElementRelated>(){ 
-                        new ElementRelated{ EntityIndex = (int)EntityRelated.NEBULIZER_BRAND, Name = input.Brand },
-                        new ElementRelated{ EntityIndex = (int)EntityRelated.NEBULIZER_CODE, Name = input.Code },
+                        new ElementRelated{ EntityIndex = (int)PropertyRelated.NEBULIZER_BRAND, Name = input.Brand },
+                        new ElementRelated{ EntityIndex = (int)PropertyRelated.NEBULIZER_CODE, Name = input.Code },
                     }.ToArray()
                 }
             });

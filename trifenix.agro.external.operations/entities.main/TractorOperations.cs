@@ -61,8 +61,8 @@ Neb
                     Name = input.Code,
                     EntityIndex = tractor.CosmosEntityName,
                     ElementsRelated = new List<ElementRelated>(){
-                        new ElementRelated{ EntityIndex = (int)EntityRelated.TRACTOR_BRAND, Name = input.Brand },
-                        new ElementRelated{ EntityIndex = (int)EntityRelated.TRACTOR_CODE, Name = input.Code },
+                        new ElementRelated{ EntityIndex = (int)PropertyRelated.TRACTOR_BRAND, Name = input.Brand },
+                        new ElementRelated{ EntityIndex = (int)PropertyRelated.TRACTOR_CODE, Name = input.Code },
                     }.ToArray()
                 }
             });

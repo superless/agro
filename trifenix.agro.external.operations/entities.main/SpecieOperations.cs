@@ -34,6 +34,8 @@ namespace trifenix.agro.external.operations.entities.main
 
             var valida = await Validate(input);
             if (!valida) throw new Exception(string.Format(ErrorMessages.NotValid, specie.CosmosEntityName));
+
+
             if (string.IsNullOrWhiteSpace(input.Id))
             {
                 var validaAbbv = await existElement.ExistsElement<Specie>("Abbreviation", input.Abbreviation);

@@ -86,9 +86,9 @@ namespace trifenix.agro.external.operations.entities.main
                     Name = input.Name,
                     EntityIndex = businessName.CosmosEntityName,
                     ElementsRelated = new List<ElementRelated>{ 
-                        new ElementRelated{ EntityIndex=(int)EntityRelated.BUSINESSNAME_RUT, Name = input.Rut },
-                        new ElementRelated{ EntityIndex=(int)EntityRelated.BUSINESSNAME_GIRO, Name = input.Giro },
-                        new ElementRelated{ EntityIndex=(int)EntityRelated.BUSINESSNAME_EMAIL, Name = input.Email },
+                        new ElementRelated{ EntityIndex=(int)PropertyRelated.BUSINESSNAME_RUT, Name = input.Rut },
+                        new ElementRelated{ EntityIndex=(int)PropertyRelated.BUSINESSNAME_GIRO, Name = input.Giro },
+                        new ElementRelated{ EntityIndex=(int)PropertyRelated.BUSINESSNAME_EMAIL, Name = input.Email },
 
                     }.ToArray()
                 }

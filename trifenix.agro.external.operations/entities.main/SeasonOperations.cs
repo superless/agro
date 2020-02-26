@@ -59,13 +59,13 @@ namespace trifenix.agro.external.operations.entities.main
                     EntityIndex = costCenter.CosmosEntityName,
                     NumbersRelated = new NumberEntityRelated[]{ 
                         new NumberEntityRelated{ 
-                            EntityIndex = (int)NumberRelated.SEASON_CURRENT,
+                            EntityIndex = (int)EnumerationRelated.SEASON_CURRENT,
                             Number = current?1:0
                         }
                     },
                     IdsRelated = new IdsRelated[]{ 
                         new IdsRelated{ 
-                            EntityIndex = (int)EntityIdRelated.COSTCENTER,
+                            EntityIndex = (int)EntityRelated.COSTCENTER,
                             EntityId = input.IdCostCenter
                         }
                     }

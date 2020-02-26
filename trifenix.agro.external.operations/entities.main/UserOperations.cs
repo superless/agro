@@ -32,7 +32,7 @@ namespace trifenix.agro.external.operations.entities.main
             if (!string.IsNullOrWhiteSpace(input.IdJob))
             {
                 list.Add(new IdsRelated { 
-                    EntityIndex = (int)EntityIdRelated.JOB,
+                    EntityIndex = (int)EntityRelated.JOB,
                     EntityId = input.IdJob
                 });
             }
@@ -41,7 +41,7 @@ namespace trifenix.agro.external.operations.entities.main
             {
                 list.Add(new IdsRelated
                 {
-                    EntityIndex = (int)EntityIdRelated.TRACTOR,
+                    EntityIndex = (int)EntityRelated.TRACTOR,
                     EntityId = input.IdTractor
                 });
             }
@@ -50,7 +50,7 @@ namespace trifenix.agro.external.operations.entities.main
             {
                 list.Add(new IdsRelated
                 {
-                    EntityIndex = (int)EntityIdRelated.NEBULIZER,
+                    EntityIndex = (int)EntityRelated.NEBULIZER,
                     EntityId = input.IdNebulizer
                 });
             }
@@ -60,7 +60,7 @@ namespace trifenix.agro.external.operations.entities.main
                 {
                     list.Add(new IdsRelated
                     {
-                        EntityIndex = (int)EntityIdRelated.ROLE,
+                        EntityIndex = (int)EntityRelated.ROLE,
                         EntityId = idRol
                     });
                 }
@@ -70,7 +70,7 @@ namespace trifenix.agro.external.operations.entities.main
             {
                 list.Add(new IdsRelated
                 {
-                    EntityIndex = (int)EntityIdRelated.AAD,
+                    EntityIndex = (int)EntityRelated.AAD,
                     EntityId = input.ObjectIdAAD
                 });
             }
@@ -86,7 +86,7 @@ namespace trifenix.agro.external.operations.entities.main
             {
                 list.Add(new ElementRelated
                 {
-                    EntityIndex = (int)EntityRelated.USER_RUT,
+                    EntityIndex = (int)PropertyRelated.USER_RUT,
                     Name = input.Rut
                 });
             }
@@ -95,7 +95,7 @@ namespace trifenix.agro.external.operations.entities.main
             {
                 list.Add(new ElementRelated
                 {
-                    EntityIndex = (int)EntityRelated.USER_EMAIL,
+                    EntityIndex = (int)PropertyRelated.USER_EMAIL,
                     Name = input.Email
                 });
             }
