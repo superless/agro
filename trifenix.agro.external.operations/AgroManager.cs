@@ -2,15 +2,12 @@
 using trifenix.agro.db.applicationsReference;
 using trifenix.agro.db.applicationsReference.agro.Common;
 using trifenix.agro.db.applicationsReference.common;
-using trifenix.agro.db.interfaces.agro;
 using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.db.model.agro.core;
 using trifenix.agro.db.model.agro.orders;
 using trifenix.agro.external.interfaces;
-using trifenix.agro.external.interfaces.entities.core;
 using trifenix.agro.external.interfaces.entities.events;
-using trifenix.agro.external.interfaces.entities.ext;
 using trifenix.agro.external.interfaces.entities.fields;
 using trifenix.agro.external.interfaces.entities.main;
 using trifenix.agro.external.interfaces.entities.orders;
@@ -26,7 +23,8 @@ using trifenix.agro.search.interfaces;
 using trifenix.agro.storage.interfaces;
 using trifenix.agro.weather.interfaces;
 
-namespace trifenix.agro.external.operations {
+namespace trifenix.agro.external.operations
+{
     public class AgroManager : IAgroManager {
 
         
@@ -81,7 +79,7 @@ namespace trifenix.agro.external.operations {
 
         public IGenericOperation<Doses, DosesInput> Doses => new DosesOperations(new MainGenericDb<Doses>(arguments), ExistsElements, _searchServiceInstance);
 
-        public IGenericOperation<Role, RoleInput> Roles => new RoleOperations(new MainGenericDb<Role>(arguments), _searchServiceInstance);
+        public IGenericOperation<Role, RoleInput> Roles => new RoleOperations(new MainGenericDb<Role>(arguments), ExistsElements, _searchServiceInstance);
 
 
 
