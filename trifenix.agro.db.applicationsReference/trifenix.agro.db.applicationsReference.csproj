@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Cosmonaut" Version="2.11.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\trifenix.agro.db.interfaces\trifenix.agro.db.interfaces.csproj" />
   </ItemGroup>
 

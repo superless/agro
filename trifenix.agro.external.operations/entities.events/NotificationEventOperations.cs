@@ -49,7 +49,7 @@ namespace trifenix.agro.external.operations.entities.events
             if (!existsBarrack) return "no existe cuartel";
 
 
-            if (input.NotificationType == NotificationType.Phenological)
+            if (input.EventType == NotificationType.Phenological)
             {
                 var existsPhenologicalEvent = await existElement.ExistsElement<PhenologicalEvent>(input.IdPhenologicalEvent);
 
@@ -92,10 +92,12 @@ namespace trifenix.agro.external.operations.entities.events
                 notification.Weather = await weather.GetWeather(input.Lat.Value, input.Long.Value);
             }
 
+            var picturePath = await uploadImage.UploadImageBase64(input.Base64);
+
             notification.IdBarrack = input.IdBarrack;
             notification.IdPhenologicalEvent = input.IdPhenologicalEvent;
-            notification.NotificationType = input.NotificationType;
-            notification.PicturePath = input.PicturePath;
+            notification.NotificationType = input.EventType;
+            notification.PicturePath = picturePath;
             notification.Description = input.Description;
             await repo.CreateUpdate(notification);
 
@@ -108,18 +110,19 @@ namespace trifenix.agro.external.operations.entities.events
                 new EntitySearch{
                     Created = DateTime.Now,
                     Id = id,
-                    ElementsRelated= new ElementRelated[]{
-                       new ElementRelated{ EntityIndex=(int)PropertyRelated.NOTIFICATION_DESC, Name = input.Description },
-                       new ElementRelated{ EntityIndex=(int)PropertyRelated.SPECIE_CODE, Name = specieAbbv },
+                    RelatedProperties= new Property[]{
+                       new Property{ PropertyIndex=(int)PropertyRelated.GENERIC_DESC, Value = input.Description },
+                       new Property{ PropertyIndex=(int)PropertyRelated.GENERIC_CODE, Value = specieAbbv },
+                       new Property{ PropertyIndex=(int)PropertyRelated.GENERIC_PATH, Value = picturePath}
                     },
                     EntityIndex = (int)EntityRelated.NOTIFICATION,
-                    IdsRelated = new IdsRelated[]{
-                      new IdsRelated{  EntityIndex=(int)EntityRelated.PHENOLOGICAL_EVENT, EntityId = input.IdPhenologicalEvent},
-                      new IdsRelated{  EntityIndex=(int)EntityRelated.BARRACK, EntityId = input.IdBarrack}
+                    RelatedIds = new RelatedId[]{
+                      new RelatedId{  EntityIndex=(int)EntityRelated.PHENOLOGICAL_EVENT, EntityId = input.IdPhenologicalEvent},
+                      new RelatedId{  EntityIndex=(int)EntityRelated.BARRACK, EntityId = input.IdBarrack}
 
                     },
-                    NumbersRelated = new NumberEntityRelated[]{ 
-                        new NumberEntityRelated{ EntityIndex = (int)EnumerationRelated.NOTIFICATION_TYPE, Number = (int)input.NotificationType  }
+                    RelatedEnumValues = new RelatedEnumValue[]{ 
+                        new RelatedEnumValue{ EnumerationIndex = (int)EnumerationRelated.NOTIFICATION_TYPE, Value = (int)input.EventType  }
                     }
 
 
@@ -136,6 +139,5 @@ namespace trifenix.agro.external.operations.entities.events
                 Result = id
             };
         }
-    }
     }
 }

@@ -23,12 +23,12 @@
         TRACTOR,
         USER,
         VARIETY,
-
-
+        NOTIFICATION,
+        POLLINATOR
     }
 
     public enum PropertyRelated {
-        BUSINESSNAME_GIRO,
+        GENERIC_GIRO,
         GENERIC_ABBREVIATION,
         GENERIC_BRAND,
         GENERIC_CODE,
@@ -37,13 +37,14 @@
         GENERIC_NAME,
         GENERIC_RUT,
         GENERIC_START_DATE,
-
+        GENERIC_DESC,
+        GENERIC_PATH,
     }
 
     public enum EnumerationRelated {
         ORDER_TYPE= 1,
         SEASON_CURRENT=2,
-
+        NOTIFICATION_TYPE = 3,
     }
 
     public enum OrderType { 

@@ -46,8 +46,10 @@ namespace trifenix.agro.microsoftgraph.operations
         public async Task<string> CreateUserIntoActiveDirectory(string name, string email) {
             var scopes = new string[] { "https://graph.microsoft.com/.default" };
             var authResult = await _confidentialClientApplication.AcquireTokenForClient(scopes).ExecuteAsync();
-            GraphServiceClient graphServiceClient = new GraphServiceClient(new DelegateAuthenticationProvider(async (requestMessage) => 
+            var graphServiceClient = new GraphServiceClient(new DelegateAuthenticationProvider(async (requestMessage) => 
                     requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authResult.AccessToken)));
+
+
             var invitation = new Invitation {
                 InvitedUserDisplayName = name,
                 InvitedUserEmailAddress = email,

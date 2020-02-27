@@ -8,6 +8,7 @@ using trifenix.agro.functions.mantainers;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.db.model.agro.core;
+using trifenix.agro.functions.Helper;
 
 namespace trifenix.agro.functions
 {
@@ -190,7 +191,12 @@ namespace trifenix.agro.functions
         }
 
 
-
+        [FunctionName("NotificationEvents")]
+        public static async Task<IActionResult> NotificationEvents([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "v2/notification_events/{id?}")] HttpRequest req, string id, ILogger log)
+        {
+            var result = await GenericMantainer<NotificationEventInput, NotificationEvent>.SendInternalHttp(req, log, s => s.NotificationEvents, id);
+            return result.JsonResult;
+        }
 
 
 

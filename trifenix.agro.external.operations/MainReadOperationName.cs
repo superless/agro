@@ -23,9 +23,10 @@ namespace trifenix.agro.external.operations
                 return !existsName;
             }
 
-            var notExistId = await existElement.ExistsElement<T>(input.Id);
+            var existsId = await existElement.ExistsElement<T>(input.Id);
+            if (!existsId) return false;            
             var existEditName = await existElement.ExistsEditElement<T>(input.Id, "Name", input.Name);
-            return !existEditName && notExistId;
+            return !existEditName;
 
         }
     }

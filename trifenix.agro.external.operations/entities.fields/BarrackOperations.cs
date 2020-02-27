@@ -84,23 +84,23 @@ namespace trifenix.agro.external.operations.entities.fields
                 new EntitySearch{
                     Created = DateTime.Now,
                     Id = id,
-                    ElementsRelated= new ElementRelated[]{ 
-                        new ElementRelated{ 
-                            EntityIndex = (int)PropertyRelated.GENERIC_NAME,
-                            Name = input.Name
+                    RelatedProperties= new Property[]{ 
+                        new Property{ 
+                            PropertyIndex = (int)PropertyRelated.GENERIC_NAME,
+                            Value = input.Name
                         },
-                        new ElementRelated{ 
-                            EntityIndex = (int)PropertyRelated.SPECIE_CODE,
-                            Name = specieAbbv
+                        new Property{
+                            PropertyIndex = (int)PropertyRelated.GENERIC_CODE,
+                            Value = specieAbbv
                         }
                     },
                     EntityIndex = (int)EntityRelated.BARRACK,
-                    IdsRelated = new IdsRelated[]{ 
-                        new IdsRelated{ EntityIndex = (int)EntityRelated.SEASON , EntityId = input.SeasonId },
-                        new IdsRelated{ EntityIndex = (int)EntityRelated.PLOTLAND, EntityId = input.IdPlotLand },
-                        new IdsRelated { EntityIndex = (int)EntityRelated.VARIETY, EntityId = input.IdVariety },
-                        new IdsRelated { EntityIndex = (int)EntityRelated.POLLINATOR, EntityId = input.IdPollinator },
-                        new IdsRelated { EntityIndex = (int)EntityRelated.ROOTSTOCK, EntityId = input.IdRootstock }
+                    RelatedIds = new RelatedId[]{ 
+                        new RelatedId{ EntityIndex = (int)EntityRelated.SEASON , EntityId = input.SeasonId },
+                        new RelatedId{ EntityIndex = (int)EntityRelated.PLOTLAND, EntityId = input.IdPlotLand },
+                        new RelatedId { EntityIndex = (int)EntityRelated.VARIETY, EntityId = input.IdVariety },
+                        new RelatedId { EntityIndex = (int)EntityRelated.POLLINATOR, EntityId = input.IdPollinator },
+                        new RelatedId { EntityIndex = (int)EntityRelated.ROOTSTOCK, EntityId = input.IdRootstock }
 
                     }
                     

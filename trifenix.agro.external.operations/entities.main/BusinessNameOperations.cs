@@ -90,7 +90,7 @@ namespace trifenix.agro.external.operations.entities.main
                             Value = input.Rut
                         },
                         new Property {
-                            PropertyIndex = (int)PropertyRelated.BUSINESSNAME_GIRO,
+                            PropertyIndex = (int)PropertyRelated.GENERIC_GIRO,
                             Value = input.Giro
                         },
                         new Property {

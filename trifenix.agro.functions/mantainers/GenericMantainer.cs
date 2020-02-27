@@ -3,10 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 using trifenix.agro.db;
 using trifenix.agro.db.interfaces.agro.common;
@@ -30,7 +28,7 @@ namespace trifenix.agro.functions.mantainers
     public static class GenericMantainer<InputElement,DbElement> where InputElement : InputBase where DbElement : DocumentBase
     {
 
-        public static async Task<ActionResultWithId> HttpProcessing(HttpRequest req, ILogger log, IExistElement existsElement, IGenericOperation<DbElement, InputElement> repo, IGenericOperation<UserActivity, UserActivityInput> recordAcitvity, InputElement element) {
+        public static async Task<ActionResultWithId> HttpProcessing(HttpRequest req, ILogger log, IGenericOperation<DbElement, InputElement> repo, IGenericOperation<UserActivity, UserActivityInput> recordAcitvity, InputElement element) {
             var method = req.Method.ToLower();
 
             switch (method)
@@ -57,6 +55,13 @@ namespace trifenix.agro.functions.mantainers
                     try
                     {
                         saveReturn = await repo.Save(element);
+                        await recordAcitvity.Save(new UserActivityInput
+                        {
+                            Action = method.Equals("post") ? UserActivityAction.CREATE : UserActivityAction.MODIFY,
+                            Date = DateTime.Now,
+                            EntityName = ((DbElement)Activator.CreateInstance(typeof(DbElement))).CosmosEntityName,
+                            Id = saveReturn.IdRelated
+                        });
 
                     }
                     catch (Exception ex)
@@ -72,16 +77,7 @@ namespace trifenix.agro.functions.mantainers
                         };
                     }
 
-                    if (!string.IsNullOrWhiteSpace(saveReturn.IdRelated))
-                    {
-                        await recordAcitvity.Save(new UserActivityInput
-                        {
-                            Action = method.Equals("post") ? UserActivityAction.CREATE : UserActivityAction.MODIFY,
-                            Date = DateTime.Now,
-                            EntityName = ((DbElement)Activator.CreateInstance(typeof(DbElement))).CosmosEntityName,
-                            Id = saveReturn.IdRelated
-                        });
-                    }
+
                     return new ActionResultWithId { 
                         Id= saveReturn.IdRelated,
                         JsonResult = ContainerMethods.GetJsonPostContainer(saveReturn, log)
@@ -93,7 +89,7 @@ namespace trifenix.agro.functions.mantainers
         public static async Task<ActionResultWithId> SendInternalHttp(HttpRequest req, ILogger log, Func<IAgroManager, IGenericOperation<DbElement, InputElement>> repo, string id = null)
         {
 
-            ClaimsPrincipal claims = await Auth.Validate(req);
+            var claims = await Auth.Validate(req);
 
             if (claims == null)
                 return new ActionResultWithId
@@ -104,28 +100,32 @@ namespace trifenix.agro.functions.mantainers
 
             var manager = await ContainerMethods.AgroManager(claims);
 
-            return await HttpProcessing(req, log, manager.ExistsElements, repo(manager), manager.UserActivity, id);
+            return await HttpProcessing(req, log, repo(manager), manager.UserActivity, id);
 
 
 
         }
 
-        public static async Task<ActionResultWithId> HttpProcessing(HttpRequest req, ILogger log, IExistElement existsElement, IGenericOperation<DbElement, InputElement> repo, IGenericFullReadOperation<UserActivity, UserActivityInput> recordAcitvity,  string id = null ) {
+        public static async Task<ActionResultWithId> HttpProcessing(HttpRequest req, ILogger log, IGenericOperation<DbElement, InputElement> repo, IGenericFullReadOperation<UserActivity, UserActivityInput> recordAcitvity,  string id = null ) {
 
 
-            var jsonElement = await ConvertToElement(req, id);
-            
-            return await HttpProcessing(req, log, existsElement, repo, recordAcitvity, jsonElement);
+            var body = await new StreamReader(req.Body).ReadToEndAsync();
+
+            var method = req.Method.ToLower();
+
+            var jsonElement = await ConvertToElement(body, id, method);
+
+            return await HttpProcessing(req, log, repo, recordAcitvity, jsonElement);
 
         }
 
-        public static async Task<InputElement> ConvertToElement(HttpRequest req, string id) 
+        public static async Task<InputElement> ConvertToElement(string body, string id, string method) 
         {
 
-            var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            var requestBody = await new StreamReader(body).ReadToEndAsync();
 
             InputElement element;
-            if (req.Method.ToLower().Equals("get"))
+            if (method.Equals("get"))
             {
                 element = (InputElement)Activator.CreateInstance(typeof(InputElement));
 

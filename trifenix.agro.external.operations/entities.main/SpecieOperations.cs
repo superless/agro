@@ -33,6 +33,7 @@ namespace trifenix.agro.external.operations.entities.main
             await repo.CreateUpdate(specie);
 
             var valida = await Validate(input);
+
             if (!valida) throw new Exception(string.Format(ErrorMessages.NotValid, specie.CosmosEntityName));
 
 

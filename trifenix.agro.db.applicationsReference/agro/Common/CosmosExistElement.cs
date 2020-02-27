@@ -68,7 +68,7 @@ namespace trifenix.agro.db.applicationsReference.agro.Common
         public async Task<bool> ExistsEditElement<T>(string id, string nameCheck, string valueCheck) where T : DocumentBase
         {
             var db = new MainDb<T>(DbArguments);
-            var result = await db.Store.QuerySingleAsync<long>($"SELECT value count(1) FROM c where {nameCheck} = {valueCheck} and c.Id != '{id}'");
+            var result = await db.Store.QuerySingleAsync<long>($"SELECT value count(1) FROM c where {nameCheck} = '{valueCheck}' and c.Id != '{id}'");
 
             return result != 0;
         }

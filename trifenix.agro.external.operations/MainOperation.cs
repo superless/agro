@@ -33,7 +33,7 @@ namespace trifenix.agro.external.operations
         }
     }
 
-    public abstract class MainBaseOperation<T> : IGenericBaseOperation<T> where T : DocumentBase {
+    public abstract class MainBaseOperation<T> where T : DocumentBase {
         protected readonly IMainGenericDb<T> repo;
 
         public MainBaseOperation(IMainGenericDb<T> repo)
@@ -48,7 +48,7 @@ namespace trifenix.agro.external.operations
 
     }
 
-    public abstract class MainReadOperation<T> : MainBaseOperation<T>, IGenericBaseOperation<T> where T : DocumentBase
+    public abstract class MainReadOperation<T> : MainBaseOperation<T> where T : DocumentBase
     {
         
         protected readonly IExistElement existElement;

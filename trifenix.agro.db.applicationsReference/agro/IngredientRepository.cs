@@ -15,5 +15,5 @@ namespace trifenix.agro.db.applicationsReference.agro
         {
         }
     }
-}
+
 }

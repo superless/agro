@@ -33,8 +33,8 @@ namespace trifenix.agro.db.applicationsReference.agro.Common
             var idSpecie = await db.Store.QuerySingleAsync<string>($"SELECT value c.IdSpecie FROM c where  c.Id = '{idVariety}'");
 
             return await GetSpecieAbbreviation(idSpecie);
-
-
         }
+
+
     }
 }
