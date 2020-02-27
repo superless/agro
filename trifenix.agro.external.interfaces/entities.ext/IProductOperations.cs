@@ -5,7 +5,6 @@ using trifenix.agro.enums;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.model.external.output;
-using trifenix.agro.search.model;
 
 namespace trifenix.agro.external.interfaces.entities.ext {
     public interface IProductOperations <T> {

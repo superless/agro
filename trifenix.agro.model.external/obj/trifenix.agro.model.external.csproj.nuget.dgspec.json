@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\aresa\\developments\\cloud.app\\trifenix.agro.model.external\\trifenix.agro.model.external.csproj": {}
+    "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.model.external\\trifenix.agro.model.external.csproj": {}
   },
   "projects": {
-    "D:\\aresa\\developments\\cloud.app\\trifenix.agro.db\\trifenix.agro.db.csproj": {
+    "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.db\\trifenix.agro.db.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.db\\trifenix.agro.db.csproj",
+        "projectUniqueName": "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.db\\trifenix.agro.db.csproj",
         "projectName": "trifenix.agro.db",
-        "projectPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.db\\trifenix.agro.db.csproj",
-        "packagesPath": "C:\\Users\\aleja\\.nuget\\packages\\",
-        "outputPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.db\\obj\\",
+        "projectPath": "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.db\\trifenix.agro.db.csproj",
+        "packagesPath": "C:\\Users\\Trifenix\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.db\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\aleja\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Trifenix\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -59,21 +59,21 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\aresa\\developments\\cloud.app\\trifenix.agro.enums\\trifenix.agro.enums.csproj": {
+    "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.enums\\trifenix.agro.enums.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.enums\\trifenix.agro.enums.csproj",
+        "projectUniqueName": "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.enums\\trifenix.agro.enums.csproj",
         "projectName": "trifenix.agro.enums",
-        "projectPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.enums\\trifenix.agro.enums.csproj",
-        "packagesPath": "C:\\Users\\aleja\\.nuget\\packages\\",
-        "outputPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.enums\\obj\\",
+        "projectPath": "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.enums\\trifenix.agro.enums.csproj",
+        "packagesPath": "C:\\Users\\Trifenix\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.enums\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\aleja\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Trifenix\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -114,21 +114,21 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\aresa\\developments\\cloud.app\\trifenix.agro.model.external\\trifenix.agro.model.external.csproj": {
+    "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.model.external\\trifenix.agro.model.external.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.model.external\\trifenix.agro.model.external.csproj",
+        "projectUniqueName": "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.model.external\\trifenix.agro.model.external.csproj",
         "projectName": "trifenix.agro.model.external",
-        "projectPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.model.external\\trifenix.agro.model.external.csproj",
-        "packagesPath": "C:\\Users\\aleja\\.nuget\\packages\\",
-        "outputPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.model.external\\obj\\",
+        "projectPath": "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.model.external\\trifenix.agro.model.external.csproj",
+        "packagesPath": "C:\\Users\\Trifenix\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.model.external\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\aleja\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Trifenix\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -141,11 +141,11 @@
         "frameworks": {
           "netstandard2.0": {
             "projectReferences": {
-              "D:\\aresa\\developments\\cloud.app\\trifenix.agro.enums\\trifenix.agro.enums.csproj": {
-                "projectPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.enums\\trifenix.agro.enums.csproj"
+              "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.enums\\trifenix.agro.enums.csproj": {
+                "projectPath": "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.enums\\trifenix.agro.enums.csproj"
               },
-              "D:\\aresa\\developments\\cloud.app\\trifenix.agro.model\\trifenix.agro.db.model.csproj": {
-                "projectPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.model\\trifenix.agro.db.model.csproj"
+              "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.model\\trifenix.agro.db.model.csproj": {
+                "projectPath": "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.model\\trifenix.agro.db.model.csproj"
               }
             }
           }
@@ -176,21 +176,21 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\aresa\\developments\\cloud.app\\trifenix.agro.model\\trifenix.agro.db.model.csproj": {
+    "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.model\\trifenix.agro.db.model.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.model\\trifenix.agro.db.model.csproj",
+        "projectUniqueName": "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.model\\trifenix.agro.db.model.csproj",
         "projectName": "trifenix.agro.db.model",
-        "projectPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.model\\trifenix.agro.db.model.csproj",
-        "packagesPath": "C:\\Users\\aleja\\.nuget\\packages\\",
-        "outputPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.model\\obj\\",
+        "projectPath": "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.model\\trifenix.agro.db.model.csproj",
+        "packagesPath": "C:\\Users\\Trifenix\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.model\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\aleja\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Trifenix\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -203,14 +203,14 @@
         "frameworks": {
           "netstandard2.0": {
             "projectReferences": {
-              "D:\\aresa\\developments\\cloud.app\\trifenix.agro.db\\trifenix.agro.db.csproj": {
-                "projectPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.db\\trifenix.agro.db.csproj"
+              "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.db\\trifenix.agro.db.csproj": {
+                "projectPath": "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.db\\trifenix.agro.db.csproj"
               },
-              "D:\\aresa\\developments\\cloud.app\\trifenix.agro.enums\\trifenix.agro.enums.csproj": {
-                "projectPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.enums\\trifenix.agro.enums.csproj"
+              "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.enums\\trifenix.agro.enums.csproj": {
+                "projectPath": "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.enums\\trifenix.agro.enums.csproj"
               },
-              "D:\\aresa\\developments\\cloud.app\\trifenix.agro.weather.model\\trifenix.agro.weather.model.csproj": {
-                "projectPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.weather.model\\trifenix.agro.weather.model.csproj"
+              "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.weather.model\\trifenix.agro.weather.model.csproj": {
+                "projectPath": "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.weather.model\\trifenix.agro.weather.model.csproj"
               }
             }
           }
@@ -245,21 +245,21 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\aresa\\developments\\cloud.app\\trifenix.agro.translator.interfaces\\trifenix.agro.translator.interfaces.csproj": {
+    "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.translator.interfaces\\trifenix.agro.translator.interfaces.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.translator.interfaces\\trifenix.agro.translator.interfaces.csproj",
+        "projectUniqueName": "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.translator.interfaces\\trifenix.agro.translator.interfaces.csproj",
         "projectName": "trifenix.agro.translator.interfaces",
-        "projectPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.translator.interfaces\\trifenix.agro.translator.interfaces.csproj",
-        "packagesPath": "C:\\Users\\aleja\\.nuget\\packages\\",
-        "outputPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.translator.interfaces\\obj\\",
+        "projectPath": "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.translator.interfaces\\trifenix.agro.translator.interfaces.csproj",
+        "packagesPath": "C:\\Users\\Trifenix\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.translator.interfaces\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\aleja\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Trifenix\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -300,21 +300,21 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\aresa\\developments\\cloud.app\\trifenix.agro.translator.operations\\trifenix.agro.translator.operations.csproj": {
+    "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.translator.operations\\trifenix.agro.translator.operations.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.translator.operations\\trifenix.agro.translator.operations.csproj",
+        "projectUniqueName": "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.translator.operations\\trifenix.agro.translator.operations.csproj",
         "projectName": "trifenix.agro.translator.operations",
-        "projectPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.translator.operations\\trifenix.agro.translator.operations.csproj",
-        "packagesPath": "C:\\Users\\aleja\\.nuget\\packages\\",
-        "outputPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.translator.operations\\obj\\",
+        "projectPath": "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.translator.operations\\trifenix.agro.translator.operations.csproj",
+        "packagesPath": "C:\\Users\\Trifenix\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.translator.operations\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\aleja\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Trifenix\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -327,8 +327,8 @@
         "frameworks": {
           "netstandard2.0": {
             "projectReferences": {
-              "D:\\aresa\\developments\\cloud.app\\trifenix.agro.translator.interfaces\\trifenix.agro.translator.interfaces.csproj": {
-                "projectPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.translator.interfaces\\trifenix.agro.translator.interfaces.csproj"
+              "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.translator.interfaces\\trifenix.agro.translator.interfaces.csproj": {
+                "projectPath": "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.translator.interfaces\\trifenix.agro.translator.interfaces.csproj"
               }
             }
           }
@@ -367,21 +367,21 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\aresa\\developments\\cloud.app\\trifenix.agro.weather.model\\trifenix.agro.weather.model.csproj": {
+    "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.weather.model\\trifenix.agro.weather.model.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.weather.model\\trifenix.agro.weather.model.csproj",
+        "projectUniqueName": "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.weather.model\\trifenix.agro.weather.model.csproj",
         "projectName": "trifenix.agro.weather.model",
-        "projectPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.weather.model\\trifenix.agro.weather.model.csproj",
-        "packagesPath": "C:\\Users\\aleja\\.nuget\\packages\\",
-        "outputPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.weather.model\\obj\\",
+        "projectPath": "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.weather.model\\trifenix.agro.weather.model.csproj",
+        "packagesPath": "C:\\Users\\Trifenix\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.weather.model\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\aleja\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Trifenix\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -394,8 +394,8 @@
         "frameworks": {
           "netstandard2.0": {
             "projectReferences": {
-              "D:\\aresa\\developments\\cloud.app\\trifenix.agro.translator.operations\\trifenix.agro.translator.operations.csproj": {
-                "projectPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.translator.operations\\trifenix.agro.translator.operations.csproj"
+              "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.translator.operations\\trifenix.agro.translator.operations.csproj": {
+                "projectPath": "C:\\Users\\Trifenix\\Desktop\\cloud-agricola-JHM\\trifenix.agro.translator.operations\\trifenix.agro.translator.operations.csproj"
               }
             }
           }
@@ -430,7 +430,7 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     }

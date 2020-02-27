@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Collections.Generic;
 
 namespace trifenix.agro.email.interfaces {
     public interface IEmail {
-        IActionResult SendEmail(string subject, string htmlBody);
-
+        void SendEmail(List<string> mails, string subject, string htmlBody);
     }
-
 }
