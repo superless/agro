@@ -120,34 +120,19 @@ namespace trifenix.agro.external.operations
         public IGenericOperation<NotificationEvent, NotificationEventInput> NotificationEvents => new NotificationEventOperations(new MainGenericDb<NotificationEvent>(arguments), ExistsElements, _searchServiceInstance, CommonQueries, _uploadImage, _weatherApi);
 
 
+        public IGenericOperation<PreOrder, PreOrderInput> PreOrders => new PreOrdersOperations(new MainGenericDb<PreOrder>(arguments), ExistsElements, _searchServiceInstance, CommonQueries);
 
 
-        public ICustomManager CustomManager => new CustomManager(_repository, _idSeason);
-
-
-        public IApplicationOrderOperations ApplicationOrders => new ApplicationOrderOperations<ApplicationOrder>(new ApplicationOrderArgs {
-            ApplicationOrder = _repository.Orders,
-            GraphApi = _graphApi,
-            Barracks = _repository.Barracks,
-            Product = _repository.Products,
-            Notifications = _repository.NotificationEvents,
-            CommonDb = new ApplicationOrderCommonDbArgs {
-                ApplicationOrder = new CommonDbOperations<ApplicationOrder>()
-            },
-            DosesArgs = new DosesArgs {
-                CertifiedEntity = _repository.CertifiedEntities,
-                Specie = _repository.Species,
-                Target = _repository.Targets,
-                Variety = _repository.Varieties
-            },
-            PreOrder = _repository.PhenologicalPreOrders,
-            SeasonId = _idSeason
-        }, _searchServiceInstance);
 
         
+
+
+        public IGenericOperation<ApplicationOrder, ApplicationOrderInput> ApplicationOrders => new ApplicationOrderOperations(new MainGenericDb<ApplicationOrder>(arguments), ExistsElements, _searchServiceInstance, CommonQueries);
+
+
+
+
         
-        
-        public IPhenologicalPreOrderOperations PhenologicalPreOrders => new PhenologicalPreOrdersOperations(_repository.PhenologicalPreOrders, new CommonDbOperations<PhenologicalPreOrder>(), _idSeason, _graphApi);
 
         //public IExecutionOrderOperations<ExecutionOrder> ExecutionOrders => new ExecutionOrderOperations<ExecutionOrder>(_repository.ExecutionOrders, _repository.Orders, _repository.Users, _repository.Nebulizers, _repository.Products, _repository.Tractors, new CommonDbOperations<ExecutionOrder>(), _graphApi, _idSeason, _searchServiceInstance);
 

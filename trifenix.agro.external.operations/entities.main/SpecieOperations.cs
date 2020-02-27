@@ -54,7 +54,7 @@ namespace trifenix.agro.external.operations.entities.main
             {
                 new EntitySearch{
                     Id = id,
-                    EntityIndex = (int)EntityRelated.SPECIE,
+                    EntityIndex = (int)EntityRelated.PREORDER,
                     Created = DateTime.Now,
                     RelatedProperties = new Property[] {
                         new Property {

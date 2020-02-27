@@ -1,6 +1,7 @@
 ﻿using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.db.model.agro.core;
+using trifenix.agro.db.model.agro.orders;
 using trifenix.agro.external.interfaces.entities.core;
 using trifenix.agro.external.interfaces.entities.events;
 using trifenix.agro.external.interfaces.entities.ext;
@@ -67,20 +68,25 @@ namespace trifenix.agro.external.interfaces {
         IGenericOperation<NotificationEvent, NotificationEventInput> NotificationEvents { get; }
 
 
+        IGenericOperation<PreOrder, PreOrderInput> PreOrders { get; }
 
-        IPhenologicalPreOrderOperations PhenologicalPreOrders { get; }
+        IGenericOperation<ApplicationOrder, ApplicationOrderInput> ApplicationOrders { get; }
+
+
+
+
+
+
+
+
+
+
+
+
 
         
 
         
-
-        
-
-        
-
-        ICustomManager CustomManager { get; }
-
-        IApplicationOrderOperations ApplicationOrders { get; }
 
         //IExecutionOrderOperations<ExecutionOrder> ExecutionOrders { get; }
 

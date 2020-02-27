@@ -70,7 +70,7 @@ namespace trifenix.agro.external.operations.entities.main
                     },
                     RelatedIds = new RelatedId[]{
                         new RelatedId{
-                            EntityIndex = (int)EntityRelated.SPECIE,
+                            EntityIndex = (int)EntityRelated.PREORDER,
                             EntityId = input.IdSpecie
                         }
                     }

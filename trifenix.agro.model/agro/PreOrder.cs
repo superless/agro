@@ -3,23 +3,24 @@ using Cosmonaut.Attributes;
 using System;
 using System.Collections.Generic;
 using trifenix.agro.db.model.agro.local;
+using trifenix.agro.enums;
 
 namespace trifenix.agro.db.model.agro
 {
-    [SharedCosmosCollection("agro", "PhenologicalPreOrder")]
-    public class PhenologicalPreOrder : DocumentBase, ISharedCosmosEntity
+    [SharedCosmosCollection("agro", "PreOrder")]
+    public class PreOrder : DocumentBaseName, ISharedCosmosEntity
     {
         public override string Id { get; set; }
 
-        public string Name { get; set; }
+        public override string Name { get; set; }
 
-        public string SeasonId { get; set; }
 
+        public string IdIngredient { get; set; }
         public string OrderFolderId { get; set; }
 
-        
+        public PreOrderType PreOrderType { get; set; }
 
-        
+
         private List<string> _barracksId;
 
         public List<string> BarracksId
@@ -29,12 +30,6 @@ namespace trifenix.agro.db.model.agro
                 return _barracksId; }
             set { _barracksId = value; }
         }
-
-        public DateTime Created { get; set; }
-
-
-
-
 
     }
 }

@@ -1,27 +1,17 @@
-﻿using Cosmonaut;
-using Cosmonaut.Attributes;
-using System;
-using System.Collections.Generic;
-using trifenix.agro.db.model.agro.local;
+﻿using System;
+using trifenix.agro.db.model.agro.orders;
 using trifenix.agro.enums;
 
-namespace trifenix.agro.db.model.agro.orders
+namespace trifenix.agro.model.external.Input
 {
-    [SharedCosmosCollection("agro", "ExecutionOrder")]
-    public class ExecutionOrder : DocumentBase, ISharedCosmosEntity {
-       
-
-
-        public override string Id { get; set; }
+    public class ExecutionOrderInput : InputBase
+    {
 
         public string IdOrder { get; set; }
 
         public DosesOrder[] DosesOrder { get; set; }
 
-
         public ExecutionStatus ExecutionStatus { get; set; }
-
-        public string[] StatusInfo { get; set; }
 
         public FinishStatus FinishStatus;
 
@@ -33,15 +23,9 @@ namespace trifenix.agro.db.model.agro.orders
         public string IdUserApplicator;
         public string IdNebulizer { get; set; }
         public string IdTractor { get; set; }
-
-
-        
-       
-
     }
 
-    
 
 
-    
+
 }

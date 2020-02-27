@@ -44,7 +44,7 @@ namespace trifenix.agro.external.operations.entities.ext
                 list.AddRange(input.IdSpecies.Select(s => new RelatedId
                 {
                     EntityId = s,
-                    EntityIndex = (int)EntityRelated.SPECIE
+                    EntityIndex = (int)EntityRelated.PREORDER
                 }));
             }
 

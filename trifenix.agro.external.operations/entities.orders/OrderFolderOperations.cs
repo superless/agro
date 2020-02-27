@@ -104,7 +104,7 @@ namespace trifenix.agro.external.operations.entities.orders
                         new RelatedId{ EntityIndex = (int)EntityRelated.CATEGORY_INGREDIENT, EntityId = input.IdCategoryIngredient  },
                         new RelatedId{ EntityIndex = (int)EntityRelated.PHENOLOGICAL_EVENT, EntityId = input.IdPhenologicalEvent },
                         new RelatedId{ EntityIndex = (int)EntityRelated.INGREDIENT, EntityId = input.IdIngredient },
-                        new RelatedId{ EntityIndex = (int)EntityRelated.SPECIE, EntityId = input.IdSpecie}
+                        new RelatedId{ EntityIndex = (int)EntityRelated.PREORDER, EntityId = input.IdSpecie}
                     },
                     RelatedProperties = new Property[]{ 
                         new Property{ 
