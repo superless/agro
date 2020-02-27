@@ -590,6 +590,9 @@
         "frameworks": {
           "netstandard2.0": {
             "projectReferences": {
+              "D:\\aresa\\developments\\cloud.app\\trifenix.agro.db.interfaces\\trifenix.agro.db.interfaces.csproj": {
+                "projectPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.db.interfaces\\trifenix.agro.db.interfaces.csproj"
+              },
               "D:\\aresa\\developments\\cloud.app\\trifenix.agro.email.interfaces\\trifenix.agro.email.interfaces.csproj": {
                 "projectPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.email.interfaces\\trifenix.agro.email.interfaces.csproj"
               },
@@ -795,6 +798,9 @@
               },
               "D:\\aresa\\developments\\cloud.app\\trifenix.agro.db.interfaces\\trifenix.agro.db.interfaces.csproj": {
                 "projectPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.db.interfaces\\trifenix.agro.db.interfaces.csproj"
+              },
+              "D:\\aresa\\developments\\cloud.app\\trifenix.agro.email.interfaces\\trifenix.agro.email.interfaces.csproj": {
+                "projectPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.email.interfaces\\trifenix.agro.email.interfaces.csproj"
               },
               "D:\\aresa\\developments\\cloud.app\\trifenix.agro.external.interfaces\\trifenix.agro.external.interfaces.csproj": {
                 "projectPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.external.interfaces\\trifenix.agro.external.interfaces.csproj"

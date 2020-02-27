@@ -3611,6 +3611,7 @@
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Abstractions": "2.2.0",
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
+          "trifenix.agro.db.interfaces": "1.0.0",
           "trifenix.agro.db.model": "1.0.0",
           "trifenix.agro.email.interfaces": "1.0.0"
         },
@@ -3654,6 +3655,7 @@
         "dependencies": {
           "trifenix.agro.db.applicationsReference": "1.0.0",
           "trifenix.agro.db.interfaces": "1.0.0",
+          "trifenix.agro.email.interfaces": "1.0.0",
           "trifenix.agro.external.interfaces": "1.0.0",
           "trifenix.agro.microsoftgraph.interfaces": "1.0.0",
           "trifenix.agro.microsoftgraph.operations": "1.0.0",

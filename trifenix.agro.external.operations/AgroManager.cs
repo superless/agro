@@ -6,6 +6,7 @@ using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.db.model.agro.core;
 using trifenix.agro.db.model.agro.orders;
+using trifenix.agro.email.interfaces;
 using trifenix.agro.external.interfaces;
 using trifenix.agro.external.interfaces.entities.orders;
 using trifenix.agro.external.operations.entities.events;
@@ -26,15 +27,16 @@ namespace trifenix.agro.external.operations
 
         
         private readonly AgroDbArguments arguments;
+        private readonly IEmail _email;
         private readonly IUploadImage _uploadImage;
         private readonly IGraphApi _graphApi;
         private readonly IWeatherApi _weatherApi;
         private readonly IAgroSearch _searchServiceInstance;
 
-        public AgroManager(AgroDbArguments arguments,  IUploadImage uploadImage, IGraphApi graphApi, IWeatherApi weatherApi, IAgroSearch searchServiceInstance) {
+        public AgroManager(AgroDbArguments arguments, IEmail email, IUploadImage uploadImage, IGraphApi graphApi, IWeatherApi weatherApi, IAgroSearch searchServiceInstance) {
             this.arguments = arguments;
+            _email = email;
             _uploadImage = uploadImage;
-            
             _weatherApi = weatherApi;
             _searchServiceInstance = searchServiceInstance;
             GraphApi = graphApi;
@@ -117,7 +119,7 @@ namespace trifenix.agro.external.operations
 
 
 
-        public IGenericOperation<NotificationEvent, NotificationEventInput> NotificationEvents => new NotificationEventOperations(new MainGenericDb<NotificationEvent>(arguments), ExistsElements, _searchServiceInstance, CommonQueries, _uploadImage, _weatherApi);
+        public IGenericOperation<NotificationEvent, NotificationEventInput> NotificationEvents => new NotificationEventOperations(new MainGenericDb<NotificationEvent>(arguments), ExistsElements, _searchServiceInstance, CommonQueries, _email, _uploadImage, _weatherApi);
 
 
         public IGenericOperation<PreOrder, PreOrderInput> PreOrders => new PreOrdersOperations(new MainGenericDb<PreOrder>(arguments), ExistsElements, _searchServiceInstance, CommonQueries);
