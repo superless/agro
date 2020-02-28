@@ -125,6 +125,10 @@ namespace trifenix.agro.external.operations.entities.orders
                 });
             }
 
+            var idSeason = await commonQueries.GetSeasonId(input.BarracksId.First());
+
+            entities.Add(new RelatedId { EntityIndex = (int)EntityRelated.SEASON, EntityId = idSeason });
+
             entity.RelatedIds = entities.ToArray();
 
             search.AddElements(new List<EntitySearch> { 

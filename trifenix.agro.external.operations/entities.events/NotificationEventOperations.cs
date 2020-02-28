@@ -74,6 +74,8 @@ namespace trifenix.agro.external.operations.entities.events {
             notification.Description = input.Description;
             await repo.CreateUpdate(notification);
             var specieAbbv = await commonQueries.GetSpecieAbbreviationFromBarrack(input.IdBarrack);
+
+            var idSeason = await commonQueries.GetSeasonId(input.IdBarrack);
             search.AddElements(new List<EntitySearch> {
                 new EntitySearch {
                     Created = DateTime.Now,
@@ -86,7 +88,8 @@ namespace trifenix.agro.external.operations.entities.events {
                     EntityIndex = (int)EntityRelated.NOTIFICATION,
                     RelatedIds = new RelatedId[]{
                       new RelatedId{  EntityIndex=(int)EntityRelated.PHENOLOGICAL_EVENT, EntityId = input.IdPhenologicalEvent},
-                      new RelatedId{  EntityIndex=(int)EntityRelated.BARRACK, EntityId = input.IdBarrack}
+                      new RelatedId{  EntityIndex=(int)EntityRelated.BARRACK, EntityId = input.IdBarrack},
+                      new RelatedId{ EntityIndex=(int)EntityRelated.SEASON, EntityId = idSeason }
 
                     },
                     RelatedEnumValues = new RelatedEnumValue[]{ 

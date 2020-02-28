@@ -33,11 +33,16 @@ namespace trifenix.agro.db.applicationsReference.agro.Common {
 
         public async Task<List<string>> GetUsersMailsFromRoles(List<string> idsRoles) {
             var db = new MainDb<User>(DbArguments);
-            string query = "SELECT DISTINCT value c.Email  FROM c join Rol in c.IdsRoles where Rol IN (" + string.Join(",", idsRoles.Select(idRole => "'" + idRole + "'").ToArray()) + ")";
+            string query = $"SELECT DISTINCT value c.Email  FROM c join Rol in c.IdsRoles where Rol IN ({string.Join(",", idsRoles.Select(idRole => $"'{idRole}'").ToArray())})";
             var result = await db.Store.QueryMultipleAsync<string>(query);
             List<string> emails = result.ToList();
             return emails;
         }
 
+        public async Task<string> GetSeasonId(string idBarrack)
+        {
+            var db = new MainDb<Barrack>(DbArguments);
+            return await db.Store.QuerySingleAsync<string>($"SELECT value c.SeasonId FROM c where  c.Id = '{idBarrack}'");
+        }
     }
 }

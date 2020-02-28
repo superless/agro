@@ -88,7 +88,7 @@ namespace trifenix.agro.external.interfaces {
 
         
 
-        //IExecutionOrderOperations<ExecutionOrder> ExecutionOrders { get; }
+        IExecutionOrderOperations ExecutionOrders { get; }
 
          
 

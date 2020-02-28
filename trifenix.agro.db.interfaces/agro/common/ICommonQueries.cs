@@ -12,5 +12,7 @@ namespace trifenix.agro.db.interfaces.agro.common {
 
         Task<List<string>> GetUsersMailsFromRoles(List<string> idsRoles);
 
+        Task<string> GetSeasonId(string idBarrack);
+
     }
 }

@@ -2,99 +2,131 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using trifenix.agro.db.interfaces;
+using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.interfaces.agro.orders;
 using trifenix.agro.db.model.agro.orders;
 using trifenix.agro.enums;
 using trifenix.agro.external.interfaces.entities.orders;
 using trifenix.agro.external.operations.helper;
 using trifenix.agro.model.external;
+using trifenix.agro.model.external.Input;
+using trifenix.agro.search.interfaces;
 
 namespace trifenix.agro.external.operations.entities.orders
 {
-    public class ExecutionOrderOperations : IExecutionOrderOperations
+    public class ExecutionOrderOperations : MainReadOperation<ExecutionOrder>, IExecutionOrderOperations
     {
-        private readonly IExecutionOrderRepository _executionRepository;
+        private readonly ICommonQueries commonQueries;
 
-
-        public ExecutionOrderOperations(
-            IExecutionOrderRepository executionRepository)
+        public ExecutionOrderOperations(IMainGenericDb<ExecutionOrder> repo, IExistElement existElement, IAgroSearch search, ICommonQueries commonQueries) : base(repo, existElement, search)
         {
-            _executionRepository = executionRepository;
-        }
-        public async Task<ExtGetContainer<ExecutionOrder>> GetExecutionOrder(string id)
-        {
-            var executionOrder = await _executionRepository.GetExecutionOrder(id);
-            return OperationHelper.GetElement(executionOrder);
+            this.commonQueries = commonQueries;
         }
 
-        public async Task<ExtPostContainer<string>> SaveNewExecutionOrder(string idOrder, string idUserApplicator, string idNebulizer, string[] idsProduct, double[] quantitiesByHectare, string idTractor, string commentary)
+
+        private async Task<string> ValidaExecutionOrder(ExecutionOrderInput input) { 
+            
+        
+        }
+
+
+        public async Task<ExtPostContainer<string>> Save(ExecutionOrderInput input)
         {
-            if (string.IsNullOrWhiteSpace(idOrder)) return OperationHelper.GetPostException<string>(new Exception("Es requerido 'idOrder' para crear una ejecucion."));
+            var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
+
 
             
-            List<ProductToApply> productApplies;
-            try
-            {
-                productApplies = GetProductsExecution(idsProduct, quantitiesByHectare);
-            }
-            catch (Exception e)
-            {
-                return OperationHelper.GetPostException<string>(e);
-            }
 
-            var execution = new ExecutionOrder
+            var validaPreOrder = await ValidaOrder(input);
+
+            if (!string.IsNullOrWhiteSpace(validaPreOrder)) throw new Exception(validaPreOrder);
+
+            var order = new ApplicationOrder
             {
-                Id = Guid.NewGuid().ToString("N"),
-                ClosedStatus = ClosedStatus.NotClosed,
-                ExecutionStatus = ExecutionStatus.Planification,
-                IdNebulizer = idNebulizer,
-                IdOrder = idOrder,
-                IdTractor = idTractor,
-                ProductToApply = productApplies,
-                StatusInfo = new string[4],
-                FinishStatus = FinishStatus.NotFinish,
-                IdUserApplicator = idUserApplicator
+                Id = id,
+                Barracks = input.Barracks,
+                DosesOrder = input.DosesOrder,
+                EndDate = input.EndDate,
+                InitDate = input.InitDate,
+                IdsPhenologicalPreOrder = input.IdsPhenologicalPreOrder,
+                Name = input.Name,
+                OrderType = input.OrderType,
+                Wetting = input.Wetting
             };
 
-            //execution
-            var executionId =  await _executionRepository.CreateUpdateExecutionOrder(execution);
 
 
+            await repo.CreateUpdate(order);
+
+
+            var specieAbbv = await commonQueries.GetSpecieAbbreviationFromBarrack(input.Barracks.First().IdBarrack);
+
+
+            var entity = new EntitySearch
+            {
+                Id = id,
+                EntityIndex = (int)EntityRelated.APPLICATION_ORDER,
+                Created = DateTime.Now,
+                RelatedProperties = new Property[] {
+                        new Property {
+                            PropertyIndex = (int)PropertyRelated.GENERIC_NAME,
+                            Value = input.Name
+                        },
+                        new Property {
+                            PropertyIndex = (int)PropertyRelated.GENERIC_ABBREVIATION,
+                            Value = specieAbbv
+                        },
+                        new Property{
+                            PropertyIndex = (int)PropertyRelated.GENERIC_START_DATE,
+                            Value = $"{input.InitDate : dd/MM/yyyy}"
+                        },
+                        new Property{
+                            PropertyIndex = (int)PropertyRelated.GENERIC_END_DATE,
+                            Value = $"{input.EndDate : dd/MM/yyyy}"
+                        }
+                    },
+                RelatedEnumValues = new RelatedEnumValue[] {
+                    new RelatedEnumValue{ EnumerationIndex = (int)EnumerationRelated.ORDER_TYPE, Value = (int)input.OrderType }
+                }
+            };
+
+            var entitiesForBarrack = input.Barracks.Select(s => new RelatedId { EntityIndex = (int)EntityRelated.BARRACK, EntityId = s.IdBarrack }).ToList();
+
+            var entitiesForEvents = input.Barracks.SelectMany(s => s.IdEvents).Distinct().Select(s => new RelatedId { EntityIndex = (int)EntityRelated.NOTIFICATION, EntityId = s });
+
+            var entitiesForDoses = input.DosesOrder.Select(s => s.IdDoses).Distinct().Select(s => new RelatedId { EntityIndex = (int)EntityRelated.DOSES, EntityId = s });
+
+            var entities = new List<RelatedId>();
+
+            entities.AddRange(entitiesForBarrack);
+
+            entities.AddRange(entitiesForEvents);
+
+            entities.AddRange(entitiesForDoses);
+
+
+            if (input.OrderType == OrderType.PHENOLOGICAL)
+            {
+                entities.AddRange(input.IdsPhenologicalPreOrder.Select(s => new RelatedId { EntityIndex = (int)EntityRelated.PREORDER, EntityId = s }));
+            }
+
+
+            entity.RelatedIds = entities.ToArray();
+
+
+
+            search.AddElements(new List<EntitySearch> {
+                entity
+            });
 
             return new ExtPostContainer<string>
             {
-                IdRelated = executionId,
-                Result = executionId,
-                MessageResult = ExtMessageResult.Ok
+                IdRelated = id,
+                MessageResult = ExtMessageResult.Ok,
+                Result = id
             };
         }
-        private List<ProductToApply> GetProductsExecution(string[] idsProduct, double[] quantities)
-        {
-            if (idsProduct.Count() != quantities.Count())
-                throw new Exception("Los productos no cumplen el criterio.");
-
-
-            var max = idsProduct.Count();
-            var list = new List<ProductToApply>();
-            for (int i = 0; i < max; i++)
-            {
-
-                var localQuantity = quantities[i];
-                list.Add(new ProductToApply
-                {
-                    IdProduct = idsProduct[i],
-                    QuantityByHectare = localQuantity
-                });
-            }
-            return list;
-        }
-
-        public Task<ExtPostContainer<string>> SaveEditExecutionOrder(string idExecutionOrder, string idOrder, string idUserApplicator, string idNebulizer, string[] idsProduct, double[] quantitiesByHectare, string idTractor)
-        {
-            throw new NotImplementedException();
-        }
-
-        
 
         public Task<ExtPostContainer<ExecutionOrder>> SetStatus(string idExecutionOrder, string typeOfStatus, int newValueOfStatus, string commentary)
         {

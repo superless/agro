@@ -177,14 +177,14 @@ namespace trifenix.agro.functions
         }
 
         [FunctionName("OrderFolder")]
-        public static async Task<IActionResult> OrderFolder([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/order_folders/{id?}")] HttpRequest req, string id, ILogger log)
+        public static async Task<IActionResult> OrderFolder([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "order_folders/{id?}")] HttpRequest req, string id, ILogger log)
         {
             var result = await GenericMantainer<OrderFolderInput, OrderFolder>.SendInternalHttp(req, log, s => s.OrderFolder, id);
             return result.JsonResult;
         }
 
         [FunctionName("Barracks")]
-        public static async Task<IActionResult> BarracksV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/barracks/{id?}")] HttpRequest req, string id, ILogger log)
+        public static async Task<IActionResult> BarracksV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "barracks/{id?}")] HttpRequest req, string id, ILogger log)
         {
             var result = await GenericMantainer<BarrackInput, Barrack>.SendInternalHttp(req, log, s => s.Barracks, id);
             return result.JsonResult;
@@ -192,11 +192,22 @@ namespace trifenix.agro.functions
 
 
         [FunctionName("NotificationEvents")]
-        public static async Task<IActionResult> NotificationEvents([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "v2/notification_events/{id?}")] HttpRequest req, string id, ILogger log)
+        public static async Task<IActionResult> NotificationEvents([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "notification_events/{id?}")] HttpRequest req, string id, ILogger log)
         {
             var result = await GenericMantainer<NotificationEventInput, NotificationEvent>.SendInternalHttp(req, log, s => s.NotificationEvents, id);
             return result.JsonResult;
         }
+
+
+        [FunctionName("PreOrders")]
+        public static async Task<IActionResult> PreOrders([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "pro_orders/{id?}")] HttpRequest req, string id, ILogger log)
+        {
+            var result = await GenericMantainer<PreOrderInput, PreOrder>.SendInternalHttp(req, log, s => s.PreOrders, id);
+
+            return result.JsonResult;
+        }
+
+
 
 
 

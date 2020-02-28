@@ -5,23 +5,17 @@ using System.Threading.Tasks;
 using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.model.agro;
-using trifenix.agro.db.model.agro.local;
 using trifenix.agro.db.model.agro.orders;
 using trifenix.agro.enums;
 using trifenix.agro.external.interfaces;
-using trifenix.agro.external.interfaces.entities.orders;
-using trifenix.agro.external.operations.common;
-using trifenix.agro.external.operations.entities.orders.args;
-using trifenix.agro.external.operations.helper;
 using trifenix.agro.external.operations.res;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
-using trifenix.agro.model.external.output;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
-using trifenix.agro.util;
 
-namespace trifenix.agro.external.operations.entities.orders {
+namespace trifenix.agro.external.operations.entities.orders
+{
     public class ApplicationOrderOperations : MainReadOperationName<ApplicationOrder, ApplicationOrderInput>, IGenericOperation<ApplicationOrder, ApplicationOrderInput>
     {
         private readonly ICommonQueries commonQueries;
@@ -93,7 +87,7 @@ namespace trifenix.agro.external.operations.entities.orders {
 
             if (!string.IsNullOrWhiteSpace(validaPreOrder)) throw new Exception(validaPreOrder);
 
-            var preOrder = new ApplicationOrder
+            var order = new ApplicationOrder
             {
                 Id = id,
                 Barracks = input.Barracks,
@@ -108,7 +102,7 @@ namespace trifenix.agro.external.operations.entities.orders {
 
 
 
-            await repo.CreateUpdate(preOrder);
+            await repo.CreateUpdate(order);
 
 
             var specieAbbv = await commonQueries.GetSpecieAbbreviationFromBarrack(input.Barracks.First().IdBarrack);
@@ -127,35 +121,49 @@ namespace trifenix.agro.external.operations.entities.orders {
                         new Property {
                             PropertyIndex = (int)PropertyRelated.GENERIC_ABBREVIATION,
                             Value = specieAbbv
+                        },
+                        new Property{ 
+                            PropertyIndex = (int)PropertyRelated.GENERIC_START_DATE,
+                            Value = $"{input.InitDate : dd/MM/yyyy}"
+                        },
+                        new Property{
+                            PropertyIndex = (int)PropertyRelated.GENERIC_END_DATE,
+                            Value = $"{input.EndDate : dd/MM/yyyy}"
                         }
                     },
                 RelatedEnumValues = new RelatedEnumValue[] {
-                    new RelatedEnumValue{ EnumerationIndex = (int)EnumerationRelated.PREORDER_TYPE, Value = (int)input.PreOrderType }
+                    new RelatedEnumValue{ EnumerationIndex = (int)EnumerationRelated.ORDER_TYPE, Value = (int)input.OrderType }
                 }
             };
 
-            var entities = input.BarracksId.Select(s => new RelatedId { EntityIndex = (int)EntityRelated.BARRACK, EntityId = s }).ToList();
+            var entitiesForBarrack = input.Barracks.Select(s => new RelatedId { EntityIndex = (int)EntityRelated.BARRACK, EntityId = s.IdBarrack }).ToList();
+
+            var entitiesForEvents = input.Barracks.SelectMany(s => s.IdEvents).Distinct().Select(s => new RelatedId { EntityIndex = (int)EntityRelated.NOTIFICATION, EntityId = s});
+
+            var entitiesForDoses = input.DosesOrder.Select(s => s.IdDoses).Distinct().Select(s => new RelatedId { EntityIndex = (int)EntityRelated.DOSES, EntityId = s });
+
+            var entities = new List<RelatedId>();
+
+            entities.AddRange(entitiesForBarrack);
+
+            entities.AddRange(entitiesForEvents);
+
+            entities.AddRange(entitiesForDoses);
+            
 
 
-            if (input.PreOrderType == PreOrderType.DEFAULT)
+            if (input.OrderType == OrderType.PHENOLOGICAL)
             {
-                entities.Add(new RelatedId
-                {
-                    EntityIndex = (int)EntityRelated.INGREDIENT,
-                    EntityId = input.IdIngredient
-                });
+                entities.AddRange(input.IdsPhenologicalPreOrder.Select(s => new RelatedId { EntityIndex = (int)EntityRelated.PREORDER, EntityId = s }));
             }
 
-            if (input.PreOrderType == PreOrderType.PHENOLOGICAL)
-            {
-                entities.Add(new RelatedId
-                {
-                    EntityIndex = (int)EntityRelated.ORDER_FOLDER,
-                    EntityId = input.OrderFolderId
-                });
-            }
+            var idSeason = await commonQueries.GetSeasonId(input.Barracks.First().IdBarrack);
+            entities.Add( new RelatedId { EntityIndex = (int)EntityRelated.SEASON, EntityId = idSeason });
+
 
             entity.RelatedIds = entities.ToArray();
+
+
 
             search.AddElements(new List<EntitySearch> {
                 entity

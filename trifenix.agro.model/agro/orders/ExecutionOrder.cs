@@ -34,10 +34,6 @@ namespace trifenix.agro.db.model.agro.orders
         public string IdNebulizer { get; set; }
         public string IdTractor { get; set; }
 
-
-        
-       
-
     }
 
     

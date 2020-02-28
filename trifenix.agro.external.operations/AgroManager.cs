@@ -136,12 +136,13 @@ namespace trifenix.agro.external.operations
 
         
 
-        //public IExecutionOrderOperations<ExecutionOrder> ExecutionOrders => new ExecutionOrderOperations<ExecutionOrder>(_repository.ExecutionOrders, _repository.Orders, _repository.Users, _repository.Nebulizers, _repository.Products, _repository.Tractors, new CommonDbOperations<ExecutionOrder>(), _graphApi, _idSeason, _searchServiceInstance);
+        public IExecutionOrderOperations ExecutionOrders => new ExecutionOrderOperations(new MainGenericDb<ApplicationOrder>(arguments), ExistsElements, _searchServiceInstance, CommonQueries);
 
-        
 
-        
 
-        
+
+
+
+
     }
 }

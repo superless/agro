@@ -11,7 +11,6 @@ namespace trifenix.agro.model.external.Input
         public string IdIngredient { get; set; }
 
 
-
         public PreOrderType PreOrderType { get; set; }
 
 

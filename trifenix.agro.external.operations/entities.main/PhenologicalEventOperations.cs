@@ -52,11 +52,11 @@ namespace trifenix.agro.external.operations.entities.main
                         },
                         new Property {
                             PropertyIndex = (int)PropertyRelated.GENERIC_START_DATE,
-                            Value = string.Format("{0:MM/dd/yyyy}", input.StartDate)
+                            Value = string.Format("{0:dd/MM/yyyy}", input.StartDate)
                         },
                         new Property {
                             PropertyIndex = (int)PropertyRelated.GENERIC_END_DATE,
-                            Value = string.Format("{0:MM/dd/yyyy}", input.EndDate)
+                            Value = string.Format("{0:dd/MM/yyyy}", input.EndDate)
                         }
                     }
                 }
