@@ -2,11 +2,7 @@
 using trifenix.agro.db.model.agro;
 using trifenix.agro.db.model.agro.core;
 using trifenix.agro.db.model.agro.orders;
-using trifenix.agro.external.interfaces.entities.core;
-using trifenix.agro.external.interfaces.entities.events;
-using trifenix.agro.external.interfaces.entities.ext;
-using trifenix.agro.external.interfaces.entities.fields;
-using trifenix.agro.external.interfaces.entities.main;
+
 using trifenix.agro.external.interfaces.entities.orders;
 using trifenix.agro.microsoftgraph.interfaces;
 using trifenix.agro.model.external.Input;

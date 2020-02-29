@@ -18,7 +18,7 @@ namespace trifenix.agro.db.model.agro
 
         public string IdUser { get; set; }
 
-        public string EntityName { get; set; }
+        public int EntityIndex { get; set; }
 
         public string EntityId { get; set; }
 

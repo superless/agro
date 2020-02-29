@@ -29,8 +29,11 @@ namespace trifenix.agro.search.model {
         [IsFilterable, IsSortable]
         public int EntityIndex { get; set; }
 
-        [IsFilterable, IsSortable]
+        [IsFilterable, IsSortable, IsSearchable]
         public string EntityId { get; set; }
+
+        
+
 
     }
 
@@ -41,6 +44,8 @@ namespace trifenix.agro.search.model {
 
         [IsSearchable, IsSortable]
         public string Value { get; set; }
+
+
 
     }
 

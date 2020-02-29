@@ -9,11 +9,62 @@ using trifenix.agro.model.external.Input;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.db.model.agro.core;
 using trifenix.agro.functions.Helper;
+using System.Net;
+using trifenix.agro.model.external;
+using AzureFunctions.Extensions.Swashbuckle.Attribute;
+using trifenix.agro.swagger.model.input;
+using System.IO;
+using Newtonsoft.Json;
+using System.Net.Http;
+using trifenix.agro.external.operations.helper;
+using System.Collections.Generic;
+using trifenix.agro.db.model.agro.orders;
 
 namespace trifenix.agro.functions
 {
     public static class CoreFunctions
     {
+        [FunctionName("login")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> Run(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)]
+            [RequestBodyType(typeof(LoginInput), "Nombre de usuario y contraseña")]HttpRequest req,
+            ILogger log)
+        {
+
+            var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            dynamic credenciales = JsonConvert.DeserializeObject(requestBody);
+
+            string clientId = "a81f0ad4-912b-46d3-ba3e-7bf605693242";
+            string scope = "https://sprint3-jhm.trifenix.io/App.access";
+            string clientSecret = "gUjIa4F=NXlAwwMCF2j2SFMMj3?m@=FM";
+            string username = (string)credenciales["username"];
+            string password = (string)credenciales["password"];
+            string grantType = "password";
+            string endPoint = "https://login.microsoftonline.com/jhmad.onmicrosoft.com/oauth2/v2.0/token";
+
+            HttpClient client = new HttpClient();
+            var parametros = new Dictionary<string, string> {
+                {"client_id",clientId},
+                {"scope",scope},
+                {"client_secret",clientSecret},
+                {"username",username},
+                {"password",password},
+                {"grant_type",grantType}
+            };
+            var requestMessage = new HttpRequestMessage(HttpMethod.Post, endPoint);
+            requestMessage.Content = new FormUrlEncodedContent(parametros);
+            var response = await client.SendAsync(requestMessage);
+            var responseBody = await response.Content.ReadAsStringAsync();
+            dynamic json = JsonConvert.DeserializeObject(responseBody);
+            client.Dispose();
+            string accessToken = json.access_token;
+            return ContainerMethods.GetJsonGetContainer(OperationHelper.GetElement(accessToken), log);
+        }
+
+
         [FunctionName("SectorV3")]
         public static async Task<IActionResult> SectorV3([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "sectors/{id?}")] HttpRequest req, string id, ILogger log)
         {
@@ -200,9 +251,25 @@ namespace trifenix.agro.functions
 
 
         [FunctionName("PreOrders")]
-        public static async Task<IActionResult> PreOrders([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "pro_orders/{id?}")] HttpRequest req, string id, ILogger log)
+        public static async Task<IActionResult> PreOrders([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "pre_orders/{id?}")] HttpRequest req, string id, ILogger log)
         {
             var result = await GenericMantainer<PreOrderInput, PreOrder>.SendInternalHttp(req, log, s => s.PreOrders, id);
+
+            return result.JsonResult;
+        }
+
+        [FunctionName("Orders")]
+        public static async Task<IActionResult> Orders([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "orders/{id?}")] HttpRequest req, string id, ILogger log)
+        {
+            var result = await GenericMantainer<ApplicationOrderInput, ApplicationOrder>.SendInternalHttp(req, log, s => s.ApplicationOrders, id);
+
+            return result.JsonResult;
+        }
+
+        [FunctionName("Executions")]
+        public static async Task<IActionResult> ExecutionOrders([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "executions/{id?}")] HttpRequest req, string id, ILogger log)
+        {
+            var result = await GenericMantainer<ExecutionOrderInput, ExecutionOrder>.SendInternalHttp(req, log, s => s.ExecutionOrders, id);
 
             return result.JsonResult;
         }

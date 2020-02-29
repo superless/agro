@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.common;
-using trifenix.agro.db.interfaces.agro.orders;
+using trifenix.agro.db.model.agro;
 using trifenix.agro.db.model.agro.orders;
 using trifenix.agro.enums;
 using trifenix.agro.external.interfaces.entities.orders;
@@ -12,6 +12,7 @@ using trifenix.agro.external.operations.helper;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
+using trifenix.agro.search.model;
 
 namespace trifenix.agro.external.operations.entities.orders
 {
@@ -25,9 +26,55 @@ namespace trifenix.agro.external.operations.entities.orders
         }
 
 
-        private async Task<string> ValidaExecutionOrder(ExecutionOrderInput input) { 
-            
-        
+        private async Task<string> ValidaExecutionOrder(ExecutionOrderInput input) {
+
+            if (!string.IsNullOrWhiteSpace(input.Id))
+            {
+                var exists = await existElement.ExistsElement<ExecutionOrder>(input.Id);
+                if (!exists) return $"la ejecución con id {input.Id} no existe";
+            }
+
+            if (!input.DosesOrder.Any()) return "Debe existir al menos un producto";
+
+            foreach (var doses in input.DosesOrder)
+            {
+                var exists = await existElement.ExistsElement<Doses>(doses.IdDoses);
+                if (!exists) return $"la dosis con id {doses.IdDoses} no existe";
+
+            }
+
+
+          
+
+            if (input.InitDate > input.EndDate) return "La fecha inicial no puede ser mayor a la final";
+
+
+            if (!string.IsNullOrWhiteSpace(input.IdUserApplicator))
+            {
+                var userExists = await existElement.ExistsElement<User>(input.IdUserApplicator);
+                if (!userExists) return $"usuario con id {input.IdUserApplicator} no existe en la base de datos"; 
+            }
+
+            if (!string.IsNullOrWhiteSpace(input.IdNebulizer))
+            {
+                var nebulizerExists = await existElement.ExistsElement<Nebulizer>(input.IdNebulizer);
+                if (!nebulizerExists) return $"nebulizador con id {input.IdNebulizer} no existe";
+
+            }
+
+
+            if (!string.IsNullOrWhiteSpace(input.IdTractor))
+            {
+                var tractorExists = await existElement.ExistsElement<Tractor>(input.IdTractor);
+                if (!tractorExists) return $"tractor con id {input.IdTractor} no existe";
+            }
+
+
+            var orderExists = await existElement.ExistsElement<ApplicationOrder>(input.IdOrder);
+            if (!orderExists) return $"orden con id {input.IdOrder} no existe en la base de datos";
+
+            return string.Empty;
+
         }
 
 
@@ -35,86 +82,104 @@ namespace trifenix.agro.external.operations.entities.orders
         {
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
 
-
-            
-
-            var validaPreOrder = await ValidaOrder(input);
+            var validaPreOrder = await ValidaExecutionOrder(input);
 
             if (!string.IsNullOrWhiteSpace(validaPreOrder)) throw new Exception(validaPreOrder);
 
-            var order = new ApplicationOrder
+            ExecutionOrder execution;
+
+            if (!string.IsNullOrWhiteSpace(input.Id))
             {
-                Id = id,
-                Barracks = input.Barracks,
-                DosesOrder = input.DosesOrder,
-                EndDate = input.EndDate,
-                InitDate = input.InitDate,
-                IdsPhenologicalPreOrder = input.IdsPhenologicalPreOrder,
-                Name = input.Name,
-                OrderType = input.OrderType,
-                Wetting = input.Wetting
-            };
+                var tmp = await Get(input.Id);
+                execution = tmp.Result;
+            }
+            else { 
+                execution = new ExecutionOrder
+                {
+                    Id = id,
+                    ClosedStatus = ClosedStatus.NotClosed,
+                    ExecutionStatus = ExecutionStatus.Planification,
+                   
+                    StatusInfo = new string[4],
+                    FinishStatus = FinishStatus.NotFinish,
+                    
+                };
+            }
+
+            execution.IdUserApplicator = input.IdUserApplicator;
+            execution.IdNebulizer = input.IdNebulizer;
+            execution.IdOrder = input.IdOrder;
+            execution.IdTractor = input.IdTractor;
+            await repo.CreateUpdate(execution);
 
 
 
-            await repo.CreateUpdate(order);
-
-
-            var specieAbbv = await commonQueries.GetSpecieAbbreviationFromBarrack(input.Barracks.First().IdBarrack);
+            var specieAbbv = await commonQueries.GetSpecieAbbreviationFromOrder(input.IdOrder);
 
 
             var entity = new EntitySearch
             {
                 Id = id,
-                EntityIndex = (int)EntityRelated.APPLICATION_ORDER,
+                EntityIndex = (int)EntityRelated.EXECUTION_ORDER,
                 Created = DateTime.Now,
+               
                 RelatedProperties = new Property[] {
-                        new Property {
-                            PropertyIndex = (int)PropertyRelated.GENERIC_NAME,
-                            Value = input.Name
-                        },
+                      
                         new Property {
                             PropertyIndex = (int)PropertyRelated.GENERIC_ABBREVIATION,
                             Value = specieAbbv
-                        },
-                        new Property{
-                            PropertyIndex = (int)PropertyRelated.GENERIC_START_DATE,
-                            Value = $"{input.InitDate : dd/MM/yyyy}"
-                        },
-                        new Property{
-                            PropertyIndex = (int)PropertyRelated.GENERIC_END_DATE,
-                            Value = $"{input.EndDate : dd/MM/yyyy}"
                         }
-                    },
-                RelatedEnumValues = new RelatedEnumValue[] {
-                    new RelatedEnumValue{ EnumerationIndex = (int)EnumerationRelated.ORDER_TYPE, Value = (int)input.OrderType }
-                }
+                    }
+                
             };
 
-            var entitiesForBarrack = input.Barracks.Select(s => new RelatedId { EntityIndex = (int)EntityRelated.BARRACK, EntityId = s.IdBarrack }).ToList();
-
-            var entitiesForEvents = input.Barracks.SelectMany(s => s.IdEvents).Distinct().Select(s => new RelatedId { EntityIndex = (int)EntityRelated.NOTIFICATION, EntityId = s });
-
-            var entitiesForDoses = input.DosesOrder.Select(s => s.IdDoses).Distinct().Select(s => new RelatedId { EntityIndex = (int)EntityRelated.DOSES, EntityId = s });
-
-            var entities = new List<RelatedId>();
-
-            entities.AddRange(entitiesForBarrack);
-
-            entities.AddRange(entitiesForEvents);
-
-            entities.AddRange(entitiesForDoses);
-
-
-            if (input.OrderType == OrderType.PHENOLOGICAL)
+            var entitiesIds = new List<RelatedId> {
+                    new RelatedId{
+                        EntityIndex = (int)EntityRelated.ORDER, EntityId = input.IdOrder
+                    }
+            };
+            if (!string.IsNullOrWhiteSpace(input.IdUserApplicator))
             {
-                entities.AddRange(input.IdsPhenologicalPreOrder.Select(s => new RelatedId { EntityIndex = (int)EntityRelated.PREORDER, EntityId = s }));
+                entitiesIds.Add(new RelatedId { EntityIndex = (int)EntityRelated.USER, EntityId = input.IdUserApplicator });
+            }
+
+            if (!string.IsNullOrWhiteSpace(input.IdNebulizer))
+            {
+                entitiesIds.Add(new RelatedId { EntityIndex = (int)EntityRelated.NEBULIZER, EntityId = input.IdNebulizer });
             }
 
 
-            entity.RelatedIds = entities.ToArray();
+            //TODO : Eliminar antes de agregar
+            foreach (var doses in input.DosesOrder)
+            {
+                var idGuid = Guid.NewGuid().ToString("N");
+                var inputSearch = new EntitySearch
+                {
+                    Id = idGuid,
+                    Created = DateTime.Now,
+                    EntityIndex = (int)EntityRelated.DOSES_ORDER,
+                    RelatedProperties = new Property[] {
+                        new Property{ PropertyIndex = (int)PropertyRelated.GENERIC_DOUBLE_VALUE,  Value = $"{doses.QuantityByHectare}" }
+                     },
+                    RelatedIds = new RelatedId[] {
+                        new RelatedId{ EntityIndex=(int)EntityRelated.DOSES, EntityId = doses.IdDoses },
+                        new RelatedId { EntityIndex = (int)EntityRelated.EXECUTION_ORDER, EntityId = id }
+                     }
+
+                };
+                search.AddElements(new List<EntitySearch> {
+                    inputSearch
+                });
+                entitiesIds.Add(new RelatedId { EntityIndex = (int)EntityRelated.DOSES_ORDER, EntityId = idGuid });
+            }
+
+            if (!string.IsNullOrWhiteSpace(input.IdTractor))
+            {
+                entitiesIds.Add(new RelatedId { EntityIndex = (int)EntityRelated.TRACTOR, EntityId = input.IdTractor });
+            }
 
 
+            entity.RelatedIds = entitiesIds.ToArray();
 
             search.AddElements(new List<EntitySearch> {
                 entity

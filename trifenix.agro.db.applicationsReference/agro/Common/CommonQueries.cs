@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model.agro.orders;
 
 namespace trifenix.agro.db.applicationsReference.agro.Common {
     public class CommonQueries : ICommonQueries {
@@ -29,6 +30,14 @@ namespace trifenix.agro.db.applicationsReference.agro.Common {
             var db = new MainDb<Barrack>(DbArguments);
             var result = await db.Store.QuerySingleAsync<string>($"SELECT value c.IdVariety FROM c where  c.Id = '{idBarrack}'");
             return await GetSpecieAbbreviationFromVariety(result);
+        }
+
+        public async Task<string> GetSpecieAbbreviationFromOrder(string idOrder)
+        {
+            var db = new MainDb<ApplicationOrder>(DbArguments);
+            var result = await db.Store.QuerySingleAsync<string>($"SELECT value c.IdBarrack[0] FROM c where  c.Id = '{idOrder}'");
+
+            return await GetSpecieAbbreviationFromBarrack(result);
         }
 
         public async Task<List<string>> GetUsersMailsFromRoles(List<string> idsRoles) {

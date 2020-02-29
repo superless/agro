@@ -26,7 +26,10 @@
         NOTIFICATION,
         POLLINATOR,
         ORDER_FOLDER,
-        APPLICATION_ORDER
+        EXECUTION_ORDER,
+        ORDER,
+        BARRACK_EVENT,
+        DOSES_ORDER
     }
 
     public enum PropertyRelated {
@@ -40,7 +43,8 @@
         GENERIC_RUT,
         GENERIC_START_DATE,
         GENERIC_DESC,
-        GENERIC_PATH
+        GENERIC_PATH,
+        GENERIC_DOUBLE_VALUE
     }
 
     public enum EnumerationRelated {

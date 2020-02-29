@@ -68,6 +68,7 @@ namespace trifenix.agro.external.operations.entities.orders
 
             if (!string.IsNullOrWhiteSpace(validaPreOrder)) throw new Exception(validaPreOrder);
 
+
             var preOrder = new PreOrder
             {
                 Id = id,

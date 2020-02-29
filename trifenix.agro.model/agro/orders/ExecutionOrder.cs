@@ -1,16 +1,12 @@
 ﻿using Cosmonaut;
 using Cosmonaut.Attributes;
 using System;
-using System.Collections.Generic;
-using trifenix.agro.db.model.agro.local;
 using trifenix.agro.enums;
 
 namespace trifenix.agro.db.model.agro.orders
 {
     [SharedCosmosCollection("agro", "ExecutionOrder")]
     public class ExecutionOrder : DocumentBase, ISharedCosmosEntity {
-       
-
 
         public override string Id { get; set; }
 

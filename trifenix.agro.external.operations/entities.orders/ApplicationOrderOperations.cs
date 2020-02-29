@@ -27,6 +27,8 @@ namespace trifenix.agro.external.operations.entities.orders
 
 
         private async Task<string> ValidaOrder(ApplicationOrderInput input) {
+
+            
             if (input.OrderType == OrderType.PHENOLOGICAL)
             {
                 if (!input.IdsPhenologicalPreOrder.Any()) return "Deben existir preordenes fenológicas, cuando la orden de aplicación es de tipo fenológica";
@@ -111,7 +113,7 @@ namespace trifenix.agro.external.operations.entities.orders
             var entity = new EntitySearch
             {
                 Id = id,
-                EntityIndex = (int)EntityRelated.APPLICATION_ORDER,
+                EntityIndex = (int)EntityRelated.EXECUTION_ORDER,
                 Created = DateTime.Now,
                 RelatedProperties = new Property[] {
                         new Property {
@@ -136,21 +138,57 @@ namespace trifenix.agro.external.operations.entities.orders
                 }
             };
 
-            var entitiesForBarrack = input.Barracks.Select(s => new RelatedId { EntityIndex = (int)EntityRelated.BARRACK, EntityId = s.IdBarrack }).ToList();
-
-            var entitiesForEvents = input.Barracks.SelectMany(s => s.IdEvents).Distinct().Select(s => new RelatedId { EntityIndex = (int)EntityRelated.NOTIFICATION, EntityId = s});
-
-            var entitiesForDoses = input.DosesOrder.Select(s => s.IdDoses).Distinct().Select(s => new RelatedId { EntityIndex = (int)EntityRelated.DOSES, EntityId = s });
 
             var entities = new List<RelatedId>();
+            //TODO : Eliminar antes de agregar
+            foreach (var barrack in input.Barracks)
+            {
+                var newGuid = Guid.NewGuid().ToString("N");
+                var relatedIds = new List<RelatedId>() {
+                    new RelatedId{ EntityIndex = (int)EntityRelated.BARRACK, EntityId = barrack.IdBarrack },
+                    new RelatedId { EntityIndex = (int)EntityRelated.ORDER, EntityId = id }
 
-            entities.AddRange(entitiesForBarrack);
+                };
+                relatedIds.AddRange(barrack.IdEvents.Select(s => new RelatedId { EntityIndex = (int)EntityRelated.NOTIFICATION, EntityId = s }));
 
-            entities.AddRange(entitiesForEvents);
+                var inputSearch = new EntitySearch
+                {
+                    Id = newGuid,
+                    EntityIndex = (int)EntityRelated.BARRACK_EVENT,
+                    Created = DateTime.Now,
+                    RelatedIds = relatedIds.ToArray()
 
-            entities.AddRange(entitiesForDoses);
-            
+                };
+                search.AddElements(new List<EntitySearch> {
+                    inputSearch
+                });
 
+                entities.Add(new RelatedId { EntityIndex = (int)EntityRelated.BARRACK_EVENT, EntityId = newGuid });
+
+            }
+            //TODO : Eliminar antes de agregar
+            foreach (var doses in input.DosesOrder)
+            {
+                var idGuid = Guid.NewGuid().ToString("N");
+                var inputSearch = new EntitySearch
+                {
+                    Id = idGuid,
+                    Created = DateTime.Now,
+                    EntityIndex = (int)EntityRelated.DOSES_ORDER,
+                    RelatedProperties = new Property[] {
+                        new Property{ PropertyIndex = (int)PropertyRelated.GENERIC_DOUBLE_VALUE,  Value = $"{doses.QuantityByHectare}" }
+                     },
+                    RelatedIds = new RelatedId[] {
+                        new RelatedId{ EntityIndex=(int)EntityRelated.DOSES, EntityId = doses.IdDoses },
+                        new RelatedId { EntityIndex = (int)EntityRelated.ORDER, EntityId = id }
+                     }
+
+                };
+                search.AddElements(new List<EntitySearch> {
+                    inputSearch
+                });
+                entities.Add(new RelatedId { EntityIndex = (int)EntityRelated.DOSES_ORDER, EntityId = idGuid });
+            }
 
             if (input.OrderType == OrderType.PHENOLOGICAL)
             {
@@ -159,11 +197,7 @@ namespace trifenix.agro.external.operations.entities.orders
 
             var idSeason = await commonQueries.GetSeasonId(input.Barracks.First().IdBarrack);
             entities.Add( new RelatedId { EntityIndex = (int)EntityRelated.SEASON, EntityId = idSeason });
-
-
             entity.RelatedIds = entities.ToArray();
-
-
 
             search.AddElements(new List<EntitySearch> {
                 entity

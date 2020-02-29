@@ -23,6 +23,10 @@ namespace trifenix.agro.model.external.Input
         public string IdUserApplicator;
         public string IdNebulizer { get; set; }
         public string IdTractor { get; set; }
+
+        public string StatusCommentary { get; set; }
+
+        
     }
 
 
