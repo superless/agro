@@ -6,6 +6,8 @@ using trifenix.agro.model.external;
 using trifenix.agro.db;
 using System.Linq.Expressions;
 using trifenix.agro.db.interfaces.common;
+using trifenix.agro.enums;
+using trifenix.agro.db.interfaces.agro.common;
 
 namespace trifenix.agro.external.operations.helper
 {
@@ -124,6 +126,11 @@ namespace trifenix.agro.external.operations.helper
         }
 
 
+
+        
+        
+
+        //TODO: Deprecar
         /// <summary>
         /// Crea elemento en la base de datos y crea un contenedor con la respuesta de acuerdo al resultado de la operación.
         /// </summary>

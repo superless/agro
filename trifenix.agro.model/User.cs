@@ -4,21 +4,21 @@ using System.Collections.Generic;
 
 namespace trifenix.agro.db.model {
     [SharedCosmosCollection("agro", "User")]
-    public class User : DocumentBase, ISharedCosmosEntity {
+    public class User : DocumentBaseName, ISharedCosmosEntity {
     
         public override string Id { get; set; }
 
         public string ObjectIdAAD { get; set; }
 
-        public string Name { get; set; }
+        public override string Name { get; set; }
 
         public string Rut { get; set; }
 
         public string Email { get; set; }
 
-        public Job Job { get; set; }
+        public string IdJob { get; set; }
 
-        public List<Role> Roles { get; set; }
+        public List<string> IdsRoles { get; set; }
 
     }
 }

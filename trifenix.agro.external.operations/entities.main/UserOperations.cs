@@ -1,150 +1,196 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using trifenix.agro.db.interfaces.agro;
-using trifenix.agro.db.interfaces.common;
+using trifenix.agro.db.interfaces;
+using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.model;
-using trifenix.agro.external.interfaces.entities.main;
-using trifenix.agro.external.operations.helper;
+using trifenix.agro.db.model.agro;
+using trifenix.agro.enums;
+using trifenix.agro.external.interfaces;
+using trifenix.agro.external.operations.res;
 using trifenix.agro.microsoftgraph.interfaces;
 using trifenix.agro.model.external;
+using trifenix.agro.model.external.Input;
+using trifenix.agro.search.interfaces;
+using trifenix.agro.search.model;
 
 namespace trifenix.agro.external.operations.entities.main
 {
-    public class UserOperations : IUserOperations {
-        private readonly IUserRepository _repo;
-        private readonly IGraphApi _graphApi;
-        private readonly IJobRepository _repoJob;
-        private readonly IRoleRepository _repoRole;
-        private readonly INebulizerRepository _repoNebulizer;
-        private readonly ITractorRepository _repoTractor;
-        private readonly ICommonDbOperations<UserApplicator> _commonDb;
-        public UserOperations(IUserRepository repo, IGraphApi graphApi, IJobRepository repoJob, IRoleRepository repoRole, INebulizerRepository repoNebulizer, ITractorRepository repoTractor, ICommonDbOperations<UserApplicator> commonDb)
+    public class UserOperations : MainReadOperationName<UserApplicator, UserApplicatorInput>, IGenericOperation<UserApplicator, UserApplicatorInput>
+    {
+        private readonly IGraphApi graphApi;
+
+        public UserOperations(IMainGenericDb<UserApplicator> repo, IExistElement existElement, IAgroSearch search, IGraphApi graphApi ) : base(repo, existElement, search)
         {
-            _repo = repo;
-            _graphApi = graphApi;
-            _repoJob = repoJob;
-            _repoRole = repoRole;
-            _repoNebulizer = repoNebulizer;
-            _repoTractor = repoTractor;
-            _commonDb = commonDb;
+            this.graphApi = graphApi;
         }
 
-        public async Task<ExtGetContainer<UserApplicator>> GetUser(string id)
-        {
-            var user = await _repo.GetUser(id);
-            return OperationHelper.GetElement(user);
-        }
 
-        public async Task<ExtGetContainer<UserApplicator>> GetUserFromToken()
-        {
-            var user = await _graphApi.GetUserFromToken();
-            return OperationHelper.GetElement(user);
-        }
+        private RelatedId[] GetIdsRelated(UserApplicator input) {
 
-        public async Task<ExtGetContainer<List<UserApplicator>>> GetUsers()
-        {
-            var queryTargets = _repo.GetUsers();
-            var targets = await _commonDb.TolistAsync(queryTargets);
-            return OperationHelper.GetElements(targets);
-        }
-
-        public async Task<ExtPostContainer<UserApplicator>> SaveEditUser(string id, string name, string rut, string email, string idJob, string[] idsRoles, string idNebulizer, string idTractor) {
-            Job job = await _repoJob.GetJob(idJob);
-            if (job == null)
-                return OperationHelper.PostNotFoundElementException<UserApplicator>($"No se encontró el cargo con id {idJob}", idJob);
-            List<Role> roles = new List<Role>();
-            Role role;
-            foreach (string idRole in idsRoles)
+            var list = new List<RelatedId>();
+            if (!string.IsNullOrWhiteSpace(input.IdJob))
             {
-                role = await _repoRole.GetRole(idRole);
-                if (role == null)
-                    return OperationHelper.PostNotFoundElementException<UserApplicator>($"No se encontró el rol con id {idRole}", idRole);
-                roles.Add(role);
+                list.Add(new RelatedId { 
+                    EntityIndex = (int)EntityRelated.JOB,
+                    EntityId = input.IdJob
+                });
             }
-            bool isApplicator = roles.Exists(r => r.Name.Equals("Aplicador"));
-            Nebulizer nebulizer = null;
-            Tractor tractor = null;
-            if (isApplicator){
-                if (!String.IsNullOrWhiteSpace(idNebulizer)){
-                    nebulizer = await _repoNebulizer.GetNebulizer(idNebulizer);
-                    if (nebulizer == null)
-                        return OperationHelper.PostNotFoundElementException<UserApplicator>($"No se encontró la nebulizadora con id {idNebulizer}", idNebulizer);
-                }
-                if (!String.IsNullOrWhiteSpace(idTractor)){
-                    tractor = await _repoTractor.GetTractor(idTractor);
-                    if (tractor == null)
-                        return OperationHelper.PostNotFoundElementException<UserApplicator>($"No se encontró el tractor con id {idTractor}", idTractor);
-                }
-            }
-            var element = await _repo.GetUser(id);
-            return await OperationHelper.EditElement(_commonDb, _repo.GetUsers(), id, element,
-                s => {
-                    s.Name = name;
-                    s.Rut = rut;
-                    s.Email = email;
-                    s.Job = job;
-                    s.Roles = roles;
-                    s.Tractor = (isApplicator)?tractor:null;
-                    s.Nebulizer = (isApplicator)?nebulizer:null;
-                    return s;
-                },
-                _repo.CreateUpdateUser,
-                $"No existe objetivo aplicación con id : {id}",
-                s => (s.Rut.Equals(rut) && rut != element.Rut) || (s.Email.Equals(email) && email != element.Email),
-                $"Este rut o correo ya existe"
-            );
-        }
 
-        public async Task<ExtPostContainer<string>> SaveNewUser(string name, string rut, string email, string idJob, string[] idsRoles, string idNebulizer, string idTractor) {
-            string objectId = await _graphApi.CreateUserIntoActiveDirectory(name, email);
-            Job job = await _repoJob.GetJob(idJob);
-            if (job == null)
-                return OperationHelper.PostNotFoundElementException<string>($"No se encontró el cargo con id {idJob}", idJob);
-            List<Role> roles = new List<Role>();
-            Role role;
-            foreach (string idRole in idsRoles)
+            if (!string.IsNullOrWhiteSpace(input.IdTractor))
             {
-                role = await _repoRole.GetRole(idRole);
-                if (role == null)
-                    return OperationHelper.PostNotFoundElementException<string>($"No se encontró el rol con id {idRole}", idRole);
-                roles.Add(role);
-            }
-            bool isApplicator = roles.Exists(r => r.Name.Equals("Aplicador"));
-            Nebulizer nebulizer = null;
-            Tractor tractor = null;
-            if (isApplicator)
-            {
-                if (!String.IsNullOrWhiteSpace(idNebulizer))
+                list.Add(new RelatedId
                 {
-                    nebulizer = await _repoNebulizer.GetNebulizer(idNebulizer);
-                    if (nebulizer == null)
-                        return OperationHelper.PostNotFoundElementException<string>($"No se encontró la nebulizadora con id {idNebulizer}", idNebulizer);
-                }
-                if (!String.IsNullOrWhiteSpace(idTractor))
-                {
-                    tractor = await _repoTractor.GetTractor(idTractor);
-                    if (tractor == null)
-                        return OperationHelper.PostNotFoundElementException<string>($"No se encontró el tractor con id {idTractor}", idTractor);
-                }
+                    EntityIndex = (int)EntityRelated.TRACTOR,
+                    EntityId = input.IdTractor
+                });
             }
-            return await OperationHelper.CreateElement(_commonDb, _repo.GetUsers(),
-                async s => await _repo.CreateUpdateUser(
-                    new UserApplicator
+
+            if (!string.IsNullOrWhiteSpace(input.IdNebulizer))
+            {
+                list.Add(new RelatedId
+                {
+                    EntityIndex = (int)EntityRelated.NEBULIZER,
+                    EntityId = input.IdNebulizer
+                });
+            }
+            if (input.IdsRoles != null && input.IdsRoles.Any())
+            {
+                foreach (var idRol in input.IdsRoles)
+                {
+                    list.Add(new RelatedId
                     {
-                        Id = s,
-                        ObjectIdAAD = objectId,
-                        Name = name,
-                        Rut = rut,
-                        Email = email,
-                        Job = job,
-                        Roles = roles,
-                        Nebulizer = (isApplicator) ? nebulizer : null,
-                        Tractor = (isApplicator) ? tractor : null,
-                    }),
-                s => s.Rut.Equals(rut) || s.Email.Equals(email),
-                $"Este nombre, rut o correo ya existe"
-            );
+                        EntityIndex = (int)EntityRelated.ROLE,
+                        EntityId = idRol
+                    });
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(input.ObjectIdAAD))
+            {
+                list.Add(new RelatedId
+                {
+                    EntityIndex = (int)EntityRelated.AAD,
+                    EntityId = input.ObjectIdAAD
+                });
+            }
+
+            return list.ToArray();
+        }
+
+        private Property[] GetElementRelated(UserApplicator input)
+        {
+
+            var list = new List<Property>();
+            if (!string.IsNullOrWhiteSpace(input.Rut))
+            {
+                list.Add(new Property
+                {
+                    PropertyIndex = (int)PropertyRelated.GENERIC_RUT,
+                    Value = input.Rut
+                });
+            }
+
+            if (!string.IsNullOrWhiteSpace(input.Email))
+            {
+                list.Add(new Property
+                {
+                    PropertyIndex = (int)PropertyRelated.GENERIC_EMAIL,
+                    Value = input.Email
+                });
+            }
+            return list.ToArray();
+
+        }
+
+
+
+        public async Task<ExtPostContainer<string>> Save(UserApplicatorInput input)
+        {
+
+            var valida = await Validate(input);
+            if (!valida) throw new Exception(string.Format(ErrorMessages.NotValid, "Usuario"));
+            if (!string.IsNullOrWhiteSpace(input.IdNebulizer))
+            {
+                var existsNebulizer = await existElement.ExistsElement<Nebulizer>(input.IdNebulizer);
+                if (!existsNebulizer) throw new Exception(string.Format(ErrorMessages.NotValidId, "Nebulizador"));
+            }
+            if (!string.IsNullOrWhiteSpace(input.IdJob))
+            {
+                var existsJob = await existElement.ExistsElement<Job>(input.IdJob);
+                if (!existsJob) throw new Exception(string.Format(ErrorMessages.NotValidId, "Cargo"));
+
+            }
+
+            if (!string.IsNullOrWhiteSpace(input.IdTractor))
+            {
+                var existsTractor = await existElement.ExistsElement<Tractor>(input.IdTractor);
+                if (!existsTractor) throw new Exception(string.Format(ErrorMessages.NotValid, "Tractor"));
+            }
+
+            if (input.IdsRoles != null && input.IdsRoles.Any())
+            {
+                foreach (var idRol in input.IdsRoles)
+                {
+                    var exists = await existElement.ExistsElement<Role>(idRol);
+                    
+                    if (!exists) throw new Exception(string.Format(ErrorMessages.NotValid, "Rol"));
+                }
+            }
+
+
+            UserApplicator userApp;
+            if (!string.IsNullOrWhiteSpace(input.Id))
+            {
+                var tmpUser = await Get(input.Id);
+                userApp = tmpUser.Result;
+                userApp.IdJob = input.IdJob;
+                userApp.IdNebulizer = input.IdNebulizer;
+                userApp.IdsRoles = input.IdsRoles;
+                userApp.IdTractor = input.IdTractor;
+                userApp.Name = input.Name;
+                userApp.Rut = input.Rut;
+            } else
+            {
+                var objectId = await graphApi.CreateUserIntoActiveDirectory(input.Name, input.Email);
+
+                userApp = new UserApplicator { 
+                    Email = input.Email,
+                    Id = Guid.NewGuid().ToString("N"),
+                    IdJob = input.IdJob,
+                    IdNebulizer = input.IdNebulizer,
+                    IdsRoles = input.IdsRoles,
+                    Name = input.Name,
+                    IdTractor = input.IdTractor,
+                    Rut = input.Rut,
+                    ObjectIdAAD = objectId
+
+                };
+            }
+
+
+
+            await repo.CreateUpdate(userApp);
+
+            search.AddElements(new List<EntitySearch>
+            {
+                new EntitySearch{
+                    Id = userApp.Id,
+                    EntityIndex = (int)EntityRelated.USER,
+                    Created = DateTime.Now,
+                    RelatedProperties = GetElementRelated(userApp),
+                    RelatedIds = GetIdsRelated(userApp)
+                }
+            });
+
+
+            return new ExtPostContainer<string>
+            {
+                IdRelated = userApp.Id,
+                MessageResult = ExtMessageResult.Ok,
+                Result = userApp.Id
+            };
         }
     }
 }

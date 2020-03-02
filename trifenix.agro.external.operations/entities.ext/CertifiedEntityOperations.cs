@@ -1,100 +1,80 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using trifenix.agro.db.interfaces.agro.ext;
-using trifenix.agro.db.interfaces.common;
-using trifenix.agro.db.model;
-using trifenix.agro.external.interfaces.entities.ext;
-using trifenix.agro.external.operations.helper;
+using trifenix.agro.db.interfaces;
+using trifenix.agro.db.interfaces.agro.common;
+using trifenix.agro.db.model.agro;
+using trifenix.agro.enums;
+using trifenix.agro.external.interfaces;
+using trifenix.agro.external.operations.res;
 using trifenix.agro.model.external;
+using trifenix.agro.model.external.Input;
+using trifenix.agro.search.interfaces;
+using trifenix.agro.search.model;
 
 namespace trifenix.agro.external.operations.entities.ext
 {
-    public class CertifiedEntityOperations : ICertifiedEntityOperations
+    public class CertifiedEntityOperations : MainReadOperationName<CertifiedEntity, CertifiedEntityInput>, IGenericOperation<CertifiedEntity, CertifiedEntityInput>
     {
-        private readonly ICertifiedEntityRepository _repo;
-        private readonly ICommonDbOperations<CertifiedEntity> _commonDb;
-
-
-        public CertifiedEntityOperations(ICertifiedEntityRepository repo, ICommonDbOperations<CertifiedEntity> commonDb )
+        public CertifiedEntityOperations(IMainGenericDb<CertifiedEntity> repo, IExistElement existElement, IAgroSearch search) : base(repo, existElement, search)
         {
-            _repo = repo;
-            _commonDb = commonDb;
         }
 
-        public async Task<ExtGetContainer<List<CertifiedEntity>>> GetCertifiedEntities()
+
+        public async Task<ExtPostContainer<string>> Save(CertifiedEntityInput input)
         {
-            try
+            var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
+
+            var certifiedEntity = new CertifiedEntity
             {
-                var certifiedEntitiesQuery = _repo.GetCertifiedEntities();
-                var certifiedEntities = await _commonDb.TolistAsync(certifiedEntitiesQuery);
-                return OperationHelper.GetElements(certifiedEntities);
-            }
-            catch (Exception e)
+                Id = id,
+                Name = input.Name,
+                Abbreviation = input.Abbreviation
+            };
+
+            var valida = await Validate(input);
+            if (!valida) throw new Exception(string.Format(ErrorMessages.NotValid, certifiedEntity.CosmosEntityName));
+
+            if (string.IsNullOrWhiteSpace(input.Id))
             {
-
-                return OperationHelper.GetException<List<CertifiedEntity>>(e);
-            }
-
-
-        }
-
-        public async Task<ExtGetContainer<CertifiedEntity>> GetCertifiedEntity(string id)
-        {
-            try
-            {
-                var certifiedEntity = await _repo.GetCertifiedEntity(id);
-
-                return OperationHelper.GetElement(certifiedEntity);
-            }
-            catch (Exception e)
-            {
-
-                return OperationHelper.GetException<CertifiedEntity>(e);
-            }
-        }
-
-        public async Task<ExtPostContainer<CertifiedEntity>> SaveEditCertifiedEntity(string id, string name, string abbreviation)
-        {
-            try
-            {
-                var element = await _repo.GetCertifiedEntity(id);
-                return await OperationHelper.EditElement(_commonDb, _repo.GetCertifiedEntities(), id,
-                    element,
-                    s =>
-                    {
-                        s.Name = name;
-                        s.Abbreviation = abbreviation;
-                        return s;
-                    },
-                    _repo.CreateUpdateCertifiedEntity,
-                    $"no existe entidad certificadora con nombre {name}",
-                    s => s.Name.Equals(name) && name!=element.Name,
-                    $"Este nombre ya existe"
-             );
+                var validaAbbv = await existElement.ExistsElement<CertifiedEntity>("Abbreviation", input.Abbreviation);
+                if (validaAbbv) throw new Exception(string.Format(ErrorMessages.NotValidAbbreviation, certifiedEntity.CosmosEntityName));
 
             }
-            catch (Exception e)
+            else
             {
-                return OperationHelper.GetPostException<CertifiedEntity>(e);
+                var validaAbbv = await existElement.ExistsEditElement<CertifiedEntity>(input.Id, "Abbreviation", input.Abbreviation);
+                if (validaAbbv) throw new Exception(string.Format(ErrorMessages.NotValidAbbreviation, certifiedEntity.CosmosEntityName));
             }
 
+            await repo.CreateUpdate(certifiedEntity);
+
+            search.AddElements(new List<EntitySearch>
+            {
+                new EntitySearch{
+                    Id = id,
+                    EntityIndex = (int)EntityRelated.CERTIFIED_ENTITY,
+                    Created = DateTime.Now,
+                    RelatedProperties = new Property[] {
+                        new Property {
+                            PropertyIndex = (int)PropertyRelated.GENERIC_NAME,
+                            Value = input.Name
+                        },
+                        new Property {
+                            PropertyIndex = (int)PropertyRelated.GENERIC_ABBREVIATION,
+                            Value = input.Abbreviation
+                        }
+                    }
+                }
+            });
 
 
-        }
-
-        public async Task<ExtPostContainer<string>> SaveNewCertifiedEntity(string name, string abbreviation)
-        {
-            return await OperationHelper.CreateElement(_commonDb, _repo.GetCertifiedEntities(),
-                async s => await _repo.CreateUpdateCertifiedEntity(new CertifiedEntity {
-                    Id = s,
-                    Name = name,
-                    Abbreviation = abbreviation
-                }),
-                s => s.Name.Equals(name),
-                $"ya existe entidad certificadora con nombre {name}"
-
-                );
+            return new ExtPostContainer<string>
+            {
+                IdRelated = id,
+                MessageResult = ExtMessageResult.Ok,
+                Result = id
+            };
         }
     }
 }

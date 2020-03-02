@@ -1,0 +1,9 @@
+﻿namespace trifenix.agro.model.external.Input
+{
+    public class CostCenterInput : InputBaseName
+    {
+       
+        public string IdBusinessName { get; set; }
+
+    }
+}

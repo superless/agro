@@ -1,61 +1,61 @@
 ﻿using Microsoft.Azure.Search;
-using Newtonsoft.Json;
 using System;
 using System.ComponentModel.DataAnnotations;
-using trifenix.agro.search.model.@base;
 
 namespace trifenix.agro.search.model {
-    public class EntitySearch : BaseSearch {
 
-        public override DateTime Created { get; set; }  //Todos
-
-        [IsFilterable]
-        public string EntityName { get; set; }          //Todos
+    public class EntitySearch {
 
         [Key]
         [IsFilterable]
-        public string Id { get; set; }                  //Todos
-
-        [IsSearchable, IsSortable, JsonProperty("IdentificadorDeEntidad")]
-        public string Name { get; set; }                //Todos
-
-        [IsSortable, IsFilterable]
-        public string SeasonId { get; set; }            //Orden, Ejecucion, Barrack
-
-        [IsSortable, IsFilterable]
-        public int? Status { get; set; }                //Ejecucion
+        public string Id { get; set; }                              
 
         [IsFilterable]
-        public bool? Type { get; set; }                 //Orden
+        public int EntityIndex { get; set; }                        
 
-        [IsFilterable]
-        public string Specie { get; set; }              //Orden, Ejecucion, Barrack
-    }
+        [IsSortable]
+        public DateTime Created { get; set; }                       
 
-    public class EntitiesSearchContainer {
+        public RelatedId[] RelatedIds { get; set; } 
+        
+        public Property[] RelatedProperties { get; set; }       
 
-        public EntitySearch[] Entities { get; set; }
-        public long Total { get; set; }
-    }
-
-    public class Filters {
-
-        public string EntityName { get; set; }
-        public string SeasonId { get; set; }
-        public int? Status { get; set; }
-        public bool? Type { get; set; }
-        public string Specie { get; set; }
-        public override string ToString() => $"EntityName eq '{EntityName}'" + (!string.IsNullOrWhiteSpace(SeasonId) ? $" and SeasonId eq '{SeasonId}'" : "") + (Status.HasValue ? $" and Status eq {Status}" : "") + (Type.HasValue ? (" and " + (Type.Value ? "Type" : "not Type")) : "") + (!string.IsNullOrWhiteSpace(Specie) ? $" and Specie eq '{Specie}'" : "");
+        public RelatedEnumValue[] RelatedEnumValues { get; set; }
 
     }
 
-    public class Parameters {
+    public class RelatedId {
 
-        public string TextToSearch { get; set; }
-        public Filters Filters { get; set; }
-        public int? Page { get; set; }
-        public int? Quantity { get; set; }
-        public bool? Desc { get; set; }
+        [IsFilterable, IsSortable]
+        public int EntityIndex { get; set; }
+
+        [IsFilterable, IsSortable, IsSearchable]
+        public string EntityId { get; set; }
+
+        
+
+
+    }
+
+    public class Property {
+
+        [IsFilterable, IsSortable]
+        public int PropertyIndex { get; set; }
+
+        [IsSearchable, IsSortable]
+        public string Value { get; set; }
+
+
+
+    }
+
+    public class RelatedEnumValue {
+
+        [IsFilterable, IsSortable]
+        public int EnumerationIndex { get; set; }
+
+        [IsFilterable, IsSortable]
+        public int Value { get; set; }
 
     }
 

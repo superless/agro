@@ -1,78 +1,61 @@
-﻿using Cosmonaut.Extensions;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using trifenix.agro.db.interfaces.agro;
-using trifenix.agro.db.interfaces.common;
-using trifenix.agro.db.model;
-using trifenix.agro.external.interfaces.entities.main;
-using trifenix.agro.external.operations.helper;
+using trifenix.agro.db.interfaces;
+using trifenix.agro.db.interfaces.agro.common;
+using trifenix.agro.db.model.agro;
+using trifenix.agro.enums;
+using trifenix.agro.external.interfaces;
+using trifenix.agro.external.operations.res;
 using trifenix.agro.model.external;
+using trifenix.agro.model.external.Input;
+using trifenix.agro.search.interfaces;
+using trifenix.agro.search.model;
 
 namespace trifenix.agro.external.operations.entities.main
 {
-    public class IngredientCategoryOperations : IIngredientCategoryOperations
+    public class IngredientCategoryOperations : MainReadOperationName<IngredientCategory, IngredientCategoryInput>, IGenericOperation<IngredientCategory, IngredientCategoryInput>
     {
-
-        private readonly IIngredientCategoryRepository _repo;
-        private readonly ICommonDbOperations<IngredientCategory> _commonDb;
-        public IngredientCategoryOperations(IIngredientCategoryRepository repo, ICommonDbOperations<IngredientCategory> commonDb)
+        public IngredientCategoryOperations(IMainGenericDb<IngredientCategory> repo, IExistElement existElement, IAgroSearch search) : base(repo, existElement, search)
         {
-            _repo = repo;
-            _commonDb = commonDb;
         }
 
-        public async Task<ExtGetContainer<List<IngredientCategory>>> GetIngredientCategories()
+        public async Task<ExtPostContainer<string>> Save(IngredientCategoryInput input)
         {
-            try
+            var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
+
+            var category = new IngredientCategory
             {
-                var categoriesQuery = _repo.GetIngredientCategories();
-                var categories = await _commonDb.TolistAsync(categoriesQuery);
-                return OperationHelper.GetElements(categories);
-            }
-            catch (Exception ex)
+                Id = id,
+                Name = input.Name
+            };
+            var valida = await Validate(input);
+            if (!valida) throw new Exception(string.Format(ErrorMessages.NotValid, category.CosmosEntityName));
+
+            await repo.CreateUpdate(category);
+
+            search.AddElements(new List<EntitySearch>
             {
+                new EntitySearch{
+                    Id = id,
+                    EntityIndex = (int)EntityRelated.CATEGORY_INGREDIENT,
+                    Created = DateTime.Now,
+                    RelatedProperties = new Property[] {
+                        new Property {
+                            PropertyIndex = (int)PropertyRelated.GENERIC_NAME,
+                            Value = input.Name
+                        }
+                    },
+                }
+            });
 
-                return new ExtGetErrorContainer<List<IngredientCategory>>
-                {
-                    StatusResult = ExtGetDataResult.Error,
-                    ErrorMessage = ex.Message,
-                    InternalException = ex
-                };
-            }
-        }
 
-        public async Task<ExtPostContainer<IngredientCategory>> SaveEditIngredientCategory(string id, string name)
-        {
-            var element = await _repo.GetIngredientCategory(id);
-            return await OperationHelper.EditElement(_commonDb, _repo.GetIngredientCategories(), 
-                id,
-                element,
-                s => {
-                    s.Name = name;
-                    return s;
-                },
-                _repo.CreateUpdateIngredientCategory,
-                 $"No existe categoria con id : {id}",
-                s => s.Name.Equals(name) && name != element.Name,
-                $"Ya existe categoria con nombre: {name}"
-            );
-        }
-
-        public async Task<ExtPostContainer<string>> SaveNewIngredientCategory(string name)
-        {
-            return await OperationHelper.CreateElement(_commonDb, _repo.GetIngredientCategories(),
-                async s => await _repo.CreateUpdateIngredientCategory(new IngredientCategory
-                {
-                    Id = s,
-                    Name = name
-                }),
-                s => s.Name.Equals(name),
-                $"Ya existe categoria con nombre: {name}"
-
-            );
+            return new ExtPostContainer<string>
+            {
+                IdRelated = id,
+                MessageResult = ExtMessageResult.Ok,
+                Result = id
+            };
         }
     }
 }

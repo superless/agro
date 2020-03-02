@@ -1,64 +1,61 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using trifenix.agro.db.interfaces.agro;
-using trifenix.agro.db.interfaces.common;
-using trifenix.agro.db.model;
-using trifenix.agro.external.interfaces.entities.main;
-using trifenix.agro.external.operations.helper;
+using trifenix.agro.db.interfaces;
+using trifenix.agro.db.interfaces.agro.common;
+using trifenix.agro.db.model.agro;
+using trifenix.agro.enums;
+using trifenix.agro.external.interfaces;
+using trifenix.agro.external.operations.res;
 using trifenix.agro.model.external;
+using trifenix.agro.model.external.Input;
+using trifenix.agro.search.interfaces;
+using trifenix.agro.search.model;
 
-namespace trifenix.agro.external.operations.entities.main {
-    public class RoleOperations : IRoleOperations {
-        private readonly IRoleRepository _repo;
-        private readonly ICommonDbOperations<Role> _commonDb;
-        public RoleOperations(IRoleRepository repo, ICommonDbOperations<Role> commonDb) {
-            _repo = repo;
-            _commonDb = commonDb;
-        }
-
-        public async Task<ExtGetContainer<Role>> GetRole(string id) {
-            var role = await _repo.GetRole(id);
-            return OperationHelper.GetElement(role);
-        }
-
-        public async Task<ExtGetContainer<List<Role>>> GetRoles()
+namespace trifenix.agro.external.operations.entities.main
+{
+    public class RoleOperations : MainReadOperationName<Role, RoleInput>, IGenericOperation<Role, RoleInput>
+    {
+        public RoleOperations(IMainGenericDb<Role> repo, IExistElement existElement, IAgroSearch search) : base(repo, existElement, search)
         {
-            var queryTargets = _repo.GetRoles();
-            var targets = await _commonDb.TolistAsync(queryTargets);
-            return OperationHelper.GetElements(targets);
         }
 
-        public async Task<ExtPostContainer<Role>> SaveEditRole(string id, string name)
+        public async Task<ExtPostContainer<string>> Save(RoleInput input)
         {
-            var element = await _repo.GetRole(id);
-            return await OperationHelper.EditElement(_commonDb, _repo.GetRoles(), 
-                id,
-                element,
-                s => {
-                    s.Name = name;
-                    return s;
-                },
-                _repo.CreateUpdateRole,
-                 $"No existe objetivo aplicación con id: {id}",
-                s => s.Name.Equals(name) && name != element.Name,
-                $"Ya existe rol con nombre: {name}"
-            );
+            var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
 
-        }
+            var role = new Role
+            {
+                Id = id,
+                Name = input.Name
+            };
+            await repo.CreateUpdate(role);
 
-        public async Task<ExtPostContainer<string>> SaveNewRole(string name)
-        {
-            return await OperationHelper.CreateElement(_commonDb,_repo.GetRoles(),
-                async s => await _repo.CreateUpdateRole(new Role
-                {
-                    Id = s,
-                    Name = name
-                }),
-                s => s.Name.Equals(name),
-                $"Ya existe rol con nombre: {name}"
+            search.AddElements(new List<EntitySearch>
+            {
+                new EntitySearch{
+                    Id = id,
+                    EntityIndex = (int)EntityRelated.ROLE,
+                    Created = DateTime.Now,
+                    RelatedProperties = new Property[] {
+                        new Property {
+                            PropertyIndex = (int)PropertyRelated.GENERIC_NAME,
+                            Value = input.Name
+                        }
+                    }
+                }
+            });
 
-            );
+            var valida = await Validate(input);
+            if (!valida) throw new Exception(string.Format(ErrorMessages.NotValid, role.CosmosEntityName));
+
+
+            return new ExtPostContainer<string>
+            {
+                IdRelated = id,
+                MessageResult = ExtMessageResult.Ok,
+                Result = id
+            };
         }
     }
 }

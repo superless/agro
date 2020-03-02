@@ -1,13 +1,20 @@
 ﻿using Cosmonaut;
 using Cosmonaut.Attributes;
 
-namespace trifenix.agro.db.model {
+namespace trifenix.agro.db.model.agro
+{
     [SharedCosmosCollection("agro", "Ingredient")]
-    public class Ingredient : DocumentBase, ISharedCosmosEntity {
-
+    public class Ingredient : DocumentBaseName, ISharedCosmosEntity
+    {
         public override string Id { get; set; }
-        public string Name { get; set; }
-        public IngredientCategory Category { get; set; }
+
+        public override string Name { get; set; }
+
+        public string idCategory { get; set; }
+
+        
+
+
 
     }
 }

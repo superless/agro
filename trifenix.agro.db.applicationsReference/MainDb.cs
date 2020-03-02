@@ -7,23 +7,25 @@ using trifenix.agro.db.interfaces;
 
 namespace trifenix.agro.db.applicationsReference
 {
-    public class MainDb<T> : IMainDb<T> where T:DocumentBase 
+
+    public class MainGenericDb<T> : IMainGenericDb<T> where T : DocumentBase
     {
 
-        protected readonly CosmosStoreSettings StoreSettings;
-        protected readonly AgroDbArguments MainArgs;
-
-        public ICosmosStore<T> Store { get; private set; }
-
-        public MainDb(AgroDbArguments args)
+        public MainGenericDb(AgroDbArguments args)
         {
-            StoreSettings = new CosmosStoreSettings(args.NameDb, args.EndPointUrl, args.PrimaryKey);
+            var storeSettings = new CosmosStoreSettings(args.NameDb, args.EndPointUrl, args.PrimaryKey);
             MainArgs = args;
-            Store = new CosmosStore<T>(StoreSettings);
-            
+            Store = new CosmosStore<T>(storeSettings);
+
         }
 
-        public async Task<string> CreateUpdate(T entity) {
+
+        public ICosmosStore<T> Store  {get ;}
+
+        public AgroDbArguments MainArgs {get;}
+
+        public async Task<string> CreateUpdate(T entity)
+        {
             if (string.IsNullOrWhiteSpace(entity.Id))
                 throw new NonIdException<DocumentBase>(entity);
             var result = await Store.UpsertAsync(entity);
@@ -32,18 +34,20 @@ namespace trifenix.agro.db.applicationsReference
             return result.Entity.Id;
         }
 
-        public async Task<T> GetEntity(string uniqueId) {
+        public async Task<T> GetEntity(string uniqueId)
+        {
             var entity = (T)Activator.CreateInstance(typeof(T));
             return await Store.FindAsync(uniqueId, entity.CosmosEntityName);
+        }
+    }
+    public class MainDb<T> : MainGenericDb<T>, IMainDb<T> where T: DocumentBase
+    {
+        public MainDb(AgroDbArguments args) : base(args)
+        {   
         }
 
         public  IQueryable<T> GetEntities() {
             return Store.Query();
         }
-
-        public async Task<long> GetTotalElements() {
-            return await Store.QuerySingleAsync<long>("SELECT VALUE COUNT(1) FROM c");
-        }
-
     }
 }

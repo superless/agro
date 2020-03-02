@@ -1,5 +1,6 @@
 ﻿using Cosmonaut.Attributes;
 using System;
+using trifenix.agro.db.model.agro;
 
 namespace trifenix.agro.db.model.local {
     [SharedCosmosCollection("agro", "UserActivity")]

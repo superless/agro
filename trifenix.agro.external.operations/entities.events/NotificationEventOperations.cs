@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using trifenix.agro.db.interfaces.agro;
-using trifenix.agro.db.interfaces.agro.events;
-using trifenix.agro.db.interfaces.agro.fields;
-using trifenix.agro.db.interfaces.common;
+using trifenix.agro.db.interfaces;
+using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.model;
-using trifenix.agro.db.model.local;
+using trifenix.agro.db.model.agro;
+using trifenix.agro.email.interfaces;
 using trifenix.agro.enums;
-using trifenix.agro.external.interfaces.entities.events;
-using trifenix.agro.external.operations.helper;
-using trifenix.agro.microsoftgraph.interfaces;
+using trifenix.agro.external.interfaces;
 using trifenix.agro.model.external;
+using trifenix.agro.model.external.Input;
+using trifenix.agro.search.interfaces;
+using trifenix.agro.search.model;
 using trifenix.agro.storage.interfaces;
 using trifenix.agro.weather.interfaces;
 
@@ -21,139 +20,101 @@ namespace trifenix.agro.external.operations.entities.events {
     /// <summary>
     /// Todos las funciones necesarias para interactuar con eventos registrados en el monitoreo.
     /// </summary>
-    public class NotificationEventOperations : INotificatonEventOperations {
-        private readonly IPhenologicalEventRepository _phenologicalRepository;
-        private readonly ICommonDbOperations<NotificationEvent> _commonDb;
-        private readonly IBarrackRepository _barrackRepository;
-        private readonly IUploadImage _uploadImage;
-        private readonly INotificationEventRepository _repo;
-        private readonly IGraphApi _graphApi;
-        private readonly IWeatherApi _weatherApi;
-
-
-        /// <summary>
-        /// Constructor de la gestión de notificaciones
-        /// </summary>
-        /// <param name="repo">Repositorio de base de datos de las notificaciones</param>
-        /// <param name="barrackRepository">repositorio de cuarteles</param>
-        /// <param name="phenologicalRepository">repositorio de eventos fenológicos</param>
-        /// <param name="phenologicalRepository">repositorio de eventos fenológicos</param>
-        /// <param name="uploadImage">Objeto que permite obtener la imagen subida en la aplicación</param>
-        public NotificationEventOperations(INotificationEventRepository repo, IBarrackRepository barrackRepository, IPhenologicalEventRepository phenologicalRepository, ICommonDbOperations<NotificationEvent> commonDb, IUploadImage uploadImage, IGraphApi graphApi, IWeatherApi weatherApi) {
-            _repo = repo;
-            _phenologicalRepository = phenologicalRepository;
-            _commonDb = commonDb;
-            _barrackRepository = barrackRepository;
-            _uploadImage = uploadImage;
-            _graphApi = graphApi;
-            _weatherApi = weatherApi;
-        }
-
-
-        /// <summary>
-        /// Obtiene el elemento de notificación de acuerdo al identificador
-        /// </summary>
-        /// <param name="id">identificador del elemento</param>
-        /// <returns>Contenedor con el id del elemento o el detalle del error.</returns>
-        public async Task<ExtGetContainer<NotificationEvent>> GetEvent(string id) {
-            try {
-                var notEvent = await _repo.GetNotificationEvent(id);
-                return OperationHelper.GetElement(notEvent);
-            }
-            catch (Exception e) {
-                return OperationHelper.GetException<NotificationEvent>(e);
-            }
-        }
-
-
-        /// <summary>
-        /// obtiene todas las notificaciones de evento como lista en un contenedor
-        /// </summary>
-        /// <returns>contenedor con la lista de eventos</returns>
-        public async Task<ExtGetContainer<List<NotificationEvent>>> GetEvents() {
-            try {
-                return await GetEventsWrapper(_repo.GetNotificationEvents());
-            }
-            catch (Exception e) {
-                return OperationHelper.GetException<List<NotificationEvent>>(e);
-            }
-        }
-
-        private async Task<ExtGetContainer<List<NotificationEvent>>> GetEventsWrapper(IQueryable<NotificationEvent> notificationQuery) {
-            if (notificationQuery == null) {
-                var message = "La base de datos retorna nulo para eventos";
-                return OperationHelper.GetException<List<NotificationEvent>>(new Exception(message));
-            }
-            var notEvents = await _commonDb.TolistAsync(notificationQuery);
-            return OperationHelper.GetElements(notEvents);
-        }
-
-        public async  Task<ExtGetContainer<List<NotificationEvent>>> GetEventsByBarrackId(string id) {
-            try {
-                return await GetEventsWrapper(_repo.GetNotificationEvents().Where(s => s.Barrack.Id.Equals(id)));
-            }
-            catch (Exception e) {
-                return OperationHelper.GetException<List<NotificationEvent>>(e);
-            }
-        }
-
-        public async Task<ExtGetContainer<List<NotificationEvent>>> GetEventsByBarrackPhenologicalEventId(string idBarrack, string idPhenologicalId) {
-            try {
-                return await GetEventsWrapper(_repo.GetNotificationEvents().Where(s => s.Barrack.Id.Equals(idBarrack) && s.PhenologicalEvent.Id.Equals(idPhenologicalId)));
-            }
-            catch (Exception e) {
-                return OperationHelper.GetException<List<NotificationEvent>>(e);
-            }
-        }
-
-
-        /// <summary>
-        /// Almacena en la base de datos una nueva notificación
-        /// </summary>
-        /// <param name="idBarrack">identificador del cuartel</param>
-        /// <param name="idPhenologicalEvent">identificador del evento fenológico</param>
-        /// <param name="base64">string de la imagen subida</param>
-        /// <param name="description">descripción del evento notificado</param>
-        /// <returns>contenedor con el identificador de la notificación</returns>
-        public async Task<ExtPostContainer<string>> SaveNewNotificationEvent(string idPhenologicalEvent, NotificationType NotificationType, string idBarrack, string base64, string description, float lat, float lon) {
-            if (string.IsNullOrWhiteSpace(idPhenologicalEvent) && NotificationType == 0) return OperationHelper.GetPostException<string>(new Exception("Es requerido 'idPhenologicalEvent'"));
-            if (string.IsNullOrWhiteSpace(idBarrack)) return OperationHelper.GetPostException<string>(new Exception("Es requerido 'idBarrack'"));
-            if (string.IsNullOrWhiteSpace(base64)) return OperationHelper.GetPostException<string>(new Exception("Es requerido 'base64'"));
-            
-            try {
-                PhenologicalEvent phenologicalEvent = null;
-                if(NotificationType == 0) {
-                    phenologicalEvent = await _phenologicalRepository.GetPhenologicalEvent(idPhenologicalEvent);
-                    if(phenologicalEvent == null)
-                        return OperationHelper.PostNotFoundElementException<string>($"No se encontró evento fenológico con id {idPhenologicalEvent}", idPhenologicalEvent);
-                }
-                Barrack barrack = await _barrackRepository.GetBarrack(idBarrack);
-                if (barrack == null)
-                    return OperationHelper.PostNotFoundElementException<string>($"No se encontró cuartel con id {idBarrack}", idBarrack);
-                string imgPath = await _uploadImage.UploadImageBase64(base64);
-                var creator = await _graphApi.GetUserFromToken();
-                var userActivity = new UserActivity(DateTime.Now, creator);
-                //var weather = await _weatherApi.GetWeather(lat, lon);
-                return await OperationHelper.CreateElement(_commonDb, _repo.GetNotificationEvents(),
-                   async s => await _repo.CreateUpdateNotificationEvent(new NotificationEvent {
-                       Id = s,
-                       Barrack = barrack,
-                       Created = DateTime.Now,
-                       Description = description,
-                       PhenologicalEvent = phenologicalEvent,
-                       NotificationType = NotificationType,
-                       PicturePath = imgPath,
-                       Creator = userActivity,
-                       //Weather = weather
-                   }),
-                   s => false,
-                   $""
-               );
-            }
-            catch (Exception e) {
-                return OperationHelper.GetPostException<string>(e);
-            }
-        }
+    public class NotificationEventOperations : MainReadOperation<NotificationEvent>, IGenericOperation<NotificationEvent, NotificationEventInput> {
         
+        private readonly ICommonQueries commonQueries;
+        private readonly IEmail email;
+        private readonly IUploadImage uploadImage;
+        private readonly IWeatherApi weather;
+
+        public NotificationEventOperations(IMainGenericDb<NotificationEvent> repo, IExistElement existElement, IAgroSearch search, ICommonQueries commonQueries, IEmail email, IUploadImage uploadImage, IWeatherApi weather) : base(repo, existElement, search) {
+            this.commonQueries = commonQueries;
+            this.email = email;
+            this.uploadImage = uploadImage;
+            this.weather = weather;
+        }
+
+        private async Task<string> ValidaNotification(NotificationEventInput input) {
+            string errors = string.Empty;
+            if (!string.IsNullOrWhiteSpace(input.Id)) {
+                var existsId  = await existElement.ExistsElement<NotificationEvent>(input.Id);
+                if (!existsId)
+                    errors += "No existe notificación a modificar.  ";
+            }
+            var existsBarrack = await existElement.ExistsElement<Barrack>(input.IdBarrack);
+            if (!existsBarrack)
+                errors += "No existe cuartel    ";
+            if (input.EventType == NotificationType.Phenological) {
+                var existsPhenologicalEvent = await existElement.ExistsElement<PhenologicalEvent>(input.IdPhenologicalEvent);
+                if (!existsPhenologicalEvent)
+                    errors += "No existe evento fenológico";
+            }
+            return errors;
+        }
+
+        public async Task<ExtPostContainer<string>> Save(NotificationEventInput input) {
+            var validaNotification = await ValidaNotification(input);
+            if (!string.IsNullOrWhiteSpace(validaNotification))
+                throw new Exception(validaNotification);
+            var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
+            NotificationEvent notification = new NotificationEvent {
+                Id = id,
+                Created = DateTime.Now,
+            };
+            if (!string.IsNullOrWhiteSpace(input.Id)) {
+                var notificationTmp = await Get(input.Id);
+                notification = notificationTmp.Result;
+            }
+            if (input.Lat.HasValue && input.Long.HasValue)
+                notification.Weather = await weather.GetWeather(input.Lat.Value, input.Long.Value);
+            var picturePath = await uploadImage.UploadImageBase64(input.Base64);
+            notification.IdBarrack = input.IdBarrack;
+            notification.IdPhenologicalEvent = input.IdPhenologicalEvent;
+            notification.NotificationType = input.EventType;
+            notification.PicturePath = picturePath;
+            notification.Description = input.Description;
+            await repo.CreateUpdate(notification);
+            var specieAbbv = await commonQueries.GetSpecieAbbreviationFromBarrack(input.IdBarrack);
+
+            var idSeason = await commonQueries.GetSeasonId(input.IdBarrack);
+            search.AddElements(new List<EntitySearch> {
+                new EntitySearch {
+                    Created = DateTime.Now,
+                    Id = id,
+                    RelatedProperties= new Property[]{
+                       new Property{ PropertyIndex=(int)PropertyRelated.GENERIC_DESC, Value = input.Description },
+                       new Property{ PropertyIndex=(int)PropertyRelated.GENERIC_CODE, Value = specieAbbv },
+                       new Property{ PropertyIndex=(int)PropertyRelated.GENERIC_PATH, Value = picturePath}
+                    },
+                    EntityIndex = (int)EntityRelated.NOTIFICATION,
+                    RelatedIds = new RelatedId[]{
+                      new RelatedId{  EntityIndex=(int)EntityRelated.PHENOLOGICAL_EVENT, EntityId = input.IdPhenologicalEvent},
+                      new RelatedId{  EntityIndex=(int)EntityRelated.BARRACK, EntityId = input.IdBarrack},
+                      new RelatedId{ EntityIndex=(int)EntityRelated.SEASON, EntityId = idSeason }
+
+                    },
+                    RelatedEnumValues = new RelatedEnumValue[]{ 
+                        new RelatedEnumValue{ EnumerationIndex = (int)EnumerationRelated.NOTIFICATION_TYPE, Value = (int)input.EventType  }
+                    }
+                }
+            });
+            //TODO: Definir el origen de la lista de idsRoles
+            var usersEmails = await commonQueries.GetUsersMailsFromRoles(new List<string> { "24beac75d4bb4f8d8fae8373426af780" });
+            email.SendEmail(usersEmails, "Notificacion",
+                $@"<html>
+                    <body>
+                        <p> Estimado(a), </p>
+                        <p> Llego una notificacion </p>
+                        <img src='{picturePath}' style='width:50%;height:auto;'>
+                        <p> Atentamente,<br> -Aresa </br></p>
+                    </body>
+                </html>");
+            return new ExtPostContainer<string> {
+                IdRelated = id,
+                MessageResult = ExtMessageResult.Ok,
+                Result = id
+            };
+        }
+
     }
 }

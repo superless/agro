@@ -32,7 +32,17 @@ namespace trifenix.agro.weather.operations {
             int hum = (int)json.main.humidity;
             int pressure = (int)json.main.pressure;
             string iconCode = (string)json.weather[0].icon;
-            return new Weather(cityName, lat, lon, translator.TranslateText(main), translator.TranslateText(desc), temp, speed, degree, cloud, hum, pressure, iconCode);
+            return new Weather {
+                Coordinates = new Coordinates() { CityName = cityName, Latitude = lat, Longitude = lon },
+                Wind = new Wind() { Speed = speed, Degree = degree },
+                Main = main,
+                Description = desc,
+                TemperatureCelcius = temp,
+                CloudsPercentage = cloud,
+                HumidityPercentage = hum,
+                PressureHectoPascal = pressure,
+                UrlIcon = iconCode
+            };
         }
 
     }

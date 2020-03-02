@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model.agro.local;
 
 namespace trifenix.agro.db.model.local {
     public class Doses {

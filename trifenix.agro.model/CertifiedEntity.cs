@@ -1,12 +1,15 @@
 ﻿using Cosmonaut;
 using Cosmonaut.Attributes;
 
-namespace trifenix.agro.db.model {
+namespace trifenix.agro.db.model.agro
+{
+
     /// <summary>
     /// Entidad certificadora, encargada de validar el proceso de exportación
     /// </summary>
     [SharedCosmosCollection("agro", "CertifiedEntity")]
-    public class CertifiedEntity : DocumentBase, ISharedCosmosEntity {
+    public class CertifiedEntity : DocumentBaseName, ISharedCosmosEntity
+    {
 
         /// <summary>
         /// Identificador de la entidad
@@ -16,9 +19,8 @@ namespace trifenix.agro.db.model {
         /// <summary>
         /// Nombre de la entidad certificadora.
         /// </summary>
-        public string Name { get; set; }
+        public override string Name { get; set; }
 
         public string Abbreviation { get; set; }
-
     }
 }

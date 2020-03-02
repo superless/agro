@@ -1,177 +1,138 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using trifenix.agro.db.interfaces;
+using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.model;
-using trifenix.agro.db.model;
-using trifenix.agro.db.model.local;
+using trifenix.agro.db.model.agro;
 using trifenix.agro.enums;
-using trifenix.agro.external.interfaces.entities.orders;
-using trifenix.agro.external.operations.entities.orders.args;
-using trifenix.agro.external.operations.helper;
+using trifenix.agro.external.interfaces;
 using trifenix.agro.model.external;
+using trifenix.agro.model.external.Input;
+using trifenix.agro.search.interfaces;
+using trifenix.agro.search.model;
 
-namespace trifenix.agro.external.operations.entities.orders {
-    public class OrderFolderOperations : IOrderFolderOperations {
-        private readonly OrderFolderArgs _args;
+namespace trifenix.agro.external.operations.entities.orders
+{
+    public class OrderFolderOperations : MainReadOperation<OrderFolder>, IGenericOperation<OrderFolder, OrderFolderInput>
+    {
+        private readonly ICommonQueries commonQueries;
 
-        public OrderFolderOperations(OrderFolderArgs args) {
-            _args = args;
-        }        
-
-        public async Task<ExtGetContainer<OrderFolder>> GetOrderFolder(string id) {
-            var order = await _args.OrderFolder.GetOrderFolder(id);
-            return OperationHelper.GetElement(order);
+        public OrderFolderOperations(IMainGenericDb<OrderFolder> repo, IExistElement existElement, IAgroSearch search, ICommonQueries commonQueries) : base(repo, existElement, search)
+        {
+            this.commonQueries = commonQueries;
         }
 
-        public async Task<ExtGetContainer<List<OrderFolder>>> GetOrderFolders() {
-            var orderFoldersQuery = _args.OrderFolder.GetOrderFolders();
-            var orderFolders = await _args.CommonDb.TolistAsync(orderFoldersQuery);
-            var notificationsQuery = _args.NotificationEvent.GetNotificationEvents();
-            var notifications = await _args.CommonDbNotifications.TolistAsync(notificationsQuery.Where(s => s.Barrack.SeasonId == _args.IdSeason));
-            var orders = orderFolders.Select(s => {
-                var nw = DateTime.Now;
-                var stage = notifications.Any(a => a.PhenologicalEvent.Id.Equals(s.PhenologicalEvent.Id)) ? PhenologicalStage.Success : nw > s.PhenologicalEvent.InitDate ? PhenologicalStage.Warning : PhenologicalStage.Waiting;
-                s.Stage = stage;
-                return s;
-            }).ToList();
-            return OperationHelper.GetElements(orders);
-        }
-
-        public async Task<ExtPostContainer<OrderFolder>> SaveEditOrderFolder(string id, string idPhenologicalEvent, string idApplicationTarget, string categoryId, string idSpecie, string idIngredient){
-            var modifier = await _args.GraphApi.GetUserFromToken();
-            var userActivity = new UserActivity(DateTime.Now, modifier);
-            try
+        private async Task<string> Valida(OrderFolderInput input)
+        {
+            if (string.IsNullOrWhiteSpace(input.IdCategoryIngredient) && string.IsNullOrWhiteSpace(input.IdIngredient))
             {
-                var elements = await GetElementsToFolder(idPhenologicalEvent, idApplicationTarget, categoryId, idSpecie, idIngredient);
-                if (!elements.Success)
-                {
-                    return OperationHelper.PostNotFoundElementException<OrderFolder>(elements.Message, elements.IdNotfound);
+                return "la categoría de ingrediente y el ingrediente ";
+            }
+
+            if (!string.IsNullOrWhiteSpace(input.IdIngredient))
+            {
+                var existsIngredient = await existElement.ExistsElement<Ingredient>(input.IdIngredient);
+
+                if (!existsIngredient) return "El ingrediente no existe";
+            }
+
+            if (!string.IsNullOrWhiteSpace(input.IdCategoryIngredient))
+            {
+                var existsCategory = await existElement.ExistsElement<IngredientCategory>(input.IdCategoryIngredient);
+
+                if (!existsCategory) return "La categoría no existe";
+
+            }
+
+            var existsPhenological = await existElement.ExistsElement<PhenologicalEvent>(input.IdPhenologicalEvent);
+
+
+            if (!existsPhenological) return "El evento fenológico no existe";
+
+            var existsSpecie = await existElement.ExistsElement<Specie>(input.IdSpecie);
+
+            if (!existsSpecie) return "Especie no existe";
+
+            var existsTarget = await existElement.ExistsElement<ApplicationTarget>(input.IdApplicationTarget);
+
+            if (!existsTarget) return "No existe objetivo de la aplicación";
+
+            if (!string.IsNullOrWhiteSpace(input.Id))
+            {
+                var existsId = await existElement.ExistsElement<OrderFolder>(input.Id);
+
+                if (!existsId) return "No existe el id de la carpeta a modificar";
+            }
+
+            return string.Empty;
+
+
+        }
+
+        public async Task<ExtPostContainer<string>> Save(OrderFolderInput input)
+        {
+            var valida = await Valida(input);
+            if (!string.IsNullOrWhiteSpace(valida)) throw new Exception(valida);
+
+            var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
+
+            var specie = new OrderFolder
+            {
+                Id = id,
+                IdApplicationTarget = input.IdApplicationTarget,
+                IdCategoryIngredient = input.IdCategoryIngredient,
+                IdIngredient = input.IdIngredient,
+                IdPhenologicalEvent = input.IdPhenologicalEvent,
+                IdSpecie = input.IdSpecie
+            };
+
+            await repo.CreateUpdate(specie);
+
+
+            var specieAbbv = await commonQueries.GetSpecieAbbreviation(input.IdSpecie);
+
+
+
+
+            search.AddElements(new List<EntitySearch>
+            {
+                new EntitySearch{
+                    Created = DateTime.Now,
+                    Id = id,
+                    RelatedIds = new RelatedId[]{ 
+                        new RelatedId{ EntityIndex = (int)EntityRelated.TARGET, EntityId = input.IdApplicationTarget  },
+                        new RelatedId{ EntityIndex = (int)EntityRelated.CATEGORY_INGREDIENT, EntityId = input.IdCategoryIngredient  },
+                        new RelatedId{ EntityIndex = (int)EntityRelated.PHENOLOGICAL_EVENT, EntityId = input.IdPhenologicalEvent },
+                        new RelatedId{ EntityIndex = (int)EntityRelated.INGREDIENT, EntityId = input.IdIngredient },
+                        new RelatedId{ EntityIndex = (int)EntityRelated.PREORDER, EntityId = input.IdSpecie}
+                    },
+                    RelatedProperties = new Property[]{ 
+                        new Property{ 
+                            PropertyIndex = (int)PropertyRelated.GENERIC_ABBREVIATION,
+                            Value = specieAbbv
+                        }
+                    }
+                    
                 }
-                var order = await _args.OrderFolder.GetOrderFolder(id);
-                if (order == null)
-                {
-                    return OperationHelper.PostNotFoundElementException<OrderFolder>($"orden con id {id} no encontrada", id);
-                }
-                order.Stage = PhenologicalStage.Waiting;
-                order.SeasonId = _args.IdSeason;
-                order.PhenologicalEvent = elements.PhenologicalEvent;
-                order.ModifyBy.Add(userActivity);
-                order.Specie = elements.Specie;
-                order.Ingredient = elements.Ingredient != null ? new LocalIngredient { Id = idIngredient, Name = elements.Ingredient.Name } : null;
-                order.Category = elements.Category;
-                order.ApplicationTarget = elements.Target;
-                await _args.OrderFolder.CreateUpdateOrderFolder(order);
-                return new ExtPostContainer<OrderFolder>
-                {
-                    IdRelated = id,
-                    Result = order,
-                    MessageResult = ExtMessageResult.Ok
-                };
-            }
-            catch (Exception exc)
+            });
+
+
+            return new ExtPostContainer<string>
             {
-                return OperationHelper.GetPostException<OrderFolder>(exc);
-            }
+                IdRelated = id,
+                MessageResult = ExtMessageResult.Ok,
+                Result = id
+            };
+
+
         }
 
-        public async Task<ExtPostContainer<string>> SaveNewOrderFolder(string idPhenologicalEvent, string idApplicationTarget, string categoryId, string idSpecie, string idIngredient){
-            var creator = await _args.GraphApi.GetUserFromToken();
-            var userActivity = new UserActivity(DateTime.Now, creator);
-            try
-            {
-                var elements = await GetElementsToFolder(idPhenologicalEvent, idApplicationTarget, categoryId, idSpecie, idIngredient);
+       
 
-                if (!elements.Success)
-                {
-                    return OperationHelper.PostNotFoundElementException<string>(elements.Message, elements.IdNotfound);
-                }
-                var order = new OrderFolder
-                {
-                    Id = Guid.NewGuid().ToString("N"),
-                    ApplicationTarget = elements.Target,
-                    Creator = userActivity,
-                    Category = elements.Category,
-                    Ingredient = elements.Ingredient != null ? new LocalIngredient { Id = idIngredient, Name = elements.Ingredient.Name } : null,
-                    PhenologicalEvent = elements.PhenologicalEvent,
-                    SeasonId = _args.IdSeason,
-                    Specie = elements.Specie,
-                    Stage = PhenologicalStage.Waiting
-                };
-                var idResult = await _args.OrderFolder.CreateUpdateOrderFolder(order);
-                return new ExtPostContainer<string>
-                {
-                    IdRelated = idResult,
-                    Result = idResult,
-                    MessageResult = ExtMessageResult.Ok
-                };
-            }
-            catch (Exception exc)
-            {
-                return OperationHelper.GetPostException<string>(exc);
-            }
-        }
 
-        private async Task<ElementsFolder> GetElementsToFolder(string idPhenologicalEvent, string idApplicationTarget, string categoryId, string idSpecie, string idIngredient, string idSeason = null) {
-            var elementFolder = new ElementsFolder();
-            elementFolder.PhenologicalEvent = await _args.PhenologicalEvent.GetPhenologicalEvent(idPhenologicalEvent);
-            if (elementFolder.PhenologicalEvent == null)
-            {
-                elementFolder.IdNotfound = idPhenologicalEvent;
-                elementFolder.Message = $"Evento fenológico con id {idPhenologicalEvent} no encontrado";
-                elementFolder.Success = false;
-                return elementFolder;
-            }
-            elementFolder.Target =  await _args.Target.GetTarget(idApplicationTarget);
-            if (elementFolder.Target == null)
-            {
-                elementFolder.IdNotfound = idApplicationTarget;
-                elementFolder.Message = $"Objetivo de aplicación con id {idApplicationTarget} no encontrado";
-                elementFolder.Success = false;
-                return elementFolder;
-            }
-            elementFolder.Specie = await _args.Specie.GetSpecie(idSpecie);
-            if (elementFolder.Specie == null)
-            {
-                elementFolder.IdNotfound = idSpecie;
-                elementFolder.Message = $"Especie con id {idApplicationTarget} no encontrado";
-                elementFolder.Success = false;
-                return elementFolder;
-            }
-            elementFolder.Category = await _args.IngredientCategory.GetIngredientCategory(categoryId);
-            if (elementFolder.Category == null)
-            {
-                elementFolder.IdNotfound = idSpecie;
-                elementFolder.Message = $"Categoría de ingrediente con id {categoryId} no encontrado";
-                elementFolder.Success = false;
-                return elementFolder;
-            }          
-            elementFolder.Success = true;
-            if (string.IsNullOrWhiteSpace(idIngredient))
-            {
-                return elementFolder;
-            }
-            elementFolder.Ingredient = await _args.Ingredient.GetIngredient(idIngredient);
-            return elementFolder;
-        }
+
+        
     }
 
-    public class ElementsFolder {
-        public bool Success { get; set; }
-
-        public PhenologicalEvent PhenologicalEvent { get; set; }
-        public ApplicationTarget Target { get; set; }
-
-        public IngredientCategory Category { get; set; }
-
-        public Specie Specie { get; set; }
-
-        public Rootstock Rootstock { get; set; }
-
-        public Ingredient Ingredient { get; set; }
-
-        public string Message { get; set; }
-
-        public string IdNotfound { get; set; }
-    }
 }

@@ -1,40 +1,35 @@
 ﻿using Cosmonaut;
 using Cosmonaut.Attributes;
-using System.Collections.Generic;
 using trifenix.agro.db.model.local;
 
-namespace trifenix.agro.db.model {
+namespace trifenix.agro.db.model.agro
+{
 
     [SharedCosmosCollection("agro", "Barrack")]
-    public class Barrack : DocumentBase, ISharedCosmosEntity {
+    public class Barrack : DocumentBaseName, ISharedCosmosEntity {
         public override string Id { get; set; }
+
+        public override string Name { get; set; }
 
         public string SeasonId { get; set; }
 
-        public string Name { get; set; }
+        public string IdPlotLand { get; set; }
 
-        public PlotLand PlotLand { get; set; }
-
-        public float Hectares { get; set; }
+        public double Hectares { get; set; }
 
         public int PlantingYear { get; set; }
 
-        public Variety Variety { get; set; }
+        public string IdVariety { get; set; }
 
         public int NumberOfPlants { get; set; }
 
-        private List<GeographicalPoint> _geoPoints;
+        public GeographicalPoint[] GeographicalPoints { get; set; }
 
-        public List<GeographicalPoint> GeoPoints {
-            get {
-                _geoPoints = _geoPoints ?? new List<GeographicalPoint>();
-                return _geoPoints; }
-            set { _geoPoints = value; }
-        }
 
-        public Variety Pollinator { get; set; }
+        public string IdPollinator { get; set; }
 
-        public Rootstock Rootstock { get; set; }
+        public string IdRootstock { get; set; }
 
     }
+
 }

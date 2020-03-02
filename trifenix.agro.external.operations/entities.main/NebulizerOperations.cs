@@ -1,62 +1,79 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using trifenix.agro.db.interfaces.agro;
-using trifenix.agro.db.interfaces.common;
+using trifenix.agro.db.interfaces;
+using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.model;
-using trifenix.agro.external.interfaces.entities.main;
-using trifenix.agro.external.operations.helper;
+using trifenix.agro.enums;
+using trifenix.agro.external.interfaces;
+using trifenix.agro.external.operations.res;
 using trifenix.agro.model.external;
+using trifenix.agro.model.external.Input;
+using trifenix.agro.search.interfaces;
+using trifenix.agro.search.model;
 
-namespace trifenix.agro.external.operations.entities.main {
-    public class NebulizerOperations : INebulizerOperations {
-
-        private readonly INebulizerRepository _repo;
-        private readonly ICommonDbOperations<Nebulizer> _commonDb;
-
-        public NebulizerOperations(INebulizerRepository repo, ICommonDbOperations<Nebulizer> commonDb) {
-            _repo = repo;
-            _commonDb = commonDb;
+namespace trifenix.agro.external.operations.entities.main
+{
+    public class NebulizerOperations : MainReadOperation<Nebulizer>, IGenericOperation<Nebulizer, NebulizerInput>
+    {
+        public NebulizerOperations(IMainGenericDb<Nebulizer> repo, IExistElement existElement, IAgroSearch search) : base(repo, existElement, search)
+        {
         }
 
-        public async Task<ExtGetContainer<Nebulizer>> GetNebulizer(string idNebulizer) {
-            var nebulizer = await _repo.GetNebulizer(idNebulizer);
-            return OperationHelper.GetElement(nebulizer);
-        }
+        public async Task<ExtPostContainer<string>> Save(NebulizerInput input)
+        {
+            var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
 
-        public async Task<ExtGetContainer<List<Nebulizer>>> GetNebulizers() {
-            var queryTargets = _repo.GetNebulizers();
-            var targets = await _commonDb.TolistAsync(queryTargets);
-            return OperationHelper.GetElements(targets);
-        }
+            var nebulizer = new Nebulizer
+            {
+                Id = id,
+                Brand = input.Brand,
+                Code = input.Code
+            };
 
-        public async Task<ExtPostContainer<Nebulizer>> SaveEditNebulizer(string id, string brand, string code) {
-            var element = await _repo.GetNebulizer(id);
-            return await OperationHelper.EditElement(_commonDb, _repo.GetNebulizers(),
-                id,
-                element,
-                s => {
-                    s.Brand = brand;
-                    s.Code = code;
-                    return s;
-                },
-                _repo.CreateUpdateNebulizer,
-                 $"No existe objetivo aplicación con id: {id}",
-                s => s.Code.Equals(code) && code != element.Code,
-                $"Ya existe nebulizadora con codigo: {code}"
-            );
-        }
+            if (!string.IsNullOrWhiteSpace(input.Id))
+            {
+                var existsId = await existElement.ExistsElement<Nebulizer>(input.Id);
 
-        public async Task<ExtPostContainer<string>> SaveNewNebulizer(string brand, string code) {
-            return await OperationHelper.CreateElement(_commonDb,_repo.GetNebulizers(),
-                async s => await _repo.CreateUpdateNebulizer(new Nebulizer {
-                    Id = s,
-                    Brand = brand,
-                    Code = code
-                }),
-                s => s.Code.Equals(code),
-                $"Ya existe nebulizadora con codigo: {code}"
-            );
-        }
+                if (!existsId) throw new Exception(string.Format(ErrorMessages.NotValidId, "Nebulizadora"));
 
+                var existsCode = await existElement.ExistsEditElement<Nebulizer>(input.Id, "Code", input.Code);
+
+                if (existsCode) throw new Exception("El código ya existe en otra nebulizadora");
+            } else {
+                var existsCode = await existElement.ExistsElement<Nebulizer>("Code", input.Code);
+
+                if (existsCode) throw new Exception("El código ya existe en otra nebulizadora");
+            }
+
+            await repo.CreateUpdate(nebulizer);
+
+            search.AddElements(new List<EntitySearch>
+            {
+                new EntitySearch{
+                    Id = id,
+                    EntityIndex = (int)EntityRelated.NEBULIZER,
+                    Created = DateTime.Now,
+                    RelatedProperties = new Property[] {
+                        new Property {
+                            PropertyIndex = (int)PropertyRelated.GENERIC_BRAND,
+                            Value = input.Brand
+                        },
+                        new Property {
+                            PropertyIndex = (int)PropertyRelated.GENERIC_CODE,
+                            Value = input.Code
+                        }
+                    }
+                }
+            });
+
+
+            return new ExtPostContainer<string>
+            {
+                IdRelated = id,
+                MessageResult = ExtMessageResult.Ok,
+                Result = id
+            };
+        }
     }
 }

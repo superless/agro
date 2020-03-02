@@ -1,298 +1,214 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System;
-using trifenix.agro.db.model.local;
+using trifenix.agro.db.interfaces;
+using trifenix.agro.db.interfaces.agro.common;
+using trifenix.agro.db.model.agro;
 using trifenix.agro.db.model.agro.orders;
-using trifenix.agro.db.model;
-using trifenix.agro.external.interfaces.entities.orders;
-using trifenix.agro.external.operations.common;
-using trifenix.agro.external.operations.helper;
-using trifenix.agro.model.external.Input;
-using trifenix.agro.model.external.output;
+using trifenix.agro.enums;
+using trifenix.agro.external.interfaces;
+using trifenix.agro.external.operations.res;
 using trifenix.agro.model.external;
+using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
-using trifenix.agro.db.interfaces.agro.fields;
-using trifenix.agro.db.interfaces.agro.orders;
-using trifenix.agro.db.interfaces.common;
-using trifenix.agro.microsoftgraph.interfaces;
-using trifenix.agro.db.interfaces.agro.ext;
-using trifenix.agro.db.interfaces.agro.events;
-using trifenix.agro.db.interfaces.agro;
-using trifenix.agro.util;
-using trifenix.agro.external.interfaces;
 
-namespace trifenix.agro.external.operations.entities.orders {
-    public class ApplicationOrderOperations<T> : IApplicationOrderOperations where T : ApplicationOrder{
+namespace trifenix.agro.external.operations.entities.orders
+{
+    public class ApplicationOrderOperations : MainReadOperationName<ApplicationOrder, ApplicationOrderInput>, IGenericOperation<ApplicationOrder, ApplicationOrderInput>
+    {
+        private readonly ICommonQueries commonQueries;
 
-        private readonly IApplicationOrderRepository ApplicationOrder;
-        private readonly IApplicationTargetRepository Target;
-        private readonly IBarrackRepository Barracks;
-        private readonly ICertifiedEntityRepository CertifiedEntity;
-        private readonly ICommonDbOperations<T> CommonDb;
-        private readonly ICounterOperations CounterOp;
-        private readonly IExecutionOrderRepository Execution;
-        private readonly IGraphApi GraphApi;
-        private readonly INotificationEventRepository Notifications;
-        private readonly IPhenologicalPreOrderRepository PreOrder;
-        private readonly IProductRepository Product;
-        private readonly ISpecieRepository Specie;
-        private readonly IVarietyRepository Variety;
-        private readonly IAgroSearch SearchServiceInstance;
-        private readonly string EntityName;
-        private readonly string SeasonId;
-
-        public ApplicationOrderOperations(IApplicationOrderRepository _applicationOrder, IApplicationTargetRepository _target, IBarrackRepository _barracks, ICertifiedEntityRepository _certifiedEntity, ICommonDbOperations<T> _commonDb, ICounterOperations _counterOp, IExecutionOrderRepository _execution, IGraphApi _graphApi, INotificationEventRepository _notifications, IPhenologicalPreOrderRepository _preOrder, IProductRepository _product, ISpecieRepository _specie, IVarietyRepository _variety, string _seasonId, IAgroSearch _searchServiceInstance) {
-            ApplicationOrder = _applicationOrder;
-            Target = _target;
-            Barracks = _barracks;
-            CertifiedEntity = _certifiedEntity;
-            CommonDb = _commonDb;
-            CounterOp = _counterOp;
-            Execution = _execution;
-            GraphApi = _graphApi;
-            Notifications = _notifications;
-            PreOrder = _preOrder;
-            Specie = _specie;
-            Variety = _variety;
-            Product = _product;
-            EntityName = typeof(T).Name;
-            SeasonId = _seasonId;
-            SearchServiceInstance = _searchServiceInstance;
+        public ApplicationOrderOperations(IMainGenericDb<ApplicationOrder> repo, IExistElement existElement, IAgroSearch search, ICommonQueries commonQueries) : base(repo, existElement, search)
+        {
+            this.commonQueries = commonQueries;
         }
 
-        private OutPutApplicationOrder GetOutputOrder(ApplicationOrder appOrder) =>
-            new OutPutApplicationOrder {
-                Id = appOrder.Id,
-                Correlative = appOrder.Correlative,
-                SpecieAbb = appOrder.SpecieAbb,
-                Wetting = appOrder.Wetting,
-                Name = appOrder.Name,
-                isPhenological = appOrder.IsPhenological,
-                InitDate = appOrder.InitDate,
-                EndDate = appOrder.EndDate,
-                SeasonId = appOrder.SeasonId,
-                ApplicationInOrders = appOrder.ApplicationInOrders.Select(async s => {
-                    return new OutPutApplicationInOrder {
-                        Doses = s.Doses,
-                        Product = await Product.GetProduct(s.ProductId),
-                        ProductId = s.ProductId,
-                        QuantityByHectare = s.QuantityByHectare
-                    };
-                }).Select(s => s.Result).ToList(),
-                PhenologicalPreOrders = appOrder.PhenologicalPreOrders,
-                Barracks = appOrder.Barracks.Select(async s => {
-                    var events = await s.EventsId.SelectElement(Notifications.GetNotificationEvent, "Identicadores de evento no encontrados");
-                    return new OutputBarrackInstance {
-                        Barrack = s.Barrack,
-                        EventsId = s.EventsId,
-                        Events = events.Select(a => new OutputOrderNotificationEvent {
-                            Created = a.Created,
-                            Description = a.Description,
-                            Id = a.Id,
-                            PhenologicalEvent = a.PhenologicalEvent,
-                            PicturePath = a.PicturePath
-                        }).ToList()
-                    };
-                }).Select(s => s.Result).ToList()
-            };
 
-        public async Task<ExtGetContainer<OutPutApplicationOrder>> GetApplicationOrder(string id) {
-            try {
-                var appOrder = await ApplicationOrder.GetApplicationOrder(id);
-                var newAppOrder = GetOutputOrder(appOrder);
-                return OperationHelper.GetElement(newAppOrder);
-            }
-            catch (Exception e) {
-                return OperationHelper.GetException<OutPutApplicationOrder>(e);
-            }
-        }
+        private async Task<string> ValidaOrder(ApplicationOrderInput input) {
 
-        public async Task<ExtPostContainer<OutPutApplicationOrder>> SaveEditApplicationOrder(string id, ApplicationOrderInput input) {
-            var modifier = await GraphApi.GetUserFromToken();
-            var userActivity = new UserActivity(DateTime.Now, modifier);
-            T order = (T)await ApplicationOrder.GetApplicationOrder(id);
-            var newAppOrder = await GetApplicationOrder(id, input);
-            bool changedSpecie = !order.SpecieAbb.Equals(newAppOrder.SpecieAbb);
-            var executions = GetExecutionsInOrder(id);
-            //TODO: Validaciones al momento de modificar orden
-            //LISTO ->  Al modificar la fecha en la orden, no deben existir ejecuciones en proceso,  todas deben estar cerradas.   Posible duplicidad 
-            //LISTO -> No se puede modificar una orden que ya posee una ejecucion en proceso o una ejecucion exitosa (cerrada).    
-            if (executions.Result.Any(execution => execution.ExecutionStatus == ExecutionStatus.InProcess || execution.FinishStatus == FinishStatus.Successful)) return OperationHelper.GetPostException<OutPutApplicationOrder>(new Exception("No se puede modificar una Orden de Aplicacion que posee al menos una Ejecucion en proceso o que ha finalizado con exito."));
-            if ((DateTime.Compare(order.InitDate,newAppOrder.InitDate) != 0 || DateTime.Compare(order.EndDate,newAppOrder.EndDate) != 0) && executions.Result.Any(execution => execution.ClosedStatus != 0)) return OperationHelper.GetPostException<OutPutApplicationOrder>(new Exception("Para modificar la fecha de inicio o fecha de fin en la Orden de Aplicacion, todas las Ejecuciones deben estar cerradas."));
-            var editOperation = await OperationHelper.EditElement(CommonDb, (IQueryable<T>)ApplicationOrder.GetApplicationOrders(),
-                id,
-                order,
-                s => {
-                    newAppOrder.Creator = s.Creator;
-                    newAppOrder.ModifyBy = s.ModifyBy;
-                    newAppOrder.ModifyBy.Add(userActivity);
-                    if (changedSpecie)
-                        newAppOrder.Correlative = CounterOp.GetCorrelativePosition<T>(newAppOrder.SpecieAbb);
-                    return newAppOrder;
-                },
-                ApplicationOrder.CreateUpdate,
-                $"No existe orden con id {id}",
-                s => s.Name.Equals(input.Name) && input.Name != order.Name,
-                $"Ya existe orden de aplicacion con nombre : {input.Name}"
-            );
-            if (editOperation.GetType() == typeof(ExtPostErrorContainer<string>))
-                return OperationHelper.GetPostException<OutPutApplicationOrder>(new Exception(editOperation.Message));
-            if (changedSpecie)
-                CounterOp.IncreaseCorrelativePosition<T>(newAppOrder.SpecieAbb);
-            SearchServiceInstance.AddEntities(new List<EntitySearch> {
-                new EntitySearch{
-                    Id = id,
-                    Name = input.Name,
-                    Specie = newAppOrder.SpecieAbb,
-                    Type = input.isPhenological
+            
+            if (input.OrderType == OrderType.PHENOLOGICAL)
+            {
+                if (!input.IdsPhenologicalPreOrder.Any()) return "Deben existir preordenes fenológicas, cuando la orden de aplicación es de tipo fenológica";
+
+                foreach (var preOrderId in input.IdsPhenologicalPreOrder)
+                {
+                    var exists = await existElement.ExistsElement<PreOrder>(preOrderId);
+
+                    if (!exists) return $"la preorden con id {preOrderId} no existe";
                 }
-            });
-            return new ExtPostContainer<OutPutApplicationOrder> {
-                IdRelated = editOperation.IdRelated,
-                Message = editOperation.Message,
-                MessageResult = editOperation.MessageResult,
-                Result = GetOutputOrder(newAppOrder)
+
+            }
+
+
+            if (!input.DosesOrder.Any()) return "Debe existir al menos un producto";
+
+            foreach (var doses in input.DosesOrder)
+            {
+                var exists = await existElement.ExistsElement<Doses>(doses.IdDoses);
+                if (!exists) return $"la dosis con id {doses.IdDoses} no existe";
+
+            }
+
+            if (!input.Barracks.Any()) return "Debe existir al menos un cuartel";
+
+            foreach (var barrack in input.Barracks)
+            {
+                var exists = await existElement.ExistsElement<Barrack>(barrack.IdBarrack);
+                if (!exists) return $"el cuartel con id {barrack.IdBarrack} no existe";
+                if (barrack.IdEvents.Any())
+                {
+                    foreach (var idNotif in barrack.IdEvents)
+                    {
+                        var existsEvent = await existElement.ExistsElement<NotificationEvent>(idNotif);
+
+                        if (!existsEvent) return $"la notificación con id {idNotif} no existe";
+                    }
+
+                }
+
+            }
+
+            if (input.InitDate > input.EndDate) return "La fecha inicial no puede ser mayor a la final";
+
+            return string.Empty;
+        }
+
+        public async Task<ExtPostContainer<string>> Save(ApplicationOrderInput input)
+        {
+            var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
+
+
+            var valida = await Validate(input);
+
+            if (!valida) throw new Exception(string.Format(ErrorMessages.NotValid, "PreOrden"));
+
+            var validaPreOrder = await ValidaOrder(input);
+
+            if (!string.IsNullOrWhiteSpace(validaPreOrder)) throw new Exception(validaPreOrder);
+
+            var order = new ApplicationOrder
+            {
+                Id = id,
+                Barracks = input.Barracks,
+                DosesOrder = input.DosesOrder,
+                EndDate = input.EndDate,
+                InitDate = input.InitDate,
+                IdsPhenologicalPreOrder = input.IdsPhenologicalPreOrder,
+                Name = input.Name,
+                OrderType = input.OrderType,
+                Wetting = input.Wetting
             };
-        }
 
-        private async Task<T> GetApplicationOrder(string id, ApplicationOrderInput input) {
-            var targetIds = input.Applications.Any(s => s.Doses != null) ? input.Applications.Where(s => s.Doses != null).SelectMany(s => s.Doses.idsApplicationTarget).Distinct() : new List<string>();
-            var varietyAbb = new List<string> { Barracks.GetBarrack(input.BarracksInput.FirstOrDefault()?.IdBarrack).Result.Variety?.Abbreviation };
-            var specieAbb = Barracks.GetBarrack(input.BarracksInput.FirstOrDefault()?.IdBarrack).Result.Variety.Specie.Abbreviation;
-            int correlative = CounterOp.GetCorrelativePosition<T>(specieAbb);
-            var certifiedEntitiesIds = input.Applications.Any(s => s.Doses != null) ? input.Applications.Where(s => s.Doses != null).SelectMany(s => s.Doses.WaitingHarvest.Select(a => a.IdCertifiedEntity)).Distinct() : new List<string>();
-            var barracksInstances = await GetBarracksIntance(input.BarracksInput);
-            var applications = GetApplicationInOrder(input.Applications);
-            var phenologicalPreOrders = input.PreOrdersId == null || !input.PreOrdersId.Any() ? new List<PhenologicalPreOrder>() :
-            await input.PreOrdersId.SelectElement(PreOrder.GetPhenologicalPreOrder, "Existen identificadores de preordenes que no fueron encontrados");
-            var creator = await GraphApi.GetUserFromToken();
-            var userActivity = new UserActivity(DateTime.Now, creator);
-            return (T)Activator.CreateInstance(typeof(T), new object[] {
-                id,
-                correlative,
-                certifiedEntitiesIds?.ToList(),
-                specieAbb,
-                barracksInstances,
-                targetIds?.ToList(),
-                varietyAbb?.ToList(),
-                SeasonId,
-                input.Name,
-                input.isPhenological,
-                input.InitDate,
-                input.EndDate,
-                input.Wetting,
-                applications,
-                userActivity,
-                phenologicalPreOrders
-            });
-                
-        }
 
-        public async Task<ExtPostContainer<string>> SaveNewApplicationOrder(ApplicationOrderInput input) {
-            var createOperation = await OperationHelper.CreateElement(CommonDb, (IQueryable<T>)ApplicationOrder.GetApplicationOrders(),
-                async s => {
-                    ApplicationOrder order = await GetApplicationOrder(s, input);
-                    order.InnerCorrelative = 1;
-                    return await ApplicationOrder.CreateUpdate(order);
-                },
-                s => s.Name.Equals(input.Name),
-                $"Ya existe orden de aplicacion con nombre: {input.Name}");
-            if (createOperation.GetType() == typeof(ExtPostErrorContainer<string>))
-                return OperationHelper.GetPostException<string>(new Exception(createOperation.Message));
-            string specieAbb = Barracks.GetBarrack(input.BarracksInput.FirstOrDefault()?.IdBarrack).Result.Variety.Specie.Abbreviation;
-            SearchServiceInstance.AddEntities(new List<EntitySearch> {
-                new EntitySearch {
-                    Id = createOperation.IdRelated,
-                    SeasonId = SeasonId,
+
+            await repo.CreateUpdate(order);
+
+
+            var specieAbbv = await commonQueries.GetSpecieAbbreviationFromBarrack(input.Barracks.First().IdBarrack);
+
+
+            var entity = new EntitySearch
+            {
+                Id = id,
+                EntityIndex = (int)EntityRelated.ORDER,
+                Created = DateTime.Now,
+                RelatedProperties = new Property[] {
+                        new Property {
+                            PropertyIndex = (int)PropertyRelated.GENERIC_NAME,
+                            Value = input.Name
+                        },
+                        new Property {
+                            PropertyIndex = (int)PropertyRelated.GENERIC_ABBREVIATION,
+                            Value = specieAbbv
+                        },
+                        new Property{ 
+                            PropertyIndex = (int)PropertyRelated.GENERIC_START_DATE,
+                            Value = $"{input.InitDate : dd/MM/yyyy}"
+                        },
+                        new Property{
+                            PropertyIndex = (int)PropertyRelated.GENERIC_END_DATE,
+                            Value = $"{input.EndDate : dd/MM/yyyy}"
+                        }
+                    },
+                RelatedEnumValues = new RelatedEnumValue[] {
+                    new RelatedEnumValue{ EnumerationIndex = (int)EnumerationRelated.ORDER_TYPE, Value = (int)input.OrderType }
+                }
+            };
+
+
+            var entities = new List<RelatedId>();
+            //TODO : Eliminar antes de agregar
+            foreach (var barrack in input.Barracks)
+            {
+                var newGuid = Guid.NewGuid().ToString("N");
+                var relatedIds = new List<RelatedId>() {
+                    new RelatedId{ EntityIndex = (int)EntityRelated.BARRACK, EntityId = barrack.IdBarrack },
+                    new RelatedId { EntityIndex = (int)EntityRelated.ORDER, EntityId = id }
+
+                };
+                relatedIds.AddRange(barrack.IdEvents.Select(s => new RelatedId { EntityIndex = (int)EntityRelated.NOTIFICATION, EntityId = s }));
+
+                var inputSearch = new EntitySearch
+                {
+                    Id = newGuid,
+                    EntityIndex = (int)EntityRelated.BARRACK_EVENT,
                     Created = DateTime.Now,
-                    EntityName = EntityName,
-                    Name = input.Name,
-                    Specie = specieAbb,
-                    Type = input.isPhenological
-                }
-            });
-            CounterOp.IncreaseCorrelativePosition<T>(specieAbb);
-            return createOperation;
-        }
+                    RelatedIds = relatedIds.ToArray()
 
-        private List<ApplicationsInOrder> GetApplicationInOrder(ApplicationInOrderInput[] appInOrder) {
-            return appInOrder.Select(async s => {
-                if (s.Doses == null) {
-                    return new ApplicationsInOrder {
-                        ProductId = s.ProductId,
-                        QuantityByHectare = s.QuantityByHectare
-                    };
-                }
-                var dose = await GetDose(s.Doses);
-                return new ApplicationsInOrder {
-                    ProductId = s.ProductId,
-                    QuantityByHectare = s.QuantityByHectare,
-                    Doses = dose
                 };
-            }).Select(s => s.Result).ToList();
-        }
+                search.AddElements(new List<EntitySearch> {
+                    inputSearch
+                });
 
-        public ExtGetContainer<List<ExecutionOrder>> GetExecutionsInOrder(string idOrder) {
-            var executions = Execution.GetExecutionOrders(idOrder);
-            return OperationHelper.GetElements(executions.ToList());
-        }
+                entities.Add(new RelatedId { EntityIndex = (int)EntityRelated.BARRACK_EVENT, EntityId = newGuid });
 
-        private async Task<Doses> GetDose(DosesInput input) {
-            var doses = new List<DosesInput> { input };
-            var idCerts = input.WaitingHarvest.Select(s => s.IdCertifiedEntity).Distinct();
-            var dosesResult = await ModelCommonOperations.GetDoses(Variety, Target, Specie, CertifiedEntity, doses.ToArray(), input.IdVarieties, input.idsApplicationTarget, input.IdSpecies, idCerts, SeasonId);
-            return dosesResult.First();
-        }
+            }
+            //TODO : Eliminar antes de agregar
+            foreach (var doses in input.DosesOrder)
+            {
+                var idGuid = Guid.NewGuid().ToString("N");
+                var inputSearch = new EntitySearch
+                {
+                    Id = idGuid,
+                    Created = DateTime.Now,
+                    EntityIndex = (int)EntityRelated.DOSES_ORDER,
+                    RelatedProperties = new Property[] {
+                        new Property{ PropertyIndex = (int)PropertyRelated.GENERIC_QUANTITY_HECTARE,  Value = $"{doses.QuantityByHectare}" }
+                     },
+                    RelatedIds = new RelatedId[] {
+                        new RelatedId{ EntityIndex=(int)EntityRelated.DOSES, EntityId = doses.IdDoses },
+                        new RelatedId { EntityIndex = (int)EntityRelated.ORDER, EntityId = id }
+                     }
 
-        private async Task<List<BarrackOrderInstance>> GetBarracksIntance(BarrackEventInput[] barracksInput) {
-            var barracks = await barracksInput.Select(s => s.IdBarrack).SelectElement(Barracks.GetBarrack, "Uno de los identificadores de cuartel no fue encontrado");
-            return barracksInput.Select(s => {
-                return new BarrackOrderInstance {
-                    Barrack = barracks.First(a => a.Id.Equals(s.IdBarrack)),
-                    EventsId = s.EventsId?.ToList()
                 };
-            }).ToList();
-        }
+                search.AddElements(new List<EntitySearch> {
+                    inputSearch
+                });
+                entities.Add(new RelatedId { EntityIndex = (int)EntityRelated.DOSES_ORDER, EntityId = idGuid });
+            }
 
-        public async Task<ExtGetContainer<List<OutPutApplicationOrder>>> GetApplicationOrders() {
-            try {
-                var applicationOrderQuery = ApplicationOrder.GetApplicationOrders();
-                var applicationOrders = await CommonDb.TolistAsync((IQueryable<T>)applicationOrderQuery);
-                var outputOrders = applicationOrders.Select(GetOutputOrder).ToList();
-                return OperationHelper.GetElements(outputOrders);
+            if (input.OrderType == OrderType.PHENOLOGICAL)
+            {
+                entities.AddRange(input.IdsPhenologicalPreOrder.Select(s => new RelatedId { EntityIndex = (int)EntityRelated.PREORDER, EntityId = s }));
             }
-            catch (Exception e) {
-                return OperationHelper.GetException<List<OutPutApplicationOrder>>(e);
-            }
-        }
-        
-        public ExtGetContainer<SearchResult<OutPutApplicationOrder>> GetPaginatedOrders(string textToSearch, string abbSpecie, bool? type, int? page, int? quantity, bool? desc) {
-            var filters = new Filters { EntityName = EntityName, SeasonId = SeasonId };
-            if (!string.IsNullOrWhiteSpace(abbSpecie))
-                filters.Specie = abbSpecie;
-            if (type.HasValue)
-                filters.Type = type;
-            var parameters = new Parameters { Filters = filters, TextToSearch = textToSearch, Page = page, Quantity = quantity, Desc = desc };
-            EntitiesSearchContainer entitySearch = SearchServiceInstance.GetPaginatedEntities(parameters);
-            var resultDb = entitySearch.Entities.Select(async order => await GetApplicationOrder(order.Id));
-            return OperationHelper.GetElement(new SearchResult<OutPutApplicationOrder> {
-                Total = entitySearch.Total,
-                Elements = resultDb.Select(s=>s.Result.Result).ToArray()
+
+            var idSeason = await commonQueries.GetSeasonId(input.Barracks.First().IdBarrack);
+            entities.Add( new RelatedId { EntityIndex = (int)EntityRelated.SEASON, EntityId = idSeason });
+            entity.RelatedIds = entities.ToArray();
+
+            search.AddElements(new List<EntitySearch> {
+                entity
             });
-        }
 
-        public ExtGetContainer<EntitiesSearchContainer> GetIndexElements(string textToSearch, string abbSpecie, bool? type, int? page, int? quantity, bool? desc) {
-            var filters = new Filters { EntityName = EntityName, SeasonId = SeasonId };
-            if (!string.IsNullOrWhiteSpace(abbSpecie))
-                filters.Specie = abbSpecie;
-            if (type.HasValue)
-                filters.Type = type;
-            var parameters = new Parameters { Filters = filters, TextToSearch = textToSearch, Page = page, Quantity = quantity, Desc = desc };
-            EntitiesSearchContainer entitySearchFilteresBySeason = SearchServiceInstance.GetPaginatedEntities(parameters);
-            return OperationHelper.GetElement(entitySearchFilteresBySeason);
+            return new ExtPostContainer<string>
+            {
+                IdRelated = id,
+                MessageResult = ExtMessageResult.Ok,
+                Result = id
+            };
         }
-
     }
 }

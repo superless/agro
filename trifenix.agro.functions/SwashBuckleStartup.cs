@@ -22,7 +22,6 @@ namespace trifenix.agro.functions
     {
 
         public void Configure(IWebJobsBuilder builder)
-
         {
 
             //Register the extension

@@ -1,74 +1,65 @@
-﻿using Cosmonaut.Extensions;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using trifenix.agro.db.interfaces.agro.fields;
-using trifenix.agro.db.interfaces.common;
-using trifenix.agro.db.model;
-using trifenix.agro.external.interfaces.entities.fields;
-using trifenix.agro.external.operations.helper;
+using trifenix.agro.db.interfaces;
+using trifenix.agro.db.interfaces.agro.common;
+using trifenix.agro.db.model.agro;
+using trifenix.agro.enums;
+using trifenix.agro.external.interfaces;
+using trifenix.agro.external.operations.res;
 using trifenix.agro.model.external;
+using trifenix.agro.model.external.Input;
+using trifenix.agro.search.interfaces;
+using trifenix.agro.search.model;
 
 namespace trifenix.agro.external.operations.entities.fields
 {
-    public class SectorOperations : ISectorOperations
+
+    public class SectorOperations : MainReadOperationName<Sector, SectorInput>, IGenericOperation<Sector, SectorInput>
     {
-        private readonly ICommonDbOperations<Sector> _commonDb;
-        private readonly ISectorRepository _repo;
-        private readonly string _idSeason;
-
-        public SectorOperations(ISectorRepository repo, ICommonDbOperations<Sector> commonDb, string idSeason)
+        public SectorOperations(IMainGenericDb<Sector> repo, IExistElement existElement, IAgroSearch search) : base(repo, existElement, search)
         {
-            _repo = repo;
-            _idSeason = idSeason;
-            _commonDb = commonDb;
         }
 
-        public async Task<ExtGetContainer<Sector>> GetSector(string id)
+        public async Task<ExtPostContainer<string>> Save(SectorInput input)
         {
-            var sector = await _repo.GetSector(id);
-            return OperationHelper.GetElement(sector);
+            var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
+
+            var sector = new Sector
+            {
+                Id = id,
+                Name = input.Name
+            };
+
+            var valida = await Validate(input);
+            if (!valida) throw new Exception(string.Format(ErrorMessages.NotValid, sector.CosmosEntityName));
+
+            await repo.CreateUpdate(sector);
+
+            search.AddElements(new List<EntitySearch>
+            {
+                new EntitySearch{
+                    Id = id,
+                    EntityIndex = (int)EntityRelated.SECTOR,
+                    Created = DateTime.Now,
+                    RelatedProperties = new Property[] {
+                        new Property {
+                            PropertyIndex = (int)PropertyRelated.GENERIC_NAME,
+                            Value = input.Name
+                        }
+                    }
+                }
+            });
+
+
+            return new ExtPostContainer<string>
+            {
+                IdRelated = id,
+                MessageResult = ExtMessageResult.Ok,
+                Result = id
+            };
         }
 
-        public async Task<ExtGetContainer<List<Sector>>> GetSectors()
-        {
-            var querySectors = _repo.GetSectors();
-            var sectors = await _commonDb.TolistAsync(querySectors);
-            return OperationHelper.GetElements(sectors);
-        }
-
-        public async Task<ExtPostContainer<Sector>> SaveEditSector(string id, string name)
-        {
-            var element = await _repo.GetSector(id);
-            return await OperationHelper.EditElement(_commonDb, _repo.GetSectors(), 
-                id,
-                element,
-                s => {
-                    s.Name = name;
-                    s.SeasonId = _idSeason;
-                    return s;
-                },
-                _repo.CreateUpdateSector,
-                 $"No existe Sector con id: {id}",
-                s => s.Name.Equals(name) && name!=element.Name,
-                $"Ya existe sector con nombre: {name}"
-            );
-        }
-
-        public async Task<ExtPostContainer<string>> SaveNewSector(string name)
-        {
-            return await OperationHelper.CreateElement(_commonDb,_repo.GetSectors(),
-                async s => await _repo.CreateUpdateSector(new Sector
-                {
-                    Id = s,
-                    Name = name,
-                    SeasonId = _idSeason
-                }),
-                s => s.Name.Equals(name),
-                $"Ya existe sector con nombre: {name}"
-
-            );
-        }
+       
     }
 }

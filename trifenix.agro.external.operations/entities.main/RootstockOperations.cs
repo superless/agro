@@ -1,65 +1,78 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using trifenix.agro.db.interfaces.agro;
-using trifenix.agro.db.interfaces.common;
-using trifenix.agro.db.model;
-using trifenix.agro.external.interfaces.entities.main;
-using trifenix.agro.external.operations.helper;
+using trifenix.agro.db.interfaces;
+using trifenix.agro.db.interfaces.agro.common;
+using trifenix.agro.db.model.agro;
+using trifenix.agro.enums;
+using trifenix.agro.external.interfaces;
+using trifenix.agro.external.operations.res;
 using trifenix.agro.model.external;
+using trifenix.agro.model.external.Input;
+using trifenix.agro.search.interfaces;
+using trifenix.agro.search.model;
 
 namespace trifenix.agro.external.operations.entities.main
 {
-    public class RootstockOperations : IRootstockOperations
+    public class RootstockOperations : MainReadOperationName<Rootstock, RootStockInput>, IGenericOperation<Rootstock, RootStockInput>
     {
-        private readonly IRootstockRepository _repo;
-        private readonly ICommonDbOperations<Rootstock> _commonDb;
-        public RootstockOperations(IRootstockRepository repo, ICommonDbOperations<Rootstock> commonDb)
+        public RootstockOperations(IMainGenericDb<Rootstock> repo, IExistElement existElement, IAgroSearch search) : base(repo, existElement, search)
         {
-            _repo = repo;
-            _commonDb = commonDb;
         }
 
-        public async Task<ExtGetContainer<List<Rootstock>>> GetRootstocks()
+        public async Task<ExtPostContainer<string>> Save(RootStockInput input)
         {
-            var rootstocksQuery = _repo.GetRootstocks();
-            var rootstocks = await _commonDb.TolistAsync(rootstocksQuery);
-            return OperationHelper.GetElements(rootstocks);
+            var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
 
-        }
+            var specie = new Rootstock
+            {
+                Id = id,
+                Name = input.Name,
+                Abbreviation = input.Abbreviation
+            };
+            await repo.CreateUpdate(specie);
 
-        public async Task<ExtPostContainer<Rootstock>> SaveEditRootstock(string id, string name, string abbreviation)
-        {
-            var element = await _repo.GetRootstock(id);
-            return await OperationHelper.EditElement(_commonDb, _repo.GetRootstocks(),
-                id, 
-                element, 
-                s => {
-                    s.Name = name;
-                    s.Abbreviation = abbreviation;
-                    return s;
-                },
-                _repo.CreateUpdateRootstock,
-                 $"No existe portainjerto con id : {id}",
-                s => s.Name.Equals(name) && name != element.Name,
-                $"Ya existe portainjerto con nombre: {name}"
-            );
+            var valida = await Validate(input);
+            if (!valida) throw new Exception(string.Format(ErrorMessages.NotValid, specie.CosmosEntityName));
+            if (string.IsNullOrWhiteSpace(input.Id))
+            {
+                var validaAbbv = await existElement.ExistsElement<Rootstock>("Abbreviation", input.Abbreviation);
+                if (validaAbbv) throw new Exception(string.Format(ErrorMessages.NotValidAbbreviation, specie.CosmosEntityName));
+            }
+            else
+            {
+                var validaAbbv = await existElement.ExistsEditElement<Rootstock>(input.Id, "Abbreviation", input.Abbreviation);
+                if (validaAbbv) throw new Exception(string.Format(ErrorMessages.NotValidAbbreviation, specie.CosmosEntityName));
+            }
 
-        }
 
-        public async Task<ExtPostContainer<string>> SaveNewRootstock(string name, string abbreviation)
-        {
-            
-            return await OperationHelper.CreateElement(_commonDb, _repo.GetRootstocks(), 
-                async s => await _repo.CreateUpdateRootstock(new Rootstock
-                {
-                    Id = s,
-                    Name = name,
-                    Abbreviation = abbreviation
-                }),
-                s => s.Name.Equals(name),
-                $"Ya existe portainjerto con nombre: {name}"
-            );
-            
+
+            search.AddElements(new List<EntitySearch>
+            {
+                new EntitySearch{
+                    Id = id,
+                    EntityIndex = (int)EntityRelated.ROOTSTOCK,
+                    Created = DateTime.Now,
+                    RelatedProperties = new Property[] {
+                        new Property {
+                            PropertyIndex = (int)PropertyRelated.GENERIC_NAME,
+                            Value = input.Name
+                        },
+                        new Property {
+                            PropertyIndex = (int)PropertyRelated.GENERIC_ABBREVIATION,
+                            Value = input.Abbreviation
+                        }
+                    }
+                }
+            });
+
+
+            return new ExtPostContainer<string>
+            {
+                IdRelated = id,
+                MessageResult = ExtMessageResult.Ok,
+                Result = id
+            };
         }
     }
 }

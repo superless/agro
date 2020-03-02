@@ -1,12 +1,14 @@
-﻿namespace trifenix.agro.db.model {
-    public class UserApplicator : User {
-
-        public UserApplicator() : base() {
+﻿namespace trifenix.agro.db.model.agro
+{
+    public class UserApplicator : User
+    {
+        public UserApplicator() : base()
+        {
             CosmosEntityName = "User";
         }
+        public string IdNebulizer { get; set; }
 
-        public Nebulizer Nebulizer { get; set; }
-        public Tractor Tractor { get; set; }
+        public string IdTractor { get; set; }
 
     }
 }
