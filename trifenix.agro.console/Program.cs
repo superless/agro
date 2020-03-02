@@ -1,7 +1,11 @@
 ﻿using Cosmonaut;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,17 +14,16 @@ using trifenix.agro.db.applicationsReference;
 using trifenix.agro.db.applicationsReference.agro;
 
 using trifenix.agro.db.applicationsReference.common;
-using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model;
 using trifenix.agro.db.model.agro.orders;
 using trifenix.agro.external.operations;
-
 using trifenix.agro.search;
 using trifenix.agro.search.model;
 
 namespace trifenix.agro.console {
     class Program {
-        static async Task Main(string[] args)
-        {
+        static async Task Main(string[] args) {
+            Console.WriteLine("Hora de inicio: {0}", DateTime.Now.ToString("hh\\:mm\\:ss"));
             Stopwatch timer = Stopwatch.StartNew();
 
             #region Reflexion
@@ -74,9 +77,15 @@ namespace trifenix.agro.console {
             #endregion
 
             #region ActualizaElementosDb
-            //var orders = db.Orders.GetApplicationOrders();
+            //int indice = 0;
+            //float porcentaje = 0;
+            //int cantidad = orders.Count;
+            //float incremento = (float)100 / cantidad;
+            //Console.WriteLine("Existen " + cantidad + " ApplicationOrder sin actualizar.");
             //orders.ToList().ForEach(order => {
-            //    order.isPhenological = order.PhenologicalPreOrders.Count != 0;
+            //    Console.WriteLine(Math.Round(porcentaje, 2) + "% -> Indice: " + ++indice);
+            //    porcentaje += incremento;
+            //    order.InnerCorrelative = db.ExecutionOrders.GetExecutionOrders(order.Id).Count() + 1;
             //    db.Orders.CreateUpdate(order);
             //});
             #endregion
@@ -227,10 +236,12 @@ namespace trifenix.agro.console {
             //var agro = new AgroManager(db, season?.Id, null, null, null, null);
             //agro.ApplicationOrders.UpdateOrder(lines, db);
             #endregion
-
+            
             timer.Stop();
+            Console.WriteLine("Hora de termino: {0}", DateTime.Now.ToString("hh\\:mm\\:ss"));
             Console.WriteLine("Tiempo transcurrido: {0}", timer.Elapsed.ToString("hh\\:mm\\:ss"));
 
         }
     }
+
 }

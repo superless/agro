@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model;
 
 namespace trifenix.agro.microsoftgraph.interfaces {
     public interface IGraphApi {

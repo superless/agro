@@ -2,7 +2,7 @@
 using Cosmonaut.Attributes;
 using System.Collections.Generic;
 
-namespace trifenix.agro.db.model.agro {
+namespace trifenix.agro.db.model {
     [SharedCosmosCollection("agro", "User")]
     public class User : DocumentBaseName, ISharedCosmosEntity {
     
