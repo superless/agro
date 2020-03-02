@@ -23,8 +23,18 @@ using trifenix.agro.db.model;
 
 namespace trifenix.agro.functions
 {
+    /// <summary>
+    /// Funciones 
+    /// </summary>
     public static class CoreFunctions
     {
+
+        /// <summary>
+        /// Login, donde usa usuario y contraseña para obtener el token.
+        /// </summary>
+        /// <param name="req">cabecera que debe incluir el modelo de entrada </param>
+        /// <param name="log"></param>
+        /// <returns></returns>
         [FunctionName("login")]
         [RequestHttpHeader("Authorization", isRequired: true)]
 
@@ -66,7 +76,8 @@ namespace trifenix.agro.functions
         }
 
 
-        [FunctionName("SectorV3")]
+        [FunctionName("Sector")]
+
         public static async Task<IActionResult> SectorV3([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "sectors/{id?}")] HttpRequest req, string id, ILogger log)
         {
 
