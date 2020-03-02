@@ -35,7 +35,7 @@ namespace trifenix.agro.external.operations.entities.main
 
             await repo.CreateUpdate(job);
 
-            search.AddElements(new List<EntitySearch>
+            var jobSearch = new List<EntitySearch>
             {
                 new EntitySearch{
                     Id = id,
@@ -48,7 +48,9 @@ namespace trifenix.agro.external.operations.entities.main
                         }
                     },
                 }
-            });
+            };
+
+            search.AddElements(jobSearch);
 
 
             return new ExtPostContainer<string>

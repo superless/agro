@@ -1,10 +1,10 @@
 ﻿using Cosmonaut;
 using Cosmonaut.Attributes;
 using System;
-using trifenix.agro.enums;
 
 namespace trifenix.agro.db.model.agro.orders
 {
+
     [SharedCosmosCollection("agro", "ExecutionOrder")]
     public class ExecutionOrder : DocumentBase, ISharedCosmosEntity {
 
@@ -13,15 +13,6 @@ namespace trifenix.agro.db.model.agro.orders
         public string IdOrder { get; set; }
 
         public DosesOrder[] DosesOrder { get; set; }
-
-
-        public ExecutionStatus ExecutionStatus { get; set; }
-
-        public string[] StatusInfo { get; set; }
-
-        public FinishStatus FinishStatus;
-
-        public ClosedStatus ClosedStatus;
 
         public DateTime? InitDate { get; set; }
         public DateTime? EndDate { get; set; }

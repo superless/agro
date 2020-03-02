@@ -113,7 +113,7 @@ namespace trifenix.agro.external.operations.entities.orders
             var entity = new EntitySearch
             {
                 Id = id,
-                EntityIndex = (int)EntityRelated.EXECUTION_ORDER,
+                EntityIndex = (int)EntityRelated.ORDER,
                 Created = DateTime.Now,
                 RelatedProperties = new Property[] {
                         new Property {
@@ -176,7 +176,7 @@ namespace trifenix.agro.external.operations.entities.orders
                     Created = DateTime.Now,
                     EntityIndex = (int)EntityRelated.DOSES_ORDER,
                     RelatedProperties = new Property[] {
-                        new Property{ PropertyIndex = (int)PropertyRelated.GENERIC_DOUBLE_VALUE,  Value = $"{doses.QuantityByHectare}" }
+                        new Property{ PropertyIndex = (int)PropertyRelated.GENERIC_QUANTITY_HECTARE,  Value = $"{doses.QuantityByHectare}" }
                      },
                     RelatedIds = new RelatedId[] {
                         new RelatedId{ EntityIndex=(int)EntityRelated.DOSES, EntityId = doses.IdDoses },

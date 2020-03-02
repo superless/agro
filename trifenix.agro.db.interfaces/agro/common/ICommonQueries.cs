@@ -17,5 +17,7 @@ namespace trifenix.agro.db.interfaces.agro.common {
 
         Task<string> GetSeasonId(string idBarrack);
 
+        Task<string> GetUserIdFromAAD(string idAad);
+
     }
 }

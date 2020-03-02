@@ -29,7 +29,9 @@
         EXECUTION_ORDER,
         ORDER,
         BARRACK_EVENT,
-        DOSES_ORDER
+        DOSES_ORDER,
+        EXECUTION_ORDER_STATUS,
+        SPECIE
     }
 
     public enum PropertyRelated {
@@ -44,14 +46,18 @@
         GENERIC_START_DATE,
         GENERIC_DESC,
         GENERIC_PATH,
-        GENERIC_DOUBLE_VALUE
+        GENERIC_QUANTITY_HECTARE,
+        GENERIC_COMMENT
     }
 
     public enum EnumerationRelated {
         ORDER_TYPE= 1,
         SEASON_CURRENT=2, //0 false. 1 true
         NOTIFICATION_TYPE = 3,
-        PREORDER_TYPE = 4
+        PREORDER_TYPE = 4,
+        EXECUTION_STATUS = 5,
+        EXECUTION_CLOSED_STATUS = 6,
+        EXECUTION_FINISH_STATUS = 7
     }
 
     public enum OrderType { 

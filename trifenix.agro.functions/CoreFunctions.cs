@@ -274,6 +274,13 @@ namespace trifenix.agro.functions
             return result.JsonResult;
         }
 
+        [FunctionName("ExecutionStatus")]
+        public static async Task<IActionResult> ExecutionOrdersStatus([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "executions_status/{id?}")] HttpRequest req, string id, ILogger log)
+        {
+            var result = await GenericMantainer<ExecutionOrderStatusInput, ExecutionOrderStatus>.SendInternalHttp(req, log, s => s.ExecutionStatus, id);
+
+            return result.JsonResult;
+        }
 
 
 
@@ -283,91 +290,5 @@ namespace trifenix.agro.functions
 
 
 
-
-
-        //    #region v2/executions
-        //    [SwaggerIgnore]
-        //    [FunctionName("ExecutionsV3")]
-        //    public static async Task<IActionResult> Executions([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v3/executions/{idExecution?}")] HttpRequest req, string idExecution, ILogger log)
-        //    {
-        //        var claims = await Auth.Validate(req);
-
-        //        if (claims == null)
-        //            return new UnauthorizedResult();
-
-        //        var manager = await ContainerMethods.AgroManager(claims);
-
-
-
-        //        ExtGetContainer<ExecutionOrder> result = null;
-
-
-        //        switch (req.Method.ToLower())
-        //        {
-        //            case "get":
-        //                result = await manager.ExecutionOrders.GetExecutionOrder(idExecution);
-
-        //                return ContainerMethods.GetJsonGetContainer(result, log);
-
-        //            case "post":
-        //                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
-        //                    string idOrder = (string)model["idOrder"];
-        //                    string idUserApplicator = (string)model["idUserApplicator"];
-        //                    string idNebulizer = (string)model["idNebulizer"];
-        //                    string[] idProduct = JsonConvert.DeserializeObject<string[]>(((object)model["idProduct"]).ToString());
-        //                    double[] quantityByHectare = JsonConvert.DeserializeObject<double[]>(((object)model["quantityByHectare"]).ToString());
-        //                    string idTractor = (string)model["idTractor"];
-        //                    string commentary = (string)model["commentary"];
-        //                    string executionName = (string)model["executionName"];
-        //                    return await db.ExecutionOrders.SaveNewExecutionOrder(idOrder, executionName, idUserApplicator, idNebulizer, idProduct, quantityByHectare, idTractor, commentary);
-        //                }, claims);
-        //            default:
-        //                return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
-        //                    string idOrder = (string)model["idOrder"];
-        //                    string idUserApplicator = (string)model["idUserApplicator"];
-        //                    string idNebulizer = (string)model["idNebulizer"];
-        //                    string[] idProduct = JsonConvert.DeserializeObject<string[]>(((object)model["idProduct"]).ToString());
-        //                    double[] quantityByHectare = JsonConvert.DeserializeObject<double[]>(((object)model["quantityByHectare"]).ToString());
-        //                    string idTractor = (string)model["idTractor"];
-        //                    string executionName = (string)model["executionName"];
-        //                    return await db.ExecutionOrders.SaveEditExecutionOrder(idExecution, idOrder, executionName, idUserApplicator, idNebulizer, idProduct, quantityByHectare, idTractor);
-        //                }, claims);
-        //        }
-
-        //    }
-        //    #endregion
-
-        //    #region v2/Executions_ChangeStatus
-        //    [FunctionName("Execution_ChangeStatusV3")]
-        //    public static async Task<IActionResult> Execution_ChangeStatus([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "v3/execution/changeStatus/{idExecution}")] HttpRequest req, string idExecution, ILogger log)
-        //    {
-        //        ClaimsPrincipal claims = await Auth.Validate(req);
-        //        if (claims == null)
-        //            return new UnauthorizedResult();
-
-        //        var manager = await ContainerMethods.AgroManager(claims);
-
-        //        return await ContainerMethods.ApiPostOperations(req.Body, log, async (db, model) => {
-        //            var type = (string)model["type"];
-        //            var value = (int)model["value"];
-        //            var commentary = (string)model["commentary"];
-        //            return await manager.ExecutionOrders.SetStatus(idExecution, type, value, commentary);
-        //        }, claims);
-        //    }
-        //    #endregion
-
-        //    #region v2/executionsAddCommentary
-        //    [FunctionName("ExecutionsAddCommentaryV3")]
-        //    public static async Task<IActionResult> ExecutionsAddCommentary([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "v3/execution/add_commentary/{idExecution}")] HttpRequest req, string idExecution, ILogger log)
-        //    {
-        //        ClaimsPrincipal claims = await Auth.Validate(req);
-        //        if (claims == null)
-        //            return new UnauthorizedResult();
-        //        return await ContainerMethods.ApiPostOperations<ExecutionOrder>(req.Body, log, async (db, model) => {
-        //            string commentary = (string)model["commentary"];
-        //            return await db.ExecutionOrders.AddCommentaryToExecutionOrder(idExecution, commentary);
-        //        }, claims);
-        //    }
-        //    #endregion
     }
 }

@@ -53,7 +53,7 @@ namespace trifenix.agro.external.operations.entities.main
 
             await repo.CreateUpdate(variety);
 
-            search.AddElements(new List<EntitySearch> {
+            var varietySearch = new List<EntitySearch> {
                 new EntitySearch{
                     Id = id,
                     EntityIndex = (int)EntityRelated.VARIETY,
@@ -70,12 +70,16 @@ namespace trifenix.agro.external.operations.entities.main
                     },
                     RelatedIds = new RelatedId[]{
                         new RelatedId{
-                            EntityIndex = (int)EntityRelated.PREORDER,
+                            EntityIndex = (int)EntityRelated.SPECIE,
                             EntityId = input.IdSpecie
                         }
                     }
                 }
-            });
+            };
+
+
+
+            search.AddElements(varietySearch);
 
 
             return new ExtPostContainer<string> {

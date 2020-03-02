@@ -2,8 +2,6 @@
 using trifenix.agro.db.model.agro;
 using trifenix.agro.db.model.agro.core;
 using trifenix.agro.db.model.agro.orders;
-
-using trifenix.agro.external.interfaces.entities.orders;
 using trifenix.agro.microsoftgraph.interfaces;
 using trifenix.agro.model.external.Input;
 
@@ -68,6 +66,7 @@ namespace trifenix.agro.external.interfaces {
 
         IGenericOperation<ApplicationOrder, ApplicationOrderInput> ApplicationOrders { get; }
 
+        IGenericOperation<ExecutionOrderStatus, ExecutionOrderStatusInput> ExecutionStatus { get; }
 
 
 
@@ -80,11 +79,10 @@ namespace trifenix.agro.external.interfaces {
 
 
 
-        
 
-        
 
-        IExecutionOrderOperations ExecutionOrders { get; }
+
+        IGenericOperation<ExecutionOrder, ExecutionOrderInput> ExecutionOrders { get; }
 
          
 

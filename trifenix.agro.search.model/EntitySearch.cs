@@ -8,17 +8,17 @@ namespace trifenix.agro.search.model {
 
         [Key]
         [IsFilterable]
-        public string Id { get; set; }                              //Todos
+        public string Id { get; set; }                              
 
         [IsFilterable]
-        public int EntityIndex { get; set; }                        //Todos
+        public int EntityIndex { get; set; }                        
 
         [IsSortable]
-        public DateTime Created { get; set; }                       //Todos
+        public DateTime Created { get; set; }                       
 
         public RelatedId[] RelatedIds { get; set; } 
         
-        public Property[] RelatedProperties { get; set; }       //Orden, Ejecucion, PreOrden, 
+        public Property[] RelatedProperties { get; set; }       
 
         public RelatedEnumValue[] RelatedEnumValues { get; set; }
 

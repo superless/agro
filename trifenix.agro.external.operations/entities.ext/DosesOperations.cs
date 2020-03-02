@@ -103,7 +103,7 @@ namespace trifenix.agro.external.operations.entities.ext
                 DosesApplicatedTo = input.DosesApplicatedTo,
                 DosesQuantityMax = input.DosesQuantityMax,
                 DosesQuantityMin = input.DosesQuantityMin,
-                idsApplicationTarget = input.idsApplicationTarget,
+                IdsApplicationTarget = input.idsApplicationTarget,
                 IdSpecies = input.IdSpecies,
                 IdVarieties = input.IdVarieties,
                 NumberOfSequentialApplication = input.NumberOfSequentialApplication,

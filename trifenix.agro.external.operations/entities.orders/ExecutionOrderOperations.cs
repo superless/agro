@@ -7,7 +7,7 @@ using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.db.model.agro.orders;
 using trifenix.agro.enums;
-using trifenix.agro.external.interfaces.entities.orders;
+using trifenix.agro.external.interfaces;
 using trifenix.agro.external.operations.helper;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
@@ -16,7 +16,7 @@ using trifenix.agro.search.model;
 
 namespace trifenix.agro.external.operations.entities.orders
 {
-    public class ExecutionOrderOperations : MainReadOperation<ExecutionOrder>, IExecutionOrderOperations
+    public class ExecutionOrderOperations : MainReadOperation<ExecutionOrder>, IGenericOperation<ExecutionOrder, ExecutionOrderInput>
     {
         private readonly ICommonQueries commonQueries;
 
@@ -86,51 +86,62 @@ namespace trifenix.agro.external.operations.entities.orders
 
             if (!string.IsNullOrWhiteSpace(validaPreOrder)) throw new Exception(validaPreOrder);
 
-            ExecutionOrder execution;
-
-            if (!string.IsNullOrWhiteSpace(input.Id))
+            var execution = new ExecutionOrder
             {
-                var tmp = await Get(input.Id);
-                execution = tmp.Result;
-            }
-            else { 
-                execution = new ExecutionOrder
-                {
-                    Id = id,
-                    ClosedStatus = ClosedStatus.NotClosed,
-                    ExecutionStatus = ExecutionStatus.Planification,
-                   
-                    StatusInfo = new string[4],
-                    FinishStatus = FinishStatus.NotFinish,
-                    
-                };
-            }
+                Id= input.Id,
+                IdUserApplicator = input.IdUserApplicator,
+                IdNebulizer = input.IdNebulizer,
+                IdOrder = input.IdOrder,
+                IdTractor = input.IdTractor,
+                InitDate = input.InitDate,
+                EndDate = input.EndDate,
+                DosesOrder = input.DosesOrder
 
-            execution.IdUserApplicator = input.IdUserApplicator;
-            execution.IdNebulizer = input.IdNebulizer;
-            execution.IdOrder = input.IdOrder;
-            execution.IdTractor = input.IdTractor;
+            };
+
+            
             await repo.CreateUpdate(execution);
 
 
 
             var specieAbbv = await commonQueries.GetSpecieAbbreviationFromOrder(input.IdOrder);
 
+            var properties = new List<Property>() {
+                        new Property {
+                            PropertyIndex = (int)PropertyRelated.GENERIC_ABBREVIATION,
+                            Value = specieAbbv
+                        } 
+            };
+
+            if (input.InitDate.HasValue)
+            {
+                properties.Add(
+                    new Property { 
+                        PropertyIndex = (int)PropertyRelated.GENERIC_START_DATE,
+                        Value = $"{input.InitDate.Value}:dd/MM/yyyy"
+                    }
+                );
+            }
+
+            if (input.EndDate.HasValue)
+            {
+                properties.Add(
+                    new Property
+                    {
+                        PropertyIndex = (int)PropertyRelated.GENERIC_END_DATE,
+                        Value = $"{input.EndDate.Value}:dd/MM/yyyy"
+                    }
+                );
+            }
+
 
             var entity = new EntitySearch
             {
                 Id = id,
                 EntityIndex = (int)EntityRelated.EXECUTION_ORDER,
-                Created = DateTime.Now,
-               
-                RelatedProperties = new Property[] {
-                      
-                        new Property {
-                            PropertyIndex = (int)PropertyRelated.GENERIC_ABBREVIATION,
-                            Value = specieAbbv
-                        }
-                    }
-                
+                Created = DateTime.Now,               
+                RelatedProperties = properties.ToArray()
+
             };
 
             var entitiesIds = new List<RelatedId> {
@@ -149,6 +160,8 @@ namespace trifenix.agro.external.operations.entities.orders
             }
 
 
+
+
             //TODO : Eliminar antes de agregar
             foreach (var doses in input.DosesOrder)
             {
@@ -159,7 +172,7 @@ namespace trifenix.agro.external.operations.entities.orders
                     Created = DateTime.Now,
                     EntityIndex = (int)EntityRelated.DOSES_ORDER,
                     RelatedProperties = new Property[] {
-                        new Property{ PropertyIndex = (int)PropertyRelated.GENERIC_DOUBLE_VALUE,  Value = $"{doses.QuantityByHectare}" }
+                        new Property{ PropertyIndex = (int)PropertyRelated.GENERIC_QUANTITY_HECTARE,  Value = $"{doses.QuantityByHectare}" }
                      },
                     RelatedIds = new RelatedId[] {
                         new RelatedId{ EntityIndex=(int)EntityRelated.DOSES, EntityId = doses.IdDoses },
@@ -193,10 +206,7 @@ namespace trifenix.agro.external.operations.entities.orders
             };
         }
 
-        public Task<ExtPostContainer<ExecutionOrder>> SetStatus(string idExecutionOrder, string typeOfStatus, int newValueOfStatus, string commentary)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }
 

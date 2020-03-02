@@ -2,14 +2,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces;
-using trifenix.agro.db.interfaces.agro;
 using trifenix.agro.db.interfaces.agro.common;
-using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.enums;
 using trifenix.agro.external.interfaces;
-using trifenix.agro.external.interfaces.entities.main;
-using trifenix.agro.external.operations.helper;
 using trifenix.agro.external.operations.res;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;

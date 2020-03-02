@@ -8,13 +8,11 @@ using trifenix.agro.db.model.agro.core;
 using trifenix.agro.db.model.agro.orders;
 using trifenix.agro.email.interfaces;
 using trifenix.agro.external.interfaces;
-using trifenix.agro.external.interfaces.entities.orders;
 using trifenix.agro.external.operations.entities.events;
 using trifenix.agro.external.operations.entities.ext;
 using trifenix.agro.external.operations.entities.fields;
 using trifenix.agro.external.operations.entities.main;
 using trifenix.agro.external.operations.entities.orders;
-using trifenix.agro.external.operations.entities.orders.args;
 using trifenix.agro.microsoftgraph.interfaces;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
@@ -136,12 +134,9 @@ namespace trifenix.agro.external.operations
 
         
 
-        public IExecutionOrderOperations ExecutionOrders => new ExecutionOrderOperations(new MainGenericDb<ApplicationOrder>(arguments), ExistsElements, _searchServiceInstance, CommonQueries);
+        public IGenericOperation<ExecutionOrder, ExecutionOrderInput> ExecutionOrders => new ExecutionOrderOperations(new MainGenericDb<ExecutionOrder>(arguments), ExistsElements, _searchServiceInstance, CommonQueries);
 
-
-
-
-
+        public IGenericOperation<ExecutionOrderStatus, ExecutionOrderStatusInput> ExecutionStatus => new ExecutionOrderStatusOperations(new MainGenericDb<ExecutionOrderStatus>(arguments), ExistsElements, _searchServiceInstance);
 
 
     }

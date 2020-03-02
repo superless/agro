@@ -1047,11 +1047,20 @@
         "frameworks": {
           "netstandard2.0": {
             "projectReferences": {
+              "D:\\aresa\\developments\\cloud.app\\trifenix.agro.db.applicationsReference\\trifenix.agro.db.applicationsReference.csproj": {
+                "projectPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.db.applicationsReference\\trifenix.agro.db.applicationsReference.csproj"
+              },
               "D:\\aresa\\developments\\cloud.app\\trifenix.agro.db.interfaces\\trifenix.agro.db.interfaces.csproj": {
                 "projectPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.db.interfaces\\trifenix.agro.db.interfaces.csproj"
               },
+              "D:\\aresa\\developments\\cloud.app\\trifenix.agro.external.interfaces\\trifenix.agro.external.interfaces.csproj": {
+                "projectPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.external.interfaces\\trifenix.agro.external.interfaces.csproj"
+              },
               "D:\\aresa\\developments\\cloud.app\\trifenix.agro.microsoftgraph.interfaces\\trifenix.agro.microsoftgraph.interfaces.csproj": {
                 "projectPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.microsoftgraph.interfaces\\trifenix.agro.microsoftgraph.interfaces.csproj"
+              },
+              "D:\\aresa\\developments\\cloud.app\\trifenix.agro.model.external\\trifenix.agro.model.external.csproj": {
+                "projectPath": "D:\\aresa\\developments\\cloud.app\\trifenix.agro.model.external\\trifenix.agro.model.external.csproj"
               }
             }
           }

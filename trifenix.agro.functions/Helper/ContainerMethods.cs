@@ -23,13 +23,13 @@ namespace trifenix.agro.functions.Helper
     {
         public static async Task<IAgroManager> AgroManager(ClaimsPrincipal claims){
            
-            var agroDb = new AgroRepository(ConfigManager.GetDbArguments);
+            
 
             var email = new Email("aresa.notificaciones@gmail.com", "Aresa2019");
 
             var uploadImage = new UploadImage(Environment.GetEnvironmentVariable("StorageConnectionStrings", EnvironmentVariableTarget.Process));
 
-            var graphApi = new GraphApi(claims, agroDb.Users);
+            var graphApi = new GraphApi(claims, ConfigManager.GetDbArguments);
 
             var weatherApi = new WeatherApi(Environment.GetEnvironmentVariable("KeyWeatherApi", EnvironmentVariableTarget.Process));
 
@@ -38,7 +38,7 @@ namespace trifenix.agro.functions.Helper
                 Environment.GetEnvironmentVariable("SearchServiceKey", EnvironmentVariableTarget.Process)
             );
 
-            return new AgroManager(agroDb, email, uploadImage, graphApi, weatherApi, searchServiceInstance);
+            return new AgroManager(ConfigManager.GetDbArguments, email, uploadImage, graphApi, weatherApi, searchServiceInstance);
         }
 
         public static async Task<JsonResult> ApiPostOperations<T>(Stream body, ILogger log, Func<IAgroManager, dynamic, Task<ExtPostContainer<T>>> create, ClaimsPrincipal claims) 

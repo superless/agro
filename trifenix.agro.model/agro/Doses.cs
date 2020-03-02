@@ -19,7 +19,7 @@ namespace trifenix.agro.db.model.agro
 
         public string[] IdSpecies { get; set; }
 
-        public string[] idsApplicationTarget { get; set; }
+        public string[] IdsApplicationTarget { get; set; }
 
         public int DaysToReEntryToBarrack { get; set; }
 

@@ -6,7 +6,6 @@ using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.model.agro.core;
 using trifenix.agro.enums;
 using trifenix.agro.external.interfaces;
-using trifenix.agro.external.interfaces.entities.core;
 using trifenix.agro.external.operations.res;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
