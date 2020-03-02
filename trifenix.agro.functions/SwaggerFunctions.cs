@@ -45,7 +45,7 @@ namespace trifenix.agro.functions
 
 
 
-            var strJs = swaggerElement.ToString();
+           
 
             return new JsonResult(swaggerElement);
 
