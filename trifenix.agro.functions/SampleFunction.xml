@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>trifenix.agro.functions</name>
+    </assembly>
+    <members>
+        <member name="T:trifenix.agro.functions.CoreFunctions">
+            <summary>
+            Funciones 
+            </summary>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.Run(Microsoft.AspNetCore.Http.HttpRequest,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Login, donde usa usuario y contraseña para obtener el token.
+            </summary>
+            <param name="req">cabecera que debe incluir el modelo de entrada </param>
+            <param name="log"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

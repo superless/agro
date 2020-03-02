@@ -4,6 +4,9 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using AzureFunctions.Extensions.Swashbuckle.Attribute;
 using System.Net.Http;
 using AzureFunctions.Extensions.Swashbuckle;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using Microsoft.AspNetCore.Mvc;
 
 namespace trifenix.agro.functions
 {
@@ -14,7 +17,7 @@ namespace trifenix.agro.functions
 
         [FunctionName("Swagger")]
         
-        public static Task<HttpResponseMessage> Swagger(
+        public async static Task<IActionResult> Swagger(
 
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "swagger/json")]
 
@@ -23,8 +26,28 @@ namespace trifenix.agro.functions
             [SwashBuckleClient] ISwashBuckleClient swashBuckleClient)
 
         {
-            
-            return Task.FromResult(swashBuckleClient.CreateSwaggerDocumentResponse(req));
+
+            var result = swashBuckleClient.CreateSwaggerDocumentResponse(req);
+
+
+
+            var getResult =  Task.FromResult(result);
+
+            var js = await getResult.Result.Content.ReadAsStringAsync();
+
+            var swaggerElement = JObject.Parse(js);
+
+
+
+            swaggerElement["info"]["version"] = "v1";
+            swaggerElement["info"]["title"] = "AgroFenix";
+            swaggerElement["info"]["description"] = "API Oficial de AgroFenix";
+
+
+
+            var strJs = swaggerElement.ToString();
+
+            return new JsonResult(swaggerElement);
 
         }
 
@@ -43,6 +66,7 @@ namespace trifenix.agro.functions
             [SwashBuckleClient] ISwashBuckleClient swashBuckleClient)
 
         {
+            
 
             return Task.FromResult(swashBuckleClient.CreateSwaggerUIResponse(req, "swagger/json"));
 

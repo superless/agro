@@ -28,6 +28,8 @@ namespace trifenix.agro.functions
 
             builder.AddSwashBuckle(Assembly.GetExecutingAssembly());
 
+            
+
 
 
         }

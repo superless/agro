@@ -1,7 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>SampleFunction.xml</DocumentationFile>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <AzureFunctionsVersion>v2</AzureFunctionsVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Product>AgroFenix</Product>
+    <Company>Trifenix</Company>
+    <Authors>Trifenix Team</Authors>
+    <Description>AgroFenix la aplicación de la agricultura</Description>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AzureFunctions.Extensions.Swashbuckle" Version="1.4.4" />
