@@ -19,6 +19,7 @@ using System.Net.Http;
 using trifenix.agro.external.operations.helper;
 using System.Collections.Generic;
 using trifenix.agro.db.model.agro.orders;
+using trifenix.agro.db.model;
 
 namespace trifenix.agro.functions
 {

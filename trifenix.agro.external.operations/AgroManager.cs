@@ -3,6 +3,7 @@ using trifenix.agro.db.applicationsReference;
 using trifenix.agro.db.applicationsReference.agro.Common;
 using trifenix.agro.db.applicationsReference.common;
 using trifenix.agro.db.interfaces.agro.common;
+using trifenix.agro.db.model;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.db.model.agro.core;
 using trifenix.agro.db.model.agro.orders;

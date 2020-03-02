@@ -1,5 +1,6 @@
 ﻿using Cosmonaut;
 using Cosmonaut.Attributes;
+using trifenix.agro.db.model.local;
 
 namespace trifenix.agro.db.model.agro
 {
