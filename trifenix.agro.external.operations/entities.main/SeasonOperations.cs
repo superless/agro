@@ -11,6 +11,7 @@ using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
 using trifenix.agro.external.operations.res;
 using trifenix.agro.enums;
+using trifenix.agro.db.model.agro.core;
 
 namespace trifenix.agro.external.operations.entities.main
 {
@@ -27,7 +28,7 @@ namespace trifenix.agro.external.operations.entities.main
             var current = !input.Current.HasValue || input.Current.Value;
 
 
-            var costCenter = new Season
+            var season = new Season
             {
                 Id = id,
                 Current = current,
@@ -37,7 +38,7 @@ namespace trifenix.agro.external.operations.entities.main
             };
 
 
-            var validaCostCenter = await existElement.ExistsElement<Season>("IdCostCenter", input.IdCostCenter);
+            var validaCostCenter = await existElement.ExistsElement<CostCenter>(input.IdCostCenter);
 
             if (!validaCostCenter) throw new Exception(string.Format(ErrorMessages.NotValidId, "Centro de Costos"));
 
@@ -49,7 +50,7 @@ namespace trifenix.agro.external.operations.entities.main
             }
 
 
-            await repo.CreateUpdate(costCenter);
+            await repo.CreateUpdate(season);
 
             search.AddElements(new List<EntitySearch>
             {

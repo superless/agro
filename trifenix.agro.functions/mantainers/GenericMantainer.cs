@@ -56,13 +56,13 @@ namespace trifenix.agro.functions.mantainers
                     try
                     {
                         saveReturn = await repo.Save(element);
-                        await recordAcitvity.Save(new UserActivityInput
-                        {
-                            Action = method.Equals("post") ? UserActivityAction.CREATE : UserActivityAction.MODIFY,
-                            Date = DateTime.Now,
-                            EntityName = ((DbElement)Activator.CreateInstance(typeof(DbElement))).CosmosEntityName,
-                            Id = saveReturn.IdRelated
-                        });
+                        //await recordAcitvity.Save(new UserActivityInput
+                        //{
+                        //    Action = method.Equals("post") ? UserActivityAction.CREATE : UserActivityAction.MODIFY,
+                        //    Date = DateTime.Now,
+                        //    EntityName = ((DbElement)Activator.CreateInstance(typeof(DbElement))).CosmosEntityName,
+                        //    Id = saveReturn.IdRelated
+                        //});
 
                     }
                     catch (Exception ex)
@@ -124,7 +124,7 @@ namespace trifenix.agro.functions.mantainers
         public static async Task<InputElement> ConvertToElement<InputElement>(string body, string id, string method) where InputElement : InputBase
         {
 
-            var requestBody = await new StreamReader(body).ReadToEndAsync();
+            var requestBody = body;
 
             InputElement element;
             if (method.Equals("get"))
@@ -134,7 +134,15 @@ namespace trifenix.agro.functions.mantainers
             }
             else
             {
-                element = JsonConvert.DeserializeObject<InputElement>(requestBody);
+                try
+                {
+                    element = JsonConvert.DeserializeObject<InputElement>(requestBody);
+                }
+                catch (Exception e)
+                {
+
+                    throw;
+                }
             }
 
             element.Id = id;

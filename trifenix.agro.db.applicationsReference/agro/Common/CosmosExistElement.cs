@@ -19,7 +19,8 @@ namespace trifenix.agro.db.applicationsReference.agro.Common
         {
             var db = new MainDb<T>(DbArguments);
 
-            var result = await db.Store.QuerySingleAsync<long>($"SELECT value count(1) FROM c where c.Id = '{id}'");
+            var query = $"SELECT value count(1) FROM c where c.id = '{id}'";
+            var result = await db.Store.QuerySingleAsync<long>(query);
 
             return result != 0;
         }
@@ -52,7 +53,7 @@ namespace trifenix.agro.db.applicationsReference.agro.Common
         public async Task<bool> ExistsElement<T>(string namePropCheck, string valueCheck) where T : DocumentBase
         {
             var db = new MainDb<T>(DbArguments);
-            var result = await db.Store.QuerySingleAsync<long>($"SELECT value count(1) FROM c where {namePropCheck} = '{valueCheck}'");
+            var result = await db.Store.QuerySingleAsync<long>($"SELECT value count(1) FROM c where c.{namePropCheck} = '{valueCheck}'");
 
             return result != 0;
         }
@@ -60,7 +61,7 @@ namespace trifenix.agro.db.applicationsReference.agro.Common
         public async Task<bool> ExistsElement<T>(string namePropCheck, int valueCheck) where T : DocumentBase
         {
             var db = new MainDb<T>(DbArguments);
-            var result = await db.Store.QuerySingleAsync<long>($"SELECT value count(1) FROM c where {namePropCheck} = {valueCheck}");
+            var result = await db.Store.QuerySingleAsync<long>($"SELECT value count(1) FROM c where c.{namePropCheck} = {valueCheck}");
 
             return result != 0;
         }
@@ -68,7 +69,7 @@ namespace trifenix.agro.db.applicationsReference.agro.Common
         public async Task<bool> ExistsEditElement<T>(string id, string nameCheck, string valueCheck) where T : DocumentBase
         {
             var db = new MainDb<T>(DbArguments);
-            var result = await db.Store.QuerySingleAsync<long>($"SELECT value count(1) FROM c where {nameCheck} = '{valueCheck}' and c.Id != '{id}'");
+            var result = await db.Store.QuerySingleAsync<long>($"SELECT value count(1) FROM c where c.{nameCheck} = '{valueCheck}' and c.id != '{id}'");
 
             return result != 0;
         }

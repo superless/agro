@@ -47,7 +47,8 @@
         GENERIC_DESC,
         GENERIC_PATH,
         GENERIC_QUANTITY_HECTARE,
-        GENERIC_COMMENT
+        GENERIC_COMMENT,
+        GENERIC_PHONE
     }
 
     public enum EnumerationRelated {

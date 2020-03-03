@@ -14,6 +14,11 @@ namespace trifenix.agro.model.external.Input
 
     public class BusinessNameSwaggerInput {
 
+
+        [Required]
+        public string Name { get; set; }
+
+
         [Required]
         public string Email { get; set; }
 
@@ -22,6 +27,8 @@ namespace trifenix.agro.model.external.Input
 
 
         public string WebPage { get; set; }
+
+
         public string Giro { get; set; }
         public string Phone { get; set; }
 
