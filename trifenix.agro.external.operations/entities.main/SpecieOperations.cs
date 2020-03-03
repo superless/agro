@@ -30,13 +30,13 @@ namespace trifenix.agro.external.operations.entities.main
                 Name = input.Name,
                 Abbreviation = input.Abbreviation
             };
-            await repo.CreateUpdate(specie);
+            
 
             var valida = await Validate(input);
 
             if (!valida) throw new Exception(string.Format(ErrorMessages.NotValid, specie.CosmosEntityName));
 
-
+            
             if (string.IsNullOrWhiteSpace(input.Id))
             {
                 var validaAbbv = await existElement.ExistsElement<Specie>("Abbreviation", input.Abbreviation);
@@ -48,13 +48,13 @@ namespace trifenix.agro.external.operations.entities.main
                 if (validaAbbv) throw new Exception(string.Format(ErrorMessages.NotValidAbbreviation, specie.CosmosEntityName));
             }
 
-
+            await repo.CreateUpdate(specie);
 
             search.AddElements(new List<EntitySearch>
             {
                 new EntitySearch{
                     Id = id,
-                    EntityIndex = (int)EntityRelated.PREORDER,
+                    EntityIndex = (int)EntityRelated.SPECIE,
                     Created = DateTime.Now,
                     RelatedProperties = new Property[] {
                         new Property {
