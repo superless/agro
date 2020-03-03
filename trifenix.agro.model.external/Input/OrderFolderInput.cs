@@ -14,7 +14,7 @@ namespace trifenix.agro.model.external.Input
 
     }
 
-    public class OrderFolderSwaggerInput : InputBase
+    public class OrderFolderSwaggerInput
     {
 
         [Required]

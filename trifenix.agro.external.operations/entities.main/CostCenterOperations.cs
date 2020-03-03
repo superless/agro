@@ -32,10 +32,11 @@ namespace trifenix.agro.external.operations.entities.main
             };
 
             var valida = await Validate(input);
+
             if (!valida) throw new Exception(string.Format(ErrorMessages.NotValid, costCenter.CosmosEntityName));
 
-            var existsSector = await existElement.ExistsElement<CostCenter>("IdBusinessName", input.IdBusinessName);
-            if (!existsSector) throw new Exception(string.Format(ErrorMessages.NotValidId, "Razón social"));
+            var existsCostCenter = await existElement.ExistsElement<BusinessName>(input.IdBusinessName);
+            if (!existsCostCenter) throw new Exception(string.Format(ErrorMessages.NotValidId, "Razón social"));
 
 
             await repo.CreateUpdate(costCenter);

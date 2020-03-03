@@ -720,7 +720,7 @@ namespace trifenix.agro.functions
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> BusinessNamePut(
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "business_names/{id}")]
-            [RequestBodyType(typeof(TractorSwaggerInput), "Razón Social")]
+            [RequestBodyType(typeof(BusinessNameSwaggerInput), "Razón Social")]
             HttpRequest req, string id, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.BusinessNames, id);

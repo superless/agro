@@ -78,8 +78,6 @@ namespace trifenix.agro.external.operations.entities.ext
 
             var validaDoses = DosesHelper.ValidaDoses(existElement, input);
 
-
-
             if (!string.IsNullOrWhiteSpace(validaDoses)) throw new Exception(validaDoses);
 
             var validaProduct = await existElement.ExistsElement<Product>(input.IdProduct);

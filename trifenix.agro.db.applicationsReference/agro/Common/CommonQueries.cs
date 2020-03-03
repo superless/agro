@@ -17,26 +17,26 @@ namespace trifenix.agro.db.applicationsReference.agro.Common {
 
         public async Task<string> GetSpecieAbbreviation(string idSpecie) {
             var db = new MainDb<Specie>(DbArguments);
-            var result = await db.Store.QuerySingleAsync<string>($"SELECT value c.Abbreviation FROM c where  c.Id = '{idSpecie}'");
+            var result = await db.Store.QuerySingleAsync<string>($"SELECT value c.Abbreviation FROM c where  c.id = '{idSpecie}'");
             return result;
         }
 
         public async Task<string> GetSpecieAbbreviationFromVariety(string idVariety) {
             var db = new MainDb<Variety>(DbArguments);
-            var idSpecie = await db.Store.QuerySingleAsync<string>($"SELECT value c.IdSpecie FROM c where  c.Id = '{idVariety}'");
+            var idSpecie = await db.Store.QuerySingleAsync<string>($"SELECT value c.IdSpecie FROM c where  c.id = '{idVariety}'");
             return await GetSpecieAbbreviation(idSpecie);
         }
 
         public async Task<string> GetSpecieAbbreviationFromBarrack(string idBarrack) {
             var db = new MainDb<Barrack>(DbArguments);
-            var result = await db.Store.QuerySingleAsync<string>($"SELECT value c.IdVariety FROM c where  c.Id = '{idBarrack}'");
+            var result = await db.Store.QuerySingleAsync<string>($"SELECT value c.IdVariety FROM c where  c.id = '{idBarrack}'");
             return await GetSpecieAbbreviationFromVariety(result);
         }
 
         public async Task<string> GetSpecieAbbreviationFromOrder(string idOrder)
         {
             var db = new MainDb<ApplicationOrder>(DbArguments);
-            var result = await db.Store.QuerySingleAsync<string>($"SELECT value c.IdBarrack[0] FROM c where  c.Id = '{idOrder}'");
+            var result = await db.Store.QuerySingleAsync<string>($"SELECT value c.IdBarrack[0] FROM c where  c.id = '{idOrder}'");
 
             return await GetSpecieAbbreviationFromBarrack(result);
         }
@@ -54,13 +54,13 @@ namespace trifenix.agro.db.applicationsReference.agro.Common {
         public async Task<string> GetSeasonId(string idBarrack)
         {
             var db = new MainDb<Barrack>(DbArguments);
-            return await db.Store.QuerySingleAsync<string>($"SELECT value c.SeasonId FROM c where  c.Id = '{idBarrack}'");
+            return await db.Store.QuerySingleAsync<string>($"SELECT value c.SeasonId FROM c where  c.id = '{idBarrack}'");
         }
 
         public async Task<string> GetUserIdFromAAD(string idAad)
         {
             var db = new MainDb<User>(DbArguments);
-            return await db.Store.QuerySingleAsync<string>($"SELECT value c.Id FROM c where  c.ObjectIdAAD = '{idAad}'");
+            return await db.Store.QuerySingleAsync<string>($"SELECT value c.id FROM c where  c.ObjectIdAAD = '{idAad}'");
         }
     }
 }

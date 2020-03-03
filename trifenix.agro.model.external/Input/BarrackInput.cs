@@ -27,7 +27,7 @@ namespace trifenix.agro.model.external.Input
 
 
 
-    public class BarrackSwaggerInput : InputBaseName
+    public class BarrackSwaggerInput 
     {
         [Required]
         public string SeasonId { get; set; }

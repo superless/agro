@@ -78,26 +78,57 @@ namespace trifenix.agro.external.operations.entities.main
 
             await repo.CreateUpdate(businessName);
 
+            var properties = new List<Property>
+            {
+                 new Property {
+                            PropertyIndex = (int)PropertyRelated.GENERIC_RUT,
+                            Value = input.Rut
+                        },
+                        new Property {
+                            PropertyIndex = (int)PropertyRelated.GENERIC_NAME,
+                            Value = input.Name
+                        },
+                        
+                        new Property {
+                            PropertyIndex = (int)PropertyRelated.GENERIC_EMAIL,
+                            Value = input.Email
+                        }
+            };
+
+            if (!string.IsNullOrWhiteSpace(input.WebPage))
+            {
+                properties.Add(new Property
+                {
+                    PropertyIndex = (int)PropertyRelated.GENERIC_PHONE,
+                    Value = input.WebPage
+                });
+            }
+
+            if (!string.IsNullOrWhiteSpace(input.Phone))
+            {
+                properties.Add(new Property
+                {
+                    PropertyIndex = (int)PropertyRelated.GENERIC_PHONE,
+                    Value = input.Phone
+                });
+            }
+
+            if (!string.IsNullOrWhiteSpace(input.Giro))
+            {
+                properties.Add(new Property
+                {
+                    PropertyIndex = (int)PropertyRelated.GENERIC_GIRO,
+                    Value = input.Giro
+                });
+            }
+
             search.AddElements(new List<EntitySearch>
             {
                 new EntitySearch{
                     Id = id,
                     EntityIndex = (int)EntityRelated.BUSINESSNAME,
                     Created = DateTime.Now,
-                    RelatedProperties = new Property[] {
-                        new Property {
-                            PropertyIndex = (int)PropertyRelated.GENERIC_RUT,
-                            Value = input.Rut
-                        },
-                        new Property {
-                            PropertyIndex = (int)PropertyRelated.GENERIC_GIRO,
-                            Value = input.Giro
-                        },
-                        new Property {
-                            PropertyIndex = (int)PropertyRelated.GENERIC_EMAIL,
-                            Value = input.Email
-                        }
-                    }
+                    RelatedProperties = properties.ToArray()
                 }
             });
 
