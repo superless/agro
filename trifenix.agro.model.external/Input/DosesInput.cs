@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using trifenix.agro.db.model.agro.local;
-using trifenix.agro.enums;
+﻿using trifenix.agro.enums;
 
 namespace trifenix.agro.model.external.Input
 {

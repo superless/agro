@@ -141,7 +141,8 @@ namespace trifenix.agro.external.operations.entities.orders
 
             var entities = new List<RelatedId>();
 
-
+            // Eliminar antes de agregar
+            search.DeleteElements(search.FilterElements<EntitySearch>($"EntityIndex eq {(int)EntityRelated.BARRACK_EVENT} and RelatedIds/any(elementId: elementId/EntityIndex eq {(int)EntityRelated.ORDER} and elementId/EntityId eq '{id}'"));
             //TODO : Eliminar antes de agregar
             foreach (var barrack in input.Barracks)
             {
@@ -168,6 +169,8 @@ namespace trifenix.agro.external.operations.entities.orders
                 entities.Add(new RelatedId { EntityIndex = (int)EntityRelated.BARRACK_EVENT, EntityId = newGuid });
 
             }
+            // Eliminar antes de agregar
+            search.DeleteElements(search.FilterElements<EntitySearch>($"EntityIndex eq {(int)EntityRelated.DOSES_ORDER} and RelatedIds/any(elementId: elementId/EntityIndex eq {(int)EntityRelated.ORDER} and elementId/EntityId eq '{id}'"));
             //TODO : Eliminar antes de agregar
             foreach (var doses in input.DosesOrder)
             {

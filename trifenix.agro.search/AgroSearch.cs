@@ -22,7 +22,6 @@ namespace trifenix.agro.search.operations {
         }
 
         private void OperationElements<T>(List<T> elements, SearchOperation operationType) {
-
             var indexName = typeof(T).Equals(typeof(EntitySearch)) ? _entityIndex : _commentIndex;
             var indexClient = _search.Indexes.GetClient(indexName);
             var actions = elements.Select(o => operationType == SearchOperation.Add ? IndexAction.MergeOrUpload(o) : IndexAction.Delete(o));
@@ -36,6 +35,13 @@ namespace trifenix.agro.search.operations {
 
         public void DeleteElements<T>(List<T> elements) {
             OperationElements(elements, SearchOperation.Delete);
+        }
+
+        public List<T> FilterElements<T>(string filter) {
+            var indexName = typeof(T).Equals(typeof(EntitySearch)) ? _entityIndex : _commentIndex;
+            var indexClient = _search.Indexes.GetClient(indexName);
+            var result = indexClient.Documents.Search<T>(null, new SearchParameters { Filter = filter });
+            return result.Results.Select(v => v.Document).ToList();
         }
 
     }
