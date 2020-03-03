@@ -14,7 +14,7 @@ namespace trifenix.agro.model.external.Input
 
     }
 
-    public class VarietySwaggerInput : InputBaseName
+    public class VarietySwaggerInput 
     {
 
 

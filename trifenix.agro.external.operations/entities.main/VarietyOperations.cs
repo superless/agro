@@ -35,7 +35,7 @@ namespace trifenix.agro.external.operations.entities.main
             var valida = await Validate(input);
             if (!valida) throw new Exception(string.Format(ErrorMessages.NotValid, variety.CosmosEntityName));
 
-            var existsSector = await existElement.ExistsElement<Variety>("IdSpecie", input.IdSpecie);
+            var existsSector = await existElement.ExistsElement<Specie>(input.IdSpecie);
             if (!existsSector) throw new Exception(string.Format(ErrorMessages.NotValidId, "Especie"));
 
             if (string.IsNullOrWhiteSpace(input.Id))

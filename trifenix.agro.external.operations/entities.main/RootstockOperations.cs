@@ -24,28 +24,28 @@ namespace trifenix.agro.external.operations.entities.main
         {
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
 
-            var specie = new Rootstock
+            var rootstock = new Rootstock
             {
                 Id = id,
                 Name = input.Name,
                 Abbreviation = input.Abbreviation
             };
-            await repo.CreateUpdate(specie);
 
             var valida = await Validate(input);
-            if (!valida) throw new Exception(string.Format(ErrorMessages.NotValid, specie.CosmosEntityName));
+            if (!valida) throw new Exception(string.Format(ErrorMessages.NotValid, rootstock.CosmosEntityName));
             if (string.IsNullOrWhiteSpace(input.Id))
             {
                 var validaAbbv = await existElement.ExistsElement<Rootstock>("Abbreviation", input.Abbreviation);
-                if (validaAbbv) throw new Exception(string.Format(ErrorMessages.NotValidAbbreviation, specie.CosmosEntityName));
+                if (validaAbbv) throw new Exception(string.Format(ErrorMessages.NotValidAbbreviation, rootstock.CosmosEntityName));
             }
             else
             {
                 var validaAbbv = await existElement.ExistsEditElement<Rootstock>(input.Id, "Abbreviation", input.Abbreviation);
-                if (validaAbbv) throw new Exception(string.Format(ErrorMessages.NotValidAbbreviation, specie.CosmosEntityName));
+                if (validaAbbv) throw new Exception(string.Format(ErrorMessages.NotValidAbbreviation, rootstock.CosmosEntityName));
             }
 
 
+            await repo.CreateUpdate(rootstock);
 
             search.AddElements(new List<EntitySearch>
             {

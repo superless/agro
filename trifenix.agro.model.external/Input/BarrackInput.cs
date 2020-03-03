@@ -44,7 +44,8 @@ namespace trifenix.agro.model.external.Input
         [Required]
         public string IdVariety { get; set; }
 
-
+        [Required]
+        public string Name { get; set; }
 
         public int NumberOfPlants { get; set; }
 

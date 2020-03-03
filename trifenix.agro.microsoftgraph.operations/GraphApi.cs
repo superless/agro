@@ -38,7 +38,6 @@ namespace trifenix.agro.microsoftgraph.operations
                 .Build();
         }
 
-        //TODO: Revisar si está correcto
         public async Task<UserApplicator> GetUserFromToken() {
             try {
                 string objectIdAAD = AccessTokenClaims.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
