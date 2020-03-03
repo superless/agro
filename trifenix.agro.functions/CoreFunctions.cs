@@ -20,6 +20,7 @@ using trifenix.agro.external.operations.helper;
 using System.Collections.Generic;
 using trifenix.agro.db.model.agro.orders;
 using trifenix.agro.db.model;
+using System;
 
 namespace trifenix.agro.functions
 {
@@ -52,13 +53,14 @@ namespace trifenix.agro.functions
             var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic credenciales = JsonConvert.DeserializeObject(requestBody);
 
-            string clientId = "a81f0ad4-912b-46d3-ba3e-7bf605693242";
-            string scope = "https://sprint3-jhm.trifenix.io/App.access";
-            string clientSecret = "gUjIa4F=NXlAwwMCF2j2SFMMj3?m@=FM";
+            string clientId = Environment.GetEnvironmentVariable("clientID", EnvironmentVariableTarget.Process);
+            string scope = Environment.GetEnvironmentVariable("scope", EnvironmentVariableTarget.Process);
+            string clientSecret = Environment.GetEnvironmentVariable("clientSecret", EnvironmentVariableTarget.Process);
             string username = (string)credenciales["username"];
             string password = (string)credenciales["password"];
             string grantType = "password";
-            string endPoint = "https://login.microsoftonline.com/jhmad.onmicrosoft.com/oauth2/v2.0/token";
+            string tenant = Environment.GetEnvironmentVariable("tenant", EnvironmentVariableTarget.Process);
+            string endPoint = $"https://login.microsoftonline.com/{tenant}/oauth2/v2.0/token";
 
             HttpClient client = new HttpClient();
             var parametros = new Dictionary<string, string> {
