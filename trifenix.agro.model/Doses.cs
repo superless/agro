@@ -60,9 +60,10 @@ namespace trifenix.agro.db.model.agro
             set { _waitingToHarvest = value; }
         }
 
+        public string IdProduct { get; set; }
 
 
-        
+
 
     }
 

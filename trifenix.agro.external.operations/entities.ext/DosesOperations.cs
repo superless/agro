@@ -105,6 +105,7 @@ namespace trifenix.agro.external.operations.entities.ext
                 IdSpecies = input.IdSpecies,
                 IdVarieties = input.IdVarieties,
                 NumberOfSequentialApplication = input.NumberOfSequentialApplication,
+                IdProduct = input.IdProduct,
                 WaitingDaysLabel = input.WaitingDaysLabel,
                 WaitingToHarvest = input.WaitingToHarvest==null || !input.WaitingToHarvest.Any()?new List<WaitingHarvest>(): input.WaitingToHarvest.Select(w=>new WaitingHarvest { 
                     IdCertifiedEntity = w.IdCertifiedEntity,

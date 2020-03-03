@@ -724,7 +724,9 @@ namespace trifenix.agro.functions
             HttpRequest req, string id, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.BusinessNames, id);
+
             return result.JsonResult;
+
         }
 
 
