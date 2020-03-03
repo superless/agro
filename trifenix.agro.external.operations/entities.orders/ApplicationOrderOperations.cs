@@ -140,6 +140,8 @@ namespace trifenix.agro.external.operations.entities.orders
 
 
             var entities = new List<RelatedId>();
+
+
             //TODO : Eliminar antes de agregar
             foreach (var barrack in input.Barracks)
             {
