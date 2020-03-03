@@ -9,7 +9,7 @@ namespace trifenix.agro.swagger.model.input
         /// </summary>
 
         [Required]
-        public string UserName { get; set; }
+        public string Username { get; set; }
 
 
 
