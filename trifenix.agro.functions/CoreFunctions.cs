@@ -29,6 +29,10 @@ namespace trifenix.agro.functions
     public static class CoreFunctions
     {
 
+
+       
+
+
         /// <summary>
         /// Login, donde usa usuario y contraseña para obtener el token.
         /// </summary>
@@ -76,221 +80,850 @@ namespace trifenix.agro.functions
         }
 
 
-        [FunctionName("Sector")]
 
-        public static async Task<IActionResult> SectorV3([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "sectors/{id?}")] HttpRequest req, string id, ILogger log)
-        {
+        
 
+
+        /// <summary>
+        /// Creación de Sector
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("sector_post")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> SectorPost(
             
-            var result = await GenericMantainer<SectorInput,Sector>.SendInternalHttp(req, log, s => s.Sectors, id);
-            return result.JsonResult;
-
-
-        }
-
-        [FunctionName("PlotLandsV3")]
-        public static async Task<IActionResult> PlotLandsV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "plotlands/{id?}")] HttpRequest req, string id, ILogger log)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "sectors")]
+            [RequestBodyType(typeof(SectorSwaggerInput), "Sector")]
+        HttpRequest req, ILogger log)
         {
-            var result = await GenericMantainer<PlotLandInput, PlotLand>.SendInternalHttp(req, log, s => s.PlotLands, id);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Sectors, string.Empty);
             return result.JsonResult;
         }
 
-        [FunctionName("SpecieV3")]
-        public static async Task<IActionResult> Speciev3([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "species/{id?}")] HttpRequest req, string id, ILogger log)
+
+        /// <summary>
+        /// Modificación del Sector
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("sector_put")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> SectorPut(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "sectors/{id}")]
+            [RequestBodyType(typeof(SectorSwaggerInput), "Sector")]
+            HttpRequest req, string id, ILogger log)
         {
-            var result = await GenericMantainer<SpecieInput, Specie>.SendInternalHttp(req, log, s => s.Species, id);
-
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Sectors, id);
             return result.JsonResult;
         }
 
-        [FunctionName("VarietiesV3")]
-        public static async Task<IActionResult> VarietiesV3([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "varieties/{id?}")] HttpRequest req, string id, ILogger log) {
+
+
+        /// <summary>
+        /// Creación de parcela
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("plotland_post")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> PlotLandsPost(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "plotlands")]
+            [RequestBodyType(typeof(PlotLandSwaggerInput), "Parcela")]
+            HttpRequest req,
             
-            var result = await GenericMantainer < VarietyInput, Variety>.SendInternalHttp(req, log, s => s.Varieties, id);
-
-            return result.JsonResult;
-        }
-
-        [FunctionName("TargetV3")]
-        public static async Task<IActionResult> TargetV3([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "targets/{id?}")] HttpRequest req, string id, ILogger log)
+            ILogger log)
         {
-            var result = await GenericMantainer<TargetInput, ApplicationTarget>.SendInternalHttp(req, log, s => s.ApplicationTargets,id);
-
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.PlotLands, string.Empty);
             return result.JsonResult;
         }
 
 
-        [FunctionName("PhenologicalEventV3")]
-        public static async Task<IActionResult> PhenologicalEventV3([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "phenological_events/{id?}")] HttpRequest req, string id, ILogger log) {
-
-            var result = await GenericMantainer< PhenologicalEventInput, PhenologicalEvent>.SendInternalHttp(req, log, s => s.PhenologicalEvents, id);
-
-            return result.JsonResult;
-        }
-
-
-        [FunctionName("CertifiedEntityV3")]
-        public static async Task<IActionResult> CertifiedEntityV3([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "certified_entities/{id?}")] HttpRequest req, string id, ILogger log)
+        /// <summary>
+        /// Modificación de parcela
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("plotland_put")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> PlotLandsPut(
+            
+            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "plotlands/{id}")]
+            [RequestBodyType(typeof(PlotLandSwaggerInput), "Parcela")]
+            HttpRequest req, string id, ILogger log)
         {
-            var result = await GenericMantainer<CertifiedEntityInput, CertifiedEntity>.SendInternalHttp(req, log, s => s.CertifiedEntities, id);
-
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.PlotLands, id);
             return result.JsonResult;
         }
 
 
-        [FunctionName("CategoryIngredientsV3")]
-        public static async Task<IActionResult> CategoryIngredientsV3([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "ingredient_categories/{id?}")] HttpRequest req, string id, ILogger log)
+        /// <summary>
+        /// Añadir Especie
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("specie_post")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> SpeciesPost(
+            
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "species")]
+            [RequestBodyType(typeof(SpecieSwaggerInput), "Especie")]
+            HttpRequest req, ILogger log)
         {
-            var result = await GenericMantainer<IngredientCategoryInput, IngredientCategory>.SendInternalHttp(req, log, s => s.IngredientCategories, id);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Species, string.Empty);
 
             return result.JsonResult;
         }
 
-        [FunctionName("IngredientsV3")]
-        public static async Task<IActionResult> IngredientsV3([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "ingredients/{id?}")] HttpRequest req, string id, ILogger log)
+
+        /// <summary>
+        /// Modificar Especie
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("specie_put")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> SpeciesPut(
+
+            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "species/{id}")]
+            [RequestBodyType(typeof(SpecieSwaggerInput), "Especie")]
+            HttpRequest req, string id, ILogger log)
         {
-            var result = await GenericMantainer<IngredientInput, Ingredient>.SendInternalHttp(req, log, s => s.Ingredients, id);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Species, id);
 
             return result.JsonResult;
         }
 
-        [FunctionName("ProductV3")]
-        public static async Task<IActionResult> ProductV3([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "v2/products/{id?}")] HttpRequest req, string id, ILogger log)
+        /// <summary>
+        /// Añadir Variedad
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("variety_post")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> VarietyPost(
+
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "varieties")]
+            [RequestBodyType(typeof(VarietySwaggerInput), "Variedad")]
+            HttpRequest req, ILogger log)
         {
-            var result = await GenericMantainer<ProductInput, Product>.SendInternalHttp(req, log, s => s.Products, id);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Varieties, string.Empty);
 
             return result.JsonResult;
-
         }
 
+        /// <summary>
+        /// Añadir Variedad
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("variety_put")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> VarietyPut(
 
-        [FunctionName("Roles")]
-        public static async Task<IActionResult> Roles([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "roles/{id?}")] HttpRequest req, ILogger log, string id)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "varieties/{id}")]
+            [RequestBodyType(typeof(VarietySwaggerInput), "Variedad")]
+            HttpRequest req, string id, ILogger log)
         {
-            var result = await GenericMantainer < RoleInput, Role>.SendInternalHttp(req, log, s => s.Roles, id);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Varieties, id);
 
             return result.JsonResult;
         }
 
+        /// <summary>
+        /// Añadir Objetivo de aplicación
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("target_post")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> TargetPost(
 
-        [FunctionName("Jobs")]
-        public static async Task<IActionResult> Jobs([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "jobs/{id?}")] HttpRequest req, ILogger log, string id)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "targets")]
+            [RequestBodyType(typeof(TargetSwaggerInput), "Objetivo de aplicación")]
+            HttpRequest req, ILogger log)
         {
-            var result = await GenericMantainer<JobInput, Job>.SendInternalHttp(req, log, s => s.Jobs, id);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ApplicationTargets, string.Empty);
 
             return result.JsonResult;
         }
 
-        [FunctionName("Users")]
-        public static async Task<IActionResult> Users([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "users/{id?}")] HttpRequest req, string id, ILogger log)
+        /// <summary>
+        /// Modificar objetivo de aplicación
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("target_put")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> TargetPut(
+
+            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "targets/{id}")]
+            [RequestBodyType(typeof(TargetSwaggerInput), "Objetivo de aplicación")]
+            HttpRequest req, string id, ILogger log)
         {
-            var result = await GenericMantainer<UserApplicatorInput, UserApplicator>.SendInternalHttp(req, log, s => s.Users, id);
-
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ApplicationTargets, id);
             return result.JsonResult;
         }
 
-        [FunctionName("Nebulizers")]
-        public static async Task<IActionResult> Nebulizers([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "nebulizers/{id?}")] HttpRequest req, string id, ILogger log)
+        /// <summary>
+        /// Añadir Evento fenológico
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("phenological_event_post")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> PhenologicalEventPost(
+
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "phenological_events")]
+            [RequestBodyType(typeof(PhenologicalEventSwaggerInput), "Evento Fenológico")]
+            HttpRequest req, ILogger log)
         {
-            var result = await GenericMantainer<NebulizerInput, Nebulizer>.SendInternalHttp(req, log, s => s.Nebulizers, id);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.PhenologicalEvents, string.Empty);
 
             return result.JsonResult;
         }
 
 
-        [FunctionName("Tractors")]
-        public static async Task<IActionResult> Tractors([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "tractors/{id?}")] HttpRequest req, string id, ILogger log)
+        /// <summary>
+        /// Modificación de evento fenológico
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("phenological_event_put")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> PhenologicalEventPut(
+
+            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "phenological_events/{id}")]
+            [RequestBodyType(typeof(PhenologicalEventSwaggerInput), "Evento Fenológico")]
+            HttpRequest req, string id, ILogger log)
         {
-
-            var result = await GenericMantainer<TractorInput, Tractor >.SendInternalHttp(req, log, s => s.Tractors, id);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.PhenologicalEvents, id);
 
             return result.JsonResult;
         }
 
-        [FunctionName("BusinessName")]
-        public static async Task<IActionResult> BusinessName([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "businessNames/{id?}")] HttpRequest req, string id, ILogger log)
+
+        /// <summary>
+        /// Añadir Entidad Certificadora
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("certified_entities_post")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> CertifiedEntityPost(
+
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "certified_entities")]
+            [RequestBodyType(typeof(CertifiedEntitySwaggerInput), "Entidad Certificadora")]
+            HttpRequest req, ILogger log)
         {
-            var result = await GenericMantainer<BusinessNameInput, BusinessName>.SendInternalHttp(req, log, s => s.BusinessNames, id);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.CertifiedEntities, string.Empty);
 
             return result.JsonResult;
         }
 
-        [FunctionName("CostCenter")]
-        public static async Task<IActionResult> CostCenter([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "costCenters/{id?}")] HttpRequest req, string id, ILogger log)
+        /// <summary>
+        /// Modificación de Entidad Certificadora
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("certified_entities_put")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> CertifiedEntityPut(
+
+            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "certified_entities/{id}")]
+            [RequestBodyType(typeof(CertifiedEntitySwaggerInput), "Entidad Certificadora")]
+            HttpRequest req, string id, ILogger log)
         {
-            var result = await GenericMantainer<CostCenterInput, CostCenter>.SendInternalHttp(req, log, s => s.CostCenters, id);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.CertifiedEntities, id);
 
             return result.JsonResult;
         }
 
-        [FunctionName("SeasonV3")]
-        public static async Task<IActionResult> SeasonV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "seasons/{id?}")] HttpRequest req, string id, ILogger log)
+
+        /// <summary>
+        /// Añadir Categoría de ingrediente
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("ingredient_categories_post")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> CategoryIngredientPost(
+
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "ingredient_categories")]
+            [RequestBodyType(typeof(IngredientCategorySwaggerInput), "Categoría de Ingrediente")]
+            HttpRequest req, ILogger log)
         {
-            var result = await GenericMantainer<CostCenterInput, CostCenter>.SendInternalHttp(req, log, s => s.CostCenters, id);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.IngredientCategories, string.Empty);
 
             return result.JsonResult;
         }
 
-
-        [FunctionName("RootstockV2")]
-        public static async Task<IActionResult> RootstockV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "rootstock/{id?}")] HttpRequest req, string id, ILogger log)
+        /// <summary>
+        /// Modificación de Categoría de ingredientes
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("ingredient_categories_put")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> CategoryIngredientPut(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "ingredient_categories/{id}")]
+            [RequestBodyType(typeof(IngredientCategorySwaggerInput), "Categoría de Ingrediente")]
+            HttpRequest req, string id, ILogger log)
         {
-            var result = await GenericMantainer<RootStockInput, Rootstock>.SendInternalHttp(req, log, s => s.Rootstock, id);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.IngredientCategories, id);
             return result.JsonResult;
         }
 
-        [FunctionName("OrderFolder")]
-        public static async Task<IActionResult> OrderFolder([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "order_folders/{id?}")] HttpRequest req, string id, ILogger log)
+
+        /// <summary>
+        /// Añadir Ingredientes
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("ingredients_post")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> IngredientsPost(
+
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "ingredients")]
+            [RequestBodyType(typeof(IngredientSwaggerInput), "Ingrediente")]
+            HttpRequest req, ILogger log)
         {
-            var result = await GenericMantainer<OrderFolderInput, OrderFolder>.SendInternalHttp(req, log, s => s.OrderFolder, id);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Ingredients, string.Empty);
+
             return result.JsonResult;
         }
 
-        [FunctionName("Barracks")]
-        public static async Task<IActionResult> BarracksV2([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "barracks/{id?}")] HttpRequest req, string id, ILogger log)
+
+        /// <summary>
+        /// Modificación de Ingrediente
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("ingredients_put")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> IngredientPut(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "ingredients/{id}")]
+            [RequestBodyType(typeof(IngredientSwaggerInput), "Ingrediente")]
+            HttpRequest req, string id, ILogger log)
         {
-            var result = await GenericMantainer<BarrackInput, Barrack>.SendInternalHttp(req, log, s => s.Barracks, id);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Ingredients, id);
             return result.JsonResult;
         }
 
 
-        [FunctionName("NotificationEvents")]
-        public static async Task<IActionResult> NotificationEvents([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "notification_events/{id?}")] HttpRequest req, string id, ILogger log)
+        /// <summary>
+        /// Añadir Producto
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("products_post")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> ProductsPost(
+
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "products")]
+            [RequestBodyType(typeof(ProductSwaggerInput), "Producto")]
+            HttpRequest req, ILogger log)
         {
-            var result = await GenericMantainer<NotificationEventInput, NotificationEvent>.SendInternalHttp(req, log, s => s.NotificationEvents, id);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Products, string.Empty);
+
             return result.JsonResult;
         }
 
 
-        [FunctionName("PreOrders")]
-        public static async Task<IActionResult> PreOrders([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "pre_orders/{id?}")] HttpRequest req, string id, ILogger log)
+        /// <summary>
+        /// Modificación de Productos
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("products_put")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> ProductPut(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "products/{id}")]
+            [RequestBodyType(typeof(ProductSwaggerInput), "Producto")]
+            HttpRequest req, string id, ILogger log)
         {
-            var result = await GenericMantainer<PreOrderInput, PreOrder>.SendInternalHttp(req, log, s => s.PreOrders, id);
-
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Products, id);
             return result.JsonResult;
         }
 
-        [FunctionName("Orders")]
-        public static async Task<IActionResult> Orders([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "orders/{id?}")] HttpRequest req, string id, ILogger log)
+
+        /// <summary>
+        /// Añadir Rol
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("roles_post")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> RolePost(
+
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "roles")]
+            [RequestBodyType(typeof(RoleSwaggerInput), "Rol")]
+            HttpRequest req, ILogger log)
         {
-            var result = await GenericMantainer<ApplicationOrderInput, ApplicationOrder>.SendInternalHttp(req, log, s => s.ApplicationOrders, id);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Roles, string.Empty);
 
             return result.JsonResult;
         }
 
-        [FunctionName("Executions")]
-        public static async Task<IActionResult> ExecutionOrders([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "executions/{id?}")] HttpRequest req, string id, ILogger log)
+
+        /// <summary>
+        /// Modificación de Rol
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("roles_put")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> RolePut(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "roles/{id}")]
+            [RequestBodyType(typeof(RoleSwaggerInput), "Rol")]
+            HttpRequest req, string id, ILogger log)
         {
-            var result = await GenericMantainer<ExecutionOrderInput, ExecutionOrder>.SendInternalHttp(req, log, s => s.ExecutionOrders, id);
-
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Roles, id);
             return result.JsonResult;
         }
 
-        [FunctionName("ExecutionStatus")]
-        public static async Task<IActionResult> ExecutionOrdersStatus([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "executions_status/{id?}")] HttpRequest req, string id, ILogger log)
+
+
+        /// <summary>
+        /// Añadir Trabajo
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("jobs_post")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> JobPost(
+
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "jobs")]
+            [RequestBodyType(typeof(JobSwaggerInput), "Trabajo")]
+            HttpRequest req, ILogger log)
         {
-            var result = await GenericMantainer<ExecutionOrderStatusInput, ExecutionOrderStatus>.SendInternalHttp(req, log, s => s.ExecutionStatus, id);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Jobs, string.Empty);
 
+            return result.JsonResult;
+        }
+
+
+        /// <summary>
+        /// Modificación de Trabajo
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("jobs_put")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> JobPut(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "jobs/{id}")]
+            [RequestBodyType(typeof(JobSwaggerInput), "Trabajo")]
+            HttpRequest req, string id, ILogger log)
+        {
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Jobs, id);
+            return result.JsonResult;
+        }
+
+
+        /// <summary>
+        /// Añadir Usuario
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("users_post")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> UserPost(
+
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "users")]
+            [RequestBodyType(typeof(UserApplicatorSwaggerInput), "Usuario aplicador")]
+            HttpRequest req, ILogger log)
+        {
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Users, string.Empty);
+
+            return result.JsonResult;
+        }
+
+
+        /// <summary>
+        /// Modificación de Usuario
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("users_put")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> UsersPut(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "users/{id}")]
+            [RequestBodyType(typeof(UserApplicatorSwaggerInput), "Usuario aplicador")]
+            HttpRequest req, string id, ILogger log)
+        {
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Users, id);
+            return result.JsonResult;
+        }
+
+
+        /// <summary>
+        /// Añadir Nebulizador
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("nebulizers_post")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> NebulizersPost(
+
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "nebulizers")]
+            [RequestBodyType(typeof(NebulizerSwaggerInput), "Nebulizador")]
+            HttpRequest req, ILogger log)
+        {
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Nebulizers, string.Empty);
+
+            return result.JsonResult;
+        }
+
+
+        /// <summary>
+        /// Modificación de Nebulizador
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("nebulizer_put")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> NebulizerPut(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "nebulizers/{id}")]
+            [RequestBodyType(typeof(NebulizerSwaggerInput), "Nebulizador")]
+            HttpRequest req, string id, ILogger log)
+        {
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Nebulizers, id);
+            return result.JsonResult;
+        }
+
+        /// <summary>
+        /// Añadir Tractor
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("tractors_post")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> TractorPost(
+
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "tractors")]
+            [RequestBodyType(typeof(TractorSwaggerInput), "Tractor")]
+            HttpRequest req, ILogger log)
+        {
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Tractors, string.Empty);
+
+            return result.JsonResult;
+        }
+
+
+        /// <summary>
+        /// Modificación de Trabajo
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("tractors_put")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> TractorPut(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "tractors/{id}")]
+            [RequestBodyType(typeof(TractorSwaggerInput), "Tractor")]
+            HttpRequest req, string id, ILogger log)
+        {
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Tractors, id);
+            return result.JsonResult;
+        }
+
+
+
+        /// <summary>
+        /// Añadir Razón social
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("business_names_post")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> BusinessNamePost(
+
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "business_names")]
+            [RequestBodyType(typeof(BusinessNameSwaggerInput), "Razón social")]
+            HttpRequest req, ILogger log)
+        {
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.BusinessNames, string.Empty);
+
+            return result.JsonResult;
+        }
+
+
+        /// <summary>
+        /// Modificación de Razón Social
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("business_names_put")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> BusinessNamePut(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "business_names/{id}")]
+            [RequestBodyType(typeof(TractorSwaggerInput), "Razón Social")]
+            HttpRequest req, string id, ILogger log)
+        {
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.BusinessNames, id);
+            return result.JsonResult;
+        }
+
+
+
+        /// <summary>
+        /// Añadir centro de costos
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("cost_centers_post")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> CostCenterPost(
+
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "cost_centers")]
+            [RequestBodyType(typeof(CostCenterSwaggerInput), "Centro de Costos")]
+            HttpRequest req, ILogger log)
+        {
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.CostCenters, string.Empty);
+
+            return result.JsonResult;
+        }
+
+
+        /// <summary>
+        /// Modificación de centro de costos
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("cost_centers_put")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> CostCenterPut(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "cost_centers/{id}")]
+            [RequestBodyType(typeof(CostCenterSwaggerInput), "Centro de Costos")]
+            HttpRequest req, string id, ILogger log)
+        {
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.CostCenters, id);
+            return result.JsonResult;
+        }
+
+
+        /// <summary>
+        /// Añadir Temporada
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("seasons_post")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> SeasonPost(
+
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "seasons")]
+            [RequestBodyType(typeof(SeasonSwaggerInput), "Temporada")]
+            HttpRequest req, ILogger log)
+        {
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Seasons, string.Empty);
+
+            return result.JsonResult;
+        }
+
+
+        /// <summary>
+        /// Modificación de Temporada
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("seasons_put")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> SeasonPut(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "seasons/{id}")]
+            [RequestBodyType(typeof(SeasonSwaggerInput), "Temporada")]
+            HttpRequest req, string id, ILogger log)
+        {
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Seasons, id);
+            return result.JsonResult;
+        }
+
+        /// <summary>
+        /// Añadir Raíz
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("rootstock_post")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> RootStockPost(
+
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "rootstock")]
+            [RequestBodyType(typeof(RootStockSwaggerInput), "Raíz")]
+            HttpRequest req, ILogger log)
+        {
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Rootstock, string.Empty);
+
+            return result.JsonResult;
+        }
+
+
+        /// <summary>
+        /// Modificación de Raíz
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("rootstock_put")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> RootStockPut(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "rootstock/{id}")]
+            [RequestBodyType(typeof(RootStockSwaggerInput), "Raíz")]
+            HttpRequest req, string id, ILogger log)
+        {
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Rootstock, id);
+            return result.JsonResult;
+        }
+
+
+        /// <summary>
+        /// Añadir Carpeta de Órdenes
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("order_folders_post")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> OrderFolderPost(
+
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "order_folders")]
+            [RequestBodyType(typeof(OrderFolderSwaggerInput), "Carpeta de órdenes")]
+            HttpRequest req, ILogger log)
+        {
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.OrderFolder, string.Empty);
+
+            return result.JsonResult;
+        }
+
+
+        /// <summary>
+        /// Modificación de Carpeta de órdenes
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("order_folders_put")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> OrderFolderPut(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "order_folders/{id}")]
+            [RequestBodyType(typeof(OrderFolderSwaggerInput), "Carpeta de órdenes")]
+            HttpRequest req, string id, ILogger log)
+        {
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.OrderFolder, id);
+            return result.JsonResult;
+        }
+
+
+        /// <summary>
+        /// Añadir cuartel
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("barracks_post")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> BarracksPost(
+
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "barracks")]
+            [RequestBodyType(typeof(BarrackSwaggerInput), "Cuartel")]
+            HttpRequest req, ILogger log)
+        {
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Barracks, string.Empty);
+
+            return result.JsonResult;
+        }
+
+
+        /// <summary>
+        /// Modificación de Cuartel
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("barracks_put")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> BarrackPut(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "barracks/{id}")]
+            [RequestBodyType(typeof(BarrackSwaggerInput), "Cuartel")]
+            HttpRequest req, string id, ILogger log)
+        {
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Barracks, id);
             return result.JsonResult;
         }
 
@@ -298,8 +931,165 @@ namespace trifenix.agro.functions
 
 
 
+        /// <summary>
+        /// Añadir Orden de aplicación
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("orders_post")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> OrderPost(
+
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "orders")]
+            [RequestBodyType(typeof(ApplicationOrderSwaggerInput), "Orden de aplicación")]
+            HttpRequest req, ILogger log)
+        {
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ApplicationOrders, string.Empty);
+
+            return result.JsonResult;
+        }
 
 
+        /// <summary>
+        /// Modificación de Orden de aplicación
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("orders_put")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> OrderPut(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "orders/{id}")]
+            [RequestBodyType(typeof(ApplicationOrderSwaggerInput), "Orden de aplicación")]
+            HttpRequest req, string id, ILogger log)
+        {
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ApplicationOrders, id);
+            return result.JsonResult;
+        }
+
+
+        /// <summary>
+        /// Añadir Pre Orden de aplicación
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("pre_orders_post")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> PreOrderPost(
+
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "pre_orders")]
+            [RequestBodyType(typeof(PreOrderSwaggerInput), "Pre Orden de aplicación")]
+            HttpRequest req, ILogger log)
+        {
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.PreOrders, string.Empty);
+
+            return result.JsonResult;
+        }
+
+
+        /// <summary>
+        /// Modificación de Pre Orden de aplicación
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("pre_orders_put")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> PreOrderPut(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "pre_orders/{id}")]
+            [RequestBodyType(typeof(PreOrderSwaggerInput), "Pre Orden de aplicación")]
+            HttpRequest req, string id, ILogger log)
+        {
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.PreOrders, id);
+            return result.JsonResult;
+        }
+
+
+        /// <summary>
+        /// Añadir Ejecución
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("executions_post")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> ExecutionsPost(
+
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "executions")]
+            [RequestBodyType(typeof(ExecutionOrderSwaggerInput), "Ejecución aplicación")]
+            HttpRequest req, ILogger log)
+        {
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ExecutionOrders, string.Empty);
+
+            return result.JsonResult;
+        }
+
+
+        /// <summary>
+        /// Modificación de Ejecución
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("executions_put")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> ExecutionsPut(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "executions/{id}")]
+            [RequestBodyType(typeof(ExecutionOrderSwaggerInput), "Ejecución aplicación")]
+            HttpRequest req, string id, ILogger log)
+        {
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ExecutionOrders, id);
+            return result.JsonResult;
+        }
+
+
+
+        /// <summary>
+        /// Añadir Ejecución
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("executions_status_post")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> ExecutionsStatusPost(
+
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "executions_status")]
+            [RequestBodyType(typeof(ExecutionOrderStatusSwaggerInput), "Estatus Ejecución aplicación")]
+            HttpRequest req, ILogger log)
+        {
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ExecutionStatus, string.Empty);
+
+            return result.JsonResult;
+        }
+
+
+        /// <summary>
+        /// Modificación de Estatus Ejecución
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("executions_status_put")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> ExecutionsStatusPut(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "executions_status/{id}")]
+            [RequestBodyType(typeof(ExecutionOrderStatusSwaggerInput), "Ejecución aplicación")]
+            HttpRequest req, string id, ILogger log)
+        {
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ExecutionStatus, id);
+            return result.JsonResult;
+        }
 
 
     }

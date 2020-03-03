@@ -3740,6 +3740,7 @@
         "type": "project",
         "framework": ".NETStandard,Version=v2.0",
         "dependencies": {
+          "System.ComponentModel.Annotations": "4.7.0",
           "trifenix.agro.db.model": "1.0.0",
           "trifenix.agro.enums": "1.0.0"
         },

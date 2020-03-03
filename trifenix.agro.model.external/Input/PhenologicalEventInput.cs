@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace trifenix.agro.model.external.Input
 {
@@ -9,6 +10,20 @@ namespace trifenix.agro.model.external.Input
         public DateTime StartDate { get; set; }
 
 
+        public DateTime EndDate { get; set; }
+    }
+
+    public class PhenologicalEventSwaggerInput 
+    {
+
+        [Required]
+        public string Name { get; set; }
+
+        [Required]
+        public DateTime StartDate { get; set; }
+
+
+        [Required]
         public DateTime EndDate { get; set; }
     }
 

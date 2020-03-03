@@ -25,10 +25,11 @@ namespace trifenix.agro.functions.mantainers
     }
 
 
-    public static class GenericMantainer<InputElement,DbElement> where InputElement : InputBase where DbElement : DocumentBase
+    public static class GenericMantainer
     {
 
-        public static async Task<ActionResultWithId> HttpProcessing(HttpRequest req, ILogger log, IGenericOperation<DbElement, InputElement> repo, IGenericOperation<UserActivity, UserActivityInput> recordAcitvity, InputElement element) {
+        public static async Task<ActionResultWithId> HttpProcessing<InputElement, DbElement>(HttpRequest req, ILogger log, IGenericOperation<DbElement, InputElement> repo, IGenericOperation<UserActivity, UserActivityInput> recordAcitvity, InputElement element) where InputElement : InputBase where DbElement : DocumentBase
+        { 
             var method = req.Method.ToLower();
 
             switch (method)
@@ -86,7 +87,7 @@ namespace trifenix.agro.functions.mantainers
 
         }
 
-        public static async Task<ActionResultWithId> SendInternalHttp(HttpRequest req, ILogger log, Func<IAgroManager, IGenericOperation<DbElement, InputElement>> repo, string id = null)
+        public static async Task<ActionResultWithId> SendInternalHttp<InputElement, DbElement>(HttpRequest req, ILogger log, Func<IAgroManager, IGenericOperation<DbElement, InputElement>> repo, string id = null) where InputElement : InputBase where DbElement : DocumentBase
         {
 
             var claims = await Auth.Validate(req);
@@ -106,20 +107,21 @@ namespace trifenix.agro.functions.mantainers
 
         }
 
-        public static async Task<ActionResultWithId> HttpProcessing(HttpRequest req, ILogger log, IGenericOperation<DbElement, InputElement> repo, IGenericFullReadOperation<UserActivity, UserActivityInput> recordAcitvity,  string id = null ) {
+        public static async Task<ActionResultWithId> HttpProcessing<InputElement, DbElement>(HttpRequest req, ILogger log, IGenericOperation<DbElement, InputElement> repo, IGenericFullReadOperation<UserActivity, UserActivityInput> recordAcitvity,  string id = null) where InputElement : InputBase where DbElement : DocumentBase
+        {
 
 
             var body = await new StreamReader(req.Body).ReadToEndAsync();
 
             var method = req.Method.ToLower();
 
-            var jsonElement = await ConvertToElement(body, id, method);
+            var jsonElement = await ConvertToElement<InputElement>(body, id, method);
 
             return await HttpProcessing(req, log, repo, recordAcitvity, jsonElement);
 
         }
 
-        public static async Task<InputElement> ConvertToElement(string body, string id, string method) 
+        public static async Task<InputElement> ConvertToElement<InputElement>(string body, string id, string method) where InputElement : InputBase
         {
 
             var requestBody = await new StreamReader(body).ReadToEndAsync();

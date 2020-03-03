@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using trifenix.agro.enums;
 
 namespace trifenix.agro.model.external.Input
@@ -14,17 +15,30 @@ namespace trifenix.agro.model.external.Input
         public PreOrderType PreOrderType { get; set; }
 
 
-        private List<string> _barracksId;
+        public string[] BarracksId { get; set; }
 
-        public List<string> BarracksId
-        {
-            get
-            {
-                _barracksId = _barracksId ?? new List<string>();
-                return _barracksId;
-            }
-            set { _barracksId = value; }
-        }
+
+    }
+
+    public class PreOrderSwaggerInput 
+    {
+        [Required]
+        public string Name { get; set; }
+
+        
+        public string OrderFolderId { get; set; }
+        
+        public string IdIngredient { get; set; }
+
+
+
+        [Required]
+        public PreOrderType PreOrderType { get; set; }
+
+
+        [Required]
+        public string[] BarracksId { get; set; }
+
 
     }
 

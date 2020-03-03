@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using trifenix.agro.enums;
 using trifenix.agro.weather.model;
 
@@ -34,6 +35,34 @@ namespace trifenix.agro.model.external.Input
         public float? Long { get; set; }
 
 
+    }
+
+    public class NotificationEventSwaggerInput {
+        
+        [Required]
+        public string IdBarrack { get; set; }
+        
+        public string IdPhenologicalEvent { get; set; }
+
+        [Required]
+        public NotificationType EventType { get; set; }
+        
+
+        public string Description { get; set; }
+
+        
+        [Required]
+        public DateTime Created { get; set; }
+
+        [Required]
+        public string Base64 { get; set; }
+
+
+
+
+        public float? Lat { get; set; }
+
+        public float? Long { get; set; }
     }
 
     
