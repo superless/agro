@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using trifenix.agro.db.model.agro.orders;
 
 namespace trifenix.agro.model.external.Input
@@ -21,6 +22,26 @@ namespace trifenix.agro.model.external.Input
 
         
         
+    }
+
+    public class ExecutionOrderSwaggerInput : InputBase
+    {
+        [Required]
+        public string IdOrder { get; set; }
+
+
+        public DosesOrder[] DosesOrder { get; set; }
+
+
+        public DateTime? InitDate { get; set; }
+        public DateTime? EndDate { get; set; }
+
+        public string IdUserApplicator;
+        public string IdNebulizer { get; set; }
+        public string IdTractor { get; set; }
+
+
+
     }
 
 

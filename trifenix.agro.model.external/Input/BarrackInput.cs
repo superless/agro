@@ -1,4 +1,5 @@
-﻿using trifenix.agro.db.model.agro;
+﻿using System.ComponentModel.DataAnnotations;
+using trifenix.agro.db.model.agro;
 using trifenix.agro.db.model.local;
 
 namespace trifenix.agro.model.external.Input
@@ -24,5 +25,36 @@ namespace trifenix.agro.model.external.Input
 
     }
 
-    
+
+
+    public class BarrackSwaggerInput : InputBaseName
+    {
+        [Required]
+        public string SeasonId { get; set; }
+
+        [Required]
+        public string IdPlotLand { get; set; }
+
+        [Required]
+        public double Hectares { get; set; }
+
+        [Required]
+        public int PlantingYear { get; set; }
+
+        [Required]
+        public string IdVariety { get; set; }
+
+
+
+        public int NumberOfPlants { get; set; }
+
+        public GeographicalPoint[] GeographicalPoints { get; set; }
+
+        public string IdPollinator { get; set; }
+
+        public string IdRootstock { get; set; }
+
+    }
+
+
 }

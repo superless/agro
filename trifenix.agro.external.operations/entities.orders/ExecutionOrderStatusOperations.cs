@@ -49,7 +49,7 @@ namespace trifenix.agro.external.operations.entities.orders
                 ClosedStatus = input.ClosedStatus,
                 ExecutionStatus = input.ExecutionStatus,
                 Comment = input.Comment,
-                Created = input.Created,
+                Created = DateTime.Now,
                 FinishStatus = input.FinishStatus,
                 IdExecutionOrder = input.IdExecutionOrder
             };

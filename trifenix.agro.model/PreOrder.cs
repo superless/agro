@@ -21,15 +21,7 @@ namespace trifenix.agro.db.model.agro
         public PreOrderType PreOrderType { get; set; }
 
 
-        private List<string> _barracksId;
-
-        public List<string> BarracksId
-        {
-            get {
-                _barracksId = _barracksId ?? new List<string>();
-                return _barracksId; }
-            set { _barracksId = value; }
-        }
+        public string[] BarracksId { get; set; }
 
     }
 }

@@ -1,4 +1,5 @@
-﻿using trifenix.agro.enums;
+﻿using System.ComponentModel.DataAnnotations;
+using trifenix.agro.enums;
 
 namespace trifenix.agro.model.external.Input
 {
@@ -18,10 +19,30 @@ namespace trifenix.agro.model.external.Input
 
         public DosesInput[] Doses { get; set; }
 
+    }
+
+    public class ProductSwaggerInput {
+
+        [Required]
+        public string Name { get; set; }
+
+        [Required]
+        public string IdActiveIngredient { get; set; }
 
 
+        [Required]
+        public string Brand { get; set; }
 
+        [Required]
+        public MeasureType MeasureType { get; set; }
 
+        [Required]
+        public double Quantity { get; set; }
 
+        [Required]
+        public KindOfProductContainer KindOfBottle { get; set; }
+
+        [Required]
+        public DosesInput[] Doses { get; set; }
     }
 }

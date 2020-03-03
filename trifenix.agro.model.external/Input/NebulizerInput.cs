@@ -7,4 +7,12 @@
         public string Code { get; set; }
 
     }
+
+    public class NebulizerSwaggerInput
+    {
+        public string Brand { get; set; }
+
+        public string Code { get; set; }
+
+    }
 }

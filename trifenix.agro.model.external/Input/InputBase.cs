@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace trifenix.agro.model.external.Input
@@ -8,11 +9,12 @@ namespace trifenix.agro.model.external.Input
     {
         public string Id { get; set; }
 
+        
     }
 
     public abstract class InputBaseName : InputBase
     {
-        
+        [Required]
         public string Name { get; set; }
 
         

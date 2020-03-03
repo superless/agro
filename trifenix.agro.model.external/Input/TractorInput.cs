@@ -7,4 +7,14 @@
         public string Code { get; set; }
 
     }
+
+    public class TractorSwaggerInput 
+    {
+        public string Brand { get; set; }
+
+        public string Code { get; set; }
+
+    }
+
+
 }
