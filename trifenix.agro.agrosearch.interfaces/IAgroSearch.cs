@@ -5,6 +5,7 @@ namespace trifenix.agro.search.interfaces {
 
         void AddElements<T>(List<T> elements);
         void DeleteElements<T>(List<T> elements);
+        List<T> FilterElements<T>(string filter);
 
     }
 }

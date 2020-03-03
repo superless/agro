@@ -1,11 +1,9 @@
 ﻿using Cosmonaut;
 using Cosmonaut.Attributes;
-using System.Collections.Generic;
-
-using trifenix.agro.db.model.agro.local;
 using trifenix.agro.enums;
 
-namespace trifenix.agro.db.model.agro {
+namespace trifenix.agro.db.model.agro
+{
 
     /// <summary>
     /// Producto Quimico usado por las órdenes
