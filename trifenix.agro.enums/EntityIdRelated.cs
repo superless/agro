@@ -31,7 +31,8 @@
         BARRACK_EVENT,
         DOSES_ORDER,
         EXECUTION_ORDER_STATUS,
-        SPECIE
+        SPECIE,
+        GEOPOINT
     }
 
     public enum PropertyRelated {
@@ -48,7 +49,12 @@
         GENERIC_PATH,
         GENERIC_QUANTITY_HECTARE,
         GENERIC_COMMENT,
-        GENERIC_PHONE
+        GENERIC_PHONE,
+        GENERIC_NUMBER_OF_PLANTS,
+        GENERIC_PLANT_IN_YEAR,
+        GENERIC_HECTARES,
+        GENERIC_LATITUDE,
+        GENERIC_LONGITUDE
     }
 
     public enum EnumerationRelated {
