@@ -55,7 +55,7 @@ namespace trifenix.agro.external.operations.entities.ext
 
 
             }
-            var existsIngredient = await existElement.ExistsElement<Ingredient>(productInput.IdActiveIngredient);
+            var existsIngredient = await existElement.ExistsById<Ingredient>(productInput.IdActiveIngredient);
 
             if (!existsIngredient) return "no existe id de ingrediente";
 

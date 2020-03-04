@@ -31,7 +31,7 @@ namespace trifenix.agro.external.operations.entities.orders
 
             if (!string.IsNullOrWhiteSpace(input.Id))
             {
-                var exists = await existElement.ExistsElement<ExecutionOrder>(input.Id);
+                var exists = await existElement.ExistsById<ExecutionOrder>(input.Id);
                 if (!exists) return $"la ejecución con id {input.Id} no existe";
             }
 
@@ -39,7 +39,7 @@ namespace trifenix.agro.external.operations.entities.orders
 
             foreach (var doses in input.DosesOrder)
             {
-                var exists = await existElement.ExistsElement<Doses>(doses.IdDoses);
+                var exists = await existElement.ExistsById<Doses>(doses.IdDoses);
                 if (!exists) return $"la dosis con id {doses.IdDoses} no existe";
 
             }
@@ -52,13 +52,13 @@ namespace trifenix.agro.external.operations.entities.orders
 
             if (!string.IsNullOrWhiteSpace(input.IdUserApplicator))
             {
-                var userExists = await existElement.ExistsElement<User>(input.IdUserApplicator);
+                var userExists = await existElement.ExistsById<User>(input.IdUserApplicator);
                 if (!userExists) return $"usuario con id {input.IdUserApplicator} no existe en la base de datos"; 
             }
 
             if (!string.IsNullOrWhiteSpace(input.IdNebulizer))
             {
-                var nebulizerExists = await existElement.ExistsElement<Nebulizer>(input.IdNebulizer);
+                var nebulizerExists = await existElement.ExistsById<Nebulizer>(input.IdNebulizer);
                 if (!nebulizerExists) return $"nebulizador con id {input.IdNebulizer} no existe";
 
             }
@@ -66,12 +66,12 @@ namespace trifenix.agro.external.operations.entities.orders
 
             if (!string.IsNullOrWhiteSpace(input.IdTractor))
             {
-                var tractorExists = await existElement.ExistsElement<Tractor>(input.IdTractor);
+                var tractorExists = await existElement.ExistsById<Tractor>(input.IdTractor);
                 if (!tractorExists) return $"tractor con id {input.IdTractor} no existe";
             }
 
 
-            var orderExists = await existElement.ExistsElement<ApplicationOrder>(input.IdOrder);
+            var orderExists = await existElement.ExistsById<ApplicationOrder>(input.IdOrder);
             if (!orderExists) return $"orden con id {input.IdOrder} no existe en la base de datos";
 
             return string.Empty;

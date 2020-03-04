@@ -35,18 +35,18 @@ namespace trifenix.agro.external.operations.entities.main
             var valida = await Validate(input);
             if (!valida) throw new Exception(string.Format(ErrorMessages.NotValid, variety.CosmosEntityName));
 
-            var existsSector = await existElement.ExistsElement<Specie>(input.IdSpecie);
+            var existsSector = await existElement.ExistsById<Specie>(input.IdSpecie);
             if (!existsSector) throw new Exception(string.Format(ErrorMessages.NotValidId, "Especie"));
 
             if (string.IsNullOrWhiteSpace(input.Id))
             {
-                var validaAbbv = await existElement.ExistsElement<Variety>("Abbreviation", input.Abbreviation);
+                var validaAbbv = await existElement.ExistsWithPropertyValue<Variety>("Abbreviation", input.Abbreviation);
                 if (validaAbbv) throw new Exception(string.Format(ErrorMessages.NotValidAbbreviation, variety.CosmosEntityName));
 
             }
             else
             {
-                var validaAbbv = await existElement.ExistsEditElement<Variety>(input.Id, "Abbreviation", input.Abbreviation);
+                var validaAbbv = await existElement.ExistsWithPropertyValue<Variety>("Abbreviation", input.Abbreviation, input.Id);
                 if (validaAbbv) throw new Exception(string.Format(ErrorMessages.NotValidAbbreviation, variety.CosmosEntityName));
             }
 

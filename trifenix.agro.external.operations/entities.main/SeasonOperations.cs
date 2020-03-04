@@ -38,13 +38,13 @@ namespace trifenix.agro.external.operations.entities.main
             };
 
 
-            var validaCostCenter = await existElement.ExistsElement<CostCenter>(input.IdCostCenter);
+            var validaCostCenter = await existElement.ExistsById<CostCenter>(input.IdCostCenter);
 
             if (!validaCostCenter) throw new Exception(string.Format(ErrorMessages.NotValidId, "Centro de Costos"));
 
             if (!string.IsNullOrWhiteSpace(input.Id))
             {
-                var validaId = await existElement.ExistsElement<Season>(input.Id);
+                var validaId = await existElement.ExistsById<Season>(input.Id);
 
                 if (!validaId) throw new Exception("No existe la temporada a modificar");
             }

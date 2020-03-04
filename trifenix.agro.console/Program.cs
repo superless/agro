@@ -12,16 +12,17 @@ using System.Threading.Tasks;
 using trifenix.agro.db;
 using trifenix.agro.db.applicationsReference;
 using trifenix.agro.db.applicationsReference.agro;
-
 using trifenix.agro.db.applicationsReference.common;
 using trifenix.agro.db.model;
 using trifenix.agro.db.model.agro.orders;
 using trifenix.agro.external.operations;
 using trifenix.agro.search;
 using trifenix.agro.search.model;
+using trifenix.agro.search.operations;
 
 namespace trifenix.agro.console {
     class Program {
+
         static async Task Main(string[] args) {
             Console.WriteLine("Hora de inicio: {0}", DateTime.Now.ToString("hh\\:mm\\:ss"));
             Stopwatch timer = Stopwatch.StartNew();
@@ -236,12 +237,13 @@ namespace trifenix.agro.console {
             //var agro = new AgroManager(db, season?.Id, null, null, null, null);
             //agro.ApplicationOrders.UpdateOrder(lines, db);
             #endregion
-            
+
             timer.Stop();
             Console.WriteLine("Hora de termino: {0}", DateTime.Now.ToString("hh\\:mm\\:ss"));
             Console.WriteLine("Tiempo transcurrido: {0}", timer.Elapsed.ToString("hh\\:mm\\:ss"));
 
         }
+
     }
 
 }

@@ -35,7 +35,7 @@ namespace trifenix.agro.external.operations.entities.main
 
             if (!valida) throw new Exception(string.Format(ErrorMessages.NotValid, costCenter.CosmosEntityName));
 
-            var existsCostCenter = await existElement.ExistsElement<BusinessName>(input.IdBusinessName);
+            var existsCostCenter = await existElement.ExistsById<BusinessName>(input.IdBusinessName);
             if (!existsCostCenter) throw new Exception(string.Format(ErrorMessages.NotValidId, "Razón social"));
 
 

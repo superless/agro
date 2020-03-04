@@ -14,83 +14,65 @@ using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
 
-namespace trifenix.agro.external.operations.entities.orders
-{
-    public class ApplicationOrderOperations : MainReadOperationName<ApplicationOrder, ApplicationOrderInput>, IGenericOperation<ApplicationOrder, ApplicationOrderInput>
-    {
+namespace trifenix.agro.external.operations.entities.orders {
+
+    public class ApplicationOrderOperations : MainReadOperationName<ApplicationOrder, ApplicationOrderInput>, IGenericOperation<ApplicationOrder, ApplicationOrderInput> {
+
         private readonly ICommonQueries commonQueries;
 
-        public ApplicationOrderOperations(IMainGenericDb<ApplicationOrder> repo, IExistElement existElement, IAgroSearch search, ICommonQueries commonQueries) : base(repo, existElement, search)
-        {
+        public ApplicationOrderOperations(IMainGenericDb<ApplicationOrder> repo, IExistElement existElement, IAgroSearch search, ICommonQueries commonQueries) : base(repo, existElement, search) {
             this.commonQueries = commonQueries;
         }
 
-
         private async Task<string> ValidaOrder(ApplicationOrderInput input) {
-
-            
-            if (input.OrderType == OrderType.PHENOLOGICAL)
-            {
-                if (!input.IdsPhenologicalPreOrder.Any()) return "Deben existir preordenes fenológicas, cuando la orden de aplicación es de tipo fenológica";
-
-                foreach (var preOrderId in input.IdsPhenologicalPreOrder)
-                {
-                    var exists = await existElement.ExistsElement<PreOrder>(preOrderId);
-
-                    if (!exists) return $"la preorden con id {preOrderId} no existe";
-                }
-
-            }
-
-
-            if (!input.DosesOrder.Any()) return "Debe existir al menos un producto";
-
-            foreach (var doses in input.DosesOrder)
-            {
-                var exists = await existElement.ExistsElement<Doses>(doses.IdDoses);
-                if (!exists) return $"la dosis con id {doses.IdDoses} no existe";
-
-            }
-
-            if (!input.Barracks.Any()) return "Debe existir al menos un cuartel";
-
-            foreach (var barrack in input.Barracks)
-            {
-                var exists = await existElement.ExistsElement<Barrack>(barrack.IdBarrack);
-                if (!exists) return $"el cuartel con id {barrack.IdBarrack} no existe";
-                if (barrack.IdEvents.Any())
-                {
-                    foreach (var idNotif in barrack.IdEvents)
-                    {
-                        var existsEvent = await existElement.ExistsElement<NotificationEvent>(idNotif);
-
-                        if (!existsEvent) return $"la notificación con id {idNotif} no existe";
+            string errors = string.Empty;
+            if (input.OrderType == OrderType.PHENOLOGICAL) {
+                if (!input.IdsPhenologicalPreOrder.Any())
+                    errors += "Deben existir preordenes fenológicas, cuando la orden de aplicación es de tipo fenológica\r\n";
+                else
+                    foreach (var preOrderId in input.IdsPhenologicalPreOrder) {
+                        bool exists = await existElement.ExistsById<PreOrder>(preOrderId);
+                        if (!exists)
+                            errors += $"La preorden con id {preOrderId} no existe\r\n";
                     }
-
-                }
-
             }
-
-            if (input.InitDate > input.EndDate) return "La fecha inicial no puede ser mayor a la final";
-
-            return string.Empty;
+            if (!input.DosesOrder.Any())
+                errors += "Debe existir al menos una dosis\r\n";
+            else
+                foreach (var doses in input.DosesOrder) {
+                    bool exists = await existElement.ExistsById<Doses>(doses.IdDoses);
+                    if (!exists)
+                        errors += $"La dosis con id {doses.IdDoses} no existe\r\n";
+                }
+            if (!input.Barracks.Any())
+                errors += "Debe existir al menos un cuartel\r\n";
+            else    
+                foreach (var barrack in input.Barracks) {
+                    bool exists = await existElement.ExistsById<Barrack>(barrack.IdBarrack);
+                    if (!exists)
+                        errors += $"El cuartel con id {barrack.IdBarrack} no existe\r\n";
+                    if (barrack.IdNotificationEvents.Any()) {
+                        foreach (var idNotification in barrack.IdNotificationEvents) {
+                            bool existsEvent = await existElement.ExistsById<NotificationEvent>(idNotification);
+                            if (!existsEvent)
+                                errors += $"La notificación con id {idNotification} no existe\r\n";
+                        }
+                    }
+                }
+            if (input.InitDate > input.EndDate)
+                errors += "La fecha inicial no puede ser mayor a la final\r\n";
+            return errors;
         }
 
-        public async Task<ExtPostContainer<string>> Save(ApplicationOrderInput input)
-        {
-            var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
-
-
+        public async Task<ExtPostContainer<string>> Save(ApplicationOrderInput input) {
+            var id = input.Id ?? Guid.NewGuid().ToString("N");
             var valida = await Validate(input);
-
-            if (!valida) throw new Exception(string.Format(ErrorMessages.NotValid, "PreOrden"));
-
+            if (!valida)
+                throw new Exception(string.Format(ErrorMessages.NotValid, "PreOrden"));
             var validaPreOrder = await ValidaOrder(input);
-
-            if (!string.IsNullOrWhiteSpace(validaPreOrder)) throw new Exception(validaPreOrder);
-
-            var order = new ApplicationOrder
-            {
+            if (!string.IsNullOrEmpty(validaPreOrder))
+                throw new Exception(validaPreOrder);
+            var order = new ApplicationOrder {
                 Id = id,
                 Barracks = input.Barracks,
                 DosesOrder = input.DosesOrder,
@@ -101,119 +83,84 @@ namespace trifenix.agro.external.operations.entities.orders
                 OrderType = input.OrderType,
                 Wetting = input.Wetting
             };
-
-
-
             await repo.CreateUpdate(order);
-
-
             var specieAbbv = await commonQueries.GetSpecieAbbreviationFromBarrack(input.Barracks.First().IdBarrack);
-
-
-            var entity = new EntitySearch
-            {
+            var entity = new EntitySearch {
                 Id = id,
                 EntityIndex = (int)EntityRelated.ORDER,
                 Created = DateTime.Now,
                 RelatedProperties = new Property[] {
-                        new Property {
-                            PropertyIndex = (int)PropertyRelated.GENERIC_NAME,
-                            Value = input.Name
-                        },
-                        new Property {
-                            PropertyIndex = (int)PropertyRelated.GENERIC_ABBREVIATION,
-                            Value = specieAbbv
-                        },
-                        new Property{ 
-                            PropertyIndex = (int)PropertyRelated.GENERIC_START_DATE,
-                            Value = $"{input.InitDate : dd/MM/yyyy}"
-                        },
-                        new Property{
-                            PropertyIndex = (int)PropertyRelated.GENERIC_END_DATE,
-                            Value = $"{input.EndDate : dd/MM/yyyy}"
-                        }
-                    },
+                    new Property { PropertyIndex = (int)PropertyRelated.GENERIC_NAME, Value = input.Name },
+                    new Property { PropertyIndex = (int)PropertyRelated.GENERIC_ABBREVIATION, Value = specieAbbv },
+                    new Property { PropertyIndex = (int)PropertyRelated.GENERIC_WETTING, Value =  $"{input.Wetting}" },
+                    new Property { PropertyIndex = (int)PropertyRelated.GENERIC_START_DATE, Value = $"{input.InitDate : dd/MM/yyyy}" },
+                    new Property { PropertyIndex = (int)PropertyRelated.GENERIC_END_DATE, Value = $"{input.EndDate : dd/MM/yyyy}" }
+                },
                 RelatedEnumValues = new RelatedEnumValue[] {
                     new RelatedEnumValue{ EnumerationIndex = (int)EnumerationRelated.ORDER_TYPE, Value = (int)input.OrderType }
                 }
             };
 
-
-            var entities = new List<RelatedId>();
+            var relatedEntities = new List<RelatedId>();
 
             // Eliminar antes de agregar
             search.DeleteElements(search.FilterElements<EntitySearch>($"EntityIndex eq {(int)EntityRelated.BARRACK_EVENT} and RelatedIds/any(elementId: elementId/EntityIndex eq {(int)EntityRelated.ORDER} and elementId/EntityId eq '{id}'"));
             //TODO : Eliminar antes de agregar
-            foreach (var barrack in input.Barracks)
-            {
-                var newGuid = Guid.NewGuid().ToString("N");
+            foreach (var barrack in input.Barracks) {
+                var idGuid = Guid.NewGuid().ToString("N");
                 var relatedIds = new List<RelatedId>() {
                     new RelatedId{ EntityIndex = (int)EntityRelated.BARRACK, EntityId = barrack.IdBarrack },
                     new RelatedId { EntityIndex = (int)EntityRelated.ORDER, EntityId = id }
-
                 };
-                relatedIds.AddRange(barrack.IdEvents.Select(s => new RelatedId { EntityIndex = (int)EntityRelated.NOTIFICATION, EntityId = s }));
-
-                var inputSearch = new EntitySearch
-                {
-                    Id = newGuid,
+                relatedIds.AddRange(barrack.IdNotificationEvents.Select(s => new RelatedId { EntityIndex = (int)EntityRelated.NOTIFICATION, EntityId = s }));
+                var inputSearch = new EntitySearch {
+                    Id = idGuid,
                     EntityIndex = (int)EntityRelated.BARRACK_EVENT,
                     Created = DateTime.Now,
                     RelatedIds = relatedIds.ToArray()
-
                 };
                 search.AddElements(new List<EntitySearch> {
                     inputSearch
                 });
-
-                entities.Add(new RelatedId { EntityIndex = (int)EntityRelated.BARRACK_EVENT, EntityId = newGuid });
-
+                relatedEntities.Add(new RelatedId { EntityIndex = (int)EntityRelated.BARRACK_EVENT, EntityId = idGuid });
             }
+
             // Eliminar antes de agregar
             search.DeleteElements(search.FilterElements<EntitySearch>($"EntityIndex eq {(int)EntityRelated.DOSES_ORDER} and RelatedIds/any(elementId: elementId/EntityIndex eq {(int)EntityRelated.ORDER} and elementId/EntityId eq '{id}'"));
             //TODO : Eliminar antes de agregar
-            foreach (var doses in input.DosesOrder)
-            {
+            foreach (var doses in input.DosesOrder) {
                 var idGuid = Guid.NewGuid().ToString("N");
-                var inputSearch = new EntitySearch
-                {
+                var inputSearch = new EntitySearch {
                     Id = idGuid,
                     Created = DateTime.Now,
                     EntityIndex = (int)EntityRelated.DOSES_ORDER,
                     RelatedProperties = new Property[] {
                         new Property{ PropertyIndex = (int)PropertyRelated.GENERIC_QUANTITY_HECTARE,  Value = $"{doses.QuantityByHectare}" }
-                     },
+                    },
                     RelatedIds = new RelatedId[] {
                         new RelatedId{ EntityIndex=(int)EntityRelated.DOSES, EntityId = doses.IdDoses },
                         new RelatedId { EntityIndex = (int)EntityRelated.ORDER, EntityId = id }
-                     }
-
+                    }
                 };
                 search.AddElements(new List<EntitySearch> {
                     inputSearch
                 });
-                entities.Add(new RelatedId { EntityIndex = (int)EntityRelated.DOSES_ORDER, EntityId = idGuid });
+                relatedEntities.Add(new RelatedId { EntityIndex = (int)EntityRelated.DOSES_ORDER, EntityId = idGuid });
             }
 
             if (input.OrderType == OrderType.PHENOLOGICAL)
-            {
-                entities.AddRange(input.IdsPhenologicalPreOrder.Select(s => new RelatedId { EntityIndex = (int)EntityRelated.PREORDER, EntityId = s }));
-            }
-
+                relatedEntities.AddRange(input.IdsPhenologicalPreOrder.Select(s => new RelatedId { EntityIndex = (int)EntityRelated.PREORDER, EntityId = s }));
             var idSeason = await commonQueries.GetSeasonId(input.Barracks.First().IdBarrack);
-            entities.Add( new RelatedId { EntityIndex = (int)EntityRelated.SEASON, EntityId = idSeason });
-            entity.RelatedIds = entities.ToArray();
-
-            search.AddElements(new List<EntitySearch> {
-                entity
-            });
-
-            return new ExtPostContainer<string>
-            {
+            relatedEntities.Add( new RelatedId { EntityIndex = (int)EntityRelated.SEASON, EntityId = idSeason });
+            entity.RelatedIds = relatedEntities.ToArray();
+            search.AddElements(new List<EntitySearch> { entity });
+            return new ExtPostContainer<string> {
                 IdRelated = id,
                 MessageResult = ExtMessageResult.Ok,
                 Result = id
             };
         }
+
     }
+
 }

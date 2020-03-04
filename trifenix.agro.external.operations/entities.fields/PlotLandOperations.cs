@@ -34,7 +34,7 @@ namespace trifenix.agro.external.operations.entities.fields
             var valida = await Validate(input);
             if (!valida) throw new Exception(string.Format(ErrorMessages.NotValid, plotLand.CosmosEntityName));
 
-            var existsSector = await existElement.ExistsElement<Sector>(input.IdSector);
+            var existsSector = await existElement.ExistsById<Sector>(input.IdSector);
             if (!existsSector) throw new Exception(string.Format(ErrorMessages.NotValidId, "Sector"));
 
 

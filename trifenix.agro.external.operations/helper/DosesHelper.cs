@@ -16,7 +16,7 @@ namespace trifenix.agro.external.operations.helper
 
             if (dose.IdSpecies.Any())
             {
-                var existsSpeciesId = dose.IdSpecies.Select(async s => await existsElement.ExistsElement<Specie>(s));
+                var existsSpeciesId = dose.IdSpecies.Select(async s => await existsElement.ExistsById<Specie>(s));
 
                 if (existsSpeciesId.Any(s => !s.Result))
                 {
@@ -26,7 +26,7 @@ namespace trifenix.agro.external.operations.helper
 
             if (dose.IdVarieties.Any())
             {
-                var existsVarietiesId = dose.IdVarieties.Distinct().Select(async s => await existsElement.ExistsElement<Variety>(s));
+                var existsVarietiesId = dose.IdVarieties.Distinct().Select(async s => await existsElement.ExistsById<Variety>(s));
 
                 if (existsVarietiesId.Any(s => !s.Result))
                 {
@@ -37,7 +37,7 @@ namespace trifenix.agro.external.operations.helper
 
             if (dose.idsApplicationTarget.Any())
             {
-                var existsTargetsId = dose.idsApplicationTarget.Distinct().Select(async s => await existsElement.ExistsElement<ApplicationTarget>(s));
+                var existsTargetsId = dose.idsApplicationTarget.Distinct().Select(async s => await existsElement.ExistsById<ApplicationTarget>(s));
 
                 if (existsTargetsId.Any(s => !s.Result))
                 {
@@ -52,7 +52,7 @@ namespace trifenix.agro.external.operations.helper
                 var certifiedIds = dose.WaitingToHarvest.Select(s => s.IdCertifiedEntity);
                 if (certifiedIds.Any())
                 {
-                    var existsCertifiedsId = certifiedIds.Distinct().Select(async s => await existsElement.ExistsElement<CertifiedEntity>(s));
+                    var existsCertifiedsId = certifiedIds.Distinct().Select(async s => await existsElement.ExistsById<CertifiedEntity>(s));
 
                     if (existsCertifiedsId.Any(s => !s.Result))
                     {

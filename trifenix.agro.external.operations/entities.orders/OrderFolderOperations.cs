@@ -32,35 +32,35 @@ namespace trifenix.agro.external.operations.entities.orders
 
             if (!string.IsNullOrWhiteSpace(input.IdIngredient))
             {
-                var existsIngredient = await existElement.ExistsElement<Ingredient>(input.IdIngredient);
+                var existsIngredient = await existElement.ExistsById<Ingredient>(input.IdIngredient);
 
                 if (!existsIngredient) return "El ingrediente no existe";
             }
 
             if (!string.IsNullOrWhiteSpace(input.IdCategoryIngredient))
             {
-                var existsCategory = await existElement.ExistsElement<IngredientCategory>(input.IdCategoryIngredient);
+                var existsCategory = await existElement.ExistsById<IngredientCategory>(input.IdCategoryIngredient);
 
                 if (!existsCategory) return "La categoría no existe";
 
             }
 
-            var existsPhenological = await existElement.ExistsElement<PhenologicalEvent>(input.IdPhenologicalEvent);
+            var existsPhenological = await existElement.ExistsById<PhenologicalEvent>(input.IdPhenologicalEvent);
 
 
             if (!existsPhenological) return "El evento fenológico no existe";
 
-            var existsSpecie = await existElement.ExistsElement<Specie>(input.IdSpecie);
+            var existsSpecie = await existElement.ExistsById<Specie>(input.IdSpecie);
 
             if (!existsSpecie) return "Especie no existe";
 
-            var existsTarget = await existElement.ExistsElement<ApplicationTarget>(input.IdApplicationTarget);
+            var existsTarget = await existElement.ExistsById<ApplicationTarget>(input.IdApplicationTarget);
 
             if (!existsTarget) return "No existe objetivo de la aplicación";
 
             if (!string.IsNullOrWhiteSpace(input.Id))
             {
-                var existsId = await existElement.ExistsElement<OrderFolder>(input.Id);
+                var existsId = await existElement.ExistsById<OrderFolder>(input.Id);
 
                 if (!existsId) return "No existe el id de la carpeta a modificar";
             }

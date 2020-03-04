@@ -33,15 +33,15 @@ namespace trifenix.agro.external.operations.entities.main
 
             if (!string.IsNullOrWhiteSpace(input.Id))
             {
-                var existsId = await existElement.ExistsElement<Nebulizer>(input.Id);
+                var existsId = await existElement.ExistsById<Nebulizer>(input.Id);
 
                 if (!existsId) throw new Exception(string.Format(ErrorMessages.NotValidId, "Nebulizadora"));
 
-                var existsCode = await existElement.ExistsEditElement<Nebulizer>(input.Id, "Code", input.Code);
+                var existsCode = await existElement.ExistsWithPropertyValue<Nebulizer>("Code", input.Code, input.Id);
 
                 if (existsCode) throw new Exception("El código ya existe en otra nebulizadora");
             } else {
-                var existsCode = await existElement.ExistsElement<Nebulizer>("Code", input.Code);
+                var existsCode = await existElement.ExistsWithPropertyValue<Nebulizer>("Code", input.Code);
 
                 if (existsCode) throw new Exception("El código ya existe en otra nebulizadora");
             }

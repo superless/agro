@@ -24,7 +24,7 @@ namespace trifenix.agro.search.operations {
         private void OperationElements<T>(List<T> elements, SearchOperation operationType) {
             var indexName = typeof(T).Equals(typeof(EntitySearch)) ? _entityIndex : _commentIndex;
             var indexClient = _search.Indexes.GetClient(indexName);
-            var actions = elements.Select(o => operationType == SearchOperation.Add ? IndexAction.MergeOrUpload(o) : IndexAction.Delete(o));
+            var actions = elements.Select(o => operationType == SearchOperation.Add ? IndexAction.Upload(o) : IndexAction.Delete(o));
             var batch = IndexBatch.New(actions);
             indexClient.Documents.Index(batch);
         }

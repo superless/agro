@@ -113,19 +113,19 @@ namespace trifenix.agro.external.operations.entities.main
             if (!valida) throw new Exception(string.Format(ErrorMessages.NotValid, "Usuario"));
             if (!string.IsNullOrWhiteSpace(input.IdNebulizer))
             {
-                var existsNebulizer = await existElement.ExistsElement<Nebulizer>(input.IdNebulizer);
+                var existsNebulizer = await existElement.ExistsById<Nebulizer>(input.IdNebulizer);
                 if (!existsNebulizer) throw new Exception(string.Format(ErrorMessages.NotValidId, "Nebulizador"));
             }
             if (!string.IsNullOrWhiteSpace(input.IdJob))
             {
-                var existsJob = await existElement.ExistsElement<Job>(input.IdJob);
+                var existsJob = await existElement.ExistsById<Job>(input.IdJob);
                 if (!existsJob) throw new Exception(string.Format(ErrorMessages.NotValidId, "Cargo"));
 
             }
 
             if (!string.IsNullOrWhiteSpace(input.IdTractor))
             {
-                var existsTractor = await existElement.ExistsElement<Tractor>(input.IdTractor);
+                var existsTractor = await existElement.ExistsById<Tractor>(input.IdTractor);
                 if (!existsTractor) throw new Exception(string.Format(ErrorMessages.NotValid, "Tractor"));
             }
 
@@ -133,7 +133,7 @@ namespace trifenix.agro.external.operations.entities.main
             {
                 foreach (var idRol in input.IdsRoles)
                 {
-                    var exists = await existElement.ExistsElement<Role>(idRol);
+                    var exists = await existElement.ExistsById<Role>(idRol);
                     
                     if (!exists) throw new Exception(string.Format(ErrorMessages.NotValid, "Rol"));
                 }

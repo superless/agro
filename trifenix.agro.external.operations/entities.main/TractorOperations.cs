@@ -33,17 +33,17 @@ namespace trifenix.agro.external.operations.entities.main
 
             if (!string.IsNullOrWhiteSpace(input.Id))
             {
-                var existsId = await existElement.ExistsElement<Tractor>(input.Id);
+                var existsId = await existElement.ExistsById<Tractor>(input.Id);
 
                 if (!existsId) throw new Exception(string.Format(ErrorMessages.NotValidId, "Tractor"));
 
-                var existsCode = await existElement.ExistsEditElement<Tractor>(input.Id, "Code", input.Code);
+                var existsCode = await existElement.ExistsWithPropertyValue<Tractor>("Code", input.Code, input.Id);
 
                 if (existsCode) throw new Exception("El código ya existe en otro tractor");
             }
             else
             {
-                var existsCode = await existElement.ExistsElement<Tractor>("Code", input.Code);
+                var existsCode = await existElement.ExistsWithPropertyValue<Tractor>("Code", input.Code);
 
                 if (existsCode) throw new Exception("El código ya existe en otro tractor");
             }

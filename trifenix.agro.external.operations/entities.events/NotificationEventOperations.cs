@@ -37,15 +37,15 @@ namespace trifenix.agro.external.operations.entities.events {
         private async Task<string> ValidaNotification(NotificationEventInput input) {
             string errors = string.Empty;
             if (!string.IsNullOrWhiteSpace(input.Id)) {
-                var existsId  = await existElement.ExistsElement<NotificationEvent>(input.Id);
+                var existsId  = await existElement.ExistsById<NotificationEvent>(input.Id);
                 if (!existsId)
                     errors += "No existe notificación a modificar.  ";
             }
-            var existsBarrack = await existElement.ExistsElement<Barrack>(input.IdBarrack);
+            var existsBarrack = await existElement.ExistsById<Barrack>(input.IdBarrack);
             if (!existsBarrack)
                 errors += "No existe cuartel    ";
             if (input.EventType == NotificationType.Phenological) {
-                var existsPhenologicalEvent = await existElement.ExistsElement<PhenologicalEvent>(input.IdPhenologicalEvent);
+                var existsPhenologicalEvent = await existElement.ExistsById<PhenologicalEvent>(input.IdPhenologicalEvent);
                 if (!existsPhenologicalEvent)
                     errors += "No existe evento fenológico";
             }

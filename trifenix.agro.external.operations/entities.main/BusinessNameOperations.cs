@@ -24,26 +24,26 @@ namespace trifenix.agro.external.operations.entities.main
         private async Task<string> ValidaBusinessName(BusinessNameInput input) {
             if (!string.IsNullOrWhiteSpace(input.Id))
             {
-                var existsId = await existElement.ExistsElement<BusinessName>(input.Id);
+                var existsId = await existElement.ExistsById<BusinessName>(input.Id);
 
                 if (!existsId) return "No existe el id de la razón social a modificar";
 
-                var existsEmail = await existElement.ExistsEditElement<BusinessName>(input.Id, "Email", input.Email);
+                var existsEmail = await existElement.ExistsWithPropertyValue<BusinessName>("Email", input.Email, input.Id);
 
                 if (existsEmail) return "El correo electrónico de la razón social, ya existe en otra";
 
-                var existsRut = await existElement.ExistsEditElement<BusinessName>(input.Id, "Rut", input.Rut);
+                var existsRut = await existElement.ExistsWithPropertyValue<BusinessName>("Rut", input.Rut, input.Id);
 
                 if (existsRut) return "El rut de la razón social, ya existe en otra";
             }
             else {
                 
 
-                var existsEmail = await existElement.ExistsElement<BusinessName>("Email", input.Email);
+                var existsEmail = await existElement.ExistsWithPropertyValue<BusinessName>("Email", input.Email);
 
                 if (existsEmail) return "El correo electrónico de la razón social, ya existe en otra";
 
-                var existsRut = await existElement.ExistsElement<BusinessName>( "Rut", input.Rut);
+                var existsRut = await existElement.ExistsWithPropertyValue<BusinessName>( "Rut", input.Rut);
 
                 if (existsRut) return "El rut de la razón social, ya existe en otra";
             }

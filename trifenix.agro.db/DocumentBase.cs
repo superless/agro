@@ -10,16 +10,13 @@ namespace trifenix.agro.db {
         protected DocumentBase() {
             CosmosEntityName = GetType().Name;
         }
+
     }
 
-    public abstract class DocumentBaseName : DocumentBase
-    {
+    public abstract class DocumentBaseName : DocumentBase {
+
         public abstract string Name { get; set; }
 
-
     }
-
-
-
 
 }

@@ -29,14 +29,14 @@ namespace trifenix.agro.external.operations.entities.orders
 
             if (input.PreOrderType == PreOrderType.DEFAULT)
             {
-                var existsIngredient = await existElement.ExistsElement<Ingredient>(input.IdIngredient);
+                var existsIngredient = await existElement.ExistsById<Ingredient>(input.IdIngredient);
 
                 if (!existsIngredient) return "No existe ingrediente en PreOrden Normal";
             }
 
             if (input.PreOrderType == PreOrderType.PHENOLOGICAL)
             {
-                var existsOrderFolder = await existElement.ExistsElement<OrderFolder>(input.OrderFolderId);
+                var existsOrderFolder = await existElement.ExistsById<OrderFolder>(input.OrderFolderId);
 
                 if (!existsOrderFolder) return "No existe id de carpeta de orden";
             }
@@ -46,7 +46,7 @@ namespace trifenix.agro.external.operations.entities.orders
 
             foreach (var idBarrack in input.BarracksId)
             {
-                var exists = await existElement.ExistsElement<Barrack>(idBarrack);
+                var exists = await existElement.ExistsById<Barrack>(idBarrack);
 
                 if (!exists) return $"el cuartel con id {idBarrack} no existe";
             }

@@ -22,11 +22,11 @@ namespace trifenix.agro.external.operations.entities.orders
         private async Task<string> ValidaExecutionStatus(ExecutionOrderStatusInput input) {
             if (!string.IsNullOrWhiteSpace(input.Id))
             {
-                var exists = await existElement.ExistsElement<ExecutionOrder>(input.Id);
+                var exists = await existElement.ExistsById<ExecutionOrder>(input.Id);
                 if (!exists) return $"la estado de ejecución con id {input.Id} no existe";
             }
 
-            var existsExecution = await existElement.ExistsElement<ExecutionOrder>(input.IdExecutionOrder);
+            var existsExecution = await existElement.ExistsById<ExecutionOrder>(input.IdExecutionOrder);
 
             if (!existsExecution) return $"no existe ejecución con id {input.IdExecutionOrder}";
 

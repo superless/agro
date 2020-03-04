@@ -54,7 +54,8 @@
         GENERIC_PLANT_IN_YEAR,
         GENERIC_HECTARES,
         GENERIC_LATITUDE,
-        GENERIC_LONGITUDE
+        GENERIC_LONGITUDE,
+        GENERIC_WETTING
     }
 
     public enum EnumerationRelated {

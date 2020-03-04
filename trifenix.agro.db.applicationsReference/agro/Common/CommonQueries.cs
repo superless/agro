@@ -51,16 +51,15 @@ namespace trifenix.agro.db.applicationsReference.agro.Common {
 
 
 
-        public async Task<string> GetSeasonId(string idBarrack)
-        {
+        public async Task<string> GetSeasonId(string idBarrack) {
             var db = new MainDb<Barrack>(DbArguments);
-            return await db.Store.QuerySingleAsync<string>($"SELECT value c.SeasonId FROM c where  c.id = '{idBarrack}'");
+            return await db.Store.QuerySingleAsync<string>($"SELECT value c.SeasonId FROM c where c.id = '{idBarrack}'");
         }
 
         public async Task<string> GetUserIdFromAAD(string idAad)
         {
             var db = new MainDb<User>(DbArguments);
-            return await db.Store.QuerySingleAsync<string>($"SELECT value c.id FROM c where  c.ObjectIdAAD = '{idAad}'");
+            return await db.Store.QuerySingleAsync<string>($"SELECT value c.id FROM c where c.ObjectIdAAD = '{idAad}'");
         }
     }
 }

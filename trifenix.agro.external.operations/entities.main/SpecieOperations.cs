@@ -39,12 +39,12 @@ namespace trifenix.agro.external.operations.entities.main
             
             if (string.IsNullOrWhiteSpace(input.Id))
             {
-                var validaAbbv = await existElement.ExistsElement<Specie>("Abbreviation", input.Abbreviation);
+                var validaAbbv = await existElement.ExistsWithPropertyValue<Specie>("Abbreviation", input.Abbreviation);
                 if (validaAbbv) throw new Exception(string.Format(ErrorMessages.NotValidAbbreviation, specie.CosmosEntityName));
 
             }
             else {
-                var validaAbbv = await existElement.ExistsEditElement<Specie>(input.Id, "Abbreviation", input.Abbreviation);
+                var validaAbbv = await existElement.ExistsWithPropertyValue<Specie>("Abbreviation", input.Abbreviation, input.Id);
                 if (validaAbbv) throw new Exception(string.Format(ErrorMessages.NotValidAbbreviation, specie.CosmosEntityName));
             }
 
