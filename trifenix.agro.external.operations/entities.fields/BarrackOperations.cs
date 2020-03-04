@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.common;
@@ -57,15 +58,25 @@ namespace trifenix.agro.external.operations.entities.fields
             
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
 
-            var specie = new Barrack
+            var barrack = new Barrack
             {
                 Id = id,
                 Name = input.Name,
-                
+                GeographicalPoints = input.GeographicalPoints,
+                Hectares = input.Hectares,
+                IdPlotLand = input.IdPlotLand,
+                IdPollinator = input.IdPollinator,
+                IdRootstock = input.IdRootstock,
+                IdVariety = input.IdVariety,
+                NumberOfPlants = input.NumberOfPlants,
+                PlantingYear = input.PlantingYear,
+                SeasonId = input.SeasonId
             };
 
+
+
             var valida = await Validate(input);
-            if (!valida) throw new Exception(string.Format(ErrorMessages.NotValid, specie.CosmosEntityName));
+            if (!valida) throw new Exception(string.Format(ErrorMessages.NotValid, barrack.CosmosEntityName));
             
             var validaBarrak = await ValidaBarrack(input);
 
@@ -73,11 +84,51 @@ namespace trifenix.agro.external.operations.entities.fields
 
 
 
-            await repo.CreateUpdate(specie);
+            await repo.CreateUpdate(barrack);
 
 
             var specieAbbv = await commonQueries.GetSpecieAbbreviationFromVariety(input.IdVariety);
 
+            var keysGeo = new List<EntitySearch>();
+            var relatedEntities = new List<RelatedId>
+            {
+                new RelatedId{ EntityIndex = (int)EntityRelated.SEASON , EntityId = input.SeasonId },
+                new RelatedId{ EntityIndex = (int)EntityRelated.PLOTLAND, EntityId = input.IdPlotLand },
+                new RelatedId { EntityIndex = (int)EntityRelated.VARIETY, EntityId = input.IdVariety },
+                new RelatedId { EntityIndex = (int)EntityRelated.POLLINATOR, EntityId = input.IdPollinator },
+                new RelatedId { EntityIndex = (int)EntityRelated.ROOTSTOCK, EntityId = input.IdRootstock }
+            };
+            //TODO : ELiminar geoPoints
+            if (input.GeographicalPoints != null && input.GeographicalPoints.Any())
+            {
+                foreach (var geo in input.GeographicalPoints)
+                {
+
+                    keysGeo.Add(new EntitySearch
+                    {
+                        Created = DateTime.Now,
+                        EntityIndex = (int)EntityRelated.GEOPOINT,
+                        Id = Guid.NewGuid().ToString("N"),
+                        RelatedProperties = new Property[] {
+                            new Property {
+                                PropertyIndex = (int)PropertyRelated.GENERIC_LATITUDE,
+                                Value = $"{geo.Latitude}"
+                            },
+                            new Property {
+                                PropertyIndex = (int)PropertyRelated.GENERIC_LONGITUDE,
+                                Value = $"{geo.Longitude}"
+                            }
+                        }
+
+                    });
+                }
+
+                search.AddElements(keysGeo);
+                relatedEntities.AddRange(keysGeo.Select(s => new RelatedId { EntityIndex = (int)EntityRelated.GEOPOINT, EntityId = s.Id }));
+            }
+
+            
+            
 
             search.AddElements(new List<EntitySearch>
             {
@@ -92,20 +143,26 @@ namespace trifenix.agro.external.operations.entities.fields
                         new Property{
                             PropertyIndex = (int)PropertyRelated.GENERIC_CODE,
                             Value = specieAbbv
+                        },
+                        new Property{ 
+                            PropertyIndex = (int)PropertyRelated.GENERIC_NUMBER_OF_PLANTS,
+                            Value = $"{input.NumberOfPlants}"
+                        },
+                        new Property{
+                            PropertyIndex = (int)PropertyRelated.GENERIC_PLANT_IN_YEAR,
+                            Value = $"{input.PlantingYear}"
+                        },
+                        new Property{
+                            PropertyIndex = (int)PropertyRelated.GENERIC_HECTARES,
+                            Value = $"{input.Hectares}"
                         }
                     },
                     EntityIndex = (int)EntityRelated.BARRACK,
-                    RelatedIds = new RelatedId[]{ 
-                        new RelatedId{ EntityIndex = (int)EntityRelated.SEASON , EntityId = input.SeasonId },
-                        new RelatedId{ EntityIndex = (int)EntityRelated.PLOTLAND, EntityId = input.IdPlotLand },
-                        new RelatedId { EntityIndex = (int)EntityRelated.VARIETY, EntityId = input.IdVariety },
-                        new RelatedId { EntityIndex = (int)EntityRelated.POLLINATOR, EntityId = input.IdPollinator },
-                        new RelatedId { EntityIndex = (int)EntityRelated.ROOTSTOCK, EntityId = input.IdRootstock }
-
+                    RelatedIds = relatedEntities.ToArray()
                     }
                     
                   
-                }
+                
             });
 
 
