@@ -1,23 +1,21 @@
 {
   "IsEncrypted": false,
   "Values": {
-    "AzureSearchKey": "016DAA5EF1158FEEEE58DA60996D5981",
-    "AzureSearchName": "agrosearch",
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
-    "clientID": "a81f0ad4-912b-46d3-ba3e-7bf605693242",
-    "clientSecret": "gUjIa4F=NXlAwwMCF2j2SFMMj3?m@=FM",
+    "clientID": "34d9266f-43f9-4fb2-8cdd-ae21be551342",
+    "clientSecret": "B._H_uAwEdg7K1FzVboS3S/oF4IKNbtf",
     "CosmosDbName": "agrodb",
     "CosmosDbPrimaryKey": "yG6EIAT1dKSBaS7oSZizTrWQGGfwSb2ot2prYJwQOLHYk3cGmzvvhGohSzFZYHueSFDiptUAqCQYYSeSetTiKw==",
     "CosmosDbUri": "https://agricola-jhm.documents.azure.com:443/",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet",
     "KeyWeatherApi": "7eb9d18077256697f3e1bea03605bdd2",
-    "mustBeAuthenticated": "false",
-
+    "mustBeAuthenticated": "true",
+    "scope": "https://agro-dev.trifenix.io/App.access",
     "SearchServiceKey": "016DAA5EF1158FEEEE58DA60996D5981",
     "SearchServiceName": "agrosearch",
-    "StorageConnectionStrings": "DefaultEndpointsProtocol=https;AccountName=agricolablob;AccountKey=xyDmUZdjlPzUwHaAxj3ybyYnsCsRaby382b3P7nBoyvwL2hp5DYsSVnFzO727MW85CcT4nJK/WWKWs/tSGL8+A==;EndpointSuffix=core.windows.net",
-    "tenant": "jhmad.onmicrosoft.com",
-    "tenantID": "dc17aef1-b155-4005-aa00-9e80f52d2a7d"
+    "StorageConnectionStrings": "DefaultEndpointsProtocol=https;AccountName=agro;AccountKey=sxTG8s2x/LvAAYc9Id/bJ+zp+DpK4/nFZZRrJVxpG+H/WME60gLx1zVgxjVVvMgzqlSdl05RtObMafNv3Mgoeg==;EndpointSuffix=core.windows.net",
+    "tenant": "jhmdev.onmicrosoft.com",
+    "tenantID": "13f71027-8389-436e-bdaf-7bd34382fbff"
   },
   "Host": {
     "CORS": "*"

@@ -35,7 +35,7 @@ namespace trifenix.agro.functions {
         private static string GetAccessToken(HttpRequest req) {
             var authorizationHeader = req.Headers?["Authorization"];
             string[] parts = authorizationHeader?.ToString().Split(null) ?? new string[0];
-            if (parts.Length == 2 && parts[0].Equals("Bearer"))
+            if (parts.Length == 2 && parts[0].ToLower().Equals("bearer"))
                 return parts[1];
             return null;
         }

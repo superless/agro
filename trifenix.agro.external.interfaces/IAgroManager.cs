@@ -9,87 +9,36 @@ using trifenix.agro.model.external.Input;
 namespace trifenix.agro.external.interfaces {
     public interface IAgroManager {
 
-        IGenericOperation<Sector, SectorInput> Sectors { get; }
-
-
+        IExistElement ExistsElements { get; }
         IGenericFullReadOperation<UserActivity, UserActivityInput> UserActivity { get; }
-
-
-        IGenericOperation<PlotLand, PlotLandInput> PlotLands { get; }
-
-
-        IGenericOperation<Specie, SpecieInput> Species { get; }
-
-        IGenericOperation<Variety, VarietyInput> Varieties { get; }
-
-
-        IGenericOperation<ApplicationTarget, TargetInput> ApplicationTargets { get; }
-
-        IGenericOperation<PhenologicalEvent, PhenologicalEventInput> PhenologicalEvents { get; }
-
-        IGenericOperation<CertifiedEntity, CertifiedEntityInput> CertifiedEntities { get; }
-
-
-        IGenericOperation<IngredientCategory, IngredientCategoryInput> IngredientCategories { get; }
-
-        IGenericOperation<Ingredient, IngredientInput> Ingredients { get; }
-
-        IGenericOperation<Product, ProductInput> Products { get; }
-
-        IGenericOperation<Doses, DosesInput> Doses { get; }
-
-        IGenericOperation<Job, JobInput> Jobs { get; }
-        IGenericOperation<Role, RoleInput> Roles { get; }
-
-        IGenericOperation<UserApplicator, UserApplicatorInput> Users { get; }
-
-        IGenericOperation<Nebulizer, NebulizerInput> Nebulizers { get; }
-
-        IGenericOperation<Tractor, TractorInput> Tractors { get; }
-
-
-        IGenericOperation<BusinessName, BusinessNameInput> BusinessNames { get; }
-
-        IGenericOperation<CostCenter, CostCenterInput> CostCenters { get; }
-
-
-        IGenericOperation<Season, SeasonInput> Seasons { get; }
-        IGenericOperation<Rootstock, RootStockInput> Rootstock { get; }
-
-        IGenericOperation<OrderFolder, OrderFolderInput> OrderFolder { get; }
-
-        IGenericOperation<Barrack, BarrackInput> Barracks { get; }
-
-        IGenericOperation<NotificationEvent, NotificationEventInput> NotificationEvents { get; }
-
-
-        IGenericOperation<PreOrder, PreOrderInput> PreOrders { get; }
-
         IGenericOperation<ApplicationOrder, ApplicationOrderInput> ApplicationOrders { get; }
-
-        IGenericOperation<ExecutionOrderStatus, ExecutionOrderStatusInput> ExecutionStatus { get; }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        IGenericOperation<ApplicationTarget, TargetInput> ApplicationTargets { get; }
+        IGenericOperation<Barrack, BarrackInput> Barracks { get; }
+        IGenericOperation<BusinessName, BusinessNameInput> BusinessNames { get; }
+        IGenericOperation<CertifiedEntity, CertifiedEntityInput> CertifiedEntities { get; }
+        IGenericOperation<CostCenter, CostCenterInput> CostCenters { get; }
+        IGenericOperation<Doses, DosesInput> Doses { get; }
         IGenericOperation<ExecutionOrder, ExecutionOrderInput> ExecutionOrders { get; }
-
-         
-
-
+        IGenericOperation<ExecutionOrderStatus, ExecutionOrderStatusInput> ExecutionStatus { get; }
+        IGenericOperation<Ingredient, IngredientInput> Ingredients { get; }
+        IGenericOperation<IngredientCategory, IngredientCategoryInput> IngredientCategories { get; }
+        IGenericOperation<Job, JobInput> Jobs { get; }
+        IGenericOperation<Nebulizer, NebulizerInput> Nebulizers { get; }
+        IGenericOperation<NotificationEvent, NotificationEventInput> NotificationEvents { get; }
+        IGenericOperation<OrderFolder, OrderFolderInput> OrderFolder { get; }
+        IGenericOperation<PhenologicalEvent, PhenologicalEventInput> PhenologicalEvents { get; }
+        IGenericOperation<PlotLand, PlotLandInput> PlotLands { get; }
+        IGenericOperation<PreOrder, PreOrderInput> PreOrders { get; }
+        IGenericOperation<Product, ProductInput> Products { get; }
+        IGenericOperation<Role, RoleInput> Roles { get; }
+        IGenericOperation<Rootstock, RootStockInput> Rootstock { get; }
+        IGenericOperation<Season, SeasonInput> Seasons { get; }
+        IGenericOperation<Sector, SectorInput> Sectors { get; }
+        IGenericOperation<Specie, SpecieInput> Species { get; }
+        IGenericOperation<Tractor, TractorInput> Tractors { get; }
+        IGenericOperation<UserApplicator, UserApplicatorInput> Users { get; }
+        IGenericOperation<Variety, VarietyInput> Varieties { get; }
         IGraphApi GraphApi { get; }
 
-        IExistElement ExistsElements { get; }
     }
 }

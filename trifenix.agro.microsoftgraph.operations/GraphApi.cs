@@ -39,15 +39,16 @@ namespace trifenix.agro.microsoftgraph.operations
         }
 
         public async Task<UserApplicator> GetUserFromToken() {
-            try {
-                string objectIdAAD = AccessTokenClaims.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
-                var idUSer = await queries.GetUserIdFromAAD(objectIdAAD);
-                var tmpUser = await repo.GetEntity(idUSer);
-                return tmpUser;
-            }
-            catch (Exception ex) {
-                Console.WriteLine("Error en GetUserFromToken():\n" + ex.StackTrace);
-            }
+            //TODO corregir
+            //try {
+            //    string objectIdAAD = AccessTokenClaims.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
+            //    var idUSer = await queries.GetUserIdFromAAD(objectIdAAD);
+            //    var tmpUser = await repo.GetEntity(idUSer);
+            //    return tmpUser;
+            //}
+            //catch (Exception ex) {
+            //    Console.WriteLine("Error en GetUserFromToken():\n" + ex.StackTrace);
+            //}
             return null;
         }
 

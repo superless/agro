@@ -1,58 +1,42 @@
-using System.Threading.Tasks;
+锘縰sing AzureFunctions.Extensions.Swashbuckle.Attribute;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using trifenix.agro.functions.mantainers;
-using trifenix.agro.model.external.Input;
-using trifenix.agro.db.model.agro;
-using trifenix.agro.db.model.agro.core;
-using trifenix.agro.functions.Helper;
-using System.Net;
-using trifenix.agro.model.external;
-using AzureFunctions.Extensions.Swashbuckle.Attribute;
-using trifenix.agro.swagger.model.input;
-using System.IO;
 using Newtonsoft.Json;
-using System.Net.Http;
-using trifenix.agro.external.operations.helper;
-using System.Collections.Generic;
-using trifenix.agro.db.model.agro.orders;
-using trifenix.agro.db.model;
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using trifenix.agro.external.operations.helper;
+using trifenix.agro.functions.Helper;
+using trifenix.agro.functions.mantainers;
+using trifenix.agro.model.external;
+using trifenix.agro.model.external.Input;
+using trifenix.agro.swagger.model.input;
 
-namespace trifenix.agro.functions
-{
+namespace trifenix.agro.functions {
+
     /// <summary>
     /// Funciones 
     /// </summary>
-    public static class CoreFunctions
-    {
-
-
-       
-
+    public static class CoreFunctions {
 
         /// <summary>
-        /// Login, donde usa usuario y contrase馻 para obtener el token.
+        /// Login, donde usa usuario y contrase帽a para obtener el token.
         /// </summary>
         /// <param name="req">cabecera que debe incluir el modelo de entrada </param>
         /// <param name="log"></param>
         /// <returns></returns>
         [FunctionName("login")]
-        [RequestHttpHeader("Authorization", isRequired: true)]
-
+        //[RequestHttpHeader("Authorization", isRequired: false)]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
-        public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)]
-            [RequestBodyType(typeof(LoginInput), "Nombre de usuario y contrase馻")]HttpRequest req,
-            ILogger log)
-        {
-
+        public static async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] [RequestBodyType(typeof(LoginInput), "Nombre de usuario y contrase帽a")] HttpRequest req, ILogger log) {
             var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic credenciales = JsonConvert.DeserializeObject(requestBody);
-
             string clientId = Environment.GetEnvironmentVariable("clientID", EnvironmentVariableTarget.Process);
             string scope = Environment.GetEnvironmentVariable("scope", EnvironmentVariableTarget.Process);
             string clientSecret = Environment.GetEnvironmentVariable("clientSecret", EnvironmentVariableTarget.Process);
@@ -61,7 +45,6 @@ namespace trifenix.agro.functions
             string grantType = "password";
             string tenant = Environment.GetEnvironmentVariable("tenant", EnvironmentVariableTarget.Process);
             string endPoint = $"https://login.microsoftonline.com/{tenant}/oauth2/v2.0/token";
-
             HttpClient client = new HttpClient();
             var parametros = new Dictionary<string, string> {
                 {"client_id",clientId},
@@ -82,12 +65,8 @@ namespace trifenix.agro.functions
         }
 
 
-
-        
-
-
         /// <summary>
-        /// Creaci髇 de Sector
+        /// Creaci贸n de Sector
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -96,10 +75,9 @@ namespace trifenix.agro.functions
         [RequestHttpHeader("Authorization", isRequired: true)]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> SectorPost(
-            
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "sectors")]
             [RequestBodyType(typeof(SectorSwaggerInput), "Sector")]
-        HttpRequest req, ILogger log)
+            HttpRequest req, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Sectors, string.Empty);
             return result.JsonResult;
@@ -107,7 +85,7 @@ namespace trifenix.agro.functions
 
 
         /// <summary>
-        /// Modificaci髇 del Sector
+        /// Modificaci贸n del Sector
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -125,9 +103,8 @@ namespace trifenix.agro.functions
         }
 
 
-
         /// <summary>
-        /// Creaci髇 de parcela
+        /// Creaci贸n de parcela
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -138,9 +115,7 @@ namespace trifenix.agro.functions
         public static async Task<IActionResult> PlotLandsPost(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "plotlands")]
             [RequestBodyType(typeof(PlotLandSwaggerInput), "Parcela")]
-            HttpRequest req,
-            
-            ILogger log)
+            HttpRequest req, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.PlotLands, string.Empty);
             return result.JsonResult;
@@ -148,7 +123,7 @@ namespace trifenix.agro.functions
 
 
         /// <summary>
-        /// Modificaci髇 de parcela
+        /// Modificaci贸n de parcela
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -157,7 +132,6 @@ namespace trifenix.agro.functions
         [RequestHttpHeader("Authorization", isRequired: true)]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> PlotLandsPut(
-            
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "plotlands/{id}")]
             [RequestBodyType(typeof(PlotLandSwaggerInput), "Parcela")]
             HttpRequest req, string id, ILogger log)
@@ -168,7 +142,7 @@ namespace trifenix.agro.functions
 
 
         /// <summary>
-        /// A馻dir Especie
+        /// A帽adir Especie
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -177,13 +151,11 @@ namespace trifenix.agro.functions
         [RequestHttpHeader("Authorization", isRequired: true)]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> SpeciesPost(
-            
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "species")]
             [RequestBodyType(typeof(SpecieSwaggerInput), "Especie")]
             HttpRequest req, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Species, string.Empty);
-
             return result.JsonResult;
         }
 
@@ -198,18 +170,16 @@ namespace trifenix.agro.functions
         [RequestHttpHeader("Authorization", isRequired: true)]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> SpeciesPut(
-
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "species/{id}")]
             [RequestBodyType(typeof(SpecieSwaggerInput), "Especie")]
             HttpRequest req, string id, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Species, id);
-
             return result.JsonResult;
         }
 
         /// <summary>
-        /// A馻dir Variedad
+        /// A帽adir Variedad
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -218,18 +188,16 @@ namespace trifenix.agro.functions
         [RequestHttpHeader("Authorization", isRequired: true)]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> VarietyPost(
-
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "varieties")]
             [RequestBodyType(typeof(VarietySwaggerInput), "Variedad")]
             HttpRequest req, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Varieties, string.Empty);
-
             return result.JsonResult;
         }
 
         /// <summary>
-        /// A馻dir Variedad
+        /// A帽adir Variedad
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -238,18 +206,16 @@ namespace trifenix.agro.functions
         [RequestHttpHeader("Authorization", isRequired: true)]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> VarietyPut(
-
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "varieties/{id}")]
             [RequestBodyType(typeof(VarietySwaggerInput), "Variedad")]
             HttpRequest req, string id, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Varieties, id);
-
             return result.JsonResult;
         }
 
         /// <summary>
-        /// A馻dir Objetivo de aplicaci髇
+        /// A帽adir Objetivo de aplicaci贸n
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -260,16 +226,15 @@ namespace trifenix.agro.functions
         public static async Task<IActionResult> TargetPost(
 
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "targets")]
-            [RequestBodyType(typeof(TargetSwaggerInput), "Objetivo de aplicaci髇")]
+            [RequestBodyType(typeof(TargetSwaggerInput), "Objetivo de aplicaci贸n")]
             HttpRequest req, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ApplicationTargets, string.Empty);
-
             return result.JsonResult;
         }
 
         /// <summary>
-        /// Modificar objetivo de aplicaci髇
+        /// Modificar objetivo de aplicaci贸n
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -278,9 +243,8 @@ namespace trifenix.agro.functions
         [RequestHttpHeader("Authorization", isRequired: true)]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> TargetPut(
-
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "targets/{id}")]
-            [RequestBodyType(typeof(TargetSwaggerInput), "Objetivo de aplicaci髇")]
+            [RequestBodyType(typeof(TargetSwaggerInput), "Objetivo de aplicaci贸n")]
             HttpRequest req, string id, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ApplicationTargets, id);
@@ -288,7 +252,7 @@ namespace trifenix.agro.functions
         }
 
         /// <summary>
-        /// A馻dir Evento fenol骻ico
+        /// A帽adir Evento fenol贸gico
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -297,19 +261,17 @@ namespace trifenix.agro.functions
         [RequestHttpHeader("Authorization", isRequired: true)]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> PhenologicalEventPost(
-
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "phenological_events")]
-            [RequestBodyType(typeof(PhenologicalEventSwaggerInput), "Evento Fenol骻ico")]
+            [RequestBodyType(typeof(PhenologicalEventSwaggerInput), "Evento Fenol贸gico")]
             HttpRequest req, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.PhenologicalEvents, string.Empty);
-
             return result.JsonResult;
         }
 
 
         /// <summary>
-        /// Modificaci髇 de evento fenol骻ico
+        /// Modificaci贸n de evento fenol贸gico
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -318,19 +280,17 @@ namespace trifenix.agro.functions
         [RequestHttpHeader("Authorization", isRequired: true)]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> PhenologicalEventPut(
-
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "phenological_events/{id}")]
-            [RequestBodyType(typeof(PhenologicalEventSwaggerInput), "Evento Fenol骻ico")]
+            [RequestBodyType(typeof(PhenologicalEventSwaggerInput), "Evento Fenol贸gico")]
             HttpRequest req, string id, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.PhenologicalEvents, id);
-
             return result.JsonResult;
         }
 
 
         /// <summary>
-        /// A馻dir Entidad Certificadora
+        /// A帽adir Entidad Certificadora
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -339,18 +299,16 @@ namespace trifenix.agro.functions
         [RequestHttpHeader("Authorization", isRequired: true)]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> CertifiedEntityPost(
-
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "certified_entities")]
             [RequestBodyType(typeof(CertifiedEntitySwaggerInput), "Entidad Certificadora")]
             HttpRequest req, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.CertifiedEntities, string.Empty);
-
             return result.JsonResult;
         }
 
         /// <summary>
-        /// Modificaci髇 de Entidad Certificadora
+        /// Modificaci贸n de Entidad Certificadora
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -359,19 +317,17 @@ namespace trifenix.agro.functions
         [RequestHttpHeader("Authorization", isRequired: true)]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> CertifiedEntityPut(
-
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "certified_entities/{id}")]
             [RequestBodyType(typeof(CertifiedEntitySwaggerInput), "Entidad Certificadora")]
             HttpRequest req, string id, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.CertifiedEntities, id);
-
             return result.JsonResult;
         }
 
 
         /// <summary>
-        /// A馻dir Categor韆 de ingrediente
+        /// A帽adir Categor铆a de ingrediente
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -380,18 +336,16 @@ namespace trifenix.agro.functions
         [RequestHttpHeader("Authorization", isRequired: true)]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> CategoryIngredientPost(
-
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "ingredient_categories")]
-            [RequestBodyType(typeof(IngredientCategorySwaggerInput), "Categor韆 de Ingrediente")]
+            [RequestBodyType(typeof(IngredientCategorySwaggerInput), "Categor铆a de Ingrediente")]
             HttpRequest req, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.IngredientCategories, string.Empty);
-
             return result.JsonResult;
         }
 
         /// <summary>
-        /// Modificaci髇 de Categor韆 de ingredientes
+        /// Modificaci贸n de Categor铆a de ingredientes
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -401,7 +355,7 @@ namespace trifenix.agro.functions
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> CategoryIngredientPut(
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "ingredient_categories/{id}")]
-            [RequestBodyType(typeof(IngredientCategorySwaggerInput), "Categor韆 de Ingrediente")]
+            [RequestBodyType(typeof(IngredientCategorySwaggerInput), "Categor铆a de Ingrediente")]
             HttpRequest req, string id, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.IngredientCategories, id);
@@ -410,7 +364,7 @@ namespace trifenix.agro.functions
 
 
         /// <summary>
-        /// A馻dir Ingredientes
+        /// A帽adir Ingredientes
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -425,13 +379,12 @@ namespace trifenix.agro.functions
             HttpRequest req, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Ingredients, string.Empty);
-
             return result.JsonResult;
         }
 
 
         /// <summary>
-        /// Modificaci髇 de Ingrediente
+        /// Modificaci贸n de Ingrediente
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -450,7 +403,7 @@ namespace trifenix.agro.functions
 
 
         /// <summary>
-        /// A馻dir Producto
+        /// A帽adir Producto
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -459,19 +412,17 @@ namespace trifenix.agro.functions
         [RequestHttpHeader("Authorization", isRequired: true)]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> ProductsPost(
-
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "products")]
             [RequestBodyType(typeof(ProductSwaggerInput), "Producto")]
             HttpRequest req, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Products, string.Empty);
-
             return result.JsonResult;
         }
 
 
         /// <summary>
-        /// Modificaci髇 de Productos
+        /// Modificaci贸n de Productos
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -490,7 +441,7 @@ namespace trifenix.agro.functions
 
 
         /// <summary>
-        /// A馻dir Rol
+        /// A帽adir Rol
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -499,19 +450,17 @@ namespace trifenix.agro.functions
         [RequestHttpHeader("Authorization", isRequired: true)]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> RolePost(
-
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "roles")]
             [RequestBodyType(typeof(RoleSwaggerInput), "Rol")]
             HttpRequest req, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Roles, string.Empty);
-
             return result.JsonResult;
         }
 
 
         /// <summary>
-        /// Modificaci髇 de Rol
+        /// Modificaci贸n de Rol
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -531,7 +480,7 @@ namespace trifenix.agro.functions
 
 
         /// <summary>
-        /// A馻dir Trabajo
+        /// A帽adir Trabajo
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -546,13 +495,12 @@ namespace trifenix.agro.functions
             HttpRequest req, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Jobs, string.Empty);
-
             return result.JsonResult;
         }
 
 
         /// <summary>
-        /// Modificaci髇 de Trabajo
+        /// Modificaci贸n de Trabajo
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -571,7 +519,7 @@ namespace trifenix.agro.functions
 
 
         /// <summary>
-        /// A馻dir Usuario
+        /// A帽adir Usuario
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -580,19 +528,17 @@ namespace trifenix.agro.functions
         [RequestHttpHeader("Authorization", isRequired: true)]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> UserPost(
-
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "users")]
             [RequestBodyType(typeof(UserApplicatorSwaggerInput), "Usuario aplicador")]
             HttpRequest req, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Users, string.Empty);
-
             return result.JsonResult;
         }
 
 
         /// <summary>
-        /// Modificaci髇 de Usuario
+        /// Modificaci贸n de Usuario
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -611,7 +557,7 @@ namespace trifenix.agro.functions
 
 
         /// <summary>
-        /// A馻dir Nebulizador
+        /// A帽adir Nebulizador
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -620,19 +566,17 @@ namespace trifenix.agro.functions
         [RequestHttpHeader("Authorization", isRequired: true)]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> NebulizersPost(
-
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "nebulizers")]
             [RequestBodyType(typeof(NebulizerSwaggerInput), "Nebulizador")]
             HttpRequest req, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Nebulizers, string.Empty);
-
             return result.JsonResult;
         }
 
 
         /// <summary>
-        /// Modificaci髇 de Nebulizador
+        /// Modificaci贸n de Nebulizador
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -650,7 +594,7 @@ namespace trifenix.agro.functions
         }
 
         /// <summary>
-        /// A馻dir Tractor
+        /// A帽adir Tractor
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -659,19 +603,17 @@ namespace trifenix.agro.functions
         [RequestHttpHeader("Authorization", isRequired: true)]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> TractorPost(
-
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "tractors")]
             [RequestBodyType(typeof(TractorSwaggerInput), "Tractor")]
             HttpRequest req, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Tractors, string.Empty);
-
             return result.JsonResult;
         }
 
 
         /// <summary>
-        /// Modificaci髇 de Trabajo
+        /// Modificaci贸n de Trabajo
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -691,7 +633,7 @@ namespace trifenix.agro.functions
 
 
         /// <summary>
-        /// A馻dir Raz髇 social
+        /// A帽adir Raz贸n social
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -700,19 +642,17 @@ namespace trifenix.agro.functions
         [RequestHttpHeader("Authorization", isRequired: true)]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> BusinessNamePost(
-
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "business_names")]
-            [RequestBodyType(typeof(BusinessNameSwaggerInput), "Raz髇 social")]
+            [RequestBodyType(typeof(BusinessNameSwaggerInput), "Raz贸n social")]
             HttpRequest req, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.BusinessNames, string.Empty);
-
             return result.JsonResult;
         }
 
 
         /// <summary>
-        /// Modificaci髇 de Raz髇 Social
+        /// Modificaci贸n de Raz贸n Social
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -722,19 +662,17 @@ namespace trifenix.agro.functions
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> BusinessNamePut(
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "business_names/{id}")]
-            [RequestBodyType(typeof(BusinessNameSwaggerInput), "Raz髇 Social")]
+            [RequestBodyType(typeof(BusinessNameSwaggerInput), "Raz贸n Social")]
             HttpRequest req, string id, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.BusinessNames, id);
-
             return result.JsonResult;
 
         }
 
 
-
         /// <summary>
-        /// A馻dir centro de costos
+        /// A帽adir centro de costos
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -743,19 +681,17 @@ namespace trifenix.agro.functions
         [RequestHttpHeader("Authorization", isRequired: true)]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> CostCenterPost(
-
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "cost_centers")]
             [RequestBodyType(typeof(CostCenterSwaggerInput), "Centro de Costos")]
             HttpRequest req, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.CostCenters, string.Empty);
-
             return result.JsonResult;
         }
 
 
         /// <summary>
-        /// Modificaci髇 de centro de costos
+        /// Modificaci贸n de centro de costos
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -774,7 +710,7 @@ namespace trifenix.agro.functions
 
 
         /// <summary>
-        /// A馻dir Temporada
+        /// A帽adir Temporada
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -783,19 +719,17 @@ namespace trifenix.agro.functions
         [RequestHttpHeader("Authorization", isRequired: true)]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> SeasonPost(
-
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "seasons")]
             [RequestBodyType(typeof(SeasonSwaggerInput), "Temporada")]
             HttpRequest req, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Seasons, string.Empty);
-
             return result.JsonResult;
         }
 
 
         /// <summary>
-        /// Modificaci髇 de Temporada
+        /// Modificaci贸n de Temporada
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -813,7 +747,7 @@ namespace trifenix.agro.functions
         }
 
         /// <summary>
-        /// A馻dir Ra韟
+        /// A帽adir Ra铆z
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -822,19 +756,17 @@ namespace trifenix.agro.functions
         [RequestHttpHeader("Authorization", isRequired: true)]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> RootStockPost(
-
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "rootstock")]
-            [RequestBodyType(typeof(RootStockSwaggerInput), "Ra韟")]
+            [RequestBodyType(typeof(RootStockSwaggerInput), "Ra铆z")]
             HttpRequest req, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Rootstock, string.Empty);
-
             return result.JsonResult;
         }
 
 
         /// <summary>
-        /// Modificaci髇 de Ra韟
+        /// Modificaci贸n de Ra铆z
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -844,7 +776,7 @@ namespace trifenix.agro.functions
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> RootStockPut(
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "rootstock/{id}")]
-            [RequestBodyType(typeof(RootStockSwaggerInput), "Ra韟")]
+            [RequestBodyType(typeof(RootStockSwaggerInput), "Ra铆z")]
             HttpRequest req, string id, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Rootstock, id);
@@ -853,7 +785,7 @@ namespace trifenix.agro.functions
 
 
         /// <summary>
-        /// A馻dir Carpeta de 觬denes
+        /// A帽adir Carpeta de 脫rdenes
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -862,19 +794,17 @@ namespace trifenix.agro.functions
         [RequestHttpHeader("Authorization", isRequired: true)]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> OrderFolderPost(
-
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "order_folders")]
-            [RequestBodyType(typeof(OrderFolderSwaggerInput), "Carpeta de 髍denes")]
+            [RequestBodyType(typeof(OrderFolderSwaggerInput), "Carpeta de 贸rdenes")]
             HttpRequest req, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.OrderFolder, string.Empty);
-
             return result.JsonResult;
         }
 
 
         /// <summary>
-        /// Modificaci髇 de Carpeta de 髍denes
+        /// Modificaci贸n de Carpeta de 贸rdenes
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -884,7 +814,7 @@ namespace trifenix.agro.functions
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> OrderFolderPut(
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "order_folders/{id}")]
-            [RequestBodyType(typeof(OrderFolderSwaggerInput), "Carpeta de 髍denes")]
+            [RequestBodyType(typeof(OrderFolderSwaggerInput), "Carpeta de 贸rdenes")]
             HttpRequest req, string id, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.OrderFolder, id);
@@ -893,7 +823,7 @@ namespace trifenix.agro.functions
 
 
         /// <summary>
-        /// A馻dir cuartel
+        /// A帽adir cuartel
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -902,19 +832,17 @@ namespace trifenix.agro.functions
         [RequestHttpHeader("Authorization", isRequired: true)]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> BarracksPost(
-
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "barracks")]
             [RequestBodyType(typeof(BarrackSwaggerInput), "Cuartel")]
             HttpRequest req, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Barracks, string.Empty);
-
             return result.JsonResult;
         }
 
 
         /// <summary>
-        /// Modificaci髇 de Cuartel
+        /// Modificaci贸n de Cuartel
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -932,11 +860,8 @@ namespace trifenix.agro.functions
         }
 
 
-
-
-
         /// <summary>
-        /// A馻dir Orden de aplicaci髇
+        /// A帽adir Orden de aplicaci贸n
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -945,19 +870,17 @@ namespace trifenix.agro.functions
         [RequestHttpHeader("Authorization", isRequired: true)]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> OrderPost(
-
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "orders")]
-            [RequestBodyType(typeof(ApplicationOrderSwaggerInput), "Orden de aplicaci髇")]
+            [RequestBodyType(typeof(ApplicationOrderSwaggerInput), "Orden de aplicaci贸n")]
             HttpRequest req, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ApplicationOrders, string.Empty);
-
             return result.JsonResult;
         }
 
 
         /// <summary>
-        /// Modificaci髇 de Orden de aplicaci髇
+        /// Modificaci贸n de Orden de aplicaci贸n
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -967,7 +890,7 @@ namespace trifenix.agro.functions
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> OrderPut(
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "orders/{id}")]
-            [RequestBodyType(typeof(ApplicationOrderSwaggerInput), "Orden de aplicaci髇")]
+            [RequestBodyType(typeof(ApplicationOrderSwaggerInput), "Orden de aplicaci贸n")]
             HttpRequest req, string id, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ApplicationOrders, id);
@@ -976,7 +899,7 @@ namespace trifenix.agro.functions
 
 
         /// <summary>
-        /// A馻dir Pre Orden de aplicaci髇
+        /// A帽adir Pre Orden de aplicaci贸n
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -985,19 +908,17 @@ namespace trifenix.agro.functions
         [RequestHttpHeader("Authorization", isRequired: true)]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> PreOrderPost(
-
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "pre_orders")]
-            [RequestBodyType(typeof(PreOrderSwaggerInput), "Pre Orden de aplicaci髇")]
+            [RequestBodyType(typeof(PreOrderSwaggerInput), "Pre Orden de aplicaci贸n")]
             HttpRequest req, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.PreOrders, string.Empty);
-
             return result.JsonResult;
         }
 
 
         /// <summary>
-        /// Modificaci髇 de Pre Orden de aplicaci髇
+        /// Modificaci贸n de Pre Orden de aplicaci贸n
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -1007,7 +928,7 @@ namespace trifenix.agro.functions
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> PreOrderPut(
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "pre_orders/{id}")]
-            [RequestBodyType(typeof(PreOrderSwaggerInput), "Pre Orden de aplicaci髇")]
+            [RequestBodyType(typeof(PreOrderSwaggerInput), "Pre Orden de aplicaci贸n")]
             HttpRequest req, string id, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.PreOrders, id);
@@ -1016,7 +937,7 @@ namespace trifenix.agro.functions
 
 
         /// <summary>
-        /// A馻dir Ejecuci髇
+        /// A帽adir Ejecuci贸n
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -1025,19 +946,17 @@ namespace trifenix.agro.functions
         [RequestHttpHeader("Authorization", isRequired: true)]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> ExecutionsPost(
-
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "executions")]
-            [RequestBodyType(typeof(ExecutionOrderSwaggerInput), "Ejecuci髇 aplicaci髇")]
+            [RequestBodyType(typeof(ExecutionOrderSwaggerInput), "Ejecuci贸n aplicaci贸n")]
             HttpRequest req, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ExecutionOrders, string.Empty);
-
             return result.JsonResult;
         }
 
 
         /// <summary>
-        /// Modificaci髇 de Ejecuci髇
+        /// Modificaci贸n de Ejecuci贸n
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -1047,7 +966,7 @@ namespace trifenix.agro.functions
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> ExecutionsPut(
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "executions/{id}")]
-            [RequestBodyType(typeof(ExecutionOrderSwaggerInput), "Ejecuci髇 aplicaci髇")]
+            [RequestBodyType(typeof(ExecutionOrderSwaggerInput), "Ejecuci贸n aplicaci贸n")]
             HttpRequest req, string id, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ExecutionOrders, id);
@@ -1055,9 +974,8 @@ namespace trifenix.agro.functions
         }
 
 
-
         /// <summary>
-        /// A馻dir Ejecuci髇
+        /// A帽adir Ejecuci贸n
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -1066,19 +984,17 @@ namespace trifenix.agro.functions
         [RequestHttpHeader("Authorization", isRequired: true)]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> ExecutionsStatusPost(
-
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "executions_status")]
-            [RequestBodyType(typeof(ExecutionOrderStatusSwaggerInput), "Estatus Ejecuci髇 aplicaci髇")]
+            [RequestBodyType(typeof(ExecutionOrderStatusSwaggerInput), "Estatus Ejecuci贸n aplicaci贸n")]
             HttpRequest req, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ExecutionStatus, string.Empty);
-
             return result.JsonResult;
         }
 
 
         /// <summary>
-        /// Modificaci髇 de Estatus Ejecuci髇
+        /// Modificaci贸n de Estatus Ejecuci贸n
         /// </summary>
         /// <return>
         /// Retorna un contenedor con el id
@@ -1088,13 +1004,12 @@ namespace trifenix.agro.functions
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> ExecutionsStatusPut(
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "executions_status/{id}")]
-            [RequestBodyType(typeof(ExecutionOrderStatusSwaggerInput), "Ejecuci髇 aplicaci髇")]
+            [RequestBodyType(typeof(ExecutionOrderStatusSwaggerInput), "Ejecuci贸n aplicaci贸n")]
             HttpRequest req, string id, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ExecutionStatus, id);
             return result.JsonResult;
         }
-
 
     }
 }
