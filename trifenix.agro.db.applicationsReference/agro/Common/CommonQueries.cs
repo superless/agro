@@ -33,11 +33,9 @@ namespace trifenix.agro.db.applicationsReference.agro.Common {
             return await GetSpecieAbbreviationFromVariety(result);
         }
 
-        public async Task<string> GetSpecieAbbreviationFromOrder(string idOrder)
-        {
+        public async Task<string> GetSpecieAbbreviationFromOrder(string idOrder) {
             var db = new MainDb<ApplicationOrder>(DbArguments);
             var result = await db.Store.QuerySingleAsync<string>($"SELECT value c.IdBarrack[0] FROM c where  c.id = '{idOrder}'");
-
             return await GetSpecieAbbreviationFromBarrack(result);
         }
 
@@ -49,17 +47,16 @@ namespace trifenix.agro.db.applicationsReference.agro.Common {
             return emails;
         }
 
-
-
         public async Task<string> GetSeasonId(string idBarrack) {
             var db = new MainDb<Barrack>(DbArguments);
             return await db.Store.QuerySingleAsync<string>($"SELECT value c.SeasonId FROM c where c.id = '{idBarrack}'");
         }
 
-        public async Task<string> GetUserIdFromAAD(string idAad)
-        {
+        public async Task<string> GetUserIdFromAAD(string idAAD) {
             var db = new MainDb<User>(DbArguments);
-            return await db.Store.QuerySingleAsync<string>($"SELECT value c.id FROM c where c.ObjectIdAAD = '{idAad}'");
+            return await db.Store.QuerySingleAsync<string>($"SELECT value c.id FROM c where c.ObjectIdAAD = '{idAAD}'");
         }
+
     }
+
 }

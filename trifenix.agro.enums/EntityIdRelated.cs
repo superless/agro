@@ -1,7 +1,6 @@
 ﻿namespace trifenix.agro.enums {
 
     public enum EntityRelated {
-        AAD = 0,
         BARRACK = 1,
         BUSINESSNAME = 2,
         CATEGORY_INGREDIENT = 3,
@@ -55,7 +54,8 @@
         GENERIC_HECTARES,
         GENERIC_LATITUDE,
         GENERIC_LONGITUDE,
-        GENERIC_WETTING
+        GENERIC_WETTING,
+        OBJECT_ID_AAD
     }
 
     public enum EnumerationRelated {
@@ -73,8 +73,7 @@
         PHENOLOGICAL = 1
     }
 
-    public enum PreOrderType
-    {
+    public enum PreOrderType {
         DEFAULT = 0,
         PHENOLOGICAL = 1
     }
@@ -83,7 +82,5 @@
         NOT_CURRENT = 0,
         CURRENT = 1
     }
-
-    
 
 }

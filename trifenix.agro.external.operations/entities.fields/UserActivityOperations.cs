@@ -21,10 +21,10 @@ namespace trifenix.agro.external.operations.entities.fields {
 
         public async Task<ExtPostContainer<string>> Save(UserActivityInput input) {
             var id = Guid.NewGuid().ToString("N");
-            var user = await graphApi.GetUserFromToken();
+            var userId = await graphApi.GetUserIdFromToken();
             await repo.CreateUpdate(new UserActivity {
                 Id = id,
-                UserId = user.Id,
+                UserId = userId,
                 Action = input.Action,
                 Date = input.Date,
                 EntityName = input.EntityName,

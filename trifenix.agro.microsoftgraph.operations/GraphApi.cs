@@ -38,17 +38,15 @@ namespace trifenix.agro.microsoftgraph.operations
                 .Build();
         }
 
-        public async Task<UserApplicator> GetUserFromToken() {
-            //TODO corregir
-            //try {
-            //    string objectIdAAD = AccessTokenClaims.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
-            //    var idUSer = await queries.GetUserIdFromAAD(objectIdAAD);
-            //    var tmpUser = await repo.GetEntity(idUSer);
-            //    return tmpUser;
-            //}
-            //catch (Exception ex) {
-            //    Console.WriteLine("Error en GetUserFromToken():\n" + ex.StackTrace);
-            //}
+        public async Task<string> GetUserIdFromToken() {
+            try {
+                string objectIdAAD = AccessTokenClaims.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
+                var idUSer = await queries.GetUserIdFromAAD(objectIdAAD);
+                return idUSer;
+            }
+            catch (Exception ex) {
+                Console.WriteLine("Error en GetUserFromToken():\n" + ex.StackTrace);
+            }
             return null;
         }
 
@@ -57,13 +55,11 @@ namespace trifenix.agro.microsoftgraph.operations
             var authResult = await _confidentialClientApplication.AcquireTokenForClient(scopes).ExecuteAsync();
             var graphServiceClient = new GraphServiceClient(new DelegateAuthenticationProvider(async (requestMessage) => 
                     requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authResult.AccessToken)));
-
-
             var invitation = new Invitation {
                 InvitedUserDisplayName = name,
                 InvitedUserEmailAddress = email,
                 InvitedUserMessageInfo = new InvitedUserMessageInfo() { CustomizedMessageBody = "Bienvenido a Aresa", MessageLanguage = "es-es"},
-                InviteRedirectUrl = "https://sprint3-jhm.trifenix.io/",
+                InviteRedirectUrl = "https://agro.trifenix.io",
                 SendInvitationMessage = true,
             };
             await graphServiceClient.Invitations.Request().AddAsync(invitation);
@@ -89,5 +85,7 @@ namespace trifenix.agro.microsoftgraph.operations
             var jUser = jArray.FirstOrDefault(user => !String.IsNullOrEmpty(user.Value<string>("mail"))?user.Value<string>("mail").Equals(email):false);
             return jUser?.Value<string>("id");
         }
+
     }
+
 }
