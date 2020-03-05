@@ -238,6 +238,34 @@ namespace trifenix.agro.console {
             //agro.ApplicationOrders.UpdateOrder(lines, db);
             #endregion
 
+            #region Script para poblar db
+            //1.BusinessName
+            //2.CostCenter
+            //3.Season
+            //4.Specie
+            //5.Variety
+            //6.Sector
+            //7.PlotLand
+            //8.Rootstock
+            //9.Barrack
+            //10.IngredientCategory
+            //11.Ingredient
+            //12.ApplicationTarget
+            //13.CertifiedEntity
+            //14.Product->Doses
+            //15.PhenologicalEvent
+            //16.OrderFolder
+            //17.PhenologicalPreOrder
+            //18.Tractor
+            //19.Nebulizer
+            //20.Role
+            //21.Job
+            //22.User
+            //23.NotificationEvent
+            //24.ApplicationOrder
+            //25.ExecutionOrder
+            #endregion
+
             timer.Stop();
             Console.WriteLine("Hora de termino: {0}", DateTime.Now.ToString("hh\\:mm\\:ss"));
             Console.WriteLine("Tiempo transcurrido: {0}", timer.Elapsed.ToString("hh\\:mm\\:ss"));

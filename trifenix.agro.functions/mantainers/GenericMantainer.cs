@@ -17,50 +17,6 @@ namespace trifenix.agro.functions.mantainers {
 
     public static class GenericMantainer {
 
-        public static async Task<ActionResultWithId> HttpProcessing<DbElement, InputElement>(HttpRequest req, ILogger log, IGenericOperation<DbElement, InputElement> repo, IGenericOperation<UserActivity, UserActivityInput> recordAcitvity, InputElement element) where DbElement : DocumentBase where InputElement : InputBase {
-            var method = req.Method.ToLower();
-            switch (method) {
-                case "get":
-                    if (!string.IsNullOrWhiteSpace(element.Id)) {
-                        var elementDb = await repo.Get(element.Id);
-                        return new ActionResultWithId {
-                            Id = element.Id,
-                            JsonResult = ContainerMethods.GetJsonGetContainer(elementDb, log)
-                        };
-                    }
-                    return new ActionResultWithId {
-                        Id = null,
-                        JsonResult = ContainerMethods.GetJsonGetContainer(new ExtGetContainer<string> { ErrorMessage = "Id obligatorio", StatusResult = ExtGetDataResult.Error }, log)
-                    };
-                default:
-                    ExtPostContainer<string> saveReturn;
-                    try {
-                        saveReturn = await repo.Save(element);
-                        //await recordAcitvity.Save(new UserActivityInput
-                        //{
-                        //    Action = method.Equals("post") ? UserActivityAction.CREATE : UserActivityAction.MODIFY,
-                        //    Date = DateTime.Now,
-                        //    EntityName = ((DbElement)Activator.CreateInstance(typeof(DbElement))).CosmosEntityName,
-                        //    Id = saveReturn.IdRelated
-                        //});
-                    }
-                    catch (Exception ex) {
-                        return new ActionResultWithId {
-                            Id = null,
-                            JsonResult = ContainerMethods.GetJsonPostContainer(new ExtPostErrorContainer<string> {
-                                InternalException = ex,
-                                Message = ex.Message,
-                                MessageResult = ExtMessageResult.Error
-                            }, log)
-                        };
-                    }
-                    return new ActionResultWithId {
-                        Id = saveReturn.IdRelated,
-                        JsonResult = ContainerMethods.GetJsonPostContainer(saveReturn, log)
-                    };
-            }
-        }
-
         public static async Task<ActionResultWithId> SendInternalHttp<DbElement, InputElement>(HttpRequest req, ILogger log, Func<IAgroManager, IGenericOperation<DbElement, InputElement>> repo, string id = null) where DbElement : DocumentBase where InputElement : InputBase {
             var claims = await Auth.Validate(req);
             if (claims == null)
@@ -85,16 +41,57 @@ namespace trifenix.agro.functions.mantainers {
             if (method.Equals("get"))
                 element = (InputElement)Activator.CreateInstance(typeof(InputElement));
             else
-                try
-                {
+                try {
                     element = JsonConvert.DeserializeObject<InputElement>(requestBody);
                 }
-                catch (Exception e)
-                {
+                catch (Exception) {
                     throw;
                 }
             element.Id = id;
             return element;
+        }
+
+        public static async Task<ActionResultWithId> HttpProcessing<DbElement, InputElement>(HttpRequest req, ILogger log, IGenericOperation<DbElement, InputElement> repo, IGenericOperation<UserActivity, UserActivityInput> recordAcitvity, InputElement element) where DbElement : DocumentBase where InputElement : InputBase {
+            var method = req.Method.ToLower();
+            switch (method) {
+                case "get":
+                    if (!string.IsNullOrWhiteSpace(element.Id)) {
+                        var elementDb = await repo.Get(element.Id);
+                        return new ActionResultWithId {
+                            Id = element.Id,
+                            JsonResult = ContainerMethods.GetJsonGetContainer(elementDb, log)
+                        };
+                    }
+                    return new ActionResultWithId {
+                        Id = null,
+                        JsonResult = ContainerMethods.GetJsonGetContainer(new ExtGetContainer<string> { ErrorMessage = "Id obligatorio", StatusResult = ExtGetDataResult.Error }, log)
+                    };
+                default:
+                    ExtPostContainer<string> saveReturn;
+                    try {
+                        saveReturn = await repo.Save(element);
+                        //await recordAcitvity.Save(new UserActivityInput {
+                        //    Action = method.Equals("post") ? UserActivityAction.CREATE : UserActivityAction.MODIFY,
+                        //    Date = DateTime.Now,
+                        //    EntityName = ((DbElement)Activator.CreateInstance(typeof(DbElement))).CosmosEntityName,
+                        //    EntityId = saveReturn.IdRelated
+                        //});
+                    }
+                    catch (Exception ex) {
+                        return new ActionResultWithId {
+                            Id = null,
+                            JsonResult = ContainerMethods.GetJsonPostContainer(new ExtPostErrorContainer<string> {
+                                InternalException = ex,
+                                Message = ex.Message,
+                                MessageResult = ExtMessageResult.Error
+                            }, log)
+                        };
+                    }
+                    return new ActionResultWithId {
+                        Id = saveReturn.IdRelated,
+                        JsonResult = ContainerMethods.GetJsonPostContainer(saveReturn, log)
+                    };
+            }
         }
 
     }
