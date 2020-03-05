@@ -112,7 +112,7 @@ namespace trifenix.agro.external.operations.entities.orders {
                     new RelatedId{ EntityIndex = (int)EntityRelated.BARRACK, EntityId = barrack.IdBarrack },
                     new RelatedId { EntityIndex = (int)EntityRelated.ORDER, EntityId = id }
                 };
-                relatedIds.AddRange(barrack.IdNotificationEvents.Select(s => new RelatedId { EntityIndex = (int)EntityRelated.NOTIFICATION, EntityId = s }));
+                relatedIds.AddRange(barrack.IdNotificationEvents.Select(s => new RelatedId { EntityIndex = (int)EntityRelated.NOTIFICATION_EVENT, EntityId = s }));
                 var inputSearch = new EntitySearch {
                     Id = idGuid,
                     EntityIndex = (int)EntityRelated.BARRACK_EVENT,

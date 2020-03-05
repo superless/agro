@@ -22,7 +22,7 @@ namespace trifenix.agro.external.operations.entities.fields
 
         public async Task<ExtPostContainer<string>> Save(UserActivityInput input)
         {
-            var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
+            var id = input.Id ?? Guid.NewGuid().ToString("N");
             var user = await graphApi.GetUserFromToken();
 
             await repo.CreateUpdate(new UserActivity
