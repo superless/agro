@@ -17,6 +17,40 @@ namespace trifenix.agro.functions.mantainers {
 
     public static class GenericMantainer {
 
+        public static async Task<ActionResultWithId> SendInternalHttp<DbElement, InputElement>(HttpRequest req, ILogger log, Func<IAgroManager, IGenericOperation<DbElement, InputElement>> repo, string id = null) where DbElement : DocumentBase where InputElement : InputBase {
+            var claims = await Auth.Validate(req);
+            if (claims == null)
+                return new ActionResultWithId {
+                    Id = null,
+                    JsonResult = new UnauthorizedResult()
+                };
+            var manager = await ContainerMethods.AgroManager(claims);
+            return await HttpProcessing(req, log, repo(manager), manager.UserActivity, id);
+        }
+
+        public static async Task<ActionResultWithId> HttpProcessing<DbElement, InputElement>(HttpRequest req, ILogger log, IGenericOperation<DbElement, InputElement> repo, IGenericOperation<UserActivity, UserActivityInput> recordAcitvity, string id = null) where DbElement : DocumentBase where InputElement : InputBase {
+            var body = await new StreamReader(req.Body).ReadToEndAsync();
+            var method = req.Method.ToLower();
+            var jsonElement = ConvertToElement<InputElement>(body, id, method);
+            return await HttpProcessing(req, log, repo, recordAcitvity, jsonElement);
+        }
+
+        public static InputElement ConvertToElement<InputElement>(string body, string id, string method) where InputElement : InputBase {
+            var requestBody = body;
+            InputElement element;
+            if (method.Equals("get"))
+                element = (InputElement)Activator.CreateInstance(typeof(InputElement));
+            else
+                try {
+                    element = JsonConvert.DeserializeObject<InputElement>(requestBody);
+                }
+                catch (Exception) {
+                    throw;
+                }
+            element.Id = id;
+            return element;
+        }
+
         public static async Task<ActionResultWithId> HttpProcessing<DbElement, InputElement>(HttpRequest req, ILogger log, IGenericOperation<DbElement, InputElement> repo, IGenericOperation<UserActivity, UserActivityInput> recordAcitvity, InputElement element) where DbElement : DocumentBase where InputElement : InputBase {
             var method = req.Method.ToLower();
             switch (method) {
@@ -36,13 +70,12 @@ namespace trifenix.agro.functions.mantainers {
                     ExtPostContainer<string> saveReturn;
                     try {
                         saveReturn = await repo.Save(element);
-                        //await recordAcitvity.Save(new UserActivityInput
-                        //{
-                        //    Action = method.Equals("post") ? UserActivityAction.CREATE : UserActivityAction.MODIFY,
-                        //    Date = DateTime.Now,
-                        //    EntityName = ((DbElement)Activator.CreateInstance(typeof(DbElement))).CosmosEntityName,
-                        //    Id = saveReturn.IdRelated
-                        //});
+                        await recordAcitvity.Save(new UserActivityInput {
+                            Action = method.Equals("post") ? UserActivityAction.CREATE : UserActivityAction.MODIFY,
+                            Date = DateTime.Now,
+                            EntityName = ((DbElement)Activator.CreateInstance(typeof(DbElement))).CosmosEntityName,
+                            EntityId = saveReturn.IdRelated
+                        });
                     }
                     catch (Exception ex) {
                         return new ActionResultWithId {
@@ -59,42 +92,6 @@ namespace trifenix.agro.functions.mantainers {
                         JsonResult = ContainerMethods.GetJsonPostContainer(saveReturn, log)
                     };
             }
-        }
-
-        public static async Task<ActionResultWithId> SendInternalHttp<DbElement, InputElement>(HttpRequest req, ILogger log, Func<IAgroManager, IGenericOperation<DbElement, InputElement>> repo, string id = null) where DbElement : DocumentBase where InputElement : InputBase {
-            var claims = await Auth.Validate(req);
-            if (claims == null)
-                return new ActionResultWithId {
-                    Id = null,
-                    JsonResult = new UnauthorizedResult()
-                };
-            var manager = await ContainerMethods.AgroManager(claims);
-            return await HttpProcessing(req, log, repo(manager), manager.UserActivity, id);
-        }
-
-        public static async Task<ActionResultWithId> HttpProcessing<DbElement, InputElement>(HttpRequest req, ILogger log, IGenericOperation<DbElement, InputElement> repo, IGenericFullReadOperation<UserActivity, UserActivityInput> recordAcitvity, string id = null) where DbElement : DocumentBase where InputElement : InputBase {
-            var body = await new StreamReader(req.Body).ReadToEndAsync();
-            var method = req.Method.ToLower();
-            var jsonElement = ConvertToElement<InputElement>(body, id, method);
-            return await HttpProcessing(req, log, repo, recordAcitvity, jsonElement);
-        }
-
-        public static InputElement ConvertToElement<InputElement>(string body, string id, string method) where InputElement : InputBase {
-            var requestBody = body;
-            InputElement element;
-            if (method.Equals("get"))
-                element = (InputElement)Activator.CreateInstance(typeof(InputElement));
-            else
-                try
-                {
-                    element = JsonConvert.DeserializeObject<InputElement>(requestBody);
-                }
-                catch (Exception e)
-                {
-                    throw;
-                }
-            element.Id = id;
-            return element;
         }
 
     }

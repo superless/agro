@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.common;
+using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.db.model.agro.orders;
 using trifenix.agro.enums;
@@ -20,7 +21,7 @@ namespace trifenix.agro.external.operations.entities.orders {
 
         private readonly ICommonQueries commonQueries;
 
-        public ApplicationOrderOperations(IMainGenericDb<ApplicationOrder> repo, IExistElement existElement, IAgroSearch search, ICommonQueries commonQueries) : base(repo, existElement, search) {
+        public ApplicationOrderOperations(IMainGenericDb<ApplicationOrder> repo, IExistElement existElement, IAgroSearch search, ICommonQueries commonQueries, ICommonDbOperations<ApplicationOrder> commonDb) : base(repo, existElement, search, commonDb) {
             this.commonQueries = commonQueries;
         }
 
@@ -65,7 +66,7 @@ namespace trifenix.agro.external.operations.entities.orders {
         }
 
         public async Task<ExtPostContainer<string>> Save(ApplicationOrderInput input) {
-            var id = input.Id ?? Guid.NewGuid().ToString("N");
+            var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
             var valida = await Validate(input);
             if (!valida)
                 throw new Exception(string.Format(ErrorMessages.NotValid, "PreOrden"));

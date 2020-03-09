@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.common;
+using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model.agro.orders;
 using trifenix.agro.enums;
 using trifenix.agro.external.interfaces;
@@ -15,7 +16,7 @@ namespace trifenix.agro.external.operations.entities.orders
 {
     public class ExecutionOrderStatusOperations : MainReadOperation<ExecutionOrderStatus>, IGenericOperation<ExecutionOrderStatus, ExecutionOrderStatusInput>
     {
-        public ExecutionOrderStatusOperations(IMainGenericDb<ExecutionOrderStatus> repo, IExistElement existElement, IAgroSearch search) : base(repo, existElement, search)
+        public ExecutionOrderStatusOperations(IMainGenericDb<ExecutionOrderStatus> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<ExecutionOrderStatus> commonDb) : base(repo, existElement, search, commonDb)
         {
         }
 

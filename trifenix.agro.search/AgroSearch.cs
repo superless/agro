@@ -13,6 +13,16 @@ namespace trifenix.agro.search.operations {
         private readonly string _entityIndex = "entities";
         private readonly string _commentIndex = "comments";
 
+        private readonly List<Suggester> _suggesterEntities = new List<Suggester>
+        {
+            new Suggester{
+                Name= "SgProperty",
+                SourceFields = new List<string>{
+                    "RelatedProperties/Value"
+                }
+            }
+        };
+
         public AgroSearch(string SearchServiceName, string SearchServiceKey) {
             _search = new SearchServiceClient(SearchServiceName, new SearchCredentials(SearchServiceKey));
             if (!_search.Indexes.Exists(_entityIndex))

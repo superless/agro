@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.common;
+using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.enums;
 using trifenix.agro.external.interfaces;
@@ -16,7 +17,7 @@ namespace trifenix.agro.external.operations.entities.main
 {
     public class SpecieOperations : MainReadOperationName<Specie, SpecieInput>, IGenericOperation<Specie, SpecieInput>
     {
-        public SpecieOperations(IMainGenericDb<Specie> repo, IExistElement existElement, IAgroSearch search) : base(repo, existElement, search)
+        public SpecieOperations(IMainGenericDb<Specie> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Specie> commonDb) : base(repo, existElement, search, commonDb)
         {
         }
 

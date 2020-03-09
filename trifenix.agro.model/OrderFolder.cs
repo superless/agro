@@ -12,6 +12,6 @@ namespace trifenix.agro.db.model.agro
         public string IdApplicationTarget { get; set; }
         public string IdSpecie { get; set; }
         public string  IdIngredient { get; set; }
-        public string IdCategoryIngredient { get; set; }
+        public string IdIngredientCategory { get; set; }
     }
 }

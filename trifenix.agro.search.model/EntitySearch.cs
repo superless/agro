@@ -26,10 +26,10 @@ namespace trifenix.agro.search.model {
 
     public class RelatedId {
 
-        [IsFilterable]
+        [IsFilterable, IsFacetable]
         public int EntityIndex { get; set; }
 
-        [IsFilterable, IsSearchable]
+        [IsFilterable, IsSearchable, IsFacetable]
         public string EntityId { get; set; }
 
         
