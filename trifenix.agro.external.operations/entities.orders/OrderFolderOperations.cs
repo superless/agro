@@ -81,7 +81,7 @@ namespace trifenix.agro.external.operations.entities.orders
             {
                 Id = id,
                 IdApplicationTarget = input.IdApplicationTarget,
-                IdCategoryIngredient = input.IdCategoryIngredient,
+                IdIngredientCategory = input.IdCategoryIngredient,
                 IdIngredient = input.IdIngredient,
                 IdPhenologicalEvent = input.IdPhenologicalEvent,
                 IdSpecie = input.IdSpecie

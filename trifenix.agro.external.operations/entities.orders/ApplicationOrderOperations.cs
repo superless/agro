@@ -65,7 +65,7 @@ namespace trifenix.agro.external.operations.entities.orders {
         }
 
         public async Task<ExtPostContainer<string>> Save(ApplicationOrderInput input) {
-            var id = input.Id ?? Guid.NewGuid().ToString("N");
+            var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
             var valida = await Validate(input);
             if (!valida)
                 throw new Exception(string.Format(ErrorMessages.NotValid, "PreOrden"));

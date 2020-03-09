@@ -19,7 +19,7 @@ namespace trifenix.agro.external.operations.entities.main {
         public TractorOperations(IMainGenericDb<Tractor> repo, IExistElement existElement, IAgroSearch search) : base(repo, existElement, search) { }
 
         public async Task<ExtPostContainer<string>> Save(TractorInput input) {
-            var id = input.Id ?? Guid.NewGuid().ToString("N");
+            var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
             if (!string.IsNullOrWhiteSpace(input.Id)) {
                 var existsId = await existElement.ExistsById<Tractor>(input.Id);
                 if (!existsId)

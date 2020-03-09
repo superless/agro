@@ -15,7 +15,7 @@ namespace trifenix.agro.db.model.agro
         public override string Name { get; set; }
 
 
-        public string IdIngredient { get; set; }
+        public string IdIngredient { get; set; }    //Este esta en la OrderFolder. Eliminar(?)
         public string OrderFolderId { get; set; }
 
         public PreOrderType PreOrderType { get; set; }
