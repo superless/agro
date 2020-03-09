@@ -179,6 +179,43 @@ namespace trifenix.agro.functions {
         }
 
         /// <summary>
+        /// Añadir Notificación
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("notification_event_post")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> NotificationsPost(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "notification")]
+            [RequestBodyType(typeof(NotificationEventSwaggerInput), "notification")]
+            HttpRequest req, ILogger log)
+        {
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.NotificationEvents, string.Empty);
+            return result.JsonResult;
+        }
+
+        /// <summary>
+        /// Editar Notificación
+        /// </summary>
+        /// <return>
+        /// Retorna un contenedor con el id
+        /// </return>
+        [FunctionName("notification_put")]
+        [RequestHttpHeader("Authorization", isRequired: true)]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> NotificationPut(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "notification/{id}")]
+            [RequestBodyType(typeof(NotificationEventSwaggerInput), "Notificación")]
+            HttpRequest req, string id, ILogger log)
+        {
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.NotificationEvents, id);
+            return result.JsonResult;
+        }
+
+
+        /// <summary>
         /// Añadir Variedad
         /// </summary>
         /// <return>
