@@ -12,12 +12,13 @@ using trifenix.agro.search.model;
 using trifenix.agro.external.operations.res;
 using trifenix.agro.enums;
 using trifenix.agro.db.model.agro.core;
+using trifenix.agro.db.interfaces.common;
 
 namespace trifenix.agro.external.operations.entities.main
 {
     public class SeasonOperations : MainReadOperation<Season>, IGenericOperation<Season, SeasonInput>
     {
-        public SeasonOperations(IMainGenericDb<Season> repo, IExistElement existElement, IAgroSearch search) : base(repo, existElement, search)
+        public SeasonOperations(IMainGenericDb<Season> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Season> commonDb) : base(repo, existElement, search, commonDb)
         {
         }
 

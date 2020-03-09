@@ -28,7 +28,7 @@ namespace trifenix.agro.functions.mantainers {
             return await HttpProcessing(req, log, repo(manager), manager.UserActivity, id);
         }
 
-        public static async Task<ActionResultWithId> HttpProcessing<DbElement, InputElement>(HttpRequest req, ILogger log, IGenericOperation<DbElement, InputElement> repo, IGenericFullReadOperation<UserActivity, UserActivityInput> recordAcitvity, string id = null) where DbElement : DocumentBase where InputElement : InputBase {
+        public static async Task<ActionResultWithId> HttpProcessing<DbElement, InputElement>(HttpRequest req, ILogger log, IGenericOperation<DbElement, InputElement> repo, IGenericOperation<UserActivity, UserActivityInput> recordAcitvity, string id = null) where DbElement : DocumentBase where InputElement : InputBase {
             var body = await new StreamReader(req.Body).ReadToEndAsync();
             var method = req.Method.ToLower();
             var jsonElement = ConvertToElement<InputElement>(body, id, method);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.common;
+using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.enums;
@@ -18,7 +19,7 @@ namespace trifenix.agro.external.operations.entities.orders
     {
         private readonly ICommonQueries commonQueries;
 
-        public OrderFolderOperations(IMainGenericDb<OrderFolder> repo, IExistElement existElement, IAgroSearch search, ICommonQueries commonQueries) : base(repo, existElement, search)
+        public OrderFolderOperations(IMainGenericDb<OrderFolder> repo, IExistElement existElement, IAgroSearch search, ICommonQueries commonQueries, ICommonDbOperations<OrderFolder> commonDb) : base(repo, existElement, search, commonDb)
         {
             this.commonQueries = commonQueries;
         }

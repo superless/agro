@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.common;
+using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model.agro.core;
 using trifenix.agro.enums;
 using trifenix.agro.external.interfaces;
@@ -16,7 +17,7 @@ namespace trifenix.agro.external.operations.entities.main
 {
     public class CostCenterOperations : MainReadOperationName<CostCenter, CostCenterInput>, IGenericOperation<CostCenter, CostCenterInput>
     {
-        public CostCenterOperations(IMainGenericDb<CostCenter> repo, IExistElement existElement, IAgroSearch search) : base(repo, existElement, search)
+        public CostCenterOperations(IMainGenericDb<CostCenter> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<CostCenter> commonDb) : base(repo, existElement, search, commonDb)
         {
         }
 

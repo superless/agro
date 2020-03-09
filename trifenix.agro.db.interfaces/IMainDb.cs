@@ -11,10 +11,9 @@ namespace trifenix.agro.db.interfaces
         ICosmosStore<T> Store { get; }
 
         AgroDbArguments MainArgs { get; }
-    }
 
-    public interface IMainDb<T> :IMainGenericDb<T> where T:DocumentBase
-    {   
         IQueryable<T> GetEntities();
     }
+
+ 
 }
