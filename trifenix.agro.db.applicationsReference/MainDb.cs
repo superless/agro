@@ -10,12 +10,9 @@ namespace trifenix.agro.db.applicationsReference {
     public class MainGenericDb<T> : IMainGenericDb<T> where T : DocumentBase {
 
         public ICosmosStore<T> Store { get; }
-
-        public AgroDbArguments MainArgs { get; }
-
+        
         public MainGenericDb(AgroDbArguments args) {
             var storeSettings = new CosmosStoreSettings(args.NameDb, args.EndPointUrl, args.PrimaryKey);
-            MainArgs = args;
             Store = new CosmosStore<T>(storeSettings);
         }
 

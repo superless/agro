@@ -3,9 +3,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.IO;
-using System.Security.Claims;
 using System.Threading.Tasks;
-using trifenix.agro.db.applicationsReference.agro;
 using trifenix.agro.email.operations;
 using trifenix.agro.enums;
 using trifenix.agro.external.interfaces;
@@ -21,7 +19,7 @@ namespace trifenix.agro.functions.Helper
 {
     public static class ContainerMethods
     {
-        public static async Task<IAgroManager> AgroManager(ClaimsPrincipal claims){
+        public static async Task<IAgroManager> AgroManager(string ObjectIdAAD){
            
             
 
@@ -29,7 +27,7 @@ namespace trifenix.agro.functions.Helper
 
             var uploadImage = new UploadImage(Environment.GetEnvironmentVariable("StorageConnectionStrings", EnvironmentVariableTarget.Process));
 
-            var graphApi = new GraphApi(claims, ConfigManager.GetDbArguments);
+            var graphApi = new GraphApi(ObjectIdAAD, ConfigManager.GetDbArguments);
 
             var weatherApi = new WeatherApi(Environment.GetEnvironmentVariable("KeyWeatherApi", EnvironmentVariableTarget.Process));
 
@@ -41,14 +39,14 @@ namespace trifenix.agro.functions.Helper
             return new AgroManager(ConfigManager.GetDbArguments, email, uploadImage, graphApi, weatherApi, searchServiceInstance);
         }
 
-        public static async Task<JsonResult> ApiPostOperations<T>(Stream body, ILogger log, Func<IAgroManager, dynamic, Task<ExtPostContainer<T>>> create, ClaimsPrincipal claims) 
+        public static async Task<JsonResult> ApiPostOperations<T>(Stream body, ILogger log, Func<IAgroManager, dynamic, Task<ExtPostContainer<T>>> create, string ObjectIdAAD) 
         {
             try
             {
                 var requestBody = await new StreamReader(body).ReadToEndAsync();
                 dynamic result = JsonConvert.DeserializeObject(requestBody);
 
-                var manager = await AgroManager(claims);
+                var manager = await AgroManager(ObjectIdAAD);
                 var resultDb = await create(manager, result);
                 return ContainerMethods.GetJsonPostContainer(resultDb, log);
             }

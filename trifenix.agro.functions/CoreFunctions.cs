@@ -5,12 +5,14 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using trifenix.agro.authentication.operations;
 using trifenix.agro.external.operations.helper;
 using trifenix.agro.functions.Helper;
 using trifenix.agro.functions.mantainers;
@@ -18,7 +20,8 @@ using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.swagger.model.input;
 
-namespace trifenix.agro.functions {
+namespace trifenix.agro.functions
+{
 
     /// <summary>
     /// Funciones 
@@ -1009,6 +1012,15 @@ namespace trifenix.agro.functions {
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ExecutionStatus, id);
             return result.JsonResult;
+        }
+
+        [FunctionName("Initialize")]
+        public static async Task<IActionResult> Initialize([HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequest req, ILogger log) {
+            string json = await req.ReadAsStringAsync();
+            JObject jsonObject = JObject.Parse(json);
+            var dbInitializer = new CosmosDbInitializer(jsonObject.Value<string>("CosmosDbName"), jsonObject.Value<string>("CosmosDbUri"), jsonObject.Value<string>("CosmosDbPrimaryKey"), jsonObject.Value<string>("AssemblyName"), jsonObject.Value<bool>("AutoGuid"));
+            dbInitializer.MapJsonToDB(jsonObject.Value<JObject>("Entities"));
+            return new OkResult();
         }
 
     }

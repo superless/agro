@@ -3,10 +3,10 @@ using trifenix.agro.db.model;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.db.model.agro.core;
 using trifenix.agro.db.model.agro.orders;
-using trifenix.agro.microsoftgraph.interfaces;
 using trifenix.agro.model.external.Input;
 
-namespace trifenix.agro.external.interfaces {
+namespace trifenix.agro.external.interfaces
+{
     public interface IAgroManager {
 
         IExistElement ExistsElements { get; }
@@ -38,7 +38,6 @@ namespace trifenix.agro.external.interfaces {
         IGenericOperation<Tractor, TractorInput> Tractors { get; }
         IGenericOperation<UserApplicator, UserApplicatorInput> Users { get; }
         IGenericOperation<Variety, VarietyInput> Varieties { get; }
-        IGraphApi GraphApi { get; }
 
     }
 }

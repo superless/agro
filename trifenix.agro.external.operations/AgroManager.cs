@@ -38,13 +38,10 @@ namespace trifenix.agro.external.operations
             _uploadImage = uploadImage;
             _weatherApi = weatherApi;
             _searchServiceInstance = searchServiceInstance;
-            GraphApi = graphApi;
-
+            _graphApi = graphApi;
         }
-
-        public IGraphApi GraphApi { get; }
-
-        public IGenericFullReadOperation<UserActivity, UserActivityInput> UserActivity => new UserActivityOperations(new MainDb<UserActivity>(arguments), new CommonDbOperations<UserActivity>(), GraphApi);
+        
+        public IGenericFullReadOperation<UserActivity, UserActivityInput> UserActivity => new UserActivityOperations(new MainDb<UserActivity>(arguments), new CommonDbOperations<UserActivity>(), _graphApi);
 
         public IExistElement ExistsElements => new CosmosExistElement(arguments);
 
@@ -89,7 +86,7 @@ namespace trifenix.agro.external.operations
         
 
         public IGenericOperation<UserApplicator, UserApplicatorInput> Users => new UserOperations(new MainGenericDb<UserApplicator>(arguments), ExistsElements, _searchServiceInstance, 
-            GraphApi);
+            _graphApi);
 
 
         public IGenericOperation<Nebulizer, NebulizerInput> Nebulizers => new NebulizerOperations(new MainGenericDb<Nebulizer>(arguments), ExistsElements, _searchServiceInstance);
