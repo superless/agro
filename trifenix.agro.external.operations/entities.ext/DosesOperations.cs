@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.common;
+using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.db.model.agro.local;
 using trifenix.agro.enums;
@@ -18,7 +19,7 @@ namespace trifenix.agro.external.operations.entities.ext
 {
     public class DosesOperations : MainReadOperation<Doses>, IGenericOperation<Doses, DosesInput>
     {
-        public DosesOperations(IMainGenericDb<Doses> repo, IExistElement existElement, IAgroSearch search) : base(repo, existElement, search)
+        public DosesOperations(IMainGenericDb<Doses> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Doses> commonDb) : base(repo, existElement, search, commonDb)
         {
         }
 

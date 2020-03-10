@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.common;
+using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.enums;
@@ -20,7 +21,7 @@ namespace trifenix.agro.external.operations.entities.main {
 
         private readonly IGraphApi graphApi;
 
-        public UserOperations(IMainGenericDb<UserApplicator> repo, IExistElement existElement, IAgroSearch search, IGraphApi graphApi ) : base(repo, existElement, search) {
+        public UserOperations(IMainGenericDb<UserApplicator> repo, IExistElement existElement, IAgroSearch search, IGraphApi graphApi, ICommonDbOperations<UserApplicator> commonDb) : base(repo, existElement, search, commonDb) {
             this.graphApi = graphApi;
         }
 

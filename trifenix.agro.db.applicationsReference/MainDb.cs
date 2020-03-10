@@ -30,13 +30,9 @@ namespace trifenix.agro.db.applicationsReference {
             return await Store.FindAsync(uniqueId, entity.CosmosEntityName);
         }
 
-    }
-
-    public class MainDb<T> : MainGenericDb<T>, IMainDb<T> where T: DocumentBase {
-
-        public MainDb(AgroDbArguments args) : base(args) {}
-
-        public  IQueryable<T> GetEntities() => Store.Query();
+        public IQueryable<T> GetEntities() => Store.Query();
 
     }
+
+
 }

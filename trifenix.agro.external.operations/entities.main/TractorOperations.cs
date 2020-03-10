@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.common;
+using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model;
 using trifenix.agro.enums;
 using trifenix.agro.external.interfaces;
@@ -16,7 +17,7 @@ namespace trifenix.agro.external.operations.entities.main {
 
     public class TractorOperations : MainReadOperation<Tractor>, IGenericOperation<Tractor, TractorInput> {
 
-        public TractorOperations(IMainGenericDb<Tractor> repo, IExistElement existElement, IAgroSearch search) : base(repo, existElement, search) { }
+        public TractorOperations(IMainGenericDb<Tractor> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Tractor> commonDb) : base(repo, existElement, search, commonDb) { }
 
         public async Task<ExtPostContainer<string>> Save(TractorInput input) {
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");

@@ -39,9 +39,10 @@ namespace trifenix.agro.external.operations
             _weatherApi = weatherApi;
             _searchServiceInstance = searchServiceInstance;
             _graphApi = graphApi;
+
         }
-        
-        public IGenericFullReadOperation<UserActivity, UserActivityInput> UserActivity => new UserActivityOperations(new MainDb<UserActivity>(arguments), new CommonDbOperations<UserActivity>(), _graphApi);
+
+        public IGenericOperation<UserActivity, UserActivityInput> UserActivity => new UserActivityOperations(new MainGenericDb<UserActivity>(arguments), ExistsElements, _searchServiceInstance, _graphApi, new CommonDbOperations<UserActivity>());
 
         public IExistElement ExistsElements => new CosmosExistElement(arguments);
 
@@ -49,92 +50,92 @@ namespace trifenix.agro.external.operations
         public ICommonQueries CommonQueries => new CommonQueries(arguments);
 
 
-        public IGenericOperation<Sector, SectorInput> Sectors => new SectorOperations(new MainGenericDb<Sector>(arguments), ExistsElements, _searchServiceInstance);
-        public IGenericOperation<PlotLand, PlotLandInput> PlotLands => new PlotLandOperations(new MainGenericDb<PlotLand>(arguments), ExistsElements, _searchServiceInstance);
+        public IGenericOperation<Sector, SectorInput> Sectors => new SectorOperations(new MainGenericDb<Sector>(arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<Sector>());
+        public IGenericOperation<PlotLand, PlotLandInput> PlotLands => new PlotLandOperations(new MainGenericDb<PlotLand>(arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<PlotLand>());
 
 
-        public IGenericOperation<Specie, SpecieInput> Species => new SpecieOperations(new MainGenericDb<Specie>(arguments), ExistsElements, _searchServiceInstance);
+        public IGenericOperation<Specie, SpecieInput> Species => new SpecieOperations(new MainGenericDb<Specie>(arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<Specie>());
 
-        public IGenericOperation<Variety, VarietyInput> Varieties => new VarietyOperations(new MainGenericDb<Variety>(arguments), ExistsElements, _searchServiceInstance);
-
-
-        public IGenericOperation<ApplicationTarget, TargetInput> ApplicationTargets => new ApplicationTargetOperations(new MainGenericDb<ApplicationTarget>(arguments), ExistsElements, _searchServiceInstance);
+        public IGenericOperation<Variety, VarietyInput> Varieties => new VarietyOperations(new MainGenericDb<Variety>(arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<Variety>());
 
 
-
-        public IGenericOperation<PhenologicalEvent, PhenologicalEventInput> PhenologicalEvents => new PhenologicalEventOperations(new MainGenericDb<PhenologicalEvent>(arguments), ExistsElements, _searchServiceInstance);
-
-
-        public IGenericOperation<CertifiedEntity, CertifiedEntityInput> CertifiedEntities => new CertifiedEntityOperations(new MainGenericDb<CertifiedEntity>(arguments), ExistsElements, _searchServiceInstance);
-
-        public IGenericOperation<IngredientCategory, IngredientCategoryInput> IngredientCategories => new IngredientCategoryOperations(new MainGenericDb<IngredientCategory>(arguments), ExistsElements, _searchServiceInstance);
-
-        public IGenericOperation<Ingredient, IngredientInput> Ingredients => new IngredientOperations(new MainGenericDb<Ingredient>(arguments), ExistsElements, _searchServiceInstance);
-
-
-        public IGenericOperation<Product, ProductInput> Products => new ProductOperations(new MainGenericDb<Product>(arguments), ExistsElements, _searchServiceInstance, Doses);
-
-
-        public IGenericOperation<Doses, DosesInput> Doses => new DosesOperations(new MainGenericDb<Doses>(arguments), ExistsElements, _searchServiceInstance);
-
-        public IGenericOperation<Role, RoleInput> Roles => new RoleOperations(new MainGenericDb<Role>(arguments), ExistsElements, _searchServiceInstance);
+        public IGenericOperation<ApplicationTarget, TargetInput> ApplicationTargets => new ApplicationTargetOperations(new MainGenericDb<ApplicationTarget>(arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<ApplicationTarget>());
 
 
 
-        public IGenericOperation<Job, JobInput> Jobs => new JobOperations(new MainGenericDb<Job>(arguments), ExistsElements, _searchServiceInstance);
+        public IGenericOperation<PhenologicalEvent, PhenologicalEventInput> PhenologicalEvents => new PhenologicalEventOperations(new MainGenericDb<PhenologicalEvent>(arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<PhenologicalEvent>());
+
+
+        public IGenericOperation<CertifiedEntity, CertifiedEntityInput> CertifiedEntities => new CertifiedEntityOperations(new MainGenericDb<CertifiedEntity>(arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<CertifiedEntity>());
+
+        public IGenericOperation<IngredientCategory, IngredientCategoryInput> IngredientCategories => new IngredientCategoryOperations(new MainGenericDb<IngredientCategory>(arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<IngredientCategory>());
+
+        public IGenericOperation<Ingredient, IngredientInput> Ingredients => new IngredientOperations(new MainGenericDb<Ingredient>(arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<Ingredient>());
+
+
+        public IGenericOperation<Product, ProductInput> Products => new ProductOperations(new MainGenericDb<Product>(arguments), ExistsElements, _searchServiceInstance, Doses, new CommonDbOperations<Product>());
+
+
+        public IGenericOperation<Doses, DosesInput> Doses => new DosesOperations(new MainGenericDb<Doses>(arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<Doses>());
+
+        public IGenericOperation<Role, RoleInput> Roles => new RoleOperations(new MainGenericDb<Role>(arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<Role>());
+
+
+
+        public IGenericOperation<Job, JobInput> Jobs => new JobOperations(new MainGenericDb<Job>(arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<Job>());
 
         
 
         public IGenericOperation<UserApplicator, UserApplicatorInput> Users => new UserOperations(new MainGenericDb<UserApplicator>(arguments), ExistsElements, _searchServiceInstance, 
-            _graphApi);
+            _graphApi, new CommonDbOperations<UserApplicator>());
 
 
-        public IGenericOperation<Nebulizer, NebulizerInput> Nebulizers => new NebulizerOperations(new MainGenericDb<Nebulizer>(arguments), ExistsElements, _searchServiceInstance);
+        public IGenericOperation<Nebulizer, NebulizerInput> Nebulizers => new NebulizerOperations(new MainGenericDb<Nebulizer>(arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<Nebulizer>());
         
 
 
-        public IGenericOperation<Tractor, TractorInput> Tractors => new TractorOperations(new MainGenericDb<Tractor>(arguments), ExistsElements, _searchServiceInstance);
+        public IGenericOperation<Tractor, TractorInput> Tractors => new TractorOperations(new MainGenericDb<Tractor>(arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<Tractor>());
 
 
 
-        public IGenericOperation<BusinessName, BusinessNameInput> BusinessNames => new BusinessNameOperations(new MainGenericDb<BusinessName>(arguments), ExistsElements, _searchServiceInstance);
+        public IGenericOperation<BusinessName, BusinessNameInput> BusinessNames => new BusinessNameOperations(new MainGenericDb<BusinessName>(arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<BusinessName>());
 
-        public IGenericOperation<CostCenter, CostCenterInput> CostCenters => new CostCenterOperations(new MainGenericDb<CostCenter>(arguments), ExistsElements, _searchServiceInstance);
-
-
-        public IGenericOperation<Season, SeasonInput> Seasons => new SeasonOperations(new MainGenericDb<Season>(arguments), ExistsElements, _searchServiceInstance);
+        public IGenericOperation<CostCenter, CostCenterInput> CostCenters => new CostCenterOperations(new MainGenericDb<CostCenter>(arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<CostCenter>());
 
 
-        public IGenericOperation<Rootstock, RootStockInput> Rootstock => new RootstockOperations(new MainGenericDb<Rootstock>(arguments), ExistsElements, _searchServiceInstance);
+        public IGenericOperation<Season, SeasonInput> Seasons => new SeasonOperations(new MainGenericDb<Season>(arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<Season>());
 
 
-        public IGenericOperation<OrderFolder, OrderFolderInput> OrderFolder => new OrderFolderOperations(new MainGenericDb<OrderFolder>(arguments), ExistsElements, _searchServiceInstance, CommonQueries);
+        public IGenericOperation<Rootstock, RootStockInput> Rootstock => new RootstockOperations(new MainGenericDb<Rootstock>(arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<Rootstock>());
 
 
-        public IGenericOperation<Barrack, BarrackInput> Barracks => new BarrackOperations(new MainGenericDb<Barrack>(arguments), ExistsElements, _searchServiceInstance, CommonQueries);
+        public IGenericOperation<OrderFolder, OrderFolderInput> OrderFolder => new OrderFolderOperations(new MainGenericDb<OrderFolder>(arguments), ExistsElements, _searchServiceInstance, CommonQueries, new CommonDbOperations<OrderFolder>());
 
 
-
-        public IGenericOperation<NotificationEvent, NotificationEventInput> NotificationEvents => new NotificationEventOperations(new MainGenericDb<NotificationEvent>(arguments), ExistsElements, _searchServiceInstance, CommonQueries, _email, _uploadImage, _weatherApi);
-
-
-        public IGenericOperation<PreOrder, PreOrderInput> PreOrders => new PreOrdersOperations(new MainGenericDb<PreOrder>(arguments), ExistsElements, _searchServiceInstance, CommonQueries);
+        public IGenericOperation<Barrack, BarrackInput> Barracks => new BarrackOperations(new MainGenericDb<Barrack>(arguments), ExistsElements, _searchServiceInstance, CommonQueries, new CommonDbOperations<Barrack>());
 
 
 
-        
+        public IGenericOperation<NotificationEvent, NotificationEventInput> NotificationEvents => new NotificationEventOperations(new MainGenericDb<NotificationEvent>(arguments), ExistsElements, _searchServiceInstance, CommonQueries, _email, _uploadImage, _weatherApi, new CommonDbOperations<NotificationEvent>());
 
 
-        public IGenericOperation<ApplicationOrder, ApplicationOrderInput> ApplicationOrders => new ApplicationOrderOperations(new MainGenericDb<ApplicationOrder>(arguments), ExistsElements, _searchServiceInstance, CommonQueries);
-
+        public IGenericOperation<PreOrder, PreOrderInput> PreOrders => new PreOrdersOperations(new MainGenericDb<PreOrder>(arguments), ExistsElements, _searchServiceInstance, CommonQueries, new CommonDbOperations<PreOrder>());
 
 
 
         
 
-        public IGenericOperation<ExecutionOrder, ExecutionOrderInput> ExecutionOrders => new ExecutionOrderOperations(new MainGenericDb<ExecutionOrder>(arguments), ExistsElements, _searchServiceInstance, CommonQueries);
 
-        public IGenericOperation<ExecutionOrderStatus, ExecutionOrderStatusInput> ExecutionStatus => new ExecutionOrderStatusOperations(new MainGenericDb<ExecutionOrderStatus>(arguments), ExistsElements, _searchServiceInstance);
+        public IGenericOperation<ApplicationOrder, ApplicationOrderInput> ApplicationOrders => new ApplicationOrderOperations(new MainGenericDb<ApplicationOrder>(arguments), ExistsElements, _searchServiceInstance, CommonQueries, new CommonDbOperations<ApplicationOrder>());
+
+
+
+
+        
+
+        public IGenericOperation<ExecutionOrder, ExecutionOrderInput> ExecutionOrders => new ExecutionOrderOperations(new MainGenericDb<ExecutionOrder>(arguments), ExistsElements, _searchServiceInstance, CommonQueries, new CommonDbOperations<ExecutionOrder>());
+
+        public IGenericOperation<ExecutionOrderStatus, ExecutionOrderStatusInput> ExecutionStatus => new ExecutionOrderStatusOperations(new MainGenericDb<ExecutionOrderStatus>(arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<ExecutionOrderStatus>());
 
 
     }

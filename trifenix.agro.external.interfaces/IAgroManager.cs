@@ -10,7 +10,7 @@ namespace trifenix.agro.external.interfaces
     public interface IAgroManager {
 
         IExistElement ExistsElements { get; }
-        IGenericFullReadOperation<UserActivity, UserActivityInput> UserActivity { get; }
+        IGenericOperation<UserActivity, UserActivityInput> UserActivity { get; }
         IGenericOperation<ApplicationOrder, ApplicationOrderInput> ApplicationOrders { get; }
         IGenericOperation<ApplicationTarget, TargetInput> ApplicationTargets { get; }
         IGenericOperation<Barrack, BarrackInput> Barracks { get; }

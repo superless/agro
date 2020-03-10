@@ -9,8 +9,8 @@ using trifenix.agro.db.model;
 namespace trifenix.agro.db.applicationsReference.agro {
     public class CounterRepository : ICounterRepository {
 
-        private readonly IMainDb<Counter> _db;
-        public CounterRepository(IMainDb<Counter> db) {
+        private readonly IMainGenericDb<Counter> _db;
+        public CounterRepository(IMainGenericDb<Counter> db) {
             _db = db;
         }
 

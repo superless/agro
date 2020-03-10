@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.common;
+using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.email.interfaces;
@@ -27,7 +28,7 @@ namespace trifenix.agro.external.operations.entities.events {
         private readonly IUploadImage uploadImage;
         private readonly IWeatherApi weather;
 
-        public NotificationEventOperations(IMainGenericDb<NotificationEvent> repo, IExistElement existElement, IAgroSearch search, ICommonQueries commonQueries, IEmail email, IUploadImage uploadImage, IWeatherApi weather) : base(repo, existElement, search) {
+        public NotificationEventOperations(IMainGenericDb<NotificationEvent> repo, IExistElement existElement, IAgroSearch search, ICommonQueries commonQueries, IEmail email, IUploadImage uploadImage, IWeatherApi weather, ICommonDbOperations<NotificationEvent> commonDb) : base(repo, existElement, search, commonDb) {
             this.commonQueries = commonQueries;
             this.email = email;
             this.uploadImage = uploadImage;

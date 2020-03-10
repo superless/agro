@@ -248,7 +248,7 @@ namespace trifenix.agro.console {
             //var searchServiceInstance = new AgroSearch("agrosearch", "016DAA5EF1158FEEEE58DA60996D5981");
             //searchServiceInstance.DeleteElements(searchServiceInstance.FilterElements<EntitySearch>($"EntityIndex eq {(int)EntityRelated.TRACTOR}"));
 
-            var repo = new MainDb<EntityContainer>(new AgroDbArguments {
+            var repo = new MainGenericDb<EntityContainer>(new AgroDbArguments {
                 EndPointUrl = "https://agricola-jhm.documents.azure.com:443/",
                 NameDb = "agrodb",
                 PrimaryKey = "yG6EIAT1dKSBaS7oSZizTrWQGGfwSb2ot2prYJwQOLHYk3cGmzvvhGohSzFZYHueSFDiptUAqCQYYSeSetTiKw=="
