@@ -38,6 +38,10 @@ namespace trifenix.agro.external.interfaces {
         IGenericOperation<Tractor, TractorInput> Tractors { get; }
         IGenericOperation<UserApplicator, UserApplicatorInput> Users { get; }
         IGenericOperation<Variety, VarietyInput> Varieties { get; }
+
+        IGenericOperation<Comment, CommentInput> Comments { get; }
+
+
         IGraphApi GraphApi { get; }
 
     }

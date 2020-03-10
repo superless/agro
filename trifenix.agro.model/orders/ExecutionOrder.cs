@@ -8,13 +8,14 @@ namespace trifenix.agro.db.model.agro.orders {
     public class ExecutionOrder : DocumentBase, ISharedCosmosEntity {
 
         public override string Id { get; set; }
-        public string IdOrder { get; set; }
-        public DosesOrder[] DosesOrder { get; set; }
-        public DateTime? InitDate { get; set; }
-        public DateTime? EndDate { get; set; }
-        public string IdUserApplicator { get; set; }
-        public string IdNebulizer { get; set; }
-        public string IdTractor { get; set; }
+        
+        public string IdOrder { get; set; } // orden
+        public DosesOrder[] DosesOrder { get; set; } // se modifica solo si, lo determina el agronomo, al finalizar y poner incompleto.
+        public DateTime? InitDate { get; set; } // fecha de inicio que el agronomo puede determinar. 
+        public DateTime? EndDate { get; set; } // fecha de fin que el agronomo determina
+        public string IdUserApplicator { get; set; } // id user applicator
+        public string IdNebulizer { get; set; } // nebilizadora
+        public string IdTractor { get; set; } // tractor
 
     }
 

@@ -104,8 +104,17 @@ namespace trifenix.agro.external.operations.entities.orders {
 
             var relatedEntities = new List<RelatedId>();
 
+
+            var query = $"EntityIndex eq {(int)EntityRelated.BARRACK_EVENT} and RelatedIds/any(elementId: elementId/EntityIndex eq {(int)EntityRelated.ORDER} and elementId/EntityId eq '{id}')";
+
+            var elements = search.FilterElements<EntitySearch>(query);
             // Eliminar antes de agregar
-            search.DeleteElements(search.FilterElements<EntitySearch>($"EntityIndex eq {(int)EntityRelated.BARRACK_EVENT} and RelatedIds/any(elementId: elementId/EntityIndex eq {(int)EntityRelated.ORDER} and elementId/EntityId eq '{id}'"));
+            if (elements.Any())
+            {
+                search.DeleteElements(elements);
+            } 
+
+
             //TODO : Eliminar antes de agregar
             foreach (var barrack in input.Barracks) {
                 var idGuid = Guid.NewGuid().ToString("N");

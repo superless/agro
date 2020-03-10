@@ -8,9 +8,9 @@ namespace trifenix.agro.db.model.agro.orders
     [SharedCosmosCollection("agro", "ExecutionOrderStatus")]
     public class ExecutionOrderStatus : DocumentBase, ISharedCosmosEntity
     {
-        public override string Id { get; set; }
-        public DateTime Created { get; set; }        
-        public ExecutionStatus ExecutionStatus { get; set; }
+        public override string Id { get; set; } 
+        public DateTime Created { get; set; }  // fecha de creacion     
+        public ExecutionStatus ExecutionStatus { get; set; } // etapas del proceso
 
         public FinishStatus FinishStatus;
 

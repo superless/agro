@@ -100,7 +100,7 @@ namespace trifenix.agro.external.operations.entities.main
             {
                 properties.Add(new Property
                 {
-                    PropertyIndex = (int)PropertyRelated.GENERIC_PHONE,
+                    PropertyIndex = (int)PropertyRelated.GENERIC_WEBPAGE,
                     Value = input.WebPage
                 });
             }

@@ -11,5 +11,6 @@ namespace trifenix.agro.enums
         InProcess = 1,
         EndProcess = 2,
         Closed = 3
+        
     }
 }

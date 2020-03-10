@@ -1,27 +1,27 @@
 ﻿namespace trifenix.agro.enums {
 
     public enum EntityRelated {
-        BARRACK = 1,
-        BUSINESSNAME = 2,
+        BARRACK = 1, 
+        BUSINESSNAME = 2, // search
         CATEGORY_INGREDIENT = 3,
-        CERTIFIED_ENTITY = 4,
+        CERTIFIED_ENTITY = 4, // search
         COSTCENTER = 5,
         DOSES = 6,
         INGREDIENT = 7,
-        JOB = 8,
+        JOB = 8, // search
         NEBULIZER = 9,
         PHENOLOGICAL_EVENT = 10,
-        PLOTLAND = 11,
+        PLOTLAND = 11, // search
         PRODUCT = 12,
         ROLE = 13,
         ROOTSTOCK = 14,
         SEASON = 15,
-        SECTOR = 16,
+        SECTOR = 16, // sector
         PREORDER = 17,
         TARGET = 18,
         TRACTOR = 19,
-        USER = 20,
-        VARIETY = 21,
+        USER = 20, //user
+        VARIETY = 21, // search
         NOTIFICATION_EVENT = 22,
         POLLINATOR = 23,
         ORDER_FOLDER = 24,
@@ -30,32 +30,33 @@
         BARRACK_EVENT = 27,
         DOSES_ORDER = 28,
         EXECUTION_ORDER_STATUS = 29,
-        SPECIE = 30,
-        GEOPOINT = 31
+        SPECIE = 30, // search
+        GEOPOINT = 31 // search
     }
 
     public enum PropertyRelated {
-        GENERIC_GIRO,
-        GENERIC_ABBREVIATION,
-        GENERIC_BRAND,
-        GENERIC_CODE,
-        GENERIC_EMAIL,
-        GENERIC_END_DATE,
-        GENERIC_NAME,
-        GENERIC_RUT,
-        GENERIC_START_DATE,
-        GENERIC_DESC,
-        GENERIC_PATH,
-        GENERIC_QUANTITY_HECTARE,
-        GENERIC_COMMENT,
-        GENERIC_PHONE,
-        GENERIC_NUMBER_OF_PLANTS,
-        GENERIC_PLANT_IN_YEAR,
-        GENERIC_HECTARES,
-        GENERIC_LATITUDE,
-        GENERIC_LONGITUDE,
-        GENERIC_WETTING,
-        OBJECT_ID_AAD
+        GENERIC_GIRO = 0,
+        GENERIC_ABBREVIATION = 1,
+        GENERIC_BRAND = 2,
+        GENERIC_CODE = 3,
+        GENERIC_EMAIL = 4 ,
+        GENERIC_END_DATE= 5,
+        GENERIC_NAME = 6,
+        GENERIC_RUT = 7,
+        GENERIC_START_DATE = 8,
+        GENERIC_DESC = 9,
+        GENERIC_PATH = 10,
+        GENERIC_QUANTITY_HECTARE = 11,
+        GENERIC_COMMENT = 12,
+        GENERIC_PHONE=13,
+        GENERIC_NUMBER_OF_PLANTS=14,
+        GENERIC_PLANT_IN_YEAR = 15,
+        GENERIC_HECTARES = 16,
+        GENERIC_LATITUDE = 17,
+        GENERIC_LONGITUDE = 18,
+        GENERIC_WETTING = 19,
+        OBJECT_ID_AAD = 20,
+        GENERIC_WEBPAGE = 21
     }
 
     public enum EnumerationRelated {
