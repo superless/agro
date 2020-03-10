@@ -27,6 +27,8 @@ namespace trifenix.agro.db.model.agro.orders {
 
         public string[] IdsPhenologicalPreOrder { get; set; }
 
+        
+
         public BarrackOrderInstance[] Barracks { get; set; }
 
     }

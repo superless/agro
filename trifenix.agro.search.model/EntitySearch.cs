@@ -10,7 +10,7 @@ namespace trifenix.agro.search.model {
         [IsFilterable]
         public string Id { get; set; }                              
 
-        [IsFilterable]
+        [IsFilterable, IsFacetable]
         public int EntityIndex { get; set; }                        
 
         [IsSortable]

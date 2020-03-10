@@ -13,15 +13,22 @@ namespace trifenix.agro.external.operations {
         public MainReadOperationName(IMainGenericDb<T> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<T> commonDb) : base(repo, existElement, search, commonDb) {}
 
         public async Task<bool> Validate(T2 input) {
-            if (string.IsNullOrWhiteSpace(input.Id)) {
+            if (string.IsNullOrWhiteSpace(input.Id))
+            {
                 var existsName = await existElement.ExistsWithPropertyValue<T>("Name", input.Name);
                 return !existsName;
+
             }
-            var existsId = await existElement.ExistsById<T>(input.Id);
-            if (!existsId)
-                return false;            
-            var existEditName = await existElement.ExistsWithPropertyValue<T>("Name", input.Name, input.Id);
-            return !existEditName;
+            else {
+                var existsId = await existElement.ExistsById<T>(input.Id);
+                if (!existsId)
+                    return false;
+
+                var existEditName = await existElement.ExistsWithPropertyValue<T>("Name", input.Name, input.Id);
+                return !existEditName;
+            }
+
+            
         }
 
     }

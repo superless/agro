@@ -80,7 +80,19 @@ namespace trifenix.agro.external.operations.entities.fields {
             if(barrackIndex.Any())
                 foreach(string idGeo in barrackIndex.ElementAt(0).RelatedIds.AsEnumerable().Where(relatedId => relatedId.EntityIndex == (int)EntityRelated.GEOPOINT).Select(relatedId => relatedId.EntityId))
                     search.DeleteElements(search.FilterElements<EntitySearch>($"EntityIndex eq {(int)EntityRelated.GEOPOINT} and Id eq '{idGeo}'"));
-            //TODO : ELiminar geoPoints
+
+
+            var query = $"EntityIndex eq {(int)EntityRelated.GEOPOINT} and RelatedIds/any(elementId: elementId/EntityIndex eq {(int)EntityRelated.BARRACK} and elementId/EntityId eq '{id}')";
+
+            var elements = search.FilterElements<EntitySearch>(query);
+            if (elements.Any())
+            {
+                search.DeleteElements(search.FilterElements<EntitySearch>(query));
+            }
+
+
+            
+
             if (input.GeographicalPoints != null && input.GeographicalPoints.Any()) {
                 var keysGeo = new List<EntitySearch>();
                 foreach (var geo in input.GeographicalPoints) {
@@ -91,7 +103,11 @@ namespace trifenix.agro.external.operations.entities.fields {
                         RelatedProperties = new Property[] {
                             new Property { PropertyIndex = (int)PropertyRelated.GENERIC_LATITUDE, Value = $"{geo.Latitude}" },
                             new Property { PropertyIndex = (int)PropertyRelated.GENERIC_LONGITUDE, Value = $"{geo.Longitude}" }
-                        }
+                        },
+                        RelatedIds = new RelatedId[] { 
+                            new RelatedId{ EntityIndex = (int)EntityRelated.BARRACK, EntityId = id
+                            }
+                        } 
                     });
                 }
                 search.AddElements(keysGeo);

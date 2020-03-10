@@ -9,6 +9,7 @@ using trifenix.agro.db.model.agro.core;
 using trifenix.agro.db.model.agro.orders;
 using trifenix.agro.email.interfaces;
 using trifenix.agro.external.interfaces;
+using trifenix.agro.external.operations.entities;
 using trifenix.agro.external.operations.entities.events;
 using trifenix.agro.external.operations.entities.ext;
 using trifenix.agro.external.operations.entities.fields;
@@ -47,11 +48,7 @@ namespace trifenix.agro.external.operations
         public IGenericOperation<UserActivity, UserActivityInput> UserActivity => new UserActivityOperations(new MainGenericDb<UserActivity>(arguments), ExistsElements, _searchServiceInstance, GraphApi, new CommonDbOperations<UserActivity>());
 
         public IExistElement ExistsElements => new CosmosExistElement(arguments);
-
-
         public ICommonQueries CommonQueries => new CommonQueries(arguments);
-
-
         public IGenericOperation<Sector, SectorInput> Sectors => new SectorOperations(new MainGenericDb<Sector>(arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<Sector>());
         public IGenericOperation<PlotLand, PlotLandInput> PlotLands => new PlotLandOperations(new MainGenericDb<PlotLand>(arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<PlotLand>());
 
@@ -91,10 +88,7 @@ namespace trifenix.agro.external.operations
         public IGenericOperation<UserApplicator, UserApplicatorInput> Users => new UserOperations(new MainGenericDb<UserApplicator>(arguments), ExistsElements, _searchServiceInstance, 
             GraphApi, new CommonDbOperations<UserApplicator>());
 
-
         public IGenericOperation<Nebulizer, NebulizerInput> Nebulizers => new NebulizerOperations(new MainGenericDb<Nebulizer>(arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<Nebulizer>());
-        
-
 
         public IGenericOperation<Tractor, TractorInput> Tractors => new TractorOperations(new MainGenericDb<Tractor>(arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<Tractor>());
 
@@ -120,25 +114,17 @@ namespace trifenix.agro.external.operations
 
         public IGenericOperation<NotificationEvent, NotificationEventInput> NotificationEvents => new NotificationEventOperations(new MainGenericDb<NotificationEvent>(arguments), ExistsElements, _searchServiceInstance, CommonQueries, _email, _uploadImage, _weatherApi, new CommonDbOperations<NotificationEvent>());
 
-
         public IGenericOperation<PreOrder, PreOrderInput> PreOrders => new PreOrdersOperations(new MainGenericDb<PreOrder>(arguments), ExistsElements, _searchServiceInstance, CommonQueries, new CommonDbOperations<PreOrder>());
-
-
-
-        
-
 
         public IGenericOperation<ApplicationOrder, ApplicationOrderInput> ApplicationOrders => new ApplicationOrderOperations(new MainGenericDb<ApplicationOrder>(arguments), ExistsElements, _searchServiceInstance, CommonQueries, new CommonDbOperations<ApplicationOrder>());
 
-
-
-
-        
 
         public IGenericOperation<ExecutionOrder, ExecutionOrderInput> ExecutionOrders => new ExecutionOrderOperations(new MainGenericDb<ExecutionOrder>(arguments), ExistsElements, _searchServiceInstance, CommonQueries, new CommonDbOperations<ExecutionOrder>());
 
         public IGenericOperation<ExecutionOrderStatus, ExecutionOrderStatusInput> ExecutionStatus => new ExecutionOrderStatusOperations(new MainGenericDb<ExecutionOrderStatus>(arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<ExecutionOrderStatus>());
 
+
+        public IGenericOperation<Comment, CommentInput> Comments => new CommentOperation(new MainGenericDb<Comment>(arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<Comment>());
 
     }
 }

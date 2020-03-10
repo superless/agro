@@ -1,48 +1,67 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using trifenix.agro.db;
 using trifenix.agro.enums;
 using trifenix.agro.external.operations;
 using trifenix.agro.model.external.Input;
-using trifenix.agro.search.interfaces;
+using trifenix.agro.search.operations;
 
 namespace trifenix.agro.console
 {
     public static class SearchHelper
     {
-        public static async Task UpdateSearch(AgroDbArguments dbArguments, IAgroSearch searchServiceInstance)
+        public static async Task UpdateSearch()
         {
+            var dbArguments = new AgroDbArguments
+            {
+                EndPointUrl = "https://agricola-jhm.documents.azure.com:443/",
+                NameDb = "agrodb",
+                PrimaryKey = "yG6EIAT1dKSBaS7oSZizTrWQGGfwSb2ot2prYJwQOLHYk3cGmzvvhGohSzFZYHueSFDiptUAqCQYYSeSetTiKw=="
+            };
 
+            var searchServiceInstance = new AgroSearch("agrosearch", "016DAA5EF1158FEEEE58DA60996D5981");
+
+
+
+            
 
             var agroManager = new AgroManager(dbArguments, null, null, null, null, searchServiceInstance);
 
-            var species = await agroManager.Species.GetElements();
-
-            var varieties = await agroManager.Varieties.GetElements();
-
-            var barracks = await agroManager.Barracks.GetElements();
-
-            var businessNames = await agroManager.BusinessNames.GetElements();
-
-            var seasons = await agroManager.Seasons.GetElements();
-
-            var sectors = await agroManager.Sectors.GetElements();
 
             var rootStocks = await agroManager.Rootstock.GetElements();
 
-            var certifiedEntity = await agroManager.CertifiedEntities.GetElements();
-
-            var plotlands = await agroManager.PlotLands.GetElements();
-
             var roles = await agroManager.Roles.GetElements();
 
-            var users = await agroManager.Users.GetElements();
+            var seasons = await agroManager.Seasons.GetElements();
 
             var costCenter = await agroManager.CostCenters.GetElements();
 
-            var jobs = await agroManager.Jobs.GetElements();
+
+
+            var species = await agroManager.Species.GetElements(); // search
+
+            var varieties = await agroManager.Varieties.GetElements(); // search
+
+            var barracks = await agroManager.Barracks.GetElements(); // search
+
+            var businessNames = await agroManager.BusinessNames.GetElements(); // search
+
+            
+            var sectors = await agroManager.Sectors.GetElements(); // search
+
+            
+
+            var certifiedEntity = await agroManager.CertifiedEntities.GetElements(); // seach
+
+            var plotlands = await agroManager.PlotLands.GetElements(); // search
+
+           
+
+            var users = await agroManager.Users.GetElements(); // search
+
+            
+
+            var jobs = await agroManager.Jobs.GetElements(); // search
 
             if (jobs.StatusResult == ExtGetDataResult.Success)
             {
@@ -121,20 +140,6 @@ namespace trifenix.agro.console
             }
 
 
-            if (plotlands.StatusResult == ExtGetDataResult.Success)
-            {
-                foreach (var item in plotlands.Result)
-                {
-                    await agroManager.PlotLands.Save(new PlotLandInput
-                    {
-                        Id = item.Id,
-                        Name = item.Name,
-                        IdSector = item.IdSector
-
-
-                    });
-                }
-            }
 
             if (certifiedEntity.StatusResult == ExtGetDataResult.Success)
             {
@@ -225,7 +230,7 @@ namespace trifenix.agro.console
                 }
             }
 
-            if (species.StatusResult == ExtGetDataResult.Success)
+            if (varieties.StatusResult == ExtGetDataResult.Success)
             {
                 foreach (var item in varieties.Result)
                 {
@@ -239,7 +244,7 @@ namespace trifenix.agro.console
                 }
             }
 
-            if (species.StatusResult == ExtGetDataResult.Success)
+            if (barracks.StatusResult == ExtGetDataResult.Success)
             {
                 foreach (var item in barracks.Result)
                 {

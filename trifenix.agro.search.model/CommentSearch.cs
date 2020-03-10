@@ -11,20 +11,18 @@ namespace trifenix.agro.search.model
         [IsFilterable]
         public string Id { get; set; }
 
-
-        
         public DateTime Created { get; set; }
 
 
 
-        [IsSearchable, IsSortable, IsFilterable]
-        public string UserName { get; set; }
+        [IsFilterable]
+        public string IdUser { get; set; }
+
+        [IsFilterable, IsFacetable]
+        public int EntityIndex { get; set; }
 
         [IsFilterable]
-        public string EntityName { get; set; }
-
-        [IsFilterable]
-        public string IdEntityName { get; set; }
+        public string EntityId { get; set; }
 
 
         [IsSearchable]
