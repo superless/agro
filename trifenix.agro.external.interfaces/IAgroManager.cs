@@ -12,7 +12,7 @@ namespace trifenix.agro.external.interfaces
         IExistElement ExistsElements { get; }
         IGenericOperation<UserActivity, UserActivityInput> UserActivity { get; }
         IGenericOperation<ApplicationOrder, ApplicationOrderInput> ApplicationOrder { get; }
-        IGenericOperation<ApplicationTarget, TargetInput> ApplicationTarget { get; }
+        IGenericOperation<ApplicationTarget, ApplicationTargetInput> ApplicationTarget { get; }
         IGenericOperation<Barrack, BarrackInput> Barrack { get; }
         IGenericOperation<BusinessName, BusinessNameInput> BusinessName { get; }
         IGenericOperation<CertifiedEntity, CertifiedEntityInput> CertifiedEntity { get; }
@@ -32,7 +32,7 @@ namespace trifenix.agro.external.interfaces
         IGenericOperation<PreOrder, PreOrderInput> PreOrder { get; }
         IGenericOperation<Product, ProductInput> Product { get; }
         IGenericOperation<Role, RoleInput> Role { get; }
-        IGenericOperation<Rootstock, RootStockInput> Rootstock { get; }
+        IGenericOperation<Rootstock, RootstockInput> Rootstock { get; }
         IGenericOperation<Season, SeasonInput> Season { get; }
         IGenericOperation<Sector, SectorInput> Sector { get; }
         IGenericOperation<Specie, SpecieInput> Specie { get; }

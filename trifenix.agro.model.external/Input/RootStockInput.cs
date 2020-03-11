@@ -2,7 +2,7 @@
 
 namespace trifenix.agro.model.external.Input
 {
-    public class RootStockInput : InputBaseName
+    public class RootstockInput : InputBaseName
     {
         public string Abbreviation { get; set; }
 
@@ -10,7 +10,7 @@ namespace trifenix.agro.model.external.Input
 
     }
 
-    public class RootStockSwaggerInput {
+    public class RootstockSwaggerInput {
 
 
         [Required]

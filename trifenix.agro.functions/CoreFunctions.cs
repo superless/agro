@@ -266,7 +266,7 @@ namespace trifenix.agro.functions
         public static async Task<IActionResult> TargetPost(
 
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "targets")]
-            [RequestBodyType(typeof(TargetSwaggerInput), "Objetivo de aplicación")]
+            [RequestBodyType(typeof(ApplicationTargetSwaggerInput), "Objetivo de aplicación")]
             HttpRequest req, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ApplicationTarget, string.Empty);
@@ -284,7 +284,7 @@ namespace trifenix.agro.functions
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> TargetPut(
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "targets/{id}")]
-            [RequestBodyType(typeof(TargetSwaggerInput), "Objetivo de aplicación")]
+            [RequestBodyType(typeof(ApplicationTargetSwaggerInput), "Objetivo de aplicación")]
             HttpRequest req, string id, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ApplicationTarget, id);
@@ -797,7 +797,7 @@ namespace trifenix.agro.functions
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> RootStockPost(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "rootstock")]
-            [RequestBodyType(typeof(RootStockSwaggerInput), "Raíz")]
+            [RequestBodyType(typeof(RootstockSwaggerInput), "Raíz")]
             HttpRequest req, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Rootstock, string.Empty);
@@ -816,7 +816,7 @@ namespace trifenix.agro.functions
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> RootStockPut(
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "rootstock/{id}")]
-            [RequestBodyType(typeof(RootStockSwaggerInput), "Raíz")]
+            [RequestBodyType(typeof(RootstockSwaggerInput), "Raíz")]
             HttpRequest req, string id, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Rootstock, id);

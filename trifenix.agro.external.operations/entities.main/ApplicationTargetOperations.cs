@@ -17,13 +17,13 @@ namespace trifenix.agro.external.operations.entities.main
 {
 
 
-    public class ApplicationTargetOperations : MainReadOperationName<ApplicationTarget, TargetInput>, IGenericOperation<ApplicationTarget, TargetInput>
+    public class ApplicationTargetOperations : MainReadOperationName<ApplicationTarget, ApplicationTargetInput>, IGenericOperation<ApplicationTarget, ApplicationTargetInput>
     {
         public ApplicationTargetOperations(IMainGenericDb<ApplicationTarget> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<ApplicationTarget> commonDb) : base(repo, existElement, search, commonDb)
         {
         }
 
-        public async Task<ExtPostContainer<string>> Save(TargetInput input)
+        public async Task<ExtPostContainer<string>> Save(ApplicationTargetInput input)
         {
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
 
