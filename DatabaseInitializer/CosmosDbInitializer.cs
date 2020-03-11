@@ -1,63 +1,64 @@
-﻿using Cosmonaut;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using trifenix.agro.cosmosdbinitializer.interfaces;
-using trifenix.agro.db.model.agro.core;
+using trifenix.agro.external.interfaces;
+using trifenix.agro.model.external.Input;
 
-namespace trifenix.agro.authentication.operations {
+namespace trifenix.agro.authentication.operations
+{
     public class CosmosDbInitializer : ICosmosDbInitializer {
 
-        private static CosmosStoreSettings StoreSettings;
+        //private static CosmosStoreSettings StoreSettings;
         private readonly Assembly Assembly;
-        private readonly bool AutoGuid;
+        private readonly IAgroManager Manager;
 
-        public CosmosDbInitializer(string CosmosDbName, string CosmosDbUri, string CosmosDbPrimaryKey, string AssemblyName, bool? autoGuid) {
-            StoreSettings = new CosmosStoreSettings(CosmosDbName ?? "agrodb", CosmosDbUri ?? "https://agricola-jhm.documents.azure.com:443", CosmosDbPrimaryKey ?? "yG6EIAT1dKSBaS7oSZizTrWQGGfwSb2ot2prYJwQOLHYk3cGmzvvhGohSzFZYHueSFDiptUAqCQYYSeSetTiKw==");
-            Assembly = !string.IsNullOrWhiteSpace(AssemblyName) ? Assembly.Load(AssemblyName) : typeof(BusinessName).Assembly;
-            AutoGuid = autoGuid ?? false;
+        public CosmosDbInitializer(IAgroManager manager, string AssemblyName) {
+            Manager = manager;
+            //StoreSettings = new CosmosStoreSettings(CosmosDbName ?? "agrodb", CosmosDbUri ?? "https://agricola-jhm.documents.azure.com:443", CosmosDbPrimaryKey ?? "yG6EIAT1dKSBaS7oSZizTrWQGGfwSb2ot2prYJwQOLHYk3cGmzvvhGohSzFZYHueSFDiptUAqCQYYSeSetTiKw==");
+            Assembly = !string.IsNullOrWhiteSpace(AssemblyName) ? Assembly.Load(AssemblyName) : typeof(BusinessNameInput).Assembly;
         }
 
-        public static CosmosStore<T> CreateStoreInstance<T>() where T : class => new CosmosStore<T>(StoreSettings);
+        //public static CosmosStore<T> CreateStoreInstance<T>() where T : class => new CosmosStore<T>(StoreSettings);
 
-        public static T CreateEntityInstance<T>() => (T)Activator.CreateInstance(typeof(T));
+        public static T CreateEntityInputInstance<T>() => (T)Activator.CreateInstance(typeof(T));
 
         public static T GetValue<T>(JValue value) => typeof(T).Equals(typeof(DateTime)) ? (T)(object)DateTime.Parse(value.Value<string>()) : value.Value<T>();
 
-        public void MapJsonToDB(dynamic json) {
+        public async void MapJsonToDB(dynamic json) {
             if (!(json is JObject))
                 throw new Exception("\nError! Se espera un Json.");
-            Type entityType;
+            Type entityInputType;
             PropertyInfo prop;
-            dynamic Store, dbInstance;
+            //dynamic Store;
+            dynamic dbInputInstance, EntityOperations;
             List<string> Guids = new List<string>();
-            if (AutoGuid) {
-                foreach (var entity in json)
-                    foreach (var jsonInstance in entity.Value)
-                        Guids.Add(Guid.NewGuid().ToString("N"));
-            }
+            string idRelated;
             foreach (var entity in json) {
-                entityType = Assembly.GetTypes().SingleOrDefault(type => type.Name.Equals(entity.Name));
-                if (entityType == null)
+                entityInputType = Assembly.GetTypes().SingleOrDefault(type => type.Name.Equals($"{entity.Name}Input"));
+                if (entityInputType == null)
                     continue;
-                Store = typeof(CosmosDbInitializer).GetMethod("CreateStoreInstance").MakeGenericMethod(entityType).Invoke(null, null);
-                dbInstance = typeof(CosmosDbInitializer).GetMethod("CreateEntityInstance").MakeGenericMethod(entityType).Invoke(null, null);
+                EntityOperations = Manager.GetType().GetProperty(entity.Name).GetValue(Manager);
+                //Store = typeof(CosmosDbInitializer).GetMethod("CreateStoreInstance").MakeGenericMethod(entityType).Invoke(null, null);
+                dbInputInstance = typeof(CosmosDbInitializer).GetMethod("CreateEntityInputInstance").MakeGenericMethod(entityInputType).Invoke(null, null);
                 foreach (var jsonInstance in entity.Value) {
                     var properties = jsonInstance.Properties();
                     foreach (var p in properties) {
-                        prop = entityType.GetProperty(p.Name);
+                        prop = entityInputType.GetProperty(p.Name);
                         var value = typeof(CosmosDbInitializer).GetMethod("GetValue").MakeGenericMethod(prop.PropertyType).Invoke(null, new object[] { p.Value });
-                        if (AutoGuid) {
-                            int index = GetNumberOfGuid(value.ToString());
-                            if(index != -1)
-                                value = Guids.ElementAt(index);
-                        }
-                        prop?.SetValue(dbInstance, value);
+                        int index = GetNumberOfGuid(value.ToString());
+                        if(index != -1 && index < Guids.Count)
+                            value = Guids.ElementAt(index);
+                        prop?.SetValue(dbInputInstance, value);
                     }
-                    if (!string.IsNullOrWhiteSpace(dbInstance.Id))
-                        Store.UpsertAsync(dbInstance);
+                    try {
+                        idRelated = (await EntityOperations.Save(dbInputInstance)).IdRelated;
+                        Guids.Add(idRelated);
+                    } catch(Exception e) {
+                        Console.WriteLine(e.Message);
+                    }
                 }
             }
         }

@@ -9,11 +9,6 @@ using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using trifenix.agro.db;
-using trifenix.agro.db.applicationsReference;
-using trifenix.agro.db.applicationsReference.agro.Common;
-using trifenix.agro.db.interfaces;
-using trifenix.agro.db.interfaces.agro.common;
-using trifenix.agro.db.model.agro;
 using trifenix.agro.microsoftgraph.interfaces;
 
 namespace trifenix.agro.microsoftgraph.operations
@@ -21,23 +16,15 @@ namespace trifenix.agro.microsoftgraph.operations
     public class GraphApi : IGraphApi {
 
         private readonly IConfidentialClientApplication _confidentialClientApplication;
-        private readonly ICommonQueries queries;
-        private readonly IMainGenericDb<UserApplicator> repo;
-        private readonly string UserId;
 
-        public GraphApi(string objectIdAAD, AgroDbArguments arguments) {
-            UserId = queries.GetUserIdFromAAD(objectIdAAD).Result;
-            queries = new CommonQueries(arguments);
-            repo = new MainGenericDb<UserApplicator>(arguments);
+        public GraphApi(AgroDbArguments arguments) {
             _confidentialClientApplication = ConfidentialClientApplicationBuilder
                 .Create(Environment.GetEnvironmentVariable("clientID", EnvironmentVariableTarget.Process))
                 .WithAuthority("https://login.microsoftonline.com/" + Environment.GetEnvironmentVariable("tenantID", EnvironmentVariableTarget.Process) + "/v2.0")
                 .WithClientSecret(Environment.GetEnvironmentVariable("clientSecret", EnvironmentVariableTarget.Process))
                 .Build();
         }
-
-        public string GetUserId() => UserId;
-
+        
         public async Task<string> CreateUserIntoActiveDirectory(string name, string email) {
             var scopes = new string[] { "https://graph.microsoft.com/.default" };
             var authResult = await _confidentialClientApplication.AcquireTokenForClient(scopes).ExecuteAsync();

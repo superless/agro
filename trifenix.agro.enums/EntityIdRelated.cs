@@ -55,6 +55,7 @@
         GENERIC_LATITUDE,
         GENERIC_LONGITUDE,
         GENERIC_WETTING,
+        GENERIC_WEBPAGE,
         OBJECT_ID_AAD
     }
 

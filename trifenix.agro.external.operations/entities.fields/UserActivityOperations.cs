@@ -6,7 +6,6 @@ using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.enums;
 using trifenix.agro.external.interfaces;
-using trifenix.agro.microsoftgraph.interfaces;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
@@ -15,19 +14,17 @@ namespace trifenix.agro.external.operations.entities.fields {
 
     public class UserActivityOperations : MainReadOperation<UserActivity>, IGenericOperation<UserActivity, UserActivityInput> {
 
-        private readonly IGraphApi graphApi;
+        private readonly string UserId;
 
-        public UserActivityOperations(IMainGenericDb<UserActivity> repo, IExistElement existElement, IAgroSearch search, IGraphApi graphApi, ICommonDbOperations<UserActivity> commonDb) : base(repo, existElement, search, commonDb)
-        {
-            this.graphApi = graphApi;
+        public UserActivityOperations(IMainGenericDb<UserActivity> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<UserActivity> commonDb, string userId) : base(repo, existElement, search, commonDb) {
+            UserId = userId;
         }
 
         public async Task<ExtPostContainer<string>> Save(UserActivityInput input) {
             var id = Guid.NewGuid().ToString("N");
-            var userId = graphApi.GetUserId();
             await repo.CreateUpdate(new UserActivity {
                 Id = id,
-                UserId = userId,
+                UserId = UserId,
                 Action = input.Action,
                 Date = input.Date,
                 EntityName = input.EntityName,

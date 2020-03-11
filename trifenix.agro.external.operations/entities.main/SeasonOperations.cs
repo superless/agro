@@ -33,8 +33,8 @@ namespace trifenix.agro.external.operations.entities.main
             {
                 Id = id,
                 Current = current,
-                Start = input.StartDate,
-                End = input.EndDate,
+                StartDate = input.StartDate,
+                EndDate = input.EndDate,
                 IdCostCenter = input.IdCostCenter
             };
 
