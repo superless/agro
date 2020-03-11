@@ -31,9 +31,7 @@ namespace trifenix.agro.console {
             Console.WriteLine("Hora de inicio: {0}", DateTime.Now.ToString("hh\\:mm\\:ss"));
             Stopwatch timer = Stopwatch.StartNew();
 
-            await SearchHelper.UpdateSearch();
-
-            return;
+            //await SearchHelper.UpdateSearch();
 
             #region Reflexion
             //Console.WriteLine("typeof(Barrack).Name:            " + typeof(Barrack).Name);

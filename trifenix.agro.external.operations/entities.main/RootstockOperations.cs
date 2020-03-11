@@ -15,13 +15,13 @@ using trifenix.agro.search.model;
 
 namespace trifenix.agro.external.operations.entities.main
 {
-    public class RootstockOperations : MainReadOperationName<Rootstock, RootStockInput>, IGenericOperation<Rootstock, RootStockInput>
+    public class RootstockOperations : MainReadOperationName<Rootstock, RootstockInput>, IGenericOperation<Rootstock, RootstockInput>
     {
         public RootstockOperations(IMainGenericDb<Rootstock> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Rootstock> commonDb) : base(repo, existElement, search, commonDb)
         {
         }
 
-        public async Task<ExtPostContainer<string>> Save(RootStockInput input)
+        public async Task<ExtPostContainer<string>> Save(RootstockInput input)
         {
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
 
