@@ -16,7 +16,7 @@ using trifenix.agro.db.interfaces.common;
 
 namespace trifenix.agro.external.operations.entities.main
 {
-    public class SeasonOperations : MainReadOperation<Season>, IGenericOperation<Season, SeasonInput>
+    public class SeasonOperations : MainOperation<Season>, IGenericOperation<Season, SeasonInput>
     {
         public SeasonOperations(IMainGenericDb<Season> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Season> commonDb) : base(repo, existElement, search, commonDb)
         {

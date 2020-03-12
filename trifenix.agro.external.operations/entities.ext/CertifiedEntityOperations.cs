@@ -15,7 +15,7 @@ using trifenix.agro.search.model;
 
 namespace trifenix.agro.external.operations.entities.ext
 {
-    public class CertifiedEntityOperations : MainReadOperationName<CertifiedEntity, CertifiedEntityInput>, IGenericOperation<CertifiedEntity, CertifiedEntityInput>
+    public class CertifiedEntityOperations : MainOperation<CertifiedEntity>, IGenericOperation<CertifiedEntity, CertifiedEntityInput>
     {
         public CertifiedEntityOperations(IMainGenericDb<CertifiedEntity> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<CertifiedEntity> commonDb) : base(repo, existElement, search, commonDb)
         {

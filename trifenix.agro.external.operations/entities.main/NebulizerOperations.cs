@@ -15,7 +15,7 @@ using trifenix.agro.search.model;
 
 namespace trifenix.agro.external.operations.entities.main
 {
-    public class NebulizerOperations : MainReadOperation<Nebulizer>, IGenericOperation<Nebulizer, NebulizerInput>
+    public class NebulizerOperations : MainOperation<Nebulizer>, IGenericOperation<Nebulizer, NebulizerInput>
     {
         public NebulizerOperations(IMainGenericDb<Nebulizer> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Nebulizer> commonDb) : base(repo, existElement, search, commonDb)
         {

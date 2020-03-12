@@ -17,7 +17,7 @@ using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
 
 namespace trifenix.agro.external.operations.entities.main {
-    public class UserOperations : MainReadOperationName<UserApplicator, UserApplicatorInput>, IGenericOperation<UserApplicator, UserApplicatorInput> {
+    public class UserOperations : MainOperation<UserApplicator>, IGenericOperation<UserApplicator, UserApplicatorInput> {
 
         private readonly IGraphApi graphApi;
 

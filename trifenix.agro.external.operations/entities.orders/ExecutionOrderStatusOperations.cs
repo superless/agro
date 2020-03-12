@@ -14,7 +14,7 @@ using trifenix.agro.search.model;
 
 namespace trifenix.agro.external.operations.entities.orders
 {
-    public class ExecutionOrderStatusOperations : MainReadOperation<ExecutionOrderStatus>, IGenericOperation<ExecutionOrderStatus, ExecutionOrderStatusInput>
+    public class ExecutionOrderStatusOperations : MainOperation<ExecutionOrderStatus>, IGenericOperation<ExecutionOrderStatus, ExecutionOrderStatusInput>
     {
         public ExecutionOrderStatusOperations(IMainGenericDb<ExecutionOrderStatus> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<ExecutionOrderStatus> commonDb) : base(repo, existElement, search, commonDb)
         {

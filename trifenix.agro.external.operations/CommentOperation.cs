@@ -15,7 +15,7 @@ using trifenix.agro.search.model;
 
 namespace trifenix.agro.external.operations.entities
 {
-    public class CommentOperation : MainReadOperation<Comment>, IGenericOperation<Comment, CommentInput>
+    public class CommentOperation : MainOperation<Comment>, IGenericOperation<Comment, CommentInput>
     {
         public CommentOperation(IMainGenericDb<Comment> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Comment> commonDb) : base(repo, existElement, search, commonDb)
         {

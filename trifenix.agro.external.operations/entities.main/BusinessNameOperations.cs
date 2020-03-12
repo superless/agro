@@ -13,35 +13,47 @@ using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
 
-namespace trifenix.agro.external.operations.entities.main {
-    public class BusinessNameOperations : MainReadOperationName<BusinessName, BusinessNameInput>, IGenericOperation<BusinessName, BusinessNameInput> {
+namespace trifenix.agro.external.operations.entities.main
+{
+    public class BusinessNameOperations : MainOperation<BusinessName>, IGenericOperation<BusinessName, BusinessNameInput> {
 
         public BusinessNameOperations(IMainGenericDb<BusinessName> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<BusinessName> commonDb) : base(repo, existElement, search, commonDb) { }
-
-        private async Task<string> ValidaBusinessName(BusinessNameInput input) {
+        
+        public async Task<string> Validate(BusinessNameInput input) {
+            string errors = string.Empty;
             if (!string.IsNullOrWhiteSpace(input.Id)) {
                 var existsId = await existElement.ExistsById<BusinessName>(input.Id);
                 if (!existsId)
-                    return "No existe el id de la razón social a modificar";
+                    errors += "No existe el id de la razón social a modificar.";
+                var existEditName = await existElement.ExistsWithPropertyValue<BusinessName>("Name", input.Name, input.Id);
+                if (existEditName)
+                    errors += "El nombre de la razón social, ya existe en otra.";
                 var existsEmail = await existElement.ExistsWithPropertyValue<BusinessName>("Email", input.Email, input.Id);
                 if (existsEmail)
-                    return "El correo electrónico de la razón social, ya existe en otra";
+                    errors += "El correo electrónico de la razón social, ya existe en otra.";
                 var existsRut = await existElement.ExistsWithPropertyValue<BusinessName>("Rut", input.Rut, input.Id);
                 if (existsRut)
-                    return "El rut de la razón social, ya existe en otra";
+                    errors += "El rut de la razón social, ya existe en otra.";
             }
             else {
+                var existsName = await existElement.ExistsWithPropertyValue<BusinessName>("Name", input.Name);
+                if(existsName)
+                    errors += "El nombre de la razón social, ya existe en otra.";
                 var existsEmail = await existElement.ExistsWithPropertyValue<BusinessName>("Email", input.Email);
                 if (existsEmail)
-                    return "El correo electrónico de la razón social, ya existe en otra";
+                    errors += "El correo electrónico de la razón social, ya existe en otra.";
                 var existsRut = await existElement.ExistsWithPropertyValue<BusinessName>( "Rut", input.Rut);
                 if (existsRut)
-                    return "El rut de la razón social, ya existe en otra";
+                    errors += "El rut de la razón social, ya existe en otra.";
             }
-            return string.Empty;        
+
+            return errors.Replace(".",".\r\n");  
         }
 
         public async Task<ExtPostContainer<string>> Save(BusinessNameInput input) {
+            var validaBusinessName = await Validate(input);
+            if (!string.IsNullOrEmpty(validaBusinessName))
+                throw new Exception(validaBusinessName);
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
             var businessName = new BusinessName {
                 Id = id,
@@ -52,12 +64,6 @@ namespace trifenix.agro.external.operations.entities.main {
                 Rut = input.Rut,
                 WebPage = input.WebPage
             };
-            var valida = await Validate(input);
-            if (!valida)
-                throw new Exception(string.Format(ErrorMessages.NotValid, businessName.CosmosEntityName));
-            var validaBusinessName = await ValidaBusinessName(input);
-            if (!string.IsNullOrWhiteSpace(validaBusinessName))
-                throw new Exception(validaBusinessName);
             await repo.CreateUpdate(businessName);
             var properties = new List<Property> {
                 new Property {

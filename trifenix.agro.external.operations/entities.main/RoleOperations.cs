@@ -15,7 +15,7 @@ using trifenix.agro.search.model;
 
 namespace trifenix.agro.external.operations.entities.main
 {
-    public class RoleOperations : MainReadOperationName<Role, RoleInput>, IGenericOperation<Role, RoleInput>
+    public class RoleOperations : MainOperation<Role>, IGenericOperation<Role, RoleInput>
     {
         public RoleOperations(IMainGenericDb<Role> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Role> commonDb) : base(repo, existElement, search, commonDb) { }
 

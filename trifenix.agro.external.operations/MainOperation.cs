@@ -10,15 +10,17 @@ using trifenix.agro.search.interfaces;
 
 namespace trifenix.agro.external.operations {
 
-   
-
-    public abstract class MainBaseOperation<T> where T : DocumentBase {
+    public abstract class MainOperation<T> where T : DocumentBase {
         
         protected readonly IMainGenericDb<T> repo;
+        protected readonly IExistElement existElement;
+        protected readonly IAgroSearch search;
         private readonly ICommonDbOperations<T> commonDb;
 
-        public MainBaseOperation(IMainGenericDb<T> repo, ICommonDbOperations<T> commonDb) {
+        public MainOperation(IMainGenericDb<T> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<T> commonDb) {
             this.repo = repo;
+            this.existElement = existElement;
+            this.search = search;
             this.commonDb = commonDb;
         }
 
@@ -27,27 +29,12 @@ namespace trifenix.agro.external.operations {
             return OperationHelper.GetElement(entity);
         }
 
-        public async Task<ExtGetContainer<List<T>>> GetElements()
-        {
+        public async Task<ExtGetContainer<List<T>>> GetElements() {
             var entityQuery = repo.GetEntities();
             var entities = await commonDb.TolistAsync(entityQuery);
             return OperationHelper.GetElements(entities);
         }
 
-    }
-
-    public abstract class MainReadOperation<T> : MainBaseOperation<T> where T : DocumentBase {
-        
-        protected readonly IExistElement existElement;
-        protected readonly IAgroSearch search;
-
-        public MainReadOperation(IMainGenericDb<T> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<T> commonDb) : base(repo, commonDb) {
-            this.existElement = existElement;
-            this.search = search;
-        }
-
-
-        
     }
 
 }

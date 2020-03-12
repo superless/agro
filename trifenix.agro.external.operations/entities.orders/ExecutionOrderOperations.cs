@@ -18,7 +18,7 @@ using trifenix.agro.search.model;
 
 namespace trifenix.agro.external.operations.entities.orders
 {
-    public class ExecutionOrderOperations : MainReadOperation<ExecutionOrder>, IGenericOperation<ExecutionOrder, ExecutionOrderInput>
+    public class ExecutionOrderOperations : MainOperation<ExecutionOrder>, IGenericOperation<ExecutionOrder, ExecutionOrderInput>
     {
         private readonly ICommonQueries commonQueries;
 

@@ -17,7 +17,7 @@ using trifenix.agro.search.model;
 
 namespace trifenix.agro.external.operations.entities.ext
 {
-    public class ProductOperations : MainReadOperationName<Product, ProductInput>, IGenericOperation<Product, ProductInput>
+    public class ProductOperations : MainOperation<Product>, IGenericOperation<Product, ProductInput>
     {
         private readonly IGenericOperation<Doses, DosesInput> dosesOperation;
 

@@ -21,7 +21,7 @@ namespace trifenix.agro.external.operations.entities.events {
     /// <summary>
     /// Todos las funciones necesarias para interactuar con eventos registrados en el monitoreo.
     /// </summary>
-    public class NotificationEventOperations : MainReadOperation<NotificationEvent>, IGenericOperation<NotificationEvent, NotificationEventInput> {
+    public class NotificationEventOperations : MainOperation<NotificationEvent>, IGenericOperation<NotificationEvent, NotificationEventInput> {
         
         private readonly ICommonQueries commonQueries;
         private readonly IEmail email;

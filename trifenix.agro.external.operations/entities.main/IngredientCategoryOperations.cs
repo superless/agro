@@ -15,7 +15,7 @@ using trifenix.agro.search.model;
 
 namespace trifenix.agro.external.operations.entities.main
 {
-    public class IngredientCategoryOperations : MainReadOperationName<IngredientCategory, IngredientCategoryInput>, IGenericOperation<IngredientCategory, IngredientCategoryInput>
+    public class IngredientCategoryOperations : MainOperation<IngredientCategory>, IGenericOperation<IngredientCategory, IngredientCategoryInput>
     {
         public IngredientCategoryOperations(IMainGenericDb<IngredientCategory> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<IngredientCategory> commonDb) : base(repo, existElement, search, commonDb)
         {

@@ -12,7 +12,7 @@ using trifenix.agro.search.interfaces;
 
 namespace trifenix.agro.external.operations.entities.fields {
 
-    public class UserActivityOperations : MainReadOperation<UserActivity>, IGenericOperation<UserActivity, UserActivityInput> {
+    public class UserActivityOperations : MainOperation<UserActivity>, IGenericOperation<UserActivity, UserActivityInput> {
 
         private readonly string UserId;
 

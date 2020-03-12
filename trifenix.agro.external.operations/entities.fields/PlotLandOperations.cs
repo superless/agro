@@ -15,7 +15,7 @@ using trifenix.agro.search.model;
 
 namespace trifenix.agro.external.operations.entities.fields
 {
-    public class PlotLandOperations : MainReadOperationName<PlotLand, PlotLandInput>, IGenericOperation<PlotLand, PlotLandInput>
+    public class PlotLandOperations : MainOperation<PlotLand>, IGenericOperation<PlotLand, PlotLandInput>
     {
         public PlotLandOperations(IMainGenericDb<PlotLand> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<PlotLand> commonDb) : base(repo, existElement, search, commonDb)
         {

@@ -16,7 +16,7 @@ using trifenix.agro.search.model;
 
 namespace trifenix.agro.external.operations.entities.fields {
 
-    public class BarrackOperations : MainReadOperationName<Barrack, BarrackInput>, IGenericOperation<Barrack, BarrackInput> {
+    public class BarrackOperations : MainOperation<Barrack>, IGenericOperation<Barrack, BarrackInput> {
 
         private readonly ICommonQueries commonQueries;
 

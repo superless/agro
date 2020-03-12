@@ -19,8 +19,6 @@ namespace trifenix.agro.db.applicationsReference {
         public async Task<string> CreateUpdate(T entity) {
             if (string.IsNullOrWhiteSpace(entity.Id))
                 throw new NonIdException<DocumentBase>(entity);
-
-
             var result = await Store.UpsertAsync(entity);
             if (!result.IsSuccess)
                 throw result.Exception;
@@ -35,6 +33,5 @@ namespace trifenix.agro.db.applicationsReference {
         public IQueryable<T> GetEntities() => Store.Query();
 
     }
-
 
 }

@@ -16,7 +16,7 @@ using trifenix.agro.search.model;
 
 namespace trifenix.agro.external.operations.entities.main
 {
-    public class PhenologicalEventOperations : MainReadOperationName<PhenologicalEvent, PhenologicalEventInput>, IGenericOperation<PhenologicalEvent, PhenologicalEventInput>
+    public class PhenologicalEventOperations : MainOperation<PhenologicalEvent>, IGenericOperation<PhenologicalEvent, PhenologicalEventInput>
     {
         public PhenologicalEventOperations(IMainGenericDb<PhenologicalEvent> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<PhenologicalEvent> commonDb) : base(repo, existElement, search, commonDb)
         {

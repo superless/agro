@@ -15,7 +15,7 @@ using trifenix.agro.search.model;
 
 namespace trifenix.agro.external.operations.entities.main
 {
-    public class SpecieOperations : MainReadOperationName<Specie, SpecieInput>, IGenericOperation<Specie, SpecieInput>
+    public class SpecieOperations : MainOperation<Specie>, IGenericOperation<Specie, SpecieInput>
     {
         public SpecieOperations(IMainGenericDb<Specie> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Specie> commonDb) : base(repo, existElement, search, commonDb)
         {

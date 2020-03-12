@@ -15,7 +15,7 @@ using trifenix.agro.search.model;
 
 namespace trifenix.agro.external.operations.entities.orders
 {
-    public class OrderFolderOperations : MainReadOperation<OrderFolder>, IGenericOperation<OrderFolder, OrderFolderInput>
+    public class OrderFolderOperations : MainOperation<OrderFolder>, IGenericOperation<OrderFolder, OrderFolderInput>
     {
         private readonly ICommonQueries commonQueries;
 
