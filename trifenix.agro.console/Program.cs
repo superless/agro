@@ -31,9 +31,7 @@ namespace trifenix.agro.console {
             Console.WriteLine("Hora de inicio: {0}", DateTime.Now.ToString("hh\\:mm\\:ss"));
             Stopwatch timer = Stopwatch.StartNew();
 
-            await SearchHelper.UpdateSearch();
-
-            return;
+            //await SearchHelper.UpdateSearch();
 
             #region Reflexion
             //Console.WriteLine("typeof(Barrack).Name:            " + typeof(Barrack).Name);
@@ -298,7 +296,7 @@ namespace trifenix.agro.console {
             entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
                 new CostCenter { Id = Guid.NewGuid().ToString("N"), Name = "Esmeralda", IdBusinessName = entitiesContainers.ElementAt(0).Entity.Id } });
             entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
-                new Season { Id = Guid.NewGuid().ToString("N"), Current = true, Start = new DateTime(2020,1,1), End = new DateTime(2021, 1, 1), IdCostCenter = entitiesContainers.ElementAt(1).Entity.Id } });
+                new Season { Id = Guid.NewGuid().ToString("N"), Current = true, StartDate = new DateTime(2020,1,1), EndDate = new DateTime(2021, 1, 1), IdCostCenter = entitiesContainers.ElementAt(1).Entity.Id } });
             entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity =
                 new Specie { Id = Guid.NewGuid().ToString("N"), Name = "Ciruela", Abbreviation = "CI" } });
             entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 

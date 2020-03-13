@@ -24,7 +24,8 @@ namespace trifenix.agro.functions.mantainers {
                     Id = null,
                     JsonResult = new UnauthorizedResult()
                 };
-            var manager = await ContainerMethods.AgroManager(claims);
+            string ObjectIdAAD = claims.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
+            var manager = await ContainerMethods.AgroManager(ObjectIdAAD);
             return await HttpProcessing(req, log, repo(manager), manager.UserActivity, id);
         }
 

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using trifenix.agro.db;
 using trifenix.agro.enums;
 using trifenix.agro.external.operations;
@@ -25,51 +24,51 @@ namespace trifenix.agro.console
 
             
 
-            var agroManager = new AgroManager(dbArguments, null, null, null, null, searchServiceInstance);
+            var agroManager = new AgroManager(dbArguments, null, null, null, searchServiceInstance, "ba7e86c8-6c2d-491d-bb2e-0dd39fdf5dc1");
 
 
             var rootStocks = await agroManager.Rootstock.GetElements();
 
-            var roles = await agroManager.Roles.GetElements();
+            var roles = await agroManager.Role.GetElements();
 
-            var seasons = await agroManager.Seasons.GetElements();
+            var seasons = await agroManager.Season.GetElements();
 
-            var costCenter = await agroManager.CostCenters.GetElements();
+            var costCenter = await agroManager.CostCenter.GetElements();
 
 
 
-            var species = await agroManager.Species.GetElements(); // search
+            var species = await agroManager.Specie.GetElements(); // search
 
-            var varieties = await agroManager.Varieties.GetElements(); // search
+            var varieties = await agroManager.Variety.GetElements(); // search
 
-            var barracks = await agroManager.Barracks.GetElements(); // search
+            var barracks = await agroManager.Barrack.GetElements(); // search
 
-            var businessNames = await agroManager.BusinessNames.GetElements(); // search
-
-            
-            var sectors = await agroManager.Sectors.GetElements(); // search
+            var businessNames = await agroManager.BusinessName.GetElements(); // search
 
             
+            var sectors = await agroManager.Sector.GetElements(); // search
 
-            var certifiedEntity = await agroManager.CertifiedEntities.GetElements(); // seach
+            
 
-            var plotlands = await agroManager.PlotLands.GetElements(); // search
+            var certifiedEntity = await agroManager.CertifiedEntity.GetElements(); // seach
+
+            var plotlands = await agroManager.PlotLand.GetElements(); // search
 
            
 
-            var users = await agroManager.Users.GetElements(); // search
+            var users = await agroManager.UserApplicator.GetElements(); // search
 
             
 
-            var jobs = await agroManager.Jobs.GetElements(); // search
+            var jobs = await agroManager.Job.GetElements(); // search
 
-            var ingredients = await agroManager.Ingredients.GetElements();
+            var ingredients = await agroManager.Ingredient.GetElements();
 
             if (ingredients.StatusResult == ExtGetDataResult.Success)
             {
                 foreach (var item in ingredients.Result)
                 {
-                    await agroManager.Ingredients.Save(new IngredientInput
+                    await agroManager.Ingredient.Save(new IngredientInput
                     {
                         Id = item.Id,
                         Name = item.Name,
@@ -85,7 +84,7 @@ namespace trifenix.agro.console
             {
                 foreach (var item in jobs.Result)
                 {
-                    await agroManager.Jobs.Save(new JobInput
+                    await agroManager.Job.Save(new JobInput
                     {
                         Id = item.Id,
                         Name = item.Name
@@ -99,7 +98,7 @@ namespace trifenix.agro.console
             {
                 foreach (var item in costCenter.Result)
                 {
-                    await agroManager.CostCenters.Save(new CostCenterInput
+                    await agroManager.CostCenter.Save(new CostCenterInput
                     {
                         Id = item.Id,
                         Name = item.Name,
@@ -113,7 +112,7 @@ namespace trifenix.agro.console
             {
                 foreach (var item in users.Result)
                 {
-                    await agroManager.Users.Save(new UserApplicatorInput
+                    await agroManager.UserApplicator.Save(new UserApplicatorInput
                     {
                         Id = item.Id,
                         Name = item.Name,
@@ -132,7 +131,7 @@ namespace trifenix.agro.console
             {
                 foreach (var item in roles.Result)
                 {
-                    await agroManager.Roles.Save(new RoleInput
+                    await agroManager.Role.Save(new RoleInput
                     {
                         Id = item.Id,
                         Name = item.Name
@@ -146,7 +145,7 @@ namespace trifenix.agro.console
             {
                 foreach (var item in plotlands.Result)
                 {
-                    await agroManager.PlotLands.Save(new PlotLandInput
+                    await agroManager.PlotLand.Save(new PlotLandInput
                     {
                         Id = item.Id,
                         Name = item.Name,
@@ -163,7 +162,7 @@ namespace trifenix.agro.console
             {
                 foreach (var item in certifiedEntity.Result)
                 {
-                    await agroManager.CertifiedEntities.Save(new CertifiedEntityInput
+                    await agroManager.CertifiedEntity.Save(new CertifiedEntityInput
                     {
                         Id = item.Id,
                         Name = item.Name,
@@ -177,7 +176,7 @@ namespace trifenix.agro.console
             {
                 foreach (var item in rootStocks.Result)
                 {
-                    await agroManager.Rootstock.Save(new RootStockInput
+                    await agroManager.Rootstock.Save(new RootstockInput
                     {
                         Id = item.Id,
                         Name = item.Name,
@@ -190,7 +189,7 @@ namespace trifenix.agro.console
             {
                 foreach (var item in sectors.Result)
                 {
-                    await agroManager.Sectors.Save(new SectorInput
+                    await agroManager.Sector.Save(new SectorInput
                     {
                         Id = item.Id,
                         Name = item.Name
@@ -204,12 +203,12 @@ namespace trifenix.agro.console
             {
                 foreach (var item in seasons.Result)
                 {
-                    await agroManager.Seasons.Save(new SeasonInput
+                    await agroManager.Season.Save(new SeasonInput
                     {
                         Id = item.Id,
                         Current = item.Current,
-                        EndDate = item.End,
-                        StartDate = item.Start,
+                        EndDate = item.EndDate,
+                        StartDate = item.StartDate,
                         IdCostCenter = item.IdCostCenter
 
                     });
@@ -221,7 +220,7 @@ namespace trifenix.agro.console
             {
                 foreach (var item in businessNames.Result)
                 {
-                    await agroManager.BusinessNames.Save(new BusinessNameInput
+                    await agroManager.BusinessName.Save(new BusinessNameInput
                     {
                         Id = item.Id,
                         Name = item.Name,
@@ -239,7 +238,7 @@ namespace trifenix.agro.console
             {
                 foreach (var item in species.Result)
                 {
-                    await agroManager.Species.Save(new SpecieInput
+                    await agroManager.Specie.Save(new SpecieInput
                     {
                         Id = item.Id,
                         Name = item.Name,
@@ -252,7 +251,7 @@ namespace trifenix.agro.console
             {
                 foreach (var item in varieties.Result)
                 {
-                    await agroManager.Varieties.Save(new VarietyInput
+                    await agroManager.Variety.Save(new VarietyInput
                     {
                         Id = item.Id,
                         Name = item.Name,
@@ -266,7 +265,7 @@ namespace trifenix.agro.console
             {
                 foreach (var item in barracks.Result)
                 {
-                    await agroManager.Barracks.Save(new BarrackInput
+                    await agroManager.Barrack.Save(new BarrackInput
                     {
                         Id = item.Id,
                         Name = item.Name,

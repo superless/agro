@@ -5,12 +5,14 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using trifenix.agro.authentication.operations;
 using trifenix.agro.external.operations.helper;
 using trifenix.agro.functions.Helper;
 using trifenix.agro.functions.mantainers;
@@ -18,7 +20,8 @@ using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.swagger.model.input;
 
-namespace trifenix.agro.functions {
+namespace trifenix.agro.functions
+{
 
     /// <summary>
     /// Funciones 
@@ -78,7 +81,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(SectorSwaggerInput), "Sector")]
             HttpRequest req, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Sectors, string.Empty);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Sector, string.Empty);
             return result.JsonResult;
         }
 
@@ -97,7 +100,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(SectorSwaggerInput), "Sector")]
             HttpRequest req, string id, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Sectors, id);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Sector, id);
             return result.JsonResult;
         }
 
@@ -116,7 +119,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(PlotLandSwaggerInput), "Parcela")]
             HttpRequest req, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.PlotLands, string.Empty);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.PlotLand, string.Empty);
             return result.JsonResult;
         }
 
@@ -135,7 +138,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(PlotLandSwaggerInput), "Parcela")]
             HttpRequest req, string id, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.PlotLands, id);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.PlotLand, id);
             return result.JsonResult;
         }
 
@@ -154,7 +157,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(SpecieSwaggerInput), "Especie")]
             HttpRequest req, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Species, string.Empty);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Specie, string.Empty);
             return result.JsonResult;
         }
 
@@ -173,7 +176,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(SpecieSwaggerInput), "Especie")]
             HttpRequest req, string id, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Species, id);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Specie, id);
             return result.JsonResult;
         }
 
@@ -191,7 +194,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(NotificationEventSwaggerInput), "notification")]
             HttpRequest req, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.NotificationEvents, string.Empty);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.NotificationEvent, string.Empty);
             return result.JsonResult;
         }
 
@@ -209,7 +212,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(NotificationEventSwaggerInput), "Notificación")]
             HttpRequest req, string id, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.NotificationEvents, id);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.NotificationEvent, id);
             return result.JsonResult;
         }
 
@@ -228,7 +231,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(VarietySwaggerInput), "Variedad")]
             HttpRequest req, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Varieties, string.Empty);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Variety, string.Empty);
             return result.JsonResult;
         }
 
@@ -246,7 +249,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(VarietySwaggerInput), "Variedad")]
             HttpRequest req, string id, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Varieties, id);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Variety, id);
             return result.JsonResult;
         }
 
@@ -265,7 +268,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(TargetSwaggerInput), "Objetivo de aplicación")]
             HttpRequest req, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ApplicationTargets, string.Empty);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ApplicationTarget, string.Empty);
             return result.JsonResult;
         }
 
@@ -283,7 +286,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(TargetSwaggerInput), "Objetivo de aplicación")]
             HttpRequest req, string id, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ApplicationTargets, id);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ApplicationTarget, id);
             return result.JsonResult;
         }
 
@@ -301,7 +304,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(PhenologicalEventSwaggerInput), "Evento Fenológico")]
             HttpRequest req, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.PhenologicalEvents, string.Empty);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.PhenologicalEvent, string.Empty);
             return result.JsonResult;
         }
 
@@ -320,7 +323,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(PhenologicalEventSwaggerInput), "Evento Fenológico")]
             HttpRequest req, string id, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.PhenologicalEvents, id);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.PhenologicalEvent, id);
             return result.JsonResult;
         }
 
@@ -339,7 +342,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(CertifiedEntitySwaggerInput), "Entidad Certificadora")]
             HttpRequest req, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.CertifiedEntities, string.Empty);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.CertifiedEntity, string.Empty);
             return result.JsonResult;
         }
 
@@ -357,7 +360,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(CertifiedEntitySwaggerInput), "Entidad Certificadora")]
             HttpRequest req, string id, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.CertifiedEntities, id);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.CertifiedEntity, id);
             return result.JsonResult;
         }
 
@@ -376,7 +379,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(IngredientCategorySwaggerInput), "Categoría de Ingrediente")]
             HttpRequest req, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.IngredientCategories, string.Empty);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.IngredientCategory, string.Empty);
             return result.JsonResult;
         }
 
@@ -394,7 +397,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(IngredientCategorySwaggerInput), "Categoría de Ingrediente")]
             HttpRequest req, string id, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.IngredientCategories, id);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.IngredientCategory, id);
             return result.JsonResult;
         }
 
@@ -414,7 +417,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(IngredientSwaggerInput), "Ingrediente")]
             HttpRequest req, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Ingredients, string.Empty);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Ingredient, string.Empty);
             return result.JsonResult;
         }
 
@@ -433,7 +436,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(IngredientSwaggerInput), "Ingrediente")]
             HttpRequest req, string id, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Ingredients, id);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Ingredient, id);
             return result.JsonResult;
         }
 
@@ -452,7 +455,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(ProductSwaggerInput), "Producto")]
             HttpRequest req, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Products, string.Empty);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Product, string.Empty);
             return result.JsonResult;
         }
 
@@ -471,7 +474,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(ProductSwaggerInput), "Producto")]
             HttpRequest req, string id, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Products, id);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Product, id);
             return result.JsonResult;
         }
 
@@ -490,7 +493,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(RoleSwaggerInput), "Rol")]
             HttpRequest req, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Roles, string.Empty);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Role, string.Empty);
             return result.JsonResult;
         }
 
@@ -509,7 +512,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(RoleSwaggerInput), "Rol")]
             HttpRequest req, string id, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Roles, id);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Role, id);
             return result.JsonResult;
         }
 
@@ -530,7 +533,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(JobSwaggerInput), "Trabajo")]
             HttpRequest req, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Jobs, string.Empty);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Job, string.Empty);
             return result.JsonResult;
         }
 
@@ -549,7 +552,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(JobSwaggerInput), "Trabajo")]
             HttpRequest req, string id, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Jobs, id);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Job, id);
             return result.JsonResult;
         }
 
@@ -568,7 +571,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(UserApplicatorSwaggerInput), "Usuario aplicador")]
             HttpRequest req, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Users, string.Empty);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.UserApplicator, string.Empty);
             return result.JsonResult;
         }
 
@@ -587,7 +590,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(UserApplicatorSwaggerInput), "Usuario aplicador")]
             HttpRequest req, string id, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Users, id);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.UserApplicator, id);
             return result.JsonResult;
         }
 
@@ -606,7 +609,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(NebulizerSwaggerInput), "Nebulizador")]
             HttpRequest req, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Nebulizers, string.Empty);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Nebulizer, string.Empty);
             return result.JsonResult;
         }
 
@@ -625,7 +628,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(NebulizerSwaggerInput), "Nebulizador")]
             HttpRequest req, string id, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Nebulizers, id);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Nebulizer, id);
             return result.JsonResult;
         }
 
@@ -643,7 +646,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(TractorSwaggerInput), "Tractor")]
             HttpRequest req, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Tractors, string.Empty);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Tractor, string.Empty);
             return result.JsonResult;
         }
 
@@ -662,7 +665,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(TractorSwaggerInput), "Tractor")]
             HttpRequest req, string id, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Tractors, id);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Tractor, id);
             return result.JsonResult;
         }
 
@@ -682,7 +685,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(BusinessNameSwaggerInput), "Razón social")]
             HttpRequest req, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.BusinessNames, string.Empty);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.BusinessName, string.Empty);
             return result.JsonResult;
         }
 
@@ -701,7 +704,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(BusinessNameSwaggerInput), "Razón Social")]
             HttpRequest req, string id, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.BusinessNames, id);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.BusinessName, id);
             return result.JsonResult;
 
         }
@@ -721,7 +724,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(CostCenterSwaggerInput), "Centro de Costos")]
             HttpRequest req, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.CostCenters, string.Empty);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.CostCenter, string.Empty);
             return result.JsonResult;
         }
 
@@ -740,7 +743,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(CostCenterSwaggerInput), "Centro de Costos")]
             HttpRequest req, string id, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.CostCenters, id);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.CostCenter, id);
             return result.JsonResult;
         }
 
@@ -759,7 +762,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(SeasonSwaggerInput), "Temporada")]
             HttpRequest req, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Seasons, string.Empty);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Season, string.Empty);
             return result.JsonResult;
         }
 
@@ -778,7 +781,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(SeasonSwaggerInput), "Temporada")]
             HttpRequest req, string id, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Seasons, id);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Season, id);
             return result.JsonResult;
         }
 
@@ -793,7 +796,7 @@ namespace trifenix.agro.functions {
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> RootStockPost(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "rootstock")]
-            [RequestBodyType(typeof(RootStockSwaggerInput), "Raíz")]
+            [RequestBodyType(typeof(RootstockSwaggerInput), "Raíz")]
             HttpRequest req, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Rootstock, string.Empty);
@@ -812,7 +815,7 @@ namespace trifenix.agro.functions {
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> RootStockPut(
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "rootstock/{id}")]
-            [RequestBodyType(typeof(RootStockSwaggerInput), "Raíz")]
+            [RequestBodyType(typeof(RootstockSwaggerInput), "Raíz")]
             HttpRequest req, string id, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Rootstock, id);
@@ -872,7 +875,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(BarrackSwaggerInput), "Cuartel")]
             HttpRequest req, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Barracks, string.Empty);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Barrack, string.Empty);
             return result.JsonResult;
         }
 
@@ -891,7 +894,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(BarrackSwaggerInput), "Cuartel")]
             HttpRequest req, string id, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Barracks, id);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Barrack, id);
             return result.JsonResult;
         }
 
@@ -910,7 +913,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(ApplicationOrderSwaggerInput), "Orden de aplicación")]
             HttpRequest req, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ApplicationOrders, string.Empty);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ApplicationOrder, string.Empty);
             return result.JsonResult;
         }
 
@@ -929,7 +932,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(ApplicationOrderSwaggerInput), "Orden de aplicación")]
             HttpRequest req, string id, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ApplicationOrders, id);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ApplicationOrder, id);
             return result.JsonResult;
         }
 
@@ -948,7 +951,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(PreOrderSwaggerInput), "Pre Orden de aplicación")]
             HttpRequest req, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.PreOrders, string.Empty);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.PreOrder, string.Empty);
             return result.JsonResult;
         }
 
@@ -967,7 +970,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(PreOrderSwaggerInput), "Pre Orden de aplicación")]
             HttpRequest req, string id, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.PreOrders, id);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.PreOrder, id);
             return result.JsonResult;
         }
 
@@ -986,7 +989,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(ExecutionOrderSwaggerInput), "Ejecución aplicación")]
             HttpRequest req, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ExecutionOrders, string.Empty);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ExecutionOrder, string.Empty);
             return result.JsonResult;
         }
 
@@ -1005,7 +1008,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(ExecutionOrderSwaggerInput), "Ejecución aplicación")]
             HttpRequest req, string id, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ExecutionOrders, id);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ExecutionOrder, id);
             return result.JsonResult;
         }
 
@@ -1024,7 +1027,7 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(ExecutionOrderStatusSwaggerInput), "Estatus Ejecución aplicación")]
             HttpRequest req, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ExecutionStatus, string.Empty);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ExecutionOrderStatus, string.Empty);
             return result.JsonResult;
         }
 
@@ -1043,9 +1046,24 @@ namespace trifenix.agro.functions {
             [RequestBodyType(typeof(ExecutionOrderStatusSwaggerInput), "Ejecución aplicación")]
             HttpRequest req, string id, ILogger log)
         {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ExecutionStatus, id);
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ExecutionOrderStatus, id);
             return result.JsonResult;
         }
 
+        [FunctionName("Initialize")]
+        public static async Task<IActionResult> Initialize([HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequest req, ILogger log) {
+            var claims = await Auth.Validate(req);
+            if (claims == null)
+                return new UnauthorizedResult();
+            string ObjectIdAAD = claims.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
+            var manager = await ContainerMethods.AgroManager(ObjectIdAAD);
+            string json = await req.ReadAsStringAsync();
+            JObject jsonObject = JObject.Parse(json);
+            var dbInitializer = new CosmosDbInitializer(manager, jsonObject.Value<string>("AssemblyName"));
+            dbInitializer.MapJsonToDB(jsonObject.Value<JObject>("Entities"));
+            return new OkResult();
+        }
+
     }
+
 }

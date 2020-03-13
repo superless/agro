@@ -6,15 +6,9 @@ using System;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using trifenix.agro.db;
-using trifenix.agro.db.applicationsReference;
-using trifenix.agro.db.applicationsReference.agro.Common;
-using trifenix.agro.db.interfaces;
-using trifenix.agro.db.interfaces.agro.common;
-using trifenix.agro.db.model.agro;
 using trifenix.agro.microsoftgraph.interfaces;
 
 namespace trifenix.agro.microsoftgraph.operations
@@ -22,34 +16,15 @@ namespace trifenix.agro.microsoftgraph.operations
     public class GraphApi : IGraphApi {
 
         private readonly IConfidentialClientApplication _confidentialClientApplication;
-        private readonly ICommonQueries queries;
-        private readonly IMainGenericDb<UserApplicator> repo;
 
-        public ClaimsPrincipal AccessTokenClaims { get; set; }
-
-        public GraphApi(ClaimsPrincipal accessTokenClaim, AgroDbArguments arguments) {
-            AccessTokenClaims = accessTokenClaim;
-            this.queries = new CommonQueries(arguments);
-            this.repo = new MainGenericDb<UserApplicator>(arguments);
+        public GraphApi(AgroDbArguments arguments) {
             _confidentialClientApplication = ConfidentialClientApplicationBuilder
                 .Create(Environment.GetEnvironmentVariable("clientID", EnvironmentVariableTarget.Process))
                 .WithAuthority("https://login.microsoftonline.com/" + Environment.GetEnvironmentVariable("tenantID", EnvironmentVariableTarget.Process) + "/v2.0")
                 .WithClientSecret(Environment.GetEnvironmentVariable("clientSecret", EnvironmentVariableTarget.Process))
                 .Build();
         }
-
-        public async Task<string> GetUserIdFromToken() {
-            try {
-                string objectIdAAD = AccessTokenClaims.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
-                var idUSer = await queries.GetUserIdFromAAD(objectIdAAD);
-                return idUSer;
-            }
-            catch (Exception ex) {
-                Console.WriteLine("Error en GetUserFromToken():\n" + ex.StackTrace);
-            }
-            return null;
-        }
-
+        
         public async Task<string> CreateUserIntoActiveDirectory(string name, string email) {
             var scopes = new string[] { "https://graph.microsoft.com/.default" };
             var authResult = await _confidentialClientApplication.AcquireTokenForClient(scopes).ExecuteAsync();
@@ -59,7 +34,7 @@ namespace trifenix.agro.microsoftgraph.operations
                 InvitedUserDisplayName = name,
                 InvitedUserEmailAddress = email,
                 InvitedUserMessageInfo = new InvitedUserMessageInfo() { CustomizedMessageBody = "Bienvenido a Aresa", MessageLanguage = "es-es"},
-                InviteRedirectUrl = "https://agro.trifenix.io",
+                InviteRedirectUrl = "https://agro-dev.trifenix.io",
                 SendInvitationMessage = true,
             };
             await graphServiceClient.Invitations.Request().AddAsync(invitation);
