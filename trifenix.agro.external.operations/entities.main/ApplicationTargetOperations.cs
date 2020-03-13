@@ -22,7 +22,10 @@ namespace trifenix.agro.external.operations.entities.main
         public ApplicationTargetOperations(IMainGenericDb<ApplicationTarget> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<ApplicationTarget> commonDb) : base(repo, existElement, search, commonDb)
         {
         }
+        public async Task Remove(string id)
+        {
 
+        }
         public async Task<ExtPostContainer<string>> Save(TargetInput input)
         {
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
@@ -61,6 +64,10 @@ namespace trifenix.agro.external.operations.entities.main
                         new Property {
                             PropertyIndex = (int)PropertyRelated.GENERIC_NAME,
                             Value = input.Name
+                        },
+                        new Property{ 
+                            PropertyIndex = (int)PropertyRelated.GENERIC_ABBREVIATION,
+                            Value = input.Abbreviation
                         }
                     }
                 }

@@ -63,6 +63,24 @@ namespace trifenix.agro.console
 
             var jobs = await agroManager.Jobs.GetElements(); // search
 
+            var ingredients = await agroManager.Ingredients.GetElements();
+
+            if (ingredients.StatusResult == ExtGetDataResult.Success)
+            {
+                foreach (var item in ingredients.Result)
+                {
+                    await agroManager.Ingredients.Save(new IngredientInput
+                    {
+                        Id = item.Id,
+                        Name = item.Name,
+                        idCategory = item.idCategory
+
+
+                    });
+                }
+            }
+
+
             if (jobs.StatusResult == ExtGetDataResult.Success)
             {
                 foreach (var item in jobs.Result)

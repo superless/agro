@@ -23,7 +23,10 @@ namespace trifenix.agro.external.operations.entities.orders
         {
             this.commonQueries = commonQueries;
         }
+        public async Task Remove(string id)
+        {
 
+        }
         private async Task<string> Valida(OrderFolderInput input)
         {
             if (string.IsNullOrWhiteSpace(input.IdCategoryIngredient) && string.IsNullOrWhiteSpace(input.IdIngredient))

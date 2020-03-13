@@ -24,6 +24,11 @@ namespace trifenix.agro.external.operations.entities.fields {
             this.commonQueries = commonQueries;
         }
 
+        public async Task Remove(string id)
+        {
+
+        }
+
         private async Task<string> ValidaBarrack(BarrackInput input) {
             string errors = string.Empty;
             var seasonExists = await existElement.ExistsById<Season>(input.SeasonId);
@@ -67,6 +72,8 @@ namespace trifenix.agro.external.operations.entities.fields {
                 throw new Exception(validaBarrak);
             await repo.CreateUpdate(barrack);
             var specieAbbv = await commonQueries.GetSpecieAbbreviationFromVariety(input.IdVariety);
+
+
             var relatedEntities = new List<RelatedId> {
                 new RelatedId { EntityIndex = (int)EntityRelated.PLOTLAND, EntityId = input.IdPlotLand },
                 new RelatedId { EntityIndex = (int)EntityRelated.POLLINATOR, EntityId = input.IdPollinator },
@@ -87,7 +94,7 @@ namespace trifenix.agro.external.operations.entities.fields {
             var elements = search.FilterElements<EntitySearch>(query);
             if (elements.Any())
             {
-                search.DeleteElements(search.FilterElements<EntitySearch>(query));
+                search.DeleteElements(elements);
             }
 
 

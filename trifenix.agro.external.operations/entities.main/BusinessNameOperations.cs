@@ -20,7 +20,10 @@ namespace trifenix.agro.external.operations.entities.main
         public BusinessNameOperations(IMainGenericDb<BusinessName> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<BusinessName> commonDb) : base(repo, existElement, search, commonDb)
         {
         }
+        public async Task Remove(string id)
+        {
 
+        }
 
         private async Task<string> ValidaBusinessName(BusinessNameInput input) {
             if (!string.IsNullOrWhiteSpace(input.Id))

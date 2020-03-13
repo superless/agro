@@ -20,7 +20,10 @@ namespace trifenix.agro.external.operations.entities.main
         public NebulizerOperations(IMainGenericDb<Nebulizer> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Nebulizer> commonDb) : base(repo, existElement, search, commonDb)
         {
         }
+        public async Task Remove(string id)
+        {
 
+        }
         public async Task<ExtPostContainer<string>> Save(NebulizerInput input)
         {
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");

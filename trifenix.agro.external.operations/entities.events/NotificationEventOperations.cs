@@ -35,6 +35,10 @@ namespace trifenix.agro.external.operations.entities.events {
             this.weather = weather;
         }
 
+        public async Task Remove(string id) { 
+        
+        }
+
         private async Task<string> ValidaNotification(NotificationEventInput input) {
             string errors = string.Empty;
             if (!string.IsNullOrWhiteSpace(input.Id)) {

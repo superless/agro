@@ -27,7 +27,10 @@ namespace trifenix.agro.external.operations.entities.orders
             this.commonQueries = commonQueries;
         }
 
+        public async Task Remove(string id)
+        {
 
+        }
         private async Task<string> ValidaExecutionOrder(ExecutionOrderInput input) {
 
             if (!string.IsNullOrWhiteSpace(input.Id))

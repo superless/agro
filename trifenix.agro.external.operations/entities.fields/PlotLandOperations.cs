@@ -20,7 +20,10 @@ namespace trifenix.agro.external.operations.entities.fields
         public PlotLandOperations(IMainGenericDb<PlotLand> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<PlotLand> commonDb) : base(repo, existElement, search, commonDb)
         {
         }
+        public async Task Remove(string id)
+        {
 
+        }
         public async Task<ExtPostContainer<string>> Save(PlotLandInput input)
         {
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");

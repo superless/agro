@@ -13,6 +13,8 @@ namespace trifenix.agro.db.interfaces
         AgroDbArguments MainArgs { get; }
 
         IQueryable<T> GetEntities();
+
+        Task DeleteEntity(string id);
     }
 
  

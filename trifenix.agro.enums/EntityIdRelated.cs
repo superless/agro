@@ -1,6 +1,7 @@
 ﻿namespace trifenix.agro.enums {
 
     public enum EntityRelated {
+        WAITINGHARVEST = 0,
         BARRACK = 1, 
         BUSINESSNAME = 2, // search
         CATEGORY_INGREDIENT = 3,
@@ -56,7 +57,17 @@
         GENERIC_LONGITUDE = 18,
         GENERIC_WETTING = 19,
         OBJECT_ID_AAD = 20,
-        GENERIC_WEBPAGE = 21
+        GENERIC_WEBPAGE = 21,
+        GENERIC_QUANTITY = 22,
+        DOSES_HOURSENTRYBARRACK= 23,
+        DOSES_DAYSINTERVAL = 24,
+        DOSES_SEQUENCE = 25,
+        DOSES_WETTINGRECOMMENDED = 26,        
+        DOSES_WAITINGDAYSLABEL = 27,
+        DOSES_WAITINGHARVESTDAYS = 28
+        
+
+
     }
 
     public enum EnumerationRelated {
@@ -66,7 +77,13 @@
         PREORDER_TYPE = 4,
         EXECUTION_STATUS = 5,
         EXECUTION_CLOSED_STATUS = 6,
-        EXECUTION_FINISH_STATUS = 7
+        EXECUTION_FINISH_STATUS = 7,
+        PRODUCT_KINDOFBOTTLE = 8,
+        PRODUCT_MEASURETYPE = 9,
+        GENERIC_ACTIVE = 10, //0 false, 1 true,
+        GENERIC_DEFAULT = 11, //0 false, 1 true
+        DOSES_DOSESAPPLICATEDTO = 12,
+        
     }
 
     public enum OrderType { 

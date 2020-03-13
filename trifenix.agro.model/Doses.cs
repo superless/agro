@@ -21,7 +21,7 @@ namespace trifenix.agro.db.model.agro
 
         public string[] IdsApplicationTarget { get; set; }
 
-        public int DaysToReEntryToBarrack { get; set; }
+        public int HoursToReEntryToBarrack { get; set; }
 
 
         public int ApplicationDaysInterval { get; set; }
@@ -61,6 +61,10 @@ namespace trifenix.agro.db.model.agro
         }
 
         public string IdProduct { get; set; }
+
+        public bool Default { get; set; }
+
+        public bool Active { get; set; }
 
 
 

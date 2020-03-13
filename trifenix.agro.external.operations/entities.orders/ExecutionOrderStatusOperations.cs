@@ -19,7 +19,10 @@ namespace trifenix.agro.external.operations.entities.orders
         public ExecutionOrderStatusOperations(IMainGenericDb<ExecutionOrderStatus> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<ExecutionOrderStatus> commonDb) : base(repo, existElement, search, commonDb)
         {
         }
+        public async Task Remove(string id)
+        {
 
+        }
         private async Task<string> ValidaExecutionStatus(ExecutionOrderStatusInput input) {
             if (!string.IsNullOrWhiteSpace(input.Id))
             {

@@ -20,7 +20,10 @@ namespace trifenix.agro.external.operations.entities
         public CommentOperation(IMainGenericDb<Comment> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Comment> commonDb) : base(repo, existElement, search, commonDb)
         {
         }
+        public async Task Remove(string id)
+        {
 
+        }
         private async Task<string> ValidaComment(CommentInput input)
         {
             if (!string.IsNullOrWhiteSpace(input.Id))

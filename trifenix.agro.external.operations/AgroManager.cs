@@ -29,7 +29,7 @@ namespace trifenix.agro.external.operations
         private readonly AgroDbArguments arguments;
         private readonly IEmail _email;
         private readonly IUploadImage _uploadImage;
-        private readonly IGraphApi _graphApi;
+        
         private readonly IWeatherApi _weatherApi;
         private readonly IAgroSearch _searchServiceInstance;
 

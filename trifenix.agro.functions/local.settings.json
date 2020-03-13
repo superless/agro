@@ -16,6 +16,7 @@
     "StorageConnectionStrings": "DefaultEndpointsProtocol=https;AccountName=agro;AccountKey=sxTG8s2x/LvAAYc9Id/bJ+zp+DpK4/nFZZRrJVxpG+H/WME60gLx1zVgxjVVvMgzqlSdl05RtObMafNv3Mgoeg==;EndpointSuffix=core.windows.net",
     "tenant": "jhmdev.onmicrosoft.com",
     "tenantID": "13f71027-8389-436e-bdaf-7bd34382fbff"
+
   },
   "Host": {
     "CORS": "*"

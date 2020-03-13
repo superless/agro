@@ -21,7 +21,10 @@ namespace trifenix.agro.external.operations.entities.fields {
         {
             this.graphApi = graphApi;
         }
+        public async Task Remove(string id)
+        {
 
+        }
         public async Task<ExtPostContainer<string>> Save(UserActivityInput input) {
             var id = Guid.NewGuid().ToString("N");
             var userId = await graphApi.GetUserIdFromToken();
