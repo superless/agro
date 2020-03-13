@@ -34,8 +34,7 @@ namespace trifenix.agro.functions
         /// <param name="req">cabecera que debe incluir el modelo de entrada </param>
         /// <param name="log"></param>
         /// <returns></returns>
-        [FunctionName("login")]
-        //[RequestHttpHeader("Authorization", isRequired: false)]
+        [FunctionName("login")]        
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] [RequestBodyType(typeof(LoginInput), "Nombre de usuario y contraseña")] HttpRequest req, ILogger log) {
             var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
@@ -266,7 +265,7 @@ namespace trifenix.agro.functions
         public static async Task<IActionResult> TargetPost(
 
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "targets")]
-            [RequestBodyType(typeof(ApplicationTargetSwaggerInput), "Objetivo de aplicación")]
+            [RequestBodyType(typeof(TargetSwaggerInput), "Objetivo de aplicación")]
             HttpRequest req, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ApplicationTarget, string.Empty);
@@ -284,7 +283,7 @@ namespace trifenix.agro.functions
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> TargetPut(
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "targets/{id}")]
-            [RequestBodyType(typeof(ApplicationTargetSwaggerInput), "Objetivo de aplicación")]
+            [RequestBodyType(typeof(TargetSwaggerInput), "Objetivo de aplicación")]
             HttpRequest req, string id, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ApplicationTarget, id);
@@ -451,7 +450,7 @@ namespace trifenix.agro.functions
         [FunctionName("products_post")]
         [RequestHttpHeader("Authorization", isRequired: true)]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
-        public static async Task<IActionResult> ProductsPost(
+        public async static Task<IActionResult> ProductsPost(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "products")]
             [RequestBodyType(typeof(ProductSwaggerInput), "Producto")]
             HttpRequest req, ILogger log)

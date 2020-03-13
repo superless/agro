@@ -71,12 +71,12 @@ namespace trifenix.agro.functions.mantainers {
                     ExtPostContainer<string> saveReturn;
                     try {
                         saveReturn = await repo.Save(element);
-                        await recordAcitvity.Save(new UserActivityInput {
-                            Action = method.Equals("post") ? UserActivityAction.CREATE : UserActivityAction.MODIFY,
-                            Date = DateTime.Now,
-                            EntityName = ((DbElement)Activator.CreateInstance(typeof(DbElement))).CosmosEntityName,
-                            EntityId = saveReturn.IdRelated
-                        });
+                        //await recordAcitvity.Save(new UserActivityInput {
+                        //    Action = method.Equals("post") ? UserActivityAction.CREATE : UserActivityAction.MODIFY,
+                        //    Date = DateTime.Now,
+                        //    EntityName = ((DbElement)Activator.CreateInstance(typeof(DbElement))).CosmosEntityName,
+                        //    EntityId = saveReturn.IdRelated
+                        //});
                     }
                     catch (Exception ex) {
                         return new ActionResultWithId {

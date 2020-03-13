@@ -32,6 +32,11 @@ namespace trifenix.agro.db.applicationsReference {
             return await Store.FindAsync(uniqueId, entity.CosmosEntityName);
         }
 
+        public async Task DeleteEntity(string id) {
+            var entity = (T)Activator.CreateInstance(typeof(T));
+            await Store.RemoveByIdAsync(id, entity.CosmosEntityName);
+        } 
+
         public IQueryable<T> GetEntities() => Store.Query();
 
     }

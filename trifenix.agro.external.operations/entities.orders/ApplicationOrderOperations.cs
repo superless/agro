@@ -24,7 +24,10 @@ namespace trifenix.agro.external.operations.entities.orders {
         public ApplicationOrderOperations(IMainGenericDb<ApplicationOrder> repo, IExistElement existElement, IAgroSearch search, ICommonQueries commonQueries, ICommonDbOperations<ApplicationOrder> commonDb) : base(repo, existElement, search, commonDb) {
             this.commonQueries = commonQueries;
         }
+        public async Task Remove(string id)
+        {
 
+        }
         private async Task<string> ValidaOrder(ApplicationOrderInput input) {
             string errors = string.Empty;
             if (input.OrderType == OrderType.PHENOLOGICAL) {

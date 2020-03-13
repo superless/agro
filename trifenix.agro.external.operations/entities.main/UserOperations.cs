@@ -24,7 +24,10 @@ namespace trifenix.agro.external.operations.entities.main {
         public UserOperations(IMainGenericDb<UserApplicator> repo, IExistElement existElement, IAgroSearch search, IGraphApi graphApi, ICommonDbOperations<UserApplicator> commonDb) : base(repo, existElement, search, commonDb) {
             this.graphApi = graphApi;
         }
+        public async Task Remove(string id)
+        {
 
+        }
         private RelatedId[] GetIdsRelated(UserApplicator input) {
             var relatedIds = new List<RelatedId>();
             if (!string.IsNullOrWhiteSpace(input.IdJob))

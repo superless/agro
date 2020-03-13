@@ -7,6 +7,7 @@ using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.db.model.agro.local;
+using trifenix.agro.db.model.agro.orders;
 using trifenix.agro.enums;
 using trifenix.agro.external.interfaces;
 using trifenix.agro.external.operations.helper;
@@ -23,18 +24,20 @@ namespace trifenix.agro.external.operations.entities.ext
         {
         }
 
-        private RelatedId[] GetIdsRelated(DosesInput input)
+        private RelatedId[] GetIdsRelated(Doses input)
         {
-            var list = new List<RelatedId>();
-            list.Add(new RelatedId
+            var list = new List<RelatedId>
             {
-                EntityId = input.IdProduct,
-                EntityIndex = (int)EntityRelated.PRODUCT
-            });
+                new RelatedId
+                {
+                    EntityId = input.IdProduct,
+                    EntityIndex = (int)EntityRelated.PRODUCT
+                }
+            };
 
-            if (input.idsApplicationTarget != null && input.idsApplicationTarget.Any())
+            if (input.IdsApplicationTarget != null && input.IdsApplicationTarget.Any())
             {
-                list.AddRange(input.idsApplicationTarget.Select(s=>new RelatedId { 
+                list.AddRange(input.IdsApplicationTarget.Select(s=>new RelatedId { 
                     EntityId = s,
                     EntityIndex = (int)EntityRelated.TARGET
                 }));
@@ -70,8 +73,58 @@ namespace trifenix.agro.external.operations.entities.ext
         }
 
 
+        public async Task Remove(string id)
+        {
 
-        
+            var queryOrder = $"SELECT value count(1) from c join dosesOrder in c.DosesOrder where dosesOrder.IdDoses = '{id}'";
+            var existsInOrder = await existElement.ExistsCustom<ApplicationOrder>(queryOrder);
+            var existsInExecution = await existElement.ExistsCustom<ExecutionOrder>(queryOrder);
+            if (!existsInExecution && !existsInOrder)
+            {
+                await repo.DeleteEntity(id);
+                
+                return;
+            }
+
+            var doses = await Store.GetEntity(id);
+            doses.Active = false;
+            await Store.CreateUpdate(doses);
+
+            search.AddElements(new List<EntitySearch>
+            {
+                GetEntitySearch(doses)
+            });
+            
+
+
+
+
+        }
+
+
+        private EntitySearch GetEntitySearch(Doses input) {
+            return new EntitySearch
+            {
+                Id = input.Id,
+                EntityIndex = (int)EntityRelated.DOSES,
+                Created = DateTime.Now,
+                RelatedIds = GetIdsRelated(input),
+                RelatedProperties = new Property[]{
+                        new Property{ PropertyIndex = (int)PropertyRelated.DOSES_HOURSENTRYBARRACK, Value = $"{input.HoursToReEntryToBarrack}" },
+                        new Property{ PropertyIndex = (int)PropertyRelated.DOSES_DAYSINTERVAL, Value = $"{input.ApplicationDaysInterval}" },
+                        new Property{ PropertyIndex = (int)PropertyRelated.DOSES_SEQUENCE, Value = $"{input.NumberOfSequentialApplication}" },
+                        new Property{ PropertyIndex = (int)PropertyRelated.DOSES_WAITINGDAYSLABEL, Value = $"{input.WaitingDaysLabel}" },
+                        new Property{ PropertyIndex = (int)PropertyRelated.DOSES_WETTINGRECOMMENDED, Value = $"{input.WettingRecommendedByHectares}" },
+                        new Property{ PropertyIndex = (int)PropertyRelated.DOSES_WAITINGDAYSLABEL, Value = $"{input.WaitingDaysLabel}" },
+                    },
+                RelatedEnumValues = new RelatedEnumValue[]{
+                        new RelatedEnumValue{  EnumerationIndex = (int)EnumerationRelated.GENERIC_ACTIVE, Value = input.Active?1:0},
+                        new RelatedEnumValue{  EnumerationIndex = (int)EnumerationRelated.GENERIC_DEFAULT, Value = input.Default?1:0},
+                        new RelatedEnumValue{  EnumerationIndex = (int)EnumerationRelated.DOSES_DOSESAPPLICATEDTO, Value = (int)input.DosesApplicatedTo},
+                    }
+            };
+        }
+
 
         public async Task<ExtPostContainer<string>> Save(DosesInput input)
         {
@@ -91,14 +144,20 @@ namespace trifenix.agro.external.operations.entities.ext
                 if (!validaIdExists) throw new Exception("No existe el id de la dosis a modificar");
             }
 
+            var query = $"EntityIndex eq {(int)EntityRelated.WAITINGHARVEST} and RelatedIds/any(elementId: elementId/EntityIndex eq {(int)EntityRelated.DOSES} and elementId/EntityId eq '{id}')";
 
+            var elements = search.FilterElements<EntitySearch>(query);
+            if (elements.Any())
+            {
+                search.DeleteElements(search.FilterElements<EntitySearch>(query));
+            }
 
 
             var doses = new Doses
             {
                 Id = id,
                 ApplicationDaysInterval = input.ApplicationDaysInterval,
-                DaysToReEntryToBarrack = input.DaysToReEntryToBarrack,
+                HoursToReEntryToBarrack = input.HoursToReEntryToBarrack,
                 DosesApplicatedTo = input.DosesApplicatedTo,
                 DosesQuantityMax = input.DosesQuantityMax,
                 DosesQuantityMin = input.DosesQuantityMin,
@@ -107,6 +166,8 @@ namespace trifenix.agro.external.operations.entities.ext
                 IdVarieties = input.IdVarieties,
                 NumberOfSequentialApplication = input.NumberOfSequentialApplication,
                 IdProduct = input.IdProduct,
+                Active = input.Active,
+                Default = input.Default,
                 WaitingDaysLabel = input.WaitingDaysLabel,
                 WaitingToHarvest = input.WaitingToHarvest==null || !input.WaitingToHarvest.Any()?new List<WaitingHarvest>(): input.WaitingToHarvest.Select(w=>new WaitingHarvest { 
                     IdCertifiedEntity = w.IdCertifiedEntity,
@@ -119,12 +180,7 @@ namespace trifenix.agro.external.operations.entities.ext
 
             search.AddElements(new List<EntitySearch>
             {
-                new EntitySearch{
-                    Id = id,
-                    EntityIndex = (int)EntityRelated.DOSES,
-                    Created = DateTime.Now,
-                    RelatedIds = GetIdsRelated(input),
-                }
+                GetEntitySearch(doses)
             });
 
 

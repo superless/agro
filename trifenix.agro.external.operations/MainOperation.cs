@@ -12,10 +12,13 @@ namespace trifenix.agro.external.operations {
 
    
 
-    public abstract class MainBaseOperation<T> where T : DocumentBase {
+    public class MainBaseOperation<T> where T : DocumentBase {
         
         protected readonly IMainGenericDb<T> repo;
         private readonly ICommonDbOperations<T> commonDb;
+
+
+        public IMainGenericDb<T> Store => this.repo;
 
         public MainBaseOperation(IMainGenericDb<T> repo, ICommonDbOperations<T> commonDb) {
             this.repo = repo;
@@ -36,7 +39,7 @@ namespace trifenix.agro.external.operations {
 
     }
 
-    public abstract class MainReadOperation<T> : MainBaseOperation<T> where T : DocumentBase {
+    public class MainReadOperation<T> : MainBaseOperation<T> where T : DocumentBase {
         
         protected readonly IExistElement existElement;
         protected readonly IAgroSearch search;

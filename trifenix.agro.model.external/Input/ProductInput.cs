@@ -42,7 +42,7 @@ namespace trifenix.agro.model.external.Input
         [Required]
         public KindOfProductContainer KindOfBottle { get; set; }
 
-        [Required]
-        public DosesInput[] Doses { get; set; }
+        
+        public DosesSwaggerInput[] Doses { get; set; }
     }
 }

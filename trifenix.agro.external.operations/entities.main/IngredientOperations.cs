@@ -16,7 +16,10 @@ using trifenix.agro.search.model;
 namespace trifenix.agro.external.operations.entities.main {
 
     public class IngredientOperations : MainReadOperationName<Ingredient, IngredientInput>, IGenericOperation<Ingredient, IngredientInput> {
+        public async Task Remove(string id)
+        {
 
+        }
         public IngredientOperations(IMainGenericDb<Ingredient> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Ingredient> commonDb) : base(repo, existElement, search, commonDb) {}
 
         public async Task<ExtPostContainer<string>> Save(IngredientInput input) {
@@ -29,7 +32,7 @@ namespace trifenix.agro.external.operations.entities.main {
             var valida = await Validate(input);
             if (!valida)
                 throw new Exception(string.Format(ErrorMessages.NotValid, ingredient.CosmosEntityName));
-            var existsCategory = await existElement.ExistsWithPropertyValue<Ingredient>("idCategory", input.idCategory);
+            var existsCategory = await existElement.ExistsById<IngredientCategory>(input.idCategory);
             if (!existsCategory)
                 throw new Exception(string.Format(ErrorMessages.NotValidId, "Categoria de Ingrediente"));
             await repo.CreateUpdate(ingredient);

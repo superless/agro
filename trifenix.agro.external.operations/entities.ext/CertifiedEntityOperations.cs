@@ -21,7 +21,10 @@ namespace trifenix.agro.external.operations.entities.ext
         {
         }
 
+        public async Task Remove(string id)
+        {
 
+        }
         public async Task<ExtPostContainer<string>> Save(CertifiedEntityInput input)
         {
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");

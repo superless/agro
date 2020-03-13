@@ -19,7 +19,10 @@ namespace trifenix.agro.external.operations.entities.fields {
         public UserActivityOperations(IMainGenericDb<UserActivity> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<UserActivity> commonDb, string userId) : base(repo, existElement, search, commonDb) {
             UserId = userId;
         }
+        public async Task Remove(string id)
+        {
 
+        }
         public async Task<ExtPostContainer<string>> Save(UserActivityInput input) {
             var id = Guid.NewGuid().ToString("N");
             await repo.CreateUpdate(new UserActivity {

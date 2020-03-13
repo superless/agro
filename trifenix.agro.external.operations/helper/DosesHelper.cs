@@ -14,7 +14,7 @@ namespace trifenix.agro.external.operations.helper
         public static string ValidaDoses(IExistElement existsElement, DosesInput dose) {
             
 
-            if (dose.IdSpecies.Any())
+            if (dose.IdSpecies!=null && dose.IdSpecies.Any())
             {
                 var existsSpeciesId = dose.IdSpecies.Select(async s => await existsElement.ExistsById<Specie>(s));
 
@@ -24,7 +24,7 @@ namespace trifenix.agro.external.operations.helper
                 }
             }
 
-            if (dose.IdVarieties.Any())
+            if (dose.IdVarieties!=null && dose.IdVarieties.Any())
             {
                 var existsVarietiesId = dose.IdVarieties.Distinct().Select(async s => await existsElement.ExistsById<Variety>(s));
 
@@ -35,7 +35,7 @@ namespace trifenix.agro.external.operations.helper
 
             }
 
-            if (dose.idsApplicationTarget.Any())
+            if (dose.idsApplicationTarget != null && dose.idsApplicationTarget.Any())
             {
                 var existsTargetsId = dose.idsApplicationTarget.Distinct().Select(async s => await existsElement.ExistsById<ApplicationTarget>(s));
 
@@ -47,7 +47,7 @@ namespace trifenix.agro.external.operations.helper
             }
 
             
-            if (dose.WaitingToHarvest.Any())
+            if (dose.idsApplicationTarget != null && dose.WaitingToHarvest.Any())
             {
                 var certifiedIds = dose.WaitingToHarvest.Select(s => s.IdCertifiedEntity);
                 if (certifiedIds.Any())

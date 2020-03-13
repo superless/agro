@@ -55,7 +55,7 @@ namespace trifenix.agro.external.operations
 
         public IGenericOperation<Variety, VarietyInput> Variety => new VarietyOperations(new MainGenericDb<Variety>(Arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<Variety>());
 
-        public IGenericOperation<ApplicationTarget, ApplicationTargetInput> ApplicationTarget => new ApplicationTargetOperations(new MainGenericDb<ApplicationTarget>(Arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<ApplicationTarget>());
+        public IGenericOperation<ApplicationTarget, TargetInput> ApplicationTarget => new ApplicationTargetOperations(new MainGenericDb<ApplicationTarget>(Arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<ApplicationTarget>());
 
         public IGenericOperation<PhenologicalEvent, PhenologicalEventInput> PhenologicalEvent => new PhenologicalEventOperations(new MainGenericDb<PhenologicalEvent>(Arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<PhenologicalEvent>());
 

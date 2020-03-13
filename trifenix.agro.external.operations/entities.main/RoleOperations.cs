@@ -18,7 +18,10 @@ namespace trifenix.agro.external.operations.entities.main
     public class RoleOperations : MainReadOperationName<Role, RoleInput>, IGenericOperation<Role, RoleInput>
     {
         public RoleOperations(IMainGenericDb<Role> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Role> commonDb) : base(repo, existElement, search, commonDb) { }
+        public async Task Remove(string id)
+        {
 
+        }
         public async Task<ExtPostContainer<string>> Save(RoleInput input) {
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
             var valida = await Validate(input);

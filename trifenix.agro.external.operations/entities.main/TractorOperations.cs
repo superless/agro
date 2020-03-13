@@ -18,7 +18,10 @@ namespace trifenix.agro.external.operations.entities.main {
     public class TractorOperations : MainReadOperation<Tractor>, IGenericOperation<Tractor, TractorInput> {
 
         public TractorOperations(IMainGenericDb<Tractor> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Tractor> commonDb) : base(repo, existElement, search, commonDb) { }
+        public async Task Remove(string id)
+        {
 
+        }
         public async Task<ExtPostContainer<string>> Save(TractorInput input) {
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
             if (!string.IsNullOrWhiteSpace(input.Id)) {

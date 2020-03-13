@@ -11,6 +11,8 @@ namespace trifenix.agro.db.interfaces {
         ICosmosStore<T> Store { get; }
         IQueryable<T> GetEntities();
 
+        Task DeleteEntity(string id);
+
     }
 
 }

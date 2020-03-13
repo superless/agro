@@ -12,7 +12,7 @@ namespace trifenix.agro.external.interfaces
         IExistElement ExistsElements { get; }
         IGenericOperation<UserActivity, UserActivityInput> UserActivity { get; }
         IGenericOperation<ApplicationOrder, ApplicationOrderInput> ApplicationOrder { get; }
-        IGenericOperation<ApplicationTarget, ApplicationTargetInput> ApplicationTarget { get; }
+        IGenericOperation<ApplicationTarget, TargetInput> ApplicationTarget { get; }
         IGenericOperation<Barrack, BarrackInput> Barrack { get; }
         IGenericOperation<BusinessName, BusinessNameInput> BusinessName { get; }
         IGenericOperation<CertifiedEntity, CertifiedEntityInput> CertifiedEntity { get; }
