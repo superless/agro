@@ -12,22 +12,18 @@ using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
 
-namespace trifenix.agro.external.operations.entities.orders
-{
-    public class ExecutionOrderStatusOperations : MainOperation<ExecutionOrderStatus>, IGenericOperation<ExecutionOrderStatus, ExecutionOrderStatusInput>
-    {
-        public ExecutionOrderStatusOperations(IMainGenericDb<ExecutionOrderStatus> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<ExecutionOrderStatus> commonDb) : base(repo, existElement, search, commonDb)
-        {
-        }
+namespace trifenix.agro.external.operations.entities.orders {
+    public class ExecutionOrderStatusOperations : MainOperation<ExecutionOrderStatus, ExecutionOrderStatusInput>, IGenericOperation<ExecutionOrderStatus, ExecutionOrderStatusInput> {
+        public ExecutionOrderStatusOperations(IMainGenericDb<ExecutionOrderStatus> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<ExecutionOrderStatus> commonDb) : base(repo, existElement, search, commonDb) { }
 
         private async Task<string> ValidaExecutionStatus(ExecutionOrderStatusInput input) {
             if (!string.IsNullOrWhiteSpace(input.Id))
             {
-                var exists = await existElement.ExistsById<ExecutionOrder>(input.Id);
+                var exists = await existElement.ExistsById<ExecutionOrder>(input.Id, false);
                 if (!exists) return $"la estado de ejecución con id {input.Id} no existe";
             }
 
-            var existsExecution = await existElement.ExistsById<ExecutionOrder>(input.IdExecutionOrder);
+            var existsExecution = await existElement.ExistsById<ExecutionOrder>(input.IdExecutionOrder, false);
 
             if (!existsExecution) return $"no existe ejecución con id {input.IdExecutionOrder}";
 
@@ -35,8 +31,9 @@ namespace trifenix.agro.external.operations.entities.orders
 
         }
 
-        public async Task<ExtPostContainer<string>> Save(ExecutionOrderStatusInput input)
+        public async Task<ExtPostContainer<string>> SaveInput(ExecutionOrderStatusInput input, bool isBatch)
         {
+            await Validate(input, isBatch);
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
 
             var validaExecutionStatus = await ValidaExecutionStatus(input);
@@ -54,9 +51,7 @@ namespace trifenix.agro.external.operations.entities.orders
                 FinishStatus = input.FinishStatus,
                 IdExecutionOrder = input.IdExecutionOrder
             };
-
-            await repo.CreateUpdate(order);
-
+            await repo.CreateUpdate(order, isBatch);
             search.AddElements(new List<EntitySearch> {
                 new EntitySearch { 
                     EntityIndex = (int)EntityRelated.EXECUTION_ORDER_STATUS,
@@ -83,7 +78,9 @@ namespace trifenix.agro.external.operations.entities.orders
                 Result = id
             };
         }
+
     }
+
 }
 
 /*Ejecucion

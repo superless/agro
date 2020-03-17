@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using trifenix.agro.db;
+using trifenix.agro.db.exceptions;
 using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.enums;
 using trifenix.agro.external.interfaces;
-using trifenix.agro.external.operations.helper;
-using trifenix.agro.external.operations.res;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
@@ -17,109 +17,83 @@ using trifenix.agro.search.model;
 
 namespace trifenix.agro.external.operations.entities.ext
 {
-    public class ProductOperations : MainOperation<Product>, IGenericOperation<Product, ProductInput>
-    {
-        private readonly IGenericOperation<Doses, DosesInput> dosesOperation;
+    public class ProductOperations : MainOperation<Product, ProductInput>, IGenericOperation<Product, ProductInput> {
+        private readonly IGenericOperation<Dose, DosesInput> dosesOperation;
 
-        public ProductOperations(IMainGenericDb<Product> repo, IExistElement existElement, IAgroSearch search, IGenericOperation<Doses, DosesInput> dosesOperation, ICommonDbOperations<Product> commonDb) : base(repo, existElement, search, commonDb)
-        {
+        public ProductOperations(IMainGenericDb<Product> repo, IExistElement existElement, IAgroSearch search, IGenericOperation<Dose, DosesInput> dosesOperation, ICommonDbOperations<Product> commonDb) : base(repo, existElement, search, commonDb) {
             this.dosesOperation = dosesOperation;
         }
-
-        private RelatedId[] GetIdsRelated(ProductInput input) {
-
-            var list = new List<RelatedId>();
-            if (!string.IsNullOrWhiteSpace(input.IdActiveIngredient))
-            {
-                list.Add(new RelatedId { EntityIndex = (int)EntityRelated.INGREDIENT, EntityId = input.IdActiveIngredient });
-            }
-            return list.ToArray();
-        }
-
+        
         private Property[] GetElementRelated(ProductInput input) {
-            var list = new List<Property>();
-            if (!string.IsNullOrWhiteSpace(input.Brand))
-                list.Add(new Property { PropertyIndex = (int)PropertyRelated.GENERIC_BRAND, Value = input.Brand });
-            return list.ToArray();
+            var properties = new Property[] {
+                new Property { PropertyIndex = (int)PropertyRelated.GENERIC_NAME, Value = input.Name },
+                new Property { PropertyIndex = (int)PropertyRelated.GENERIC_BRAND, Value = input.Brand }
+            };
+            return properties;
 
         }
 
-        private async Task<string> ValidaProduct(ProductInput productInput) {
-            if (productInput.Doses != null && productInput.Doses.Any())
-            {
-                var stringError = productInput.Doses.Select(s => DosesHelper.ValidaDoses(existElement, s));
-
-                if (stringError.Any(s=>!string.IsNullOrWhiteSpace(s)))
-                {
-                    return string.Join(",", stringError.Where(s => !string.IsNullOrWhiteSpace(s)));
-                }
-
-
+        public async Task<string> Validate(ProductInput input) {
+            string errors = string.Empty;
+            if (!string.IsNullOrWhiteSpace(input.Id)) {  //PUT
+                var existsId = await existElement.ExistsById<Product>(input.Id, false);
+                if (!existsId)
+                    errors += $"No existe producto con id {input.Id}.";
             }
-            var existsIngredient = await existElement.ExistsById<Ingredient>(productInput.IdActiveIngredient);
-
-            if (!existsIngredient) return "no existe id de ingrediente";
-
-            return string.Empty;
-
-
+            if (input.Doses != null && input.Doses.Any()) {
+                foreach(var dose in input.Doses) {
+                    try {
+                        await dosesOperation.Validate(dose,false);
+                    } catch (Validation_Exception ex) {
+                        errors += $"La dosis con id {dose.Id} tiene el(los) siguiente(s) problema(s): {string.Join(" ", ex.ErrorMessages)}";
+                    }
+                }
+            }
+            var existsName = await existElement.ExistsWithPropertyValue<Product>("Name", input.Name, input.Id, false);
+            if (existsName)
+                errors += $"Ya existe el nombre {input.Name}.";
+            var existsIngredient = await existElement.ExistsById<Ingredient>(input.IdActiveIngredient, false);
+            if (!existsIngredient)
+                errors += $"No existe ingrediente con id {input.IdActiveIngredient}.";
+            return errors.Replace(".",".\r\n");  
         }
 
-        public async Task<ExtPostContainer<string>> Save(ProductInput input)
-        {
-            var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
+        public async Task<ExtPostContainer<string>> Save(Product p) => null;
 
-            var product = new Product
-            {
+        public async Task<ExtPostContainer<string>> SaveInput(ProductInput input, bool isBatch) {
+            await Validate(input, isBatch);
+            var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
+            var product = new Product {
                 Id = id,
-                Brand = input.Brand,
                 Name = input.Name,
                 IdActiveIngredient = input.IdActiveIngredient,
-                KindOfBottle = input.KindOfBottle,
+                Brand = input.Brand,
                 MeasureType = input.MeasureType,
-                Quantity = input.Quantity
+                Quantity = input.Quantity,
+                KindOfBottle = input.KindOfBottle
             };
-            
-            // valida
-            var valida = await Validate(input);
-            if (!valida) throw new Exception(string.Format(ErrorMessages.NotValid, product.CosmosEntityName));
-
-
-            var validaProd = await ValidaProduct(input);
-            if (!string.IsNullOrWhiteSpace(validaProd)) throw new Exception(validaProd);
-
-            await repo.CreateUpdate(product);
-
+            await repo.CreateUpdate(product, isBatch);
             if (input.Doses!= null && input.Doses.Any())
-            {
-                foreach (var dose in input.Doses)
-                {
+                foreach (var dose in input.Doses) {
                     dose.IdProduct = id;
-                    await dosesOperation.Save(dose);
+                    await dosesOperation.SaveInput(dose, isBatch);
                 }
-            }
-
-            search.AddElements(new List<EntitySearch>
-            {
-                new EntitySearch{
+            search.AddElements(new List<EntitySearch> {
+                new EntitySearch {
                     Id = id,
                     EntityIndex = (int)EntityRelated.PRODUCT,
                     Created = DateTime.Now,
                     RelatedProperties = GetElementRelated(input),
-                    RelatedIds = GetIdsRelated(input)
+                    RelatedIds = new RelatedId[] { new RelatedId { EntityIndex = (int)EntityRelated.INGREDIENT, EntityId = input.IdActiveIngredient } }
                 }
             });
-
-            
-
-
-            return new ExtPostContainer<string>
-            {
+            return new ExtPostContainer<string> {
                 IdRelated = id,
                 MessageResult = ExtMessageResult.Ok,
                 Result = id
             };
         }
+
     }
 
 }

@@ -324,7 +324,7 @@ namespace trifenix.agro.console {
             entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity =
         /*15*/  new Product { Id = Guid.NewGuid().ToString("N"), Name = "Geminis Wp", Brand = "Anasac", IdActiveIngredient = entitiesContainers.ElementAt(12).Entity.Id, KindOfBottle = 0, MeasureType = (MeasureType)1, Quantity =  500 } });
             entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity =
- /*Preguntar*/  new Doses { Id = Guid.NewGuid().ToString("N"), IdProduct = entitiesContainers.ElementAt(15).Entity.Id, IdsApplicationTarget = new string[] { entitiesContainers.ElementAt(13).Entity.Id }, IdSpecies = new string[] { entitiesContainers.ElementAt(3).Entity.Id }, IdVarieties = new string[] { entitiesContainers.ElementAt(4).Entity.Id, entitiesContainers.ElementAt(5).Entity.Id }, ApplicationDaysInterval = 15, DaysToReEntryToBarrack = 5, DosesApplicatedTo = (DosesApplicatedTo)1, DosesQuantityMin =  500, DosesQuantityMax = 800, NumberOfSequentialApplication = 3, WaitingDaysLabel = 25, WaitingToHarvest = new List<WaitingHarvest> { new WaitingHarvest { IdCertifiedEntity = entitiesContainers.ElementAt(14).Entity.Id, WaitingDays = 25} }, WettingRecommendedByHectares = 2000 } });
+ /*Preguntar*/  new Dose { Id = Guid.NewGuid().ToString("N"), IdProduct = entitiesContainers.ElementAt(15).Entity.Id, IdsApplicationTarget = new string[] { entitiesContainers.ElementAt(13).Entity.Id }, IdSpecies = new string[] { entitiesContainers.ElementAt(3).Entity.Id }, IdVarieties = new string[] { entitiesContainers.ElementAt(4).Entity.Id, entitiesContainers.ElementAt(5).Entity.Id }, ApplicationDaysInterval = 15, DaysToReEntryToBarrack = 5, DosesApplicatedTo = (DosesApplicatedTo)1, DosesQuantityMin =  500, DosesQuantityMax = 800, NumberOfSequentialApplication = 3, WaitingDaysLabel = 25, WaitingToHarvest = new List<WaitingHarvest> { new WaitingHarvest { IdCertifiedEntity = entitiesContainers.ElementAt(14).Entity.Id, WaitingDays = 25} }, WettingRecommendedByHectares = 2000 } });
             entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
                 new PhenologicalEvent { Id = Guid.NewGuid().ToString("N"), Name = "Aparicion de flor", InitDate = new DateTime(2020, 5, 1), EndDate = new DateTime(2020, 7, 1) } });
             entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
@@ -351,7 +351,7 @@ namespace trifenix.agro.console {
  /*Preguntar*/  new ExecutionOrder { Id = Guid.NewGuid().ToString("N"), IdOrder = entitiesContainers.ElementAt(27).Entity.Id, IdUserApplicator = entitiesContainers.ElementAt(25).Entity.Id, DosesOrder = new DosesOrder[] { new DosesOrder { IdDoses = entitiesContainers.ElementAt(16).Entity.Id, QuantityByHectare = 1350 } }, IdNebulizer = entitiesContainers.ElementAt(21).Entity.Id, IdTractor = entitiesContainers.ElementAt(20).Entity.Id, InitDate = new DateTime(2020, 5, 10), EndDate = new DateTime(2020, 6, 25) } });
 
             foreach (EntityContainer entityContainer in entitiesContainers)
-                await repo.CreateUpdate(entityContainer);
+                await repo.CreateUpdate(entityContainer, false);
 
             #endregion
 

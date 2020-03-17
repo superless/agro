@@ -7,31 +7,24 @@ using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.enums;
 using trifenix.agro.external.interfaces;
-using trifenix.agro.external.operations.res;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
 
-namespace trifenix.agro.external.operations.entities.main
-{
-    public class RoleOperations : MainOperation<Role>, IGenericOperation<Role, RoleInput>
-    {
+namespace trifenix.agro.external.operations.entities.main {
+    public class RoleOperations : MainOperation<Role, RoleInput>, IGenericOperation<Role, RoleInput> {
         public RoleOperations(IMainGenericDb<Role> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Role> commonDb) : base(repo, existElement, search, commonDb) { }
 
-        public async Task<ExtPostContainer<string>> Save(RoleInput input) {
+        public async Task<ExtPostContainer<string>> SaveInput(RoleInput input, bool isBatch) {
+            await Validate(input, isBatch);
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
-            var valida = await Validate(input);
-            if (!valida)
-                throw new Exception(string.Format(ErrorMessages.NotValid, "Role"));
             var role = new Role {
                 Id = id,
                 Name = input.Name
             };
-            await repo.CreateUpdate(role);
-
-            search.AddElements(new List<EntitySearch>
-            {
+            await repo.CreateUpdate(role,isBatch);
+            search.AddElements(new List<EntitySearch> {
                 new EntitySearch{
                     Id = id,
                     EntityIndex = (int)EntityRelated.ROLE,
@@ -44,16 +37,13 @@ namespace trifenix.agro.external.operations.entities.main
                     }
                 }
             });
-
-            
-
-
-            return new ExtPostContainer<string>
-            {
+            return new ExtPostContainer<string> {
                 IdRelated = id,
                 MessageResult = ExtMessageResult.Ok,
                 Result = id
             };
         }
+
     }
+
 }

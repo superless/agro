@@ -12,7 +12,7 @@ using trifenix.agro.search.interfaces;
 
 namespace trifenix.agro.external.operations.entities.fields {
 
-    public class UserActivityOperations : MainOperation<UserActivity>, IGenericOperation<UserActivity, UserActivityInput> {
+    public class UserActivityOperations : MainOperation<UserActivity, UserActivityInput>, IGenericOperation<UserActivity, UserActivityInput> {
 
         private readonly string UserId;
 
@@ -20,21 +20,26 @@ namespace trifenix.agro.external.operations.entities.fields {
             UserId = userId;
         }
 
-        public async Task<ExtPostContainer<string>> Save(UserActivityInput input) {
+        public async Task<ExtPostContainer<string>> Save(UserActivity userActivity) {
+            await repo.CreateUpdate(userActivity, false);
+            return new ExtPostContainer<string> {
+                IdRelated = userActivity.Id,
+                MessageResult = ExtMessageResult.Ok
+            };
+        }
+
+        public async Task<ExtPostContainer<string>> SaveInput(UserActivityInput input, bool isBatch) {
+            await Validate(input, isBatch);
             var id = Guid.NewGuid().ToString("N");
-            await repo.CreateUpdate(new UserActivity {
+            var UserActivity = new UserActivity {
                 Id = id,
                 UserId = UserId,
                 Action = input.Action,
                 Date = input.Date,
                 EntityName = input.EntityName,
                 EntityId = input.EntityId,
-            });
-            return new ExtPostContainer<string> {
-                IdRelated = id,
-                MessageResult = ExtMessageResult.Ok,
-                Result = id
             };
+            return await Save(UserActivity);
         }
 
     }

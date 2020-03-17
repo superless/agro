@@ -5,10 +5,8 @@ using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model;
-using trifenix.agro.db.model.agro;
 using trifenix.agro.enums;
 using trifenix.agro.external.interfaces;
-using trifenix.agro.external.operations.res;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
@@ -16,33 +14,21 @@ using trifenix.agro.search.model;
 
 namespace trifenix.agro.external.operations.entities.main
 {
-    public class PhenologicalEventOperations : MainOperation<PhenologicalEvent>, IGenericOperation<PhenologicalEvent, PhenologicalEventInput>
-    {
-        public PhenologicalEventOperations(IMainGenericDb<PhenologicalEvent> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<PhenologicalEvent> commonDb) : base(repo, existElement, search, commonDb)
-        {
-        }
+    public class PhenologicalEventOperations : MainOperation<PhenologicalEvent, PhenologicalEventInput>, IGenericOperation<PhenologicalEvent, PhenologicalEventInput> {
+        public PhenologicalEventOperations(IMainGenericDb<PhenologicalEvent> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<PhenologicalEvent> commonDb) : base(repo, existElement, search, commonDb) { }
 
-        public async Task<ExtPostContainer<string>> Save(PhenologicalEventInput input)
-        {
+        public async Task<ExtPostContainer<string>> SaveInput(PhenologicalEventInput input, bool isBatch) {
+            await Validate(input, isBatch);
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
-
-            var phenologicalEvent = new PhenologicalEvent
-            {
+            var phenologicalEvent = new PhenologicalEvent {
                 Id = id,
                 Name = input.Name,
                 InitDate = input.StartDate,
                 EndDate = input.EndDate
             };
-
-            var valida = await Validate(input);
-            if (!valida) throw new Exception(string.Format(ErrorMessages.NotValid, phenologicalEvent.CosmosEntityName));
-
-            if (input.EndDate < input.StartDate) throw new Exception(ErrorMessages.InitDateisOlderThenEndDate);
-
-            await repo.CreateUpdate(phenologicalEvent);
-
-            search.AddElements(new List<EntitySearch>
-            {
+            //if (input.EndDate < input.StartDate) throw new Exception(ErrorMessages.InitDateisOlderThenEndDate);
+            await repo.CreateUpdate(phenologicalEvent, isBatch);
+            search.AddElements(new List<EntitySearch> {
                 new EntitySearch{
                     Id = id,
                     EntityIndex = (int)EntityRelated.PHENOLOGICAL_EVENT,
@@ -63,16 +49,13 @@ namespace trifenix.agro.external.operations.entities.main
                     }
                 }
             });
-
-
-            return new ExtPostContainer<string>
-            {
+            return new ExtPostContainer<string> {
                 IdRelated = id,
                 MessageResult = ExtMessageResult.Ok,
                 Result = id
             };
         }
 
-        
     }
+
 }

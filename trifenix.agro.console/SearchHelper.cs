@@ -66,13 +66,13 @@ namespace trifenix.agro.console
             {
                 foreach (var item in jobs.Result)
                 {
-                    await agroManager.Job.Save(new JobInput
+                    await agroManager.Job.SaveInput(new JobInput
                     {
                         Id = item.Id,
                         Name = item.Name
                         
 
-                    });
+                    }, false);
                 }
             }
 
@@ -80,13 +80,13 @@ namespace trifenix.agro.console
             {
                 foreach (var item in costCenter.Result)
                 {
-                    await agroManager.CostCenter.Save(new CostCenterInput
+                    await agroManager.CostCenter.SaveInput(new CostCenterInput
                     {
                         Id = item.Id,
                         Name = item.Name,
                         IdBusinessName = item.IdBusinessName
                         
-                    });
+                    }, false);
                 }
             }
 
@@ -94,7 +94,7 @@ namespace trifenix.agro.console
             {
                 foreach (var item in users.Result)
                 {
-                    await agroManager.UserApplicator.Save(new UserApplicatorInput
+                    await agroManager.UserApplicator.SaveInput(new UserApplicatorInput
                     {
                         Id = item.Id,
                         Name = item.Name,
@@ -104,7 +104,7 @@ namespace trifenix.agro.console
                         IdsRoles = item.IdsRoles,
                         IdTractor = item.IdTractor,
                         Rut = item.Rut
-                    });
+                    }, false);
                 }
             }
 
@@ -113,12 +113,12 @@ namespace trifenix.agro.console
             {
                 foreach (var item in roles.Result)
                 {
-                    await agroManager.Role.Save(new RoleInput
+                    await agroManager.Role.SaveInput(new RoleInput
                     {
                         Id = item.Id,
                         Name = item.Name
 
-                    });
+                    }, false);
                 }
             }
 
@@ -127,14 +127,14 @@ namespace trifenix.agro.console
             {
                 foreach (var item in plotlands.Result)
                 {
-                    await agroManager.PlotLand.Save(new PlotLandInput
+                    await agroManager.PlotLand.SaveInput(new PlotLandInput
                     {
                         Id = item.Id,
                         Name = item.Name,
                         IdSector = item.IdSector
 
 
-                    });
+                    }, false);
                 }
             }
 
@@ -144,13 +144,13 @@ namespace trifenix.agro.console
             {
                 foreach (var item in certifiedEntity.Result)
                 {
-                    await agroManager.CertifiedEntity.Save(new CertifiedEntityInput
+                    await agroManager.CertifiedEntity.SaveInput(new CertifiedEntityInput
                     {
                         Id = item.Id,
                         Name = item.Name,
                         Abbreviation = item.Abbreviation
 
-                    });
+                    }, false);
                 }
             }
 
@@ -158,12 +158,12 @@ namespace trifenix.agro.console
             {
                 foreach (var item in rootStocks.Result)
                 {
-                    await agroManager.Rootstock.Save(new RootstockInput
+                    await agroManager.Rootstock.SaveInput(new RootstockInput
                     {
                         Id = item.Id,
                         Name = item.Name,
                         Abbreviation = item.Abbreviation
-                    });
+                    }, false);
                 }
             }
 
@@ -171,12 +171,12 @@ namespace trifenix.agro.console
             {
                 foreach (var item in sectors.Result)
                 {
-                    await agroManager.Sector.Save(new SectorInput
+                    await agroManager.Sector.SaveInput(new SectorInput
                     {
                         Id = item.Id,
                         Name = item.Name
 
-                    });
+                    }, false);
                 }
             }
 
@@ -185,7 +185,7 @@ namespace trifenix.agro.console
             {
                 foreach (var item in seasons.Result)
                 {
-                    await agroManager.Season.Save(new SeasonInput
+                    await agroManager.Season.SaveInput(new SeasonInput
                     {
                         Id = item.Id,
                         Current = item.Current,
@@ -193,7 +193,7 @@ namespace trifenix.agro.console
                         StartDate = item.StartDate,
                         IdCostCenter = item.IdCostCenter
 
-                    });
+                    }, false);
                 }
             }
 
@@ -202,7 +202,7 @@ namespace trifenix.agro.console
             {
                 foreach (var item in businessNames.Result)
                 {
-                    await agroManager.BusinessName.Save(new BusinessNameInput
+                    await agroManager.BusinessName.SaveInput(new BusinessNameInput
                     {
                         Id = item.Id,
                         Name = item.Name,
@@ -212,7 +212,7 @@ namespace trifenix.agro.console
                         Rut = item.Rut,
                         WebPage = item.WebPage
 
-                    });
+                    }, false);
                 }
             }
 
@@ -220,12 +220,12 @@ namespace trifenix.agro.console
             {
                 foreach (var item in species.Result)
                 {
-                    await agroManager.Specie.Save(new SpecieInput
+                    await agroManager.Specie.SaveInput(new SpecieInput
                     {
                         Id = item.Id,
                         Name = item.Name,
                         Abbreviation = item.Name
-                    });
+                    }, false);
                 }
             }
 
@@ -233,13 +233,13 @@ namespace trifenix.agro.console
             {
                 foreach (var item in varieties.Result)
                 {
-                    await agroManager.Variety.Save(new VarietyInput
+                    await agroManager.Variety.SaveInput(new VarietyInput
                     {
                         Id = item.Id,
                         Name = item.Name,
                         Abbreviation = item.Name,
                         IdSpecie = item.IdSpecie
-                    });
+                    },false);
                 }
             }
 
@@ -247,7 +247,7 @@ namespace trifenix.agro.console
             {
                 foreach (var item in barracks.Result)
                 {
-                    await agroManager.Barrack.Save(new BarrackInput
+                    await agroManager.Barrack.SaveInput(new BarrackInput
                     {
                         Id = item.Id,
                         Name = item.Name,
@@ -260,7 +260,7 @@ namespace trifenix.agro.console
                         NumberOfPlants = item.NumberOfPlants,
                         PlantingYear = item.PlantingYear,
                         SeasonId = item.SeasonId
-                    });
+                    }, false);
                 }
             }
         }

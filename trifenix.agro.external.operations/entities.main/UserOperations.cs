@@ -17,7 +17,7 @@ using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
 
 namespace trifenix.agro.external.operations.entities.main {
-    public class UserOperations : MainOperation<UserApplicator>, IGenericOperation<UserApplicator, UserApplicatorInput> {
+    public class UserOperations : MainOperation<UserApplicator, UserApplicatorInput>, IGenericOperation<UserApplicator, UserApplicatorInput> {
 
         private readonly IGraphApi graphApi;
 
@@ -52,31 +52,9 @@ namespace trifenix.agro.external.operations.entities.main {
             return properties.ToArray();
         }
 
-        public async Task<ExtPostContainer<string>> Save(UserApplicatorInput input) {
-            var valida = await Validate(input);
-            if (!valida)
-                throw new Exception(string.Format(ErrorMessages.NotValid, "Usuario"));
-            if (!string.IsNullOrWhiteSpace(input.IdNebulizer)) {
-                var existsNebulizer = await existElement.ExistsById<Nebulizer>(input.IdNebulizer);
-                if (!existsNebulizer)
-                    throw new Exception(string.Format(ErrorMessages.NotValidId, "Nebulizador"));
-            }
-            if (!string.IsNullOrWhiteSpace(input.IdJob)) {
-                var existsJob = await existElement.ExistsById<Job>(input.IdJob);
-                if (!existsJob)
-                    throw new Exception(string.Format(ErrorMessages.NotValidId, "Cargo"));
-            }
-            if (!string.IsNullOrWhiteSpace(input.IdTractor)) {
-                var existsTractor = await existElement.ExistsById<Tractor>(input.IdTractor);
-                if (!existsTractor)
-                    throw new Exception(string.Format(ErrorMessages.NotValid, "Tractor"));
-            }
-            if (input.IdsRoles != null && input.IdsRoles.Any())
-                foreach (var idRol in input.IdsRoles) {
-                    var exists = await existElement.ExistsById<Role>(idRol);                    
-                    if (!exists)
-                        throw new Exception(string.Format(ErrorMessages.NotValid, "Rol"));
-                }
+        public async Task<ExtPostContainer<string>> SaveInput(UserApplicatorInput input, bool isBatch) {
+            await Validate(input, isBatch);
+            var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
             UserApplicator userApp;
             if (!string.IsNullOrWhiteSpace(input.Id)) {
                 var tmpUser = await Get(input.Id);
@@ -92,7 +70,7 @@ namespace trifenix.agro.external.operations.entities.main {
                 var objectId = await graphApi.CreateUserIntoActiveDirectory(input.Name, input.Email);
                 userApp = new UserApplicator { 
                     Email = input.Email,
-                    Id = Guid.NewGuid().ToString("N"),
+                    Id = id,
                     IdJob = input.IdJob,
                     IdNebulizer = input.IdNebulizer,
                     IdsRoles = input.IdsRoles,
@@ -102,7 +80,7 @@ namespace trifenix.agro.external.operations.entities.main {
                     ObjectIdAAD = objectId
                 };
             }
-            await repo.CreateUpdate(userApp);
+            await repo.CreateUpdate(userApp, isBatch);
             search.AddElements(new List<EntitySearch> {
                 new EntitySearch {
                     Id = userApp.Id,

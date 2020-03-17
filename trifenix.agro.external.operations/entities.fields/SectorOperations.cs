@@ -7,60 +7,53 @@ using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.enums;
 using trifenix.agro.external.interfaces;
-using trifenix.agro.external.operations.res;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
 
-namespace trifenix.agro.external.operations.entities.fields
-{
+namespace trifenix.agro.external.operations.entities.fields {
 
-    public class SectorOperations : MainOperation<Sector>, IGenericOperation<Sector, SectorInput>
-    {
-        public SectorOperations(IMainGenericDb<Sector> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Sector> commonDb) : base(repo, existElement, search, commonDb)
-        {
-        }
-
-        public async Task<ExtPostContainer<string>> Save(SectorInput input)
-        {
-            var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
-
-            var sector = new Sector
-            {
-                Id = id,
-                Name = input.Name
-            };
-
-            var valida = await Validate(input);
-            if (!valida) throw new Exception(string.Format(ErrorMessages.NotValid, sector.CosmosEntityName));
-
-            await repo.CreateUpdate(sector);
-
-            search.AddElements(new List<EntitySearch>
-            {
+    public class SectorOperations : MainOperation<Sector, SectorInput>, IGenericOperation<Sector, SectorInput> {
+        public SectorOperations(IMainGenericDb<Sector> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Sector> commonDb) : base(repo, existElement, search, commonDb) { }
+        
+        public async Task<ExtPostContainer<string>> Save(Sector sector) {
+            await repo.CreateUpdate(sector, false);
+            search.AddElements(new List<EntitySearch> {
                 new EntitySearch{
-                    Id = id,
+                    Id = sector.Id,
                     EntityIndex = (int)EntityRelated.SECTOR,
                     Created = DateTime.Now,
                     RelatedProperties = new Property[] {
                         new Property {
                             PropertyIndex = (int)PropertyRelated.GENERIC_NAME,
-                            Value = input.Name
+                            Value = sector.Name
                         }
                     }
                 }
             });
-
-
-            return new ExtPostContainer<string>
-            {
-                IdRelated = id,
-                MessageResult = ExtMessageResult.Ok,
-                Result = id
+            return new ExtPostContainer<string> {
+                IdRelated = sector.Id,
+                MessageResult = ExtMessageResult.Ok
             };
         }
 
-       
+        public async Task<ExtPostContainer<string>> SaveInput(SectorInput input, bool isBatch) {
+            await Validate(input, isBatch);
+            var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
+            var sector = new Sector {
+                Id = id,
+                Name = input.Name
+            };
+            if (!isBatch)
+                return await Save(sector);
+            await repo.CreateUpdate(sector, true);
+            return new ExtPostContainer<string> {
+                IdRelated = id,
+                MessageResult = ExtMessageResult.Ok
+            };
+        }
+   
     }
+
 }

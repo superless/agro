@@ -7,7 +7,6 @@ using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.enums;
 using trifenix.agro.external.interfaces;
-using trifenix.agro.external.operations.res;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
@@ -15,45 +14,19 @@ using trifenix.agro.search.model;
 
 namespace trifenix.agro.external.operations.entities.main
 {
-    public class VarietyOperations : MainOperation<Variety>, IGenericOperation<Variety, VarietyInput>
-    {
-        public VarietyOperations(IMainGenericDb<Variety> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Variety> commonDb) : base(repo, existElement, search, commonDb)
-        {
-        }
+    public class VarietyOperations : MainOperation<Variety, VarietyInput>, IGenericOperation<Variety, VarietyInput> {
+        public VarietyOperations(IMainGenericDb<Variety> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Variety> commonDb) : base(repo, existElement, search, commonDb) { }
 
-        public async Task<ExtPostContainer<string>> Save(VarietyInput input)
-        {
+        public async Task<ExtPostContainer<string>> SaveInput(VarietyInput input, bool isBatch) {
+            await Validate(input, isBatch);
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
-
-            var variety = new Variety
-            {
+            var variety = new Variety {
                 Id = id,
                 Name = input.Name,
                 Abbreviation = input.Abbreviation,
                 IdSpecie = input.IdSpecie
             };
-
-            var valida = await Validate(input);
-            if (!valida) throw new Exception(string.Format(ErrorMessages.NotValid, variety.CosmosEntityName));
-
-            var existsSector = await existElement.ExistsById<Specie>(input.IdSpecie);
-            if (!existsSector) throw new Exception(string.Format(ErrorMessages.NotValidId, "Especie"));
-
-            if (string.IsNullOrWhiteSpace(input.Id))
-            {
-                var validaAbbv = await existElement.ExistsWithPropertyValue<Variety>("Abbreviation", input.Abbreviation);
-                if (validaAbbv) throw new Exception(string.Format(ErrorMessages.NotValidAbbreviation, variety.CosmosEntityName));
-
-            }
-            else
-            {
-                var validaAbbv = await existElement.ExistsWithPropertyValue<Variety>("Abbreviation", input.Abbreviation, input.Id);
-                if (validaAbbv) throw new Exception(string.Format(ErrorMessages.NotValidAbbreviation, variety.CosmosEntityName));
-            }
-
-
-            await repo.CreateUpdate(variety);
-
+            await repo.CreateUpdate(variety, isBatch);
             var varietySearch = new List<EntitySearch> {
                 new EntitySearch{
                     Id = id,

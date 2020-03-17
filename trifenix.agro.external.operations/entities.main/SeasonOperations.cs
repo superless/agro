@@ -9,52 +9,27 @@ using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
-using trifenix.agro.external.operations.res;
 using trifenix.agro.enums;
-using trifenix.agro.db.model.agro.core;
 using trifenix.agro.db.interfaces.common;
 
 namespace trifenix.agro.external.operations.entities.main
 {
-    public class SeasonOperations : MainOperation<Season>, IGenericOperation<Season, SeasonInput>
-    {
-        public SeasonOperations(IMainGenericDb<Season> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Season> commonDb) : base(repo, existElement, search, commonDb)
-        {
-        }
+    public class SeasonOperations : MainOperation<Season, SeasonInput>, IGenericOperation<Season, SeasonInput> {
+        public SeasonOperations(IMainGenericDb<Season> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Season> commonDb) : base(repo, existElement, search, commonDb) { }
 
-        public async Task<ExtPostContainer<string>> Save(SeasonInput input)
-        {
+        public async Task<ExtPostContainer<string>> SaveInput(SeasonInput input, bool isBatch) {
+            await Validate(input, isBatch);
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
-
             var current = !input.Current.HasValue || input.Current.Value;
-
-
-            var season = new Season
-            {
+            var season = new Season {
                 Id = id,
                 Current = current,
                 StartDate = input.StartDate,
                 EndDate = input.EndDate,
                 IdCostCenter = input.IdCostCenter
             };
-
-
-            var validaCostCenter = await existElement.ExistsById<CostCenter>(input.IdCostCenter);
-
-            if (!validaCostCenter) throw new Exception(string.Format(ErrorMessages.NotValidId, "Centro de Costos"));
-
-            if (!string.IsNullOrWhiteSpace(input.Id))
-            {
-                var validaId = await existElement.ExistsById<Season>(input.Id);
-
-                if (!validaId) throw new Exception("No existe la temporada a modificar");
-            }
-
-
-            await repo.CreateUpdate(season);
-
-            search.AddElements(new List<EntitySearch>
-            {
+            await repo.CreateUpdate(season, isBatch);
+            search.AddElements(new List<EntitySearch> {
                 new EntitySearch{
                     Id = id,
                     EntityIndex = (int)EntityRelated.SEASON,
@@ -83,14 +58,13 @@ namespace trifenix.agro.external.operations.entities.main
                     }
                 }
             });
-
-
-            return new ExtPostContainer<string>
-            {
+            return new ExtPostContainer<string> {
                 IdRelated = id,
                 MessageResult = ExtMessageResult.Ok,
                 Result = id
             };
         }
+
     }
+
 }

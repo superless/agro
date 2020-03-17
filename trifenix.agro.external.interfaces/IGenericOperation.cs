@@ -10,8 +10,9 @@ namespace trifenix.agro.external.interfaces {
 
         Task<ExtGetContainer<T>> Get(string id);
         Task<ExtGetContainer<List<T>>> GetElements();
-        Task<string> Validate(T2 input);
-        Task<ExtPostContainer<string>> Save(T2 input);
+        Task Validate(T2 input, bool isBatch);
+        Task<ExtPostContainer<string>> Save(T entity);
+        Task<ExtPostContainer<string>> SaveInput(T2 entityInput, bool isBatch);
 
     }
 

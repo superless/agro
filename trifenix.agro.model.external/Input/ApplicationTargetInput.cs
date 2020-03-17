@@ -1,11 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace trifenix.agro.model.external.Input
-{
-    public class ApplicationTargetInput : InputBaseName
-    {
-        
-
+namespace trifenix.agro.model.external.Input {
+    public class ApplicationTargetInput : InputBaseName {
+        [Unique]
         public string Abbreviation { get; set; }
     }
 
@@ -17,6 +14,5 @@ namespace trifenix.agro.model.external.Input
         [Required]
         public string Abbreviation { get; set; }
     }
-
 
 }

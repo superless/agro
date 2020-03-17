@@ -1,7 +1,9 @@
-﻿using trifenix.agro.db;
+﻿using Cosmonaut;
+using trifenix.agro.db;
 using trifenix.agro.db.applicationsReference;
 using trifenix.agro.db.applicationsReference.agro.Common;
 using trifenix.agro.db.applicationsReference.common;
+using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.model;
 using trifenix.agro.db.model.agro;
@@ -43,6 +45,7 @@ namespace trifenix.agro.external.operations
 
         public IGenericOperation<UserActivity, UserActivityInput> UserActivity => new UserActivityOperations(new MainGenericDb<UserActivity>(Arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<UserActivity>(), UserId);
 
+        public ICosmosStore<EntityContainer> BatchStore => new CosmosStore<EntityContainer>(new CosmosStoreSettings(Arguments.NameDb, Arguments.EndPointUrl, Arguments.PrimaryKey));
         public IExistElement ExistsElements => new CosmosExistElement(Arguments);
 
         public ICommonQueries CommonQueries => new CommonQueries(Arguments);
@@ -65,9 +68,9 @@ namespace trifenix.agro.external.operations
 
         public IGenericOperation<Ingredient, IngredientInput> Ingredient => new IngredientOperations(new MainGenericDb<Ingredient>(Arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<Ingredient>());
 
-        public IGenericOperation<Product, ProductInput> Product => new ProductOperations(new MainGenericDb<Product>(Arguments), ExistsElements, _searchServiceInstance, Doses, new CommonDbOperations<Product>());
+        public IGenericOperation<Product, ProductInput> Product => new ProductOperations(new MainGenericDb<Product>(Arguments), ExistsElements, _searchServiceInstance, Dose, new CommonDbOperations<Product>());
 
-        public IGenericOperation<Doses, DosesInput> Doses => new DosesOperations(new MainGenericDb<Doses>(Arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<Doses>());
+        public IGenericOperation<Dose, DosesInput> Dose => new DosesOperations(new MainGenericDb<Dose>(Arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<Dose>());
 
         public IGenericOperation<Role, RoleInput> Role => new RoleOperations(new MainGenericDb<Role>(Arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<Role>());
 

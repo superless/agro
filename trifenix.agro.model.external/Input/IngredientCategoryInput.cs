@@ -1,11 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace trifenix.agro.model.external.Input
-{
-    public class IngredientCategoryInput : InputBaseName
-    {
-
-    }
+namespace trifenix.agro.model.external.Input {
+    public class IngredientCategoryInput : InputBaseName { }
 
     public class IngredientCategorySwaggerInput {
         
