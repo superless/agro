@@ -7,7 +7,9 @@ namespace trifenix.agro.db.model.agro.local
    /// </summary>
     public class WaitingHarvest 
     {
-        
+
+        public double Ppm { get; set; }
+
         /// <summary>
         /// días de espera antes de la cosecha
         /// </summary>

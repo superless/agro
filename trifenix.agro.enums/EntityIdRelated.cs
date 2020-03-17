@@ -64,10 +64,10 @@
         DOSES_SEQUENCE = 25,
         DOSES_WETTINGRECOMMENDED = 26,        
         DOSES_WAITINGDAYSLABEL = 27,
-        DOSES_WAITINGHARVESTDAYS = 28
-        
-
-
+        DOSES_WAITINGHARVESTDAYS = 28,
+        GENERIC_COUNTER = 29,
+        WAITINGHARVEST_DAYS = 30,
+        WAITINGHARVEST_PPM = 31
     }
 
     public enum EnumerationRelated {

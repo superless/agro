@@ -47,6 +47,8 @@ namespace trifenix.agro.external.operations
 
         public ICommonQueries CommonQueries => new CommonQueries(Arguments);
 
+        public ICounters Counters => new Counters(Arguments);
+
         public IGenericOperation<Sector, SectorInput> Sector => new SectorOperations(new MainGenericDb<Sector>(Arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<Sector>());
         
         public IGenericOperation<PlotLand, PlotLandInput> PlotLand => new PlotLandOperations(new MainGenericDb<PlotLand>(Arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<PlotLand>());
@@ -65,9 +67,9 @@ namespace trifenix.agro.external.operations
 
         public IGenericOperation<Ingredient, IngredientInput> Ingredient => new IngredientOperations(new MainGenericDb<Ingredient>(Arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<Ingredient>());
 
-        public IGenericOperation<Product, ProductInput> Product => new ProductOperations(new MainGenericDb<Product>(Arguments), ExistsElements, _searchServiceInstance, Doses, new CommonDbOperations<Product>());
+        public IGenericOperation<Product, ProductInput> Product => new ProductOperations(new MainGenericDb<Product>(Arguments), ExistsElements, _searchServiceInstance, Doses, new CommonDbOperations<Product>(), CommonQueries);
 
-        public IGenericOperation<Doses, DosesInput> Doses => new DosesOperations(new MainGenericDb<Doses>(Arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<Doses>());
+        public IGenericOperation<Doses, DosesInput> Doses => new DosesOperations(new MainGenericDb<Doses>(Arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<Doses>(), Counters);
 
         public IGenericOperation<Role, RoleInput> Role => new RoleOperations(new MainGenericDb<Role>(Arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<Role>());
 

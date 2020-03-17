@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using trifenix.agro.enums;
 
 namespace trifenix.agro.db.interfaces.agro.common {
     public interface ICommonQueries {
@@ -18,6 +19,21 @@ namespace trifenix.agro.db.interfaces.agro.common {
 
         Task<string> GetUserIdFromAAD(string idAAD);
 
+        Task<string> GetDefaultDosesId(string idProduct);
+
+        Task<IEnumerable<string>> GetActiveDosesIdsFromProductId(string idProduct);
+
+
+
+
+    }
+
+    public interface ICounters {
+        Task<long> GetCounter<T>(string query) where T:DocumentBase;
+
+        Task<long> GetLastCounterDoses(string idProduct);
+
+        Task<long> GetCorrelativeFromDoses(string idDoses);
     }
 
 }
