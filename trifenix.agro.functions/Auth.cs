@@ -7,13 +7,12 @@ using trifenix.agro.authentication.operations;
 
 namespace trifenix.agro.functions {
     public static class Auth {
-        private static bool MustBeAuthenticated() => bool.Parse(Environment.GetEnvironmentVariable("mustBeAuthenticated", EnvironmentVariableTarget.Process));
+        
         
         //Recibe como parametro una request http para validar el bearer token incluido en su cabecera
         //Retorna un conjunto de claims si posee token de acceso valido, de lo contrario retorna null
         public static async Task<ClaimsPrincipal> Validate(HttpRequest request) {
-            if (!MustBeAuthenticated())
-                return new ClaimsPrincipal();
+            
             string accessToken;
             ClaimsPrincipal authorize;
             IAuthentication auth = new Authentication(

@@ -20,8 +20,11 @@ namespace trifenix.agro.external.operations.entities.ext
 {
     public class DosesOperations : MainReadOperation<Doses>, IGenericOperation<Doses, DosesInput>
     {
-        public DosesOperations(IMainGenericDb<Doses> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Doses> commonDb) : base(repo, existElement, search, commonDb)
+        private readonly ICounters counters;
+
+        public DosesOperations(IMainGenericDb<Doses> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Doses> commonDb, ICounters counters) : base(repo, existElement, search, commonDb)
         {
+            this.counters = counters;
         }
 
         private RelatedId[] GetIdsRelated(Doses input)
@@ -60,15 +63,9 @@ namespace trifenix.agro.external.operations.entities.ext
                     EntityIndex = (int)EntityRelated.VARIETY
                 }));
             }
+            //waitingharvest
 
-            if (input.WaitingToHarvest != null && input.WaitingToHarvest.Any())
-            {
-                list.AddRange(input.WaitingToHarvest.Select(s=>s.IdCertifiedEntity).Select(s => new RelatedId
-                {
-                    EntityId = s,
-                    EntityIndex = (int)EntityRelated.CERTIFIED_ENTITY
-                }));
-            }
+            
             return list.ToArray();
         }
 
@@ -76,9 +73,9 @@ namespace trifenix.agro.external.operations.entities.ext
         public async Task Remove(string id)
         {
 
-            var queryOrder = $"SELECT value count(1) from c join dosesOrder in c.DosesOrder where dosesOrder.IdDoses = '{id}'";
-            var existsInOrder = await existElement.ExistsCustom<ApplicationOrder>(queryOrder);
-            var existsInExecution = await existElement.ExistsCustom<ExecutionOrder>(queryOrder);
+            
+            var existsInOrder = await existElement.ExistsDosesFromOrder(id);
+            var existsInExecution = await existElement.ExistsDosesExecutionOrder(id);
             if (!existsInExecution && !existsInOrder)
             {
                 await repo.DeleteEntity(id);
@@ -103,12 +100,44 @@ namespace trifenix.agro.external.operations.entities.ext
 
 
         private EntitySearch GetEntitySearch(Doses input) {
+
+            var ids = GetIdsRelated(input).ToList();
+            var query = $"EntityIndex eq {(int)EntityRelated.WAITINGHARVEST} and RelatedIds/any(elementId: elementId/EntityIndex eq {(int)EntityRelated.DOSES} and elementId/EntityId eq '{input.Id}')";
+
+            search.DeleteElements<EntitySearch>(query);
+
+            if (input.WaitingToHarvest!=null && input.WaitingToHarvest.Any())
+            {
+                foreach (var waitingHarvest in input.WaitingToHarvest)
+                {
+                    var idSearch = Guid.NewGuid().ToString("N");
+                    ids.Add(new RelatedId { EntityIndex = (int)EntityRelated.WAITINGHARVEST, EntityId = idSearch });
+                    search.AddElements(new List<EntitySearch> {
+                        new EntitySearch{
+                             EntityIndex=(int)EntityRelated.WAITINGHARVEST,
+                             Id= idSearch,
+                             Created = DateTime.Now,
+                             RelatedIds = new RelatedId[]{ 
+                                 new RelatedId{ EntityIndex= (int)EntityRelated.DOSES,  EntityId= input.Id},
+                                 new RelatedId{ EntityIndex=(int)EntityRelated.CERTIFIED_ENTITY, EntityId=waitingHarvest.IdCertifiedEntity }
+                             },
+                             RelatedProperties = new Property[]{ 
+                                new Property{PropertyIndex=(int)PropertyRelated.WAITINGHARVEST_DAYS, Value = $"{waitingHarvest.WaitingDays}" },
+                                new Property{PropertyIndex=(int)PropertyRelated.WAITINGHARVEST_PPM, Value = $"{waitingHarvest.Ppm}" },
+                             }
+                        }
+                    });
+                }
+            }
+
+
+
             return new EntitySearch
             {
                 Id = input.Id,
                 EntityIndex = (int)EntityRelated.DOSES,
                 Created = DateTime.Now,
-                RelatedIds = GetIdsRelated(input),
+                RelatedIds = ids.ToArray(),
                 RelatedProperties = new Property[]{
                         new Property{ PropertyIndex = (int)PropertyRelated.DOSES_HOURSENTRYBARRACK, Value = $"{input.HoursToReEntryToBarrack}" },
                         new Property{ PropertyIndex = (int)PropertyRelated.DOSES_DAYSINTERVAL, Value = $"{input.ApplicationDaysInterval}" },
@@ -116,6 +145,7 @@ namespace trifenix.agro.external.operations.entities.ext
                         new Property{ PropertyIndex = (int)PropertyRelated.DOSES_WAITINGDAYSLABEL, Value = $"{input.WaitingDaysLabel}" },
                         new Property{ PropertyIndex = (int)PropertyRelated.DOSES_WETTINGRECOMMENDED, Value = $"{input.WettingRecommendedByHectares}" },
                         new Property{ PropertyIndex = (int)PropertyRelated.DOSES_WAITINGDAYSLABEL, Value = $"{input.WaitingDaysLabel}" },
+                        new Property{  PropertyIndex = (int)PropertyRelated.GENERIC_COUNTER, Value = $"{input.Correlative}"}
                     },
                 RelatedEnumValues = new RelatedEnumValue[]{
                         new RelatedEnumValue{  EnumerationIndex = (int)EnumerationRelated.GENERIC_ACTIVE, Value = input.Active?1:0},
@@ -144,18 +174,22 @@ namespace trifenix.agro.external.operations.entities.ext
                 if (!validaIdExists) throw new Exception("No existe el id de la dosis a modificar");
             }
 
-            var query = $"EntityIndex eq {(int)EntityRelated.WAITINGHARVEST} and RelatedIds/any(elementId: elementId/EntityIndex eq {(int)EntityRelated.DOSES} and elementId/EntityId eq '{id}')";
-
-            var elements = search.FilterElements<EntitySearch>(query);
-            if (elements.Any())
+            long counter;
+            if (string.IsNullOrWhiteSpace(input.Id))
             {
-                search.DeleteElements(search.FilterElements<EntitySearch>(query));
+                var prevCounter = await counters.GetLastCounterDoses(input.IdProduct);
+                counter = prevCounter+=1;
+            }
+            else {
+                counter = await counters.GetCorrelativeFromDoses(input.Id);
             }
 
 
             var doses = new Doses
             {
                 Id = id,
+                Correlative = counter,
+                LastModified = DateTime.Now,
                 ApplicationDaysInterval = input.ApplicationDaysInterval,
                 HoursToReEntryToBarrack = input.HoursToReEntryToBarrack,
                 DosesApplicatedTo = input.DosesApplicatedTo,
@@ -171,7 +205,8 @@ namespace trifenix.agro.external.operations.entities.ext
                 WaitingDaysLabel = input.WaitingDaysLabel,
                 WaitingToHarvest = input.WaitingToHarvest==null || !input.WaitingToHarvest.Any()?new List<WaitingHarvest>(): input.WaitingToHarvest.Select(w=>new WaitingHarvest { 
                     IdCertifiedEntity = w.IdCertifiedEntity,
-                    WaitingDays = w.WaitingDays
+                    WaitingDays = w.WaitingDays,
+                    Ppm = w.Ppm
                 
                 }).ToList(),
                 WettingRecommendedByHectares = input.WettingRecommendedByHectares

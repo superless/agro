@@ -1,0 +1,43 @@
+﻿using Cosmonaut;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using trifenix.agro.db.applicationsReference.common;
+using trifenix.agro.db.interfaces.common;
+using trifenix.agro.enums;
+
+namespace trifenix.agro.db.applicationsReference.agro.Common
+{
+    public class BaseQueries {
+
+
+        private readonly Queries _queries;
+        public BaseQueries(AgroDbArguments dbArguments)
+        {
+            DbArguments = dbArguments;
+            _queries = new Queries();
+        }
+
+        public ICosmosStore<T> Client<T>() where T:DocumentBase
+        { return new MainGenericDb<T>(DbArguments).Store; }
+
+        public async Task<T> SingleQuery<TDOCUMENT,T>(string query, params object[] args) where TDOCUMENT : DocumentBase {
+            var store = Client<TDOCUMENT>();
+            var result = await store.QuerySingleAsync<T>(string.Format(query, args));
+            return result;
+        }
+
+        public async Task<IEnumerable<T>> MultipleQuery<TDOCUMENT, T>(string query, params object[] args) where TDOCUMENT : DocumentBase
+        {
+            var store = Client<TDOCUMENT>();
+
+            var result = await store.QueryMultipleAsync<T>(string.Format(query, args));
+            return result;
+        }
+
+
+        public AgroDbArguments DbArguments { get; }
+        public string Queries(DbQuery query) {
+            return _queries.Get(query);
+        }
+    }
+}

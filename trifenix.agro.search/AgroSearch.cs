@@ -54,6 +54,15 @@ namespace trifenix.agro.search.operations {
             return result.Results.Select(v => v.Document).ToList();
         }
 
+        public void DeleteElements<T>(string query)
+        {
+            var elements = FilterElements<EntitySearch>(query);
+            if (elements.Any())
+            {
+                DeleteElements(elements);
+            }
+
+        }
     }
 
 }

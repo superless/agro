@@ -12,4 +12,19 @@
     <ProjectReference Include="..\trifenix.agro.db.interfaces\trifenix.agro.db.interfaces.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="common\res\QueryRes.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>QueryRes.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="common\res\QueryRes.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>QueryRes.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>

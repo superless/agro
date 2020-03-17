@@ -50,7 +50,9 @@ namespace trifenix.agro.external.operations.entities.fields {
         }
 
         public async Task<ExtPostContainer<string>> Save(BarrackInput input) {
+
             var id = input.Id??Guid.NewGuid().ToString("N");
+
             var barrack = new Barrack {
                 Id = id,
                 Name = input.Name,
@@ -64,13 +66,18 @@ namespace trifenix.agro.external.operations.entities.fields {
                 PlantingYear = input.PlantingYear,
                 SeasonId = input.SeasonId
             };
+
             var valida = await Validate(input);
             if (!valida)
                 throw new Exception(string.Format(ErrorMessages.NotValid, barrack.CosmosEntityName));
+
             var validaBarrak = await ValidaBarrack(input);
+
             if (!string.IsNullOrEmpty(validaBarrak))
                 throw new Exception(validaBarrak);
+
             await repo.CreateUpdate(barrack);
+
             var specieAbbv = await commonQueries.GetSpecieAbbreviationFromVariety(input.IdVariety);
 
 
@@ -84,21 +91,24 @@ namespace trifenix.agro.external.operations.entities.fields {
 
             // Eliminar antes de agregar
             var barrackIndex = search.FilterElements<EntitySearch>($"EntityIndex eq {(int)EntityRelated.BARRACK} and Id eq '{id}'");
-            if(barrackIndex.Any())
-                foreach(string idGeo in barrackIndex.ElementAt(0).RelatedIds.AsEnumerable().Where(relatedId => relatedId.EntityIndex == (int)EntityRelated.GEOPOINT).Select(relatedId => relatedId.EntityId))
-                    search.DeleteElements(search.FilterElements<EntitySearch>($"EntityIndex eq {(int)EntityRelated.GEOPOINT} and Id eq '{idGeo}'"));
+
+
+            if (barrackIndex.Any()) {
+                foreach (string idGeo in barrackIndex.ElementAt(0).RelatedIds.AsEnumerable().Where(relatedId => relatedId.EntityIndex == (int)EntityRelated.GEOPOINT).Select(relatedId => relatedId.EntityId))
+                {
+                    search.DeleteElements<EntitySearch>($"EntityIndex eq {(int)EntityRelated.GEOPOINT} and Id eq '{idGeo}'");
+                }
+            }
+                
 
 
             var query = $"EntityIndex eq {(int)EntityRelated.GEOPOINT} and RelatedIds/any(elementId: elementId/EntityIndex eq {(int)EntityRelated.BARRACK} and elementId/EntityId eq '{id}')";
 
-            var elements = search.FilterElements<EntitySearch>(query);
-            if (elements.Any())
-            {
-                search.DeleteElements(elements);
-            }
+            search.DeleteElements<EntitySearch>(query);
 
 
-            
+
+
 
             if (input.GeographicalPoints != null && input.GeographicalPoints.Any()) {
                 var keysGeo = new List<EntitySearch>();

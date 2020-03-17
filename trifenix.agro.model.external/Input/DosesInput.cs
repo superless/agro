@@ -49,6 +49,8 @@ namespace trifenix.agro.model.external.Input
         public int WaitingDays { get; set; }
         public string IdCertifiedEntity { get; set; }
 
+        public double Ppm { get; set; }
+
     }
 
     public class DosesSwaggerInput 

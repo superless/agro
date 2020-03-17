@@ -1,5 +1,6 @@
 ﻿using Cosmonaut;
 using Cosmonaut.Attributes;
+using System;
 using System.Collections.Generic;
 using trifenix.agro.db.model.agro.local;
 using trifenix.agro.enums;
@@ -13,6 +14,11 @@ namespace trifenix.agro.db.model.agro
     public class Doses : DocumentBase, ISharedCosmosEntity
     {
         public override string Id { get; set; }
+
+
+        public long Correlative { get; set; }
+
+        public DateTime LastModified { get; set; }
 
 
         public string[] IdVarieties { get; set; }

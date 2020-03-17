@@ -21,10 +21,12 @@ namespace trifenix.agro.external.operations.entities.ext
     public class ProductOperations : MainReadOperationName<Product, ProductInput>, IGenericOperation<Product, ProductInput>
     {
         private readonly IGenericOperation<Doses, DosesInput> dosesOperation;
+        private readonly ICommonQueries queries;
 
-        public ProductOperations(IMainGenericDb<Product> repo, IExistElement existElement, IAgroSearch search, IGenericOperation<Doses, DosesInput> dosesOperation, ICommonDbOperations<Product> commonDb) : base(repo, existElement, search, commonDb)
+        public ProductOperations(IMainGenericDb<Product> repo, IExistElement existElement, IAgroSearch search, IGenericOperation<Doses, DosesInput> dosesOperation, ICommonDbOperations<Product> commonDb, ICommonQueries queries) : base(repo, existElement, search, commonDb)
         {
             this.dosesOperation = dosesOperation;
+            this.queries = queries;
         }
 
         public async Task Remove(string id)
@@ -35,6 +37,7 @@ namespace trifenix.agro.external.operations.entities.ext
         private RelatedId[] GetIdsRelated(ProductInput input) {
 
             var list = new List<RelatedId>();
+
             if (!string.IsNullOrWhiteSpace(input.IdActiveIngredient))
             {
                 list.Add(new RelatedId { EntityIndex = (int)EntityRelated.INGREDIENT, EntityId = input.IdActiveIngredient });
@@ -44,8 +47,11 @@ namespace trifenix.agro.external.operations.entities.ext
 
         private Property[] GetElementRelated(ProductInput input) {
             var list = new List<Property>();
-            if (!string.IsNullOrWhiteSpace(input.Brand))
+
+            if (!string.IsNullOrWhiteSpace(input.Brand)) {
                 list.Add(new Property { PropertyIndex = (int)PropertyRelated.GENERIC_BRAND, Value = input.Brand });
+            }
+                
             list.Add(new Property { PropertyIndex = (int)PropertyRelated.GENERIC_NAME, Value = input.Name });
 
             return list.ToArray();
@@ -69,8 +75,6 @@ namespace trifenix.agro.external.operations.entities.ext
             if (!existsIngredient) return "no existe id de ingrediente";
 
             return string.Empty;
-
-
         }
 
         private async Task<string> CreateDefaultDoses(string idProduct) {
@@ -80,6 +84,7 @@ namespace trifenix.agro.external.operations.entities.ext
             {
                 Id = id,
                 IdProduct = idProduct,
+                LastModified = DateTime.Now,
                 Active = true,
                 Default = true
 
@@ -114,20 +119,53 @@ namespace trifenix.agro.external.operations.entities.ext
         }
 
 
+        private async Task<RelatedId> RemoveDoses(ProductInput input, string id) {
+            if (!string.IsNullOrWhiteSpace(input.Id))
+            {
 
-        
+                
+
+
+                //obtiene el identificador de la dosis por defecto
+                var defaultDoses = await queries.GetDefaultDosesId(input.Id);
 
 
 
+
+                // elimina todas las dosis que no sean por defecto relacionadas con el producto
+                var queryDelete = $"EntityIndex eq {(int)EntityRelated.DOSES} and  Id ne '{defaultDoses}' and RelatedIds/any(elementId: elementId/EntityIndex eq {(int)EntityRelated.PRODUCT} and elementId/EntityId eq '{id}')";
+
+
+                search.DeleteElements<EntitySearch>(queryDelete);
+
+                // obtiene todas las dosis que no sean por defecto
+                var dosesPrevIds = await queries.GetActiveDosesIdsFromProductId(input.Id);
+
+                if (dosesPrevIds.Any())
+                {
+                    foreach (var idDoses in dosesPrevIds)
+                    {
+                        // elimina cada dosis, internamente elimina si no hay dependencias, si existen dependencias la desactiva y la deja en el search.
+                        await dosesOperation.Remove(idDoses);
+                    }
+                }
+
+                return new RelatedId { EntityIndex = (int)EntityRelated.DOSES, EntityId = defaultDoses };
+            }
+            else {
+                var dosesDefaultId = await CreateDefaultDoses(id);
+                return new RelatedId
+                {
+                    EntityIndex = (int)EntityRelated.DOSES,
+                    EntityId = dosesDefaultId
+                };
+            }
+        }
 
 
         public async Task<ExtPostContainer<string>> Save(ProductInput input)
         {
-
-            
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
-
-           
 
             var product = new Product
             {
@@ -144,47 +182,19 @@ namespace trifenix.agro.external.operations.entities.ext
             var valida = await Validate(input);
             if (!valida) throw new Exception(string.Format(ErrorMessages.NotValid, product.CosmosEntityName));
 
-
+            //valida producto
             var validaProd = await ValidaProduct(input);
             if (!string.IsNullOrWhiteSpace(validaProd)) throw new Exception(validaProd);
 
             
 
-
+            // obtiene el id de ingrediente 
             var relatedIds = GetIdsRelated(input).ToList();
 
-            if (!string.IsNullOrWhiteSpace(input.Id))
-            {
-                var query = $"SELECT DISTINCT value c.id from c where c.IdProduct='{input.Id}' and c.Active=true and c.Default=false";
+            //Remueve doses y retorna la dosis por defecto
+            var dosesDefault = await RemoveDoses(input, id);
 
-                var dosesPrevIds = await dosesOperation.Store.Store.QueryMultipleAsync<string>(query);
-
-                if (dosesPrevIds.Any())
-                {
-                    foreach (var idDoses in dosesPrevIds)
-                    {
-                        await dosesOperation.Remove(idDoses);
-                    }
-                }
-
-                query = $"SELECT DISTINCT value c.id from c where c.IdProduct='{input.Id}' and c.Active=true and c.Default=true";
-
-                var defaultDoses = await dosesOperation.Store.Store.QuerySingleAsync<string>(query);
-
-                relatedIds.Add(new RelatedId { EntityIndex = (int)EntityRelated.DOSES, EntityId = defaultDoses });
-
-                var queryDelete = $"EntityIndex eq {(int)EntityRelated.DOSES} and  Id ne '{defaultDoses}' and RelatedIds/any(elementId: elementId/EntityIndex eq {(int)EntityRelated.PRODUCT} and elementId/EntityId eq '{id}')";
-
-                var elements = search.FilterElements<EntitySearch>(queryDelete);
-                if (elements.Any())
-                {
-                    search.DeleteElements(elements);
-                }
-
-
-
-
-            }
+            relatedIds.Add(dosesDefault);
 
             await repo.CreateUpdate(product);
 
@@ -207,17 +217,7 @@ namespace trifenix.agro.external.operations.entities.ext
 
             }
 
-            //1. creación de doses por defecto.
-            if (string.IsNullOrWhiteSpace(input.Id))
-            {
-                var dosesDefaultId = await CreateDefaultDoses(id);
-                relatedIds.Add(new RelatedId
-                {
-                    EntityIndex = (int)EntityRelated.DOSES,
-                    EntityId = dosesDefaultId
-                });
-
-            }
+            
 
 
 

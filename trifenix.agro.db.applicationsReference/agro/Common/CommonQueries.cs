@@ -5,58 +5,70 @@ using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.model;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.db.model.agro.orders;
+using trifenix.agro.enums;
 
-namespace trifenix.agro.db.applicationsReference.agro.Common {
-    public class CommonQueries : ICommonQueries {
+namespace trifenix.agro.db.applicationsReference.agro.Common
+{
 
-        private readonly AgroDbArguments DbArguments;
 
-        public CommonQueries(AgroDbArguments dbArguments) {
-            DbArguments = dbArguments;
+    public class CommonQueries : BaseQueries, ICommonQueries {
+
+        
+
+        public CommonQueries(AgroDbArguments dbArguments) : base(dbArguments) {
+            
         }
 
         public async Task<string> GetSpecieAbbreviation(string idSpecie) {
-            var db = new MainGenericDb<Specie>(DbArguments);
-            var result = await db.Store.QuerySingleAsync<string>($"SELECT value c.Abbreviation FROM c where  c.id = '{idSpecie}'");
-            return result;
+            
+            return await SingleQuery<Specie, string>(Queries(DbQuery.SPECIEABBREVIATION_FROM_SPECIEID), idSpecie);
         }
 
         public async Task<string> GetSpecieAbbreviationFromVariety(string idVariety) {
-            var db = new MainGenericDb<Variety>(DbArguments);
-            var idSpecie = await db.Store.QuerySingleAsync<string>($"SELECT value c.IdSpecie FROM c where  c.id = '{idVariety}'");
+            
+            var idSpecie = await SingleQuery<Variety, string>(Queries(DbQuery.SPECIEID_FROM_VARIETYID), idVariety);
             return await GetSpecieAbbreviation(idSpecie);
         }
 
         public async Task<string> GetSpecieAbbreviationFromBarrack(string idBarrack) {
-            var db = new MainGenericDb<Barrack>(DbArguments);
-            var result = await db.Store.QuerySingleAsync<string>($"SELECT value c.IdVariety FROM c where  c.id = '{idBarrack}'");
+
+            
+            var result = await SingleQuery<Barrack, string>(Queries(DbQuery.VARIETYID_FROM_BARRACKID), idBarrack);
             return await GetSpecieAbbreviationFromVariety(result);
         }
 
         public async Task<string> GetSpecieAbbreviationFromOrder(string idOrder) {
-            var db = new MainGenericDb<ApplicationOrder>(DbArguments);
-            var result = await db.Store.QuerySingleAsync<string>($"SELECT value c.IdBarrack[0] FROM c where  c.id = '{idOrder}'");
+            
+            var result = await SingleQuery<ApplicationOrder, string>(Queries(DbQuery.IDBARRACK_FROM_ORDERID), idOrder);
             return await GetSpecieAbbreviationFromBarrack(result);
         }
 
         public async Task<List<string>> GetUsersMailsFromRoles(List<string> idsRoles) {
-            var db = new MainGenericDb<User>(DbArguments);
-            string query = $"SELECT DISTINCT value c.Email  FROM c join Rol in c.IdsRoles where Rol IN ({string.Join(",", idsRoles.Select(idRole => $"'{idRole}'").ToArray())})";
-            var result = await db.Store.QueryMultipleAsync<string>(query);
+            
+            var result = await MultipleQuery<User, string>(Queries(DbQuery.MAILUSERS_FROM_ROLES),  string.Join(",", idsRoles.Select(idRole => $"'{idRole}'").ToArray()));
             List<string> emails = result.ToList();
             return emails;
         }
 
         public async Task<string> GetSeasonId(string idBarrack) {
-            var db = new MainGenericDb<Barrack>(DbArguments);
-            return await db.Store.QuerySingleAsync<string>($"SELECT value c.SeasonId FROM c where c.id = '{idBarrack}'");
+            
+            return await SingleQuery<Barrack, string>(Queries(DbQuery.SEASONID_FROM_BARRACKID), idBarrack); 
         }
 
         public async Task<string> GetUserIdFromAAD(string idAAD) {
-            var db = new MainGenericDb<User>(DbArguments);
-            return await db.Store.QuerySingleAsync<string>($"SELECT value c.id FROM c where c.ObjectIdAAD = '{idAAD}'");
+
+            return await SingleQuery<User, string>(Queries(DbQuery.USERID_FROM_IDAAD), idAAD);
         }
 
+        public async Task<string> GetDefaultDosesId(string idProduct)
+        {
+            return await SingleQuery<Doses, string>(Queries(DbQuery.DEFAULTDOSESID_BY_PRODUCTID), idProduct);
+        }
+
+        public async Task<IEnumerable<string>> GetActiveDosesIdsFromProductId(string idProduct)
+        {
+            return await MultipleQuery<Doses, string>(Queries(DbQuery.ACTIVEDOSESIDS_FROM_PRODUCTID), idProduct);
+        }
     }
 
 }

@@ -1,4 +1,6 @@
 ﻿using System.Threading.Tasks;
+using trifenix.agro.db.model.agro.orders;
+
 namespace trifenix.agro.db.interfaces.agro.common {
 
     public interface IExistElement {
@@ -6,7 +8,11 @@ namespace trifenix.agro.db.interfaces.agro.common {
         Task<bool> ExistsWithPropertyValue<T>(string namePropCheck, string valueCheck, string id = null) where T : DocumentBase;
 
 
-        Task<bool> ExistsCustom<T>(string query) where T : DocumentBase;
+        Task<bool> ExistsDosesFromOrder(string idDoses);
+
+
+        Task<bool> ExistsDosesExecutionOrder(string idDoses);
+
 
     }
 }

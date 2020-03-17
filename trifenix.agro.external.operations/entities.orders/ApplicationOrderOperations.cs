@@ -110,12 +110,7 @@ namespace trifenix.agro.external.operations.entities.orders {
 
             var query = $"EntityIndex eq {(int)EntityRelated.BARRACK_EVENT} and RelatedIds/any(elementId: elementId/EntityIndex eq {(int)EntityRelated.ORDER} and elementId/EntityId eq '{id}')";
 
-            var elements = search.FilterElements<EntitySearch>(query);
-            // Eliminar antes de agregar
-            if (elements.Any())
-            {
-                search.DeleteElements(elements);
-            } 
+            search.DeleteElements<EntitySearch>(query);
 
 
             //TODO : Eliminar antes de agregar
@@ -139,7 +134,9 @@ namespace trifenix.agro.external.operations.entities.orders {
             }
 
             // Eliminar antes de agregar
-            search.DeleteElements(search.FilterElements<EntitySearch>($"EntityIndex eq {(int)EntityRelated.DOSES_ORDER} and RelatedIds/any(elementId: elementId/EntityIndex eq {(int)EntityRelated.ORDER} and elementId/EntityId eq '{id}'"));
+            search.DeleteElements<EntitySearch>($"EntityIndex eq {(int)EntityRelated.DOSES_ORDER} and RelatedIds/any(elementId: elementId/EntityIndex eq {(int)EntityRelated.ORDER} and elementId/EntityId eq '{id}'");
+
+
             //TODO : Eliminar antes de agregar
             foreach (var doses in input.DosesOrder) {
                 var idGuid = Guid.NewGuid().ToString("N");

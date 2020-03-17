@@ -9,7 +9,6 @@
     "CosmosDbUri": "https://agricola-jhm.documents.azure.com:443/",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet",
     "KeyWeatherApi": "7eb9d18077256697f3e1bea03605bdd2",
-    "mustBeAuthenticated": "true",
     "scope": "https://agro-dev.trifenix.io/App.access",
     "SearchServiceKey": "016DAA5EF1158FEEEE58DA60996D5981",
     "SearchServiceName": "agrosearch",
