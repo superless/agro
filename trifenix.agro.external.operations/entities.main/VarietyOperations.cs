@@ -12,10 +12,40 @@ using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
 
-namespace trifenix.agro.external.operations.entities.main
-{
+namespace trifenix.agro.external.operations.entities.main {
     public class VarietyOperations : MainOperation<Variety, VarietyInput>, IGenericOperation<Variety, VarietyInput> {
         public VarietyOperations(IMainGenericDb<Variety> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Variety> commonDb) : base(repo, existElement, search, commonDb) { }
+
+        public async Task<ExtPostContainer<string>> Save(Variety variety) {
+            await repo.CreateUpdate(variety, false);
+            search.AddElements(new List<EntitySearch> {
+                new EntitySearch{
+                    Id = variety.Id,
+                    EntityIndex = (int)EntityRelated.VARIETY,
+                    Created = DateTime.Now,
+                    RelatedProperties = new Property[] {
+                        new Property {
+                            PropertyIndex = (int)PropertyRelated.GENERIC_NAME,
+                            Value = variety.Name
+                        },
+                        new Property {
+                            PropertyIndex = (int)PropertyRelated.GENERIC_ABBREVIATION,
+                            Value = variety.Abbreviation
+                        }
+                    },
+                    RelatedIds = new RelatedId[]{
+                        new RelatedId{
+                            EntityIndex = (int)EntityRelated.SPECIE,
+                            EntityId = variety.IdSpecie
+                        }
+                    }
+                }
+            });
+            return new ExtPostContainer<string> {
+                IdRelated = variety.Id,
+                MessageResult = ExtMessageResult.Ok
+            };
+        }
 
         public async Task<ExtPostContainer<string>> SaveInput(VarietyInput input, bool isBatch) {
             await Validate(input, isBatch);
@@ -26,41 +56,15 @@ namespace trifenix.agro.external.operations.entities.main
                 Abbreviation = input.Abbreviation,
                 IdSpecie = input.IdSpecie
             };
-            await repo.CreateUpdate(variety, isBatch);
-            var varietySearch = new List<EntitySearch> {
-                new EntitySearch{
-                    Id = id,
-                    EntityIndex = (int)EntityRelated.VARIETY,
-                    Created = DateTime.Now,
-                    RelatedProperties = new Property[] {
-                        new Property {
-                            PropertyIndex = (int)PropertyRelated.GENERIC_NAME,
-                            Value = input.Name
-                        },
-                        new Property {
-                            PropertyIndex = (int)PropertyRelated.GENERIC_ABBREVIATION,
-                            Value = input.Abbreviation
-                        }
-                    },
-                    RelatedIds = new RelatedId[]{
-                        new RelatedId{
-                            EntityIndex = (int)EntityRelated.SPECIE,
-                            EntityId = input.IdSpecie
-                        }
-                    }
-                }
-            };
-
-
-
-            search.AddElements(varietySearch);
-
-
+            if (!isBatch)
+                return await Save(variety);
+            await repo.CreateUpdate(variety, true);
             return new ExtPostContainer<string> {
                 IdRelated = id,
-                MessageResult = ExtMessageResult.Ok,
-                Result = id
+                MessageResult = ExtMessageResult.Ok
             };
         }
+
     }
+
 }

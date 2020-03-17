@@ -80,7 +80,7 @@ namespace trifenix.agro.external.operations {
             foreach (var prop in UniqueProperties) {
                 var value = (string)prop.GetValue(input);
                 //Si input.Id es null, significa que es un POST, en caso contrario es un PUT. La validacion siguiente considera esto.
-                bool existsProperty = await existElement.ExistsWithPropertyValue<T>(prop.Name, value, input.Id, isBatch);
+                bool existsProperty = await existElement.ExistsWithPropertyValue<T>(prop.Name, value ?? "", input.Id, isBatch);
                 if (existsProperty)
                     errors.Add($"{prop.Name} debe ser un atributo unico. Ya existe otro {typeof(T).Name} con valor '{value}' en esta propiedad.");
             }

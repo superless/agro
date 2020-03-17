@@ -9,7 +9,7 @@ namespace trifenix.agro.model.external.Input {
 
         public string[] IdSpecies { get; set; }
 
-        public string[] idsApplicationTarget { get; set; }
+        public string[] IdsApplicationTarget { get; set; }
 
         public int DaysToReEntryToBarrack { get; set; }
 

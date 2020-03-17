@@ -9,8 +9,9 @@ namespace trifenix.agro.db.model {
 
         public override string Id { get; set; }
         public override string Name { get; set; }
-        public DateTime InitDate { get; set; }
+        public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 
     }
+
 }

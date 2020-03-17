@@ -16,6 +16,27 @@ namespace trifenix.agro.external.operations.entities.main {
     public class RoleOperations : MainOperation<Role, RoleInput>, IGenericOperation<Role, RoleInput> {
         public RoleOperations(IMainGenericDb<Role> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Role> commonDb) : base(repo, existElement, search, commonDb) { }
 
+        public async Task<ExtPostContainer<string>> Save(Role role) {
+            await repo.CreateUpdate(role, false);
+            search.AddElements(new List<EntitySearch> {
+                new EntitySearch{
+                    Id = role.Id,
+                    EntityIndex = (int)EntityRelated.ROLE,
+                    Created = DateTime.Now,
+                    RelatedProperties = new Property[] {
+                        new Property {
+                            PropertyIndex = (int)PropertyRelated.GENERIC_NAME,
+                            Value = role.Name
+                        }
+                    }
+                }
+            });
+            return new ExtPostContainer<string> {
+                IdRelated = role.Id,
+                MessageResult = ExtMessageResult.Ok
+            };
+        }
+
         public async Task<ExtPostContainer<string>> SaveInput(RoleInput input, bool isBatch) {
             await Validate(input, isBatch);
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
@@ -23,24 +44,12 @@ namespace trifenix.agro.external.operations.entities.main {
                 Id = id,
                 Name = input.Name
             };
-            await repo.CreateUpdate(role,isBatch);
-            search.AddElements(new List<EntitySearch> {
-                new EntitySearch{
-                    Id = id,
-                    EntityIndex = (int)EntityRelated.ROLE,
-                    Created = DateTime.Now,
-                    RelatedProperties = new Property[] {
-                        new Property {
-                            PropertyIndex = (int)PropertyRelated.GENERIC_NAME,
-                            Value = input.Name
-                        }
-                    }
-                }
-            });
+            if (!isBatch)
+                return await Save(role);
+            await repo.CreateUpdate(role, true);
             return new ExtPostContainer<string> {
                 IdRelated = id,
-                MessageResult = ExtMessageResult.Ok,
-                Result = id
+                MessageResult = ExtMessageResult.Ok
             };
         }
 

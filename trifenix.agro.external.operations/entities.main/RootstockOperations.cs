@@ -17,6 +17,31 @@ namespace trifenix.agro.external.operations.entities.main
     public class RootstockOperations : MainOperation<Rootstock, RootstockInput>, IGenericOperation<Rootstock, RootstockInput> {
         public RootstockOperations(IMainGenericDb<Rootstock> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Rootstock> commonDb) : base(repo, existElement, search, commonDb) { }
 
+        public async Task<ExtPostContainer<string>> Save(Rootstock rootstock) {
+            await repo.CreateUpdate(rootstock, false);
+            search.AddElements(new List<EntitySearch> {
+                new EntitySearch{
+                    Id = rootstock.Id,
+                    EntityIndex = (int)EntityRelated.ROOTSTOCK,
+                    Created = DateTime.Now,
+                    RelatedProperties = new Property[] {
+                        new Property {
+                            PropertyIndex = (int)PropertyRelated.GENERIC_NAME,
+                            Value = rootstock.Name
+                        },
+                        new Property {
+                            PropertyIndex = (int)PropertyRelated.GENERIC_ABBREVIATION,
+                            Value = rootstock.Abbreviation
+                        }
+                    }
+                }
+            });
+            return new ExtPostContainer<string> {
+                IdRelated = rootstock.Id,
+                MessageResult = ExtMessageResult.Ok
+            };
+        }
+
         public async Task<ExtPostContainer<string>> SaveInput(RootstockInput input, bool isBatch) {
             await Validate(input, isBatch);
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
@@ -25,28 +50,12 @@ namespace trifenix.agro.external.operations.entities.main
                 Name = input.Name,
                 Abbreviation = input.Abbreviation
             };
-            await repo.CreateUpdate(rootstock, isBatch);
-            search.AddElements(new List<EntitySearch> {
-                new EntitySearch{
-                    Id = id,
-                    EntityIndex = (int)EntityRelated.ROOTSTOCK,
-                    Created = DateTime.Now,
-                    RelatedProperties = new Property[] {
-                        new Property {
-                            PropertyIndex = (int)PropertyRelated.GENERIC_NAME,
-                            Value = input.Name
-                        },
-                        new Property {
-                            PropertyIndex = (int)PropertyRelated.GENERIC_ABBREVIATION,
-                            Value = input.Abbreviation
-                        }
-                    }
-                }
-            });
+            if (!isBatch)
+                return await Save(rootstock);
+            await repo.CreateUpdate(rootstock, true);
             return new ExtPostContainer<string> {
                 IdRelated = id,
-                MessageResult = ExtMessageResult.Ok,
-                Result = id
+                MessageResult = ExtMessageResult.Ok
             };
         }
 

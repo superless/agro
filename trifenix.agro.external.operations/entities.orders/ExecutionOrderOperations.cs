@@ -109,13 +109,3 @@ namespace trifenix.agro.external.operations.entities.orders {
     }
 
 }
-
-/*Ejecucion
-* El nuevo executionStatus debe ser siempre igual o superior al anterior (Como maximo en una unidad, ya que este estado es serial)
-* EL finishStatus solo se puede setear cuando el executionStatus tiene el valor 2:EndProcess
-* El closedStatus solo se puede setear cuando el executionStatus tiene el valor 3:Closed
-* Al crear una ejecucion (En planificacion) es obligatoria la orden relacionada.
-* Al iniciar la ejecucion (En proceso) el usuario aplicador asignado es obligatorio.
-* El closedStatus solo puede ser seteado si el usuario posee el rol de "Administrador".
-* Si la ejecucion ya finalizo(finishStatus != 0) solo se pueden recibir comentarios y cierre de ejecucion(set closedStatus to != 0)
-* Si la orden relacionada ya posee una ejecucion exitosa no se puede crear una nueva ejecucion.*/

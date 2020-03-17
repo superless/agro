@@ -43,8 +43,8 @@ namespace trifenix.agro.external.operations.entities.ext
                         errors += $"No existe la variedad con id {idVariety}.";
                 }
             }
-            if (input.idsApplicationTarget.Any()) {
-                foreach (string idApplicationTarget in input.idsApplicationTarget) {
+            if (input.IdsApplicationTarget.Any()) {
+                foreach (string idApplicationTarget in input.IdsApplicationTarget) {
                     bool existApplicationTarget = await existElement.ExistsById<ApplicationTarget>(idApplicationTarget, false);
                     if(!existApplicationTarget)
                         errors += $"No existe el objetivo de aplicacion con id {idApplicationTarget}.";
@@ -60,32 +60,28 @@ namespace trifenix.agro.external.operations.entities.ext
             return errors.Replace(".",".\r\n");  
         }
 
-        private RelatedId[] GetIdsRelated(DosesInput input) {
-            var list = new List<RelatedId>();
-            list.Add(new RelatedId {
-                EntityId = input.IdProduct,
-                EntityIndex = (int)EntityRelated.PRODUCT
-            });
-            if (input.idsApplicationTarget != null && input.idsApplicationTarget.Any()) {
-                list.AddRange(input.idsApplicationTarget.Select(s=>new RelatedId { 
+        private RelatedId[] GetIdsRelated(Dose dose) {
+            var list = new List<RelatedId> { new RelatedId { EntityId = dose.IdProduct, EntityIndex = (int)EntityRelated.PRODUCT } };
+            if (dose.IdsApplicationTarget != null && dose.IdsApplicationTarget.Any()) {
+                list.AddRange(dose.IdsApplicationTarget.Select(s => new RelatedId { 
                     EntityId = s,
                     EntityIndex = (int)EntityRelated.TARGET
                 }));
             }
-            if (input.IdSpecies != null && input.IdSpecies.Any()) {
-                list.AddRange(input.IdSpecies.Select(s => new RelatedId {
+            if (dose.IdSpecies != null && dose.IdSpecies.Any()) {
+                list.AddRange(dose.IdSpecies.Select(s => new RelatedId {
                     EntityId = s,
                     EntityIndex = (int)EntityRelated.PREORDER
                 }));
             }
-            if (input.IdVarieties != null && input.IdVarieties.Any()) {
-                list.AddRange(input.IdVarieties.Select(s => new RelatedId {
+            if (dose.IdVarieties != null && dose.IdVarieties.Any()) {
+                list.AddRange(dose.IdVarieties.Select(s => new RelatedId {
                     EntityId = s,
                     EntityIndex = (int)EntityRelated.VARIETY
                 }));
             }
-            if (input.WaitingToHarvest != null && input.WaitingToHarvest.Any()) {
-                list.AddRange(input.WaitingToHarvest.Select(s=>s.IdCertifiedEntity).Select(s => new RelatedId {
+            if (dose.WaitingToHarvest != null && dose.WaitingToHarvest.Any()) {
+                list.AddRange(dose.WaitingToHarvest.Select(s=>s.IdCertifiedEntity).Select(s => new RelatedId {
                     EntityId = s,
                     EntityIndex = (int)EntityRelated.CERTIFIED_ENTITY
                 }));
@@ -93,17 +89,33 @@ namespace trifenix.agro.external.operations.entities.ext
             return list.ToArray();
         }
 
+        public async Task<ExtPostContainer<string>> Save(Dose dose) {
+            await repo.CreateUpdate(dose, false);
+            search.AddElements(new List<EntitySearch> {
+                new EntitySearch{
+                    Id = dose.Id,
+                    EntityIndex = (int)EntityRelated.DOSES,
+                    Created = DateTime.Now,
+                    RelatedIds = GetIdsRelated(dose),
+                }
+            });
+            return new ExtPostContainer<string> {
+                IdRelated = dose.Id,
+                MessageResult = ExtMessageResult.Ok
+            };
+        }
+
         public async Task<ExtPostContainer<string>> SaveInput(DosesInput input, bool isBatch) {
             await Validate(input, isBatch);
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
-            var doses = new Dose {
+            var dose = new Dose {
                 Id = id,
                 ApplicationDaysInterval = input.ApplicationDaysInterval,
                 DaysToReEntryToBarrack = input.DaysToReEntryToBarrack,
                 DosesApplicatedTo = input.DosesApplicatedTo,
                 DosesQuantityMax = input.DosesQuantityMax,
                 DosesQuantityMin = input.DosesQuantityMin,
-                IdsApplicationTarget = input.idsApplicationTarget,
+                IdsApplicationTarget = input.IdsApplicationTarget,
                 IdSpecies = input.IdSpecies,
                 IdVarieties = input.IdVarieties,
                 NumberOfSequentialApplication = input.NumberOfSequentialApplication,
@@ -115,19 +127,12 @@ namespace trifenix.agro.external.operations.entities.ext
                 }).ToList(),
                 WettingRecommendedByHectares = input.WettingRecommendedByHectares
             };
-            await repo.CreateUpdate(doses, isBatch);
-            search.AddElements(new List<EntitySearch> {
-                new EntitySearch{
-                    Id = id,
-                    EntityIndex = (int)EntityRelated.DOSES,
-                    Created = DateTime.Now,
-                    RelatedIds = GetIdsRelated(input),
-                }
-            });
+            if (!isBatch)
+                return await Save(dose);
+            await repo.CreateUpdate(dose, true);
             return new ExtPostContainer<string> {
                 IdRelated = id,
-                MessageResult = ExtMessageResult.Ok,
-                Result = id
+                MessageResult = ExtMessageResult.Ok
             };
         }
 
