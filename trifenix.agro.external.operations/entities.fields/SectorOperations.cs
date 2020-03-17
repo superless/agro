@@ -18,7 +18,7 @@ namespace trifenix.agro.external.operations.entities.fields {
         public SectorOperations(IMainGenericDb<Sector> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Sector> commonDb) : base(repo, existElement, search, commonDb) { }
         
         public async Task<ExtPostContainer<string>> Save(Sector sector) {
-            await repo.CreateUpdate(sector, false);
+            await repo.CreateUpdate(sector);
             search.AddElements(new List<EntitySearch> {
                 new EntitySearch{
                     Id = sector.Id,
@@ -47,7 +47,7 @@ namespace trifenix.agro.external.operations.entities.fields {
             };
             if (!isBatch)
                 return await Save(sector);
-            await repo.CreateUpdate(sector, true);
+            await repo.CreateEntityContainer(sector);
             return new ExtPostContainer<string> {
                 IdRelated = id,
                 MessageResult = ExtMessageResult.Ok

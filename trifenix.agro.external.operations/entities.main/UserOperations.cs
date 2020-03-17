@@ -47,7 +47,7 @@ namespace trifenix.agro.external.operations.entities.main {
         }
 
         public async Task<ExtPostContainer<string>> Save(UserApplicator userApp) {
-            await repo.CreateUpdate(userApp, false);
+            await repo.CreateUpdate(userApp);
             search.AddElements(new List<EntitySearch> {
                 new EntitySearch {
                     Id = userApp.Id,
@@ -82,7 +82,7 @@ namespace trifenix.agro.external.operations.entities.main {
                 user.ObjectIdAAD = (await Get(id)).Result.ObjectIdAAD;
             if (!isBatch)
                 return await Save(user);
-            await repo.CreateUpdate(user, true);
+            await repo.CreateEntityContainer(user);
             return new ExtPostContainer<string> {
                 IdRelated = id,
                 MessageResult = ExtMessageResult.Ok

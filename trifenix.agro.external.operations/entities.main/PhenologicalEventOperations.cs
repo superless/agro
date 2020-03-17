@@ -27,7 +27,7 @@ namespace trifenix.agro.external.operations.entities.main {
         }
 
         public async Task<ExtPostContainer<string>> Save(PhenologicalEvent phenologicalEvent) {
-            await repo.CreateUpdate(phenologicalEvent, false);
+            await repo.CreateUpdate(phenologicalEvent);
             search.AddElements(new List<EntitySearch> {
                 new EntitySearch{
                     Id = phenologicalEvent.Id,
@@ -66,7 +66,7 @@ namespace trifenix.agro.external.operations.entities.main {
             };
             if (!isBatch)
                 return await Save(phenologicalEvent);
-            await repo.CreateUpdate(phenologicalEvent, true);
+            await repo.CreateEntityContainer(phenologicalEvent);
             return new ExtPostContainer<string> {
                 IdRelated = id,
                 MessageResult = ExtMessageResult.Ok

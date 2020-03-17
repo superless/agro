@@ -90,7 +90,7 @@ namespace trifenix.agro.external.operations.entities.ext
         }
 
         public async Task<ExtPostContainer<string>> Save(Dose dose) {
-            await repo.CreateUpdate(dose, false);
+            await repo.CreateUpdate(dose);
             search.AddElements(new List<EntitySearch> {
                 new EntitySearch{
                     Id = dose.Id,
@@ -129,7 +129,7 @@ namespace trifenix.agro.external.operations.entities.ext
             };
             if (!isBatch)
                 return await Save(dose);
-            await repo.CreateUpdate(dose, true);
+            await repo.CreateEntityContainer(dose);
             return new ExtPostContainer<string> {
                 IdRelated = id,
                 MessageResult = ExtMessageResult.Ok

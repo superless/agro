@@ -63,7 +63,7 @@ namespace trifenix.agro.authentication.operations {
                         Prop?.SetValue(dbInstance, Value);
                     }
                     try {
-                        idRelated = (await EntityOperations.Save(dbInstance,true)).IdRelated;
+                        idRelated = (await EntityOperations.SaveInput(dbInstance,true)).IdRelated;
                         Guids.Add(idRelated);
                     } catch(Exception ex) {
                         await Manager.BatchStore.RemoveAsync(container => true);

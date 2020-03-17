@@ -12,7 +12,7 @@ namespace trifenix.agro.model.external.Input {
         public OrderType OrderType { get; set; }
 
         [Required]
-        public DateTime InitDate { get; set; }
+        public DateTime StartDate { get; set; }
 
         [Required]
         public DateTime EndDate { get; set; }
@@ -41,7 +41,7 @@ namespace trifenix.agro.model.external.Input {
         public OrderType OrderType { get; set; }
 
         [Required]
-        public DateTime InitDate { get; set; }
+        public DateTime StartDate { get; set; }
 
         [Required]
         public DateTime EndDate { get; set; }

@@ -56,7 +56,7 @@ namespace trifenix.agro.external.operations.entities.events {
             //TODO: Revisar
             var picturePath = await uploadImage.UploadImageBase64(notificationEvent.PicturePath);
             notificationEvent.PicturePath = picturePath;
-            await repo.CreateUpdate(notificationEvent, false);
+            await repo.CreateUpdate(notificationEvent);
             var specieAbbv = await commonQueries.GetSpecieAbbreviationFromBarrack(notificationEvent.IdBarrack);
             var idSeason = await commonQueries.GetSeasonId(notificationEvent.IdBarrack);
             search.AddElements(new List<EntitySearch> {
@@ -114,7 +114,7 @@ namespace trifenix.agro.external.operations.entities.events {
                 notification.Weather = await weather.GetWeather(input.Lat.Value, input.Long.Value);
             if (!isBatch)
                 return await Save(notification);
-            await repo.CreateUpdate(notification, true);
+            await repo.CreateEntityContainer(notification);
             return new ExtPostContainer<string> {
                 IdRelated = id,
                 MessageResult = ExtMessageResult.Ok

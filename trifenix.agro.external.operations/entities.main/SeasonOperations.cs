@@ -12,8 +12,7 @@ using trifenix.agro.search.model;
 using trifenix.agro.enums;
 using trifenix.agro.db.interfaces.common;
 
-namespace trifenix.agro.external.operations.entities.main
-{
+namespace trifenix.agro.external.operations.entities.main {
     public class SeasonOperations : MainOperation<Season, SeasonInput>, IGenericOperation<Season, SeasonInput> {
         public SeasonOperations(IMainGenericDb<Season> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Season> commonDb) : base(repo, existElement, search, commonDb) { }
 
@@ -22,7 +21,7 @@ namespace trifenix.agro.external.operations.entities.main
         }
 
         public async Task<ExtPostContainer<string>> Save(Season season) {
-            await repo.CreateUpdate(season, false);
+            await repo.CreateUpdate(season);
             search.AddElements(new List<EntitySearch> {
                 new EntitySearch{
                     Id = season.Id,
@@ -71,7 +70,7 @@ namespace trifenix.agro.external.operations.entities.main
             };
             if (!isBatch)
                 return await Save(season);
-            await repo.CreateUpdate(season, true);
+            await repo.CreateEntityContainer(season);
             return new ExtPostContainer<string> {
                 IdRelated = id,
                 MessageResult = ExtMessageResult.Ok

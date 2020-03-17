@@ -15,7 +15,7 @@ namespace trifenix.agro.db.applicationsReference.agro {
         }
 
         public async Task<string> CreateUpdateCounter(Counter Counter) {
-            return await _db.CreateUpdate(Counter,false);
+            return await _db.CreateUpdate(Counter);
         }
 
         public Counter GetCounter() {

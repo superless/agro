@@ -72,7 +72,7 @@ namespace trifenix.agro.external.operations.entities.ext
                 Quantity = input.Quantity,
                 KindOfBottle = input.KindOfBottle
             };
-            await repo.CreateUpdate(product, isBatch);
+            //await repo.CreateUpdate(product, isBatch);
             if (input.Doses!= null && input.Doses.Any())
                 foreach (var dose in input.Doses) {
                     dose.IdProduct = id;

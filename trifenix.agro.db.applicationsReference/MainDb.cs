@@ -21,16 +21,21 @@ namespace trifenix.agro.db.applicationsReference {
 
         private EntityContainer GetContainer(T entity) => new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = entity };
 
-        public async Task<string> CreateUpdate(T entity, bool isBatch) {
+        public async Task<string> CreateUpdate(T entity) {
             if (string.IsNullOrWhiteSpace(entity.Id))
                 throw new NonIdException<DocumentBase>(entity);
-            dynamic result;
-            if (!isBatch)
-                result = await Store.UpsertAsync(entity);
-            else
-                result = await BatchStore.UpsertAsync(GetContainer(entity));
+            var result = await Store.UpsertAsync(entity);
             if (!result.IsSuccess)
-                throw (Exception)result.Exception;
+                throw result.Exception;
+            return result.Entity.Id;
+        }
+
+        public async Task<string> CreateEntityContainer(T entity) {
+            if (string.IsNullOrWhiteSpace(entity.Id))
+                throw new NonIdException<DocumentBase>(entity);
+            var result = await BatchStore.UpsertAsync(GetContainer(entity));
+            if (!result.IsSuccess)
+                throw result.Exception;
             return result.Entity.Id;
         }
 

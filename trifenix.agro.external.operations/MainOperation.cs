@@ -30,7 +30,7 @@ namespace trifenix.agro.external.operations {
             this.commonDb = commonDb;
         }
 
-        public virtual async Task Validate(T_INPUT input, bool isBatch) {
+        public virtual async Task Validate(T_INPUT input, bool isBatch = false) {
             if (!string.IsNullOrWhiteSpace(input.Id)) {  //PUT
                 var existsId = await existElement.ExistsById<T>(input.Id, isBatch);
                 if (!existsId)

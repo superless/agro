@@ -21,7 +21,7 @@ namespace trifenix.agro.external.operations.entities.orders {
         }
 
         public async Task<ExtPostContainer<string>> Save(OrderFolder orderFolder) {
-            await repo.CreateUpdate(orderFolder, false);
+            await repo.CreateUpdate(orderFolder);
             var specieAbbv = await commonQueries.GetSpecieAbbreviation(orderFolder.IdSpecie);
             search.AddElements(new List<EntitySearch> {
                 new EntitySearch {
@@ -63,7 +63,7 @@ namespace trifenix.agro.external.operations.entities.orders {
             };
             if (!isBatch)
                 return await Save(orderFolder);
-            await repo.CreateUpdate(orderFolder, true);
+            await repo.CreateEntityContainer(orderFolder);
             return new ExtPostContainer<string> {
                 IdRelated = id,
                 MessageResult = ExtMessageResult.Ok

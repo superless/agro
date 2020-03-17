@@ -17,7 +17,7 @@ namespace trifenix.agro.external.operations.entities.main {
         public NebulizerOperations(IMainGenericDb<Nebulizer> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Nebulizer> commonDb) : base(repo, existElement, search, commonDb) { }
 
         public async Task<ExtPostContainer<string>> Save(Nebulizer nebulizer) {
-            await repo.CreateUpdate(nebulizer, false);
+            await repo.CreateUpdate(nebulizer);
             search.AddElements(new List<EntitySearch> {
                 new EntitySearch {
                     Id = nebulizer.Id,
@@ -51,7 +51,7 @@ namespace trifenix.agro.external.operations.entities.main {
             };
             if (!isBatch)
                 return await Save(nebulizer);
-            await repo.CreateUpdate(nebulizer, true);
+            await repo.CreateEntityContainer(nebulizer);
             return new ExtPostContainer<string> {
                 IdRelated = id,
                 MessageResult = ExtMessageResult.Ok

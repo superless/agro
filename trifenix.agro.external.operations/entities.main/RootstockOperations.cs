@@ -18,7 +18,7 @@ namespace trifenix.agro.external.operations.entities.main
         public RootstockOperations(IMainGenericDb<Rootstock> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Rootstock> commonDb) : base(repo, existElement, search, commonDb) { }
 
         public async Task<ExtPostContainer<string>> Save(Rootstock rootstock) {
-            await repo.CreateUpdate(rootstock, false);
+            await repo.CreateUpdate(rootstock);
             search.AddElements(new List<EntitySearch> {
                 new EntitySearch{
                     Id = rootstock.Id,
@@ -52,7 +52,7 @@ namespace trifenix.agro.external.operations.entities.main
             };
             if (!isBatch)
                 return await Save(rootstock);
-            await repo.CreateUpdate(rootstock, true);
+            await repo.CreateEntityContainer(rootstock);
             return new ExtPostContainer<string> {
                 IdRelated = id,
                 MessageResult = ExtMessageResult.Ok

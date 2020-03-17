@@ -30,7 +30,7 @@ namespace trifenix.agro.external.operations.entities.orders {
         }
 
         public async Task<ExtPostContainer<string>> Save(ExecutionOrderStatus executionOrderStatus) {
-            await repo.CreateUpdate(executionOrderStatus, false);
+            await repo.CreateUpdate(executionOrderStatus);
             var executionStatusSearch = new EntitySearch {
                 Id = executionOrderStatus.Id,
                 EntityIndex = (int)EntityRelated.EXECUTION_ORDER_STATUS,
@@ -66,7 +66,7 @@ namespace trifenix.agro.external.operations.entities.orders {
             };
             if (!isBatch)
                 return await Save(executionStatus);
-            await repo.CreateUpdate(executionStatus, true);
+            await repo.CreateEntityContainer(executionStatus);
             return new ExtPostContainer<string> {
                 IdRelated = id,
                 MessageResult = ExtMessageResult.Ok

@@ -351,7 +351,7 @@ namespace trifenix.agro.console {
  /*Preguntar*/  new ExecutionOrder { Id = Guid.NewGuid().ToString("N"), IdOrder = entitiesContainers.ElementAt(27).Entity.Id, IdUserApplicator = entitiesContainers.ElementAt(25).Entity.Id, DosesOrder = new DosesOrder[] { new DosesOrder { IdDoses = entitiesContainers.ElementAt(16).Entity.Id, QuantityByHectare = 1350 } }, IdNebulizer = entitiesContainers.ElementAt(21).Entity.Id, IdTractor = entitiesContainers.ElementAt(20).Entity.Id, InitDate = new DateTime(2020, 5, 10), EndDate = new DateTime(2020, 6, 25) } });
 
             foreach (EntityContainer entityContainer in entitiesContainers)
-                await repo.CreateUpdate(entityContainer, false);
+                await repo.CreateUpdate(entityContainer);
 
             #endregion
 

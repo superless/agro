@@ -24,7 +24,7 @@ namespace trifenix.agro.external.operations.entities.fields {
         }
 
         public async Task<ExtPostContainer<string>> Save(Barrack barrack) {
-            await repo.CreateUpdate(barrack, false);
+            await repo.CreateUpdate(barrack);
             var specieAbbv = await commonQueries.GetSpecieAbbreviationFromVariety(barrack.IdVariety);
             var relatedEntities = new List<RelatedId> {
                 new RelatedId { EntityIndex = (int)EntityRelated.PLOTLAND, EntityId = barrack.IdPlotLand },
@@ -103,7 +103,7 @@ namespace trifenix.agro.external.operations.entities.fields {
             };
             if (!isBatch)
                 return await Save(barrack);
-            await repo.CreateUpdate(barrack, true);
+            await repo.CreateEntityContainer(barrack);
             return new ExtPostContainer<string> {
                 IdRelated = id,
                 MessageResult = ExtMessageResult.Ok

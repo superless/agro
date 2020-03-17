@@ -17,7 +17,7 @@ namespace trifenix.agro.external.operations.entities {
         public CommentOperation(IMainGenericDb<Comment> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Comment> commonDb) : base(repo, existElement, search, commonDb) { }
 
         public async Task<ExtPostContainer<string>> Save(Comment comment) {
-            await repo.CreateUpdate(comment, false);
+            await repo.CreateUpdate(comment);
             search.AddElements(new List<CommentSearch> {
                 new CommentSearch {
                     IdUser = comment.IdUser,
@@ -48,7 +48,7 @@ namespace trifenix.agro.external.operations.entities {
             };
             if (!isBatch)
                 return await Save(comment);
-            await repo.CreateUpdate(comment, true);
+            await repo.CreateEntityContainer(comment);
             return new ExtPostContainer<string> {
                 IdRelated = id,
                 MessageResult = ExtMessageResult.Ok

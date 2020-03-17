@@ -17,7 +17,7 @@ namespace trifenix.agro.external.operations.entities.main {
         public CostCenterOperations(IMainGenericDb<CostCenter> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<CostCenter> commonDb) : base(repo, existElement, search, commonDb) { }
 
         public async Task<ExtPostContainer<string>> Save(CostCenter costCenter) {
-            await repo.CreateUpdate(costCenter, false);
+            await repo.CreateUpdate(costCenter);
             search.AddElements(new List<EntitySearch> {
                 new EntitySearch {
                     Id = costCenter.Id,
@@ -53,7 +53,7 @@ namespace trifenix.agro.external.operations.entities.main {
             };
             if (!isBatch)
                 return await Save(costCenter);
-            await repo.CreateUpdate(costCenter, true);
+            await repo.CreateEntityContainer(costCenter);
             return new ExtPostContainer<string> {
                 IdRelated = id,
                 MessageResult = ExtMessageResult.Ok

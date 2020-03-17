@@ -20,7 +20,7 @@ namespace trifenix.agro.external.operations.entities.main
         public IngredientOperations(IMainGenericDb<Ingredient> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Ingredient> commonDb) : base(repo, existElement, search, commonDb) {}
 
         public async Task<ExtPostContainer<string>> Save(Ingredient ingredient) {
-            await repo.CreateUpdate(ingredient, false);
+            await repo.CreateUpdate(ingredient);
             search.AddElements(new List<EntitySearch> {
                 new EntitySearch{
                     Id = ingredient.Id,
@@ -56,7 +56,7 @@ namespace trifenix.agro.external.operations.entities.main
             };
             if (!isBatch)
                 return await Save(ingredient);
-            await repo.CreateUpdate(ingredient, true);
+            await repo.CreateEntityContainer(ingredient);
             return new ExtPostContainer<string> {
                 IdRelated = id,
                 MessageResult = ExtMessageResult.Ok

@@ -5,10 +5,10 @@ using trifenix.agro.db.model.agro.core;
 namespace trifenix.agro.model.external.Input {
     public class SeasonInput : InputBase {
 
-        [Required, Unique]
+        [Required]
         public DateTime  StartDate { get; set; }
 
-        [Required, Unique]
+        [Required]
         public DateTime EndDate { get; set; }
 
         public bool? Current { get; set; }

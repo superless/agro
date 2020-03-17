@@ -1,9 +1,7 @@
 ﻿using System.Threading.Tasks;
 using trifenix.agro.db.interfaces.agro.common;
-using trifenix.agro.db.model.agro;
 
-namespace trifenix.agro.db.applicationsReference.agro.Common
-{
+namespace trifenix.agro.db.applicationsReference.agro.Common {
     public class CosmosExistElement : IExistElement {
         public AgroDbArguments DbArguments { get; }
 

@@ -24,7 +24,7 @@ namespace trifenix.agro.external.operations.entities.orders {
         //if (!preOrder.BarracksId.Any()) return "Los cuarteles son obligatorios";
 
         public async Task<ExtPostContainer<string>> Save(PreOrder preOrder) {
-            await repo.CreateUpdate(preOrder, false);
+            await repo.CreateUpdate(preOrder);
             var specieAbbv = await commonQueries.GetSpecieAbbreviationFromBarrack(preOrder.BarracksId.First());
             var entity = new EntitySearch {
                 Id = preOrder.Id,
@@ -73,7 +73,7 @@ namespace trifenix.agro.external.operations.entities.orders {
             };
             if (!isBatch)
                 return await Save(preOrder);
-            await repo.CreateUpdate(preOrder, true);
+            await repo.CreateEntityContainer(preOrder);
             return new ExtPostContainer<string> {
                 IdRelated = id,
                 MessageResult = ExtMessageResult.Ok

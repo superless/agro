@@ -14,7 +14,7 @@ namespace trifenix.agro.model.external.Input {
         [Required, Reference(typeof(Dose))]
         public DosesOrder[] DosesOrder { get; set; }
 
-        public DateTime? InitDate { get; set; }
+        public DateTime? StartDate { get; set; }
 
         public DateTime? EndDate { get; set; }
 
@@ -36,7 +36,7 @@ namespace trifenix.agro.model.external.Input {
 
         public DosesOrder[] DosesOrder { get; set; }
 
-        public DateTime? InitDate { get; set; }
+        public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
 
         public string IdUserApplicator { get; set; }

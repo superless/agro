@@ -18,7 +18,7 @@ namespace trifenix.agro.external.operations.entities.main {
         public BusinessNameOperations(IMainGenericDb<BusinessName> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<BusinessName> commonDb) : base(repo, existElement, search, commonDb) { }
         
         public async Task<ExtPostContainer<string>> Save(BusinessName businessName) {
-            await repo.CreateUpdate(businessName, false);
+            await repo.CreateUpdate(businessName);
             var properties = new List<Property> {
                 new Property { PropertyIndex = (int)PropertyRelated.GENERIC_RUT, Value = businessName.Rut },
                 new Property { PropertyIndex = (int)PropertyRelated.GENERIC_NAME, Value = businessName.Name },       
@@ -58,7 +58,7 @@ namespace trifenix.agro.external.operations.entities.main {
             };
             if (!isBatch)
                 return await Save(businessName);
-            await repo.CreateUpdate(businessName, true);
+            await repo.CreateEntityContainer(businessName);
             return new ExtPostContainer<string> {
                 IdRelated = id,
                 MessageResult = ExtMessageResult.Ok

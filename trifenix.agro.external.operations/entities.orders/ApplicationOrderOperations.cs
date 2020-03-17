@@ -47,7 +47,7 @@ namespace trifenix.agro.external.operations.entities.orders {
                     }
                 }
             }
-            if (applicationOrderInput.InitDate > applicationOrderInput.EndDate)
+            if (applicationOrderInput.StartDate > applicationOrderInput.EndDate)
                 errors.Add("La fecha inicial no puede ser mayor a la final.");
             if (errors.Count > 0)
                 throw new Validation_Exception { ErrorMessages = errors };
@@ -55,7 +55,7 @@ namespace trifenix.agro.external.operations.entities.orders {
 
 
         public async Task<ExtPostContainer<string>> Save(ApplicationOrder applicationOrder) {
-            await repo.CreateUpdate(applicationOrder, false);
+            await repo.CreateUpdate(applicationOrder);
 
             var relatedEntities = new List<RelatedId>();
             // Eliminar antes de agregar
@@ -139,7 +139,7 @@ namespace trifenix.agro.external.operations.entities.orders {
                 Barracks = input.Barracks,
                 DosesOrder = input.DosesOrder,
                 EndDate = input.EndDate,
-                InitDate = input.InitDate,
+                InitDate = input.StartDate,
                 IdsPhenologicalPreOrder = input.IdsPhenologicalPreOrder,
                 Name = input.Name,
                 OrderType = input.OrderType,
@@ -147,7 +147,7 @@ namespace trifenix.agro.external.operations.entities.orders {
             };
             if (!isBatch)
                 return await Save(order);
-            await repo.CreateUpdate(order, true);
+            await repo.CreateEntityContainer(order);
             return new ExtPostContainer<string> {
                 IdRelated = id,
                 MessageResult = ExtMessageResult.Ok

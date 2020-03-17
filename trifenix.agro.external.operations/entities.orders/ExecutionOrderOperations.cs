@@ -27,14 +27,14 @@ namespace trifenix.agro.external.operations.entities.orders {
             List<string> errors = new List<string>();
             if (!executionOrderInput.DosesOrder.Any())
                 errors.Add("Debe existir al menos una dosis.");
-            if (executionOrderInput.InitDate > executionOrderInput.EndDate)
+            if (executionOrderInput.StartDate > executionOrderInput.EndDate)
                 errors.Add("La fecha inicial no puede ser mayor a la final.");
             if (errors.Count > 0)
                 throw new Validation_Exception { ErrorMessages = errors };
         }
 
         public async Task<ExtPostContainer<string>> Save(ExecutionOrder executionOrder) {
-            await repo.CreateUpdate(executionOrder, false);
+            await repo.CreateUpdate(executionOrder);
 
             var specieAbbv = await commonQueries.GetSpecieAbbreviationFromOrder(executionOrder.IdOrder);
             var properties = new List<Property>() { new Property { PropertyIndex = (int)PropertyRelated.GENERIC_ABBREVIATION, Value = specieAbbv } };
@@ -93,13 +93,13 @@ namespace trifenix.agro.external.operations.entities.orders {
                 IdNebulizer = input.IdNebulizer,
                 IdOrder = input.IdOrder,
                 IdTractor = input.IdTractor,
-                InitDate = input.InitDate,
+                InitDate = input.StartDate,
                 EndDate = input.EndDate,
                 DosesOrder = input.DosesOrder
             };
             if (!isBatch)
                 return await Save(execution);
-            await repo.CreateUpdate(execution, true);
+            await repo.CreateEntityContainer(execution);
             return new ExtPostContainer<string> {
                 IdRelated = id,
                 MessageResult = ExtMessageResult.Ok

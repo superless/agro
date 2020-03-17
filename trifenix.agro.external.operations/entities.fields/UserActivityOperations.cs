@@ -21,7 +21,7 @@ namespace trifenix.agro.external.operations.entities.fields {
         }
 
         public async Task<ExtPostContainer<string>> Save(UserActivity userActivity) {
-            await repo.CreateUpdate(userActivity, false);
+            await repo.CreateUpdate(userActivity);
             return new ExtPostContainer<string> {
                 IdRelated = userActivity.Id,
                 MessageResult = ExtMessageResult.Ok

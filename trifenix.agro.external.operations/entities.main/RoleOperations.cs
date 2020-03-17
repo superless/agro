@@ -17,7 +17,7 @@ namespace trifenix.agro.external.operations.entities.main {
         public RoleOperations(IMainGenericDb<Role> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Role> commonDb) : base(repo, existElement, search, commonDb) { }
 
         public async Task<ExtPostContainer<string>> Save(Role role) {
-            await repo.CreateUpdate(role, false);
+            await repo.CreateUpdate(role);
             search.AddElements(new List<EntitySearch> {
                 new EntitySearch{
                     Id = role.Id,
@@ -46,7 +46,7 @@ namespace trifenix.agro.external.operations.entities.main {
             };
             if (!isBatch)
                 return await Save(role);
-            await repo.CreateUpdate(role, true);
+            await repo.CreateEntityContainer(role);
             return new ExtPostContainer<string> {
                 IdRelated = id,
                 MessageResult = ExtMessageResult.Ok
