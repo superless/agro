@@ -7,10 +7,8 @@ using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.db.model.agro.local;
-using trifenix.agro.db.model.agro.orders;
 using trifenix.agro.enums;
 using trifenix.agro.external.interfaces;
-using trifenix.agro.external.operations.helper;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
@@ -18,214 +16,126 @@ using trifenix.agro.search.model;
 
 namespace trifenix.agro.external.operations.entities.ext
 {
-    public class DosesOperations : MainReadOperation<Doses>, IGenericOperation<Doses, DosesInput>
-    {
-        private readonly ICounters counters;
+    public class DosesOperations : MainOperation<Dose, DosesInput>, IGenericOperation<Dose, DosesInput> {
+        public DosesOperations(IMainGenericDb<Dose> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Dose> commonDb) : base(repo, existElement, search, commonDb) { }
 
-        public DosesOperations(IMainGenericDb<Doses> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Doses> commonDb, ICounters counters) : base(repo, existElement, search, commonDb)
-        {
-            this.counters = counters;
+        public async Task<string> Validate(DosesInput input) {
+            string errors = string.Empty;
+            if (!string.IsNullOrWhiteSpace(input.Id)) {  //PUT
+                var existsId = await existElement.ExistsById<Dose>(input.Id, false);
+                if (!existsId)
+                    errors += $"No existe dosis con id {input.Id}.";
+            }
+            var existProduct = await existElement.ExistsById<Product>(input.IdProduct, false);
+            if (!existProduct)
+                errors += $"No existe producto con id {input.IdProduct}";
+            if (input.IdSpecies.Any()) {
+                foreach (string idSpecie in input.IdSpecies.Distinct()) {
+                    bool existSpecie = await existElement.ExistsById<Specie>(idSpecie, false);
+                    if(!existSpecie)
+                        errors += $"No existe la especie con id {idSpecie}.";
+                }
+            }
+            if (input.IdVarieties.Any()) {
+                foreach (string idVariety in input.IdVarieties.Distinct()) {
+                    bool existVariety = await existElement.ExistsById<Variety>(idVariety, false);
+                    if(!existVariety)
+                        errors += $"No existe la variedad con id {idVariety}.";
+                }
+            }
+            if (input.IdsApplicationTarget.Any()) {
+                foreach (string idApplicationTarget in input.IdsApplicationTarget) {
+                    bool existApplicationTarget = await existElement.ExistsById<ApplicationTarget>(idApplicationTarget, false);
+                    if(!existApplicationTarget)
+                        errors += $"No existe el objetivo de aplicacion con id {idApplicationTarget}.";
+                }
+            }
+            if (input.WaitingToHarvest.Any()) {
+                foreach (string idCertifiedEntity in input.WaitingToHarvest.Select(wth => wth.IdCertifiedEntity).Distinct()) {
+                    bool existCertifiedEntity = await existElement.ExistsById<CertifiedEntity>(idCertifiedEntity, false);
+                    if(!existCertifiedEntity)
+                        errors += $"No existe la entidad certificadora con id {idCertifiedEntity}.";
+                }
+            }
+            return errors.Replace(".",".\r\n");  
         }
 
-        private RelatedId[] GetIdsRelated(Doses input)
-        {
-            var list = new List<RelatedId>
-            {
-                new RelatedId
-                {
-                    EntityId = input.IdProduct,
-                    EntityIndex = (int)EntityRelated.PRODUCT
-                }
-            };
-
-            if (input.IdsApplicationTarget != null && input.IdsApplicationTarget.Any())
-            {
-                list.AddRange(input.IdsApplicationTarget.Select(s=>new RelatedId { 
+        private RelatedId[] GetIdsRelated(Dose dose) {
+            var list = new List<RelatedId> { new RelatedId { EntityId = dose.IdProduct, EntityIndex = (int)EntityRelated.PRODUCT } };
+            if (dose.IdsApplicationTarget != null && dose.IdsApplicationTarget.Any()) {
+                list.AddRange(dose.IdsApplicationTarget.Select(s => new RelatedId { 
                     EntityId = s,
                     EntityIndex = (int)EntityRelated.TARGET
                 }));
             }
-
-            if (input.IdSpecies != null && input.IdSpecies.Any())
-            {
-                list.AddRange(input.IdSpecies.Select(s => new RelatedId
-                {
+            if (dose.IdSpecies != null && dose.IdSpecies.Any()) {
+                list.AddRange(dose.IdSpecies.Select(s => new RelatedId {
                     EntityId = s,
                     EntityIndex = (int)EntityRelated.PREORDER
                 }));
             }
-
-            if (input.IdVarieties != null && input.IdVarieties.Any())
-            {
-                list.AddRange(input.IdVarieties.Select(s => new RelatedId
-                {
+            if (dose.IdVarieties != null && dose.IdVarieties.Any()) {
+                list.AddRange(dose.IdVarieties.Select(s => new RelatedId {
                     EntityId = s,
                     EntityIndex = (int)EntityRelated.VARIETY
                 }));
             }
-            //waitingharvest
-
-            
+            if (dose.WaitingToHarvest != null && dose.WaitingToHarvest.Any()) {
+                list.AddRange(dose.WaitingToHarvest.Select(s=>s.IdCertifiedEntity).Select(s => new RelatedId {
+                    EntityId = s,
+                    EntityIndex = (int)EntityRelated.CERTIFIED_ENTITY
+                }));
+            }
             return list.ToArray();
         }
 
-
-        public async Task Remove(string id)
-        {
-
-            
-            var existsInOrder = await existElement.ExistsDosesFromOrder(id);
-            var existsInExecution = await existElement.ExistsDosesExecutionOrder(id);
-            if (!existsInExecution && !existsInOrder)
-            {
-                await repo.DeleteEntity(id);
-                
-                return;
-            }
-
-            var doses = await Store.GetEntity(id);
-            doses.Active = false;
-            await Store.CreateUpdate(doses);
-
-            search.AddElements(new List<EntitySearch>
-            {
-                GetEntitySearch(doses)
-            });
-            
-
-
-
-
-        }
-
-
-        private EntitySearch GetEntitySearch(Doses input) {
-
-            var ids = GetIdsRelated(input).ToList();
-            var query = $"EntityIndex eq {(int)EntityRelated.WAITINGHARVEST} and RelatedIds/any(elementId: elementId/EntityIndex eq {(int)EntityRelated.DOSES} and elementId/EntityId eq '{input.Id}')";
-
-            search.DeleteElements<EntitySearch>(query);
-
-            if (input.WaitingToHarvest!=null && input.WaitingToHarvest.Any())
-            {
-                foreach (var waitingHarvest in input.WaitingToHarvest)
-                {
-                    var idSearch = Guid.NewGuid().ToString("N");
-                    ids.Add(new RelatedId { EntityIndex = (int)EntityRelated.WAITINGHARVEST, EntityId = idSearch });
-                    search.AddElements(new List<EntitySearch> {
-                        new EntitySearch{
-                             EntityIndex=(int)EntityRelated.WAITINGHARVEST,
-                             Id= idSearch,
-                             Created = DateTime.Now,
-                             RelatedIds = new RelatedId[]{ 
-                                 new RelatedId{ EntityIndex= (int)EntityRelated.DOSES,  EntityId= input.Id},
-                                 new RelatedId{ EntityIndex=(int)EntityRelated.CERTIFIED_ENTITY, EntityId=waitingHarvest.IdCertifiedEntity }
-                             },
-                             RelatedProperties = new Property[]{ 
-                                new Property{PropertyIndex=(int)PropertyRelated.WAITINGHARVEST_DAYS, Value = $"{waitingHarvest.WaitingDays}" },
-                                new Property{PropertyIndex=(int)PropertyRelated.WAITINGHARVEST_PPM, Value = $"{waitingHarvest.Ppm}" },
-                             }
-                        }
-                    });
+        public async Task<ExtPostContainer<string>> Save(Dose dose) {
+            await repo.CreateUpdate(dose);
+            search.AddElements(new List<EntitySearch> {
+                new EntitySearch{
+                    Id = dose.Id,
+                    EntityIndex = (int)EntityRelated.DOSES,
+                    Created = DateTime.Now,
+                    RelatedIds = GetIdsRelated(dose),
                 }
-            }
-
-
-
-            return new EntitySearch
-            {
-                Id = input.Id,
-                EntityIndex = (int)EntityRelated.DOSES,
-                Created = DateTime.Now,
-                RelatedIds = ids.ToArray(),
-                RelatedProperties = new Property[]{
-                        new Property{ PropertyIndex = (int)PropertyRelated.DOSES_HOURSENTRYBARRACK, Value = $"{input.HoursToReEntryToBarrack}" },
-                        new Property{ PropertyIndex = (int)PropertyRelated.DOSES_DAYSINTERVAL, Value = $"{input.ApplicationDaysInterval}" },
-                        new Property{ PropertyIndex = (int)PropertyRelated.DOSES_SEQUENCE, Value = $"{input.NumberOfSequentialApplication}" },
-                        new Property{ PropertyIndex = (int)PropertyRelated.DOSES_WAITINGDAYSLABEL, Value = $"{input.WaitingDaysLabel}" },
-                        new Property{ PropertyIndex = (int)PropertyRelated.DOSES_WETTINGRECOMMENDED, Value = $"{input.WettingRecommendedByHectares}" },
-                        new Property{ PropertyIndex = (int)PropertyRelated.DOSES_WAITINGDAYSLABEL, Value = $"{input.WaitingDaysLabel}" },
-                        new Property{  PropertyIndex = (int)PropertyRelated.GENERIC_COUNTER, Value = $"{input.Correlative}"}
-                    },
-                RelatedEnumValues = new RelatedEnumValue[]{
-                        new RelatedEnumValue{  EnumerationIndex = (int)EnumerationRelated.GENERIC_ACTIVE, Value = input.Active?1:0},
-                        new RelatedEnumValue{  EnumerationIndex = (int)EnumerationRelated.GENERIC_DEFAULT, Value = input.Default?1:0},
-                        new RelatedEnumValue{  EnumerationIndex = (int)EnumerationRelated.DOSES_DOSESAPPLICATEDTO, Value = (int)input.DosesApplicatedTo},
-                    }
+            });
+            return new ExtPostContainer<string> {
+                IdRelated = dose.Id,
+                MessageResult = ExtMessageResult.Ok
             };
         }
 
-
-        public async Task<ExtPostContainer<string>> Save(DosesInput input)
-        {
+        public async Task<ExtPostContainer<string>> SaveInput(DosesInput input, bool isBatch) {
+            await Validate(input, isBatch);
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
-
-            var validaDoses = DosesHelper.ValidaDoses(existElement, input);
-
-            if (!string.IsNullOrWhiteSpace(validaDoses)) throw new Exception(validaDoses);
-
-            var validaProduct = await existElement.ExistsById<Product>(input.IdProduct);
-
-            if (!validaProduct) throw new Exception("el identificador de producto para dosis no se encuentra en la base de datos");
-
-            if (!string.IsNullOrWhiteSpace(input.Id))
-            {
-                var validaIdExists = await existElement.ExistsById<Doses>(input.Id);
-                if (!validaIdExists) throw new Exception("No existe el id de la dosis a modificar");
-            }
-
-            long counter;
-            if (string.IsNullOrWhiteSpace(input.Id))
-            {
-                var prevCounter = await counters.GetLastCounterDoses(input.IdProduct);
-                counter = prevCounter+=1;
-            }
-            else {
-                counter = await counters.GetCorrelativeFromDoses(input.Id);
-            }
-
-
-            var doses = new Doses
-            {
+            var dose = new Dose {
                 Id = id,
-                Correlative = counter,
-                LastModified = DateTime.Now,
                 ApplicationDaysInterval = input.ApplicationDaysInterval,
-                HoursToReEntryToBarrack = input.HoursToReEntryToBarrack,
+                DaysToReEntryToBarrack = input.DaysToReEntryToBarrack,
                 DosesApplicatedTo = input.DosesApplicatedTo,
                 DosesQuantityMax = input.DosesQuantityMax,
                 DosesQuantityMin = input.DosesQuantityMin,
-                IdsApplicationTarget = input.idsApplicationTarget,
+                IdsApplicationTarget = input.IdsApplicationTarget,
                 IdSpecies = input.IdSpecies,
                 IdVarieties = input.IdVarieties,
                 NumberOfSequentialApplication = input.NumberOfSequentialApplication,
                 IdProduct = input.IdProduct,
-                Active = input.Active,
-                Default = input.Default,
                 WaitingDaysLabel = input.WaitingDaysLabel,
                 WaitingToHarvest = input.WaitingToHarvest==null || !input.WaitingToHarvest.Any()?new List<WaitingHarvest>(): input.WaitingToHarvest.Select(w=>new WaitingHarvest { 
                     IdCertifiedEntity = w.IdCertifiedEntity,
-                    WaitingDays = w.WaitingDays,
-                    Ppm = w.Ppm
-                
+                    WaitingDays = w.WaitingDays
                 }).ToList(),
                 WettingRecommendedByHectares = input.WettingRecommendedByHectares
             };
-            await repo.CreateUpdate(doses);
-
-            search.AddElements(new List<EntitySearch>
-            {
-                GetEntitySearch(doses)
-            });
-
-
-            return new ExtPostContainer<string>
-            {
+            if (!isBatch)
+                return await Save(dose);
+            await repo.CreateEntityContainer(dose);
+            return new ExtPostContainer<string> {
                 IdRelated = id,
-                MessageResult = ExtMessageResult.Ok,
-                Result = id
+                MessageResult = ExtMessageResult.Ok
             };
         }
+
     }
 
 }

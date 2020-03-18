@@ -1,12 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using trifenix.agro.enums;
 
-namespace trifenix.agro.model.external.Input
-{
-    public class ProductInput : InputBaseName
-    {
+namespace trifenix.agro.model.external.Input {
+    public class ProductInput : InputBaseName {
         
-
         public string IdActiveIngredient { get; set; }
 
         public string Brand { get; set; }
@@ -42,7 +39,9 @@ namespace trifenix.agro.model.external.Input
         [Required]
         public KindOfProductContainer KindOfBottle { get; set; }
 
-        
-        public DosesSwaggerInput[] Doses { get; set; }
+        [Required]
+        public DosesInput[] Doses { get; set; }
+
     }
+
 }

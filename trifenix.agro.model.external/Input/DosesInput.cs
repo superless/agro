@@ -1,35 +1,26 @@
 ﻿using trifenix.agro.enums;
 
-namespace trifenix.agro.model.external.Input
-{
-    public class DosesInput : InputBase
-    {
+namespace trifenix.agro.model.external.Input {
+    public class DosesInput : InputBase {
 
         public string IdProduct { get; set; }
-
 
         public string[] IdVarieties { get; set; }
 
         public string[] IdSpecies { get; set; }
 
-        public string[] idsApplicationTarget { get; set; }
+        public string[] IdsApplicationTarget { get; set; }
 
         public int HoursToReEntryToBarrack { get; set; }
 
-        
         public int ApplicationDaysInterval { get; set; }
-
-
         
         public int NumberOfSequentialApplication { get; set; }
-
-
         
         public int WettingRecommendedByHectares { get; set; }
 
         public WaitingHarvestInput[] WaitingToHarvest;
 
-       
         public double DosesQuantityMin { get; set; }
 
         public double DosesQuantityMax { get; set; }

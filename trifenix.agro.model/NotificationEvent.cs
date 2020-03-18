@@ -1,8 +1,6 @@
 ﻿using Cosmonaut;
 using Cosmonaut.Attributes;
 using System;
-
-using trifenix.agro.db.model.agro.local;
 using trifenix.agro.enums;
 using trifenix.agro.weather.model;
 

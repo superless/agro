@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.interfaces.common;
-using trifenix.agro.db.model;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.enums;
 using trifenix.agro.external.interfaces;
@@ -13,43 +12,37 @@ using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
 
-namespace trifenix.agro.external.operations.entities
-{
-    public class CommentOperation : MainReadOperation<Comment>, IGenericOperation<Comment, CommentInput>
-    {
-        public CommentOperation(IMainGenericDb<Comment> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Comment> commonDb) : base(repo, existElement, search, commonDb)
-        {
-        }
-        public async Task Remove(string id)
-        {
+namespace trifenix.agro.external.operations.entities {
 
-        }
-        private async Task<string> ValidaComment(CommentInput input)
-        {
-            if (!string.IsNullOrWhiteSpace(input.Id))
-            {
-                var exists = await existElement.ExistsById<Comment>(input.Id);
-                if (!exists) return $"El comentario con id {input.Id} no existe";
-            }
+    public class CommentOperation : MainOperation<Comment, CommentInput>, IGenericOperation<Comment, CommentInput> {
 
-            var userExists = await existElement.ExistsById<User>(input.IdUser);
-            if (!userExists) return $"usuario con id {input.IdUser} no existe en la base de datos";
+        public CommentOperation(IMainGenericDb<Comment> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Comment> commonDb) : base(repo, existElement, search, commonDb) { }
 
-            return string.Empty;
-
+        public async Task<ExtPostContainer<string>> Save(Comment comment) {
+            await repo.CreateUpdate(comment);
+            search.AddElements(new List<CommentSearch> {
+                new CommentSearch {
+                    IdUser = comment.IdUser,
+                    Comment = comment.Commentary,
+                    Created = DateTime.Now,
+                    EntityIndex = comment.EntityIndex,
+                    Id = comment.Id,
+                    EntityId = comment.EntityId
+                }
+            });
+            return new ExtPostContainer<string> {
+                IdRelated = comment.Id,
+                MessageResult = ExtMessageResult.Ok
+            };
         }
 
-        public async Task<ExtPostContainer<string>> Save(CommentInput input)
-        {
+        public async Task Remove(string id) { }
+
+        public async Task<ExtPostContainer<string>> SaveInput(CommentInput input, bool isBatch) {
+            await Validate(input, isBatch);
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
-
-
-            var validaComment = await ValidaComment(input);
-
-            if (!string.IsNullOrWhiteSpace(validaComment)) throw new Exception(validaComment);
-
-            var comment = new Comment
-            {
+            //var validaComment = await ValidaComment(input);
+            var comment = new Comment {
                 Id = id,
                 Commentary = input.Commentary,
                 Created = DateTime.Now,
@@ -57,28 +50,15 @@ namespace trifenix.agro.external.operations.entities
                 EntityIndex = input.EntityIndex,
                 IdUser = input.IdUser
             };
-
-            await repo.CreateUpdate(comment);
-
-            search.AddElements(new List<CommentSearch>
-            {
-                new CommentSearch{ 
-                    IdUser = input.IdUser,
-                    Comment = input.Commentary,
-                    Created = DateTime.Now,
-                    EntityIndex = input.EntityIndex,
-                    Id = id,
-                    EntityId = input.EntityId
-                }
-            });
-
-
-            return new ExtPostContainer<string>
-            {
+            if (!isBatch)
+                return await Save(comment);
+            await repo.CreateEntityContainer(comment);
+            return new ExtPostContainer<string> {
                 IdRelated = id,
-                MessageResult = ExtMessageResult.Ok,
-                Result = id
+                MessageResult = ExtMessageResult.Ok
             };
         }
+
     }
+
 }

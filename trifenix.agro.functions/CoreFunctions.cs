@@ -679,7 +679,6 @@ namespace trifenix.agro.functions
         /// </return>
         [FunctionName("business_names_post")]
         [RequestHttpHeader("Authorization", isRequired: true)]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> BusinessNamePost(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "business_names")]
             [RequestBodyType(typeof(BusinessNameSwaggerInput), "Razón social")]
@@ -1059,9 +1058,9 @@ namespace trifenix.agro.functions
             var manager = await ContainerMethods.AgroManager(ObjectIdAAD);
             string json = await req.ReadAsStringAsync();
             JObject jsonObject = JObject.Parse(json);
-            var dbInitializer = new CosmosDbInitializer(manager, jsonObject.Value<string>("AssemblyName"));
-            dbInitializer.MapJsonToDB(jsonObject.Value<JObject>("Entities"));
-            return new OkResult();
+            var dbInitializer = new CosmosDbInitializer(manager, jsonObject.Value<string>("Assembly_Inputs"), jsonObject.Value<string>("Assembly_Entities"));
+            var result = await dbInitializer.MapJsonToDB(jsonObject.Value<JObject>("Entities"));
+            return result;
         }
 
     }

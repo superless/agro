@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using System;
-using System.IO;
 using System.Threading.Tasks;
 using trifenix.agro.email.operations;
-using trifenix.agro.enums;
 using trifenix.agro.external.interfaces;
 using trifenix.agro.external.operations;
 using trifenix.agro.functions.settings;
@@ -14,7 +11,8 @@ using trifenix.agro.search.operations;
 using trifenix.agro.storage.operations;
 using trifenix.agro.weather.operations;
 
-namespace trifenix.agro.functions.Helper {
+namespace trifenix.agro.functions.Helper
+{
     public static class ContainerMethods {
         public static async Task<IAgroManager> AgroManager(string ObjectIdAAD){
             var email = new Email("aresa.notificaciones@gmail.com", "Aresa2019");
@@ -27,8 +25,9 @@ namespace trifenix.agro.functions.Helper {
         public static JsonResult GetJsonPostContainer<T>(ExtPostContainer<T> containerResponse, ILogger log){
             if (containerResponse.GetType() == typeof(ExtPostErrorContainer<T>)) {
                 var resultError = (ExtPostErrorContainer<T>)containerResponse;
-                log.LogError(resultError.InternalException, resultError.Message);
-                return new JsonResult(resultError.GetBase);
+                log.LogError(resultError.InternalException, string.Join(Environment.NewLine, resultError.ValidationMessages));
+                                        //TODO: Revisar
+                return new JsonResult(resultError.ValidationMessages.Count > 0? (object)resultError.ValidationMessages : resultError.GetBase);
             }
             return new JsonResult(containerResponse);
         }

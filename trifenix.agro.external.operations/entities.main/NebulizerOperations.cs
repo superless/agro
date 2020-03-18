@@ -7,77 +7,57 @@ using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model;
 using trifenix.agro.enums;
 using trifenix.agro.external.interfaces;
-using trifenix.agro.external.operations.res;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
 
-namespace trifenix.agro.external.operations.entities.main
-{
-    public class NebulizerOperations : MainReadOperation<Nebulizer>, IGenericOperation<Nebulizer, NebulizerInput>
-    {
-        public NebulizerOperations(IMainGenericDb<Nebulizer> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Nebulizer> commonDb) : base(repo, existElement, search, commonDb)
-        {
-        }
-        public async Task Remove(string id)
-        {
+namespace trifenix.agro.external.operations.entities.main {
+    public class NebulizerOperations : MainOperation<Nebulizer, NebulizerInput>, IGenericOperation<Nebulizer, NebulizerInput> {
+        public NebulizerOperations(IMainGenericDb<Nebulizer> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Nebulizer> commonDb) : base(repo, existElement, search, commonDb) { }
 
-        }
-        public async Task<ExtPostContainer<string>> Save(NebulizerInput input)
-        {
-            var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
-
-            var nebulizer = new Nebulizer
-            {
-                Id = id,
-                Brand = input.Brand,
-                Code = input.Code
-            };
-
-            if (!string.IsNullOrWhiteSpace(input.Id))
-            {
-                var existsId = await existElement.ExistsById<Nebulizer>(input.Id);
-
-                if (!existsId) throw new Exception(string.Format(ErrorMessages.NotValidId, "Nebulizadora"));
-
-                var existsCode = await existElement.ExistsWithPropertyValue<Nebulizer>("Code", input.Code, input.Id);
-
-                if (existsCode) throw new Exception("El código ya existe en otra nebulizadora");
-            } else {
-                var existsCode = await existElement.ExistsWithPropertyValue<Nebulizer>("Code", input.Code);
-
-                if (existsCode) throw new Exception("El código ya existe en otra nebulizadora");
-            }
-
+        public async Task<ExtPostContainer<string>> Save(Nebulizer nebulizer) {
             await repo.CreateUpdate(nebulizer);
-
-            search.AddElements(new List<EntitySearch>
-            {
-                new EntitySearch{
-                    Id = id,
+            search.AddElements(new List<EntitySearch> {
+                new EntitySearch {
+                    Id = nebulizer.Id,
                     EntityIndex = (int)EntityRelated.NEBULIZER,
                     Created = DateTime.Now,
                     RelatedProperties = new Property[] {
                         new Property {
                             PropertyIndex = (int)PropertyRelated.GENERIC_BRAND,
-                            Value = input.Brand
+                            Value = nebulizer.Brand
                         },
                         new Property {
                             PropertyIndex = (int)PropertyRelated.GENERIC_CODE,
-                            Value = input.Code
+                            Value = nebulizer.Code
                         }
                     }
                 }
             });
-
-
-            return new ExtPostContainer<string>
-            {
-                IdRelated = id,
-                MessageResult = ExtMessageResult.Ok,
-                Result = id
+            return new ExtPostContainer<string> {
+                IdRelated = nebulizer.Id,
+                MessageResult = ExtMessageResult.Ok
             };
         }
+
+        public async Task<ExtPostContainer<string>> SaveInput(NebulizerInput input, bool isBatch) {
+            await Validate(input, isBatch);
+            var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
+            var nebulizer = new Nebulizer {
+                Id = id,
+                Brand = input.Brand,
+                Code = input.Code
+            };
+            if (!isBatch)
+                return await Save(nebulizer);
+            await repo.CreateEntityContainer(nebulizer);
+            return new ExtPostContainer<string> {
+                IdRelated = id,
+                MessageResult = ExtMessageResult.Ok
+            };
+        }
+
     }
+
 }

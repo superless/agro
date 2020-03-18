@@ -1,11 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Text;
-using trifenix.agro.enums;
+﻿using trifenix.agro.enums;
 
-namespace trifenix.agro.model.external
-{
-    public class ExtPostContainer<T>
-    {
+namespace trifenix.agro.model.external {
+    public class ExtPostContainer<T> {
+
         public ExtMessageResult MessageResult { get; set; }
 
         public string Message { get; set; }
@@ -15,9 +12,5 @@ namespace trifenix.agro.model.external
         public string IdRelated { get; set; }
 
     }
-
-    
-
-
 
 }
