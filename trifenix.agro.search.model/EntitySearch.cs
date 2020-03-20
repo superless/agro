@@ -29,21 +29,29 @@ namespace trifenix.agro.search.model {
         [IsFilterable, IsFacetable]
         public int EntityIndex { get; set; }
 
-        [IsFilterable, IsSearchable, IsFacetable]
+        [IsFilterable]
         public string EntityId { get; set; }
 
-        
+        [IsFilterable, IsFacetable]
+        public string Id { get { return $"[{EntityIndex},'{EntityId}']"; } }
+
+
+
+
 
 
     }
 
     public class Property {
 
-        [IsFilterable]
+        [IsFilterable, IsFacetable]
         public int PropertyIndex { get; set; }
 
-        [IsSearchable, IsFilterable]
+        [IsSearchable]
         public string Value { get; set; }
+
+        [IsFilterable, IsFacetable]
+        public string Id { get { return $"[{PropertyIndex},'{Value}']"; } }
 
 
 
@@ -51,12 +59,14 @@ namespace trifenix.agro.search.model {
 
     public class RelatedEnumValue {
 
-        [IsFilterable]
+        [IsFilterable, IsFacetable]
         public int EnumerationIndex { get; set; }
 
         [IsFilterable]
         public int Value { get; set; }
 
+        [IsFilterable, IsFacetable]
+        public string Id { get { return $"[{EnumerationIndex},'{Value}']"; } }
     }
 
 }

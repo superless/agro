@@ -1,5 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using trifenix.agro.db;
+using trifenix.agro.db.model.agro;
 using trifenix.agro.enums;
 using trifenix.agro.external.operations;
 using trifenix.agro.model.external.Input;
@@ -46,23 +49,77 @@ namespace trifenix.agro.console
             var businessNames = await agroManager.BusinessName.GetElements(); // search
 
             
-            var sectors = await agroManager.Sector.GetElements(); // search
-
-            
-
+            var sectors = await agroManager.Sector.GetElements();
             var certifiedEntity = await agroManager.CertifiedEntity.GetElements(); // seach
 
-            var plotlands = await agroManager.PlotLand.GetElements(); // search
-
-           
-
-            var users = await agroManager.UserApplicator.GetElements(); // search
-
-            
-
+            var plotlands = await agroManager.PlotLand.GetElements();
+            //var users = await agroManager.UserApplicator.GetElements(); // search
             var jobs = await agroManager.Job.GetElements(); // search
-
             var ingredients = await agroManager.Ingredient.GetElements();
+
+            var targets = await agroManager.ApplicationTarget.GetElements();
+
+            var products = await agroManager.Product.GetElements();
+
+            var doses = await agroManager.Doses.GetElements();
+
+            if (products.StatusResult == ExtGetDataResult.Success)
+            {
+                foreach (var item in products.Result)
+                {
+                    var dosesProduct = new List<Doses>();
+                    var dosesProductId = doses.Result.Where(s => s.IdProduct.Equals(item.Id) && !s.Default).ToList();
+                    if (dosesProductId.Any())
+                    {
+                        dosesProduct.AddRange(dosesProductId);
+                    }
+
+                    await agroManager.Product.Save(new ProductInput
+                    {
+                        Id = item.Id,
+                        Name = item.Name,
+                        Brand = item.Brand,
+                        IdActiveIngredient = item.IdActiveIngredient,
+                        KindOfBottle = item.KindOfBottle,
+                        MeasureType = item.MeasureType,
+                        Quantity = item.Quantity,
+                        Doses = dosesProductId.Select(s=>new DosesInput { 
+                            Active = s.Active,
+                            ApplicationDaysInterval = s.ApplicationDaysInterval,
+                            Default = s.Default,
+                            DosesApplicatedTo = s.DosesApplicatedTo,
+                            DosesQuantityMax = s.DosesQuantityMax,
+                            DosesQuantityMin = s.DosesQuantityMin,
+                            HoursToReEntryToBarrack = s.HoursToReEntryToBarrack,
+                            IdProduct = s.IdProduct,
+                            idsApplicationTarget = s.IdsApplicationTarget,
+                            IdSpecies = s.IdSpecies,
+                            IdVarieties = s.IdVarieties,
+                            NumberOfSequentialApplication = s.NumberOfSequentialApplication,
+                            WaitingDaysLabel = s.WaitingDaysLabel,
+                            WaitingToHarvest = s.WaitingToHarvest.Any()?s.WaitingToHarvest.Select(a=>new WaitingHarvestInput { IdCertifiedEntity = a.IdCertifiedEntity, Ppm = a.Ppm, WaitingDays = a.WaitingDays }).ToArray():null,
+                            WettingRecommendedByHectares = s.WettingRecommendedByHectares,
+                            
+                        }).ToArray()
+                    });
+                }
+            }
+
+
+            if (targets.StatusResult == ExtGetDataResult.Success)
+            {
+                foreach (var item in targets.Result)
+                {
+                    await agroManager.ApplicationTarget.Save(new TargetInput
+                    {
+                        Id = item.Id,
+                        Name = item.Name,
+                        Abbreviation = item.Abbreviation
+                    });
+                }
+            }
+
+
 
             if (ingredients.StatusResult == ExtGetDataResult.Success)
             {
@@ -108,23 +165,23 @@ namespace trifenix.agro.console
                 }
             }
 
-            if (users.StatusResult == ExtGetDataResult.Success)
-            {
-                foreach (var item in users.Result)
-                {
-                    await agroManager.UserApplicator.Save(new UserApplicatorInput
-                    {
-                        Id = item.Id,
-                        Name = item.Name,
-                        Email = item.Email,
-                        IdJob = item.IdJob,
-                        IdNebulizer = item.IdNebulizer,
-                        IdsRoles = item.IdsRoles,
-                        IdTractor = item.IdTractor,
-                        Rut = item.Rut
-                    });
-                }
-            }
+            //if (users.StatusResult == ExtGetDataResult.Success)
+            //{
+            //    foreach (var item in users.Result)
+            //    {
+            //        await agroManager.UserApplicator.Save(new UserApplicatorInput
+            //        {
+            //            Id = item.Id,
+            //            Name = item.Name,
+            //            Email = item.Email,
+            //            IdJob = item.IdJob,
+            //            IdNebulizer = item.IdNebulizer,
+            //            IdsRoles = item.IdsRoles,
+            //            IdTractor = item.IdTractor,
+            //            Rut = item.Rut
+            //        });
+            //    }
+            //}
 
 
             if (roles.StatusResult == ExtGetDataResult.Success)

@@ -18,6 +18,8 @@ namespace trifenix.agro.db.applicationsReference.agro.Common
             return await ExistsCustom<T>(Queries(DbQuery.COUNT_BY_ID),id);
         }
 
+
+
         public async Task<bool> ExistsWithPropertyValue<T>(string namePropCheck, string valueCheck, string id = null) where T : DocumentBase
         {   
             

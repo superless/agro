@@ -69,7 +69,7 @@ namespace trifenix.agro.external.operations
 
         public IGenericOperation<Product, ProductInput> Product => new ProductOperations(new MainGenericDb<Product>(Arguments), ExistsElements, _searchServiceInstance, Doses, new CommonDbOperations<Product>(), CommonQueries);
 
-        public IGenericOperation<Doses, DosesInput> Doses => new DosesOperations(new MainGenericDb<Doses>(Arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<Doses>(), Counters);
+        public IGenericOperation<Doses, DosesInput> Doses => new DosesOperations(new MainGenericDb<Doses>(Arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<Doses>(), Counters, CommonQueries);
 
         public IGenericOperation<Role, RoleInput> Role => new RoleOperations(new MainGenericDb<Role>(Arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<Role>());
 

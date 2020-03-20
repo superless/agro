@@ -117,55 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ACTIVEDOSESIDS_FROM_PRODUCTID" xml:space="preserve">
-    <value>SELECT DISTINCT value c.id from c where c.IdProduct='{0}' and c.Active=true and c.Default=false</value>
+  <data name="ENTITIES_WITH_ENTITYID" xml:space="preserve">
+    <value>EntityIndex eq {0} and RelatedIds/any(elementId: elementId/EntityIndex eq {1} and elementId/EntityId eq '{2}')</value>
   </data>
-  <data name="CORRELATIVE_FROM_DOSESID" xml:space="preserve">
-    <value>SELECT value c.Correlative FROM c where c.id ='{0}'</value>
+  <data name="ENTITIES_WITH_ENTITYID_EXCEPTID" xml:space="preserve">
+    <value>EntityIndex eq {0} and  Id ne '{3}' and RelatedIds/any(elementId: elementId/EntityIndex eq {1} and elementId/EntityId eq '{2}')</value>
   </data>
-  <data name="COUNT_BY_ID" xml:space="preserve">
-    <value>SELECT value count(1) FROM c where c.id = '{0}'</value>
-  </data>
-  <data name="COUNT_BY_NAMEVALUE" xml:space="preserve">
-    <value>SELECT value count(1) FROM c where c.{0} = '{1}'</value>
-  </data>
-  <data name="COUNT_BY_NAMEVALUE_AND_NOID" xml:space="preserve">
-    <value>SELECT value count(1) FROM c where c.{0} = '{1}'  and c.id != '{2}'</value>
-  </data>
-  <data name="COUNT_DOSES_BY_PRODUCTID" xml:space="preserve">
-    <value>SELECT value count(1) FROM c where c.IdProduct ='{0}'</value>
-  </data>
-  <data name="COUNT_EXECUTION_OR_ORDERS_BY_DOSESID" xml:space="preserve">
-    <value>SELECT value count(1) from c join dosesOrder in c.DosesOrder where dosesOrder.IdDoses = '{0}'</value>
-  </data>
-  <data name="DEFAULTDOSESID_BY_PRODUCTID" xml:space="preserve">
-    <value>SELECT DISTINCT value c.id from c where c.IdProduct='{0}' and c.Active=true and c.Default=true</value>
-  </data>
-  <data name="IDBARRACK_FROM_ORDERID" xml:space="preserve">
-    <value>SELECT value c.IdBarrack[0] FROM c where  c.id = '{0}'</value>
-  </data>
-  <data name="MAILUSERS_FROM_ROLES" xml:space="preserve">
-    <value>SELECT DISTINCT value c.Email  FROM c join Rol in c.IdsRoles where Rol IN ({0})</value>
-  </data>
-  <data name="MAXCORRELATIVE_DOSES_BY_PRODUCTID" xml:space="preserve">
-    <value>SELECT value max(c.Correlative) from c where c.IdProduct ='{0}'</value>
-  </data>
-  <data name="NAME_BY_ID" xml:space="preserve">
-    <value>SELECT value c.Name FROM c where  c.id = '{0}'</value>
-  </data>
-  <data name="SEASONID_FROM_BARRACKID" xml:space="preserve">
-    <value>SELECT value c.SeasonId FROM c where c.id = '{0}'</value>
-  </data>
-  <data name="SPECIEABBREVIATION_FROM_SPECIEID" xml:space="preserve">
-    <value>SELECT value c.Abbreviation FROM c where  c.id = '{0}'</value>
-  </data>
-  <data name="SPECIEID_FROM_VARIETYID" xml:space="preserve">
-    <value>SELECT value c.IdSpecie FROM c where  c.id = '{0}'</value>
-  </data>
-  <data name="USERID_FROM_IDAAD" xml:space="preserve">
-    <value>SELECT value c.id FROM c where c.ObjectIdAAD = '{0}'</value>
-  </data>
-  <data name="VARIETYID_FROM_BARRACKID" xml:space="preserve">
-    <value>SELECT value c.IdVariety FROM c where  c.id = '{0}'</value>
+  <data name="GET_ELEMENT" xml:space="preserve">
+    <value>EntityIndex eq {0} and Id eq '{1}'</value>
   </data>
 </root>

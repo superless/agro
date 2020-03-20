@@ -90,25 +90,17 @@ namespace trifenix.agro.external.operations.entities.fields {
             };
 
             // Eliminar antes de agregar
-            var barrackIndex = search.FilterElements<EntitySearch>($"EntityIndex eq {(int)EntityRelated.BARRACK} and Id eq '{id}'");
+            var barrackIndex = search.GetEntity(EntityRelated.BARRACK, id);
 
 
-            if (barrackIndex.Any()) {
-                foreach (string idGeo in barrackIndex.ElementAt(0).RelatedIds.AsEnumerable().Where(relatedId => relatedId.EntityIndex == (int)EntityRelated.GEOPOINT).Select(relatedId => relatedId.EntityId))
+            if (barrackIndex != null) {
+                foreach (string idGeo in barrackIndex.RelatedIds.AsEnumerable().Where(relatedId => relatedId.EntityIndex == (int)EntityRelated.GEOPOINT).Select(relatedId => relatedId.EntityId))
                 {
-                    search.DeleteElements<EntitySearch>($"EntityIndex eq {(int)EntityRelated.GEOPOINT} and Id eq '{idGeo}'");
+                    search.DeleteEntity(EntityRelated.GEOPOINT, idGeo);
                 }
             }
-                
 
-
-            var query = $"EntityIndex eq {(int)EntityRelated.GEOPOINT} and RelatedIds/any(elementId: elementId/EntityIndex eq {(int)EntityRelated.BARRACK} and elementId/EntityId eq '{id}')";
-
-            search.DeleteElements<EntitySearch>(query);
-
-
-
-
+            search.DeleteElementsWithRelatedElement(EntityRelated.GEOPOINT, EntityRelated.BARRACK, id);
 
             if (input.GeographicalPoints != null && input.GeographicalPoints.Any()) {
                 var keysGeo = new List<EntitySearch>();

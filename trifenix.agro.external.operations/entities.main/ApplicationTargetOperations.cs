@@ -33,7 +33,8 @@ namespace trifenix.agro.external.operations.entities.main
             var target = new ApplicationTarget
             {
                 Id = id,
-                Name = input.Name
+                Name = input.Name,
+                Abbreviation = input.Abbreviation
             };
 
             var valida = await Validate(input);

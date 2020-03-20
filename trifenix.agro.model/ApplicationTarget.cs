@@ -11,6 +11,8 @@ namespace trifenix.agro.db.model.agro
 
         public override string Name { get; set; }
 
+        public string Abbreviation { get; set; }
+
 
 
     }

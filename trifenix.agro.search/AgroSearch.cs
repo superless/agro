@@ -6,13 +6,17 @@ using trifenix.agro.enums;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
 
-namespace trifenix.agro.search.operations {
-    public class AgroSearch : IAgroSearch{
+namespace trifenix.agro.search.operations
+{
 
+
+    public class AgroSearch : IAgroSearch {
+    
         private readonly SearchServiceClient _search;
         private readonly string _entityIndex = "entities";
         private readonly string _commentIndex = "comments";
 
+        // para activar auto-complete, no es activado aún debido a el tamaño que toma.
         private readonly List<Suggester> _suggesterEntities = new List<Suggester>
         {
             new Suggester{
@@ -23,13 +27,25 @@ namespace trifenix.agro.search.operations {
             }
         };
 
+        private readonly ISearchQueries _queries;
+
+        private string Queries(SearchQuery query) {
+            return _queries.Get(query);
+        }
+
         public AgroSearch(string SearchServiceName, string SearchServiceKey) {
+
+
+            _queries = new SearchQueries();
             _search = new SearchServiceClient(SearchServiceName, new SearchCredentials(SearchServiceKey));
+
             if (!_search.Indexes.Exists(_entityIndex))
                 _search.Indexes.CreateOrUpdate(new Index { Name = _entityIndex, Fields = FieldBuilder.BuildForType<EntitySearch>() });
             if (!_search.Indexes.Exists(_commentIndex))
-                 _search.Indexes.CreateOrUpdate(new Index { Name = _commentIndex, Fields = FieldBuilder.BuildForType<CommentSearch>() });
+                _search.Indexes.CreateOrUpdate(new Index { Name = _commentIndex, Fields = FieldBuilder.BuildForType<CommentSearch>() });
         }
+
+        
 
         private void OperationElements<T>(List<T> elements, SearchOperation operationType) {
             var indexName = typeof(T).Equals(typeof(EntitySearch)) ? _entityIndex : _commentIndex;
@@ -63,6 +79,37 @@ namespace trifenix.agro.search.operations {
             }
 
         }
+
+        public EntitySearch GetEntity(EntityRelated entityRelated, string id)
+        {
+            var indexClient = _search.Indexes.GetClient(_entityIndex);
+            return indexClient.Documents
+                .Search<EntitySearch>(
+                    null, 
+                    new SearchParameters { 
+                        Filter = string.Format(Queries(SearchQuery.GET_ELEMENT), (int)entityRelated, id) }
+                ).Results.FirstOrDefault()?.Document;
+        }
+
+        public void DeleteElementsWithRelatedElement(EntityRelated elementToDelete, EntityRelated relatedElement, string idRelatedElement)
+        {
+            var query = string.Format(Queries(SearchQuery.ENTITIES_WITH_ENTITYID), (int)elementToDelete, (int)relatedElement, idRelatedElement);
+            DeleteElements<EntitySearch>(query);
     }
+
+        public void DeleteElementsWithRelatedElementExceptId(EntityRelated elementToDelete, EntityRelated relatedElement, string idRelatedElement, string elementExceptId)
+        {
+            var query = string.Format(Queries(SearchQuery.ENTITIES_WITH_ENTITYID_EXCEPTID), (int)elementToDelete, (int)relatedElement, idRelatedElement, elementExceptId);
+            DeleteElements<EntitySearch>(query);
+        }
+
+        public void DeleteEntity(EntityRelated entityRelated, string id)
+        {
+            var query = string.Format(Queries(SearchQuery.GET_ELEMENT), (int)entityRelated, id);
+            DeleteElements<EntitySearch>(query);
+        }
+    }
+
+    
 
 }

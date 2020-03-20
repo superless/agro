@@ -160,6 +160,15 @@ namespace trifenix.agro.db.applicationsReference.common.res {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SELECT value c.Name FROM c where  c.id = &apos;{0}&apos;.
+        /// </summary>
+        internal static string NAME_BY_ID {
+            get {
+                return ResourceManager.GetString("NAME_BY_ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SELECT value c.SeasonId FROM c where c.id = &apos;{0}&apos;.
         /// </summary>
         internal static string SEASONID_FROM_BARRACKID {

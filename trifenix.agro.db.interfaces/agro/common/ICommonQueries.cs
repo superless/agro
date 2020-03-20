@@ -23,6 +23,7 @@ namespace trifenix.agro.db.interfaces.agro.common {
 
         Task<IEnumerable<string>> GetActiveDosesIdsFromProductId(string idProduct);
 
+        Task<string> GetEntityName<T>(string id) where T : DocumentBaseName;
 
 
 

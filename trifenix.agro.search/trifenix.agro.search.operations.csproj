@@ -14,4 +14,19 @@
     <ProjectReference Include="..\trifenix.agro.search.model\trifenix.agro.search.model.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="SearchQueryRes.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SearchQueryRes.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="SearchQueryRes.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SearchQueryRes.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>

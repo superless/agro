@@ -3,26 +3,26 @@
     public enum EntityRelated {
         WAITINGHARVEST = 0,
         BARRACK = 1, 
-        BUSINESSNAME = 2, // search
+        BUSINESSNAME = 2, 
         CATEGORY_INGREDIENT = 3,
-        CERTIFIED_ENTITY = 4, // search
+        CERTIFIED_ENTITY = 4, 
         COSTCENTER = 5,
         DOSES = 6,
         INGREDIENT = 7,
-        JOB = 8, // search
+        JOB = 8, 
         NEBULIZER = 9,
         PHENOLOGICAL_EVENT = 10,
-        PLOTLAND = 11, // search
+        PLOTLAND = 11, 
         PRODUCT = 12,
         ROLE = 13,
         ROOTSTOCK = 14,
         SEASON = 15,
-        SECTOR = 16, // sector
+        SECTOR = 16, 
         PREORDER = 17,
         TARGET = 18,
         TRACTOR = 19,
-        USER = 20, //user
-        VARIETY = 21, // search
+        USER = 20, 
+        VARIETY = 21,  // el entity index
         NOTIFICATION_EVENT = 22,
         POLLINATOR = 23,
         ORDER_FOLDER = 24,
@@ -31,8 +31,8 @@
         BARRACK_EVENT = 27,
         DOSES_ORDER = 28,
         EXECUTION_ORDER_STATUS = 29,
-        SPECIE = 30, // search
-        GEOPOINT = 31 // search
+        SPECIE = 30, 
+        GEOPOINT = 31 
     }
 
     public enum PropertyRelated {
@@ -63,11 +63,15 @@
         DOSES_DAYSINTERVAL = 24,
         DOSES_SEQUENCE = 25,
         DOSES_WETTINGRECOMMENDED = 26,        
-        DOSES_WAITINGDAYSLABEL = 27,
-        DOSES_WAITINGHARVESTDAYS = 28,
-        GENERIC_COUNTER = 29,
-        WAITINGHARVEST_DAYS = 30,
-        WAITINGHARVEST_PPM = 31
+        DOSES_WAITINGDAYSLABEL = 27,        
+        GENERIC_COUNTER = 28,
+        WAITINGHARVEST_DAYS = 29,
+        WAITINGHARVEST_PPM = 30,
+        DOSES_MIN = 31,
+        DOSES_MAX= 32,
+        PRODUCT_NAME = 33
+
+
     }
 
     public enum EnumerationRelated {

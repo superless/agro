@@ -1,37 +1,28 @@
-﻿using Cosmonaut;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Dynamic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using trifenix.agro.db;
 using trifenix.agro.db.applicationsReference;
-using trifenix.agro.db.applicationsReference.agro;
-using trifenix.agro.db.applicationsReference.common;
 using trifenix.agro.db.model;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.db.model.agro.core;
 using trifenix.agro.db.model.agro.local;
 using trifenix.agro.db.model.agro.orders;
 using trifenix.agro.enums;
-using trifenix.agro.external.operations;
-using trifenix.agro.search;
-using trifenix.agro.search.model;
-using trifenix.agro.search.operations;
 
-namespace trifenix.agro.console {
+namespace trifenix.agro.console
+{
     class Program {
 
         static async Task Main(string[] args) {
             Console.WriteLine("Hora de inicio: {0}", DateTime.Now.ToString("hh\\:mm\\:ss"));
             Stopwatch timer = Stopwatch.StartNew();
 
-            //await SearchHelper.UpdateSearch();
+            await SearchHelper.UpdateSearch();
+
+            return;
 
             #region Reflexion
             //Console.WriteLine("typeof(Barrack).Name:            " + typeof(Barrack).Name);

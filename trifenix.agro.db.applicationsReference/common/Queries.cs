@@ -45,6 +45,9 @@ namespace trifenix.agro.db.applicationsReference.common
                     return QueryRes.DEFAULTDOSESID_BY_PRODUCTID;
                 case DbQuery.ACTIVEDOSESIDS_FROM_PRODUCTID:
                     return QueryRes.ACTIVEDOSESIDS_FROM_PRODUCTID;
+                case DbQuery.NAME_BY_ID:
+                    return QueryRes.NAME_BY_ID;
+                    break;
                 default:
                     return "";
             }

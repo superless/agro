@@ -21,10 +21,12 @@ namespace trifenix.agro.external.operations.entities.ext
     public class DosesOperations : MainReadOperation<Doses>, IGenericOperation<Doses, DosesInput>
     {
         private readonly ICounters counters;
+        private readonly ICommonQueries queries;
 
-        public DosesOperations(IMainGenericDb<Doses> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Doses> commonDb, ICounters counters) : base(repo, existElement, search, commonDb)
+        public DosesOperations(IMainGenericDb<Doses> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Doses> commonDb, ICounters counters, ICommonQueries queries) : base(repo, existElement, search, commonDb)
         {
             this.counters = counters;
+            this.queries = queries;
         }
 
         private RelatedId[] GetIdsRelated(Doses input)
@@ -87,9 +89,10 @@ namespace trifenix.agro.external.operations.entities.ext
             doses.Active = false;
             await Store.CreateUpdate(doses);
 
+            var dosesSearch = await GetEntitySearch(doses);
             search.AddElements(new List<EntitySearch>
             {
-                GetEntitySearch(doses)
+                dosesSearch
             });
             
 
@@ -99,12 +102,12 @@ namespace trifenix.agro.external.operations.entities.ext
         }
 
 
-        private EntitySearch GetEntitySearch(Doses input) {
+        private async Task<EntitySearch> GetEntitySearch(Doses input) {
 
             var ids = GetIdsRelated(input).ToList();
-            var query = $"EntityIndex eq {(int)EntityRelated.WAITINGHARVEST} and RelatedIds/any(elementId: elementId/EntityIndex eq {(int)EntityRelated.DOSES} and elementId/EntityId eq '{input.Id}')";
 
-            search.DeleteElements<EntitySearch>(query);
+            search.DeleteElementsWithRelatedElement(EntityRelated.WAITINGHARVEST, EntityRelated.DOSES, input.Id);
+
 
             if (input.WaitingToHarvest!=null && input.WaitingToHarvest.Any())
             {
@@ -132,6 +135,8 @@ namespace trifenix.agro.external.operations.entities.ext
 
 
 
+            var productName = await queries.GetEntityName<Product>(input.IdProduct);
+
             return new EntitySearch
             {
                 Id = input.Id,
@@ -141,16 +146,22 @@ namespace trifenix.agro.external.operations.entities.ext
                 RelatedProperties = new Property[]{
                         new Property{ PropertyIndex = (int)PropertyRelated.DOSES_HOURSENTRYBARRACK, Value = $"{input.HoursToReEntryToBarrack}" },
                         new Property{ PropertyIndex = (int)PropertyRelated.DOSES_DAYSINTERVAL, Value = $"{input.ApplicationDaysInterval}" },
-                        new Property{ PropertyIndex = (int)PropertyRelated.DOSES_SEQUENCE, Value = $"{input.NumberOfSequentialApplication}" },
-                        new Property{ PropertyIndex = (int)PropertyRelated.DOSES_WAITINGDAYSLABEL, Value = $"{input.WaitingDaysLabel}" },
+                        new Property{ PropertyIndex = (int)PropertyRelated.DOSES_SEQUENCE, Value = $"{input.NumberOfSequentialApplication}" },                        
                         new Property{ PropertyIndex = (int)PropertyRelated.DOSES_WETTINGRECOMMENDED, Value = $"{input.WettingRecommendedByHectares}" },
                         new Property{ PropertyIndex = (int)PropertyRelated.DOSES_WAITINGDAYSLABEL, Value = $"{input.WaitingDaysLabel}" },
-                        new Property{  PropertyIndex = (int)PropertyRelated.GENERIC_COUNTER, Value = $"{input.Correlative}"}
+                        new Property{  PropertyIndex = (int)PropertyRelated.GENERIC_COUNTER, Value = $"{input.Correlative}"},
+                        new Property { PropertyIndex = (int)PropertyRelated.DOSES_MAX, Value = $"{input.DosesQuantityMax}" },
+                        new Property { PropertyIndex = (int)PropertyRelated.DOSES_MIN, Value = $"{input.DosesQuantityMin}" }, 
+                        new Property { PropertyIndex = (int)PropertyRelated.DOSES_MIN, Value = $"{input.DosesQuantityMin}" },
+                        new Property { PropertyIndex = (int)PropertyRelated.PRODUCT_NAME, Value =productName },
+
+
                     },
                 RelatedEnumValues = new RelatedEnumValue[]{
                         new RelatedEnumValue{  EnumerationIndex = (int)EnumerationRelated.GENERIC_ACTIVE, Value = input.Active?1:0},
                         new RelatedEnumValue{  EnumerationIndex = (int)EnumerationRelated.GENERIC_DEFAULT, Value = input.Default?1:0},
                         new RelatedEnumValue{  EnumerationIndex = (int)EnumerationRelated.DOSES_DOSESAPPLICATEDTO, Value = (int)input.DosesApplicatedTo},
+
                     }
             };
         }
@@ -212,10 +223,10 @@ namespace trifenix.agro.external.operations.entities.ext
                 WettingRecommendedByHectares = input.WettingRecommendedByHectares
             };
             await repo.CreateUpdate(doses);
-
+            var dosesSearch = await GetEntitySearch(doses);
             search.AddElements(new List<EntitySearch>
             {
-                GetEntitySearch(doses)
+                dosesSearch
             });
 
 

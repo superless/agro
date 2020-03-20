@@ -69,6 +69,11 @@ namespace trifenix.agro.db.applicationsReference.agro.Common
         {
             return await MultipleQuery<Doses, string>(Queries(DbQuery.ACTIVEDOSESIDS_FROM_PRODUCTID), idProduct);
         }
+
+        public async Task<string> GetEntityName<T>(string id) where T : DocumentBaseName
+        {
+            return await SingleQuery<T, string>(Queries(DbQuery.NAME_BY_ID), id);
+        }
     }
 
 }

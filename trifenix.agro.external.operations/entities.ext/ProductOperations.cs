@@ -77,6 +77,31 @@ namespace trifenix.agro.external.operations.entities.ext
             return string.Empty;
         }
 
+
+        private EntitySearch CreateSearchDefaultDoses(string idProduct, string idDoses) {
+            return new EntitySearch
+            {
+                Id = idDoses,
+                EntityIndex = (int)EntityRelated.DOSES,
+                Created = DateTime.Now,
+                RelatedIds = new RelatedId[]{
+                        new RelatedId{
+                            EntityId = idProduct,
+                            EntityIndex = (int)EntityRelated.PRODUCT,
+                        }
+                    },
+                RelatedEnumValues = new RelatedEnumValue[]{
+                        new RelatedEnumValue{
+                            EnumerationIndex = (int)EnumerationRelated.GENERIC_ACTIVE,
+                            Value = 1
+                        },
+                        new RelatedEnumValue{
+                            EnumerationIndex = (int)EnumerationRelated.GENERIC_DEFAULT,
+                            Value = 1
+                        },
+                    }
+            };
+        }
         private async Task<string> CreateDefaultDoses(string idProduct) {
 
             var id = Guid.NewGuid().ToString("N");
@@ -90,29 +115,11 @@ namespace trifenix.agro.external.operations.entities.ext
 
             });
 
+            
+
             search.AddElements(new List<EntitySearch>
             {
-                new EntitySearch{
-                    Id = id,
-                    EntityIndex = (int)EntityRelated.DOSES,
-                    Created = DateTime.Now,
-                    RelatedIds = new RelatedId[]{ 
-                        new RelatedId{ 
-                            EntityId = idProduct,
-                            EntityIndex = (int)EntityRelated.PRODUCT,
-                        }
-                    },
-                    RelatedEnumValues = new RelatedEnumValue[]{ 
-                        new RelatedEnumValue{ 
-                            EnumerationIndex = (int)EnumerationRelated.GENERIC_ACTIVE,
-                            Value = 1
-                        },
-                        new RelatedEnumValue{
-                            EnumerationIndex = (int)EnumerationRelated.GENERIC_DEFAULT,
-                            Value = 1
-                        },
-                    }
-                }
+                CreateSearchDefaultDoses(idProduct, id)
             });
             return id;
 
@@ -122,21 +129,30 @@ namespace trifenix.agro.external.operations.entities.ext
         private async Task<RelatedId> RemoveDoses(ProductInput input, string id) {
             if (!string.IsNullOrWhiteSpace(input.Id))
             {
-
-                
-
-
                 //obtiene el identificador de la dosis por defecto
                 var defaultDoses = await queries.GetDefaultDosesId(input.Id);
 
-
-
+                
 
                 // elimina todas las dosis que no sean por defecto relacionadas con el producto
-                var queryDelete = $"EntityIndex eq {(int)EntityRelated.DOSES} and  Id ne '{defaultDoses}' and RelatedIds/any(elementId: elementId/EntityIndex eq {(int)EntityRelated.PRODUCT} and elementId/EntityId eq '{id}')";
+                search.DeleteElementsWithRelatedElementExceptId(EntityRelated.DOSES, EntityRelated.PRODUCT, id, defaultDoses);
+
+                var defaultDosesLocal = search.GetEntity(EntityRelated.DOSES, defaultDoses);
+
+                if (string.IsNullOrWhiteSpace(defaultDoses))
+                {
+                    defaultDoses = await CreateDefaultDoses(id);
+
+                } else if (defaultDosesLocal == null)
+                {
+                    search.AddElements(new List<EntitySearch> {
+                        CreateSearchDefaultDoses(input.Id, defaultDoses)
+                    });
+                }
 
 
-                search.DeleteElements<EntitySearch>(queryDelete);
+
+
 
                 // obtiene todas las dosis que no sean por defecto
                 var dosesPrevIds = await queries.GetActiveDosesIdsFromProductId(input.Id);
@@ -197,8 +213,6 @@ namespace trifenix.agro.external.operations.entities.ext
             relatedIds.Add(dosesDefault);
 
             await repo.CreateUpdate(product);
-
-
 
             if (input.Doses != null && input.Doses.Any())
             {
