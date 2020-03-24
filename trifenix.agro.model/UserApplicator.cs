@@ -1,4 +1,7 @@
-﻿namespace trifenix.agro.db.model.agro
+﻿using trifenix.agro.attr;
+using trifenix.agro.enums;
+
+namespace trifenix.agro.db.model.agro
 {
     public class UserApplicator : User
     {
@@ -6,8 +9,11 @@
         {
             CosmosEntityName = "User";
         }
+
+        [ReferenceSearch(EntityRelated.NEBULIZER)]
         public string IdNebulizer { get; set; }
 
+        [ReferenceSearch(EntityRelated.TRACTOR)]
         public string IdTractor { get; set; }
 
     }

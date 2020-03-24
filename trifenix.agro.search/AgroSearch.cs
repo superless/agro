@@ -9,13 +9,7 @@ using trifenix.agro.search.model;
 
 namespace trifenix.agro.search.operations
 {
-    //TODO: Search Modelo
-    // Considerar 
-    // reducir el nombre de los arrays de elementos
-    // ampliar los array de elementos para los tipos soportados por azure search, incluido geopoint con el fin de aprovechar las busquedas 
-    // agregar un nombre en el elemento, aunque no tenga nombre (null si no lo tiene) con el fin de implementar autocomplete
-    //Wz
-    //
+    
 
 
 

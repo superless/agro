@@ -2,26 +2,26 @@
 
     public enum EntityRelated {
         WAITINGHARVEST = 0,
-        BARRACK = 1, 
-        BUSINESSNAME = 2, 
+        BARRACK = 1,
+        BUSINESSNAME = 2,
         CATEGORY_INGREDIENT = 3,
-        CERTIFIED_ENTITY = 4, 
+        CERTIFIED_ENTITY = 4,
         COSTCENTER = 5,
         DOSES = 6,
         INGREDIENT = 7,
-        JOB = 8, 
+        JOB = 8,
         NEBULIZER = 9,
         PHENOLOGICAL_EVENT = 10,
-        PLOTLAND = 11, 
+        PLOTLAND = 11,
         PRODUCT = 12,
         ROLE = 13,
         ROOTSTOCK = 14,
         SEASON = 15,
-        SECTOR = 16, 
+        SECTOR = 16,
         PREORDER = 17,
         TARGET = 18,
         TRACTOR = 19,
-        USER = 20, 
+        USER = 20,
         VARIETY = 21,  // el entity index
         NOTIFICATION_EVENT = 22,
         POLLINATOR = 23,
@@ -31,9 +31,51 @@
         BARRACK_EVENT = 27,
         DOSES_ORDER = 28,
         EXECUTION_ORDER_STATUS = 29,
-        SPECIE = 30, 
-        GEOPOINT = 31 
+        SPECIE = 30,
+        GEOPOINT = 31
     }
+
+    public enum StringRelated {
+        GENERIC_CODE = 0,
+        GENERIC_ABBREVIATION = 1,
+        OBJECTID_AAD = 2,
+        RUT = 3,
+        GENERIC_NAME = 4,
+        EMAIL = 5,
+        GENERIC_BRAND = 6,
+    }
+}
+
+    public enum Num64Related {
+        
+    }
+
+    public enum Num32Related {
+
+    }
+
+    public enum DoubleRelated{
+        QUANTITY_CONTAINER = 0,
+    }
+
+    public enum BoolRelated {
+        CURRENT = 0,
+    }
+
+    public enum GeoRelated { 
+    
+    }
+
+    public enum DateRelated
+    {
+        END_DATE = 0,
+    }
+
+    public enum EnumRelated { 
+        GENERIC_MEASURE_TYPE = 0,
+        GENERIC_KIND_CONTAINER=1,
+    PRE_ORDER_TYPE = 2,
+}
 
     public enum PropertyRelated {
         GENERIC_GIRO = 0,
