@@ -16,6 +16,7 @@ namespace trifenix.agro.model.external.Input {
 
         [Required]
         public string Abbreviation { get; set; }
+
     }
 
 }

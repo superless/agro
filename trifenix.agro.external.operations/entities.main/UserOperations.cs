@@ -12,13 +12,14 @@ using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
+using trifenix.agro.validator.interfaces;
 
 namespace trifenix.agro.external.operations.entities.main {
     public class UserOperations : MainOperation<UserApplicator, UserApplicatorInput>, IGenericOperation<UserApplicator, UserApplicatorInput> {
 
         private readonly IGraphApi graphApi;
 
-        public UserOperations(IMainGenericDb<UserApplicator> repo, IExistElement existElement, IAgroSearch search, IGraphApi graphApi, ICommonDbOperations<UserApplicator> commonDb) : base(repo, existElement, search, commonDb) {
+        public UserOperations(IMainGenericDb<UserApplicator> repo, IExistElement existElement, IAgroSearch search, IGraphApi graphApi, ICommonDbOperations<UserApplicator> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
             this.graphApi = graphApi;
         }
         public async Task Remove(string id)
@@ -67,7 +68,7 @@ namespace trifenix.agro.external.operations.entities.main {
         }
 
         public async Task<ExtPostContainer<string>> SaveInput(UserApplicatorInput input, bool isBatch) {
-            await Validate(input, isBatch);
+            await Validate(input);
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
             var user = new UserApplicator {
                 Id = id,

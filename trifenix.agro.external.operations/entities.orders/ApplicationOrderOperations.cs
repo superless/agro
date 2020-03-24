@@ -14,6 +14,7 @@ using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
+using trifenix.agro.validator.interfaces;
 
 namespace trifenix.agro.external.operations.entities.orders {
 
@@ -21,29 +22,29 @@ namespace trifenix.agro.external.operations.entities.orders {
 
         private readonly ICommonQueries commonQueries;
 
-        public ApplicationOrderOperations(IMainGenericDb<ApplicationOrder> repo, IExistElement existElement, IAgroSearch search, ICommonQueries commonQueries, ICommonDbOperations<ApplicationOrder> commonDb) : base(repo, existElement, search, commonDb) {
+        public ApplicationOrderOperations(IMainGenericDb<ApplicationOrder> repo, IExistElement existElement, IAgroSearch search, ICommonQueries commonQueries, ICommonDbOperations<ApplicationOrder> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
             this.commonQueries = commonQueries;
         }
 
         public async Task Remove(string id) { }
 
-        public override async Task Validate(ApplicationOrderInput applicationOrderInput, bool isBatch) {
-            await base.Validate(applicationOrderInput, isBatch);
+        public override async Task Validate(ApplicationOrderInput applicationOrderInput) {
+            await base.Validate(applicationOrderInput);
             List<string> errors = new List<string>();
             if (applicationOrderInput.OrderType == OrderType.PHENOLOGICAL && !applicationOrderInput.IdsPhenologicalPreOrder.Any())
                     errors.Add("Si la orden es fenológica, deben existir preordenes fenologicas asociadas.");
             foreach (var doses in applicationOrderInput.DosesOrder) {
-                bool exists = await existElement.ExistsById<Dose>(doses.IdDoses, isBatch);
+                bool exists = await existElement.ExistsById<Dose>(doses.IdDoses);
                 if (!exists)
                     errors.Add($"No existe dosis con id '{doses.IdDoses}'.");
             }
             foreach (var barrack in applicationOrderInput.Barracks) {
-                bool exists = await existElement.ExistsById<Barrack>(barrack.IdBarrack, isBatch);
+                bool exists = await existElement.ExistsById<Barrack>(barrack.IdBarrack);
                 if (!exists)
                     errors.Add($"No existe cuartel con id '{barrack.IdBarrack}'.");
                 if (barrack.IdNotificationEvents != null && barrack.IdNotificationEvents.Any()) {
                     foreach (var idNotification in barrack.IdNotificationEvents) {
-                        bool existsEvent = await existElement.ExistsById<NotificationEvent>(idNotification, isBatch);
+                        bool existsEvent = await existElement.ExistsById<NotificationEvent>(idNotification);
                         if (!existsEvent)
                             errors.Add($"No existe notificacion con id '{idNotification}'.");
                     }
@@ -58,10 +59,9 @@ namespace trifenix.agro.external.operations.entities.orders {
 
         public async Task<ExtPostContainer<string>> Save(ApplicationOrder applicationOrder) {
             await repo.CreateUpdate(applicationOrder);
-
             var relatedEntities = new List<RelatedId>();
             // Eliminar antes de agregar
-            search.DeleteElements<EntitySearch>($"EntityIndex eq {(int)EntityRelated.BARRACK_EVENT} and RelatedIds/any(elementId: elementId/EntityIndex eq {(int)EntityRelated.ORDER} and elementId/EntityId eq '{id}')");
+            search.DeleteElements<EntitySearch>($"EntityIndex eq {(int)EntityRelated.BARRACK_EVENT} and RelatedIds/any(elementId: elementId/EntityIndex eq {(int)EntityRelated.ORDER} and elementId/EntityId eq '{applicationOrder.Id}')");
             //TODO : Eliminar antes de agregar
             foreach (var barrack in applicationOrder.Barracks) {
                 var idGuid = Guid.NewGuid().ToString("N");
@@ -82,7 +82,7 @@ namespace trifenix.agro.external.operations.entities.orders {
             }
 
             // Eliminar antes de agregar
-            search.DeleteElements<EntitySearch>($"EntityIndex eq {(int)EntityRelated.DOSES_ORDER} and RelatedIds/any(elementId: elementId/EntityIndex eq {(int)EntityRelated.ORDER} and elementId/EntityId eq '{id}'");
+            search.DeleteElements<EntitySearch>($"EntityIndex eq {(int)EntityRelated.DOSES_ORDER} and RelatedIds/any(elementId: elementId/EntityIndex eq {(int)EntityRelated.ORDER} and elementId/EntityId eq '{applicationOrder.Id}'");
             //TODO : Eliminar antes de agregar
             foreach (var doses in applicationOrder.DosesOrder) {
                 var idGuid = Guid.NewGuid().ToString("N");
@@ -131,10 +131,8 @@ namespace trifenix.agro.external.operations.entities.orders {
             };
         }
 
-
-
         public async Task<ExtPostContainer<string>> SaveInput(ApplicationOrderInput input, bool isBatch) {
-            await Validate(input, isBatch);
+            await Validate(input);
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
             var order = new ApplicationOrder {
                 Id = id,

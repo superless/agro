@@ -24,7 +24,7 @@ namespace trifenix.agro.console
 
             
 
-            var agroManager = new AgroManager(dbArguments, null, null, null, searchServiceInstance, "ba7e86c8-6c2d-491d-bb2e-0dd39fdf5dc1");
+            var agroManager = new AgroManager(dbArguments, null, null, null, searchServiceInstance, "ba7e86c8-6c2d-491d-bb2e-0dd39fdf5dc1", false);
 
 
             var rootStocks = await agroManager.Rootstock.GetElements();
@@ -68,14 +68,14 @@ namespace trifenix.agro.console
             {
                 foreach (var item in ingredients.Result)
                 {
-                    await agroManager.Ingredient.Save(new IngredientInput
+                    await agroManager.Ingredient.SaveInput(new IngredientInput
                     {
                         Id = item.Id,
                         Name = item.Name,
                         idCategory = item.idCategory
 
 
-                    });
+                    }, false);
                 }
             }
 

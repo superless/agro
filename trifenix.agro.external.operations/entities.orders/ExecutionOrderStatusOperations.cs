@@ -11,10 +11,11 @@ using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
+using trifenix.agro.validator.interfaces;
 
 namespace trifenix.agro.external.operations.entities.orders {
     public class ExecutionOrderStatusOperations : MainOperation<ExecutionOrderStatus, ExecutionOrderStatusInput>, IGenericOperation<ExecutionOrderStatus, ExecutionOrderStatusInput> {
-        public ExecutionOrderStatusOperations(IMainGenericDb<ExecutionOrderStatus> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<ExecutionOrderStatus> commonDb) : base(repo, existElement, search, commonDb) { }
+        public ExecutionOrderStatusOperations(IMainGenericDb<ExecutionOrderStatus> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<ExecutionOrderStatus> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
 
         /*Ejecucion Status
         * El nuevo executionStatus debe ser siempre igual o superior al anterior (Como maximo en una unidad, ya que este estado es serial)
@@ -25,8 +26,8 @@ namespace trifenix.agro.external.operations.entities.orders {
         * El closedStatus solo puede ser seteado si el usuario posee el rol de "Administrador".
         * Si la ejecucion ya finalizo(finishStatus != 0) solo se pueden recibir comentarios y cierre de ejecucion(set closedStatus to != 0)
         * Si la orden relacionada ya posee una ejecucion exitosa no se puede crear una nueva ejecucion.*/
-        public override async Task Validate(ExecutionOrderStatusInput executionOrderStatusInput, bool isBatch) {
-            await base.Validate(executionOrderStatusInput, isBatch);
+        public override async Task Validate(ExecutionOrderStatusInput executionOrderStatusInput) {
+            await base.Validate(executionOrderStatusInput);
         }
 
         public async Task<ExtPostContainer<string>> Save(ExecutionOrderStatus executionOrderStatus) {
@@ -53,7 +54,7 @@ namespace trifenix.agro.external.operations.entities.orders {
         }
 
         public async Task<ExtPostContainer<string>> SaveInput(ExecutionOrderStatusInput input, bool isBatch) {
-            await Validate(input, isBatch);
+            await Validate(input);
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
             var executionStatus = new ExecutionOrderStatus {
                 Id = id,
@@ -71,6 +72,10 @@ namespace trifenix.agro.external.operations.entities.orders {
                 IdRelated = id,
                 MessageResult = ExtMessageResult.Ok
             };
+        }
+
+        public Task Remove(string id) {
+            throw new NotImplementedException();
         }
 
     }

@@ -1,19 +1,26 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using trifenix.agro.db.model.agro;
 using trifenix.agro.enums;
 
 namespace trifenix.agro.model.external.Input {
     public class ProductInput : InputBaseName {
-        
+
+        [Required, Reference(typeof(Ingredient))]
         public string IdActiveIngredient { get; set; }
 
+        [Required]
         public string Brand { get; set; }
 
+        [Required]
         public MeasureType MeasureType { get; set; }
 
+        [Required]
         public double Quantity { get; set; }
 
+        [Required]
         public KindOfProductContainer KindOfBottle { get; set; }
 
+        [Required]
         public DosesInput[] Doses { get; set; }
 
     }

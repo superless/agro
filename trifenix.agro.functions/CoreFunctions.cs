@@ -1055,7 +1055,7 @@ namespace trifenix.agro.functions
             if (claims == null)
                 return new UnauthorizedResult();
             string ObjectIdAAD = claims.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
-            var manager = await ContainerMethods.AgroManager(ObjectIdAAD);
+            var manager = await ContainerMethods.AgroManager(ObjectIdAAD, true);
             string json = await req.ReadAsStringAsync();
             JObject jsonObject = JObject.Parse(json);
             var dbInitializer = new CosmosDbInitializer(manager, jsonObject.Value<string>("Assembly_Inputs"), jsonObject.Value<string>("Assembly_Entities"));

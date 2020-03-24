@@ -13,17 +13,18 @@ using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
+using trifenix.agro.validator.interfaces;
 
 namespace trifenix.agro.external.operations.entities.orders {
     public class ExecutionOrderOperations : MainOperation<ExecutionOrder, ExecutionOrderInput>, IGenericOperation<ExecutionOrder, ExecutionOrderInput> {
         private readonly ICommonQueries commonQueries;
 
-        public ExecutionOrderOperations(IMainGenericDb<ExecutionOrder> repo, IExistElement existElement, IAgroSearch search, ICommonQueries commonQueries, ICommonDbOperations<ExecutionOrder> commonDb) : base(repo, existElement, search, commonDb) {
+        public ExecutionOrderOperations(IMainGenericDb<ExecutionOrder> repo, IExistElement existElement, IAgroSearch search, ICommonQueries commonQueries, ICommonDbOperations<ExecutionOrder> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
             this.commonQueries = commonQueries;
         }
 
-        public override async Task Validate(ExecutionOrderInput executionOrderInput, bool isBatch) {
-            await base.Validate(executionOrderInput, isBatch);
+        public override async Task Validate(ExecutionOrderInput executionOrderInput) {
+            await base.Validate(executionOrderInput);
             List<string> errors = new List<string>();
             if (!executionOrderInput.DosesOrder.Any())
                 errors.Add("Debe existir al menos una dosis.");
@@ -85,7 +86,7 @@ namespace trifenix.agro.external.operations.entities.orders {
         }
 
         public async Task<ExtPostContainer<string>> SaveInput(ExecutionOrderInput input, bool isBatch) {
-            await Validate(input, isBatch);
+            await Validate(input);
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
             var execution = new ExecutionOrder {
                 Id= input.Id,
@@ -104,6 +105,10 @@ namespace trifenix.agro.external.operations.entities.orders {
                 IdRelated = id,
                 MessageResult = ExtMessageResult.Ok
             };
+        }
+
+        public Task Remove(string id) {
+            throw new NotImplementedException();
         }
 
     }

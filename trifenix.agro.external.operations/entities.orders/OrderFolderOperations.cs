@@ -11,13 +11,18 @@ using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
+using trifenix.agro.validator.interfaces;
 
 namespace trifenix.agro.external.operations.entities.orders {
     public class OrderFolderOperations : MainOperation<OrderFolder, OrderFolderInput>, IGenericOperation<OrderFolder, OrderFolderInput> {
         private readonly ICommonQueries commonQueries;
 
-        public OrderFolderOperations(IMainGenericDb<OrderFolder> repo, IExistElement existElement, IAgroSearch search, ICommonQueries commonQueries, ICommonDbOperations<OrderFolder> commonDb) : base(repo, existElement, search, commonDb) {
+        public OrderFolderOperations(IMainGenericDb<OrderFolder> repo, IExistElement existElement, IAgroSearch search, ICommonQueries commonQueries, ICommonDbOperations<OrderFolder> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
             this.commonQueries = commonQueries;
+        }
+
+        public Task Remove(string id) {
+            throw new NotImplementedException();
         }
 
         public async Task<ExtPostContainer<string>> Save(OrderFolder orderFolder) {
@@ -51,7 +56,7 @@ namespace trifenix.agro.external.operations.entities.orders {
         }
 
         public async Task<ExtPostContainer<string>> SaveInput(OrderFolderInput input, bool isBatch) {
-            await Validate(input, isBatch);
+            await Validate(input);
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
             var orderFolder = new OrderFolder {
                 Id = id,

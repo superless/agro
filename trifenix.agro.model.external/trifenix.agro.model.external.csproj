@@ -9,8 +9,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\trifenix.agro.db.interfaces\trifenix.agro.db.interfaces.csproj" />
     <ProjectReference Include="..\trifenix.agro.enums\trifenix.agro.enums.csproj" />
     <ProjectReference Include="..\trifenix.agro.model\trifenix.agro.db.model.csproj" />
+    <ProjectReference Include="..\trifenix.agro.validator.interfaces\trifenix.agro.validator.interfaces.csproj" />
   </ItemGroup>
 
 </Project>

@@ -39,14 +39,16 @@ namespace trifenix.agro.db.applicationsReference {
             return result.Entity.Id;
         }
 
-        public async Task<T> GetEntity(string uniqueId) {
-            var entity = (T)Activator.CreateInstance(typeof(T));
-            return await Store.FindAsync(uniqueId, entity.CosmosEntityName);
-        }
+        public async Task<T> GetEntity(string id) => await Store.FindAsync(id);
+        //{
+        //    var entity = (T)Activator.CreateInstance(typeof(T));
+        //    return await Store.FindAsync(uniqueId, entity.CosmosEntityName);
+        //}
 
         public async Task DeleteEntity(string id) {
-            var entity = (T)Activator.CreateInstance(typeof(T));
-            await Store.RemoveByIdAsync(id, entity.CosmosEntityName);
+            //var entity = (T)Activator.CreateInstance(typeof(T));
+            //await Store.RemoveByIdAsync(id, entity.CosmosEntityName);
+            await Store.RemoveByIdAsync(id);
         } 
 
         public IQueryable<T> GetEntities() => Store.Query();

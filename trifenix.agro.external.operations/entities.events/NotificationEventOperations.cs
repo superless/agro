@@ -13,6 +13,7 @@ using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
 using trifenix.agro.storage.interfaces;
+using trifenix.agro.validator.interfaces;
 using trifenix.agro.weather.interfaces;
 
 namespace trifenix.agro.external.operations.entities.events {
@@ -27,11 +28,15 @@ namespace trifenix.agro.external.operations.entities.events {
         private readonly IUploadImage uploadImage;
         private readonly IWeatherApi weather;
 
-        public NotificationEventOperations(IMainGenericDb<NotificationEvent> repo, IExistElement existElement, IAgroSearch search, ICommonQueries commonQueries, IEmail email, IUploadImage uploadImage, IWeatherApi weather, ICommonDbOperations<NotificationEvent> commonDb) : base(repo, existElement, search, commonDb) {
+        public NotificationEventOperations(IMainGenericDb<NotificationEvent> repo, IExistElement existElement, IAgroSearch search, ICommonQueries commonQueries, IEmail email, IUploadImage uploadImage, IWeatherApi weather, ICommonDbOperations<NotificationEvent> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
             this.commonQueries = commonQueries;
             this.email = email;
             this.uploadImage = uploadImage;
             this.weather = weather;
+        }
+
+        public Task Remove(string id) {
+            throw new NotImplementedException();
         }
 
         //public async Task<string> Validate(NotificationEventInput input) {
@@ -97,7 +102,7 @@ namespace trifenix.agro.external.operations.entities.events {
         }
 
         public async Task<ExtPostContainer<string>> SaveInput(NotificationEventInput input, bool isBatch) {
-            await Validate(input, isBatch);
+            await Validate(input);
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
             NotificationEvent notification = new NotificationEvent {
                 Id = id,

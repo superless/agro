@@ -11,10 +11,15 @@ using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
+using trifenix.agro.validator.interfaces;
 
 namespace trifenix.agro.external.operations.entities.ext {
     public class CertifiedEntityOperations : MainOperation<CertifiedEntity, CertifiedEntityInput>, IGenericOperation<CertifiedEntity, CertifiedEntityInput> {
-        public CertifiedEntityOperations(IMainGenericDb<CertifiedEntity> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<CertifiedEntity> commonDb) : base(repo, existElement, search, commonDb) { }
+        public CertifiedEntityOperations(IMainGenericDb<CertifiedEntity> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<CertifiedEntity> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
+
+        public Task Remove(string id) {
+            throw new NotImplementedException();
+        }
 
         public async Task<ExtPostContainer<string>> Save(CertifiedEntity certifiedEntity) {
             await repo.CreateUpdate(certifiedEntity); 
@@ -42,7 +47,7 @@ namespace trifenix.agro.external.operations.entities.ext {
         }
 
         public async Task<ExtPostContainer<string>> SaveInput(CertifiedEntityInput input, bool isBatch) {
-            await Validate(input, isBatch);
+            await Validate(input);
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
             var certifiedEntity = new CertifiedEntity {
                 Id = id,

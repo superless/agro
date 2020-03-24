@@ -9,6 +9,7 @@ using trifenix.agro.external.interfaces;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
+using trifenix.agro.validator.interfaces;
 
 namespace trifenix.agro.external.operations.entities.fields {
 
@@ -16,8 +17,12 @@ namespace trifenix.agro.external.operations.entities.fields {
 
         private readonly string UserId;
 
-        public UserActivityOperations(IMainGenericDb<UserActivity> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<UserActivity> commonDb, string userId) : base(repo, existElement, search, commonDb) {
+        public UserActivityOperations(IMainGenericDb<UserActivity> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<UserActivity> commonDb, string userId, IValidator validator) : base(repo, existElement, search, commonDb, validator) {
             UserId = userId;
+        }
+
+        public Task Remove(string id) {
+            throw new NotImplementedException();
         }
 
         public async Task<ExtPostContainer<string>> Save(UserActivity userActivity) {
@@ -29,7 +34,7 @@ namespace trifenix.agro.external.operations.entities.fields {
         }
 
         public async Task<ExtPostContainer<string>> SaveInput(UserActivityInput input, bool isBatch) {
-            await Validate(input, isBatch);
+            await Validate(input);
             var id = Guid.NewGuid().ToString("N");
             var UserActivity = new UserActivity {
                 Id = id,

@@ -11,12 +11,13 @@ using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
+using trifenix.agro.validator.interfaces;
 
 namespace trifenix.agro.external.operations.entities {
 
     public class CommentOperation : MainOperation<Comment, CommentInput>, IGenericOperation<Comment, CommentInput> {
 
-        public CommentOperation(IMainGenericDb<Comment> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Comment> commonDb) : base(repo, existElement, search, commonDb) { }
+        public CommentOperation(IMainGenericDb<Comment> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Comment> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
 
         public async Task<ExtPostContainer<string>> Save(Comment comment) {
             await repo.CreateUpdate(comment);
@@ -39,7 +40,7 @@ namespace trifenix.agro.external.operations.entities {
         public async Task Remove(string id) { }
 
         public async Task<ExtPostContainer<string>> SaveInput(CommentInput input, bool isBatch) {
-            await Validate(input, isBatch);
+            await Validate(input);
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
             //var validaComment = await ValidaComment(input);
             var comment = new Comment {

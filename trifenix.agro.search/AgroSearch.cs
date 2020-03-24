@@ -13,16 +13,6 @@ namespace trifenix.agro.search.operations {
         private readonly string _entityIndex = "entities";
         private readonly string _commentIndex = "comments";
 
-        private readonly List<Suggester> _suggesterEntities = new List<Suggester>
-        {
-            new Suggester{
-                Name= "SgProperty",
-                SourceFields = new List<string>{
-                    "RelatedProperties/Value"
-                }
-            }
-        };
-
         public AgroSearch(string SearchServiceName, string SearchServiceKey) {
             _search = new SearchServiceClient(SearchServiceName, new SearchCredentials(SearchServiceKey));
             if (!_search.Indexes.Exists(_entityIndex))
@@ -38,6 +28,13 @@ namespace trifenix.agro.search.operations {
             var batch = IndexBatch.New(actions);
             indexClient.Documents.Index(batch);
         }
+        
+        public List<T> FilterElements<T>(string filter) {
+            var indexName = typeof(T).Equals(typeof(EntitySearch)) ? _entityIndex : _commentIndex;
+            var indexClient = _search.Indexes.GetClient(indexName);
+            var result = indexClient.Documents.Search<T>(null, new SearchParameters { Filter = filter });
+            return result.Results.Select(v => v.Document).ToList();
+        }
 
         public void AddElements<T>(List<T> elements) {
             OperationElements(elements, SearchOperation.Add);
@@ -47,22 +44,12 @@ namespace trifenix.agro.search.operations {
             OperationElements(elements, SearchOperation.Delete);
         }
 
-        public List<T> FilterElements<T>(string filter) {
-            var indexName = typeof(T).Equals(typeof(EntitySearch)) ? _entityIndex : _commentIndex;
-            var indexClient = _search.Indexes.GetClient(indexName);
-            var result = indexClient.Documents.Search<T>(null, new SearchParameters { Filter = filter });
-            return result.Results.Select(v => v.Document).ToList();
-        }
-
-        public void DeleteElements<T>(string query)
-        {
-            var elements = FilterElements<EntitySearch>(query);
+        public void DeleteElements<T>(string query) {
+            var elements = FilterElements<T>(query);
             if (elements.Any())
-            {
                 DeleteElements(elements);
-            }
-
         }
+
     }
 
 }

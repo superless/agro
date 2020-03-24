@@ -12,6 +12,7 @@ using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
+using trifenix.agro.validator.interfaces;
 
 namespace trifenix.agro.external.operations.entities.fields {
 
@@ -19,8 +20,12 @@ namespace trifenix.agro.external.operations.entities.fields {
 
         private readonly ICommonQueries commonQueries;
 
-        public BarrackOperations(IMainGenericDb<Barrack> repo, IExistElement existElement, IAgroSearch search, ICommonQueries commonQueries, ICommonDbOperations<Barrack> commonDb) : base(repo, existElement, search, commonDb) {
+        public BarrackOperations(IMainGenericDb<Barrack> repo, IExistElement existElement, IAgroSearch search, ICommonQueries commonQueries, ICommonDbOperations<Barrack> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
             this.commonQueries = commonQueries;
+        }
+
+        public Task Remove(string id) {
+            throw new NotImplementedException();
         }
 
         public async Task<ExtPostContainer<string>> Save(Barrack barrack) {
@@ -36,15 +41,7 @@ namespace trifenix.agro.external.operations.entities.fields {
             if (!string.IsNullOrWhiteSpace(barrack.IdPollinator))
                 relatedEntities.Add(new RelatedId { EntityIndex = (int)EntityRelated.POLLINATOR, EntityId = barrack.IdPollinator });
             // Eliminar antes de agregar
-            var barrackIndex = search.FilterElements<EntitySearch>($"EntityIndex eq {(int)EntityRelated.BARRACK} and Id eq '{barrack.Id}'");
-            if (barrackIndex.Any())
-                foreach (string idGeo in barrackIndex.ElementAt(0).RelatedIds.AsEnumerable().Where(relatedId => relatedId.EntityIndex == (int)EntityRelated.GEOPOINT).Select(relatedId => relatedId.EntityId))
-                    search.DeleteElements(search.FilterElements<EntitySearch>($"EntityIndex eq {(int)EntityRelated.GEOPOINT} and Id eq '{idGeo}'"));
-                //DUPLICADO 
-            //var query = $"EntityIndex eq {(int)EntityRelated.GEOPOINT} and RelatedIds/any(elementId: elementId/EntityIndex eq {(int)EntityRelated.BARRACK} and elementId/EntityId eq '{barrack.Id}')";
-            //var elements = search.FilterElements<EntitySearch>(query);
-            //if (elements.Any())
-            //    search.DeleteElements(elements);
+            search.DeleteElements<EntitySearch>($"EntityIndex eq {(int)EntityRelated.GEOPOINT} and RelatedIds/any(elementId: elementId/EntityIndex eq {(int)EntityRelated.BARRACK} and elementId/EntityId eq '{barrack.Id}')");
             if (barrack.GeographicalPoints != null && barrack.GeographicalPoints.Any()) {
                 var keysGeo = new List<EntitySearch>();
                 foreach (var geo in barrack.GeographicalPoints) {
@@ -86,7 +83,7 @@ namespace trifenix.agro.external.operations.entities.fields {
         }
 
         public async Task<ExtPostContainer<string>> SaveInput(BarrackInput input, bool isBatch) {
-            await Validate(input, isBatch);
+            await Validate(input);
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
             var barrack = new Barrack {
                 Id = id,

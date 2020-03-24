@@ -11,10 +11,15 @@ using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
+using trifenix.agro.validator.interfaces;
 
 namespace trifenix.agro.external.operations.entities.main {
     public class RoleOperations : MainOperation<Role, RoleInput>, IGenericOperation<Role, RoleInput> {
-        public RoleOperations(IMainGenericDb<Role> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Role> commonDb) : base(repo, existElement, search, commonDb) { }
+        public RoleOperations(IMainGenericDb<Role> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Role> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
+
+        public Task Remove(string id) {
+            throw new NotImplementedException();
+        }
 
         public async Task<ExtPostContainer<string>> Save(Role role) {
             await repo.CreateUpdate(role);
@@ -38,7 +43,7 @@ namespace trifenix.agro.external.operations.entities.main {
         }
 
         public async Task<ExtPostContainer<string>> SaveInput(RoleInput input, bool isBatch) {
-            await Validate(input, isBatch);
+            await Validate(input);
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
             var role = new Role {
                 Id = id,

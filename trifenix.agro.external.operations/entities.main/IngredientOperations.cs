@@ -11,13 +11,17 @@ using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
+using trifenix.agro.validator.interfaces;
 
-namespace trifenix.agro.external.operations.entities.main
-{
+namespace trifenix.agro.external.operations.entities.main {
 
     public class IngredientOperations : MainOperation<Ingredient, IngredientInput>, IGenericOperation<Ingredient, IngredientInput> {
 
-        public IngredientOperations(IMainGenericDb<Ingredient> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Ingredient> commonDb) : base(repo, existElement, search, commonDb) {}
+        public IngredientOperations(IMainGenericDb<Ingredient> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Ingredient> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) {}
+
+        public Task Remove(string id) {
+            throw new NotImplementedException();
+        }
 
         public async Task<ExtPostContainer<string>> Save(Ingredient ingredient) {
             await repo.CreateUpdate(ingredient);
@@ -47,7 +51,7 @@ namespace trifenix.agro.external.operations.entities.main
         }
 
         public async Task<ExtPostContainer<string>> SaveInput(IngredientInput input, bool isBatch) {
-            await Validate(input, isBatch);
+            await Validate(input);
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
             var ingredient = new Ingredient {
                 Id = id,

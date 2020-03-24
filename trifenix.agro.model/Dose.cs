@@ -1,5 +1,6 @@
 ﻿using Cosmonaut;
 using Cosmonaut.Attributes;
+using System;
 using System.Collections.Generic;
 using trifenix.agro.db.model.agro.local;
 using trifenix.agro.enums;
@@ -11,6 +12,10 @@ namespace trifenix.agro.db.model.agro {
 
         public override string Id { get; set; }
 
+        public long Correlative { get; set; }
+
+        public DateTime LastModified { get; set; }
+
         public string IdProduct { get; set; }
 
         public string[] IdVarieties { get; set; }
@@ -19,7 +24,7 @@ namespace trifenix.agro.db.model.agro {
 
         public string[] IdsApplicationTarget { get; set; }
 
-        public int DaysToReEntryToBarrack { get; set; }
+        public int HoursToReEntryToBarrack { get; set; }
 
         public int ApplicationDaysInterval { get; set; }
 
@@ -48,6 +53,10 @@ namespace trifenix.agro.db.model.agro {
             }
             set { _waitingToHarvest = value; }
         }
+
+        public bool Default { get; set; }
+
+        public bool Active { get; set; }
 
     }
 

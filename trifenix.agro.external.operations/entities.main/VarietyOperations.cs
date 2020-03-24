@@ -11,10 +11,15 @@ using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
+using trifenix.agro.validator.interfaces;
 
 namespace trifenix.agro.external.operations.entities.main {
     public class VarietyOperations : MainOperation<Variety, VarietyInput>, IGenericOperation<Variety, VarietyInput> {
-        public VarietyOperations(IMainGenericDb<Variety> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Variety> commonDb) : base(repo, existElement, search, commonDb) { }
+        public VarietyOperations(IMainGenericDb<Variety> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Variety> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
+
+        public Task Remove(string id) {
+            throw new NotImplementedException();
+        }
 
         public async Task<ExtPostContainer<string>> Save(Variety variety) {
             await repo.CreateUpdate(variety);
@@ -48,7 +53,7 @@ namespace trifenix.agro.external.operations.entities.main {
         }
 
         public async Task<ExtPostContainer<string>> SaveInput(VarietyInput input, bool isBatch) {
-            await Validate(input, isBatch);
+            await Validate(input);
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
             var variety = new Variety {
                 Id = id,
