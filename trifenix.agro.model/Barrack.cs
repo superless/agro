@@ -1,5 +1,6 @@
 ﻿using Cosmonaut;
 using Cosmonaut.Attributes;
+using Microsoft.Azure.Documents.Spatial;
 using trifenix.agro.db.model.local;
 
 namespace trifenix.agro.db.model.agro
@@ -23,7 +24,7 @@ namespace trifenix.agro.db.model.agro
 
         public int NumberOfPlants { get; set; }
 
-        public GeographicalPoint[] GeographicalPoints { get; set; }
+        public Point[] GeographicalPoints { get; set; }
 
 
         public string IdPollinator { get; set; }

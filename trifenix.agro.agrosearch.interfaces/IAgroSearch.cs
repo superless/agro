@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using trifenix.agro.db;
 using trifenix.agro.enums;
 using trifenix.agro.search.model;
 
@@ -21,6 +22,8 @@ namespace trifenix.agro.search.interfaces
         void DeleteElementsWithRelatedElement(EntityRelated elementToDelete, EntityRelated relatedElement, string idRelatedElement);
 
         void DeleteElementsWithRelatedElementExceptId(EntityRelated elementToDelete, EntityRelated relatedElement, string idRelatedElement, string elementExceptId);
+
+        EntitySearch[] GetEntitySearch<T>(T model) where T : DocumentBase;
 
     }
 }

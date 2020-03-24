@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Azure.Documents.Spatial;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -53,10 +54,14 @@ namespace trifenix.agro.external.operations.entities.fields {
 
             var id = input.Id??Guid.NewGuid().ToString("N");
 
+            var geoPoints = input.GeographicalPoints.Any() ?
+                    input.GeographicalPoints.Select(s => new Point(s.Longitude, s.Latitude)).ToArray() :
+                    new List<Point>().ToArray();
+
             var barrack = new Barrack {
                 Id = id,
                 Name = input.Name,
-                GeographicalPoints = input.GeographicalPoints,
+                GeographicalPoints = geoPoints,
                 Hectares = input.Hectares,
                 IdPlotLand = input.IdPlotLand,
                 IdPollinator = input.IdPollinator,

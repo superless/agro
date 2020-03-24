@@ -33,12 +33,7 @@ namespace trifenix.agro.search.model {
         public string EntityId { get; set; }
 
         [IsFilterable, IsFacetable]
-        public string Id { get { return $"[{EntityIndex},'{EntityId}']"; } }
-
-
-
-
-
+        public string Id { get { return $"{EntityIndex},{EntityId}"; } }
 
     }
 
@@ -50,8 +45,10 @@ namespace trifenix.agro.search.model {
         [IsSearchable]
         public string Value { get; set; }
 
+        
+
         [IsFilterable, IsFacetable]
-        public string Id { get { return $"[{PropertyIndex},'{Value}']"; } }
+        public string Id { get { return $"{PropertyIndex},{Value}";  } }
 
 
 
@@ -66,7 +63,7 @@ namespace trifenix.agro.search.model {
         public int Value { get; set; }
 
         [IsFilterable, IsFacetable]
-        public string Id { get { return $"[{EnumerationIndex},'{Value}']"; } }
+        public string Id { get { return $"{EnumerationIndex},{Value}"; } }
     }
 
 }

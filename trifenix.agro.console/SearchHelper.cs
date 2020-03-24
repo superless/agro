@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.Azure.Documents.Spatial;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using trifenix.agro.db;
@@ -320,13 +321,19 @@ namespace trifenix.agro.console
 
             if (barracks.StatusResult == ExtGetDataResult.Success)
             {
+                
                 foreach (var item in barracks.Result)
                 {
+                    var geoPoints = 
+                        item.GeographicalPoints.Any() ? 
+                        item.GeographicalPoints.Select(s => new GeographicalPointInput { Latitude = s.Position.Latitude, Longitude = s.Position.Longitude }).ToArray() : 
+                        new List<GeographicalPointInput>().ToArray();
+
                     await agroManager.Barrack.Save(new BarrackInput
                     {
                         Id = item.Id,
                         Name = item.Name,
-                        GeographicalPoints = item.GeographicalPoints,
+                        GeographicalPoints = geoPoints,
                         Hectares = item.Hectares,
                         IdPlotLand = item.IdPlotLand,
                         IdPollinator = item.IdPollinator,

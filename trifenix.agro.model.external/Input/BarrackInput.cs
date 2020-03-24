@@ -17,7 +17,7 @@ namespace trifenix.agro.model.external.Input
 
         public int NumberOfPlants { get; set; }
 
-        public GeographicalPoint[] GeographicalPoints { get; set; }
+        public GeographicalPointInput[] GeographicalPoints { get; set; }
 
         public string IdPollinator { get; set; }
 

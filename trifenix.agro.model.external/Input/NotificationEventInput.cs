@@ -27,9 +27,6 @@ namespace trifenix.agro.model.external.Input
 
         public string Base64 { get; set; }
 
-
-
-
         public float? Lat { get; set; }
 
         public float? Long { get; set; }

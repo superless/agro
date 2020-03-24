@@ -14,6 +14,8 @@ namespace trifenix.agro.db.model.agro
 
         public override string Id { get; set; }
 
+
+        
         public override string Name { get; set; }
 
         public string IdActiveIngredient { get; set; }

@@ -1,5 +1,6 @@
 ﻿using Cosmonaut;
 using Cosmonaut.Attributes;
+using Microsoft.Azure.Documents.Spatial;
 using System;
 
 using trifenix.agro.db.model.agro.local;
@@ -54,9 +55,7 @@ namespace trifenix.agro.db.model.agro
 
         public Weather Weather { get; set; }
 
-        public float? Lat { get; set; }
-
-        public float? Long { get; set; }
+        public Point Location { get; set; }
 
     }
 }
