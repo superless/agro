@@ -1,10 +1,8 @@
 ﻿using Cosmonaut;
 using Cosmonaut.Attributes;
 using Microsoft.Azure.Documents.Spatial;
-using trifenix.agro.db.model.local;
 
-namespace trifenix.agro.db.model.agro
-{
+namespace trifenix.agro.db.model.agro {
 
     [SharedCosmosCollection("agro", "Barrack")]
     public class Barrack : DocumentBaseName, ISharedCosmosEntity {

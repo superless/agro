@@ -92,7 +92,7 @@ namespace trifenix.agro.external.operations.entities.events {
                        new Property{ PropertyIndex=(int)PropertyRelated.GENERIC_PATH, Value = picturePath}
                     },
                     EntityIndex = (int)EntityRelated.NOTIFICATION_EVENT,
-                    RelatedIds = new RelatedId[]{
+                    References = new RelatedId[]{
                       new RelatedId{  EntityIndex=(int)EntityRelated.PHENOLOGICAL_EVENT, EntityId = input.IdPhenologicalEvent},
                       new RelatedId{  EntityIndex=(int)EntityRelated.BARRACK, EntityId = input.IdBarrack},
                       new RelatedId{ EntityIndex=(int)EntityRelated.SEASON, EntityId = idSeason }

@@ -72,7 +72,7 @@ namespace trifenix.agro.external.operations.entities.main
                             Value = string.Format("{0:MM/dd/yyyy}", input.EndDate)
                         }
                     },
-                    RelatedIds = new RelatedId[]{
+                    References = new RelatedId[]{
                         new RelatedId{
                             EntityIndex = (int)EntityRelated.COSTCENTER,
                             EntityId = input.IdCostCenter

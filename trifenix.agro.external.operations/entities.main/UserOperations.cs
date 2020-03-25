@@ -112,7 +112,7 @@ namespace trifenix.agro.external.operations.entities.main {
                     EntityIndex = (int)EntityRelated.USER,
                     Created = DateTime.Now,
                     RelatedProperties = GetPropertiesRelated(userApp),
-                    RelatedIds = GetIdsRelated(userApp)
+                    References = GetIdsRelated(userApp)
                 }
             });
             return new ExtPostContainer<string> {

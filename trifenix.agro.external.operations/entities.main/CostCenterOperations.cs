@@ -57,7 +57,7 @@ namespace trifenix.agro.external.operations.entities.main
                             Value = input.Name
                         }
                     },
-                    RelatedIds = new RelatedId[]{
+                    References = new RelatedId[]{
                         new RelatedId{
                             EntityIndex = (int)EntityRelated.BUSINESSNAME,
                             EntityId = input.IdBusinessName

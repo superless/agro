@@ -120,7 +120,7 @@ namespace trifenix.agro.external.operations.entities.ext
                              EntityIndex=(int)EntityRelated.WAITINGHARVEST,
                              Id= idSearch,
                              Created = DateTime.Now,
-                             RelatedIds = new RelatedId[]{ 
+                             References = new RelatedId[]{ 
                                  new RelatedId{ EntityIndex= (int)EntityRelated.DOSES,  EntityId= input.Id},
                                  new RelatedId{ EntityIndex=(int)EntityRelated.CERTIFIED_ENTITY, EntityId=waitingHarvest.IdCertifiedEntity }
                              },
@@ -142,7 +142,7 @@ namespace trifenix.agro.external.operations.entities.ext
                 Id = input.Id,
                 EntityIndex = (int)EntityRelated.DOSES,
                 Created = DateTime.Now,
-                RelatedIds = ids.ToArray(),
+                References = ids.ToArray(),
                 RelatedProperties = new Property[]{
                         new Property{ PropertyIndex = (int)PropertyRelated.DOSES_HOURSENTRYBARRACK, Value = $"{input.HoursToReEntryToBarrack}" },
                         new Property{ PropertyIndex = (int)PropertyRelated.DOSES_DAYSINTERVAL, Value = $"{input.ApplicationDaysInterval}" },

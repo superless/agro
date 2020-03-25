@@ -63,7 +63,7 @@ namespace trifenix.agro.external.operations.entities.orders
             search.AddElements(new List<EntitySearch> {
                 new EntitySearch { 
                     EntityIndex = (int)EntityRelated.EXECUTION_ORDER_STATUS,
-                    RelatedIds = new RelatedId[]{ 
+                    References = new RelatedId[]{ 
                         new RelatedId{  EntityIndex= (int)EntityRelated.EXECUTION_ORDER, EntityId = input.IdExecutionOrder}
                     },
                     Created = DateTime.Now,

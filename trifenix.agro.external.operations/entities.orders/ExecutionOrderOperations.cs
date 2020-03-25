@@ -179,7 +179,7 @@ namespace trifenix.agro.external.operations.entities.orders
                     RelatedProperties = new Property[] {
                         new Property{ PropertyIndex = (int)PropertyRelated.GENERIC_QUANTITY_HECTARE,  Value = $"{doses.QuantityByHectare}" }
                      },
-                    RelatedIds = new RelatedId[] {
+                    References = new RelatedId[] {
                         new RelatedId{ EntityIndex=(int)EntityRelated.DOSES, EntityId = doses.IdDoses },
                         new RelatedId { EntityIndex = (int)EntityRelated.EXECUTION_ORDER, EntityId = id }
                      }
@@ -197,7 +197,7 @@ namespace trifenix.agro.external.operations.entities.orders
             }
 
 
-            entity.RelatedIds = entitiesIds.ToArray();
+            entity.References = entitiesIds.ToArray();
 
             search.AddElements(new List<EntitySearch> {
                 entity
