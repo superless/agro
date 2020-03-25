@@ -42,39 +42,42 @@ namespace trifenix.agro.search.model {
         [JsonProperty("prop_dt")]
         public Date[] Dates { get; set; }
 
-
         [JsonProperty("prop_sug")]
         public Suggest[] Suggests { get; set; }
+
+        public RelatedId[] RelatedIds { get; set; }
+
+        public Property[] RelatedProperties { get; set; }
 
         public RelatedEnumValue[] RelatedEnumValues { get; set; }
 
     }
 
-    //public class RelatedId {
+    public class RelatedId {
 
-    //    [IsFilterable, IsFacetable]
-    //    public int EntityIndex { get; set; }
+        [IsFilterable, IsFacetable]
+        public int EntityIndex { get; set; }
 
-    //    [IsFilterable]
-    //    public string EntityId { get; set; }
+        [IsFilterable]
+        public string EntityId { get; set; }
 
-    //    [IsFilterable, IsFacetable]
-    //    public string Id { get { return $"{EntityIndex},{EntityId}"; } }
+        [IsFilterable, IsFacetable]
+        public string Id { get { return $"{EntityIndex},{EntityId}"; } }
 
-    //}
+    }
 
-    //public class Property {
+    public class Property {
 
-    //    [IsFilterable, IsFacetable]
-    //    public int PropertyIndex { get; set; }
+        [IsFilterable, IsFacetable]
+        public int PropertyIndex { get; set; }
 
-    //    [IsSearchable]
-    //    public string Value { get; set; }
+        [IsSearchable]
+        public string Value { get; set; }
 
-    //    [IsFilterable, IsFacetable]
-    //    public string Id { get { return $"{PropertyIndex},{Value}";  } }
+        [IsFilterable, IsFacetable]
+        public string Id { get { return $"{PropertyIndex},{Value}"; } }
 
-    //}
+    }
 
     public class RelatedEnumValue {
 

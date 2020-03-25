@@ -99,7 +99,7 @@ namespace trifenix.agro.external.operations.entities.fields {
 
 
             if (barrackIndex != null) {
-                foreach (string idGeo in barrackIndex.References.AsEnumerable().Where(relatedId => relatedId.EntityIndex == (int)EntityRelated.GEOPOINT).Select(relatedId => relatedId.EntityId))
+                foreach (string idGeo in barrackIndex.RelatedIds.AsEnumerable().Where(relatedId => relatedId.EntityIndex == (int)EntityRelated.GEOPOINT).Select(relatedId => relatedId.EntityId))
                 {
                     search.DeleteEntity(EntityRelated.GEOPOINT, idGeo);
                 }
@@ -118,7 +118,7 @@ namespace trifenix.agro.external.operations.entities.fields {
                             new Property { PropertyIndex = (int)PropertyRelated.GENERIC_LATITUDE, Value = $"{geo.Latitude}" },
                             new Property { PropertyIndex = (int)PropertyRelated.GENERIC_LONGITUDE, Value = $"{geo.Longitude}" }
                         },
-                        References = new RelatedId[] { 
+                        RelatedIds = new RelatedId[] { 
                             new RelatedId{ EntityIndex = (int)EntityRelated.BARRACK, EntityId = id
                             }
                         } 
@@ -140,7 +140,7 @@ namespace trifenix.agro.external.operations.entities.fields {
                         new Property { PropertyIndex = (int)PropertyRelated.GENERIC_PLANT_IN_YEAR, Value = $"{input.PlantingYear}" },
                         new Property{ PropertyIndex = (int)PropertyRelated.GENERIC_HECTARES, Value = $"{input.Hectares}" }
                     },
-                    References = relatedEntities.ToArray()
+                    RelatedIds = relatedEntities.ToArray()
                 }  
             });
             return new ExtPostContainer<string> {

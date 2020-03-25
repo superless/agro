@@ -104,7 +104,7 @@ namespace trifenix.agro.external.operations.entities.orders
                 new EntitySearch{
                     Created = DateTime.Now,
                     Id = id,
-                    References = new RelatedId[]{ 
+                    RelatedIds = new RelatedId[]{ 
                         new RelatedId{ EntityIndex = (int)EntityRelated.TARGET, EntityId = input.IdApplicationTarget  },
                         new RelatedId{ EntityIndex = (int)EntityRelated.CATEGORY_INGREDIENT, EntityId = input.IdCategoryIngredient  },
                         new RelatedId{ EntityIndex = (int)EntityRelated.PHENOLOGICAL_EVENT, EntityId = input.IdPhenologicalEvent },

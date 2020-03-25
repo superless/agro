@@ -125,7 +125,7 @@ namespace trifenix.agro.external.operations.entities.orders {
                     Id = idGuid,
                     EntityIndex = (int)EntityRelated.BARRACK_EVENT,
                     Created = DateTime.Now,
-                    References = relatedIds.ToArray()
+                    RelatedIds = relatedIds.ToArray()
                 };
                 search.AddElements(new List<EntitySearch> {
                     inputSearch
@@ -147,7 +147,7 @@ namespace trifenix.agro.external.operations.entities.orders {
                     RelatedProperties = new Property[] {
                         new Property{ PropertyIndex = (int)PropertyRelated.GENERIC_QUANTITY_HECTARE,  Value = $"{doses.QuantityByHectare}" }
                     },
-                    References = new RelatedId[] {
+                    RelatedIds = new RelatedId[] {
                         new RelatedId{ EntityIndex=(int)EntityRelated.DOSES, EntityId = doses.IdDoses },
                         new RelatedId { EntityIndex = (int)EntityRelated.ORDER, EntityId = id }
                     }
@@ -162,7 +162,7 @@ namespace trifenix.agro.external.operations.entities.orders {
                 relatedEntities.AddRange(input.IdsPhenologicalPreOrder.Select(s => new RelatedId { EntityIndex = (int)EntityRelated.PREORDER, EntityId = s }));
             var idSeason = await commonQueries.GetSeasonId(input.Barracks.First().IdBarrack);
             relatedEntities.Add( new RelatedId { EntityIndex = (int)EntityRelated.SEASON, EntityId = idSeason });
-            entity.References = relatedEntities.ToArray();
+            entity.RelatedIds = relatedEntities.ToArray();
             search.AddElements(new List<EntitySearch> { entity });
             return new ExtPostContainer<string> {
                 IdRelated = id,

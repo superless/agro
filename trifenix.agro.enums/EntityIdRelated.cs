@@ -44,7 +44,6 @@
         EMAIL = 5,
         GENERIC_BRAND = 6,
     }
-}
 
     public enum Num64Related {
         

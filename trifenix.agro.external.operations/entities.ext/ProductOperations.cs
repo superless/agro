@@ -84,7 +84,7 @@ namespace trifenix.agro.external.operations.entities.ext
                 Id = idDoses,
                 EntityIndex = (int)EntityRelated.DOSES,
                 Created = DateTime.Now,
-                References = new RelatedId[]{
+                RelatedIds = new RelatedId[]{
                         new RelatedId{
                             EntityId = idProduct,
                             EntityIndex = (int)EntityRelated.PRODUCT,
@@ -242,7 +242,7 @@ namespace trifenix.agro.external.operations.entities.ext
                     EntityIndex = (int)EntityRelated.PRODUCT,
                     Created = DateTime.Now,
                     RelatedProperties = GetElementRelated(input),
-                    References = relatedIds.ToArray(),
+                    RelatedIds = relatedIds.ToArray(),
                     RelatedEnumValues = new RelatedEnumValue[]{
                         new RelatedEnumValue{ EnumerationIndex = (int)EnumerationRelated.PRODUCT_KINDOFBOTTLE, Value= (int)input.KindOfBottle },
                         new RelatedEnumValue{ EnumerationIndex = (int)EnumerationRelated.PRODUCT_MEASURETYPE, Value= (int)input.MeasureType }

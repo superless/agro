@@ -134,7 +134,7 @@ namespace trifenix.agro.external.operations.entities.orders
 
             entities.Add(new RelatedId { EntityIndex = (int)EntityRelated.SEASON, EntityId = idSeason });
 
-            entity.References = entities.ToArray();
+            entity.RelatedIds = entities.ToArray();
 
             search.AddElements(new List<EntitySearch> { 
                 entity             
