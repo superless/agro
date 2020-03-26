@@ -1,15 +1,15 @@
 ﻿namespace trifenix.agro.weather.model {
     public class Weather {
 
-        public Coordinates Coordinates;
-        public Wind Wind;
-        public string Main;
-        public string Description;
+        public Coordinates Coordinates { get; set; }
+        public Wind Wind { get; set; }
+        public string Main { get; set; }
+        public string Description { get; set; }
         private float _temperatureCelcius;
         public float TemperatureCelcius { get => _temperatureCelcius; set => _temperatureCelcius = value - (float)273.15; }
-        public int CloudsPercentage;
-        public int HumidityPercentage;
-        public int PressureHectoPascal;
+        public int CloudsPercentage { get; set; }
+        public int HumidityPercentage { get; set; }
+        public int PressureHectoPascal { get; set; }
         private string _urlIcon;
         public string UrlIcon { get => _urlIcon; set => _urlIcon = "https://openweathermap.org/themes/openweathermap/assets/vendor/owm/img/widgets/" + value + ".png"; }
 

@@ -39,8 +39,8 @@ namespace trifenix.agro.attr {
     }
 
     public class Num32SearchAttribute : Attribute, ISearchAttribute {
-        private readonly Num32Related _index;
-        public Num32SearchAttribute(Num32Related index) {
+        private readonly NumRelated _index;
+        public Num32SearchAttribute(NumRelated index) {
             _index = index;
         }
         public int Index => (int)_index;
@@ -48,8 +48,8 @@ namespace trifenix.agro.attr {
     }
 
     public class Num64SearchAttribute : Attribute, ISearchAttribute {
-        private readonly Num64Related _index;
-        public Num64SearchAttribute(Num64Related index) {
+        private readonly NumRelated _index;
+        public Num64SearchAttribute(NumRelated index) {
             _index = index;
         }
         public int Index => (int)_index;

@@ -105,7 +105,7 @@ namespace trifenix.agro.external.operations.entities.orders {
             }
 
             if (applicationOrder.OrderType == OrderType.PHENOLOGICAL)
-                relatedEntities.AddRange(applicationOrder.IdsPhenologicalPreOrder.Select(s => new RelatedId { EntityIndex = (int)EntityRelated.PREORDER, EntityId = s }));
+                relatedEntities.AddRange(applicationOrder.IdsPreOrder.Select(s => new RelatedId { EntityIndex = (int)EntityRelated.PREORDER, EntityId = s }));
             var idSeason = await commonQueries.GetSeasonId(applicationOrder.Barracks.First().IdBarrack);
             relatedEntities.Add( new RelatedId { EntityIndex = (int)EntityRelated.SEASON, EntityId = idSeason });
 
@@ -119,7 +119,7 @@ namespace trifenix.agro.external.operations.entities.orders {
                         new Property { PropertyIndex = (int)PropertyRelated.GENERIC_NAME, Value = applicationOrder.Name },
                         new Property { PropertyIndex = (int)PropertyRelated.GENERIC_ABBREVIATION, Value = specieAbbv },
                         new Property { PropertyIndex = (int)PropertyRelated.GENERIC_WETTING, Value =  $"{applicationOrder.Wetting}" },
-                        new Property { PropertyIndex = (int)PropertyRelated.GENERIC_START_DATE, Value = $"{applicationOrder.InitDate : dd/MM/yyyy}" },
+                        new Property { PropertyIndex = (int)PropertyRelated.GENERIC_START_DATE, Value = $"{applicationOrder.StartDate : dd/MM/yyyy}" },
                         new Property { PropertyIndex = (int)PropertyRelated.GENERIC_END_DATE, Value = $"{applicationOrder.EndDate : dd/MM/yyyy}" }
                     },
                     RelatedIds = relatedEntities.ToArray(),
@@ -140,8 +140,8 @@ namespace trifenix.agro.external.operations.entities.orders {
                 Barracks = input.Barracks,
                 DosesOrder = input.DosesOrder,
                 EndDate = input.EndDate,
-                InitDate = input.StartDate,
-                IdsPhenologicalPreOrder = input.IdsPhenologicalPreOrder,
+                StartDate = input.StartDate,
+                IdsPreOrder = input.IdsPhenologicalPreOrder,
                 Name = input.Name,
                 OrderType = input.OrderType,
                 Wetting = input.Wetting

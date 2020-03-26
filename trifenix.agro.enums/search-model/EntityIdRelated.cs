@@ -50,38 +50,48 @@
         GENERIC_DESC = 11,
     }
 
-    public enum Num64Related {
-        
-    }
-
-    public enum Num32Related {
-
+    public enum NumRelated {
+        WAITING_DAYS = 0,
+        GENERIC_CORRELATIVE = 1,
+        HOURS_TO_ENTRY = 2,
+        DAYS_INTERVAL = 3,
+        NUMBER_OF_SECQUENTIAL_APPLICATION = 4,
+        WETTING_RECOMMENDED = 5
     }
 
     public enum DoubleRelated{
         QUANTITY_CONTAINER = 0,
+        PPM = 1,
+        WETTING = 2,
+        QUANTITY_APPLIED = 3,
+        QUANTITY_MIN = 4,
+        QUANTITY_MAX = 5,
     }
 
     public enum BoolRelated {
         CURRENT = 0,
-        BYPASS = 1
+        BYPASS = 1,
+        GENERIC_DEFAULT = 2,
+        GENERIC_ACTIVE = 3
     }
 
     public enum GeoRelated {
-        GENERIC_LOCATION
+        GENERIC_LOCATION = 0
     }
 
-    public enum DateRelated
-    {
+    public enum DateRelated {
         END_DATE = 0,
         START_DATE = 1,
+        LAST_MODIFIED = 2,
     }
 
     public enum EnumRelated { 
         GENERIC_MEASURE_TYPE = 0,
         GENERIC_KIND_CONTAINER=1,
-    PRE_ORDER_TYPE = 2,
+        PRE_ORDER_TYPE = 2,
         NOTIFICATION_TYPE = 3,
+        ORDER_TYPE = 4,
+        DOSES_APPLICATED_TO = 5,
     }
 
     public enum PropertyRelated {
@@ -119,8 +129,6 @@
         DOSES_MIN = 31,
         DOSES_MAX= 32,
         PRODUCT_NAME = 33
-
-
     }
 
     public enum EnumerationRelated {

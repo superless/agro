@@ -18,7 +18,6 @@ namespace trifenix.agro.db.model.agro
 
         public override string Id { get; set; }
 
-
         [SuggestSearch(StringRelated.GENERIC_NAME)]
         public override string Name { get; set; }
 

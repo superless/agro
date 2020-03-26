@@ -20,10 +20,10 @@ namespace trifenix.agro.db.model {
         public override string Name { get; set; }
 
 
-        [StringSearch(StringRelated.RUT)]
+        [StringSearch(StringRelated.GENERIC_RUT)]
         public string Rut { get; set; }
 
-        [StringSearch(StringRelated.EMAIL)]
+        [StringSearch(StringRelated.GENERIC_EMAIL)]
         public string Email { get; set; }
 
         [ReferenceSearch(EntityRelated.JOB)]

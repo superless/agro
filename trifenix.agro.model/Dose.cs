@@ -16,7 +16,7 @@ namespace trifenix.agro.db.model.agro {
 
         public override string Id { get; set; }
 
-        [Num32Search(Num32Related.GENERIC_CORRELATIVE)]
+        [Num32Search(NumRelated.GENERIC_CORRELATIVE)]
         public long Correlative { get; set; }
 
         [DateSearch(DateRelated.LAST_MODIFIED)]
@@ -24,7 +24,6 @@ namespace trifenix.agro.db.model.agro {
 
         [ReferenceSearch(EntityRelated.PRODUCT)]
         public string IdProduct { get; set; }
-
 
         [ReferenceSearch(EntityRelated.VARIETY)]
         public string[] IdVarieties { get; set; }
@@ -35,19 +34,17 @@ namespace trifenix.agro.db.model.agro {
         [ReferenceSearch(EntityRelated.TARGET)]
         public string[] IdsApplicationTarget { get; set; }
 
-        [Num32Search(Num32Related.HOURS_TO_ENTRY)]
+        [Num32Search(NumRelated.HOURS_TO_ENTRY)]
         public int HoursToReEntryToBarrack { get; set; }
 
-        [Num32Search(Num32Related.DAYS_INTERVAL)]
+        [Num32Search(NumRelated.DAYS_INTERVAL)]
         public int ApplicationDaysInterval { get; set; }
 
-
-        [Num32Search(Num32Related.NUMBER_OF_SECQUENTIAL_APPLICATION)]
+        [Num32Search(NumRelated.NUMBER_OF_SECQUENTIAL_APPLICATION)]
         public int NumberOfSequentialApplication { get; set; }
 
-        [Num32Search(Num32Related.WETTING_RECOMMENDED)]
+        [Num32Search(NumRelated.WETTING_RECOMMENDED)]
         public int WettingRecommendedByHectares { get; set; }
-
 
         [DoubleSearch(DoubleRelated.QUANTITY_MIN)]
         public double DosesQuantityMin { get; set; }
@@ -55,7 +52,7 @@ namespace trifenix.agro.db.model.agro {
         [DoubleSearch(DoubleRelated.QUANTITY_MAX)]
         public double DosesQuantityMax { get; set; }
 
-        [DoubleSearch(DoubleRelated.WAITING_DAYS)]
+        [Num32Search(NumRelated.WAITING_DAYS)]
         public int? WaitingDaysLabel { get; set; }
 
         [EnumSearch(EnumRelated.DOSES_APPLICATED_TO)]

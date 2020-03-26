@@ -1,6 +1,8 @@
 ﻿using Cosmonaut;
 using Cosmonaut.Attributes;
 using Microsoft.Azure.Documents.Spatial;
+using trifenix.agro.attr;
+using trifenix.agro.enums.searchModel;
 
 namespace trifenix.agro.db.model.agro {
 
