@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using trifenix.agro.db.applicationsReference.common;
 using trifenix.agro.db.interfaces.common;
 using trifenix.agro.enums;
+using trifenix.agro.enums.query;
 
 namespace trifenix.agro.db.applicationsReference.agro.Common
 {

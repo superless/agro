@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using trifenix.agro.db.model.agro.orders;
 using trifenix.agro.enums;
+using trifenix.agro.enums.searchModel;
 
 namespace trifenix.agro.model.external.Input
 {

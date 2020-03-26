@@ -2,11 +2,13 @@
 using Cosmonaut.Attributes;
 using trifenix.agro.attr;
 using trifenix.agro.enums;
+using trifenix.agro.enums.searchModel;
 
 namespace trifenix.agro.db.model.agro
 {
 
     [SharedCosmosCollection("agro", "Role")]
+    [ReferenceSearch(EntityRelated.ROLE)]
     public class Role : DocumentBaseName, ISharedCosmosEntity
     {
         public override string Id { get; set; }

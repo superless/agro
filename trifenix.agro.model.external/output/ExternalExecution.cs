@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using trifenix.agro.db.model.agro.orders;
 using trifenix.agro.enums;
+using trifenix.agro.enums.model;
 
 namespace trifenix.agro.model.external.output
 {

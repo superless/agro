@@ -8,6 +8,8 @@ using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.enums;
+using trifenix.agro.enums.input;
+using trifenix.agro.enums.searchModel;
 using trifenix.agro.external.interfaces;
 using trifenix.agro.external.operations.helper;
 using trifenix.agro.external.operations.res;

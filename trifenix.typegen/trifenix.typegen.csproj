@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\trifenix.agro.model.external\trifenix.agro.model.external.csproj" />
     <ProjectReference Include="..\trifenix.agro.search.model\trifenix.agro.search.model.csproj" />
   </ItemGroup>
 

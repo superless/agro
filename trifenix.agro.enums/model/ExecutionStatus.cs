@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace trifenix.agro.enums
+namespace trifenix.agro.enums.model
 {
 
     public enum ExecutionStatus

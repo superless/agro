@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using trifenix.agro.db.model.agro;
-using trifenix.agro.db.model.local;
+
 
 namespace trifenix.agro.model.external.Input
 {
@@ -49,7 +49,7 @@ namespace trifenix.agro.model.external.Input
 
         public int NumberOfPlants { get; set; }
 
-        public GeographicalPoint[] GeographicalPoints { get; set; }
+        public GeographicalPointInput[] GeographicalPoints { get; set; }
 
         public string IdPollinator { get; set; }
 

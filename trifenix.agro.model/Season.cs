@@ -3,14 +3,16 @@ using Cosmonaut.Attributes;
 using System;
 using trifenix.agro.attr;
 using trifenix.agro.enums;
+using trifenix.agro.enums.searchModel;
 
 namespace trifenix.agro.db.model.agro {
     [SharedCosmosCollection("agro", "Season")]
+    [ReferenceSearch(EntityRelated.SEASON)]
     public class Season : DocumentBase, ISharedCosmosEntity {
         public override string Id { get; set; }
 
 
-        [DateSearch(DateRelated.END_DATE)]
+        [DateSearch(DateRelated.START_DATE)]
         public DateTime StartDate { get; set; }
 
 

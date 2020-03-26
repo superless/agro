@@ -11,6 +11,8 @@ using trifenix.agro.db.model.agro.core;
 using trifenix.agro.db.model.agro.local;
 using trifenix.agro.db.model.agro.orders;
 using trifenix.agro.enums;
+using trifenix.agro.enums.model;
+using trifenix.agro.enums.searchModel;
 
 namespace trifenix.agro.console
 {

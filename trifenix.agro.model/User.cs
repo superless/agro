@@ -3,9 +3,11 @@ using Cosmonaut.Attributes;
 using System.Collections.Generic;
 using trifenix.agro.attr;
 using trifenix.agro.enums;
+using trifenix.agro.enums.searchModel;
 
 namespace trifenix.agro.db.model {
     [SharedCosmosCollection("agro", "User")]
+    [ReferenceSearch(EntityRelated.USER)]
     public class User : DocumentBaseName, ISharedCosmosEntity {
     
 

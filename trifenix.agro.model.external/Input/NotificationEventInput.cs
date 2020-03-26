@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using trifenix.agro.enums;
+using trifenix.agro.enums.model;
 using trifenix.agro.weather.model;
 
 namespace trifenix.agro.model.external.Input

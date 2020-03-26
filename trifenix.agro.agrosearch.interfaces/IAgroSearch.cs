@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using trifenix.agro.db;
-using trifenix.agro.enums;
+using trifenix.agro.enums.searchModel;
 using trifenix.agro.search.model;
 
 namespace trifenix.agro.search.interfaces

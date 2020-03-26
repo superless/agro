@@ -15,6 +15,8 @@ namespace trifenix.agro.search.model.temp
         [IsFilterable]
         public string Id { get; set; }
 
+        
+
         [IsFilterable, IsFacetable]
         public int EntityIndex { get; set; }
 

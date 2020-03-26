@@ -1,4 +1,5 @@
 ﻿using trifenix.agro.enums;
+using trifenix.agro.enums.query;
 using trifenix.agro.search.interfaces;
 
 namespace trifenix.agro.search.operations {

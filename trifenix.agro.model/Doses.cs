@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using trifenix.agro.db.model.agro.local;
 using trifenix.agro.enums;
+using trifenix.agro.enums.model;
 
 namespace trifenix.agro.db.model.agro
 {

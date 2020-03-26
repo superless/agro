@@ -2,10 +2,12 @@
 using Cosmonaut.Attributes;
 using trifenix.agro.attr;
 using trifenix.agro.enums;
+using trifenix.agro.enums.searchModel;
 
 namespace trifenix.agro.db.model.agro {
 
     [SharedCosmosCollection("agro", "Specie")]
+    [ReferenceSearch(EntityRelated.SPECIE)]
     public class Specie : DocumentBaseName, ISharedCosmosEntity {
         public override string Id { get; set; }
 

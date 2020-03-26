@@ -3,6 +3,7 @@ using Cosmonaut.Attributes;
 using System;
 
 using trifenix.agro.enums;
+using trifenix.agro.enums.model;
 
 namespace trifenix.agro.db.model.agro {
 

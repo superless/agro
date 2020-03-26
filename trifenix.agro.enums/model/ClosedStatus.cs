@@ -1,4 +1,4 @@
-﻿namespace trifenix.agro.enums
+﻿namespace trifenix.agro.enums.model
 {
     public enum ClosedStatus
     {

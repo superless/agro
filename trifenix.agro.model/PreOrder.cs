@@ -1,14 +1,12 @@
 ﻿using Cosmonaut;
 using Cosmonaut.Attributes;
-using System;
-using System.Collections.Generic;
 using trifenix.agro.attr;
-using trifenix.agro.db.model.agro.local;
-using trifenix.agro.enums;
+using trifenix.agro.enums.searchModel;
 
 namespace trifenix.agro.db.model.agro
 {
     [SharedCosmosCollection("agro", "PreOrder")]
+    [ReferenceSearch(EntityRelated.PREORDER)]
     public class PreOrder : DocumentBaseName, ISharedCosmosEntity
     {
         public override string Id { get; set; }

@@ -13,6 +13,8 @@ using trifenix.agro.external.operations.res;
 using trifenix.agro.enums;
 using trifenix.agro.db.model.agro.core;
 using trifenix.agro.db.interfaces.common;
+using trifenix.agro.enums.searchModel;
+using trifenix.agro.enums.input;
 
 namespace trifenix.agro.external.operations.entities.main
 {

@@ -2,6 +2,8 @@
 using Cosmonaut.Attributes;
 using trifenix.agro.attr;
 using trifenix.agro.enums;
+using trifenix.agro.enums.model;
+using trifenix.agro.enums.searchModel;
 
 namespace trifenix.agro.db.model.agro
 {
@@ -10,6 +12,7 @@ namespace trifenix.agro.db.model.agro
     /// Producto Quimico usado por las órdenes
     /// </summary>
     [SharedCosmosCollection("agro", "Product")]
+    [ReferenceSearch(EntityRelated.PRODUCT)]
     public class Product : DocumentBaseName, ISharedCosmosEntity
     {
 

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using trifenix.agro.enums;
+using trifenix.agro.enums.model;
 
 namespace trifenix.agro.model.external.Input
 {

@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using trifenix.agro.db;
 using trifenix.agro.enums;
+using trifenix.agro.enums.query;
+using trifenix.agro.enums.search;
+using trifenix.agro.enums.searchModel;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
 

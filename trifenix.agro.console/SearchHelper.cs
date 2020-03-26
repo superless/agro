@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using trifenix.agro.db;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.enums;
+using trifenix.agro.enums.input;
 using trifenix.agro.external.operations;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.search.operations;

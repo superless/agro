@@ -1,4 +1,4 @@
-﻿namespace trifenix.agro.enums {
+﻿namespace trifenix.agro.enums.searchModel {
 
     public enum EntityRelated {
         WAITINGHARVEST = 0,
@@ -59,6 +59,7 @@
 
     public enum BoolRelated {
         CURRENT = 0,
+        BYPASS = 1
     }
 
     public enum GeoRelated { 
@@ -68,6 +69,7 @@
     public enum DateRelated
     {
         END_DATE = 0,
+        START_DATE = 1,
     }
 
     public enum EnumRelated { 

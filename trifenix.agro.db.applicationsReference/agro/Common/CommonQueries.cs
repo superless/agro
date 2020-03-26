@@ -6,6 +6,7 @@ using trifenix.agro.db.model;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.db.model.agro.orders;
 using trifenix.agro.enums;
+using trifenix.agro.enums.query;
 
 namespace trifenix.agro.db.applicationsReference.agro.Common
 {
