@@ -29,35 +29,49 @@ namespace trifenix.agro.db.model.agro
         /// <summary>
         /// Cuartel asignado a la notificación
         /// </summary>
+
+        [ReferenceSearch(EntityRelated.BARRACK)]
         public string IdBarrack { get; set; }
 
 
         /// <summary>
         /// Evento fenológico asignado a la notificación.
         /// </summary>
+        [ReferenceSearch(EntityRelated.BARRACK)]
         public string IdPhenologicalEvent { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        [EnumSearch(EnumRelated.NOTIFICATION_TYPE)]
         public NotificationType NotificationType { get; set; }
         
 
         /// <summary>
         /// Ruta o Url en internet de la imagen subida.
         /// </summary>
+        [StringSearch(StringRelated.GENERIC_PICTURE_PATH)]
         public string PicturePath { get; set; }
 
         /// <summary>
         /// Descripcion del evento
         /// </summary>
+        [StringSearch(StringRelated.GENERIC_DESCR)]
         public string Description { get; set; }
 
 
         /// <summary>
         /// Fecha de creación.
         /// </summary>
+        /// 
+
         public DateTime Created { get; set; }
+
 
         public Weather Weather { get; set; }
 
+
+        [GeoSearch(GeoRelated.LOCATION)]
         public Point Location { get; set; }
 
     }
