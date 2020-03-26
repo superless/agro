@@ -36,13 +36,18 @@
     }
 
     public enum StringRelated {
-        GENERIC_CODE = 0,
+        OBJECTID_AAD = 0,
         GENERIC_ABBREVIATION = 1,
-        OBJECTID_AAD = 2,
-        RUT = 3,
+        GENERIC_CODE = 2,
+        GENERIC_RUT = 3,
         GENERIC_NAME = 4,
-        EMAIL = 5,
+        GENERIC_EMAIL = 5,
         GENERIC_BRAND = 6,
+        GENERIC_WEBPAGE = 7,
+        GENERIC_GIRO = 8,
+        GENERIC_PHONE = 9,
+        GENERIC_PICTURE_PATH = 10,
+        GENERIC_DESC = 11,
     }
 
     public enum Num64Related {
@@ -62,8 +67,8 @@
         BYPASS = 1
     }
 
-    public enum GeoRelated { 
-    
+    public enum GeoRelated {
+        GENERIC_LOCATION
     }
 
     public enum DateRelated
@@ -76,7 +81,8 @@
         GENERIC_MEASURE_TYPE = 0,
         GENERIC_KIND_CONTAINER=1,
     PRE_ORDER_TYPE = 2,
-}
+        NOTIFICATION_TYPE = 3,
+    }
 
     public enum PropertyRelated {
         GENERIC_GIRO = 0,
