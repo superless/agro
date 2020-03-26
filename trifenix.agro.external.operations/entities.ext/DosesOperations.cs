@@ -157,7 +157,7 @@ namespace trifenix.agro.external.operations.entities.ext
 
 
                     },
-                RelatedEnumValues = new RelatedEnumValue[]{
+                RelatedEnumValues = new RelatedEnumValue[] {
                         new RelatedEnumValue{  EnumerationIndex = (int)EnumerationRelated.GENERIC_ACTIVE, Value = input.Active?1:0},
                         new RelatedEnumValue{  EnumerationIndex = (int)EnumerationRelated.GENERIC_DEFAULT, Value = input.Default?1:0},
                         new RelatedEnumValue{  EnumerationIndex = (int)EnumerationRelated.DOSES_DOSESAPPLICATEDTO, Value = (int)input.DosesApplicatedTo},

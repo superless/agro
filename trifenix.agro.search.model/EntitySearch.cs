@@ -15,7 +15,9 @@ namespace trifenix.agro.search.model {
 
         [IsSortable]
         public DateTime Created { get; set; }                       
+            
 
+        
         public RelatedId[] RelatedIds { get; set; } 
         
         public Property[] RelatedProperties { get; set; }       
