@@ -1,22 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
+using trifenix.agro.db.model;
+using trifenix.agro.db.model.agro;
 
-namespace trifenix.agro.model.external.Input
-{
-    public class UserApplicatorInput : InputBaseName
-    {
+namespace trifenix.agro.model.external.Input {
+    public class UserApplicatorInput : InputBaseName {
+
+        [Required, Unique]
         public string Rut { get; set; }
 
+        [Unique]
         public string Email { get; set; }
 
+        [Reference(typeof(Job))]
         public string IdJob { get; set; }
 
+        [Required, Reference(typeof(Role))]
         public List<string> IdsRoles { get; set; }
 
+        [Reference(typeof(Nebulizer))]
         public string IdNebulizer { get; set; }
 
+        [Reference(typeof(Tractor))]
         public string IdTractor { get; set; }
     }
 
@@ -25,9 +30,7 @@ namespace trifenix.agro.model.external.Input
         [Required]
         public string Name { get; set; }
 
-
         public string Rut { get; set; }
-
 
         public string Email { get; set; }
 
@@ -42,4 +45,5 @@ namespace trifenix.agro.model.external.Input
         public string IdTractor { get; set; }
 
     }
+
 }

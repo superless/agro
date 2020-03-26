@@ -6,9 +6,10 @@ namespace trifenix.agro.db.interfaces {
 
     public interface IMainGenericDb<T> where T : DocumentBase {
 
-        Task<string> CreateUpdate(T entity);
-        Task<T> GetEntity(string uniqueId);
         ICosmosStore<T> Store { get; }
+        Task<string> CreateUpdate(T entity);
+        Task<string> CreateEntityContainer(T entity);
+        Task<T> GetEntity(string uniqueId);
         IQueryable<T> GetEntities();
 
         Task DeleteEntity(string id);

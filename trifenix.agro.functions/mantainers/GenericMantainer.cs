@@ -6,6 +6,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using trifenix.agro.db;
+using trifenix.agro.db.exceptions;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.enums;
 using trifenix.agro.enums.input;
@@ -27,7 +28,7 @@ namespace trifenix.agro.functions.mantainers {
                     JsonResult = new UnauthorizedResult()
                 };
             string ObjectIdAAD = claims.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
-            var manager = await ContainerMethods.AgroManager(ObjectIdAAD);
+            var manager = await ContainerMethods.AgroManager(ObjectIdAAD, false);
             return await HttpProcessing(req, log, repo(manager), manager.UserActivity, id);
         }
 
@@ -72,23 +73,25 @@ namespace trifenix.agro.functions.mantainers {
                 default:
                     ExtPostContainer<string> saveReturn;
                     try {
-                        saveReturn = await repo.Save(element);
-                        await recordAcitvity.Save(new UserActivityInput
-                        {
+                        saveReturn = await repo.SaveInput(element, false);
+                        await recordAcitvity.SaveInput(new UserActivityInput {
                             Action = method.Equals("post") ? UserActivityAction.CREATE : UserActivityAction.MODIFY,
                             Date = DateTime.Now,
                             EntityName = ((DbElement)Activator.CreateInstance(typeof(DbElement))).CosmosEntityName,
                             EntityId = saveReturn.IdRelated
-                        });
+                        }, false);
                     }
                     catch (Exception ex) {
+                        var extPostError = new ExtPostErrorContainer<string> {
+                            InternalException = ex,
+                            Message = ex.Message,
+                            MessageResult = ExtMessageResult.Error
+                        };
+                        if (ex is Validation_Exception)
+                            extPostError.ValidationMessages = ((Validation_Exception)ex).ErrorMessages;
                         return new ActionResultWithId {
                             Id = null,
-                            JsonResult = ContainerMethods.GetJsonPostContainer(new ExtPostErrorContainer<string> {
-                                InternalException = ex,
-                                Message = ex.Message,
-                                MessageResult = ExtMessageResult.Error
-                            }, log)
+                            JsonResult = ContainerMethods.GetJsonPostContainer(extPostError, log)
                         };
                     }
                     return new ActionResultWithId {

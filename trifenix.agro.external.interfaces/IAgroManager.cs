@@ -1,4 +1,5 @@
-﻿using trifenix.agro.db.interfaces.agro.common;
+﻿using Cosmonaut;
+using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.model;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.db.model.agro.core;
@@ -9,16 +10,17 @@ namespace trifenix.agro.external.interfaces
 {
     public interface IAgroManager {
 
+        ICosmosStore<EntityContainer> BatchStore { get; }
         IExistElement ExistsElements { get; }
         IGenericOperation<UserActivity, UserActivityInput> UserActivity { get; }
         IGenericOperation<ApplicationOrder, ApplicationOrderInput> ApplicationOrder { get; }
-        IGenericOperation<ApplicationTarget, TargetInput> ApplicationTarget { get; }
+        IGenericOperation<ApplicationTarget, ApplicationTargetInput> ApplicationTarget { get; }
         IGenericOperation<Barrack, BarrackInput> Barrack { get; }
         IGenericOperation<BusinessName, BusinessNameInput> BusinessName { get; }
         IGenericOperation<CertifiedEntity, CertifiedEntityInput> CertifiedEntity { get; }
         IGenericOperation<Comment, CommentInput> Comments { get; }
         IGenericOperation<CostCenter, CostCenterInput> CostCenter { get; }
-        IGenericOperation<Doses, DosesInput> Doses { get; }
+        IGenericOperation<Dose, DosesInput> Dose { get; }
         IGenericOperation<ExecutionOrder, ExecutionOrderInput> ExecutionOrder { get; }
         IGenericOperation<ExecutionOrderStatus, ExecutionOrderStatusInput> ExecutionOrderStatus { get; }
         IGenericOperation<Ingredient, IngredientInput> Ingredient { get; }

@@ -46,33 +46,33 @@ namespace trifenix.agro.console
 
             #region ObtencionDeElementos (Productos, Especies, Variedades, Cuarteles, Execuciones y Ordenes)
             //var productsQuery = db.Products.GetProducts();
-            //var dbProductOperations = new CommonDbOperations<Product>();
+            //var dbProductOperations = GetCommonDbOp<Product>();
             //List<Product> products = await dbProductOperations.TolistAsync(productsQuery);
 
             //var barracksQuery = db.Barracks.GetBarracks();
-            //var dbBarrackOperations = new CommonDbOperations<Barrack>();
+            //var dbBarrackOperations = GetCommonDbOp<Barrack>();
             //List<Barrack> barracks = await dbBarrackOperations.TolistAsync(barracksQuery);
 
             //var speciesQuery = db.Species.GetSpecies();
-            //var dbSpecieOperations = new CommonDbOperations<Specie>();
+            //var dbSpecieOperations = GetCommonDbOp<Specie>();
             //List<Specie> species = await dbSpecieOperations.TolistAsync(speciesQuery);
 
             //var varietiesQuery = db.Varieties.GetVarieties();
-            //var dbVarietyOperations = new CommonDbOperations<Variety>();
+            //var dbVarietyOperations = GetCommonDbOp<Variety>();
             //List<Variety> varieties = await dbVarietyOperations.TolistAsync(varietiesQuery);
 
             //var executionsQuery = db.ExecutionOrders.GetExecutionOrders();
-            //var dbExecutionsOperations = new CommonDbOperations<ExecutionOrder>();
+            //var dbExecutionsOperations = GetCommonDbOp<ExecutionOrder>();
             //List<ExecutionOrder> executions = await dbExecutionsOperations.TolistAsync(executionsQuery);
 
             //var ordersQuery = db.Orders.GetApplicationOrders();
-            //var dbOrderOperations = new CommonDbOperations<ApplicationOrder>();
+            //var dbOrderOperations = GetCommonDbOp<ApplicationOrder>();
             //List<ApplicationOrder> orders = await dbOrderOperations.TolistAsync(ordersQuery);
             #endregion
 
             #region ObtenElementosDbConFiltro
             //var ordersQuery = db.Orders.GetApplicationOrders().Where(order => order.PhenologicalPreOrders.Any(ph => ph.Id.Equals("79d69acc62a8488f914bab9d1333a80e")));
-            //var dbOrderOperations = new CommonDbOperations<ApplicationOrder>();
+            //var dbOrderOperations = GetCommonDbOp<ApplicationOrder>();
             //List<ApplicationOrder> orders = await dbOrderOperations.TolistAsync(ordersQuery);
             #endregion
 
@@ -317,9 +317,9 @@ namespace trifenix.agro.console
             entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity =
         /*15*/  new Product { Id = Guid.NewGuid().ToString("N"), Name = "Geminis Wp", Brand = "Anasac", IdActiveIngredient = entitiesContainers.ElementAt(12).Entity.Id, KindOfBottle = 0, MeasureType = (MeasureType)1, Quantity =  500 } });
             entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity =
- /*Preguntar*/  new Doses { Id = Guid.NewGuid().ToString("N"), IdProduct = entitiesContainers.ElementAt(15).Entity.Id, IdsApplicationTarget = new string[] { entitiesContainers.ElementAt(13).Entity.Id }, IdSpecies = new string[] { entitiesContainers.ElementAt(3).Entity.Id }, IdVarieties = new string[] { entitiesContainers.ElementAt(4).Entity.Id, entitiesContainers.ElementAt(5).Entity.Id }, ApplicationDaysInterval = 15, HoursToReEntryToBarrack = 5, DosesApplicatedTo = (DosesApplicatedTo)1, DosesQuantityMin =  500, DosesQuantityMax = 800, NumberOfSequentialApplication = 3, WaitingDaysLabel = 25, WaitingToHarvest = new List<WaitingHarvest> { new WaitingHarvest { IdCertifiedEntity = entitiesContainers.ElementAt(14).Entity.Id, WaitingDays = 25} }, WettingRecommendedByHectares = 2000 } });
+ /*Preguntar*/  new Dose { Id = Guid.NewGuid().ToString("N"), IdProduct = entitiesContainers.ElementAt(15).Entity.Id, IdsApplicationTarget = new string[] { entitiesContainers.ElementAt(13).Entity.Id }, IdSpecies = new string[] { entitiesContainers.ElementAt(3).Entity.Id }, IdVarieties = new string[] { entitiesContainers.ElementAt(4).Entity.Id, entitiesContainers.ElementAt(5).Entity.Id }, ApplicationDaysInterval = 15, HoursToReEntryToBarrack = 5, DosesApplicatedTo = (DosesApplicatedTo)1, DosesQuantityMin =  500, DosesQuantityMax = 800, NumberOfSequentialApplication = 3, WaitingDaysLabel = 25, WaitingToHarvest = new List<WaitingHarvest> { new WaitingHarvest { IdCertifiedEntity = entitiesContainers.ElementAt(14).Entity.Id, WaitingDays = 25} }, WettingRecommendedByHectares = 2000 } });
             entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
-                new PhenologicalEvent { Id = Guid.NewGuid().ToString("N"), Name = "Aparicion de flor", InitDate = new DateTime(2020, 5, 1), EndDate = new DateTime(2020, 7, 1) } });
+                new PhenologicalEvent { Id = Guid.NewGuid().ToString("N"), Name = "Aparicion de flor", StartDate = new DateTime(2020, 5, 1), EndDate = new DateTime(2020, 7, 1) } });
             entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
                 new OrderFolder {  Id = Guid.NewGuid().ToString("N"), IdSpecie = entitiesContainers.ElementAt(3).Entity.Id, IdApplicationTarget = entitiesContainers.ElementAt(13).Entity.Id, IdPhenologicalEvent = entitiesContainers.ElementAt(17).Entity.Id, IdIngredientCategory = entitiesContainers.ElementAt(10).Entity.Id, IdIngredient = entitiesContainers.ElementAt(12).Entity.Id } });
             entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity =

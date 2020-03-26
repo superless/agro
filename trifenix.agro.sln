@@ -85,9 +85,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.cosmosdbiniti
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.cosmosdbinitializer.interfaces", "trifenix.agro.cosmosdbinitializer.interfaces\trifenix.agro.cosmosdbinitializer.interfaces.csproj", "{31B8C9E9-1271-47D4-B27A-D2984E715F0A}"
 EndProject
+<<<<<<< HEAD
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.attr", "trifenix.agro.attr\trifenix.agro.attr.csproj", "{9F512D4C-BB7F-4E04-B910-5ED9D66196F6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "trifenix.typegen", "trifenix.typegen\trifenix.typegen.csproj", "{0AA42D20-30E0-4A29-908A-211393200176}"
+=======
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "trifenix.agro.validator.operations", "trifenix.agro.validator.operations\trifenix.agro.validator.operations.csproj", "{B7CABCB2-B345-4988-9C60-6CCB8DF2F74C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "trifenix.agro.validator.interfaces", "trifenix.agro.validator.interfaces\trifenix.agro.validator.interfaces.csproj", "{EBF55AAD-4E5D-4A24-BC7F-92FF4BD67F4D}"
+>>>>>>> 07384f0d1ce041fe8e2bfa147d40724f76537a24
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -227,6 +233,7 @@ Global
 		{31B8C9E9-1271-47D4-B27A-D2984E715F0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{31B8C9E9-1271-47D4-B27A-D2984E715F0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{31B8C9E9-1271-47D4-B27A-D2984E715F0A}.Release|Any CPU.Build.0 = Release|Any CPU
+<<<<<<< HEAD
 		{9F512D4C-BB7F-4E04-B910-5ED9D66196F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9F512D4C-BB7F-4E04-B910-5ED9D66196F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F512D4C-BB7F-4E04-B910-5ED9D66196F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -235,6 +242,16 @@ Global
 		{0AA42D20-30E0-4A29-908A-211393200176}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0AA42D20-30E0-4A29-908A-211393200176}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0AA42D20-30E0-4A29-908A-211393200176}.Release|Any CPU.Build.0 = Release|Any CPU
+=======
+		{B7CABCB2-B345-4988-9C60-6CCB8DF2F74C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7CABCB2-B345-4988-9C60-6CCB8DF2F74C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7CABCB2-B345-4988-9C60-6CCB8DF2F74C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7CABCB2-B345-4988-9C60-6CCB8DF2F74C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBF55AAD-4E5D-4A24-BC7F-92FF4BD67F4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBF55AAD-4E5D-4A24-BC7F-92FF4BD67F4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBF55AAD-4E5D-4A24-BC7F-92FF4BD67F4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBF55AAD-4E5D-4A24-BC7F-92FF4BD67F4D}.Release|Any CPU.Build.0 = Release|Any CPU
+>>>>>>> 07384f0d1ce041fe8e2bfa147d40724f76537a24
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -273,8 +290,13 @@ Global
 		{2185F20F-20E9-4CE4-B8B3-ABAD6030CDE9} = {FACCD064-19E0-4DEB-8007-C357D5DE3F1D}
 		{F31E535C-C8AE-4836-8035-755D49658A46} = {C7EA10FB-7451-4775-B7B7-FE8D1DF9E7F7}
 		{31B8C9E9-1271-47D4-B27A-D2984E715F0A} = {874ECDB1-116E-49AB-825B-82384C5A57D5}
+<<<<<<< HEAD
 		{9F512D4C-BB7F-4E04-B910-5ED9D66196F6} = {E281F827-E0A7-469B-B19D-20C697EA7C3A}
 		{0AA42D20-30E0-4A29-908A-211393200176} = {85917EE6-3B67-4DEF-8521-9C4C946E5D1B}
+=======
+		{B7CABCB2-B345-4988-9C60-6CCB8DF2F74C} = {C7EA10FB-7451-4775-B7B7-FE8D1DF9E7F7}
+		{EBF55AAD-4E5D-4A24-BC7F-92FF4BD67F4D} = {874ECDB1-116E-49AB-825B-82384C5A57D5}
+>>>>>>> 07384f0d1ce041fe8e2bfa147d40724f76537a24
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2C0C9D82-464E-4741-8541-CDC460278FEC}

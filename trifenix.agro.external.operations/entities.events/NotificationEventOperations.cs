@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Microsoft.Azure.Documents.Spatial;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.interfaces.common;
-using trifenix.agro.db.model;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.email.interfaces;
 using trifenix.agro.enums;
@@ -17,6 +17,7 @@ using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
 using trifenix.agro.storage.interfaces;
+using trifenix.agro.validator.interfaces;
 using trifenix.agro.weather.interfaces;
 
 namespace trifenix.agro.external.operations.entities.events {
@@ -24,85 +25,66 @@ namespace trifenix.agro.external.operations.entities.events {
     /// <summary>
     /// Todos las funciones necesarias para interactuar con eventos registrados en el monitoreo.
     /// </summary>
-    public class NotificationEventOperations : MainReadOperation<NotificationEvent>, IGenericOperation<NotificationEvent, NotificationEventInput> {
+    public class NotificationEventOperations : MainOperation<NotificationEvent, NotificationEventInput>, IGenericOperation<NotificationEvent, NotificationEventInput> {
         
         private readonly ICommonQueries commonQueries;
         private readonly IEmail email;
         private readonly IUploadImage uploadImage;
         private readonly IWeatherApi weather;
 
-        public NotificationEventOperations(IMainGenericDb<NotificationEvent> repo, IExistElement existElement, IAgroSearch search, ICommonQueries commonQueries, IEmail email, IUploadImage uploadImage, IWeatherApi weather, ICommonDbOperations<NotificationEvent> commonDb) : base(repo, existElement, search, commonDb) {
+        public NotificationEventOperations(IMainGenericDb<NotificationEvent> repo, IExistElement existElement, IAgroSearch search, ICommonQueries commonQueries, IEmail email, IUploadImage uploadImage, IWeatherApi weather, ICommonDbOperations<NotificationEvent> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
             this.commonQueries = commonQueries;
             this.email = email;
             this.uploadImage = uploadImage;
             this.weather = weather;
         }
 
-        public async Task Remove(string id) { 
-        
+        public Task Remove(string id) {
+            throw new NotImplementedException();
         }
 
-        private async Task<string> ValidaNotification(NotificationEventInput input) {
-            string errors = string.Empty;
-            if (!string.IsNullOrWhiteSpace(input.Id)) {
-                var existsId  = await existElement.ExistsById<NotificationEvent>(input.Id);
-                if (!existsId)
-                    errors += "No existe notificación a modificar.  ";
-            }
-            var existsBarrack = await existElement.ExistsById<Barrack>(input.IdBarrack);
-            if (!existsBarrack)
-                errors += "No existe cuartel    ";
-            if (input.EventType == NotificationType.Phenological) {
-                var existsPhenologicalEvent = await existElement.ExistsById<PhenologicalEvent>(input.IdPhenologicalEvent);
-                if (!existsPhenologicalEvent)
-                    errors += "No existe evento fenológico";
-            }
-            return errors;
-        }
+        //public async Task<string> Validate(NotificationEventInput input) {
+        //    string errors = string.Empty;
+        //    if (!string.IsNullOrWhiteSpace(input.Id)) {  //PUT
+        //        var existsId = await existElement.ExistsById<NotificationEvent>(input.Id, false);
+        //        if (!existsId)
+        //            errors += $"No existe notificación con id {input.Id}.";
+        //    }
+        //    var existsBarrack = await existElement.ExistsById<Barrack>(input.IdBarrack, false);
+        //    if (!existsBarrack)
+        //        errors += $"No existe cuartel con id {input.IdBarrack}.";
+        //    if (input.NotificationType == NotificationType.Phenological) {
+        //        var existsPhenologicalEvent = await existElement.ExistsById<PhenologicalEvent>(input.IdPhenologicalEvent, false);
+        //        if (!existsPhenologicalEvent)
+        //            errors += $"No existe evento fenológico con id {input.IdPhenologicalEvent}.";
+        //    }
+        //    return errors.Replace(".",".\r\n");  
+        //}
 
-        public async Task<ExtPostContainer<string>> Save(NotificationEventInput input) {
-            var validaNotification = await ValidaNotification(input);
-            if (!string.IsNullOrWhiteSpace(validaNotification))
-                throw new Exception(validaNotification);
-            var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
-            NotificationEvent notification = new NotificationEvent {
-                Id = id,
-                Created = DateTime.Now,
-            };
-            if (!string.IsNullOrWhiteSpace(input.Id)) {
-                var notificationTmp = await Get(input.Id);
-                notification = notificationTmp.Result;
-            }
-            if (input.Lat.HasValue && input.Long.HasValue)
-                notification.Weather = await weather.GetWeather(input.Lat.Value, input.Long.Value);
-            var picturePath = await uploadImage.UploadImageBase64(input.Base64);
-            notification.IdBarrack = input.IdBarrack;
-            notification.IdPhenologicalEvent = input.IdPhenologicalEvent;
-            notification.NotificationType = input.EventType;
-            notification.PicturePath = picturePath;
-            notification.Description = input.Description;
-            await repo.CreateUpdate(notification);
-            var specieAbbv = await commonQueries.GetSpecieAbbreviationFromBarrack(input.IdBarrack);
-
-            var idSeason = await commonQueries.GetSeasonId(input.IdBarrack);
+        public async Task<ExtPostContainer<string>> Save(NotificationEvent notificationEvent) {
+            //TODO: Revisar
+            var picturePath = await uploadImage.UploadImageBase64(notificationEvent.PicturePath);
+            notificationEvent.PicturePath = picturePath;
+            await repo.CreateUpdate(notificationEvent);
+            var specieAbbv = await commonQueries.GetSpecieAbbreviationFromBarrack(notificationEvent.IdBarrack);
+            var idSeason = await commonQueries.GetSeasonId(notificationEvent.IdBarrack);
             search.AddElements(new List<EntitySearch> {
                 new EntitySearch {
-                    Created = DateTime.Now,
-                    Id = id,
-                    RelatedProperties= new Property[]{
-                       new Property{ PropertyIndex=(int)PropertyRelated.GENERIC_DESC, Value = input.Description },
-                       new Property{ PropertyIndex=(int)PropertyRelated.GENERIC_CODE, Value = specieAbbv },
-                       new Property{ PropertyIndex=(int)PropertyRelated.GENERIC_PATH, Value = picturePath}
-                    },
+                    Id = notificationEvent.Id,
                     EntityIndex = (int)EntityRelated.NOTIFICATION_EVENT,
-                    RelatedIds = new RelatedId[]{
-                      new RelatedId{  EntityIndex=(int)EntityRelated.PHENOLOGICAL_EVENT, EntityId = input.IdPhenologicalEvent},
-                      new RelatedId{  EntityIndex=(int)EntityRelated.BARRACK, EntityId = input.IdBarrack},
-                      new RelatedId{ EntityIndex=(int)EntityRelated.SEASON, EntityId = idSeason }
-
+                    Created = notificationEvent.Created,
+                    RelatedProperties= new Property[]{
+                       new Property{ PropertyIndex=(int)PropertyRelated.GENERIC_DESC, Value = notificationEvent.Description },
+                       new Property{ PropertyIndex=(int)PropertyRelated.GENERIC_ABBREVIATION, Value = specieAbbv },
+                       new Property{ PropertyIndex=(int)PropertyRelated.GENERIC_PATH, Value = notificationEvent.PicturePath }
                     },
-                    RelatedEnumValues = new RelatedEnumValue[]{ 
-                        new RelatedEnumValue{ EnumerationIndex = (int)EnumerationRelated.NOTIFICATION_TYPE, Value = (int)input.EventType  }
+                    RelatedIds = new RelatedId[]{
+                      new RelatedId{  EntityIndex=(int)EntityRelated.PHENOLOGICAL_EVENT, EntityId = notificationEvent.IdPhenologicalEvent},
+                      new RelatedId{  EntityIndex=(int)EntityRelated.BARRACK, EntityId = notificationEvent.IdBarrack},
+                      new RelatedId{ EntityIndex=(int)EntityRelated.SEASON, EntityId = idSeason }
+                    },
+                    RelatedEnumValues = new RelatedEnumValue[]{
+                        new RelatedEnumValue{ EnumerationIndex = (int)EnumerationRelated.NOTIFICATION_TYPE, Value = (int)notificationEvent.NotificationType  }
                     }
                 }
             });
@@ -118,11 +100,36 @@ namespace trifenix.agro.external.operations.entities.events {
                     </body>
                 </html>");
             return new ExtPostContainer<string> {
+                IdRelated = notificationEvent.Id,
+                MessageResult = ExtMessageResult.Ok
+            };
+        }
+
+        public async Task<ExtPostContainer<string>> SaveInput(NotificationEventInput input, bool isBatch) {
+            await Validate(input);
+            var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
+            NotificationEvent notification = new NotificationEvent {
+                Id = id,
+                Created = DateTime.Now,
+                IdBarrack = input.IdBarrack,
+                IdPhenologicalEvent = input.IdPhenologicalEvent,
+                NotificationType = input.NotificationType,
+                PicturePath = input.Base64,
+                Description = input.Description,
+            };
+            if (input.Lat.HasValue && input.Long.HasValue) {
+                notification.Location = new Point((double)input.Long, (double)input.Lat);
+                notification.Weather = await weather.GetWeather(input.Lat.Value, input.Long.Value);
+            }
+            if (!isBatch)
+                return await Save(notification);
+            await repo.CreateEntityContainer(notification);
+            return new ExtPostContainer<string> {
                 IdRelated = id,
-                MessageResult = ExtMessageResult.Ok,
-                Result = id
+                MessageResult = ExtMessageResult.Ok
             };
         }
 
     }
+
 }

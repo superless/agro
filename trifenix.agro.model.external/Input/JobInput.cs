@@ -1,27 +1,12 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using trifenix.agro.enums;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace trifenix.agro.model.external.Input
-{
-    public class JobInput : InputBaseName
-    {
-
-
-    }
+namespace trifenix.agro.model.external.Input {
+    public class JobInput : InputBaseName { }
 
     public class JobSwaggerInput {
 
-
-
         [Required]
-        
         public string Name { get; set; }
-
-
-
-
 
     }
 

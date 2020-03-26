@@ -16,7 +16,7 @@ namespace trifenix.agro.db.model {
         public override string Name { get; set; }
 
         [DateSearch(DateRelated.START_DATE)]
-        public DateTime InitDate { get; set; }
+        public DateTime StartDate { get; set; }
 
         [DateSearch(DateRelated.END_DATE)]
         public DateTime EndDate { get; set; }

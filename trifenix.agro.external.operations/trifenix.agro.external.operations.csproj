@@ -16,6 +16,7 @@
     <ProjectReference Include="..\trifenix.agro.search\trifenix.agro.search.operations.csproj" />
     <ProjectReference Include="..\trifenix.agro.storage.interfaces\trifenix.agro.storage.interfaces.csproj" />
     <ProjectReference Include="..\trifenix.agro.util\trifenix.agro.util.csproj" />
+    <ProjectReference Include="..\trifenix.agro.validator.operations\trifenix.agro.validator.operations.csproj" />
     <ProjectReference Include="..\trifenix.agro.weather.interfaces\trifenix.agro.weather.interfaces.csproj" />
     <ProjectReference Include="..\trifenix.util.exceptions\trifenix.util.exceptions.csproj" />
   </ItemGroup>

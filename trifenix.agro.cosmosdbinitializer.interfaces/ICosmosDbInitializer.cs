@@ -1,7 +1,11 @@
-﻿namespace trifenix.agro.cosmosdbinitializer.interfaces {
+﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
+using System.Threading.Tasks;
+
+namespace trifenix.agro.cosmosdbinitializer.interfaces {
     public interface ICosmosDbInitializer {
 
-        void MapJsonToDB(dynamic json);
+        Task<JsonResult> MapJsonToDB(JObject json);
 
     }
 

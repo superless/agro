@@ -2,24 +2,20 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using trifenix.agro.db.applicationsReference.common;
-using trifenix.agro.db.interfaces.common;
 using trifenix.agro.enums;
 using trifenix.agro.enums.query;
 
-namespace trifenix.agro.db.applicationsReference.agro.Common
-{
+namespace trifenix.agro.db.applicationsReference.agro.Common {
     public class BaseQueries {
 
-
+        public readonly AgroDbArguments DbArguments;
         private readonly Queries _queries;
-        public BaseQueries(AgroDbArguments dbArguments)
-        {
+        public BaseQueries(AgroDbArguments dbArguments) {
             DbArguments = dbArguments;
             _queries = new Queries();
         }
 
-        public ICosmosStore<T> Client<T>() where T:DocumentBase
-        { return new MainGenericDb<T>(DbArguments).Store; }
+        public ICosmosStore<T> Client<T>() where T:DocumentBase => new MainGenericDb<T>(DbArguments).Store;
 
         public async Task<T> SingleQuery<TDOCUMENT,T>(string query, params object[] args) where TDOCUMENT : DocumentBase {
             var store = Client<TDOCUMENT>();
@@ -27,18 +23,14 @@ namespace trifenix.agro.db.applicationsReference.agro.Common
             return result;
         }
 
-        public async Task<IEnumerable<T>> MultipleQuery<TDOCUMENT, T>(string query, params object[] args) where TDOCUMENT : DocumentBase
-        {
+        public async Task<IEnumerable<T>> MultipleQuery<TDOCUMENT, T>(string query, params object[] args) where TDOCUMENT : DocumentBase {
             var store = Client<TDOCUMENT>();
-
             var result = await store.QueryMultipleAsync<T>(string.Format(query, args));
             return result;
         }
 
+        public string Queries(DbQuery query) => _queries.Get(query);
 
-        public AgroDbArguments DbArguments { get; }
-        public string Queries(DbQuery query) {
-            return _queries.Get(query);
-        }
     }
+
 }

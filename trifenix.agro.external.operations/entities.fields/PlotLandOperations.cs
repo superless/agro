@@ -9,71 +9,64 @@ using trifenix.agro.enums;
 using trifenix.agro.enums.input;
 using trifenix.agro.enums.searchModel;
 using trifenix.agro.external.interfaces;
-using trifenix.agro.external.operations.res;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
+using trifenix.agro.validator.interfaces;
 
-namespace trifenix.agro.external.operations.entities.fields
-{
-    public class PlotLandOperations : MainReadOperationName<PlotLand, PlotLandInput>, IGenericOperation<PlotLand, PlotLandInput>
-    {
-        public PlotLandOperations(IMainGenericDb<PlotLand> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<PlotLand> commonDb) : base(repo, existElement, search, commonDb)
-        {
+namespace trifenix.agro.external.operations.entities.fields {
+    public class PlotLandOperations : MainOperation<PlotLand, PlotLandInput>, IGenericOperation<PlotLand, PlotLandInput> {
+        public PlotLandOperations(IMainGenericDb<PlotLand> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<PlotLand> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
+
+        public Task Remove(string id) {
+            throw new NotImplementedException();
         }
-        public async Task Remove(string id)
-        {
 
-        }
-        public async Task<ExtPostContainer<string>> Save(PlotLandInput input)
-        {
-            var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
-
-            var plotLand = new PlotLand
-            {
-                Id = id,
-                Name = input.Name,
-                IdSector = input.IdSector
-            };
-
-            var valida = await Validate(input);
-            if (!valida) throw new Exception(string.Format(ErrorMessages.NotValid, plotLand.CosmosEntityName));
-
-            var existsSector = await existElement.ExistsById<Sector>(input.IdSector);
-            if (!existsSector) throw new Exception(string.Format(ErrorMessages.NotValidId, "Sector"));
-
-
+        public async Task<ExtPostContainer<string>> Save(PlotLand plotLand) {
             await repo.CreateUpdate(plotLand);
-
-            search.AddElements(new List<EntitySearch>
-            {
+            search.AddElements(new List<EntitySearch> {
                 new EntitySearch{
-                    Id = id,
+                    Id = plotLand.Id,
                     EntityIndex = (int)EntityRelated.PLOTLAND,
                     Created = DateTime.Now,
                     RelatedProperties = new Property[] {
                         new Property {
                             PropertyIndex = (int)PropertyRelated.GENERIC_NAME,
-                            Value = input.Name
+                            Value = plotLand.Name
                         }
                     },
                     RelatedIds = new RelatedId[]{
                         new RelatedId{
                             EntityIndex = (int)EntityRelated.SECTOR,
-                            EntityId = input.IdSector
+                            EntityId = plotLand.IdSector
                         }
                     }
                 }
             });
-
-
-            return new ExtPostContainer<string>
-            {
-                IdRelated = id,
-                MessageResult = ExtMessageResult.Ok,
-                Result = id
+            return new ExtPostContainer<string> {
+                IdRelated = plotLand.Id,
+                MessageResult = ExtMessageResult.Ok
             };
         }
+
+        public async Task<ExtPostContainer<string>> SaveInput(PlotLandInput input, bool isBatch) {
+            await Validate(input);
+            var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
+            var plotLand = new PlotLand {
+                Id = id,
+                Name = input.Name,
+                IdSector = input.IdSector
+            };
+            if (!isBatch)
+                return await Save(plotLand);
+            await repo.CreateEntityContainer(plotLand);
+            return new ExtPostContainer<string> {
+                IdRelated = id,
+                MessageResult = ExtMessageResult.Ok
+            };
+        }
+
     }
+
 }
