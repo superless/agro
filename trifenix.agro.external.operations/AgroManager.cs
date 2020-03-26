@@ -1,8 +1,12 @@
-﻿using trifenix.agro.db;
+﻿using Cosmonaut;
+using System.Collections.Generic;
+using trifenix.agro.db;
 using trifenix.agro.db.applicationsReference;
 using trifenix.agro.db.applicationsReference.agro.Common;
 using trifenix.agro.db.applicationsReference.common;
+using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.common;
+using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.db.model.agro.core;
@@ -19,10 +23,11 @@ using trifenix.agro.microsoftgraph.operations;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.storage.interfaces;
+using trifenix.agro.validator.interfaces;
+using trifenix.agro.validator.operations;
 using trifenix.agro.weather.interfaces;
 
-namespace trifenix.agro.external.operations
-{
+namespace trifenix.agro.external.operations {
     public class AgroManager : IAgroManager {
 
         private readonly AgroDbArguments Arguments;
@@ -31,79 +36,89 @@ namespace trifenix.agro.external.operations
         private readonly IWeatherApi _weatherApi;
         private readonly IAgroSearch _searchServiceInstance;
         private readonly string UserId;
+        private readonly bool isBatch;
 
-        public AgroManager(AgroDbArguments arguments, IEmail email, IUploadImage uploadImage, IWeatherApi weatherApi, IAgroSearch searchServiceInstance, string ObjectIdAAD) {
+        public AgroManager(AgroDbArguments arguments, IEmail email, IUploadImage uploadImage, IWeatherApi weatherApi, IAgroSearch searchServiceInstance, string ObjectIdAAD, bool _isBatch) {
             Arguments = arguments;
             _email = email;
             _uploadImage = uploadImage;
             _weatherApi = weatherApi;
             _searchServiceInstance = searchServiceInstance;
             UserId = CommonQueries.GetUserIdFromAAD(ObjectIdAAD).Result;
+            isBatch = _isBatch;
         }
 
-        public IGenericOperation<UserActivity, UserActivityInput> UserActivity => new UserActivityOperations(new MainGenericDb<UserActivity>(Arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<UserActivity>(), UserId);
+        private IMainGenericDb<T> GetMainDb<T>() where T : DocumentBase => new MainGenericDb<T>(Arguments);
 
-        public IExistElement ExistsElements => new CosmosExistElement(Arguments);
+        private ICommonDbOperations<T> GetCommonDbOp<T>() where T : DocumentBase => new CommonDbOperations<T>();
 
-        public ICommonQueries CommonQueries => new CommonQueries(Arguments);
+        public ICosmosStore<EntityContainer> BatchStore => new CosmosStore<EntityContainer>(new CosmosStoreSettings(Arguments.NameDb, Arguments.EndPointUrl, Arguments.PrimaryKey));
+
+        public IExistElement ExistsElements => isBatch ? (IExistElement)new BatchExistsElements(Arguments) : new CosmosExistElement(Arguments);
+
+        private ICommonQueries CommonQueries => new CommonQueries(Arguments);
+
+        private IValidator Validators => new Validator(new Dictionary<string, IValidate> { { "Reference", new ReferenceValidation(ExistsElements) }, { "Required", new RequiredValidation() }, { "Unique", new UniqueValidation(ExistsElements) } });
 
         public ICounters Counters => new Counters(Arguments);
 
-        public IGenericOperation<Sector, SectorInput> Sector => new SectorOperations(new MainGenericDb<Sector>(Arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<Sector>());
+        public IGenericOperation<UserActivity, UserActivityInput> UserActivity => new UserActivityOperations(GetMainDb<UserActivity>(), ExistsElements, _searchServiceInstance, GetCommonDbOp<UserActivity>(), UserId, Validators);
+
+        public IGenericOperation<Sector, SectorInput> Sector => new SectorOperations(GetMainDb<Sector>(), ExistsElements, _searchServiceInstance, GetCommonDbOp<Sector>(), Validators);
         
-        public IGenericOperation<PlotLand, PlotLandInput> PlotLand => new PlotLandOperations(new MainGenericDb<PlotLand>(Arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<PlotLand>());
+        public IGenericOperation<PlotLand, PlotLandInput> PlotLand => new PlotLandOperations(GetMainDb<PlotLand>(), ExistsElements, _searchServiceInstance, GetCommonDbOp<PlotLand>(), Validators);
 
-        public IGenericOperation<Specie, SpecieInput> Specie => new SpecieOperations(new MainGenericDb<Specie>(Arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<Specie>());
+        public IGenericOperation<Specie, SpecieInput> Specie => new SpecieOperations(GetMainDb<Specie>(), ExistsElements, _searchServiceInstance, GetCommonDbOp<Specie>(), Validators);
 
-        public IGenericOperation<Variety, VarietyInput> Variety => new VarietyOperations(new MainGenericDb<Variety>(Arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<Variety>());
+        public IGenericOperation<Variety, VarietyInput> Variety => new VarietyOperations(GetMainDb<Variety>(), ExistsElements, _searchServiceInstance, GetCommonDbOp<Variety>(), Validators);
 
-        public IGenericOperation<ApplicationTarget, TargetInput> ApplicationTarget => new ApplicationTargetOperations(new MainGenericDb<ApplicationTarget>(Arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<ApplicationTarget>());
+        public IGenericOperation<ApplicationTarget, ApplicationTargetInput> ApplicationTarget => new ApplicationTargetOperations(GetMainDb<ApplicationTarget>(), ExistsElements, _searchServiceInstance, GetCommonDbOp<ApplicationTarget>(), Validators);
 
-        public IGenericOperation<PhenologicalEvent, PhenologicalEventInput> PhenologicalEvent => new PhenologicalEventOperations(new MainGenericDb<PhenologicalEvent>(Arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<PhenologicalEvent>());
+        public IGenericOperation<PhenologicalEvent, PhenologicalEventInput> PhenologicalEvent => new PhenologicalEventOperations(GetMainDb<PhenologicalEvent>(), ExistsElements, _searchServiceInstance, GetCommonDbOp<PhenologicalEvent>(), Validators);
 
-        public IGenericOperation<CertifiedEntity, CertifiedEntityInput> CertifiedEntity => new CertifiedEntityOperations(new MainGenericDb<CertifiedEntity>(Arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<CertifiedEntity>());
+        public IGenericOperation<CertifiedEntity, CertifiedEntityInput> CertifiedEntity => new CertifiedEntityOperations(GetMainDb<CertifiedEntity>(), ExistsElements, _searchServiceInstance, GetCommonDbOp<CertifiedEntity>(), Validators);
 
-        public IGenericOperation<IngredientCategory, IngredientCategoryInput> IngredientCategory => new IngredientCategoryOperations(new MainGenericDb<IngredientCategory>(Arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<IngredientCategory>());
+        public IGenericOperation<IngredientCategory, IngredientCategoryInput> IngredientCategory => new IngredientCategoryOperations(GetMainDb<IngredientCategory>(), ExistsElements, _searchServiceInstance, GetCommonDbOp<IngredientCategory>(), Validators);
 
-        public IGenericOperation<Ingredient, IngredientInput> Ingredient => new IngredientOperations(new MainGenericDb<Ingredient>(Arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<Ingredient>());
+        public IGenericOperation<Ingredient, IngredientInput> Ingredient => new IngredientOperations(GetMainDb<Ingredient>(), ExistsElements, _searchServiceInstance, GetCommonDbOp<Ingredient>(), Validators);
 
-        public IGenericOperation<Product, ProductInput> Product => new ProductOperations(new MainGenericDb<Product>(Arguments), ExistsElements, _searchServiceInstance, Doses, new CommonDbOperations<Product>(), CommonQueries);
+        public IGenericOperation<Product, ProductInput> Product => new ProductOperations(GetMainDb<Product>(), ExistsElements, _searchServiceInstance, Dose, GetCommonDbOp<Product>(), CommonQueries, Validators);
 
-        public IGenericOperation<Doses, DosesInput> Doses => new DosesOperations(new MainGenericDb<Doses>(Arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<Doses>(), Counters, CommonQueries);
+        public IGenericOperation<Dose, DosesInput> Dose => new DosesOperations(GetMainDb<Dose>(), ExistsElements, _searchServiceInstance, GetCommonDbOp<Dose>(), new Counters(Arguments), CommonQueries, Validators);
 
-        public IGenericOperation<Role, RoleInput> Role => new RoleOperations(new MainGenericDb<Role>(Arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<Role>());
+        public IGenericOperation<Role, RoleInput> Role => new RoleOperations(GetMainDb<Role>(), ExistsElements, _searchServiceInstance, GetCommonDbOp<Role>(), Validators);
 
-        public IGenericOperation<Job, JobInput> Job => new JobOperations(new MainGenericDb<Job>(Arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<Job>());
+        public IGenericOperation<Job, JobInput> Job => new JobOperations(GetMainDb<Job>(), ExistsElements, _searchServiceInstance, GetCommonDbOp<Job>(), Validators);
 
-        public IGenericOperation<UserApplicator, UserApplicatorInput> UserApplicator => new UserOperations(new MainGenericDb<UserApplicator>(Arguments), ExistsElements, _searchServiceInstance, new GraphApi(Arguments), new CommonDbOperations<UserApplicator>());
+        public IGenericOperation<UserApplicator, UserApplicatorInput> UserApplicator => new UserOperations(GetMainDb<UserApplicator>(), ExistsElements, _searchServiceInstance, new GraphApi(Arguments), GetCommonDbOp<UserApplicator>(), Validators);
 
-        public IGenericOperation<Nebulizer, NebulizerInput> Nebulizer => new NebulizerOperations(new MainGenericDb<Nebulizer>(Arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<Nebulizer>());
+        public IGenericOperation<Nebulizer, NebulizerInput> Nebulizer => new NebulizerOperations(GetMainDb<Nebulizer>(), ExistsElements, _searchServiceInstance, GetCommonDbOp<Nebulizer>(), Validators);
         
-        public IGenericOperation<Tractor, TractorInput> Tractor => new TractorOperations(new MainGenericDb<Tractor>(Arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<Tractor>());
+        public IGenericOperation<Tractor, TractorInput> Tractor => new TractorOperations(GetMainDb<Tractor>(), ExistsElements, _searchServiceInstance, GetCommonDbOp<Tractor>(), Validators);
 
-        public IGenericOperation<BusinessName, BusinessNameInput> BusinessName => new BusinessNameOperations(new MainGenericDb<BusinessName>(Arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<BusinessName>());
+        public IGenericOperation<BusinessName, BusinessNameInput> BusinessName => new BusinessNameOperations(GetMainDb<BusinessName>(), ExistsElements, _searchServiceInstance, GetCommonDbOp<BusinessName>(), Validators);
 
-        public IGenericOperation<CostCenter, CostCenterInput> CostCenter => new CostCenterOperations(new MainGenericDb<CostCenter>(Arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<CostCenter>());
+        public IGenericOperation<CostCenter, CostCenterInput> CostCenter => new CostCenterOperations(GetMainDb<CostCenter>(), ExistsElements, _searchServiceInstance, GetCommonDbOp<CostCenter>(), Validators);
 
-        public IGenericOperation<Season, SeasonInput> Season => new SeasonOperations(new MainGenericDb<Season>(Arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<Season>());
+        public IGenericOperation<Season, SeasonInput> Season => new SeasonOperations(GetMainDb<Season>(), ExistsElements, _searchServiceInstance, GetCommonDbOp<Season>(), Validators);
 
-        public IGenericOperation<Rootstock, RootstockInput> Rootstock => new RootstockOperations(new MainGenericDb<Rootstock>(Arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<Rootstock>());
+        public IGenericOperation<Rootstock, RootstockInput> Rootstock => new RootstockOperations(GetMainDb<Rootstock>(), ExistsElements, _searchServiceInstance, GetCommonDbOp<Rootstock>(), Validators);
 
-        public IGenericOperation<OrderFolder, OrderFolderInput> OrderFolder => new OrderFolderOperations(new MainGenericDb<OrderFolder>(Arguments), ExistsElements, _searchServiceInstance, CommonQueries, new CommonDbOperations<OrderFolder>());
+        public IGenericOperation<OrderFolder, OrderFolderInput> OrderFolder => new OrderFolderOperations(GetMainDb<OrderFolder>(), ExistsElements, _searchServiceInstance, CommonQueries, GetCommonDbOp<OrderFolder>(), Validators);
 
-        public IGenericOperation<Barrack, BarrackInput> Barrack => new BarrackOperations(new MainGenericDb<Barrack>(Arguments), ExistsElements, _searchServiceInstance, CommonQueries, new CommonDbOperations<Barrack>());
+        public IGenericOperation<Barrack, BarrackInput> Barrack => new BarrackOperations(GetMainDb<Barrack>(), ExistsElements, _searchServiceInstance, CommonQueries, GetCommonDbOp<Barrack>(), Validators);
 
-        public IGenericOperation<NotificationEvent, NotificationEventInput> NotificationEvent => new NotificationEventOperations(new MainGenericDb<NotificationEvent>(Arguments), ExistsElements, _searchServiceInstance, CommonQueries, _email, _uploadImage, _weatherApi, new CommonDbOperations<NotificationEvent>());
+        public IGenericOperation<NotificationEvent, NotificationEventInput> NotificationEvent => new NotificationEventOperations(GetMainDb<NotificationEvent>(), ExistsElements, _searchServiceInstance, CommonQueries, _email, _uploadImage, _weatherApi, GetCommonDbOp<NotificationEvent>(), Validators);
 
-        public IGenericOperation<PreOrder, PreOrderInput> PreOrder => new PreOrdersOperations(new MainGenericDb<PreOrder>(Arguments), ExistsElements, _searchServiceInstance, CommonQueries, new CommonDbOperations<PreOrder>());
+        public IGenericOperation<PreOrder, PreOrderInput> PreOrder => new PreOrdersOperations(GetMainDb<PreOrder>(), ExistsElements, _searchServiceInstance, CommonQueries, GetCommonDbOp<PreOrder>(), Validators);
 
-        public IGenericOperation<ApplicationOrder, ApplicationOrderInput> ApplicationOrder => new ApplicationOrderOperations(new MainGenericDb<ApplicationOrder>(Arguments), ExistsElements, _searchServiceInstance, CommonQueries, new CommonDbOperations<ApplicationOrder>());
+        public IGenericOperation<ApplicationOrder, ApplicationOrderInput> ApplicationOrder => new ApplicationOrderOperations(GetMainDb<ApplicationOrder>(), ExistsElements, _searchServiceInstance, CommonQueries, GetCommonDbOp<ApplicationOrder>(), Validators);
 
-        public IGenericOperation<ExecutionOrder, ExecutionOrderInput> ExecutionOrder => new ExecutionOrderOperations(new MainGenericDb<ExecutionOrder>(Arguments), ExistsElements, _searchServiceInstance, CommonQueries, new CommonDbOperations<ExecutionOrder>());
+        public IGenericOperation<ExecutionOrder, ExecutionOrderInput> ExecutionOrder => new ExecutionOrderOperations(GetMainDb<ExecutionOrder>(), ExistsElements, _searchServiceInstance, CommonQueries, GetCommonDbOp<ExecutionOrder>(), Validators);
 
-        public IGenericOperation<ExecutionOrderStatus, ExecutionOrderStatusInput> ExecutionOrderStatus => new ExecutionOrderStatusOperations(new MainGenericDb<ExecutionOrderStatus>(Arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<ExecutionOrderStatus>());
+        public IGenericOperation<ExecutionOrderStatus, ExecutionOrderStatusInput> ExecutionOrderStatus => new ExecutionOrderStatusOperations(GetMainDb<ExecutionOrderStatus>(), ExistsElements, _searchServiceInstance, GetCommonDbOp<ExecutionOrderStatus>(), Validators);
         
-        public IGenericOperation<Comment, CommentInput> Comments => new CommentOperation(new MainGenericDb<Comment>(Arguments), ExistsElements, _searchServiceInstance, new CommonDbOperations<Comment>());
+        public IGenericOperation<Comment, CommentInput> Comments => new CommentOperation(GetMainDb<Comment>(), ExistsElements, _searchServiceInstance, GetCommonDbOp<Comment>(), Validators);
 
     }
 

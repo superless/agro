@@ -1,24 +1,14 @@
 ﻿using System;
-using trifenix.agro.db;
 
-namespace trifenix.agro.db.exceptions
-{
-    public class NonIdException<T> : BaseException<T> where T:DocumentBase
-    {
-        public NonIdException(T docBase) : base(docBase)
-        {
-            
-        }
-
-        
+namespace trifenix.agro.db.exceptions {
+    public class NonIdException<T> : BaseException<T> where T:DocumentBase {
+        public NonIdException(T docBase) : base(docBase) { }
 
         public override string Message => $"el elemento de tipo {DbObject.GetType()} no  tiene id";
     }
 
-    public abstract class BaseException<T> : Exception where T:DocumentBase
-    {
-        public BaseException(T docBase)
-        {
+    public abstract class BaseException<T> : Exception where T:DocumentBase {
+        public BaseException(T docBase) {
             DbObject = docBase;
         }
 

@@ -7,90 +7,69 @@ using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.enums;
 using trifenix.agro.external.interfaces;
-using trifenix.agro.external.operations.res;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
+using trifenix.agro.validator.interfaces;
 
-namespace trifenix.agro.external.operations.entities.main
-{
-    public class VarietyOperations : MainReadOperationName<Variety, VarietyInput>, IGenericOperation<Variety, VarietyInput>
-    {
-        public VarietyOperations(IMainGenericDb<Variety> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Variety> commonDb) : base(repo, existElement, search, commonDb)
-        {
+namespace trifenix.agro.external.operations.entities.main {
+    public class VarietyOperations : MainOperation<Variety, VarietyInput>, IGenericOperation<Variety, VarietyInput> {
+        public VarietyOperations(IMainGenericDb<Variety> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Variety> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
+
+        public Task Remove(string id) {
+            throw new NotImplementedException();
         }
-        public async Task Remove(string id)
-        {
 
-        }
-        public async Task<ExtPostContainer<string>> Save(VarietyInput input)
-        {
-            var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
-
-            var variety = new Variety
-            {
-                Id = id,
-                Name = input.Name,
-                Abbreviation = input.Abbreviation,
-                IdSpecie = input.IdSpecie
-            };
-
-            var valida = await Validate(input);
-            if (!valida) throw new Exception(string.Format(ErrorMessages.NotValid, variety.CosmosEntityName));
-
-            var existsSector = await existElement.ExistsById<Specie>(input.IdSpecie);
-            if (!existsSector) throw new Exception(string.Format(ErrorMessages.NotValidId, "Especie"));
-
-            if (string.IsNullOrWhiteSpace(input.Id))
-            {
-                var validaAbbv = await existElement.ExistsWithPropertyValue<Variety>("Abbreviation", input.Abbreviation);
-                if (validaAbbv) throw new Exception(string.Format(ErrorMessages.NotValidAbbreviation, variety.CosmosEntityName));
-
-            }
-            else
-            {
-                var validaAbbv = await existElement.ExistsWithPropertyValue<Variety>("Abbreviation", input.Abbreviation, input.Id);
-                if (validaAbbv) throw new Exception(string.Format(ErrorMessages.NotValidAbbreviation, variety.CosmosEntityName));
-            }
-
-
+        public async Task<ExtPostContainer<string>> Save(Variety variety) {
             await repo.CreateUpdate(variety);
-
-            var varietySearch = new List<EntitySearch> {
+            search.AddElements(new List<EntitySearch> {
                 new EntitySearch{
-                    Id = id,
+                    Id = variety.Id,
                     EntityIndex = (int)EntityRelated.VARIETY,
                     Created = DateTime.Now,
                     RelatedProperties = new Property[] {
                         new Property {
                             PropertyIndex = (int)PropertyRelated.GENERIC_NAME,
-                            Value = input.Name
+                            Value = variety.Name
                         },
                         new Property {
                             PropertyIndex = (int)PropertyRelated.GENERIC_ABBREVIATION,
-                            Value = input.Abbreviation
+                            Value = variety.Abbreviation
                         }
                     },
                     RelatedIds = new RelatedId[]{
                         new RelatedId{
                             EntityIndex = (int)EntityRelated.SPECIE,
-                            EntityId = input.IdSpecie
+                            EntityId = variety.IdSpecie
                         }
                     }
                 }
-            };
-
-
-
-            search.AddElements(varietySearch);
-
-
+            });
             return new ExtPostContainer<string> {
-                IdRelated = id,
-                MessageResult = ExtMessageResult.Ok,
-                Result = id
+                IdRelated = variety.Id,
+                MessageResult = ExtMessageResult.Ok
             };
         }
+
+        public async Task<ExtPostContainer<string>> SaveInput(VarietyInput input, bool isBatch) {
+            await Validate(input);
+            var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
+            var variety = new Variety {
+                Id = id,
+                Name = input.Name,
+                Abbreviation = input.Abbreviation,
+                IdSpecie = input.IdSpecie
+            };
+            if (!isBatch)
+                return await Save(variety);
+            await repo.CreateEntityContainer(variety);
+            return new ExtPostContainer<string> {
+                IdRelated = id,
+                MessageResult = ExtMessageResult.Ok
+            };
+        }
+
     }
+
 }

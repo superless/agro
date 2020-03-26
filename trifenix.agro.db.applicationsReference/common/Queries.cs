@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using trifenix.agro.db.applicationsReference.common.res;
+﻿using trifenix.agro.db.applicationsReference.common.res;
 using trifenix.agro.db.interfaces.common;
 using trifenix.agro.enums;
 
-namespace trifenix.agro.db.applicationsReference.common
-{
-    public class Queries : IQueries
-    {
-        public string Get(DbQuery query)
-        {
-            switch (query)
-            {
+namespace trifenix.agro.db.applicationsReference.common {
+    public class Queries : IQueries {
+        public string Get(DbQuery query) {
+            switch (query) {
                 case DbQuery.SPECIEABBREVIATION_FROM_SPECIEID:
                     return QueryRes.SPECIEABBREVIATION_FROM_SPECIEID;
                 case DbQuery.SPECIEID_FROM_VARIETYID:
@@ -47,7 +40,6 @@ namespace trifenix.agro.db.applicationsReference.common
                     return QueryRes.ACTIVEDOSESIDS_FROM_PRODUCTID;
                 case DbQuery.NAME_BY_ID:
                     return QueryRes.NAME_BY_ID;
-                    break;
                 default:
                     return "";
             }

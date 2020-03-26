@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using trifenix.agro.enums;
-using trifenix.agro.weather.model;
 
 namespace trifenix.agro.model.external.Input
 {
@@ -15,7 +14,7 @@ namespace trifenix.agro.model.external.Input
         /// </summary>
         public string IdPhenologicalEvent { get; set; }
 
-        public NotificationType EventType { get; set; }
+        public NotificationType NotificationType { get; set; }
         /// <summary>
         /// Descripcion del evento
         /// </summary>
@@ -31,7 +30,6 @@ namespace trifenix.agro.model.external.Input
 
         public float? Long { get; set; }
 
-
     }
 
     public class NotificationEventSwaggerInput {
@@ -42,23 +40,17 @@ namespace trifenix.agro.model.external.Input
         public string IdPhenologicalEvent { get; set; }
 
         [Required]
-        public NotificationType EventType { get; set; }
+        public NotificationType NotificationType { get; set; }
         
-
         public string Description { get; set; }
-
         
-        [Required]
-        public DateTime Created { get; set; }
-
         [Required]
         public string Base64 { get; set; }
-
 
         public float? Lat { get; set; }
 
         public float? Long { get; set; }
+
     }
 
-    
 }

@@ -8,73 +8,67 @@ using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.enums;
 using trifenix.agro.external.interfaces;
-using trifenix.agro.external.operations.res;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
+using trifenix.agro.validator.interfaces;
 
-namespace trifenix.agro.external.operations.entities.orders
-{
-    public class PreOrdersOperations : MainReadOperationName<PreOrder, PreOrderInput>, IGenericOperation<PreOrder, PreOrderInput>
-    {
+namespace trifenix.agro.external.operations.entities.orders {
+    public class PreOrdersOperations : MainOperation<PreOrder, PreOrderInput>, IGenericOperation<PreOrder, PreOrderInput> {
         private readonly ICommonQueries commonQueries;
 
-        public PreOrdersOperations(IMainGenericDb<PreOrder> repo, IExistElement existElement, IAgroSearch search, ICommonQueries commonQueries, ICommonDbOperations<PreOrder> commonDb) : base(repo, existElement, search, commonDb)
-        {
+        public PreOrdersOperations(IMainGenericDb<PreOrder> repo, IExistElement existElement, IAgroSearch search, ICommonQueries commonQueries, ICommonDbOperations<PreOrder> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
             this.commonQueries = commonQueries;
         }
 
-        public async Task Remove(string id)
-        {
-
-        }
-        private async Task<string> ValidaPreOrder(PreOrderInput input) {
-
-            if (input.PreOrderType == PreOrderType.DEFAULT)
-            {
-                var existsIngredient = await existElement.ExistsById<Ingredient>(input.IdIngredient);
-
-                if (!existsIngredient) return "No existe ingrediente en PreOrden Normal";
-            }
-
-            if (input.PreOrderType == PreOrderType.PHENOLOGICAL)
-            {
-                var existsOrderFolder = await existElement.ExistsById<OrderFolder>(input.OrderFolderId);
-
-                if (!existsOrderFolder) return "No existe id de carpeta de orden";
-            }
-
-            if (!input.BarracksId.Any()) return "Los cuarteles son obligatorios";
-
-
-            foreach (var idBarrack in input.BarracksId)
-            {
-                var exists = await existElement.ExistsById<Barrack>(idBarrack);
-
-                if (!exists) return $"el cuartel con id {idBarrack} no existe";
-            }
-
-            return string.Empty;
-
+        public Task Remove(string id) {
+            throw new NotImplementedException();
         }
 
-        public async Task<ExtPostContainer<string>> Save(PreOrderInput input)
-        {
+        //if (!preOrder.BarracksId.Any()) return "Los cuarteles son obligatorios";
+
+        public async Task<ExtPostContainer<string>> Save(PreOrder preOrder) {
+            await repo.CreateUpdate(preOrder);
+            var specieAbbv = await commonQueries.GetSpecieAbbreviationFromBarrack(preOrder.BarracksId.First());
+            var entity = new EntitySearch {
+                Id = preOrder.Id,
+                EntityIndex = (int)EntityRelated.PREORDER,
+                Created = DateTime.Now,
+                RelatedProperties = new Property[] {
+                        new Property {
+                            PropertyIndex = (int)PropertyRelated.GENERIC_NAME,
+                            Value = preOrder.Name
+                        },
+                        new Property {
+                            PropertyIndex = (int)PropertyRelated.GENERIC_ABBREVIATION,
+                            Value = specieAbbv
+                        }
+                    },
+                RelatedEnumValues = new RelatedEnumValue[] {
+                    new RelatedEnumValue{ EnumerationIndex = (int)EnumerationRelated.PREORDER_TYPE, Value = (int)preOrder.PreOrderType }
+                }
+            };
+            var entities = preOrder.BarracksId.Select(s => new RelatedId { EntityIndex = (int)EntityRelated.BARRACK, EntityId = s }).ToList();
+                //TODO: Revisar
+            if (preOrder.PreOrderType == PreOrderType.DEFAULT)
+                entities.Add(new RelatedId { EntityIndex = (int)EntityRelated.INGREDIENT, EntityId = preOrder.IdIngredient });
+            if (preOrder.PreOrderType == PreOrderType.PHENOLOGICAL)
+                entities.Add(new RelatedId { EntityIndex = (int)EntityRelated.ORDER_FOLDER, EntityId = preOrder.OrderFolderId });
+            var idSeason = await commonQueries.GetSeasonId(preOrder.BarracksId.First());
+            entities.Add(new RelatedId { EntityIndex = (int)EntityRelated.SEASON, EntityId = idSeason });
+            entity.RelatedIds = entities.ToArray();
+            search.AddElements(new List<EntitySearch> { entity });
+            return new ExtPostContainer<string> {
+                IdRelated = preOrder.Id,
+                MessageResult = ExtMessageResult.Ok
+            };
+        }
+
+        public async Task<ExtPostContainer<string>> SaveInput(PreOrderInput input, bool isBatch) {
+            await Validate(input);
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
-
-
-            var valida = await Validate(input);
-
-            if (!valida) throw new Exception(string.Format(ErrorMessages.NotValid, "PreOrden"));
-
-            var validaPreOrder = await ValidaPreOrder(input);
-
-            if (!string.IsNullOrWhiteSpace(validaPreOrder)) throw new Exception(validaPreOrder);
-
-
-            var preOrder = new PreOrder
-            {
+            var preOrder = new PreOrder {
                 Id = id,
                 IdIngredient = input.IdIngredient,
                 BarracksId = input.BarracksId,
@@ -82,70 +76,15 @@ namespace trifenix.agro.external.operations.entities.orders
                 Name = input.Name,
                 OrderFolderId = input.OrderFolderId
             };
-
-            await repo.CreateUpdate(preOrder);
-
-
-            var specieAbbv = await commonQueries.GetSpecieAbbreviationFromBarrack(input.BarracksId.First());
-
-
-            var entity = new EntitySearch
-            {
-                Id = id,
-                EntityIndex = (int)EntityRelated.PREORDER,
-                Created = DateTime.Now,
-                RelatedProperties = new Property[] {
-                        new Property {
-                            PropertyIndex = (int)PropertyRelated.GENERIC_NAME,
-                            Value = input.Name
-                        },
-                        new Property { 
-                            PropertyIndex = (int)PropertyRelated.GENERIC_ABBREVIATION,
-                            Value = specieAbbv
-                        }
-                    },
-                RelatedEnumValues = new RelatedEnumValue[] { 
-                    new RelatedEnumValue{ EnumerationIndex = (int)EnumerationRelated.PREORDER_TYPE, Value = (int)input.PreOrderType }
-                }
-            };
-
-            var entities = input.BarracksId.Select(s => new RelatedId { EntityIndex = (int)EntityRelated.BARRACK, EntityId = s }).ToList();
-
-
-            if (input.PreOrderType == PreOrderType.DEFAULT)
-            {
-                entities.Add(new RelatedId
-                {
-                    EntityIndex = (int)EntityRelated.INGREDIENT,
-                    EntityId = input.IdIngredient
-                 });
-            }
-
-            if (input.PreOrderType == PreOrderType.PHENOLOGICAL)
-            {
-                entities.Add(new RelatedId
-                {
-                    EntityIndex = (int)EntityRelated.ORDER_FOLDER,
-                    EntityId = input.OrderFolderId
-                });
-            }
-
-            var idSeason = await commonQueries.GetSeasonId(input.BarracksId.First());
-
-            entities.Add(new RelatedId { EntityIndex = (int)EntityRelated.SEASON, EntityId = idSeason });
-
-            entity.RelatedIds = entities.ToArray();
-
-            search.AddElements(new List<EntitySearch> { 
-                entity             
-            });
-            
-            return new ExtPostContainer<string>
-            {
+            if (!isBatch)
+                return await Save(preOrder);
+            await repo.CreateEntityContainer(preOrder);
+            return new ExtPostContainer<string> {
                 IdRelated = id,
-                MessageResult = ExtMessageResult.Ok,
-                Result = id
+                MessageResult = ExtMessageResult.Ok
             };
         }
+
     }
+
 }

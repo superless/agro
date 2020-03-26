@@ -3,15 +3,13 @@ using Cosmonaut.Attributes;
 using trifenix.agro.attr;
 using trifenix.agro.enums;
 
-namespace trifenix.agro.db.model.agro
-{
+namespace trifenix.agro.db.model.agro {
 
     /// <summary>
     /// Producto Quimico usado por las órdenes
     /// </summary>
     [SharedCosmosCollection("agro", "Product")]
-    public class Product : DocumentBaseName, ISharedCosmosEntity
-    {
+    public class Product : DocumentBaseName, ISharedCosmosEntity {
 
         public override string Id { get; set; }
 
@@ -37,9 +35,6 @@ namespace trifenix.agro.db.model.agro
         [EnumSearch(EnumRelated.GENERIC_KIND_CONTAINER)]
         public KindOfProductContainer KindOfBottle { get; set; }
 
-
-
-        
-
     }
+
 }

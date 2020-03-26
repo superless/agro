@@ -2,8 +2,6 @@
 using Cosmonaut.Attributes;
 using Microsoft.Azure.Documents.Spatial;
 using System;
-
-using trifenix.agro.db.model.agro.local;
 using trifenix.agro.enums;
 using trifenix.agro.weather.model;
 

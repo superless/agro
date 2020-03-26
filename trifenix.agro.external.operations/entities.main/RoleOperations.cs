@@ -7,56 +7,57 @@ using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model.agro;
 using trifenix.agro.enums;
 using trifenix.agro.external.interfaces;
-using trifenix.agro.external.operations.res;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
+using trifenix.agro.validator.interfaces;
 
-namespace trifenix.agro.external.operations.entities.main
-{
-    public class RoleOperations : MainReadOperationName<Role, RoleInput>, IGenericOperation<Role, RoleInput>
-    {
-        public RoleOperations(IMainGenericDb<Role> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Role> commonDb) : base(repo, existElement, search, commonDb) { }
-        public async Task Remove(string id)
-        {
+namespace trifenix.agro.external.operations.entities.main {
+    public class RoleOperations : MainOperation<Role, RoleInput>, IGenericOperation<Role, RoleInput> {
+        public RoleOperations(IMainGenericDb<Role> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Role> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
 
+        public Task Remove(string id) {
+            throw new NotImplementedException();
         }
-        public async Task<ExtPostContainer<string>> Save(RoleInput input) {
-            var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
-            var valida = await Validate(input);
-            if (!valida)
-                throw new Exception(string.Format(ErrorMessages.NotValid, "Role"));
-            var role = new Role {
-                Id = id,
-                Name = input.Name
-            };
-            await repo.CreateUpdate(role);
 
-            search.AddElements(new List<EntitySearch>
-            {
+        public async Task<ExtPostContainer<string>> Save(Role role) {
+            await repo.CreateUpdate(role);
+            search.AddElements(new List<EntitySearch> {
                 new EntitySearch{
-                    Id = id,
+                    Id = role.Id,
                     EntityIndex = (int)EntityRelated.ROLE,
                     Created = DateTime.Now,
                     RelatedProperties = new Property[] {
                         new Property {
                             PropertyIndex = (int)PropertyRelated.GENERIC_NAME,
-                            Value = input.Name
+                            Value = role.Name
                         }
                     }
                 }
             });
-
-            
-
-
-            return new ExtPostContainer<string>
-            {
-                IdRelated = id,
-                MessageResult = ExtMessageResult.Ok,
-                Result = id
+            return new ExtPostContainer<string> {
+                IdRelated = role.Id,
+                MessageResult = ExtMessageResult.Ok
             };
         }
+
+        public async Task<ExtPostContainer<string>> SaveInput(RoleInput input, bool isBatch) {
+            await Validate(input);
+            var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
+            var role = new Role {
+                Id = id,
+                Name = input.Name
+            };
+            if (!isBatch)
+                return await Save(role);
+            await repo.CreateEntityContainer(role);
+            return new ExtPostContainer<string> {
+                IdRelated = id,
+                MessageResult = ExtMessageResult.Ok
+            };
+        }
+
     }
+
 }
