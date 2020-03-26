@@ -56,7 +56,7 @@ namespace trifenix.agro.db.model.agro
         /// <summary>
         /// Descripcion del evento
         /// </summary>
-        [StringSearch(StringRelated.GENERIC_DESCR)]
+        [StringSearch(StringRelated.GENERIC_DESC)]
         public string Description { get; set; }
 
 
@@ -71,7 +71,7 @@ namespace trifenix.agro.db.model.agro
         public Weather Weather { get; set; }
 
 
-        [GeoSearch(GeoRelated.LOCATION)]
+        [GeoSearch(GeoRelated.GENERIC_LOCATION)]
         public Point Location { get; set; }
 
     }
