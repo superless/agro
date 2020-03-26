@@ -41,8 +41,8 @@ namespace trifenix.agro.external.operations.entities.orders {
 
             var specieAbbv = await commonQueries.GetSpecieAbbreviationFromOrder(executionOrder.IdOrder);
             var properties = new List<Property>() { new Property { PropertyIndex = (int)PropertyRelated.GENERIC_ABBREVIATION, Value = specieAbbv } };
-            if (executionOrder.InitDate.HasValue)
-                properties.Add( new Property { PropertyIndex = (int)PropertyRelated.GENERIC_START_DATE, Value = $"{executionOrder.InitDate.Value}:dd/MM/yyyy" });
+            if (executionOrder.StartDate.HasValue)
+                properties.Add( new Property { PropertyIndex = (int)PropertyRelated.GENERIC_START_DATE, Value = $"{executionOrder.StartDate.Value}:dd/MM/yyyy" });
             if (executionOrder.EndDate.HasValue)
                 properties.Add( new Property { PropertyIndex = (int)PropertyRelated.GENERIC_END_DATE, Value = $"{executionOrder.EndDate.Value}:dd/MM/yyyy" });
 
@@ -96,7 +96,7 @@ namespace trifenix.agro.external.operations.entities.orders {
                 IdNebulizer = input.IdNebulizer,
                 IdOrder = input.IdOrder,
                 IdTractor = input.IdTractor,
-                InitDate = input.StartDate,
+                StartDate = input.StartDate,
                 EndDate = input.EndDate,
                 DosesOrder = input.DosesOrder
             };

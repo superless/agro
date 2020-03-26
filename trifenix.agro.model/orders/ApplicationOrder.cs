@@ -7,6 +7,7 @@ using trifenix.agro.enums.searchModel;
 namespace trifenix.agro.db.model.agro.orders {
 
     [SharedCosmosCollection("agro", "ApplicationOrder")]
+    [ReferenceSearch(EntityRelated.ORDER)]
     public class ApplicationOrder : DocumentBaseName, ISharedCosmosEntity {
         /// <summary>
         /// Identificador de la entidad

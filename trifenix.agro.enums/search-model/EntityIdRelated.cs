@@ -48,6 +48,7 @@
         GENERIC_PHONE = 9,
         GENERIC_PICTURE_PATH = 10,
         GENERIC_DESC = 11,
+        GENERIC_COMMENT = 12,
     }
 
     public enum NumRelated {
@@ -56,7 +57,9 @@
         HOURS_TO_ENTRY = 2,
         DAYS_INTERVAL = 3,
         NUMBER_OF_SECQUENTIAL_APPLICATION = 4,
-        WETTING_RECOMMENDED = 5
+        WETTING_RECOMMENDED = 5,
+        NUMBER_OF_PLATNS = 6,
+        PLANTING_YEAR = 7
     }
 
     public enum DoubleRelated{
@@ -66,6 +69,7 @@
         QUANTITY_APPLIED = 3,
         QUANTITY_MIN = 4,
         QUANTITY_MAX = 5,
+        HECTARES = 6,
     }
 
     public enum BoolRelated {
@@ -92,6 +96,9 @@
         NOTIFICATION_TYPE = 3,
         ORDER_TYPE = 4,
         DOSES_APPLICATED_TO = 5,
+        CLOSED_STATUS = 6,
+        FINISH_STATUS = 7,
+        EXECUTION_STATUS = 8,
     }
 
     public enum PropertyRelated {

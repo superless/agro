@@ -63,9 +63,9 @@ namespace trifenix.agro.external.operations.res {
         /// <summary>
         ///   Looks up a localized string similar to La fecha inicial es mayor a la fecha final.
         /// </summary>
-        internal static string InitDateisOlderThenEndDate {
+        internal static string StartDateisOlderThenEndDate {
             get {
-                return ResourceManager.GetString("InitDateisOlderThenEndDate", resourceCulture);
+                return ResourceManager.GetString("StartDateisOlderThenEndDate", resourceCulture);
             }
         }
         

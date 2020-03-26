@@ -19,7 +19,7 @@ namespace trifenix.agro.model.external.output
 
         public string IdNubulizer { get; set; }
 
-        public DateTime InitDate { get; set; }
+        public DateTime StartDate { get; set; }
 
         public DateTime EndDate { get; set; }
 
