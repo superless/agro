@@ -9,6 +9,7 @@ using trifenix.agro.enums.input;
 using trifenix.agro.external.operations;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.search.operations;
+using v2 = trifenix.agro.search.model.temp;
 
 namespace trifenix.agro.console
 {
@@ -31,7 +32,22 @@ namespace trifenix.agro.console
 
             var agroManager = new AgroManager(dbArguments, null, null, null, searchServiceInstance, "ba7e86c8-6c2d-491d-bb2e-0dd39fdf5dc1", false);
 
+            var productsX = await agroManager.Product.GetElements();
 
+            var list = new List<v2.EntitySearch>();
+
+            if (productsX.StatusResult == ExtGetDataResult.Success)
+            {
+                foreach (var item in productsX.Result)
+                {
+                    var searchs = searchServiceInstance.GetEntitySearch(item);
+                    list.AddRange(searchs);
+                }
+            }
+
+
+
+            return;
             var rootStocks = await agroManager.Rootstock.GetElements();
 
             var roles = await agroManager.Role.GetElements();
@@ -64,6 +80,11 @@ namespace trifenix.agro.console
             var products = await agroManager.Product.GetElements();
 
             var doses = await agroManager.Dose.GetElements();
+
+
+
+
+
 
             if (products.StatusResult == ExtGetDataResult.Success)
             {

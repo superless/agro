@@ -58,6 +58,17 @@ namespace trifenix.agro.search.model.temp {
 
     }
 
+
+    public class BaseProperty<T> {
+
+        [IsFilterable]
+        public int PropertyIndex { get; set; }
+
+        [IsSearchable, IsFilterable]
+        public T Value { get; set; }
+
+    }
+
     public class RelatedId {
 
 
@@ -71,95 +82,50 @@ namespace trifenix.agro.search.model.temp {
         public string Id { get { return $"{EntityIndex},{EntityId}"; } }
     }
 
-    public class StrProperty
+    public class StrProperty : BaseProperty<string>
     {
-
-        [IsFilterable]
-        public int PropertyIndex { get; set; }
-
-        [IsSearchable, IsFilterable]
-        public string Value { get; set; }
-
-        [IsFacetable]
-        public string Id { get { return $"{PropertyIndex},{Value}"; } }
-    }
-
-    public class EnumProperty
-    {
-
-        [IsFilterable]
-        public int PropertyIndex { get; set; }
-
-        [IsSearchable, IsFilterable]
-        public int Value { get; set; }
-
 
 
         [IsFacetable]
         public string Id { get { return $"{PropertyIndex},{Value}"; } }
     }
 
-    public class SuggestProperty
+    public class EnumProperty : BaseProperty<int>
     {
 
-        [IsFilterable]
-        public int PropertyIndex { get; set; }
+        [IsFacetable]
+        public string Id { get { return $"{PropertyIndex},{Value}"; } }
+    }
 
-        [IsSearchable, IsFilterable]
-        public string Value { get; set; }
-
+    public class SuggestProperty : BaseProperty<string>
+    {
     }
 
 
 
-    public class Num32Property
+    public class Num32Property : BaseProperty<int>
     {
-
-        [IsFilterable]
-        public int PropertyIndex { get; set; }
-
-        [IsSearchable, IsFilterable]
-        public int Value { get; set; }
     }
 
-    public class Num64Property
+    public class Num64Property : BaseProperty<long>
     {
-
-        [IsFilterable]
-        public int PropertyIndex { get; set; }
-
-        [IsSearchable, IsFilterable]
-        public long Value { get; set; }
     }
 
-    public class DblProperty
+    public class DblProperty : BaseProperty<double>
     {
 
-        [IsFilterable]
-        public int PropertyIndex { get; set; }
-
-        [IsSearchable, IsFilterable]
-        public double Value { get; set; }
     }
 
-    public class DtProperty
+    public class DtProperty : BaseProperty<DateTime>
     {
-
-        [IsFilterable]
-        public int PropertyIndex { get; set; }
-
-        [IsSearchable, IsFilterable]
-        public DateTime Value { get; set; }
     }
 
-    public class GeoProperty
+    public class BoolProperty : BaseProperty<bool>
     {
+    }
 
-        [IsFilterable]
-        public int PropertyIndex { get; set; }
-
-        [IsSearchable, IsFilterable]
-        public GeographyPoint Value { get; set; }
+    public class GeoProperty : BaseProperty<GeographyPoint>
+    {
 
     }
 
