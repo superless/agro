@@ -4,7 +4,7 @@ namespace trifenix.agro.model.external.Input {
 
     public class ApplicationTargetInput : InputBaseName {
 
-        [Required, Unique]
+        [Required, UniqueAttribute]
         public string Abbreviation { get; set; }
         
     }

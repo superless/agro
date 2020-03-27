@@ -15,7 +15,7 @@ namespace trifenix.agro.model.external.Input {
 
         public string Comment { get; set; }
 
-        [Required, Reference(typeof(ExecutionOrder))]
+        [Required, ReferenceAttribute(typeof(ExecutionOrder))]
         public string IdExecutionOrder { get; set; }
 
     }

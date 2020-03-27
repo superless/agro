@@ -3,7 +3,7 @@ using trifenix.agro.db.model.agro;
 
 namespace trifenix.agro.model.external.Input {
     public class PlotLandInput : InputBaseName {
-        [Required, Reference(typeof(Sector))]
+        [Required, ReferenceAttribute(typeof(Sector))]
         public string IdSector { get; set; }
 
     }

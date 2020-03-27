@@ -35,15 +35,16 @@ namespace trifenix.agro.validator.operations {
                 var validatorName = typeof(T_Attr).Name;
                 if (!Validators.TryGetValue(validatorName, out IValidate validator))
                     throw new NotImplementedException($"No existe la implementacion de la interface IValidate con este nombre '{validatorName}'. ");
+
                 var properties = obj.GetType().GetProperties();
                 var properties_Attr = properties.Where(prop => Attribute.IsDefined(prop, typeof(T_Attr))).ToList();
                 foreach (var prop in properties_Attr) {
                     var values = CreateDynamicList(prop.GetValue(obj));
                     foreach (var value in values) {
                         try {
-                            if (typeof(Reference).IsAssignableFrom(typeof(T_Attr)))
-                                args = new object[] { ((Reference)prop.GetCustomAttributes(typeof(Reference), true).FirstOrDefault()).entityOfReference };
-                            else if(typeof(Unique).IsAssignableFrom(typeof(T_Attr)))
+                            if (typeof(ReferenceAttribute).IsAssignableFrom(typeof(T_Attr)))
+                                args = new object[] { ((ReferenceAttribute)prop.GetCustomAttributes(typeof(ReferenceAttribute), true).FirstOrDefault()).entityOfReference };
+                            else if(typeof(UniqueAttribute).IsAssignableFrom(typeof(T_Attr)))
                                 args = new object[] { obj.GetType(), prop.Name, (string)obj.GetType().GetProperty("Id")?.GetValue(obj) };
                             await validator.Validate(value, args);
                         } catch (Validation_Exception v_ex) {

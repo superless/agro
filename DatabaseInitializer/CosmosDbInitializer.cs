@@ -64,7 +64,7 @@ namespace trifenix.agro.authentication.operations {
                     foreach (var jProp in JProperties) {
                         Prop = EntityType.GetProperty(jProp.Name);
                         Value = InvokeGenericMethod("GetValue", Prop.PropertyType, new object[] { jProp.Value });
-                        if (Attribute.IsDefined(Prop, typeof(Reference))) {
+                        if (Attribute.IsDefined(Prop, typeof(ReferenceAttribute))) {
                             int index = GetGuid(Value.ToString());
                             if (index != -1 && index < Guids.Count)
                                 Value = Guids.ElementAt(index);

@@ -3,7 +3,7 @@
 namespace trifenix.agro.model.external.Input {
     public class SpecieInput : InputBaseName {
 
-        [Required, Unique]
+        [Required, UniqueAttribute]
         public string Abbreviation { get; set; }
     }
 

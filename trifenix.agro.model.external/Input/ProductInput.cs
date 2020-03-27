@@ -6,7 +6,7 @@ using trifenix.agro.enums.model;
 namespace trifenix.agro.model.external.Input {
     public class ProductInput : InputBaseName {
 
-        [Required, Reference(typeof(Ingredient))]
+        [Required, ReferenceAttribute(typeof(Ingredient))]
         public string IdActiveIngredient { get; set; }
 
         [Required]

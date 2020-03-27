@@ -160,7 +160,7 @@ namespace trifenix.agro.external.operations.entities.ext {
         public async Task<ExtPostContainer<string>> SaveInput(DosesInput dosesInput, bool isBatch) {
             //await Validate(dosesInput);
             var id = !string.IsNullOrWhiteSpace(dosesInput.Id) ? dosesInput.Id : Guid.NewGuid().ToString("N");
-            long counter;
+            int counter;
             //TODO: Revisar
             if (string.IsNullOrWhiteSpace(dosesInput.Id)) {
                 var prevCounter = await Counters.GetLastCounterDoses(dosesInput.IdProduct);

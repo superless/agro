@@ -13,7 +13,7 @@ namespace trifenix.agro.model.external.Input {
 
         public bool? Current { get; set; }
 
-        [Required, Reference(typeof(CostCenter))]
+        [Required, ReferenceAttribute(typeof(CostCenter))]
         public string IdCostCenter { get; set; }
 
     }

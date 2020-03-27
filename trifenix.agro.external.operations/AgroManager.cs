@@ -58,7 +58,7 @@ namespace trifenix.agro.external.operations {
 
         private ICommonQueries CommonQueries => new CommonQueries(Arguments);
 
-        private IValidator Validators => new Validator(new Dictionary<string, IValidate> { { "Reference", new ReferenceValidation(ExistsElements) }, { "Required", new RequiredValidation() }, { "Unique", new UniqueValidation(ExistsElements) } });
+        private IValidator Validators => new Validator(new Dictionary<string, IValidate> { { "ReferenceAttribute", new ReferenceValidation(ExistsElements) }, { "RequiredAttribute", new RequiredValidation() }, { "UniqueAttribute", new UniqueValidation(ExistsElements) } });
 
         public ICounters Counters => new Counters(Arguments);
 

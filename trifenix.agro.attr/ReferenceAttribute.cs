@@ -24,7 +24,7 @@ namespace trifenix.agro.attr {
 
         
         public override int Index => (int)_index;
-        public override Related Related => Local ? Related.REFERENCE : Related.LOCAL_REFERENCE;
+        public override Related Related => Local ? Related.LOCAL_REFERENCE : Related.REFERENCE;
     }
 
     public class StringSearchAttribute : SearchAttribute {

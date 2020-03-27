@@ -6,16 +6,16 @@ using trifenix.agro.enums.model;
 namespace trifenix.agro.model.external.Input {
     public class DosesInput : InputBase {
 
-        [Required, Reference(typeof(Product))]
+        [Required, ReferenceAttribute(typeof(Product))]
         public string IdProduct { get; set; }
 
-        [Reference(typeof(Variety))]
+        [ReferenceAttribute(typeof(Variety))]
         public string[] IdVarieties { get; set; }
 
-        [Reference(typeof(Specie))]
+        [ReferenceAttribute(typeof(Specie))]
         public string[] IdSpecies { get; set; }
 
-        [Reference(typeof(ApplicationTarget))]
+        [ReferenceAttribute(typeof(ApplicationTarget))]
         public string[] IdsApplicationTarget { get; set; }
 
         [Required]

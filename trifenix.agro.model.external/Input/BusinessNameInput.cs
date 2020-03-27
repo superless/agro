@@ -3,9 +3,9 @@
 namespace trifenix.agro.model.external.Input {
     public class BusinessNameInput : InputBaseName {
 
-        [Required, Unique]
+        [Required, UniqueAttribute]
         public string Email { get; set; }
-        [Required, Unique]
+        [Required, UniqueAttribute]
         public string Rut { get; set; }
         public string WebPage { get; set; }
         public string Giro { get; set; }

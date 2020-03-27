@@ -5,10 +5,10 @@ using trifenix.agro.db.model.agro;
 namespace trifenix.agro.model.external.Input
 {
     public class BarrackInput : InputBaseName {
-        [Required,Reference(typeof(Season))]
+        [Required,ReferenceAttribute(typeof(Season))]
         public string SeasonId { get; set; }
 
-        [Required, Reference(typeof(PlotLand))]
+        [Required, ReferenceAttribute(typeof(PlotLand))]
         public string IdPlotLand { get; set; }
 
         [Required]
@@ -17,7 +17,7 @@ namespace trifenix.agro.model.external.Input
         [Required]
         public int PlantingYear { get; set; }
 
-        [Required,Reference(typeof(Variety))]
+        [Required,ReferenceAttribute(typeof(Variety))]
         public string IdVariety { get; set; }
 
         [Required]
@@ -25,10 +25,10 @@ namespace trifenix.agro.model.external.Input
 
         public GeographicalPointInput[] GeographicalPoints { get; set; }
 
-        [Reference(typeof(Variety))]
+        [ReferenceAttribute(typeof(Variety))]
         public string IdPollinator { get; set; }
 
-        [Reference(typeof(Rootstock))]
+        [ReferenceAttribute(typeof(Rootstock))]
         public string IdRootstock { get; set; }
 
     }

@@ -4,10 +4,10 @@ using trifenix.agro.db.model.agro;
 namespace trifenix.agro.model.external.Input {
     public class VarietyInput : InputBaseName {
         
-        [Required, Unique]
+        [Required, UniqueAttribute]
         public string Abbreviation { get; set; }
 
-        [Required, Reference(typeof(Specie))]
+        [Required, ReferenceAttribute(typeof(Specie))]
         public string IdSpecie { get; set; }
 
     }

@@ -4,7 +4,7 @@ using trifenix.agro.db.model.agro.core;
 namespace trifenix.agro.model.external.Input {
     public class CostCenterInput : InputBaseName {
 
-        [Required,Reference(typeof(BusinessName))]
+        [Required,ReferenceAttribute(typeof(BusinessName))]
         public string IdBusinessName { get; set; }
 
     }

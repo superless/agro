@@ -6,7 +6,7 @@ namespace trifenix.agro.model.external.Input {
         [Required]
         public string Brand { get; set; }
 
-        [Required, Unique]
+        [Required, UniqueAttribute]
         public string Code { get; set; }
 
     }

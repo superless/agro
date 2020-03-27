@@ -6,22 +6,22 @@ using trifenix.agro.db.model.agro;
 namespace trifenix.agro.model.external.Input {
     public class UserApplicatorInput : InputBaseName {
 
-        [Required, Unique]
+        [Required, UniqueAttribute]
         public string Rut { get; set; }
 
-        [Unique]
+        [UniqueAttribute]
         public string Email { get; set; }
 
-        [Reference(typeof(Job))]
+        [ReferenceAttribute(typeof(Job))]
         public string IdJob { get; set; }
 
-        [Required, Reference(typeof(Role))]
+        [Required, ReferenceAttribute(typeof(Role))]
         public List<string> IdsRoles { get; set; }
 
-        [Reference(typeof(Nebulizer))]
+        [ReferenceAttribute(typeof(Nebulizer))]
         public string IdNebulizer { get; set; }
 
-        [Reference(typeof(Tractor))]
+        [ReferenceAttribute(typeof(Tractor))]
         public string IdTractor { get; set; }
     }
 

@@ -5,19 +5,19 @@ using trifenix.agro.db.model.agro;
 namespace trifenix.agro.model.external.Input {
     public class OrderFolderInput : InputBase {
 
-        [Required, Reference(typeof(PhenologicalEvent))]
+        [Required, ReferenceAttribute(typeof(PhenologicalEvent))]
         public string IdPhenologicalEvent { get; set; }
 
-        [Required, Reference(typeof(ApplicationTarget))]
+        [Required, ReferenceAttribute(typeof(ApplicationTarget))]
         public string IdApplicationTarget { get; set; }
 
-        [Required, Reference(typeof(Specie))]
+        [Required, ReferenceAttribute(typeof(Specie))]
         public string IdSpecie { get; set; }
 
-        [Reference(typeof(Ingredient))]
+        [ReferenceAttribute(typeof(Ingredient))]
         public string IdIngredient { get; set; }
 
-        [Required, Reference(typeof(IngredientCategory))]
+        [Required, ReferenceAttribute(typeof(IngredientCategory))]
         public string IdIngredientCategory { get; set; }
 
     }

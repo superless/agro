@@ -8,23 +8,23 @@ namespace trifenix.agro.model.external.Input {
 
     public class ExecutionOrderInput : InputBase {
 
-        [Required, Reference(typeof(ApplicationOrder))]
+        [Required, ReferenceAttribute(typeof(ApplicationOrder))]
         public string IdOrder { get; set; }
 
-        [Required, Reference(typeof(Dose))]
+        [Required, ReferenceAttribute(typeof(Dose))]
         public DosesOrder[] DosesOrder { get; set; }
 
         public DateTime? StartDate { get; set; }
 
         public DateTime? EndDate { get; set; }
 
-        [Reference(typeof(UserApplicator))]
+        [ReferenceAttribute(typeof(UserApplicator))]
         public string IdUserApplicator { get; set; }
 
-        [Reference(typeof(Nebulizer))]
+        [ReferenceAttribute(typeof(Nebulizer))]
         public string IdNebulizer { get; set; }
 
-        [Reference(typeof(Tractor))]
+        [ReferenceAttribute(typeof(Tractor))]
         public string IdTractor { get; set; }
 
     }

@@ -24,7 +24,7 @@ namespace trifenix.agro.model.external.Input {
         [Required]
         public DosesOrder[] DosesOrder { get; set; }
 
-        [Reference(typeof(PreOrder))]
+        [ReferenceAttribute(typeof(PreOrder))]
         public string[] IdsPhenologicalPreOrder { get; set; }
 
         [Required]

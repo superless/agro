@@ -7,7 +7,7 @@ namespace trifenix.agro.model.external.Input {
         [Required]
         public string Commentary { get; set; }
 
-        [Required, Reference(typeof(User))]
+        [Required, ReferenceAttribute(typeof(User))]
         public string IdUser { get; set; }
 
         [Required]

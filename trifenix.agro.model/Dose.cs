@@ -10,14 +10,14 @@ using trifenix.agro.enums.searchModel;
 
 namespace trifenix.agro.db.model.agro {
 
-    [SharedCosmosCollection("agro", "Dose")]
+    [SharedCosmosCollection("agro", "Doses")]
     [ReferenceSearch(EntityRelated.DOSES)]
     public class Dose : DocumentBase, ISharedCosmosEntity {
 
         public override string Id { get; set; }
 
         [Num32Search(NumRelated.GENERIC_CORRELATIVE)]
-        public long Correlative { get; set; }
+        public int Correlative { get; set; }
 
         [DateSearch(DateRelated.LAST_MODIFIED)]
         public DateTime LastModified { get; set; }

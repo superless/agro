@@ -6,16 +6,16 @@ using trifenix.agro.enums.searchModel;
 namespace trifenix.agro.model.external.Input {
     public class PreOrderInput : InputBaseName {
         
-        [Reference(typeof(OrderFolder))]
+        [ReferenceAttribute(typeof(OrderFolder))]
         public string OrderFolderId { get; set; }
 
-        [Reference(typeof(Ingredient))]
+        [ReferenceAttribute(typeof(Ingredient))]
         public string IdIngredient { get; set; }
 
         [Required]
         public PreOrderType PreOrderType { get; set; }
 
-        [Required, Reference(typeof(Barrack))]
+        [Required, ReferenceAttribute(typeof(Barrack))]
         public string[] BarracksId { get; set; }
 
     }

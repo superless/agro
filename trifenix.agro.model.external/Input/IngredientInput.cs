@@ -4,7 +4,7 @@ using trifenix.agro.db.model.agro;
 namespace trifenix.agro.model.external.Input {
     public class IngredientInput : InputBaseName {
         
-        [Required, Reference(typeof(IngredientCategory))]
+        [Required, ReferenceAttribute(typeof(IngredientCategory))]
         public string idCategory { get; set; }
     }
 
