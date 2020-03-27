@@ -13,6 +13,7 @@ using trifenix.agro.db.model.agro.orders;
 using trifenix.agro.enums;
 using trifenix.agro.enums.model;
 using trifenix.agro.enums.searchModel;
+using trifenix.agro.search.operations;
 
 namespace trifenix.agro.console
 {
@@ -22,9 +23,9 @@ namespace trifenix.agro.console
             Console.WriteLine("Hora de inicio: {0}", DateTime.Now.ToString("hh\\:mm\\:ss"));
             Stopwatch timer = Stopwatch.StartNew();
 
-            await SearchHelper.UpdateSearch();
+            //await SearchHelper.UpdateSearch();
 
-            return;
+            //return;
 
             #region Reflexion
             //Console.WriteLine("typeof(Barrack).Name:            " + typeof(Barrack).Name);
@@ -243,11 +244,11 @@ namespace trifenix.agro.console
             //var searchServiceInstance = new AgroSearch("agrosearch", "016DAA5EF1158FEEEE58DA60996D5981");
             //searchServiceInstance.DeleteElements(searchServiceInstance.FilterElements<EntitySearch>($"EntityIndex eq {(int)EntityRelated.TRACTOR}"));
 
-            var repo = new MainGenericDb<EntityContainer>(new AgroDbArguments {
-                EndPointUrl = "https://agricola-jhm.documents.azure.com:443/",
-                NameDb = "agrodb",
-                PrimaryKey = "yG6EIAT1dKSBaS7oSZizTrWQGGfwSb2ot2prYJwQOLHYk3cGmzvvhGohSzFZYHueSFDiptUAqCQYYSeSetTiKw=="
-            });
+            //var repo = new MainGenericDb<EntityContainer>(new AgroDbArguments {
+            //    EndPointUrl = "https://agricola-jhm.documents.azure.com:443/",
+            //    NameDb = "agrodb",
+            //    PrimaryKey = "yG6EIAT1dKSBaS7oSZizTrWQGGfwSb2ot2prYJwQOLHYk3cGmzvvhGohSzFZYHueSFDiptUAqCQYYSeSetTiKw=="
+            //});
 
             //await repo.CreateUpdate(new EntityContainer { Id = "TGen", Entity = new Tractor { Id = "Tid", Brand = "TGen", Code = "XY" } });
             //End Utils
@@ -280,73 +281,77 @@ namespace trifenix.agro.console
             //26.ExecutionOrder
 
 
-            await repo.Store.RemoveAsync(entityContainer => true);
+            //           await repo.Store.RemoveAsync(entityContainer => true);
 
-            var entitiesContainers = new List<EntityContainer>();
+            //           var entitiesContainers = new List<EntityContainer>();
 
-            entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity =
-        /*0*/   new BusinessName { Id = Guid.NewGuid().ToString("N"), Name = "Agro", Rut = "9.876.543-2", Email = "agro@gmail.com", Giro = "Agronomia", Phone = "88884444", WebPage = "www.agro.trifenix.com" } });
-            entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
-                new CostCenter { Id = Guid.NewGuid().ToString("N"), Name = "Esmeralda", IdBusinessName = entitiesContainers.ElementAt(0).Entity.Id } });
-            entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
-                new Season { Id = Guid.NewGuid().ToString("N"), Current = true, StartDate = new DateTime(2020,1,1), EndDate = new DateTime(2021, 1, 1), IdCostCenter = entitiesContainers.ElementAt(1).Entity.Id } });
-            entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity =
-                new Specie { Id = Guid.NewGuid().ToString("N"), Name = "Ciruela", Abbreviation = "CI" } });
-            entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
-                new Variety { Id = Guid.NewGuid().ToString("N"), Name = "Pink Delight", Abbreviation = "PKD", IdSpecie = entitiesContainers.ElementAt(3).Entity.Id } });
-            entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity =
-        /*5*/   new Variety { Id = Guid.NewGuid().ToString("N"), Name = "Early Queen", Abbreviation = "EARQ", IdSpecie = entitiesContainers.ElementAt(3).Entity.Id } });
-            entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
-                new Sector { Id = Guid.NewGuid().ToString("N"), Name = "Esmeralda" } });
-            entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
-                new PlotLand { Id = Guid.NewGuid().ToString("N"), Name = "Esmeralda", IdSector = entitiesContainers.ElementAt(6).Entity.Id } });
-            entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
-                new Rootstock { Id = Guid.NewGuid().ToString("N"), Name = "Nemaguard", Abbreviation = "NEMG" } });
-            entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
-                new Barrack { Id = Guid.NewGuid().ToString("N"), SeasonId = entitiesContainers.ElementAt(2).Entity.Id, Name = "Cuartel X", Hectares = 1.5, NumberOfPlants = 453, PlantingYear = 2000, IdRootstock = entitiesContainers.ElementAt(8).Entity.Id, IdPlotLand = entitiesContainers.ElementAt(7).Entity.Id, IdVariety = entitiesContainers.ElementAt(4).Entity.Id, IdPollinator = entitiesContainers.ElementAt(5).Entity.Id } });
-            entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
-        /*10*/  new IngredientCategory { Id = Guid.NewGuid().ToString("N"), Name = "Insecticida" } });
-            entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
-                new Ingredient { Id = Guid.NewGuid().ToString("N"), Name = "Lambda-cihalotrina", idCategory = entitiesContainers.ElementAt(10).Entity.Id } });
-            entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
-                new Ingredient { Id = Guid.NewGuid().ToString("N"), Name = "Imidacloprid", idCategory = entitiesContainers.ElementAt(10).Entity.Id } });
-            entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
-                new ApplicationTarget { Id = Guid.NewGuid().ToString("N"), Name = "Control de plaga" } });
-            entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
-                new CertifiedEntity { Id = Guid.NewGuid().ToString("N"), Name = "Union Europea", Abbreviation = "UEA" } });
-            entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity =
-        /*15*/  new Product { Id = Guid.NewGuid().ToString("N"), Name = "Geminis Wp", Brand = "Anasac", IdActiveIngredient = entitiesContainers.ElementAt(12).Entity.Id, KindOfBottle = 0, MeasureType = (MeasureType)1, Quantity =  500 } });
-            entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity =
- /*Preguntar*/  new Dose { Id = Guid.NewGuid().ToString("N"), IdProduct = entitiesContainers.ElementAt(15).Entity.Id, IdsApplicationTarget = new string[] { entitiesContainers.ElementAt(13).Entity.Id }, IdSpecies = new string[] { entitiesContainers.ElementAt(3).Entity.Id }, IdVarieties = new string[] { entitiesContainers.ElementAt(4).Entity.Id, entitiesContainers.ElementAt(5).Entity.Id }, ApplicationDaysInterval = 15, HoursToReEntryToBarrack = 5, DosesApplicatedTo = (DosesApplicatedTo)1, DosesQuantityMin =  500, DosesQuantityMax = 800, NumberOfSequentialApplication = 3, WaitingDaysLabel = 25, WaitingToHarvest = new List<WaitingHarvest> { new WaitingHarvest { IdCertifiedEntity = entitiesContainers.ElementAt(14).Entity.Id, WaitingDays = 25} }, WettingRecommendedByHectares = 2000 } });
-            entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
-                new PhenologicalEvent { Id = Guid.NewGuid().ToString("N"), Name = "Aparicion de flor", StartDate = new DateTime(2020, 5, 1), EndDate = new DateTime(2020, 7, 1) } });
-            entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
-                new OrderFolder {  Id = Guid.NewGuid().ToString("N"), IdSpecie = entitiesContainers.ElementAt(3).Entity.Id, IdApplicationTarget = entitiesContainers.ElementAt(13).Entity.Id, IdPhenologicalEvent = entitiesContainers.ElementAt(17).Entity.Id, IdIngredientCategory = entitiesContainers.ElementAt(10).Entity.Id, IdIngredient = entitiesContainers.ElementAt(12).Entity.Id } });
-            entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity =
- /*Preguntar*/  new PreOrder { Id = Guid.NewGuid().ToString("N"), Name = "Eulia", OrderFolderId = entitiesContainers.ElementAt(18).Entity.Id, IdIngredient = entitiesContainers.ElementAt(12).Entity.Id, PreOrderType = (PreOrderType)1, BarracksId = new string[] { entitiesContainers.ElementAt(9).Entity.Id } } });
-            entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity =
-        /*20*/  new Tractor { Id = Guid.NewGuid().ToString("N"), Brand = "John Deere", Code = "JDT" } });
-            entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity =
-                new Nebulizer { Id = Guid.NewGuid().ToString("N"), Brand = "Lerpain", Code = "LRP" } });
-            entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
-                new Role { Id = Guid.NewGuid().ToString("N"), Name = "Administrador" } });
-            entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
-                new Role { Id = Guid.NewGuid().ToString("N"), Name = "Aplicador" } });
-            entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
-                new Job { Id = Guid.NewGuid().ToString("N"), Name = "Administrador" } });
-            entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity =
-        /*25*/  new User { Id = Guid.NewGuid().ToString("N"), Name = "Cristian Rojas", Email = "cristian.rojas@alumnos.uv.cl", Rut = "19.193.382-6", IdJob = entitiesContainers.ElementAt(24).Entity.Id, IdsRoles = new List<string> { entitiesContainers.ElementAt(22).Entity.Id, entitiesContainers.ElementAt(23).Entity.Id }, ObjectIdAAD = "d273305e-9a05-4bbb-9bfc-ae724610b93a" } });
-            entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
-                new NotificationEvent { Id = Guid.NewGuid().ToString("N"), Description = "", IdBarrack = entitiesContainers.ElementAt(9).Entity.Id, NotificationType = (NotificationType)1, IdPhenologicalEvent = entitiesContainers.ElementAt(17).Entity.Id, PicturePath = "https://agricolablob.blob.core.windows.net/contenedor013dae60-0e06-43bc-a5a9-f357c4e63de0/8209d00d-6fe0-45dd-b949-801db88b53c1.jpg", Created = DateTime.Today } });
-            entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
-                new ApplicationOrder { Id = Guid.NewGuid().ToString("N"), Name = "Aplicacion de insecticida en Ciruela", OrderType = (OrderType)1, IdsPreOrder = new string[] { entitiesContainers.ElementAt(19).Entity.Id }, Barracks = new BarrackOrderInstance[] { new BarrackOrderInstance { IdBarrack = entitiesContainers.ElementAt(9).Entity.Id, IdNotificationEvents = new string[] { entitiesContainers.ElementAt(26).Entity.Id } } }, DosesOrder = new DosesOrder[] { new DosesOrder { IdDoses = entitiesContainers.ElementAt(16).Entity.Id, QuantityByHectare = 1350 } }, Wetting = 2000, StartDate = new DateTime(2020, 5, 1), EndDate = new DateTime(2020, 7, 1) } });
-            entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity =
- /*Preguntar*/  new ExecutionOrder { Id = Guid.NewGuid().ToString("N"), IdOrder = entitiesContainers.ElementAt(27).Entity.Id, IdUserApplicator = entitiesContainers.ElementAt(25).Entity.Id, DosesOrder = new DosesOrder[] { new DosesOrder { IdDoses = entitiesContainers.ElementAt(16).Entity.Id, QuantityByHectare = 1350 } }, IdNebulizer = entitiesContainers.ElementAt(21).Entity.Id, IdTractor = entitiesContainers.ElementAt(20).Entity.Id, StartDate = new DateTime(2020, 5, 10), EndDate = new DateTime(2020, 6, 25) } });
+            //           entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity =
+            //       /*0*/   new BusinessName { Id = Guid.NewGuid().ToString("N"), Name = "Agro", Rut = "9.876.543-2", Email = "agro@gmail.com", Giro = "Agronomia", Phone = "88884444", WebPage = "www.agro.trifenix.com" } });
+            //           entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
+            //               new CostCenter { Id = Guid.NewGuid().ToString("N"), Name = "Esmeralda", IdBusinessName = entitiesContainers.ElementAt(0).Entity.Id } });
+            //           entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
+            //               new Season { Id = Guid.NewGuid().ToString("N"), Current = true, StartDate = new DateTime(2020,1,1), EndDate = new DateTime(2021, 1, 1), IdCostCenter = entitiesContainers.ElementAt(1).Entity.Id } });
+            //           entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity =
+            //               new Specie { Id = Guid.NewGuid().ToString("N"), Name = "Ciruela", Abbreviation = "CI" } });
+            //           entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
+            //               new Variety { Id = Guid.NewGuid().ToString("N"), Name = "Pink Delight", Abbreviation = "PKD", IdSpecie = entitiesContainers.ElementAt(3).Entity.Id } });
+            //           entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity =
+            //       /*5*/   new Variety { Id = Guid.NewGuid().ToString("N"), Name = "Early Queen", Abbreviation = "EARQ", IdSpecie = entitiesContainers.ElementAt(3).Entity.Id } });
+            //           entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
+            //               new Sector { Id = Guid.NewGuid().ToString("N"), Name = "Esmeralda" } });
+            //           entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
+            //               new PlotLand { Id = Guid.NewGuid().ToString("N"), Name = "Esmeralda", IdSector = entitiesContainers.ElementAt(6).Entity.Id } });
+            //           entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
+            //               new Rootstock { Id = Guid.NewGuid().ToString("N"), Name = "Nemaguard", Abbreviation = "NEMG" } });
+            //           entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
+            //               new Barrack { Id = Guid.NewGuid().ToString("N"), SeasonId = entitiesContainers.ElementAt(2).Entity.Id, Name = "Cuartel X", Hectares = 1.5, NumberOfPlants = 453, PlantingYear = 2000, IdRootstock = entitiesContainers.ElementAt(8).Entity.Id, IdPlotLand = entitiesContainers.ElementAt(7).Entity.Id, IdVariety = entitiesContainers.ElementAt(4).Entity.Id, IdPollinator = entitiesContainers.ElementAt(5).Entity.Id } });
+            //           entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
+            //       /*10*/  new IngredientCategory { Id = Guid.NewGuid().ToString("N"), Name = "Insecticida" } });
+            //           entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
+            //               new Ingredient { Id = Guid.NewGuid().ToString("N"), Name = "Lambda-cihalotrina", idCategory = entitiesContainers.ElementAt(10).Entity.Id } });
+            //           entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
+            //               new Ingredient { Id = Guid.NewGuid().ToString("N"), Name = "Imidacloprid", idCategory = entitiesContainers.ElementAt(10).Entity.Id } });
+            //           entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
+            //               new ApplicationTarget { Id = Guid.NewGuid().ToString("N"), Name = "Control de plaga" } });
+            //           entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
+            //               new CertifiedEntity { Id = Guid.NewGuid().ToString("N"), Name = "Union Europea", Abbreviation = "UEA" } });
+            //           entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity =
+            //       /*15*/  new Product { Id = Guid.NewGuid().ToString("N"), Name = "Geminis Wp", Brand = "Anasac", IdActiveIngredient = entitiesContainers.ElementAt(12).Entity.Id, KindOfBottle = 0, MeasureType = (MeasureType)1, Quantity =  500 } });
+            //           entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity =
+            ///*Preguntar*/  new Dose { Id = Guid.NewGuid().ToString("N"), IdProduct = entitiesContainers.ElementAt(15).Entity.Id, IdsApplicationTarget = new string[] { entitiesContainers.ElementAt(13).Entity.Id }, IdSpecies = new string[] { entitiesContainers.ElementAt(3).Entity.Id }, IdVarieties = new string[] { entitiesContainers.ElementAt(4).Entity.Id, entitiesContainers.ElementAt(5).Entity.Id }, ApplicationDaysInterval = 15, HoursToReEntryToBarrack = 5, DosesApplicatedTo = (DosesApplicatedTo)1, DosesQuantityMin =  500, DosesQuantityMax = 800, NumberOfSequentialApplication = 3, WaitingDaysLabel = 25, WaitingToHarvest = new List<WaitingHarvest> { new WaitingHarvest { IdCertifiedEntity = entitiesContainers.ElementAt(14).Entity.Id, WaitingDays = 25} }, WettingRecommendedByHectares = 2000 } });
+            //           entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
+            //               new PhenologicalEvent { Id = Guid.NewGuid().ToString("N"), Name = "Aparicion de flor", StartDate = new DateTime(2020, 5, 1), EndDate = new DateTime(2020, 7, 1) } });
+            //           entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
+            //               new OrderFolder {  Id = Guid.NewGuid().ToString("N"), IdSpecie = entitiesContainers.ElementAt(3).Entity.Id, IdApplicationTarget = entitiesContainers.ElementAt(13).Entity.Id, IdPhenologicalEvent = entitiesContainers.ElementAt(17).Entity.Id, IdIngredientCategory = entitiesContainers.ElementAt(10).Entity.Id, IdIngredient = entitiesContainers.ElementAt(12).Entity.Id } });
+            //           entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity =
+            ///*Preguntar*/  new PreOrder { Id = Guid.NewGuid().ToString("N"), Name = "Eulia", OrderFolderId = entitiesContainers.ElementAt(18).Entity.Id, IdIngredient = entitiesContainers.ElementAt(12).Entity.Id, PreOrderType = (PreOrderType)1, BarracksId = new string[] { entitiesContainers.ElementAt(9).Entity.Id } } });
+            //           entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity =
+            //       /*20*/  new Tractor { Id = Guid.NewGuid().ToString("N"), Brand = "John Deere", Code = "JDT" } });
+            //           entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity =
+            //               new Nebulizer { Id = Guid.NewGuid().ToString("N"), Brand = "Lerpain", Code = "LRP" } });
+            //           entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
+            //               new Role { Id = Guid.NewGuid().ToString("N"), Name = "Administrador" } });
+            //           entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
+            //               new Role { Id = Guid.NewGuid().ToString("N"), Name = "Aplicador" } });
+            //           entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
+            //               new Job { Id = Guid.NewGuid().ToString("N"), Name = "Administrador" } });
+            //           entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity =
+            //       /*25*/  new User { Id = Guid.NewGuid().ToString("N"), Name = "Cristian Rojas", Email = "cristian.rojas@alumnos.uv.cl", Rut = "19.193.382-6", IdJob = entitiesContainers.ElementAt(24).Entity.Id, IdsRoles = new List<string> { entitiesContainers.ElementAt(22).Entity.Id, entitiesContainers.ElementAt(23).Entity.Id }, ObjectIdAAD = "d273305e-9a05-4bbb-9bfc-ae724610b93a" } });
+            //           entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
+            //               new NotificationEvent { Id = Guid.NewGuid().ToString("N"), Description = "", IdBarrack = entitiesContainers.ElementAt(9).Entity.Id, NotificationType = (NotificationType)1, IdPhenologicalEvent = entitiesContainers.ElementAt(17).Entity.Id, PicturePath = "https://agricolablob.blob.core.windows.net/contenedor013dae60-0e06-43bc-a5a9-f357c4e63de0/8209d00d-6fe0-45dd-b949-801db88b53c1.jpg", Created = DateTime.Today } });
+            //           entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = 
+            //               new ApplicationOrder { Id = Guid.NewGuid().ToString("N"), Name = "Aplicacion de insecticida en Ciruela", OrderType = (OrderType)1, IdsPreOrder = new string[] { entitiesContainers.ElementAt(19).Entity.Id }, Barracks = new BarrackOrderInstance[] { new BarrackOrderInstance { IdBarrack = entitiesContainers.ElementAt(9).Entity.Id, IdNotificationEvents = new string[] { entitiesContainers.ElementAt(26).Entity.Id } } }, DosesOrder = new DosesOrder[] { new DosesOrder { IdDoses = entitiesContainers.ElementAt(16).Entity.Id, QuantityByHectare = 1350 } }, Wetting = 2000, StartDate = new DateTime(2020, 5, 1), EndDate = new DateTime(2020, 7, 1) } });
+            //           entitiesContainers.Add(new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity =
+            ///*Preguntar*/  new ExecutionOrder { Id = Guid.NewGuid().ToString("N"), IdOrder = entitiesContainers.ElementAt(27).Entity.Id, IdUserApplicator = entitiesContainers.ElementAt(25).Entity.Id, DosesOrder = new DosesOrder[] { new DosesOrder { IdDoses = entitiesContainers.ElementAt(16).Entity.Id, QuantityByHectare = 1350 } }, IdNebulizer = entitiesContainers.ElementAt(21).Entity.Id, IdTractor = entitiesContainers.ElementAt(20).Entity.Id, StartDate = new DateTime(2020, 5, 10), EndDate = new DateTime(2020, 6, 25) } });
 
-            foreach (EntityContainer entityContainer in entitiesContainers)
-                await repo.CreateUpdate(entityContainer);
+            //           foreach (EntityContainer entityContainer in entitiesContainers)
+            //               await repo.CreateUpdate(entityContainer);
 
             #endregion
+
+            AgroSearch search = new AgroSearch("agrosearch", "016DAA5EF1158FEEEE58DA60996D5981");
+            var entitySearch = search.GetEntitySearch(new Barrack { Id = "IdBarrack", PlantingYear = 10, NumberOfPlants = 5}).First();
+            Console.WriteLine(entitySearch.Id);
 
             timer.Stop();
             Console.WriteLine("Hora de termino: {0}", DateTime.Now.ToString("hh\\:mm\\:ss"));

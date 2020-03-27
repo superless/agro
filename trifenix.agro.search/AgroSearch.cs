@@ -1,7 +1,10 @@
 ﻿using Microsoft.Azure.Search;
 using Microsoft.Azure.Search.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using trifenix.agro.attr;
 using trifenix.agro.db;
 using trifenix.agro.enums;
 using trifenix.agro.enums.query;
@@ -91,9 +94,17 @@ namespace trifenix.agro.search.operations {
             DeleteElements<EntitySearch>(query);
         }
 
-        public EntitySearch[] GetEntitySearch<T>(T model)  where T : DocumentBase {
-            throw new System.NotImplementedException();
+        public model.temp.EntitySearch[] GetEntitySearch<T>(T entity)  where T : DocumentBase {
+            var entitySearch = new model.temp.EntitySearch() { };
+            Dictionary<ISearchAttribute, object> values;
+            values = GetPropertiesByAttribute<Num32SearchAttribute>(entity);
+            entitySearch.Id = entity.Id;
+            //entitySearch.EntityIndex = Transform(entity.CosmosEntityName);
+            entitySearch.NumProperties = values.Select(key_value => new model.temp.Num32Property { PropertyIndex = key_value.Key.Index, Value = (int)key_value.Value }).ToArray();
+            return new model.temp.EntitySearch[] { entitySearch };
         }
+
+        private Dictionary<ISearchAttribute, object> GetPropertiesByAttribute<T_Attr>(object Obj) where T_Attr : ISearchAttribute => Obj.GetType().GetProperties().Where(prop => Attribute.IsDefined(prop, typeof(T_Attr), true) && prop.GetValue(Obj) != null).ToDictionary(prop => (ISearchAttribute)prop.GetCustomAttributes(typeof(T_Attr), true).FirstOrDefault(), prop => prop.GetValue(Obj));
 
     }
 

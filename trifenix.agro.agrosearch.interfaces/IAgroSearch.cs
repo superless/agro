@@ -23,7 +23,7 @@ namespace trifenix.agro.search.interfaces
 
         void DeleteElementsWithRelatedElementExceptId(EntityRelated elementToDelete, EntityRelated relatedElement, string idRelatedElement, string elementExceptId);
 
-        EntitySearch[] GetEntitySearch<T>(T model) where T : DocumentBase;
+        model.temp.EntitySearch[] GetEntitySearch<T>(T model) where T : DocumentBase;
 
     }
 }
