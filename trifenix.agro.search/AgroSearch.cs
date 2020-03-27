@@ -151,7 +151,62 @@ namespace trifenix.agro.search.operations {
 
 
 
-        
+
+        private V2.Num32Property[] GetNumProps(Dictionary<SearchAttribute, object> values) =>
+            GetPropertiesObjects<int>(Related.NUM32, values).Select(s => new V2.Num32Property { 
+                PropertyIndex = s.PropertyIndex,
+                Value = s.Value
+            }).ToArray();
+
+        private V2.DblProperty[] GetDblProps(Dictionary<SearchAttribute, object> values) =>
+            GetPropertiesObjects<double>(Related.DBL, values).Select(s => new V2.DblProperty
+            {
+                PropertyIndex = s.PropertyIndex,
+                Value = s.Value
+            }).ToArray();
+
+        private V2.DtProperty[] GetDtProps(Dictionary<SearchAttribute, object> values) =>
+            GetPropertiesObjects<DateTime>(Related.DATE, values).Select(s => new V2.DtProperty
+            {
+                PropertyIndex = s.PropertyIndex,
+                Value = s.Value
+            }).ToArray();
+
+        private V2.EnumProperty[] GetEnumProps(Dictionary<SearchAttribute, object> values) =>
+            GetPropertiesObjects<int>(Related.DATE, values).Select(s => new V2.EnumProperty
+            {
+                PropertyIndex = s.PropertyIndex,
+                Value = s.Value
+            }).ToArray();
+
+        private V2.GeoProperty[] GetGeoProps(Dictionary<SearchAttribute, object> values) =>
+            GetPropertiesObjects<GeographyPoint>(Related.DATE, values).Select(s => new V2.GeoProperty
+            {
+                PropertyIndex = s.PropertyIndex,
+                Value = s.Value
+            }).ToArray();
+
+        private V2.Num64Property[] GetNum64Props(Dictionary<SearchAttribute, object> values) =>
+            GetPropertiesObjects<long>(Related.DATE, values).Select(s => new V2.Num64Property
+            {
+                PropertyIndex = s.PropertyIndex,
+                Value = s.Value
+            }).ToArray();
+
+        private V2.StrProperty[] GetStrProps(Dictionary<SearchAttribute, object> values) =>
+          GetPropertiesObjects<string>(Related.DATE, values).Select(s => new V2.StrProperty
+          {
+              PropertyIndex = s.PropertyIndex,
+              Value = s.Value
+          }).ToArray();
+
+        private V2.SuggestProperty[] GetSugProps(Dictionary<SearchAttribute, object> values) =>
+          GetPropertiesObjects<string>(Related.DATE, values).Select(s => new V2.SuggestProperty
+          {
+              PropertyIndex = s.PropertyIndex,
+              Value = s.Value
+          }).ToArray();
+
 
         private V2.EntitySearch[] GetEntitySearch(object obj, int index, string id) {
 
@@ -166,22 +221,22 @@ namespace trifenix.agro.search.operations {
 
             if (!values.Any()) return Array.Empty<V2.EntitySearch>();
 
-            entitySearch.NumProperties = (V2.Num32Property[])GetPropertiesObjects<int>(Related.NUM32, values);
+            entitySearch.NumProperties = GetNumProps(values);
 
-            entitySearch.DoubleProperties = (V2.DblProperty[])GetPropertiesObjects<double>(Related.DBL, values);
+            entitySearch.DoubleProperties = GetDblProps(values);
 
-            entitySearch.DtProperties = (V2.DtProperty[])GetPropertiesObjects<DateTime>(Related.DATE, values);
+            entitySearch.DtProperties = GetDtProps(values);
 
-            entitySearch.EnumProperties = (V2.EnumProperty[])GetPropertiesObjects<int>(Related.ENUM, values);
+            entitySearch.EnumProperties = GetEnumProps(values);
 
-            entitySearch.GeoProperties = (V2.GeoProperty[])GetPropertiesObjects<GeographyPoint>(Related.GEO, values);
+            entitySearch.GeoProperties = GetGeoProps(values);
 
-            entitySearch.Num64Properties = (V2.Num64Property[])GetPropertiesObjects<long>(Related.NUM64, values);
+            entitySearch.Num64Properties = GetNum64Props(values);
 
-            entitySearch.StringProperties = (V2.StrProperty[])GetPropertiesObjects<string>(Related.STR, values);
+            entitySearch.StringProperties = GetStrProps(values);
 
 
-            entitySearch.SuggestProperties = (V2.SuggestProperty[])GetPropertiesObjects<string>(Related.SUGGESTION, values);
+            entitySearch.SuggestProperties = GetSugProps(values);
 
             entitySearch.RelatedIds = GetReferences(values);
 

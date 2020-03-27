@@ -32,7 +32,7 @@ namespace trifenix.agro.console
 
             var agroManager = new AgroManager(dbArguments, null, null, null, searchServiceInstance, "ba7e86c8-6c2d-491d-bb2e-0dd39fdf5dc1", false);
 
-            var productsX = await agroManager.Product.GetElements();
+            var productsX = await agroManager.Barrack.GetElements();
 
             var list = new List<v2.EntitySearch>();
 
