@@ -1,10 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model;
 using trifenix.agro.enums;
 using trifenix.agro.enums.model;
 
 namespace trifenix.agro.model.external.Input {
-    public class ProductInput : InputBaseName {
+    public class ProductInput : InputBase {
+
+        [Required, Unique]
+        public string Name { get; set; }
 
         [Required, ReferenceAttribute(typeof(Ingredient))]
         public string IdActiveIngredient { get; set; }

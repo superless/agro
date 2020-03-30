@@ -1,12 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using trifenix.agro.db.model;
-using trifenix.agro.db.model.agro;
+
 
 namespace trifenix.agro.model.external.Input {
-    public class UserApplicatorInput : InputBaseName {
+    public class UserApplicatorInput : InputBase {
 
-        [Required, UniqueAttribute]
+        [Required, Unique]
+        public string Name { get; set; }
+
+        [Required, Unique]
         public string Rut { get; set; }
 
         [UniqueAttribute]

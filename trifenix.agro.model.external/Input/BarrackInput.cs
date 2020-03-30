@@ -1,10 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model;
 
 
 namespace trifenix.agro.model.external.Input
 {
-    public class BarrackInput : InputBaseName {
+    public class BarrackInput : InputBase {
+
+        [Required, Unique]
+        public string Name { get; set; }
+
+
         [Required,ReferenceAttribute(typeof(Season))]
         public string SeasonId { get; set; }
 

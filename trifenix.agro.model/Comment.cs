@@ -2,7 +2,7 @@
 using Cosmonaut.Attributes;
 using System;
 
-namespace trifenix.agro.db.model.agro
+namespace trifenix.agro.db.model
 {
 
     [SharedCosmosCollection("agro", "Comment")]

@@ -1,10 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model;
 
 namespace trifenix.agro.model.external.Input {
-    public class PlotLandInput : InputBaseName {
+    public class PlotLandInput : InputBase {
         [Required, ReferenceAttribute(typeof(Sector))]
         public string IdSector { get; set; }
+
+        [Required, Unique]
+        public string Name { get; set; }
 
     }
 

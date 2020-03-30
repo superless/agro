@@ -97,6 +97,8 @@ namespace trifenix.agro.attr {
         }
         public override int Index => (int)_index;
         public override Related Related => Related.ENUM;
+
+
     }
 
     public class DateSearchAttribute : SearchAttribute {

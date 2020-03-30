@@ -69,6 +69,15 @@ namespace trifenix.agro.search.model.temp {
 
     }
 
+    public class GeographyProperty
+    {   
+        public int PropertyIndex { get; set; }
+
+        
+        public GeoPointTs Value { get; set; }
+
+    }
+
     public class RelatedId {
 
 
@@ -80,6 +89,9 @@ namespace trifenix.agro.search.model.temp {
 
         [IsFacetable]
         public string Id { get { return $"{EntityIndex},{EntityId}"; } }
+
+
+
     }
 
     public class StrProperty : BaseProperty<string>

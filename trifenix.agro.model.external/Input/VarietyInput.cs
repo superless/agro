@@ -1,13 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model;
 
 namespace trifenix.agro.model.external.Input {
-    public class VarietyInput : InputBaseName {
-        
-        [Required, UniqueAttribute]
+    public class VarietyInput : InputBase {
+
+        [Required, Unique]
+        public string Name { get; set; }
+
+        [Required, Unique]
         public string Abbreviation { get; set; }
 
-        [Required, ReferenceAttribute(typeof(Specie))]
+        [Required, Reference(typeof(Specie))]
         public string IdSpecie { get; set; }
 
     }

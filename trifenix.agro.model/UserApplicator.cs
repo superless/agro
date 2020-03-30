@@ -2,7 +2,7 @@
 using trifenix.agro.enums;
 using trifenix.agro.enums.searchModel;
 
-namespace trifenix.agro.db.model.agro
+namespace trifenix.agro.db.model
 {
     
     public class UserApplicator : User

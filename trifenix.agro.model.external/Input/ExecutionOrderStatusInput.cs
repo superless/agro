@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using trifenix.agro.db.model.agro.orders;
+using trifenix.agro.db.model.orders;
 using trifenix.agro.enums;
 using trifenix.agro.enums.model;
 

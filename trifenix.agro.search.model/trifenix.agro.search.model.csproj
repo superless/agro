@@ -10,4 +10,8 @@
     <PackageReference Include="TypeGen" Version="2.4.9" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\trifenix.agro.enums\trifenix.agro.enums.csproj" />
+  </ItemGroup>
+
 </Project>

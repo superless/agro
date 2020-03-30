@@ -3,12 +3,12 @@ using Cosmonaut.Attributes;
 using System;
 using System.Collections.Generic;
 using trifenix.agro.attr;
-using trifenix.agro.db.model.agro.local;
+using trifenix.agro.db.model.local;
 using trifenix.agro.enums;
 using trifenix.agro.enums.model;
 using trifenix.agro.enums.searchModel;
 
-namespace trifenix.agro.db.model.agro {
+namespace trifenix.agro.db.model {
 
     [SharedCosmosCollection("agro", "Doses")]
     [ReferenceSearch(EntityRelated.DOSES)]

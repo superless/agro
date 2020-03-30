@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using trifenix.agro.db.model;
-using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model;
 
 namespace trifenix.agro.model.external.Input {
     public class OrderFolderInput : InputBase {

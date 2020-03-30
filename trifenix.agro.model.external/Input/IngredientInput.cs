@@ -1,10 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model;
 
 namespace trifenix.agro.model.external.Input {
-    public class IngredientInput : InputBaseName {
-        
-        [Required, ReferenceAttribute(typeof(IngredientCategory))]
+    public class IngredientInput : InputBase {
+
+        [Required, Unique]
+        public string Name { get; set; }
+
+        [Required, Reference(typeof(IngredientCategory))]
         public string idCategory { get; set; }
     }
 

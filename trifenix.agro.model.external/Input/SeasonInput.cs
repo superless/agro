@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using trifenix.agro.db.model.agro.core;
+using trifenix.agro.db.model.core;
 
 namespace trifenix.agro.model.external.Input {
     public class SeasonInput : InputBase {

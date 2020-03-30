@@ -6,7 +6,7 @@ using System.Text;
 using trifenix.agro.attr;
 using trifenix.agro.enums.searchModel;
 
-namespace trifenix.agro.db.model.agro
+namespace trifenix.agro.db.model
 {
 
     [SharedCosmosCollection("agro", "IngredientCategory")]

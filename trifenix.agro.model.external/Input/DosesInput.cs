@@ -1,21 +1,23 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using trifenix.agro.db.model.agro;
+using trifenix.agro.attr;
+using trifenix.agro.db.model;
 using trifenix.agro.enums;
 using trifenix.agro.enums.model;
+using trifenix.agro.enums.searchModel;
 
 namespace trifenix.agro.model.external.Input {
     public class DosesInput : InputBase {
 
-        [Required, ReferenceAttribute(typeof(Product))]
+        [Required, Reference(typeof(Product))]
         public string IdProduct { get; set; }
 
-        [ReferenceAttribute(typeof(Variety))]
+        [Reference(typeof(Variety))]
         public string[] IdVarieties { get; set; }
 
-        [ReferenceAttribute(typeof(Specie))]
+        [Reference(typeof(Specie))]
         public string[] IdSpecies { get; set; }
 
-        [ReferenceAttribute(typeof(ApplicationTarget))]
+        [Reference(typeof(ApplicationTarget))]
         public string[] IdsApplicationTarget { get; set; }
 
         [Required]
@@ -50,10 +52,25 @@ namespace trifenix.agro.model.external.Input {
 
     }
 
+    [ReferenceSearch(EntityRelated.WAITINGHARVEST, true)]
     public class WaitingHarvestInput {
-        public int WaitingDays { get; set; }
-        public string IdCertifiedEntity { get; set; }
+
+        [DoubleSearch(DoubleRelated.PPM)]
+        
         public double Ppm { get; set; }
+
+        /// <summary>
+        /// días de espera antes de la cosecha
+        /// </summary>
+        [Num32Search(NumRelated.WAITING_DAYS)]
+        public int WaitingDays { get; set; }
+        /// <summary>
+        /// Entidad certificadora (opcional), si es indicado en la etiqueta, probablemente no sea de una entidad certificadora.
+        /// </summary>
+        [ReferenceSearch(EntityRelated.CERTIFIED_ENTITY)]
+        public string IdCertifiedEntity { get; set; }
+
+
     }
 
     public class DosesSwaggerInput {

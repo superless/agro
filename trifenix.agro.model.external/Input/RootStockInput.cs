@@ -1,9 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 namespace trifenix.agro.model.external.Input {
-    public class RootstockInput : InputBaseName {
+    public class RootstockInput : InputBase {
 
-        [Required, UniqueAttribute]
+        [Required, Unique]
+        public string Name { get; set; }
+
+        [Required, Unique]
         public string Abbreviation { get; set; }
 
     }

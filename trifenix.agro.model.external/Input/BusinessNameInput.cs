@@ -1,19 +1,45 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using trifenix.agro.attr;
+using trifenix.agro.enums.searchModel;
 
 namespace trifenix.agro.model.external.Input {
-    public class BusinessNameInput : InputBaseName {
 
-        [Required, UniqueAttribute]
+
+    [ReferenceSearch(EntityRelated.BUSINESSNAME)]
+    public class BusinessNameInput : InputBase {
+
+        [StringSearch(StringRelated.GENERIC_NAME)]
+        [Required, Unique]
+        public string Name { get; set; }
+
+        [StringSearch(StringRelated.GENERIC_EMAIL)]
+        [Required, Unique]
         public string Email { get; set; }
-        [Required, UniqueAttribute]
+
+        [StringSearch(StringRelated.GENERIC_RUT)]
+        [Required, Unique]
         public string Rut { get; set; }
+
+        [StringSearch(StringRelated.GENERIC_WEBPAGE)]
         public string WebPage { get; set; }
+
+        [StringSearch(StringRelated.GENERIC_GIRO)]
         public string Giro { get; set; }
+
+        [StringSearch(StringRelated.GENERIC_PHONE)]
         public string Phone { get; set; }
+
+
+        
+        
+        
+        
+        
+
 
     }
 
-    public class BusinessNameSwaggerInput {
+    public class BusinessNameSwaggerInput  {
 
         [Required]
         public string Name { get; set; }

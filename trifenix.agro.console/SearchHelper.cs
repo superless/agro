@@ -1,13 +1,15 @@
 ﻿using Microsoft.Azure.Documents.Spatial;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using trifenix.agro.db;
-using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model;
 using trifenix.agro.enums;
 using trifenix.agro.enums.input;
 using trifenix.agro.external.operations;
 using trifenix.agro.model.external.Input;
+using trifenix.agro.search.model.temp;
 using trifenix.agro.search.operations;
 using v2 = trifenix.agro.search.model.temp;
 
@@ -32,22 +34,7 @@ namespace trifenix.agro.console
 
             var agroManager = new AgroManager(dbArguments, null, null, null, searchServiceInstance, "ba7e86c8-6c2d-491d-bb2e-0dd39fdf5dc1", false);
 
-            var productsX = await agroManager.Dose.GetElements();
-
-            var list = new List<v2.EntitySearch>();
-
-            if (productsX.StatusResult == ExtGetDataResult.Success)
-            {
-                foreach (var item in productsX.Result)
-                {
-                    var searchs = searchServiceInstance.GetEntitySearch(item);
-                    list.AddRange(searchs);
-                }
-            }
-
-
-
-            return;
+           
             var rootStocks = await agroManager.Rootstock.GetElements();
 
             var roles = await agroManager.Role.GetElements();
@@ -125,6 +112,10 @@ namespace trifenix.agro.console
                             
                         }).ToArray()
                     }, false);
+
+                    var searchs = searchServiceInstance.GetEntitySearch(item);
+                    searchServiceInstance.AddElements(searchs.ToList());
+
                 }
             }
 
@@ -133,12 +124,9 @@ namespace trifenix.agro.console
             {
                 foreach (var item in targets.Result)
                 {
-                    await agroManager.ApplicationTarget.SaveInput(new ApplicationTargetInput
-                    {
-                        Id = item.Id,
-                        Name = item.Name,
-                        Abbreviation = item.Abbreviation
-                    }, false);
+                    
+                    var searchs = searchServiceInstance.GetEntitySearch(item);
+                    searchServiceInstance.AddElements(searchs.ToList());
                 }
             }
 
@@ -154,6 +142,8 @@ namespace trifenix.agro.console
                         Name = item.Name,
                         idCategory = item.idCategory
                     }, false);
+                    var searchs = searchServiceInstance.GetEntitySearch(item);
+                    searchServiceInstance.AddElements(searchs.ToList());
                 }
             }
 
@@ -167,6 +157,8 @@ namespace trifenix.agro.console
                         Id = item.Id,
                         Name = item.Name
                     }, false);
+                    var searchs = searchServiceInstance.GetEntitySearch(item);
+                    searchServiceInstance.AddElements(searchs.ToList());
                 }
             }
 
@@ -180,6 +172,8 @@ namespace trifenix.agro.console
                         Name = item.Name,
                         IdBusinessName = item.IdBusinessName
                     }, false);
+                    var searchs = searchServiceInstance.GetEntitySearch(item);
+                    searchServiceInstance.AddElements(searchs.ToList());
                 }
             }
 
@@ -211,7 +205,10 @@ namespace trifenix.agro.console
                         Id = item.Id,
                         Name = item.Name
                     }, false);
+                    var searchs = searchServiceInstance.GetEntitySearch(item);
+                    searchServiceInstance.AddElements(searchs.ToList());
                 }
+                
             }
 
 
@@ -225,7 +222,10 @@ namespace trifenix.agro.console
                         Name = item.Name,
                         IdSector = item.IdSector
                     }, false);
+                    var searchs = searchServiceInstance.GetEntitySearch(item);
+                    searchServiceInstance.AddElements(searchs.ToList());
                 }
+                
             }
 
 
@@ -240,7 +240,11 @@ namespace trifenix.agro.console
                         Name = item.Name,
                         Abbreviation = item.Abbreviation
                     }, false);
+                    var searchs = searchServiceInstance.GetEntitySearch(item);
+                    searchServiceInstance.AddElements(searchs.ToList());
                 }
+
+                
             }
 
             if (rootStocks.StatusResult == ExtGetDataResult.Success)
@@ -253,7 +257,11 @@ namespace trifenix.agro.console
                         Name = item.Name,
                         Abbreviation = item.Abbreviation
                     }, false);
+                    var searchs = searchServiceInstance.GetEntitySearch(item);
+                    searchServiceInstance.AddElements(searchs.ToList());
                 }
+
+                
             }
 
             if (sectors.StatusResult == ExtGetDataResult.Success)
@@ -265,7 +273,10 @@ namespace trifenix.agro.console
                         Id = item.Id,
                         Name = item.Name
                     }, false);
+                    var searchs = searchServiceInstance.GetEntitySearch(item);
+                    searchServiceInstance.AddElements(searchs.ToList());
                 }
+                
             }
 
 
@@ -281,6 +292,8 @@ namespace trifenix.agro.console
                         StartDate = item.StartDate,
                         IdCostCenter = item.IdCostCenter
                     }, false);
+                    var searchs = searchServiceInstance.GetEntitySearch(item);
+                    searchServiceInstance.AddElements(searchs.ToList());
                 }
             }
 
@@ -299,6 +312,8 @@ namespace trifenix.agro.console
                         Rut = item.Rut,
                         WebPage = item.WebPage
                     }, false);
+                    var searchs = searchServiceInstance.GetEntitySearch(item);
+                    searchServiceInstance.AddElements(searchs.ToList());
                 }
             }
 
@@ -312,6 +327,8 @@ namespace trifenix.agro.console
                         Name = item.Name,
                         Abbreviation = item.Name
                     }, false);
+                    var searchs = searchServiceInstance.GetEntitySearch(item);
+                    searchServiceInstance.AddElements(searchs.ToList());
                 }
             }
 
@@ -326,6 +343,8 @@ namespace trifenix.agro.console
                         Abbreviation = item.Name,
                         IdSpecie = item.IdSpecie
                     }, false);
+                    var searchs = searchServiceInstance.GetEntitySearch(item);
+                    searchServiceInstance.AddElements(searchs.ToList());
                 }
             }
 
@@ -353,6 +372,8 @@ namespace trifenix.agro.console
                         PlantingYear = item.PlantingYear,
                         SeasonId = item.SeasonId
                     }, false);
+                    var searchs = searchServiceInstance.GetEntitySearch(item);
+                    searchServiceInstance.AddElements(searchs.ToList());
                 }
             }
         }

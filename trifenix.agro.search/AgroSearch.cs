@@ -12,8 +12,10 @@ using trifenix.agro.enums;
 using trifenix.agro.enums.query;
 using trifenix.agro.enums.search;
 using trifenix.agro.enums.searchModel;
+using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
+using trifenix.agro.search.operations.util;
 using V2 = trifenix.agro.search.model.temp;
 
 namespace trifenix.agro.search.operations {
@@ -21,7 +23,7 @@ namespace trifenix.agro.search.operations {
     public class AgroSearch : IAgroSearch {
     
         private readonly SearchServiceClient _search;
-        private readonly string _entityIndex = "entities";
+        private readonly string _entityIndex = "entitiesV2";
         private readonly string _commentIndex = "comments";
 
         private readonly ISearchQueries _queries;
@@ -40,15 +42,17 @@ namespace trifenix.agro.search.operations {
             _queries = new SearchQueries();
             _search = new SearchServiceClient(SearchServiceName, new SearchCredentials(SearchServiceKey));
             if (!_search.Indexes.Exists(_entityIndex))
-                _search.Indexes.CreateOrUpdate(new Index { Name = _entityIndex, Fields = FieldBuilder.BuildForType<EntitySearch>() });
+                _search.Indexes.CreateOrUpdate(new Index { Name = _entityIndex, Fields = FieldBuilder.BuildForType<model.EntitySearch>() });
+
             if (!_search.Indexes.Exists(_commentIndex))
                 _search.Indexes.CreateOrUpdate(new Index { Name = _commentIndex, Fields = FieldBuilder.BuildForType<CommentSearch>() });
+
         }
 
         private string Queries(SearchQuery query) => _queries.Get(query);
 
         private void OperationElements<T>(List<T> elements, SearchOperation operationType) {
-            var indexName = typeof(T).Equals(typeof(EntitySearch)) ? _entityIndex : _commentIndex;
+            var indexName = typeof(T).Equals(typeof(V2.EntitySearch)) ? _entityIndex : _commentIndex;
             var indexClient = _search.Indexes.GetClient(indexName);
             var actions = elements.Select(o => operationType == SearchOperation.Add ? IndexAction.Upload(o) : IndexAction.Delete(o));
             var batch = IndexBatch.New(actions);
@@ -64,37 +68,38 @@ namespace trifenix.agro.search.operations {
         }
 
         public List<T> FilterElements<T>(string filter) {
-            var indexName = typeof(T).Equals(typeof(EntitySearch)) ? _entityIndex : _commentIndex;
+
+            var indexName = typeof(T).Equals(typeof(model.EntitySearch)) ? _entityIndex : _commentIndex;
             var indexClient = _search.Indexes.GetClient(indexName);
             var result = indexClient.Documents.Search<T>(null, new SearchParameters { Filter = filter });
             return result.Results.Select(v => v.Document).ToList();
         }
 
         public void DeleteElements<T>(string query) {
-            var elements = FilterElements<EntitySearch>(query);
+            var elements = FilterElements<model.EntitySearch>(query);
             if (elements.Any())
                 DeleteElements(elements);
         }
 
-        public EntitySearch GetEntity(EntityRelated entityRelated, string id) {
+        public model.EntitySearch GetEntity(EntityRelated entityRelated, string id) {
             var indexClient = _search.Indexes.GetClient(_entityIndex);
-            var entity = indexClient.Documents.Search<EntitySearch>(null, new SearchParameters { Filter = string.Format(Queries(SearchQuery.GET_ELEMENT), (int)entityRelated, id) }).Results.FirstOrDefault()?.Document;
+            var entity = indexClient.Documents.Search<model.EntitySearch>(null, new SearchParameters { Filter = string.Format(Queries(SearchQuery.GET_ELEMENT), (int)entityRelated, id) }).Results.FirstOrDefault()?.Document;
             return entity;
         }
 
         public void DeleteElementsWithRelatedElement(EntityRelated elementToDelete, EntityRelated relatedElement, string idRelatedElement) {
             var query = string.Format(Queries(SearchQuery.ENTITIES_WITH_ENTITYID), (int)elementToDelete, (int)relatedElement, idRelatedElement);
-            DeleteElements<EntitySearch>(query);
+            DeleteElements<model.EntitySearch>(query);
         }
 
         public void DeleteElementsWithRelatedElementExceptId(EntityRelated elementToDelete, EntityRelated relatedElement, string idRelatedElement, string elementExceptId) {
             var query = string.Format(Queries(SearchQuery.ENTITIES_WITH_ENTITYID_EXCEPTID), (int)elementToDelete, (int)relatedElement, idRelatedElement, elementExceptId);
-            DeleteElements<EntitySearch>(query);
+            DeleteElements<model.EntitySearch>(query);
         }
 
         public void DeleteEntity(EntityRelated entityRelated, string id) {
             var query = string.Format(Queries(SearchQuery.GET_ELEMENT), (int)entityRelated, id);
-            DeleteElements<EntitySearch>(query);
+            DeleteElements<model.EntitySearch>(query);
         }
 
 
@@ -125,22 +130,15 @@ namespace trifenix.agro.search.operations {
         public IEnumerable<V2.RelatedId> GetArrayOfRelatedIds(KeyValuePair<SearchAttribute, object> attribute) {
 
             
-            if (isArray(attribute.Value))
+            if (attribute.Value.isArray())
             {
                 var relateds = new List<V2.RelatedId>();
 
-                try
+                foreach (var item in (IEnumerable<string>)attribute.Value)
                 {
-                    foreach (var item in (IEnumerable<string>)attribute.Value)
-                    {
-                        relateds.Add(new V2.RelatedId { EntityIndex = attribute.Key.Index, EntityId = item });
-                    }
+                    relateds.Add(new V2.RelatedId { EntityIndex = attribute.Key.Index, EntityId = item });
                 }
-                catch (Exception)
-                {
 
-                    throw;
-                }
                 return relateds;
                 
                
@@ -154,13 +152,11 @@ namespace trifenix.agro.search.operations {
         }
 
 
-        private bool isArray(object element) {
-            return element is IEnumerable<object>;
-        }
+        
         private IEnumerable<V2.BaseProperty<T>> GetArrayOfElements<T>(KeyValuePair<SearchAttribute, object> attribute)
         {
             var typeValue = attribute.Value.GetType();
-            if (isArray(attribute.Value))
+            if (attribute.Value.isArray())
             {
                 return ((IEnumerable<T>)attribute.Value).Select(s => GetProperty<T>(attribute.Key.Index, s));
             }
@@ -254,7 +250,7 @@ namespace trifenix.agro.search.operations {
             entitySearch.EntityIndex = index;
             entitySearch.Created = DateTime.Now;
 
-            var values = GetPropertiesByAttribute<SearchAttribute>(obj);
+            var values = obj.GetPropertiesByAttributeWithValue();
 
             if (!values.Any()) return Array.Empty<V2.EntitySearch>();
 
@@ -278,7 +274,7 @@ namespace trifenix.agro.search.operations {
             entitySearch.RelatedIds = GetReferences(values);
 
 
-            var valuesWithoutProperty = GetPropertiesWithoutAttribute<SearchAttribute>(obj);
+            var valuesWithoutProperty = obj.GetPropertiesWithoutAttributeWithValues();
 
             foreach (var item in valuesWithoutProperty)
             {
@@ -306,11 +302,13 @@ namespace trifenix.agro.search.operations {
             }
 
             var localReference = values.Where(s => s.Key.Related == Related.LOCAL_REFERENCE);
+
+
             if (localReference.Any())
             {
                 foreach (var item in localReference)
                 {
-                    IEnumerable<object> collection = isArray(item.Value) ? (IEnumerable<object>)item.Value : new List<object> { item.Value };
+                    IEnumerable<object> collection = item.Value.isArray() ? (IEnumerable<object>)item.Value : new List<object> { item.Value };
                     foreach (var childReferences in collection)
                     {
                         var guid = Guid.NewGuid().ToString("N");
@@ -342,56 +340,12 @@ namespace trifenix.agro.search.operations {
             return GetEntitySearch(entity, reference.Index, entity.Id);
         }
 
-        private Dictionary<SearchAttribute, object> GetPropertiesByAttribute<T_Attr>(object Obj) where T_Attr : SearchAttribute => Obj.GetType().GetProperties().Where(prop => {
-
-            var existsAttribute = Attribute.IsDefined(prop, typeof(T_Attr), true);
-
-            var attr = (SearchAttribute)prop.GetCustomAttributes(typeof(T_Attr), true).FirstOrDefault();
-
-            object value;
-            try
-            {
-                value = prop.GetValue(Obj);
-            }
-            catch (Exception e)
-            {
-
-                throw;
-            }
-            if (attr != null)
-            {
-                var isArray = value is IEnumerable<object>;
-
-                if (isArray)
-                {
-
-                
-                if (!((IEnumerable<object>)value).Any()) return false;
-                Console.WriteLine(attr.Related);
-                }
-            }
-
-
-
-            
-
-           
-
-            var isNullObj1 = value  != null;
-            var isNullObj2 = !(value is null);
-            var isNullObj3 = !ReferenceEquals(null, value);
-             
-
-
-            return existsAttribute &&  isNullObj1 && isNullObj2 && isNullObj3;
-        } ).ToDictionary(prop => (SearchAttribute)prop.GetCustomAttributes(typeof(T_Attr), true).FirstOrDefault(), prop => prop.GetValue(Obj));
-
-
-
-        private object[] GetPropertiesWithoutAttribute<T_Attr>(object Obj) where T_Attr : SearchAttribute => 
-            Obj.GetType().GetProperties(BindingFlags.Public).Where(prop => !Attribute.IsDefined(prop, typeof(T_Attr), true) && prop.GetValue(Obj) != null && !(prop.GetValue(Obj) is null)).
-            Select(prop => prop.GetValue(Obj)).ToArray();
-
+        public V2.EntitySearch[] GetEntitySearchByInput<T>(T model) where T : InputBase
+        {
+            var reference = typeof(T).GetTypeInfo().GetCustomAttribute<ReferenceSearchAttribute>(true);
+            if (reference == null) return Array.Empty<V2.EntitySearch>();
+            return GetEntitySearch(model, reference.Index, model.Id);
+        }
     }
 
 }

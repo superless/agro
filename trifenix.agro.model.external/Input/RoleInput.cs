@@ -1,7 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 namespace trifenix.agro.model.external.Input {
-    public class RoleInput : InputBaseName { }
+    public class RoleInput : InputBase {
+        [Required, Unique]
+        public string Name { get; set; }
+    }
 
     public class RoleSwaggerInput {
         [Required]

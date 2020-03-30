@@ -1,8 +1,8 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using trifenix.agro.db.model;
-using trifenix.agro.db.model.agro;
-using trifenix.agro.db.model.agro.orders;
+using trifenix.agro.db.model;
+using trifenix.agro.db.model.orders;
 
 namespace trifenix.agro.model.external.Input {
 

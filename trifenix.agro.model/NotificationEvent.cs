@@ -3,13 +3,13 @@ using Cosmonaut.Attributes;
 using Microsoft.Azure.Documents.Spatial;
 using System;
 using trifenix.agro.attr;
-using trifenix.agro.db.model.agro.local;
+using trifenix.agro.db.model.local;
 using trifenix.agro.enums;
 using trifenix.agro.enums.model;
 using trifenix.agro.enums.searchModel;
 using trifenix.agro.weather.model;
 
-namespace trifenix.agro.db.model.agro
+namespace trifenix.agro.db.model
 {
 
     /// <summary>

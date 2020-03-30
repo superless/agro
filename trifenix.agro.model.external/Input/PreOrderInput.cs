@@ -1,11 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model;
 using trifenix.agro.enums;
 using trifenix.agro.enums.searchModel;
 
 namespace trifenix.agro.model.external.Input {
-    public class PreOrderInput : InputBaseName {
-        
+    public class PreOrderInput : InputBase {
+
+        [Required, Unique]
+        public string Name { get; set; }
+
         [ReferenceAttribute(typeof(OrderFolder))]
         public string OrderFolderId { get; set; }
 

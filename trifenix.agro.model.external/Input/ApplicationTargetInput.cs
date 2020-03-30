@@ -2,11 +2,14 @@
 
 namespace trifenix.agro.model.external.Input {
 
-    public class ApplicationTargetInput : InputBaseName {
+    public class ApplicationTargetInput : InputBase {
 
-        [Required, UniqueAttribute]
+        [Required, Unique]
         public string Abbreviation { get; set; }
-        
+
+        [Required, Unique]
+        public string Name { get; set; }
+
     }
 
     public class TargetSwaggerInput {
