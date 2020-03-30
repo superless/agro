@@ -52,6 +52,9 @@ namespace trifenix.agro.search.model.temp {
         [JsonProperty("geo")]
         public GeoProperty[] GeoProperties { get; set; }
 
+        [JsonProperty("bl")]
+        public BoolProperty[] BoolProperties { get; set; }
+
 
 
 

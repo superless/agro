@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using trifenix.agro.attr;
+using trifenix.agro.enums.searchModel;
 using trifenix.agro.search.model.ts;
 
 namespace trifenix.agro.search.operations.util

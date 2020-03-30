@@ -212,6 +212,13 @@ namespace trifenix.agro.search.operations {
                 Value = s.Value
             }).ToArray();
 
+        private V2.BoolProperty[] GetBoolProps(Dictionary<SearchAttribute, object> values) =>
+            GetPropertiesObjects<bool>(Related.BOOL, values).Select(s => new V2.BoolProperty
+            {
+                PropertyIndex = s.PropertyIndex,
+                Value = s.Value
+            }).ToArray();
+
         private V2.GeoProperty[] GetGeoProps(Dictionary<SearchAttribute, object> values) =>
             GetPropertiesObjects<Point>(Related.GEO, values).Select(s => new V2.GeoProperty
             {
@@ -262,6 +269,8 @@ namespace trifenix.agro.search.operations {
 
             entitySearch.EnumProperties = GetEnumProps(values);
 
+            entitySearch.BoolProperties = GetBoolProps(values);
+
             entitySearch.GeoProperties = GetGeoProps(values);
 
             entitySearch.Num64Properties = GetNum64Props(values);
@@ -294,6 +303,7 @@ namespace trifenix.agro.search.operations {
 
                 entitySearch.StringProperties = entitySearch.StringProperties.Union(value.SelectMany(s => s.StringProperties)).ToArray();
 
+                entitySearch.BoolProperties = entitySearch.BoolProperties.Union(value.SelectMany(s => s.BoolProperties)).ToArray();
 
                 entitySearch.SuggestProperties = entitySearch.SuggestProperties.Union(value.SelectMany(s => s.SuggestProperties)).ToArray();
 

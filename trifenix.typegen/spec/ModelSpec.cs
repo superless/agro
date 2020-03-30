@@ -41,8 +41,8 @@ namespace trifenix.typegen.spec
             AddInterface<GeographyProperty>("model/main").Member(nameof(GeoProperty.Value));
             AddInterface<ReletadIdTs>("model/main").Member(nameof(RelatedId.Id)).Type(TsType.String);
             AddInterface<EntitySearch>("model/main")
-                .Member(nameof(EntitySearch.GeoProperties)).Type("IGeographyProperty", "./IGeographyProperty")
-                .Member(nameof(EntitySearch.RelatedIds)).Type("IReletadIdTs", "./IReletadIdTs");
+                .Member(nameof(EntitySearch.GeoProperties)).Type("IGeographyProperty[]", "./IGeographyProperty")
+                .Member(nameof(EntitySearch.RelatedIds)).Type("IReletadIdTs[]", "./IReletadIdTs");
             AddInterface<DblProperty>("model/main");
             AddInterface<DtProperty>("model/main");
             AddInterface<EnumProperty>("model/main").Member(nameof(EnumProperty.Id)).Type(TsType.String);
@@ -52,6 +52,7 @@ namespace trifenix.typegen.spec
             AddInterface<SuggestProperty>("model/main");
             AddInterface<BoolProperty>("model/main");
             AddInterface<RelatedId>("model/main").Member(nameof(StrProperty.Id)).Type(TsType.String);
+            
 
             AddClass<Data>("data");
 
