@@ -97,6 +97,7 @@ namespace trifenix.agro.search.operations {
             DeleteElements<EntitySearch>(query);
         }
 
+
         private V2.BaseProperty<T> GetProperty<T>(int index, object value) {
             var element = (V2.BaseProperty<T>)Activator.CreateInstance(typeof(V2.BaseProperty<T>));
             element.PropertyIndex = index;
@@ -104,48 +105,89 @@ namespace trifenix.agro.search.operations {
             return element;
         }
 
-        public IEnumerable<V2.RelatedId> GetArrayOfLocalRelatedIds(KeyValuePair<SearchAttribute, object> attribute) {
+        public IEnumerable<V2.RelatedId> GetArrayOfLocalRelatedIds(KeyValuePair<SearchAttribute, object> attribute)
+        {
+
             var typeValue = attribute.Value.GetType();
             if (typeValue == typeof(IEnumerable<string>))
+            {
                 return ((IEnumerable<string>)attribute.Value).Select(s => new V2.RelatedId { EntityIndex = attribute.Key.Index, EntityId = (string)s });
+
+            }
             else
+            {
                 return new List<V2.RelatedId>() { new V2.RelatedId { EntityIndex = attribute.Key.Index, EntityId = (string)attribute.Value } };
+
+            }
+
         }
 
         public IEnumerable<V2.RelatedId> GetArrayOfRelatedIds(KeyValuePair<SearchAttribute, object> attribute) {
-            if (isArray(attribute.Value)) {
+
+            
+            if (isArray(attribute.Value))
+            {
                 var relateds = new List<V2.RelatedId>();
-                try {
+
+                try
+                {
                     foreach (var item in (IEnumerable<string>)attribute.Value)
+                    {
                         relateds.Add(new V2.RelatedId { EntityIndex = attribute.Key.Index, EntityId = item });
+                    }
                 }
-                catch (Exception) {
+                catch (Exception)
+                {
+
                     throw;
                 }
                 return relateds;
+                
+               
             }
             else
+            {
                 return new List<V2.RelatedId>() { new V2.RelatedId { EntityIndex = attribute.Key.Index, EntityId = (string)attribute.Value } };
+
+            }
+
         }
 
-        private bool isArray(object element) => element is IEnumerable<object>;
 
-        private IEnumerable<V2.BaseProperty<T>> GetArrayOfElements<T>(KeyValuePair<SearchAttribute, object> attribute) {
+        private bool isArray(object element) {
+            return element is IEnumerable<object>;
+        }
+        private IEnumerable<V2.BaseProperty<T>> GetArrayOfElements<T>(KeyValuePair<SearchAttribute, object> attribute)
+        {
             var typeValue = attribute.Value.GetType();
             if (isArray(attribute.Value))
+            {
                 return ((IEnumerable<T>)attribute.Value).Select(s => GetProperty<T>(attribute.Key.Index, s));
-            else
+            }
+            else {
                 return new List<V2.BaseProperty<T>> { GetProperty<T>(attribute.Key.Index, attribute.Value)  };
+
+            }
         }
 
-        private IEnumerable<V2.BaseProperty<T>> GetPropertiesObjects<T>(Related related, Dictionary<SearchAttribute, object> elements) =>
-            elements.Where(s => s.Key.Related == related).SelectMany(s => GetArrayOfElements<T>(s)).ToArray();
+        private IEnumerable<V2.BaseProperty<T>> GetPropertiesObjects<T>(Related related, Dictionary<SearchAttribute, object> elements) { 
+            return elements.Where(s => s.Key.Related == related).SelectMany(s => GetArrayOfElements<T>(s)).ToArray();
+        }
 
-        private V2.RelatedId[] GetReferences(Dictionary<SearchAttribute, object> elements) =>
-            elements.Where(s => s.Key.Related == Related.REFERENCE).SelectMany(GetArrayOfRelatedIds).ToArray();
+        private V2.RelatedId[] GetReferences(Dictionary<SearchAttribute, object> elements)
+        {
+            return elements.Where(s => s.Key.Related == Related.REFERENCE).SelectMany(GetArrayOfRelatedIds).ToArray();
 
-        private V2.RelatedId[] GetLocalReferences(Dictionary<SearchAttribute, object> elements) =>
-            elements.Where(s => s.Key.Related == Related.LOCAL_REFERENCE).SelectMany(GetArrayOfLocalRelatedIds).ToArray();
+        }
+
+        private V2.RelatedId[] GetLocalReferences(Dictionary<SearchAttribute, object> elements)
+        {
+            return elements.Where(s => s.Key.Related == Related.LOCAL_REFERENCE).SelectMany(GetArrayOfLocalRelatedIds).ToArray();
+
+        }
+
+
+
 
         private V2.Num32Property[] GetNumProps(Dictionary<SearchAttribute, object> values) =>
             GetPropertiesObjects<int>(Related.NUM32, values).Select(s => new V2.Num32Property { 
@@ -154,85 +196,125 @@ namespace trifenix.agro.search.operations {
             }).ToArray();
 
         private V2.DblProperty[] GetDblProps(Dictionary<SearchAttribute, object> values) =>
-            GetPropertiesObjects<double>(Related.DBL, values).Select(s => new V2.DblProperty {
+            GetPropertiesObjects<double>(Related.DBL, values).Select(s => new V2.DblProperty
+            {
                 PropertyIndex = s.PropertyIndex,
                 Value = s.Value
             }).ToArray();
 
         private V2.DtProperty[] GetDtProps(Dictionary<SearchAttribute, object> values) =>
-            GetPropertiesObjects<DateTime>(Related.DATE, values).Select(s => new V2.DtProperty {
+            GetPropertiesObjects<DateTime>(Related.DATE, values).Select(s => new V2.DtProperty
+            {
                 PropertyIndex = s.PropertyIndex,
                 Value = s.Value
             }).ToArray();
 
         private V2.EnumProperty[] GetEnumProps(Dictionary<SearchAttribute, object> values) =>
-            GetPropertiesObjects<int>(Related.ENUM, values).Select(s => new V2.EnumProperty {
+            GetPropertiesObjects<int>(Related.ENUM, values).Select(s => new V2.EnumProperty
+            {
                 PropertyIndex = s.PropertyIndex,
                 Value = s.Value
             }).ToArray();
 
         private V2.GeoProperty[] GetGeoProps(Dictionary<SearchAttribute, object> values) =>
-            GetPropertiesObjects<Point>(Related.GEO, values).Select(s => new V2.GeoProperty {
+            GetPropertiesObjects<Point>(Related.GEO, values).Select(s => new V2.GeoProperty
+            {
                 PropertyIndex = s.PropertyIndex,
                 Value = GeographyPoint.Create(s.Value.Position.Latitude, s.Value.Position.Longitude)
             }).ToArray();
 
         private V2.Num64Property[] GetNum64Props(Dictionary<SearchAttribute, object> values) =>
-            GetPropertiesObjects<long>(Related.NUM64, values).Select(s => new V2.Num64Property {
+            GetPropertiesObjects<long>(Related.NUM64, values).Select(s => new V2.Num64Property
+            {
                 PropertyIndex = s.PropertyIndex,
                 Value = s.Value
             }).ToArray();
 
         private V2.StrProperty[] GetStrProps(Dictionary<SearchAttribute, object> values) =>
-          GetPropertiesObjects<string>(Related.STR, values).Select(s => new V2.StrProperty {
+          GetPropertiesObjects<string>(Related.STR, values).Select(s => new V2.StrProperty
+          {
               PropertyIndex = s.PropertyIndex,
               Value = s.Value
           }).ToArray();
 
         private V2.SuggestProperty[] GetSugProps(Dictionary<SearchAttribute, object> values) =>
-          GetPropertiesObjects<string>(Related.SUGGESTION, values).Select(s => new V2.SuggestProperty {
+          GetPropertiesObjects<string>(Related.SUGGESTION, values).Select(s => new V2.SuggestProperty
+          {
               PropertyIndex = s.PropertyIndex,
               Value = s.Value
           }).ToArray();
 
 
         private V2.EntitySearch[] GetEntitySearch(object obj, int index, string id) {
+
             var list = new List<V2.EntitySearch>();
+
             var entitySearch = new V2.EntitySearch() { };
             entitySearch.Id = id;
             entitySearch.EntityIndex = index;
             entitySearch.Created = DateTime.Now;
+
             var values = GetPropertiesByAttribute<SearchAttribute>(obj);
-            if (!values.Any())
-                return Array.Empty<V2.EntitySearch>();
+
+            if (!values.Any()) return Array.Empty<V2.EntitySearch>();
+
             entitySearch.NumProperties = GetNumProps(values);
+
             entitySearch.DoubleProperties = GetDblProps(values);
+
             entitySearch.DtProperties = GetDtProps(values);
+
             entitySearch.EnumProperties = GetEnumProps(values);
+
             entitySearch.GeoProperties = GetGeoProps(values);
+
             entitySearch.Num64Properties = GetNum64Props(values);
+
             entitySearch.StringProperties = GetStrProps(values);
+
+
             entitySearch.SuggestProperties = GetSugProps(values);
+
             entitySearch.RelatedIds = GetReferences(values);
+
+
             var valuesWithoutProperty = GetPropertiesWithoutAttribute<SearchAttribute>(obj);
-            foreach (var item in valuesWithoutProperty) {
+
+            foreach (var item in valuesWithoutProperty)
+            {
                 var value = GetEntitySearch(item, 0, string.Empty);
+
                 entitySearch.NumProperties = entitySearch.NumProperties.Union(value.SelectMany(s=>s.NumProperties)).ToArray();
+
                 entitySearch.DoubleProperties = entitySearch.DoubleProperties.Union(value.SelectMany(s => s.DoubleProperties)).ToArray();
+
                 entitySearch.DtProperties = entitySearch.DtProperties.Union(value.SelectMany(s => s.DtProperties)).ToArray();
+
                 entitySearch.EnumProperties = entitySearch.EnumProperties.Union(value.SelectMany(s => s.EnumProperties)).ToArray();
+
                 entitySearch.GeoProperties = entitySearch.GeoProperties.Union(value.SelectMany(s => s.GeoProperties)).ToArray();
+
                 entitySearch.Num64Properties = entitySearch.Num64Properties.Union(value.SelectMany(s => s.Num64Properties)).ToArray();
+
                 entitySearch.StringProperties = entitySearch.StringProperties.Union(value.SelectMany(s => s.StringProperties)).ToArray();
+
+
                 entitySearch.SuggestProperties = entitySearch.SuggestProperties.Union(value.SelectMany(s => s.SuggestProperties)).ToArray();
+
                 entitySearch.RelatedIds = entitySearch.RelatedIds.Union(value.SelectMany(s => s.RelatedIds)).ToArray();
+
             }
+
             var localReference = values.Where(s => s.Key.Related == Related.LOCAL_REFERENCE);
             if (localReference.Any())
-                foreach (var item in localReference) {
+            {
+                foreach (var item in localReference)
+                {
                     IEnumerable<object> collection = isArray(item.Value) ? (IEnumerable<object>)item.Value : new List<object> { item.Value };
-                    foreach (var childReferences in collection) {
+                    foreach (var childReferences in collection)
+                    {
                         var guid = Guid.NewGuid().ToString("N");
+
                         var localEntities = GetEntitySearch(childReferences, item.Key.Index, guid);
                         var listReferences = entitySearch.RelatedIds.ToList();
                         listReferences.Add(new V2.RelatedId { EntityId = guid, EntityIndex = item.Key.Index });
@@ -240,43 +322,75 @@ namespace trifenix.agro.search.operations {
                         list.AddRange(localEntities);
                     }
                 }
+            }
+
+           
+
             list.Add(entitySearch);
+
             return list.ToArray();
+
+
+
+
         }
 
         public V2.EntitySearch[] GetEntitySearch<T>(T entity)  where T : DocumentBase {
+
             var reference = typeof(T).GetTypeInfo().GetCustomAttribute<ReferenceSearchAttribute>(true);
-            if (reference == null)
-                return Array.Empty<V2.EntitySearch>();
+            if (reference == null) return Array.Empty<V2.EntitySearch>();
             return GetEntitySearch(entity, reference.Index, entity.Id);
         }
 
         private Dictionary<SearchAttribute, object> GetPropertiesByAttribute<T_Attr>(object Obj) where T_Attr : SearchAttribute => Obj.GetType().GetProperties().Where(prop => {
+
             var existsAttribute = Attribute.IsDefined(prop, typeof(T_Attr), true);
+
             var attr = (SearchAttribute)prop.GetCustomAttributes(typeof(T_Attr), true).FirstOrDefault();
+
             object value;
-            try {
+            try
+            {
                 value = prop.GetValue(Obj);
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
+
                 throw;
             }
-            if (value != null) {
+            if (attr != null)
+            {
                 var isArray = value is IEnumerable<object>;
-                if (isArray) {
-                    if (!((IEnumerable<object>)value).Any())
-                        return false;
-                    Console.WriteLine(attr.Related);
+
+                if (isArray)
+                {
+
+                
+                if (!((IEnumerable<object>)value).Any()) return false;
+                Console.WriteLine(attr.Related);
                 }
             }
+
+
+
+            
+
+           
+
             var isNullObj1 = value  != null;
             var isNullObj2 = !(value is null);
             var isNullObj3 = !ReferenceEquals(null, value);
+             
+
+
             return existsAttribute &&  isNullObj1 && isNullObj2 && isNullObj3;
-        }).ToDictionary(prop => (SearchAttribute)prop.GetCustomAttributes(typeof(T_Attr), true).FirstOrDefault(), prop => prop.GetValue(Obj));
+        } ).ToDictionary(prop => (SearchAttribute)prop.GetCustomAttributes(typeof(T_Attr), true).FirstOrDefault(), prop => prop.GetValue(Obj));
+
+
 
         private object[] GetPropertiesWithoutAttribute<T_Attr>(object Obj) where T_Attr : SearchAttribute => 
-            Obj.GetType().GetProperties(BindingFlags.Public).Where(prop => !Attribute.IsDefined(prop, typeof(T_Attr), true) && prop.GetValue(Obj) != null && !(prop.GetValue(Obj) is null)).Select(prop => prop.GetValue(Obj)).ToArray();
+            Obj.GetType().GetProperties(BindingFlags.Public).Where(prop => !Attribute.IsDefined(prop, typeof(T_Attr), true) && prop.GetValue(Obj) != null && !(prop.GetValue(Obj) is null)).
+            Select(prop => prop.GetValue(Obj)).ToArray();
 
     }
 
