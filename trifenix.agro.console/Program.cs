@@ -15,6 +15,7 @@ using trifenix.agro.enums;
 using trifenix.agro.enums.model;
 using trifenix.agro.enums.searchModel;
 using trifenix.agro.search.operations;
+using trifenix.agro.search.operations.util;
 
 namespace trifenix.agro.console
 {
@@ -28,12 +29,28 @@ namespace trifenix.agro.console
 
         static async Task Main(string[] args) {
 
-           
 
-
-            
             Console.WriteLine("Hora de inicio: {0}", DateTime.Now.ToString("hh\\:mm\\:ss"));
             Stopwatch timer = Stopwatch.StartNew();
+
+
+
+            var element = new {
+                arrar = Array.Empty<string>(),
+                numero = 1,
+                numeroLargo = 2L
+            };
+
+            var arrarInfo = element.GetType().GetProperty("arrar");
+            var numInfo = element.GetType().GetProperty("numero");
+
+            var numLargoInfo = element.GetType().GetProperty("numeroLargo");
+
+            var isEnumerableArray = AgroHelper.IsEnumerableProperty(arrarInfo);
+            var isEnumerableArray2 = AgroHelper.IsEnumerableProperty(numInfo);
+            var isEnumerableArray3 = AgroHelper.IsEnumerableProperty(numLargoInfo);
+
+
 
             await SearchHelper.UpdateSearch();
 

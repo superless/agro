@@ -141,6 +141,7 @@ namespace trifenix.agro.search.operations.util
                     .Where(x => x.IsGenericType && x.GetGenericTypeDefinition() ==
                                 typeof(IEnumerable<>)).ToList();
 
+            if (ienumerableInterfaces.Count == 0) return false;
 
 
 

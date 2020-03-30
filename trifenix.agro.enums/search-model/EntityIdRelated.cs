@@ -129,6 +129,7 @@ namespace trifenix.agro.enums.searchModel {
 
         [Description("Estatus de Orden de ejecución")]
         GENERIC_RUT = 3,
+
         [Description("Nombre")]
         GENERIC_NAME = 4,
 

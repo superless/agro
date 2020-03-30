@@ -16,9 +16,11 @@ namespace trifenix.agro.model.external.Input {
         public string IdProduct { get; set; }
 
         [Reference(typeof(Variety))]
+        [ReferenceSearch(EntityRelated.VARIETY)]
         public string[] IdVarieties { get; set; }
 
         [Reference(typeof(Specie))]
+        [ReferenceSearch(EntityRelated.SPECIE)]
         public string[] IdSpecies { get; set; }
 
         [Reference(typeof(ApplicationTarget))]
