@@ -8,9 +8,11 @@ using trifenix.agro.enums.searchModel;
 
 namespace trifenix.agro.model.external.Input {
 
+    [ReferenceSearch(EntityRelated.ORDER)]
     public class ApplicationOrderInput : InputBase {
 
         [Required, Unique]
+        [SuggestSearch(StringRelated.GENERIC_NAME)]
         public string Name { get; set; }
 
         [Required]
@@ -31,45 +33,21 @@ namespace trifenix.agro.model.external.Input {
         public double Wetting { get; set; }
 
         [Required]
-        [ReferenceSearch(EntityRelated.DOSES, true)]
+        [ReferenceSearch(EntityRelated.DOSES_ORDER, true)]
         public DosesOrder[] DosesOrder { get; set; }
 
 
         [Reference(typeof(PreOrder))]
         [ReferenceSearch(EntityRelated.PREORDER)]
-        public string[] IdsPhenologicalPreOrder { get; set; }
+        public string[] IdsPreOrder { get; set; }
 
         [Required]
+        [ReferenceSearch(EntityRelated.BARRACK_EVENT, true)]
         public BarrackOrderInstance[] Barracks { get; set; }
 
     }
 
 
-    public class ApplicationOrderSwaggerInput {
-
-        [Required]
-        public string Name { get; set; }
-
-        [Required]
-        public OrderType OrderType { get; set; }
-
-        [Required]
-        public DateTime StartDate { get; set; }
-
-        [Required]
-        public DateTime EndDate { get; set; }
-
-        [Required]
-        public double Wetting { get; set; }
-
-        [Required]
-        public DosesOrder[] DosesOrder { get; set; }
-
-        public string[] IdsPhenologicalPreOrder { get; set; }
-
-        [Required]
-        public BarrackOrderInstance[] Barracks { get; set; }
-
-    }
+   
 
 }

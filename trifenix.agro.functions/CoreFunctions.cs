@@ -681,7 +681,7 @@ namespace trifenix.agro.functions
         [RequestHttpHeader("Authorization", isRequired: true)]
         public static async Task<IActionResult> BusinessNamePost(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "business_names")]
-            [RequestBodyType(typeof(BusinessNameSwaggerInput), "Razón social")]
+            [RequestBodyType(typeof(BusinessNameInput), "Razón social")]
             HttpRequest req, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.BusinessName, string.Empty);
@@ -700,7 +700,7 @@ namespace trifenix.agro.functions
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> BusinessNamePut(
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "business_names/{id}")]
-            [RequestBodyType(typeof(BusinessNameSwaggerInput), "Razón Social")]
+            [RequestBodyType(typeof(BusinessNameInput), "Razón Social")]
             HttpRequest req, string id, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.BusinessName, id);
@@ -720,7 +720,7 @@ namespace trifenix.agro.functions
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> CostCenterPost(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "cost_centers")]
-            [RequestBodyType(typeof(CostCenterSwaggerInput), "Centro de Costos")]
+            [RequestBodyType(typeof(CostCenterInput), "Centro de Costos")]
             HttpRequest req, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.CostCenter, string.Empty);
@@ -739,7 +739,7 @@ namespace trifenix.agro.functions
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> CostCenterPut(
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "cost_centers/{id}")]
-            [RequestBodyType(typeof(CostCenterSwaggerInput), "Centro de Costos")]
+            [RequestBodyType(typeof(CostCenterInput), "Centro de Costos")]
             HttpRequest req, string id, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.CostCenter, id);
@@ -909,7 +909,7 @@ namespace trifenix.agro.functions
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> OrderPost(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "orders")]
-            [RequestBodyType(typeof(ApplicationOrderSwaggerInput), "Orden de aplicación")]
+            [RequestBodyType(typeof(ApplicationOrderInput), "Orden de aplicación")]
             HttpRequest req, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ApplicationOrder, string.Empty);
@@ -928,7 +928,7 @@ namespace trifenix.agro.functions
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> OrderPut(
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "orders/{id}")]
-            [RequestBodyType(typeof(ApplicationOrderSwaggerInput), "Orden de aplicación")]
+            [RequestBodyType(typeof(ApplicationOrderInput), "Orden de aplicación")]
             HttpRequest req, string id, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ApplicationOrder, id);
@@ -947,7 +947,7 @@ namespace trifenix.agro.functions
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> PreOrderPost(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "pre_orders")]
-            [RequestBodyType(typeof(PreOrderSwaggerInput), "Pre Orden de aplicación")]
+            [RequestBodyType(typeof(PreOrderInput), "Pre Orden de aplicación")]
             HttpRequest req, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.PreOrder, string.Empty);
@@ -985,7 +985,7 @@ namespace trifenix.agro.functions
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> ExecutionsPost(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "executions")]
-            [RequestBodyType(typeof(ExecutionOrderSwaggerInput), "Ejecución aplicación")]
+            [RequestBodyType(typeof(ExecutionOrderInput), "Ejecución aplicación")]
             HttpRequest req, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ExecutionOrder, string.Empty);
@@ -1004,7 +1004,7 @@ namespace trifenix.agro.functions
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> ExecutionsPut(
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "executions/{id}")]
-            [RequestBodyType(typeof(ExecutionOrderSwaggerInput), "Ejecución aplicación")]
+            [RequestBodyType(typeof(ExecutionOrderInput), "Ejecución aplicación")]
             HttpRequest req, string id, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ExecutionOrder, id);
@@ -1023,7 +1023,7 @@ namespace trifenix.agro.functions
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> ExecutionsStatusPost(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "executions_status")]
-            [RequestBodyType(typeof(ExecutionOrderStatusSwaggerInput), "Estatus Ejecución aplicación")]
+            [RequestBodyType(typeof(ExecutionOrderStatusInput), "Estatus Ejecución aplicación")]
             HttpRequest req, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ExecutionOrderStatus, string.Empty);
@@ -1042,7 +1042,7 @@ namespace trifenix.agro.functions
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> ExecutionsStatusPut(
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "executions_status/{id}")]
-            [RequestBodyType(typeof(ExecutionOrderStatusSwaggerInput), "Ejecución aplicación")]
+            [RequestBodyType(typeof(ExecutionOrderStatusInput), "Ejecución aplicación")]
             HttpRequest req, string id, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ExecutionOrderStatus, id);

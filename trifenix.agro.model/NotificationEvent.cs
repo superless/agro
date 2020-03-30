@@ -37,7 +37,7 @@ namespace trifenix.agro.db.model
         /// <summary>
         /// Evento fenológico asignado a la notificación.
         /// </summary>
-        [ReferenceSearch(EntityRelated.BARRACK)]
+        [ReferenceSearch(EntityRelated.PHENOLOGICAL_EVENT)]
         public string IdPhenologicalEvent { get; set; }
 
         /// <summary>

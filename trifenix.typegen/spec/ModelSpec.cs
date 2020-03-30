@@ -42,7 +42,7 @@ namespace trifenix.typegen.spec
             AddInterface<ReletadIdTs>("model/main").Member(nameof(RelatedId.Id)).Type(TsType.String);
             AddInterface<EntitySearch>("model/main")
                 .Member(nameof(EntitySearch.GeoProperties)).Type("IGeographyProperty", "./IGeographyProperty")
-                .Member(nameof(EntitySearch.RelatedIds)).Type("IReletadIdTs", "./ReletadIdTs");
+                .Member(nameof(EntitySearch.RelatedIds)).Type("IReletadIdTs", "./IReletadIdTs");
             AddInterface<DblProperty>("model/main");
             AddInterface<DtProperty>("model/main");
             AddInterface<EnumProperty>("model/main").Member(nameof(EnumProperty.Id)).Type(TsType.String);

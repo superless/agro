@@ -1,19 +1,22 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using trifenix.agro.attr;
+using trifenix.agro.enums.searchModel;
 
 namespace trifenix.agro.model.external.Input {
+
+    [ReferenceSearch(EntityRelated.NEBULIZER)]
     public class NebulizerInput : InputBase {
 
         [Required]
+        [StringSearch(StringRelated.GENERIC_BRAND)]
         public string Brand { get; set; }
 
-        [Required, UniqueAttribute]
+        [Required, Unique]
+        [StringSearch(StringRelated.GENERIC_CODE)]
         public string Code { get; set; }
 
     }
 
-    public class NebulizerSwaggerInput {
-        public string Brand { get; set; }
-        public string Code { get; set; }
-    }
+   
 
 }

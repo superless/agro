@@ -11,7 +11,7 @@ namespace trifenix.agro.db.model {
 
         public override string Id { get; set; }
 
-        [SuggestSearch(StringRelated.GENERIC_NAME)]
+        [StringSearch(StringRelated.GENERIC_NAME)]
         public override string Name { get; set; }
 
         [StringSearch(StringRelated.GENERIC_ABBREVIATION)]

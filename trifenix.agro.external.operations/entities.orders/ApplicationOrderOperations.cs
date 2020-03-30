@@ -33,7 +33,7 @@ namespace trifenix.agro.external.operations.entities.orders {
         public override async Task Validate(ApplicationOrderInput applicationOrderInput) {
             await base.Validate(applicationOrderInput);
             List<string> errors = new List<string>();
-            if (applicationOrderInput.OrderType == OrderType.PHENOLOGICAL && !applicationOrderInput.IdsPhenologicalPreOrder.Any())
+            if (applicationOrderInput.OrderType == OrderType.PHENOLOGICAL && !applicationOrderInput.IdsPreOrder.Any())
                     errors.Add("Si la orden es fenológica, deben existir preordenes fenologicas asociadas.");
             foreach (var doses in applicationOrderInput.DosesOrder) {
                 bool exists = await existElement.ExistsById<Dose>(doses.IdDoses);
@@ -141,7 +141,7 @@ namespace trifenix.agro.external.operations.entities.orders {
                 DosesOrder = input.DosesOrder,
                 EndDate = input.EndDate,
                 StartDate = input.StartDate,
-                IdsPreOrder = input.IdsPhenologicalPreOrder,
+                IdsPreOrder = input.IdsPreOrder,
                 Name = input.Name,
                 OrderType = input.OrderType,
                 Wetting = input.Wetting

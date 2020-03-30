@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using trifenix.agro.db;
 using trifenix.agro.db.applicationsReference;
 using trifenix.agro.db.model;
-using trifenix.agro.db.model;
+
 using trifenix.agro.db.model.core;
 using trifenix.agro.db.model.local;
 using trifenix.agro.db.model.orders;

@@ -24,7 +24,7 @@ namespace trifenix.agro.db.model
         public string IdApplicationTarget { get; set; }
 
 
-        [ReferenceSearch(EntityRelated.TARGET)]
+        [ReferenceSearch(EntityRelated.SPECIE)]
         public string IdSpecie { get; set; }
 
 

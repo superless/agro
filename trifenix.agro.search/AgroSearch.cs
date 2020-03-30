@@ -23,7 +23,7 @@ namespace trifenix.agro.search.operations {
     public class AgroSearch : IAgroSearch {
     
         private readonly SearchServiceClient _search;
-        private readonly string _entityIndex = "entitiesV2";
+        private readonly string _entityIndex = "entities-v2";
         private readonly string _commentIndex = "comments";
 
         private readonly ISearchQueries _queries;
@@ -42,7 +42,7 @@ namespace trifenix.agro.search.operations {
             _queries = new SearchQueries();
             _search = new SearchServiceClient(SearchServiceName, new SearchCredentials(SearchServiceKey));
             if (!_search.Indexes.Exists(_entityIndex))
-                _search.Indexes.CreateOrUpdate(new Index { Name = _entityIndex, Fields = FieldBuilder.BuildForType<model.EntitySearch>() });
+                _search.Indexes.CreateOrUpdate(new Index { Name = _entityIndex, Fields = FieldBuilder.BuildForType<V2.EntitySearch>() });
 
             if (!_search.Indexes.Exists(_commentIndex))
                 _search.Indexes.CreateOrUpdate(new Index { Name = _commentIndex, Fields = FieldBuilder.BuildForType<CommentSearch>() });
