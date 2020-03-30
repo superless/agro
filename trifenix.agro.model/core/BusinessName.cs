@@ -3,7 +3,7 @@ using Cosmonaut.Attributes;
 using trifenix.agro.attr;
 using trifenix.agro.enums.searchModel;
 
-namespace trifenix.agro.db.model.agro.core {
+namespace trifenix.agro.db.model.core {
 
     [SharedCosmosCollection("agro", "BusinessName")]
     [ReferenceSearch(EntityRelated.BUSINESSNAME)]
@@ -11,7 +11,7 @@ namespace trifenix.agro.db.model.agro.core {
         
         public override string Id { get; set; }
 
-        [SuggestSearch(StringRelated.GENERIC_NAME)]
+        [StringSearch(StringRelated.GENERIC_NAME)]
         public override string Name { get; set; }
 
         [StringSearch(StringRelated.GENERIC_EMAIL)]

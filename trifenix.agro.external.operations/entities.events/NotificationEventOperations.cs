@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.interfaces.common;
-using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model;
 using trifenix.agro.email.interfaces;
 using trifenix.agro.enums;
 using trifenix.agro.enums.input;
@@ -117,9 +117,9 @@ namespace trifenix.agro.external.operations.entities.events {
                 PicturePath = input.Base64,
                 Description = input.Description,
             };
-            if (input.Lat.HasValue && input.Long.HasValue) {
-                notification.Location = new Point((double)input.Long, (double)input.Lat);
-                notification.Weather = await weather.GetWeather(input.Lat.Value, input.Long.Value);
+            if (input.Location != null) {
+                notification.Location = new Point(input.Location.Longitude, input.Location.Latitude);
+                notification.Weather = await weather.GetWeather((float)input.Location.Latitude, (float)input.Location.Longitude);
             }
             if (!isBatch)
                 return await Save(notification);

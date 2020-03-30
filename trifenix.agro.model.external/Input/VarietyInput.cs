@@ -1,28 +1,27 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using trifenix.agro.db.model.agro;
+using trifenix.agro.attr;
+using trifenix.agro.db.model;
+using trifenix.agro.enums.searchModel;
 
 namespace trifenix.agro.model.external.Input {
-    public class VarietyInput : InputBaseName {
-        
-        [Required, UniqueAttribute]
-        public string Abbreviation { get; set; }
 
-        [Required, ReferenceAttribute(typeof(Specie))]
-        public string IdSpecie { get; set; }
+    [ReferenceSearch(EntityRelated.VARIETY)]
+    public class VarietyInput : InputBase {
 
-    }
-
-    public class VarietySwaggerInput {
-
-        [Required]
+        [Required, Unique]
+        [StringSearch(StringRelated.GENERIC_NAME)]
         public string Name { get; set; }
 
-        [Required]
+        [Required, Unique]
+        [StringSearch(StringRelated.GENERIC_ABBREVIATION)]
         public string Abbreviation { get; set; }
 
-        [Required]
+
+        [ReferenceSearch(EntityRelated.SPECIE)]
+        [Required, Reference(typeof(Specie))]
         public string IdSpecie { get; set; }
 
     }
+
 
 }

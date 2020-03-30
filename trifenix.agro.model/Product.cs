@@ -4,7 +4,7 @@ using trifenix.agro.attr;
 using trifenix.agro.enums.model;
 using trifenix.agro.enums.searchModel;
 
-namespace trifenix.agro.db.model.agro {
+namespace trifenix.agro.db.model {
 
     /// <summary>
     /// Producto Quimico usado por las órdenes

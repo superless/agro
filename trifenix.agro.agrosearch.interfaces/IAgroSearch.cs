@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using trifenix.agro.db;
 using trifenix.agro.enums.searchModel;
+using trifenix.agro.model.external.Input;
 using trifenix.agro.search.model;
 
 namespace trifenix.agro.search.interfaces
@@ -24,6 +25,8 @@ namespace trifenix.agro.search.interfaces
         void DeleteElementsWithRelatedElementExceptId(EntityRelated elementToDelete, EntityRelated relatedElement, string idRelatedElement, string elementExceptId);
 
         model.temp.EntitySearch[] GetEntitySearch<T>(T model) where T : DocumentBase;
+
+        model.temp.EntitySearch[] GetEntitySearchByInput<T>(T model) where T : InputBase;
 
     }
 }

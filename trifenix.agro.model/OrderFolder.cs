@@ -4,7 +4,7 @@ using trifenix.agro.attr;
 using trifenix.agro.enums;
 using trifenix.agro.enums.searchModel;
 
-namespace trifenix.agro.db.model.agro
+namespace trifenix.agro.db.model
 {
 
     [SharedCosmosCollection("agro", "OrderFolder")]
@@ -24,7 +24,7 @@ namespace trifenix.agro.db.model.agro
         public string IdApplicationTarget { get; set; }
 
 
-        [ReferenceSearch(EntityRelated.TARGET)]
+        [ReferenceSearch(EntityRelated.SPECIE)]
         public string IdSpecie { get; set; }
 
 

@@ -1,9 +1,9 @@
 ﻿using Cosmonaut;
 using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.model;
-using trifenix.agro.db.model.agro;
-using trifenix.agro.db.model.agro.core;
-using trifenix.agro.db.model.agro.orders;
+using trifenix.agro.db.model;
+using trifenix.agro.db.model.core;
+using trifenix.agro.db.model.orders;
 using trifenix.agro.model.external.Input;
 
 namespace trifenix.agro.external.interfaces

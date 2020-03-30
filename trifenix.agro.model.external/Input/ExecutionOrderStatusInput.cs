@@ -1,44 +1,35 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using trifenix.agro.db.model.agro.orders;
+using trifenix.agro.attr;
+using trifenix.agro.db.model.orders;
 using trifenix.agro.enums;
 using trifenix.agro.enums.model;
+using trifenix.agro.enums.searchModel;
 
 namespace trifenix.agro.model.external.Input {
+
+    [ReferenceSearch(EntityRelated.EXECUTION_ORDER_STATUS)]
     public class ExecutionOrderStatusInput : InputBase {
         
         [Required]
+        [EnumSearch(EnumRelated.EXECUTION_STATUS)]
         public ExecutionStatus ExecutionStatus { get; set; }
 
+        [EnumSearch(EnumRelated.FINISH_STATUS)]
         public FinishStatus FinishStatus { get; set; }
 
+        [EnumSearch(EnumRelated.CLOSED_STATUS)]
         public ClosedStatus ClosedStatus { get; set; }
 
+        [StringSearch(StringRelated.GENERIC_COMMENT)]
         public string Comment { get; set; }
 
-        [Required, ReferenceAttribute(typeof(ExecutionOrder))]
+
+        [ReferenceSearch(EntityRelated.EXECUTION_ORDER)]
+        [Required, Reference(typeof(ExecutionOrder))]
         public string IdExecutionOrder { get; set; }
 
     }
 
-    public class ExecutionOrderStatusSwaggerInput {
-
-        [Required]
-        public string Name { get; set; }
-
-        [Required]
-        public ExecutionStatus ExecutionStatus { get; set; }
-
-        [Required]
-        public FinishStatus FinishStatus;
-
-        [Required]
-        public ClosedStatus ClosedStatus;
-        
-        public string Comment { get; set; }
-
-        [Required]
-        public string IdExecutionOrder { get; set; }
-
-    }
+   
 
 }

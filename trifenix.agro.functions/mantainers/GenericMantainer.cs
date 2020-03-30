@@ -7,7 +7,7 @@ using System.IO;
 using System.Threading.Tasks;
 using trifenix.agro.db;
 using trifenix.agro.db.exceptions;
-using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model;
 using trifenix.agro.enums;
 using trifenix.agro.enums.input;
 using trifenix.agro.enums.model;

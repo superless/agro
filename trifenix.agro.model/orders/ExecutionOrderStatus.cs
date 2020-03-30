@@ -5,7 +5,7 @@ using trifenix.agro.attr;
 using trifenix.agro.enums.model;
 using trifenix.agro.enums.searchModel;
 
-namespace trifenix.agro.db.model.agro.orders {
+namespace trifenix.agro.db.model.orders {
 
     [SharedCosmosCollection("agro", "ExecutionOrderStatus")]
     [ReferenceSearch(EntityRelated.EXECUTION_ORDER_STATUS)]

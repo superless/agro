@@ -21,36 +21,39 @@ namespace trifenix.agro.search.model.temp {
         
         public DateTime Created { get; set; }
 
-        [JsonProperty("prop_rel")]
+        [JsonProperty("rel")]
         public RelatedId[] RelatedIds { get; set; }
 
 
-        [JsonProperty("prop_sug")]
+        [JsonProperty("sug")]
         public SuggestProperty[] SuggestProperties { get; set; }
 
-        [JsonProperty("prop_str")]
+        [JsonProperty("str")]
         public StrProperty[] StringProperties { get; set; }
 
-        [JsonProperty("prop_enum")]
+        [JsonProperty("enum")]
         public EnumProperty[] EnumProperties { get; set; }
 
 
-        [JsonProperty("prop_num32")]
+        [JsonProperty("num32")]
         public Num32Property[] NumProperties { get; set; }
 
-        [JsonProperty("prop_num64")]
+        [JsonProperty("num64")]
         public Num64Property[] Num64Properties { get; set; }
 
-        [JsonProperty("prop_dbl")]
+        [JsonProperty("dbl")]
         public DblProperty[] DoubleProperties { get; set; }
 
 
-        [JsonProperty("prop_dt")]
+        [JsonProperty("dt")]
         public DtProperty[] DtProperties { get; set; }
 
 
-        [JsonProperty("prop_geo")]
+        [JsonProperty("geo")]
         public GeoProperty[] GeoProperties { get; set; }
+
+        [JsonProperty("bl")]
+        public BoolProperty[] BoolProperties { get; set; }
 
 
 
@@ -64,8 +67,17 @@ namespace trifenix.agro.search.model.temp {
         [IsFilterable]
         public int PropertyIndex { get; set; }
 
-        [IsSearchable, IsFilterable]
-        public T Value { get; set; }
+        [IsFilterable]
+        public virtual T Value { get; set; }
+
+    }
+
+    public class GeographyProperty
+    {   
+        public int PropertyIndex { get; set; }
+
+        
+        public GeoPointTs Value { get; set; }
 
     }
 
@@ -80,11 +92,16 @@ namespace trifenix.agro.search.model.temp {
 
         [IsFacetable]
         public string Id { get { return $"{EntityIndex},{EntityId}"; } }
+
+
+
     }
 
     public class StrProperty : BaseProperty<string>
     {
 
+        [IsFilterable, IsSearchable]
+        public override string Value { get; set; }
 
         [IsFacetable]
         public string Id { get { return $"{PropertyIndex},{Value}"; } }
@@ -99,6 +116,8 @@ namespace trifenix.agro.search.model.temp {
 
     public class SuggestProperty : BaseProperty<string>
     {
+        [IsFilterable, IsSearchable]
+        public override string Value { get; set; }
     }
 
 

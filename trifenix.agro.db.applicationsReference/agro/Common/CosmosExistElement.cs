@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using trifenix.agro.db.interfaces.agro.common;
-using trifenix.agro.db.model.agro.orders;
+using trifenix.agro.db.model.orders;
 using trifenix.agro.enums;
 using trifenix.agro.enums.query;
 

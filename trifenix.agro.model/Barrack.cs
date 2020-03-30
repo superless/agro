@@ -4,14 +4,14 @@ using Microsoft.Azure.Documents.Spatial;
 using trifenix.agro.attr;
 using trifenix.agro.enums.searchModel;
 
-namespace trifenix.agro.db.model.agro {
+namespace trifenix.agro.db.model {
 
     [SharedCosmosCollection("agro", "Barrack")]
     [ReferenceSearch(EntityRelated.BARRACK)]
     public class Barrack : DocumentBaseName, ISharedCosmosEntity {
         public override string Id { get; set; }
 
-        [SuggestSearch(StringRelated.GENERIC_NAME)]
+        [StringSearch(StringRelated.GENERIC_NAME)]
         public override string Name { get; set; }
 
         [ReferenceSearch(EntityRelated.SEASON)]
@@ -29,7 +29,7 @@ namespace trifenix.agro.db.model.agro {
         [ReferenceSearch(EntityRelated.VARIETY)]
         public string IdVariety { get; set; }
 
-        [Num32Search(NumRelated.NUMBER_OF_PLATNS)]
+        [Num32Search(NumRelated.NUMBER_OF_PLANTS)]
         public int NumberOfPlants { get; set; }
 
         [GeoSearch(GeoRelated.GENERIC_LOCATION)]

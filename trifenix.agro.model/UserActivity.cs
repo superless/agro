@@ -5,7 +5,7 @@ using System;
 using trifenix.agro.enums;
 using trifenix.agro.enums.model;
 
-namespace trifenix.agro.db.model.agro {
+namespace trifenix.agro.db.model {
 
     [SharedCosmosCollection("agro", "UserActivity")]
     public class UserActivity : DocumentBase, ISharedCosmosEntity {

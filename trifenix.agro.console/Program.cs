@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using trifenix.agro.db;
 using trifenix.agro.db.applicationsReference;
 using trifenix.agro.db.model;
-using trifenix.agro.db.model.agro;
-using trifenix.agro.db.model.agro.core;
-using trifenix.agro.db.model.agro.local;
-using trifenix.agro.db.model.agro.orders;
+
+using trifenix.agro.db.model.core;
+using trifenix.agro.db.model.local;
+using trifenix.agro.db.model.orders;
 using trifenix.agro.enums;
 using trifenix.agro.enums.model;
 using trifenix.agro.enums.searchModel;
@@ -17,9 +18,20 @@ using trifenix.agro.search.operations;
 
 namespace trifenix.agro.console
 {
+
+    
+
+
     class Program {
 
+        
+
         static async Task Main(string[] args) {
+
+           
+
+
+            
             Console.WriteLine("Hora de inicio: {0}", DateTime.Now.ToString("hh\\:mm\\:ss"));
             Stopwatch timer = Stopwatch.StartNew();
 

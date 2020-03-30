@@ -1,7 +1,7 @@
 ﻿using trifenix.agro.attr;
 using trifenix.agro.enums.searchModel;
 
-namespace trifenix.agro.db.model.agro.local {
+namespace trifenix.agro.db.model.local {
     /// <summary>
     /// Días de espera antes de cosechar
     /// </summary>

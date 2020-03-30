@@ -1,65 +1,57 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using trifenix.agro.db.model.agro;
-
+using trifenix.agro.attr;
+using trifenix.agro.db.model;
+using trifenix.agro.enums.searchModel;
 
 namespace trifenix.agro.model.external.Input
 {
-    public class BarrackInput : InputBaseName {
-        [Required,ReferenceAttribute(typeof(Season))]
-        public string SeasonId { get; set; }
+    [ReferenceSearch(EntityRelated.BARRACK)]
+    public class BarrackInput : InputBase {
 
-        [Required, ReferenceAttribute(typeof(PlotLand))]
-        public string IdPlotLand { get; set; }
-
-        [Required]
-        public double Hectares { get; set; }
-
-        [Required]
-        public int PlantingYear { get; set; }
-
-        [Required,ReferenceAttribute(typeof(Variety))]
-        public string IdVariety { get; set; }
-
-        [Required]
-        public int NumberOfPlants { get; set; }
-
-        public GeographicalPointInput[] GeographicalPoints { get; set; }
-
-        [ReferenceAttribute(typeof(Variety))]
-        public string IdPollinator { get; set; }
-
-        [ReferenceAttribute(typeof(Rootstock))]
-        public string IdRootstock { get; set; }
-
-    }
-
-    public class BarrackSwaggerInput {
-        [Required]
-        public string SeasonId { get; set; }
-
-        [Required]
-        public string IdPlotLand { get; set; }
-
-        [Required]
-        public double Hectares { get; set; }
-
-        [Required]
-        public int PlantingYear { get; set; }
-
-        [Required]
-        public string IdVariety { get; set; }
-
-        [Required]
+        [Required, Unique]
+        [StringSearch(StringRelated.GENERIC_NAME)]
         public string Name { get; set; }
 
+
+        [ReferenceSearch(EntityRelated.SEASON)]
+        [Required,Reference(typeof(Season))]
+        public string SeasonId { get; set; }
+
+
+        [ReferenceSearch(EntityRelated.PLOTLAND)]
+        [Required, Reference(typeof(PlotLand))]
+        public string IdPlotLand { get; set; }
+
+        [Required]
+        [DoubleSearch(DoubleRelated.HECTARES)]
+        public double Hectares { get; set; }
+
+        [Required]
+        [Num32Search(NumRelated.PLANTING_YEAR)]
+        public int PlantingYear { get; set; }
+
+        [Required,Reference(typeof(Variety))]
+        [ReferenceSearch(EntityRelated.VARIETY)]
+        public string IdVariety { get; set; }
+
+        [Required]
+        [Num32Search(NumRelated.NUMBER_OF_PLANTS)]
         public int NumberOfPlants { get; set; }
 
+        [GeoSearch(GeoRelated.GENERIC_LOCATION)]
         public GeographicalPointInput[] GeographicalPoints { get; set; }
 
+        [ReferenceSearch(EntityRelated.POLLINATOR)]
+        [Reference(typeof(Variety))]
         public string IdPollinator { get; set; }
 
+
+        [ReferenceSearch(EntityRelated.ROOTSTOCK)]
+        [Reference(typeof(Rootstock))]
         public string IdRootstock { get; set; }
 
     }
+
+   
 
 }

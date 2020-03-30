@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\trifenix.agro.model.external\trifenix.agro.model.external.csproj" />
     <ProjectReference Include="..\trifenix.agro.search.model\trifenix.agro.search.model.csproj" />
+    <ProjectReference Include="..\trifenix.agro.search\trifenix.agro.search.operations.csproj" />
   </ItemGroup>
 
 </Project>

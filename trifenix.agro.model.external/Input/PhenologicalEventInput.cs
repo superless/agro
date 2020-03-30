@@ -1,26 +1,27 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using trifenix.agro.attr;
+using trifenix.agro.enums.searchModel;
 
 namespace trifenix.agro.model.external.Input {
-    public class PhenologicalEventInput : InputBaseName {
-        
-        [Required]
-        public DateTime StartDate { get; set; }
 
-        [Required]
-        public DateTime EndDate { get; set; }
-    }
+    [ReferenceSearch(EntityRelated.PHENOLOGICAL_EVENT)]
+    public class PhenologicalEventInput : InputBase {
 
-    public class PhenologicalEventSwaggerInput {
+        [Required, Unique]
 
-        [Required]
+        [StringSearch(StringRelated.GENERIC_NAME)]
         public string Name { get; set; }
 
+        [DateSearch(DateRelated.START_DATE)]
         [Required]
         public DateTime StartDate { get; set; }
 
         [Required]
+        [DateSearch(DateRelated.END_DATE)]
         public DateTime EndDate { get; set; }
     }
+
+   
 
 }
