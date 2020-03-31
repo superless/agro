@@ -7,7 +7,6 @@ using System.Text;
 using trifenix.agro.attr;
 using trifenix.agro.db.model;
 using trifenix.agro.enums.searchModel;
-using trifenix.agro.search.model.reflection;
 using trifenix.agro.search.model.ts;
 using trifenix.agro.search.operations.util;
 using TypeGen.Core.Extensions;
@@ -128,6 +127,8 @@ namespace trifenix.typegen.data
                 Indexes = indexes
             };
             
+            // group by index and related, get the first element
+            
 
         }
 
@@ -136,22 +137,22 @@ namespace trifenix.typegen.data
  
         private static Dictionary<int, DefaultDictionary> GetDictionaryFromRelated(IEnumerable<PropertySearchInfo> propSearchInfos, Related related, Dictionary<int, string> enumDescription) {
 
-            return propSearchInfos.Where(s => s.Related == related).ToDictionary(s => s.Index, g => new DefaultDictionary
+            return propSearchInfos.Where(s => s.SearchAttribute.Related == related).ToDictionary(s => s.SearchAttribute.Index, g => new DefaultDictionary
             {
                 NameProp = g.Name,
                 isArray = g.IsEnumerable,
-                Description = enumDescription[g.Index]
+                Description = enumDescription[g.SearchAttribute.Index]
             });
         }
 
         private static Dictionary<int, EnumDictionary> GetEnumDictionaryFromRelated(IEnumerable<PropertySearchInfo> propSearchInfos, Dictionary<int, string> enumDescription)
         {
 
-            return propSearchInfos.Where(s => s.Related == Related.ENUM).ToDictionary(s => s.Index, g => new EnumDictionary
+            return propSearchInfos.Where(s => s.SearchAttribute.Related == Related.ENUM).ToDictionary(s => s.SearchAttribute.Index, g => new EnumDictionary
             {
                 NameProp = g.Name,
                 isArray = g.IsEnumerable,
-                Description = enumDescription[g.Index],
+                Description = enumDescription[g.SearchAttribute.Index],
                 EnumData = g.Enums
             });
         }
