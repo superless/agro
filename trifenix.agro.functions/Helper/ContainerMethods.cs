@@ -11,8 +11,7 @@ using trifenix.agro.search.operations;
 using trifenix.agro.storage.operations;
 using trifenix.agro.weather.operations;
 
-namespace trifenix.agro.functions.Helper
-{
+namespace trifenix.agro.functions.Helper {
     public static class ContainerMethods {
         public static async Task<IAgroManager> AgroManager(string ObjectIdAAD, bool isBatch){
             var email = new Email("aresa.notificaciones@gmail.com", "Aresa2019");

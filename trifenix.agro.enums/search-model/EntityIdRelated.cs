@@ -1,8 +1,7 @@
 ﻿using System.ComponentModel;
 
 namespace trifenix.agro.enums.searchModel {
-    public enum Related
-    {
+    public enum Related {
         REFERENCE = 0,
         LOCAL_REFERENCE = 1,
         STR = 2,
@@ -15,6 +14,7 @@ namespace trifenix.agro.enums.searchModel {
         ENUM = 9,
         DATE = 10
     }
+
 
     public enum EntityRelated {
 
