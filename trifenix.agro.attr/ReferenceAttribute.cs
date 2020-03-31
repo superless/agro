@@ -1,5 +1,6 @@
 ﻿using System;
 using trifenix.agro.enums.searchModel;
+using trifenix.agro.search.model.reflection;
 
 namespace trifenix.agro.attr {
 
@@ -19,6 +20,24 @@ namespace trifenix.agro.attr {
         public override int Index => (int)_index;
         public override Related Related => Local ? Related.LOCAL_REFERENCE : Related.REFERENCE;
     }
+
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property, AllowMultiple = true)]
+    public class GroupAttribute : Attribute {
+
+        public GroupInput Group { get; private set; }
+        public GroupAttribute(int index, string title, Device device)
+        {
+            Group = new GroupInput
+            {
+                Index = index,
+                Title = title,
+                Device = device
+            };
+        }
+
+    }
+
+
 
     public class StringSearchAttribute : SearchAttribute {
         private readonly StringRelated _index;
