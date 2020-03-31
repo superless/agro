@@ -195,7 +195,7 @@ namespace trifenix.agro.search.operations {
               Value = s.Value
           }).ToArray();
 
-        private V2.EntitySearch[] GetEntitySearch(object obj, int index, string id) {
+        private V2.EntitySearch[] GetEntitySearch(object obj, int[] index, string id) {
             var list = new List<V2.EntitySearch>();
             var entitySearch = new V2.EntitySearch {
                 Id = id,
@@ -217,7 +217,7 @@ namespace trifenix.agro.search.operations {
             entitySearch.RelatedIds = GetReferences(values);
             var valuesWithoutProperty = obj.GetPropertiesWithoutAttributeWithValues();
             foreach (var item in valuesWithoutProperty) {
-                var value = GetEntitySearch(item, 0, string.Empty);
+                var value = GetEntitySearch(item, new int[] { 0 }, string.Empty);
                 entitySearch.NumProperties = entitySearch.NumProperties.Union(value.SelectMany(s=>s.NumProperties)).ToArray();
                 entitySearch.DoubleProperties = entitySearch.DoubleProperties.Union(value.SelectMany(s => s.DoubleProperties)).ToArray();
                 entitySearch.DtProperties = entitySearch.DtProperties.Union(value.SelectMany(s => s.DtProperties)).ToArray();
@@ -235,7 +235,7 @@ namespace trifenix.agro.search.operations {
                     IEnumerable<object> collection = item.Value.IsEnumerable() ? (IEnumerable<object>)item.Value : new List<object> { item.Value };
                     foreach (var childReferences in collection) {
                         var guid = Guid.NewGuid().ToString("N");
-                        var localEntities = GetEntitySearch(childReferences, item.Key.Index, guid);
+                        var localEntities = GetEntitySearch(childReferences, new int[]{ item.Key.Index }, guid);
                         var listReferences = entitySearch.RelatedIds.ToList();
                         listReferences.Add(new V2.RelatedId { EntityId = guid, EntityIndex = item.Key.Index });
                         entitySearch.RelatedIds = listReferences.ToArray();

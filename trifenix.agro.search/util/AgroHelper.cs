@@ -6,8 +6,11 @@ using System.Linq;
 using System.Reflection;
 using trifenix.agro.attr;
 using trifenix.agro.enums.searchModel;
+using trifenix.agro.search.model.reflection;
+using trifenix.agro.util;
 
-namespace trifenix.agro.search.operations.util {
+namespace trifenix.agro.search.operations.util
+{
     public static class AgroHelper {
 
         public static string GetDescription(this Enum GenericEnum) {      
@@ -21,6 +24,8 @@ namespace trifenix.agro.search.operations.util {
             return GenericEnum.ToString();
         }
 
+
+
         public static Dictionary<int, string> GetDescription(Type type) {
             var values = Enum.GetValues(type);
             var enumElements = Enum.GetValues(type).Cast<Enum>();
@@ -28,23 +33,10 @@ namespace trifenix.agro.search.operations.util {
             return dict;
         }
 
-        public static PropertySearchInfo[] GetPropertySearchInfo(Type type) {
-            var classAtribute = type.GetCustomAttribute<ReferenceSearchAttribute>();
-            if (classAtribute == null)
-                return Array.Empty<PropertySearchInfo>();
-            var indexClass = classAtribute.Index;
-            var searchAttributesProps = type.GetProperties().Where(prop => Attribute.IsDefined(prop, typeof(SearchAttribute), true));
-            return searchAttributesProps.Select(s => {
-                var SearchAttribute = (SearchAttribute)s.GetCustomAttributes(typeof(SearchAttribute), true).FirstOrDefault();
-                return new PropertySearchInfo {
-                    IsEnumerable = IsEnumerableProperty(s),
-                    Name = s.Name,
-                    SearchAttribute = SearchAttribute,
-                    Enums = SearchAttribute.Related == Related.ENUM ? GetDescription(s.PropertyType) : new Dictionary<int, string>(),
-                    IndexClass = indexClass
-                };
-            }).ToArray();
-        }
+        
+
+
+       
 
         private static bool HasValue(this object value) {
             if (value == null)
@@ -74,6 +66,8 @@ namespace trifenix.agro.search.operations.util {
         public static object[] GetPropertiesWithoutAttributeWithValues(this object Obj) =>
              GetPropertiesWithoutAttribute(Obj).Where(s => HasValue(s)).ToArray();
 
+
+
         public static bool IsEnumerable(this object element) => !element.GetType().Equals(typeof(string)) && element is IEnumerable<object>;
 
         public static bool IsEnumerableProperty(PropertyInfo propertyInfo) {
@@ -83,14 +77,39 @@ namespace trifenix.agro.search.operations.util {
             return typeof(IEnumerable).IsAssignableFrom(propertyType);
         }
 
-    }
 
-    public class PropertySearchInfo {
-        public SearchAttribute SearchAttribute { get; set; }
-        public string Name { get; set; }
-        public int IndexClass { get; set; }
-        public Dictionary<int, string> Enums { get; set; }
-        public bool IsEnumerable { get; set; }
+
+        public static PropertySearchInfo[] GetPropertySearchInfo(Type type)
+        {
+            var classAtribute = type.GetCustomAttribute<ReferenceSearchAttribute>();
+            if (classAtribute == null)
+                return Array.Empty<PropertySearchInfo>();
+            var indexClass = classAtribute.Index;
+
+            var searchAttributesProps = type.GetProperties().Where(prop => Attribute.IsDefined(prop, typeof(SearchAttribute), true));
+            return searchAttributesProps.Select(s => {
+                var SearchAttribute = (SearchAttribute)s.GetCustomAttributes(typeof(SearchAttribute), true).FirstOrDefault();
+                return new PropertySearchInfo
+                {
+                    IsEnumerable = IsEnumerableProperty(s),
+                    Name = s.Name,
+                    Index = SearchAttribute.Index,
+                    Related = SearchAttribute.Related,
+                    Enums = SearchAttribute.Related == Related.ENUM ? GetDescription(s.PropertyType) : new Dictionary<int, string>(),
+                    IndexClass = indexClass
+                };
+            }).ToArray();
+        }
+
+        
+        public static Type GetEntityType(EntityRelated index, Type elementInNameSpace, string nameSpace)
+        {
+            var assembly = Assembly.GetAssembly(elementInNameSpace);
+            var modelTypes = assembly.GetLoadableTypes().Where(type => type.FullName.StartsWith(nameSpace) && Attribute.IsDefined(type, typeof(ReferenceSearchAttribute)));
+            var entityType = modelTypes.Where(type => type.GetTypeInfo().GetCustomAttribute<ReferenceSearchAttribute>().Index == (int)index).FirstOrDefault();
+            return entityType;
+        }
+
     }
 
 }
