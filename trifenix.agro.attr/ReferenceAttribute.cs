@@ -8,6 +8,7 @@ namespace trifenix.agro.attr {
         public virtual int Index { get; }
     }
 
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property, AllowMultiple = true)]
     public class ReferenceSearchAttribute : SearchAttribute {
         private readonly EntityRelated _index;
         public bool Local { get; }
