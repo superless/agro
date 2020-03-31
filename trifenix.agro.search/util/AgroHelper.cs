@@ -100,6 +100,11 @@ namespace trifenix.agro.search.operations.util {
         }
 
 
+        public static T[] GetAttributes<T>(Type type) where T : Attribute {
+
+            return type.GetCustomAttributes<T>().ToArray();
+        } 
+
     }
 
 
