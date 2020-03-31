@@ -343,4 +343,8 @@ namespace trifenix.agro.enums.searchModel {
         CURRENT = 1
     }
 
+    public enum Device { 
+        WEB = 0,
+        MOBILE = 1
+    }
 }
