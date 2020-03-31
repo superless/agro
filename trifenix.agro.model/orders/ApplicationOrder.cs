@@ -54,6 +54,8 @@ namespace trifenix.agro.db.model.orders {
 
         [ReferenceSearch(EntityRelated.DOSES)]
         public string IdDoses { get; set; }
+
+
         [DoubleSearch(DoubleRelated.QUANTITY_APPLIED)]
         public double QuantityByHectare { get; set; }
 

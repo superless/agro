@@ -20,6 +20,7 @@ namespace trifenix.typegen
 
 
 
+            // genera los datos
             var jsonDataElements = JsonData.GetJsonData();
 
 
@@ -43,7 +44,7 @@ namespace trifenix.typegen
             gen.Generate(new List<GenerationSpec>() { new ModelSpec() });
 
 
-
+            // genera el json con datos
             System.IO.File.WriteAllText($@"{options.BaseOutputDirectory}\data\data.ts", $"import {{IModelByIndex }} from \"./IModelByIndex\"; \nexport const data:IModelByIndex = {json} as IModelByIndex");
 
             Console.WriteLine("Codigo Generado en TypeScript");

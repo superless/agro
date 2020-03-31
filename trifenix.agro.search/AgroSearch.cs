@@ -248,7 +248,7 @@ namespace trifenix.agro.search.operations {
           }).ToArray();
 
 
-        private V2.EntitySearch[] GetEntitySearch(object obj, int index, string id) {
+        private V2.EntitySearch[] GetEntitySearch(object obj, int[] index, string id) {
 
             var list = new List<V2.EntitySearch>();
 
@@ -356,6 +356,9 @@ namespace trifenix.agro.search.operations {
             if (reference == null) return Array.Empty<V2.EntitySearch>();
             return GetEntitySearch(model, reference.Index, model.Id);
         }
+
+
+
     }
 
 }

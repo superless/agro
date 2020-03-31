@@ -13,6 +13,8 @@ namespace trifenix.agro.attr {
 
 
 
+
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property, AllowMultiple = true)]
     public class ReferenceSearchAttribute : SearchAttribute
     {
         private readonly EntityRelated _index;

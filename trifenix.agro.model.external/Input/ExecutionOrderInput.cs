@@ -16,8 +16,6 @@ namespace trifenix.agro.model.external.Input {
         public string IdOrder { get; set; }
 
         [ReferenceSearch(EntityRelated.DOSES_ORDER, true)]
-
-
         //TODO: Cristian esto válida la existencia de la dosis dentro del objeto DosesOrder.
         [Required, Reference(typeof(Dose))]
         public DosesOrder[] DosesOrder { get; set; }
