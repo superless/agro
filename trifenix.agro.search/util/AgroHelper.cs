@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using trifenix.agro.attr;
 using trifenix.agro.enums.searchModel;
+using trifenix.agro.util;
 
 namespace trifenix.agro.search.operations.util {
     public static class AgroHelper {
@@ -83,7 +84,19 @@ namespace trifenix.agro.search.operations.util {
             return typeof(IEnumerable).IsAssignableFrom(propertyType);
         }
 
+        public static Type GetEntityType(EntityRelated index, Type typeInNameSpace, string nameSpace)
+        {
+            var assembly = Assembly.GetAssembly(typeInNameSpace);
+            var modelTypes = assembly.GetLoadableTypes().Where(type => type.FullName.StartsWith(nameSpace) && Attribute.IsDefined(type, typeof(ReferenceSearchAttribute)));
+            var entityType = modelTypes.Where(type => type.GetTypeInfo().GetCustomAttribute<ReferenceSearchAttribute>().Index == (int)index).FirstOrDefault();
+            return entityType;
+        }
+
+
     }
+
+
+
 
     public class PropertySearchInfo {
         public SearchAttribute SearchAttribute { get; set; }
