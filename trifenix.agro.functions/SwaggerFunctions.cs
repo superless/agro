@@ -5,11 +5,9 @@ using AzureFunctions.Extensions.Swashbuckle.Attribute;
 using System.Net.Http;
 using AzureFunctions.Extensions.Swashbuckle;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
 using Microsoft.AspNetCore.Mvc;
 
-namespace trifenix.agro.functions
-{
+namespace trifenix.agro.functions {
     public static class SwaggerFunctions
     {
 

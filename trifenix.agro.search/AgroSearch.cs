@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using trifenix.agro.attr;
 using trifenix.agro.db;
+using trifenix.agro.db.model;
 using trifenix.agro.enums.query;
 using trifenix.agro.enums.search;
 using trifenix.agro.enums.searchModel;
@@ -15,6 +16,7 @@ using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
 using trifenix.agro.search.operations.util;
+using TypeGen.Core.Extensions;
 using V2 = trifenix.agro.search.model.temp;
 
 namespace trifenix.agro.search.operations {
@@ -259,6 +261,20 @@ namespace trifenix.agro.search.operations {
             if (reference == null)
                 return Array.Empty<V2.EntitySearch>();
             return GetEntitySearch(entity, reference.Index, entity.Id);
+        }
+
+        //public DocumentBase GetEntityFromSearch(V2.EntitySearch entity) {
+        //    DocumentBase entity = 
+        //    return new object();
+        //}
+
+        //public static T CreateEntityInstance<T>() => (T)Activator.CreateInstance(typeof(T));
+
+        private Type GetEntityType(EntityRelated index) {
+            var assembly = Assembly.GetAssembly(typeof(Barrack));
+            var modelTypes = assembly.GetLoadableTypes().Where(type => type.FullName.StartsWith("trifenix.agro.db.model") && Attribute.IsDefined(type,typeof(ReferenceSearchAttribute)));
+            var entityType = modelTypes.Where(type => type.GetTypeInfo().GetCustomAttribute<ReferenceSearchAttribute>().Index == (int)index).FirstOrDefault();
+            return entityType;
         }
 
     }

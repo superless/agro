@@ -20,8 +20,7 @@ using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.swagger.model.input;
 
-namespace trifenix.agro.functions
-{
+namespace trifenix.agro.functions {
 
     /// <summary>
     /// Funciones 

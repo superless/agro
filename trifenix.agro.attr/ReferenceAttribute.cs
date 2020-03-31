@@ -1,47 +1,22 @@
 ﻿using System;
-
 using trifenix.agro.enums.searchModel;
-using trifenix.agro.search.model.reflection;
 
 namespace trifenix.agro.attr {
 
-    public class SearchAttribute : Attribute
-    {
-
+    public class SearchAttribute : Attribute {
         public virtual Related Related { get; }
         public virtual int Index { get; }
     }
 
-
-
-
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property, AllowMultiple = true)]
-    public class ReferenceSearchAttribute : SearchAttribute
-    {
+    public class ReferenceSearchAttribute : SearchAttribute {
         private readonly EntityRelated _index;
         public bool Local { get; }
         public ReferenceSearchAttribute(EntityRelated index, bool local = false) {
             _index = index;
             Local = local;
         }
-
-        
         public override int Index => (int)_index;
         public override Related Related => Local ? Related.LOCAL_REFERENCE : Related.REFERENCE;
-    }
-
-    public class GroupAttribute {
-        public GroupAttribute(int index, string title = "", Device device = Device.Web)
-        {
-            Group = new GroupInput
-            {
-                Index = index,
-                Name = title,
-                Device = device
-            };
-        }
-
-        public GroupInput Group { get; }
     }
 
     public class StringSearchAttribute : SearchAttribute {
@@ -114,8 +89,6 @@ namespace trifenix.agro.attr {
         }
         public override int Index => (int)_index;
         public override Related Related => Related.ENUM;
-
-
     }
 
     public class DateSearchAttribute : SearchAttribute {
@@ -126,7 +99,5 @@ namespace trifenix.agro.attr {
         public override int Index => (int)_index;
         public override Related Related => Related.DATE;
     }
-
-    
 
 }
