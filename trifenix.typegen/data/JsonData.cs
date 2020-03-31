@@ -140,7 +140,7 @@ namespace trifenix.typegen.data
             return propSearchInfos.Where(s => s.SearchAttribute.Related == related).ToDictionary(s => s.SearchAttribute.Index, g => new DefaultDictionary
             {
                 NameProp = g.Name,
-                isArray = g.Array,
+                isArray = g.IsEnumerable,
                 Description = enumDescription[g.SearchAttribute.Index]
             });
         }
@@ -151,7 +151,7 @@ namespace trifenix.typegen.data
             return propSearchInfos.Where(s => s.SearchAttribute.Related == Related.ENUM).ToDictionary(s => s.SearchAttribute.Index, g => new EnumDictionary
             {
                 NameProp = g.Name,
-                isArray = g.Array,
+                isArray = g.IsEnumerable,
                 Description = enumDescription[g.SearchAttribute.Index],
                 EnumData = g.Enums
             });

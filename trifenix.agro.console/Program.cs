@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using trifenix.agro.db;
 using trifenix.agro.db.applicationsReference;
 using trifenix.agro.db.model;
-
 using trifenix.agro.db.model.core;
 using trifenix.agro.db.model.local;
 using trifenix.agro.db.model.orders;
@@ -17,40 +16,15 @@ using trifenix.agro.enums.searchModel;
 using trifenix.agro.search.operations;
 using trifenix.agro.search.operations.util;
 
-namespace trifenix.agro.console
-{
-
-    
-
+namespace trifenix.agro.console {
 
     class Program {
-
-        
 
         static async Task Main(string[] args) {
 
 
-            Console.WriteLine("Hora de inicio: {0}", DateTime.Now.ToString("hh\\:mm\\:ss"));
-            Stopwatch timer = Stopwatch.StartNew();
-
-
-
-            var element = new {
-                arrar = Array.Empty<string>(),
-                numero = 1,
-                numeroLargo = 2L
-            };
-
-            var arrarInfo = element.GetType().GetProperty("arrar");
-            var numInfo = element.GetType().GetProperty("numero");
-
-            var numLargoInfo = element.GetType().GetProperty("numeroLargo");
-
-            var isEnumerableArray = AgroHelper.IsEnumerableProperty(arrarInfo);
-            var isEnumerableArray2 = AgroHelper.IsEnumerableProperty(numInfo);
-            var isEnumerableArray3 = AgroHelper.IsEnumerableProperty(numLargoInfo);
-
-
+            //Console.WriteLine("Hora de inicio: {0}", DateTime.Now.ToString("hh\\:mm\\:ss"));
+            //Stopwatch timer = Stopwatch.StartNew();
 
             await SearchHelper.UpdateSearch();
 
@@ -378,13 +352,13 @@ namespace trifenix.agro.console
 
             #endregion
 
-            AgroSearch search = new AgroSearch("agrosearch", "016DAA5EF1158FEEEE58DA60996D5981");
-            var entitySearch = search.GetEntitySearch(new Barrack { Id = "IdBarrack", PlantingYear = 10, NumberOfPlants = 5}).First();
-            Console.WriteLine(entitySearch.Id);
+            //AgroSearch search = new AgroSearch("agrosearch", "016DAA5EF1158FEEEE58DA60996D5981");
+            //var entitySearch = search.GetEntitySearch(new Barrack { Id = "IdBarrack", PlantingYear = 10, NumberOfPlants = 5}).First();
+            //Console.WriteLine(entitySearch.Id);
 
-            timer.Stop();
-            Console.WriteLine("Hora de termino: {0}", DateTime.Now.ToString("hh\\:mm\\:ss"));
-            Console.WriteLine("Tiempo transcurrido: {0}", timer.Elapsed.ToString("hh\\:mm\\:ss"));
+            //timer.Stop();
+            //Console.WriteLine("Hora de termino: {0}", DateTime.Now.ToString("hh\\:mm\\:ss"));
+            //Console.WriteLine("Tiempo transcurrido: {0}", timer.Elapsed.ToString("hh\\:mm\\:ss"));
 
         }
 

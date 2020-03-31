@@ -6,26 +6,22 @@ using System.ComponentModel.DataAnnotations;
 
 namespace trifenix.agro.search.model.temp {
 
-    public class EntitySearch
-    {
+    public class EntitySearch {
+
         [Key]
         [IsFilterable]
         public string Id { get; set; }
-
-        
 
         [IsFilterable, IsFacetable]
         public int EntityIndex { get; set; }
 
         [IsSortable]
-        
         public DateTime Created { get; set; }
 
-        [JsonProperty("rel")]
+        [JsonProperty("ref")]
         public RelatedId[] RelatedIds { get; set; }
 
-
-        [JsonProperty("sug")]
+        [JsonProperty("suggest")]
         public SuggestProperty[] SuggestProperties { get; set; }
 
         [JsonProperty("str")]
@@ -34,127 +30,79 @@ namespace trifenix.agro.search.model.temp {
         [JsonProperty("enum")]
         public EnumProperty[] EnumProperties { get; set; }
 
-
         [JsonProperty("num32")]
         public Num32Property[] NumProperties { get; set; }
 
         [JsonProperty("num64")]
         public Num64Property[] Num64Properties { get; set; }
 
-        [JsonProperty("dbl")]
+        [JsonProperty("double")]
         public DblProperty[] DoubleProperties { get; set; }
 
-
-        [JsonProperty("dt")]
+        [JsonProperty("date")]
         public DtProperty[] DtProperties { get; set; }
-
 
         [JsonProperty("geo")]
         public GeoProperty[] GeoProperties { get; set; }
 
-        [JsonProperty("bl")]
+        [JsonProperty("bool")]
         public BoolProperty[] BoolProperties { get; set; }
-
-
-
-
-
-    }
-
-
-    public class BaseProperty<T> {
-
-        [IsFilterable]
-        public int PropertyIndex { get; set; }
-
-        [IsFilterable]
-        public virtual T Value { get; set; }
-
-    }
-
-    public class GeographyProperty
-    {   
-        public int PropertyIndex { get; set; }
-
-        
-        public GeoPointTs Value { get; set; }
 
     }
 
     public class RelatedId {
-
-
         [IsFilterable]
         public int EntityIndex { get; set; }
-
         [IsFilterable]
         public string EntityId { get; set; }
-
         [IsFacetable]
-        public string Id { get { return $"{EntityIndex},{EntityId}"; } }
-
-
-
+        public string Id { get => $"{EntityIndex},{EntityId}"; }
     }
 
-    public class StrProperty : BaseProperty<string>
-    {
-
-        [IsFilterable, IsSearchable]
-        public override string Value { get; set; }
-
-        [IsFacetable]
-        public string Id { get { return $"{PropertyIndex},{Value}"; } }
+    public class BaseProperty<T> {
+        [IsFilterable]
+        public int PropertyIndex { get; set; }
+        [IsFilterable]
+        public virtual T Value { get; set; }
     }
 
-    public class EnumProperty : BaseProperty<int>
-    {
-
+    public class BaseFacetableProperty<T> : BaseProperty<T> {
         [IsFacetable]
-        public string Id { get { return $"{PropertyIndex},{Value}"; } }
+        public string Id { get => $"{PropertyIndex},{Value}"; }
     }
 
-    public class SuggestProperty : BaseProperty<string>
-    {
+    public class SuggestProperty : BaseProperty<string> {
         [IsFilterable, IsSearchable]
         public override string Value { get; set; }
     }
 
-
-
-    public class Num32Property : BaseProperty<int>
-    {
+    public class StrProperty : BaseFacetableProperty<string> {
+        [IsFilterable, IsSearchable]
+        public override string Value { get; set; }
     }
 
-    public class Num64Property : BaseProperty<long>
-    {
-    }
+    public class EnumProperty : BaseFacetableProperty<int> { }
 
-    public class DblProperty : BaseProperty<double>
-    {
+    public class Num32Property : BaseProperty<int> { }
 
-    }
+    public class Num64Property : BaseProperty<long> { }
 
-    public class DtProperty : BaseProperty<DateTime>
-    {
-    }
+    public class DblProperty : BaseProperty<double> { }
 
-    public class BoolProperty : BaseProperty<bool>
-    {
-    }
+    public class DtProperty : BaseProperty<DateTime> { }
 
-    public class GeoProperty : BaseProperty<GeographyPoint>
-    {
+    public class BoolProperty : BaseProperty<bool> { }
 
-    }
+    public class GeoProperty : BaseProperty<GeographyPoint> { }
 
     public class GeoPointTs {
         public double Latitude { get; set; }
-        
         public double Longitude { get; set; }
     }
-
-
-
+    
+    public class GeographyProperty {   
+        public int PropertyIndex { get; set; }
+        public GeoPointTs Value { get; set; }
+    }
 
 }
