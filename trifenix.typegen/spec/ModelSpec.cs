@@ -52,11 +52,7 @@ namespace trifenix.typegen.spec
             AddInterface<SuggestProperty>("model/main");
             AddInterface<BoolProperty>("model/main");
             AddInterface<RelatedId>("model/main").Member(nameof(StrProperty.Id)).Type(TsType.String);
-            
-
             AddClass<Data>("data");
-
-            
             AddInterface<StrProperty>("model/main").Member(nameof(StrProperty.Id)).Type(TsType.String);
 
 
