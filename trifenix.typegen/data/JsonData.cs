@@ -115,10 +115,9 @@ namespace trifenix.typegen.data
             .Where(x => x.FullName.StartsWith("trifenix.agro.db.model"));
 
             // get property infos
-            var propSearchinfos = modelTypes.Where(s => s.GetTypeInfo().GetCustomAttribute<ReferenceSearchAttribute>(true) != null).SelectMany(GetPropertySearchInfo).ToList();
+            var propSearchinfos = modelTypes.Where(s => s.GetTypeInfo().GetCustomAttributes<ReferenceSearchAttribute>(true).Any()).SelectMany(GetPropertySearchInfo).ToList();
 
             var grpIndexes = propSearchinfos.GroupBy(s => s.IndexClass).Select(s=>s.FirstOrDefault()) ;
-
 
 
             var indexes = grpIndexes.ToDictionary(i => i.IndexClass, g => GetModel(propSearchinfos.Where(s => s.IndexClass == g.IndexClass)));

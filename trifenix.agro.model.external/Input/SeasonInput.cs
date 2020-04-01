@@ -10,11 +10,11 @@ namespace trifenix.agro.model.external.Input {
     public class SeasonInput : InputBase {
 
         [Required]
-        [DateSearch(DateRelated.START_DATE)]
+        [DateSearch(DateRelated.START_DATE_SEASON)]
         public DateTime  StartDate { get; set; }
 
         [Required]
-        [DateSearch(DateRelated.END_DATE)]
+        [DateSearch(DateRelated.END_DATE_SEASON)]
         public DateTime EndDate { get; set; }
 
         [BoolSearch(BoolRelated.CURRENT)]

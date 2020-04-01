@@ -1,8 +1,10 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using trifenix.agro.enums.searchModel;
 using trifenix.agro.search.model.reflection;
 
-namespace trifenix.agro.attr {
+namespace trifenix.agro.attr
+{
 
     public class SearchAttribute : Attribute {
         public virtual Related Related { get; }
@@ -119,5 +121,6 @@ namespace trifenix.agro.attr {
         public override int Index => (int)_index;
         public override Related Related => Related.DATE;
     }
+
 
 }

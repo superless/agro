@@ -15,255 +15,270 @@ namespace trifenix.agro.enums.searchModel {
         DATE = 10
     }
 
+    public enum ResourceRelated { 
+        REF = 0,
+        STR = 1,
+        NUM = 2,
+        DBL = 3,
+        BOOL = 4,
+        GEO = 5,
+        ENUM = 6,
+        DATE = 7
+
+    }
+
 
     public enum EntityRelated {
 
-        [Description("Espera Cosecha")]
+        
         WAITINGHARVEST = 0,
 
-        [Description("Cuartel")]
+        
         BARRACK = 1,
 
-        [Description("Unidad de Negocios")]
+        
         BUSINESSNAME = 2,
 
-        [Description("Categoria Ingrediente")]
+        
         CATEGORY_INGREDIENT = 3,
 
-        [Description("Entidad Certificadora")]
+        
         CERTIFIED_ENTITY = 4,
 
 
-        [Description("Centro de Costos")]
+        
         COSTCENTER = 5,
 
-        [Description("Dosis")]
+        
         DOSES = 6,
 
-        [Description("Ingrediente")]
+        
         INGREDIENT = 7,
 
-        [Description("Trabajo")]
+        
         JOB = 8,
 
-        [Description("Nebulizadora")]
+        
         NEBULIZER = 9,
 
-        [Description("Evento Fenológico")]
+        
         PHENOLOGICAL_EVENT = 10,
 
-        [Description("Parcela")]
+        
         PLOTLAND = 11,
 
-        [Description("Producto")]
+        
         PRODUCT = 12,
 
-        [Description("Rol")]
+        
         ROLE = 13,
 
-        [Description("Raíz")]
+        
         ROOTSTOCK = 14,
 
-        [Description("Temporada")]
+        
         SEASON = 15,
 
-        [Description("Sector")]
+        
         SECTOR = 16,
 
-        [Description("Pre-Orden")]
+        
         PREORDER = 17,
 
-        [Description("Objetivo Aplicación")]
+        
         TARGET = 18,
 
-        [Description("Tractor")]
+        
         TRACTOR = 19,
 
-        [Description("Usuario")]
+        
         USER = 20,
 
-        [Description("Variedad")]
+        
         VARIETY = 21,  // el entity index
 
-        [Description("Notificación de Evento")]
+        
         NOTIFICATION_EVENT = 22,
 
-        [Description("Polinizador")]
+        
         POLLINATOR = 23,
 
-        [Description("Carpeta de PreOrdenes")]
+        
         ORDER_FOLDER = 24,
 
-        [Description("Orden de ejecución")]
+        
         EXECUTION_ORDER = 25,
 
-        [Description("Orden")]
+        
         ORDER = 26,
 
-        [Description("Evento de Cuartel")]
+        
         BARRACK_EVENT = 27,
 
-        [Description("Dosis en Orden")]
+        
         DOSES_ORDER = 28,
 
-        [Description("Estatus de Orden de ejecución")]
+        
         EXECUTION_ORDER_STATUS = 29,
 
-        [Description("Especie")]
+        
         SPECIE = 30,
 
-        [Description("Ubicación Geográfica")]
+        
         GEOPOINT = 31
     }
 
     public enum StringRelated {
 
-        [Description("Identificador Azure Active Directory")]
-        OBJECTID_AAD = 0,
 
-        [Description("Abreviación")]
-        GENERIC_ABBREVIATION = 1,
+        
+        GENERIC_NAME = 1,
 
-        [Description("Código")]
-        GENERIC_CODE = 2,
+        
+        GENERIC_ABBREVIATION = 2,
 
-        [Description("Estatus de Orden de ejecución")]
-        GENERIC_RUT = 3,
+        
+        GENERIC_CODE = 3,
 
-        [Description("Nombre")]
-        GENERIC_NAME = 4,
+        
+        GENERIC_RUT = 4,
 
-        [Description("Email")]
+        
+
+        
         GENERIC_EMAIL = 5,
 
-        [Description("Marca")]
+        
         GENERIC_BRAND = 6,
 
-        [Description("Página Web")]
+        
         GENERIC_WEBPAGE = 7,
 
-        [Description("giro")]
+        
         GENERIC_GIRO = 8,
 
-        [Description("Teléfono")]
+        
         GENERIC_PHONE = 9,
 
-        [Description("Imagen")]
-        GENERIC_PICTURE_PATH = 10,
 
-        [Description("Descripción")]
+        PICTURE_PATH_EVENT = 10,
+
+        
         GENERIC_DESC = 11,
 
-        [Description("Comentario")]
+        
         GENERIC_COMMENT = 12,
     }
 
     public enum NumRelated {
-        [Description("Días de espera")]
+        
         WAITING_DAYS = 0,
 
-        [Description("Número Correlativo")]
+        
         GENERIC_CORRELATIVE = 1,
 
-        [Description("Horas de reingreso")]
+        
         HOURS_TO_ENTRY = 2,
 
-        [Description("Intervalo de días")]
+        
         DAYS_INTERVAL = 3,
 
-        [Description("Número de Repetición")]
+        
         NUMBER_OF_SECQUENTIAL_APPLICATION = 4,
 
-        [Description("Mojado Recomendado")]
+        
         WETTING_RECOMMENDED = 5,
-        [Description("Número de Plantas")]
+        
         NUMBER_OF_PLANTS = 6,
 
-        [Description("Año de plantación")]
+        
         PLANTING_YEAR = 7
     }
 
     public enum DoubleRelated{
 
-        [Description("Cantidad")]
+       
         QUANTITY_CONTAINER = 0,
 
-        [Description("Partes por Millón (PPM)")]
+       
         PPM = 1,
 
-        [Description("Mojado")]
+        
         WETTING = 2,
 
-        [Description("Cantidad Aplicada")]
+        
         QUANTITY_APPLIED = 3,
 
-        [Description("Cantidad Mínima")]
+        
         QUANTITY_MIN = 4,
 
-        [Description("Cantidad Máxima")]
+       
         QUANTITY_MAX = 5,
 
-        [Description("Hectareas")]
+       
         HECTARES = 6,
     }
 
     public enum BoolRelated {
 
-        [Description("Es actual")]
+        
         CURRENT = 0,
-        [Description("Bypass")]
-        BYPASS = 1,
 
-        [Description("Por Defecto")]
-        GENERIC_DEFAULT = 2,
+        
+        GENERIC_DEFAULT = 1,
 
-        [Description("Activa")]
-        GENERIC_ACTIVE = 3
+        
+        GENERIC_ACTIVE = 2
     }
 
     public enum GeoRelated {
 
-        [Description("Ubicación Geográfica")]
-        GENERIC_LOCATION = 0
+        
+        LOCATION_EVENT = 0,
+        
+        LOCATION_BARRACK = 1
+
     }
 
     public enum DateRelated {
-
-        [Description("Fin")]
-        END_DATE = 0,
-        [Description("Inicio")]
-        START_DATE = 1,
-
-        [Description("Ultima modificación")]
-        LAST_MODIFIED = 2,
+        
+        LAST_MODIFIED = 0,
+        START_DATE_PHENOLOGICAL_EVENT = 1,
+        END_DATE_PHENOLOGICAL_EVENT = 2,
+        START_DATE_ORDER = 3,
+        END_DATE_ORDER = 4,
+        END_DATE_EXECUTION_ORDER = 5,
+        START_DATE_EXECUTION_ORDER = 6,
+        START_DATE_SEASON = 7,
+        END_DATE_SEASON = 8,
     }
 
     public enum EnumRelated {
-        [Description("Tipo Medida")]
+        
         GENERIC_MEASURE_TYPE = 0,
 
-        [Description("Tipo Contenedor")]
+        
         GENERIC_KIND_CONTAINER =1,
 
-        [Description("Tipo de PreOrden")]
+        
         PRE_ORDER_TYPE = 2,
 
-        [Description("Tipo de Notificación")]
+        
         NOTIFICATION_TYPE = 3,
 
-        [Description("Tipo de Orden")]
+        
         ORDER_TYPE = 4,
 
-        [Description("Dosis aplicada a")]
+        
         DOSES_APPLICATED_TO = 5,
 
-        [Description("Estatus Cierre ")]
+        
         CLOSED_STATUS = 6,
 
-        [Description("Estatus Finalizado")]
+        
         FINISH_STATUS = 7,
 
-        [Description("Estatus Ejecución")]
+        
         EXECUTION_STATUS = 8,
     }
 

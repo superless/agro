@@ -12,11 +12,11 @@ namespace trifenix.agro.db.model {
         public override string Id { get; set; }
 
 
-        [DateSearch(DateRelated.START_DATE)]
+        [DateSearch(DateRelated.START_DATE_SEASON)]
         public DateTime StartDate { get; set; }
 
 
-        [DateSearch(DateRelated.END_DATE)]
+        [DateSearch(DateRelated.END_DATE_SEASON)]
         public DateTime EndDate { get; set; }
 
         [BoolSearch(BoolRelated.CURRENT)]

@@ -29,6 +29,16 @@ namespace trifenix.agro.search.model.reflection
 
         public GroupInput[] Group { get; set; }
 
+        public string Description { get; set; }
+
+        public string Display { get; set; }
+
+        public string PlaceHolder { get; set; }
+
+        public string ShortName { get; set; }
+
+
+
 
 
 

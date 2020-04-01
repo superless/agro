@@ -16,14 +16,6 @@ using TypeGen.Core.TypeAnnotations;
 namespace trifenix.typegen.spec
 {
 
-    public class DictionaryExample {
-
-        public Dictionary<int, string> MyProperty => new Dictionary<int, string> {
-            { 1, "dasdsad"},{ 2, "dasdsad2"},{ 3, "dasdsad3"}
-        };
-
-    }
-
     public class Data { 
     
     }
@@ -45,12 +37,13 @@ namespace trifenix.typegen.spec
                 .Member(nameof(EntitySearch.RelatedIds)).Type("IReletadIdTs[]", "./IReletadIdTs");
             AddInterface<DblProperty>("model/main");
             AddInterface<DtProperty>("model/main");
-            AddInterface<EnumProperty>("model/main").Member(nameof(EnumProperty.Id)).Type(TsType.String);
-            AddInterface<StrProperty>("model/main").Member(nameof(StrProperty.Id)).Type(TsType.String);
+            AddInterface<EnumProperty>("model/main");
+            AddInterface<StrProperty>("model/main");
             AddInterface<Num32Property>("model/main");
             AddInterface<Num64Property>("model/main");
             AddInterface<SuggestProperty>("model/main");
             AddInterface<BoolProperty>("model/main");
+            AddInterface(typeof(BaseFacetableProperty<>), "model/main").Member(nameof(StrProperty.Id)).Type(TsType.String);
             AddInterface<RelatedId>("model/main").Member(nameof(StrProperty.Id)).Type(TsType.String);
             AddClass<Data>("data");
             AddInterface<StrProperty>("model/main").Member(nameof(StrProperty.Id)).Type(TsType.String);

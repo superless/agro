@@ -1,30 +1,47 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using Newtonsoft.Json;
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
-using trifenix.agro.db;
-using trifenix.agro.db.applicationsReference;
-using trifenix.agro.db.model;
-using trifenix.agro.db.model.core;
-using trifenix.agro.db.model.local;
-using trifenix.agro.db.model.orders;
-using trifenix.agro.enums;
-using trifenix.agro.enums.model;
-using trifenix.agro.enums.searchModel;
-using trifenix.agro.search.operations;
-using trifenix.agro.search.operations.util;
+using trifenix.agro.search.model.temp;
 
-namespace trifenix.agro.console {
+namespace trifenix.agro.console
+{
+
+
+    public class TestDesc {
+
+        [Display(ResourceType = typeof(temp), Name = nameof(Test1), Description = nameof(Test1)+"_descr")]
+        public string Test1 { get; set; }
+
+    }
 
     class Program {
 
         static async Task Main(string[] args) {
 
+            var allCultures = CultureInfo.GetCultures(CultureTypes.AllCultures);
+
 
             //Console.WriteLine("Hora de inicio: {0}", DateTime.Now.ToString("hh\\:mm\\:ss"));
             //Stopwatch timer = Stopwatch.StartNew();
+
+            var ns = new EntitySearch { Id = "sadsad", EntityIndex = new int[] { 1} };
+
+            var nsJson = JsonConvert.SerializeObject(ns);
+
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("es");
+
+            var display = typeof(TestDesc).GetProperty(nameof(TestDesc.Test1)).GetCustomAttribute<DisplayAttribute>();
+            
+            var name = display.GetName();
+            var description = display.GetDescription();
+            Console.WriteLine(name);
+            Console.WriteLine(description);
+
+
 
             await SearchHelper.UpdateSearch();
 

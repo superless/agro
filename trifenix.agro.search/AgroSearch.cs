@@ -251,14 +251,14 @@ namespace trifenix.agro.search.operations {
 
         public V2.EntitySearch[] GetEntitySearch<T>(T entity)  where T : DocumentBase {
             var references = AgroHelper.GetAttributes<ReferenceSearchAttribute>(typeof(T));
-            if (references == null || references.Any())
+            if (references == null || !references.Any())
                 return Array.Empty<V2.EntitySearch>();
             return GetEntitySearch(entity, references.Select(s=>s.Index).ToArray(), entity.Id);
         }
 
         public V2.EntitySearch[] GetEntitySearchByInput<T>(T entity) where T : InputBase {
             var references = AgroHelper.GetAttributes<ReferenceSearchAttribute>(typeof(T));
-            if (references == null || references.Any())
+            if (references == null || !references.Any())
                 return Array.Empty<V2.EntitySearch>();
             return GetEntitySearch(entity, references.Select(s=>s.Index).ToArray(), entity.Id);
         }

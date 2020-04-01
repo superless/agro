@@ -15,10 +15,10 @@ namespace trifenix.agro.db.model {
         [StringSearch(StringRelated.GENERIC_NAME)]
         public override string Name { get; set; }
 
-        [DateSearch(DateRelated.START_DATE)]
+        [DateSearch(DateRelated.START_DATE_PHENOLOGICAL_EVENT)]
         public DateTime StartDate { get; set; }
 
-        [DateSearch(DateRelated.END_DATE)]
+        [DateSearch(DateRelated.END_DATE_PHENOLOGICAL_EVENT)]
         public DateTime EndDate { get; set; }
 
     }

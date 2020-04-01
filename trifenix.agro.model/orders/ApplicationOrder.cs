@@ -20,10 +20,10 @@ namespace trifenix.agro.db.model.orders {
         [SuggestSearch(StringRelated.GENERIC_NAME)]
         public override string Name { get; set; }
 
-        [DateSearch(DateRelated.START_DATE)]
+        [DateSearch(DateRelated.START_DATE_ORDER)]
         public DateTime StartDate { get; set; }
 
-        [DateSearch(DateRelated.END_DATE)]
+        [DateSearch(DateRelated.END_DATE_ORDER)]
         public DateTime EndDate { get; set; }
 
         [DoubleSearch(DoubleRelated.WETTING)]

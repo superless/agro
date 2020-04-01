@@ -78,12 +78,9 @@ namespace trifenix.agro.search.operations.util {
         }
 
 
-        public static PropertySearchInfo[] GetPropertySearchInfo(Type type)
-        {
-            var classAtribute = type.GetCustomAttribute<ReferenceSearchAttribute>();
-            if (classAtribute == null)
-                return Array.Empty<PropertySearchInfo>();
-            var indexClass = classAtribute.Index;
+
+
+        public static PropertySearchInfo[] GetPropertyByIndex(Type type, int index) {
             var searchAttributesProps = type.GetProperties().Where(prop => Attribute.IsDefined(prop, typeof(SearchAttribute), true));
             return searchAttributesProps.Select(s => {
                 var SearchAttribute = (SearchAttribute)s.GetCustomAttributes(typeof(SearchAttribute), true).FirstOrDefault();
@@ -94,9 +91,19 @@ namespace trifenix.agro.search.operations.util {
                     Index = SearchAttribute.Index,
                     Related = SearchAttribute.Related,
                     Enums = SearchAttribute.Related == Related.ENUM ? GetDescription(s.PropertyType) : new Dictionary<int, string>(),
-                    IndexClass = indexClass
+                    IndexClass = index
                 };
             }).ToArray();
+        }
+
+        public static PropertySearchInfo[] GetPropertySearchInfo(Type type)
+        {
+            var classAtribute = GetAttributes<ReferenceSearchAttribute>(type);
+            if (classAtribute == null || !classAtribute.Any())
+                return Array.Empty<PropertySearchInfo>();
+            return classAtribute.SelectMany(s => GetPropertyByIndex(type, s.Index)).ToArray();
+
+            
         }
 
 
