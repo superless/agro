@@ -5,10 +5,8 @@ using Microsoft.Spatial;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using trifenix.agro.attr;
 using trifenix.agro.db;
-using trifenix.agro.db.model;
 using trifenix.agro.enums.query;
 using trifenix.agro.enums.search;
 using trifenix.agro.enums.searchModel;
@@ -16,10 +14,11 @@ using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
 using trifenix.agro.search.operations.util;
-using TypeGen.Core.Extensions;
 using V2 = trifenix.agro.search.model.temp;
-
-namespace trifenix.agro.search.operations {
+using static trifenix.agro.util.ReflectionExtension;
+using static trifenix.agro.util.AttributesExtension;
+namespace trifenix.agro.search.operations
+{
 
     public class AgroSearch : IAgroSearch {
     
@@ -140,9 +139,7 @@ namespace trifenix.agro.search.operations {
         private V2.RelatedId[] GetReferences(Dictionary<SearchAttribute, object> elements) =>
             elements.Where(s => s.Key.Related == Related.REFERENCE).SelectMany(GetArrayOfRelatedIds).ToArray();
 
-        private V2.RelatedId[] GetLocalReferences(Dictionary<SearchAttribute, object> elements) =>
-            elements.Where(s => s.Key.Related == Related.LOCAL_REFERENCE).SelectMany(GetArrayOfLocalRelatedIds).ToArray();
-
+        
         private V2.Num32Property[] GetNumProps(Dictionary<SearchAttribute, object> values) =>
             GetPropertiesObjects<int>(Related.NUM32, values).Select(s => new V2.Num32Property { 
                 PropertyIndex = s.PropertyIndex,
@@ -250,14 +247,14 @@ namespace trifenix.agro.search.operations {
         }
 
         public V2.EntitySearch[] GetEntitySearch<T>(T entity)  where T : DocumentBase {
-            var references = AgroHelper.GetAttributes<ReferenceSearchAttribute>(typeof(T));
+            var references = GetAttributes<ReferenceSearchAttribute>(typeof(T));
             if (references == null || !references.Any())
                 return Array.Empty<V2.EntitySearch>();
             return GetEntitySearch(entity, references.Select(s=>s.Index).ToArray(), entity.Id);
         }
 
         public V2.EntitySearch[] GetEntitySearchByInput<T>(T entity) where T : InputBase {
-            var references = AgroHelper.GetAttributes<ReferenceSearchAttribute>(typeof(T));
+            var references = GetAttributes<ReferenceSearchAttribute>(typeof(T));
             if (references == null || !references.Any())
                 return Array.Empty<V2.EntitySearch>();
             return GetEntitySearch(entity, references.Select(s=>s.Index).ToArray(), entity.Id);

@@ -1,4 +1,5 @@
 ﻿using res.core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -8,7 +9,8 @@ using trifenix.agro.enums.searchModel;
 using trifenix.agro.search.model.reflection;
 using trifenix.agro.search.model.ts;
 using TypeGen.Core.Extensions;
-using static trifenix.agro.search.operations.util.AgroHelper;
+using static trifenix.agro.util.AttributesExtension;
+
 
 namespace trifenix.typegen.data
 {
@@ -18,23 +20,9 @@ namespace trifenix.typegen.data
         {
             var propByRelatedAndIndex = propertySearchInfos.GroupBy(s => new {  s.Related, s.IndexClass, s.Index }).Select(s => s.FirstOrDefault());
 
-            
 
-            var boolEnums = GetDescription(typeof(BoolRelated));
-
-            var stringEnum = GetDescription(typeof(StringRelated));
-
-            var doubleEnum = GetDescription(typeof(DoubleRelated));
-
-            var dateEnum = GetDescription(typeof(DateRelated));
-
-            var geoEnum = GetDescription(typeof(GeoRelated));
-
-            var numEnum = GetDescription(typeof(NumRelated));
 
             var enumEmun = GetDescription(typeof(EnumRelated));
-
-            var enumRelated = GetDescription(typeof(EntityRelated));
 
 
             var modelInfo = ResourceExtension.ResourceModel(Related.REFERENCE, propByRelatedAndIndex.FirstOrDefault().IndexClass);
@@ -69,10 +57,8 @@ namespace trifenix.typegen.data
 
             };
 
-            //include suggestion, Refererence Local and num64,
+            
             var suggestions = GetDictionaryFromRelated(propByRelatedAndIndex, Related.SUGGESTION);
-
-            var referenceLocal = GetDictionaryFromRelated(propByRelatedAndIndex, Related.LOCAL_REFERENCE);
 
             var num64 = GetDictionaryFromRelated(propByRelatedAndIndex, Related.NUM64);
 
@@ -108,7 +94,7 @@ namespace trifenix.typegen.data
         }
         public static ModelMetaData GetJsonData() {
 
-            // get assemblu
+            // get assembly
             var assembly = Assembly.GetAssembly(typeof(Barrack));
 
             //get model types from namespace
@@ -161,7 +147,46 @@ namespace trifenix.typegen.data
         }
 
 
+       
+        public static PropertySearchInfo[] GetPropertyByIndex(Type type, int index)
+        {
+            var searchAttributesProps = type.GetProperties().Where(prop => Attribute.IsDefined(prop, typeof(SearchAttribute), true));
 
+
+            var props = searchAttributesProps.Select(s => {
+                var SearchAttribute = (SearchAttribute)s.GetCustomAttributes(typeof(SearchAttribute), true).FirstOrDefault();
+
+
+
+                return new PropertySearchInfo
+                {
+                    IsEnumerable = IsEnumerableProperty(s),
+                    Name = s.Name,
+                    Index = SearchAttribute.Index,
+                    Related = SearchAttribute.Related,
+                    Enums = SearchAttribute.Related == Related.ENUM ? GetDescription(s.PropertyType) : new Dictionary<int, string>(),
+                    IndexClass = index,
+                    Info = ResourceExtension.ResourceModel(SearchAttribute.Related, SearchAttribute.Index)
+
+                };
+            }).ToArray();
+
+            return props;
+        }
+
+
+        
+        public static PropertySearchInfo[] GetPropertySearchInfo(Type type)
+        {
+            var classAtribute = GetAttributes<ReferenceSearchAttribute>(type);
+            if (classAtribute == null || !classAtribute.Any())
+                return Array.Empty<PropertySearchInfo>();
+            return classAtribute.SelectMany(s => GetPropertyByIndex(type, s.Index)).ToArray();
+
+
+        }
+
+       
 
     }
 }
