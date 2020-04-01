@@ -148,7 +148,7 @@
     <value>Estatus de Orden de ejecución</value>
   </data>
   <data name="GEOPOINT" xml:space="preserve">
-    <value />
+    <value>Ubicación Geográfica</value>
   </data>
   <data name="INGREDIENT" xml:space="preserve">
     <value>Ingrediente</value>

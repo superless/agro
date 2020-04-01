@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using trifenix.agro.enums.searchModel;
 
+
 namespace trifenix.agro.search.model.reflection
 {
 
@@ -10,10 +11,7 @@ namespace trifenix.agro.search.model.reflection
     public class PropertySearchInfo
     {
         public int Index { get; set; }
-
-
         public Related Related { get; set; }
-
         public string Name { get; set; }
         public int IndexClass { get; set; }
         public Dictionary<int, string> Enums { get; set; }
@@ -29,19 +27,20 @@ namespace trifenix.agro.search.model.reflection
 
         public GroupInput[] Group { get; set; }
 
-        public string Description { get; set; }
+        public EntitySearchDisplayInfo Info { get; set; }
 
-        public string Display { get; set; }
+    }
 
-        public string PlaceHolder { get; set; }
+    public class EntitySearchDisplayInfo
+    {
+
+        public string Title { get; set; }
 
         public string ShortName { get; set; }
 
+        public string Description { get; set; }
 
-
-
-
-
+        public string Column { get; set; }
     }
 
     public class GroupInput {

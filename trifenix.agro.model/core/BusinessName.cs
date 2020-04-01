@@ -8,7 +8,7 @@ namespace trifenix.agro.db.model.core {
 
     [SharedCosmosCollection("agro", "BusinessName")]
     [ReferenceSearch(EntityRelated.BUSINESSNAME)]
-    [Display()]
+    
     public class BusinessName : DocumentBaseName, ISharedCosmosEntity {
         
         public override string Id { get; set; }

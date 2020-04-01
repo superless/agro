@@ -1,4 +1,7 @@
-﻿using System;
+﻿
+
+using res.core;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -82,8 +85,11 @@ namespace trifenix.agro.search.operations.util {
 
         public static PropertySearchInfo[] GetPropertyByIndex(Type type, int index) {
             var searchAttributesProps = type.GetProperties().Where(prop => Attribute.IsDefined(prop, typeof(SearchAttribute), true));
-            return searchAttributesProps.Select(s => {
+
+
+            var props = searchAttributesProps.Select(s => {
                 var SearchAttribute = (SearchAttribute)s.GetCustomAttributes(typeof(SearchAttribute), true).FirstOrDefault();
+
                 return new PropertySearchInfo
                 {
                     IsEnumerable = IsEnumerableProperty(s),
@@ -91,9 +97,13 @@ namespace trifenix.agro.search.operations.util {
                     Index = SearchAttribute.Index,
                     Related = SearchAttribute.Related,
                     Enums = SearchAttribute.Related == Related.ENUM ? GetDescription(s.PropertyType) : new Dictionary<int, string>(),
-                    IndexClass = index
+                    IndexClass = index,
+                    Info = ResourceExtension.ResourceModel(SearchAttribute.Related, SearchAttribute.Index)
+                    
                 };
             }).ToArray();
+
+            return props;
         }
 
         public static PropertySearchInfo[] GetPropertySearchInfo(Type type)

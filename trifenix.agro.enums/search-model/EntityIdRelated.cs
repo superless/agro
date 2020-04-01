@@ -15,18 +15,7 @@ namespace trifenix.agro.enums.searchModel {
         DATE = 10
     }
 
-    public enum ResourceRelated { 
-        REF = 0,
-        STR = 1,
-        NUM = 2,
-        DBL = 3,
-        BOOL = 4,
-        GEO = 5,
-        ENUM = 6,
-        DATE = 7
-
-    }
-
+    
 
     public enum EntityRelated {
 

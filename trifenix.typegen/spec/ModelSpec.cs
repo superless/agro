@@ -6,6 +6,7 @@ using System.Reflection;
 using trifenix.agro.enums.searchModel;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
+using trifenix.agro.search.model.reflection;
 using trifenix.agro.search.model.temp;
 using trifenix.agro.search.model.ts;
 using TypeGen.Core.Converters;
@@ -24,9 +25,10 @@ namespace trifenix.typegen.spec
         public override void OnBeforeGeneration(OnBeforeGenerationArgs args)
         {
             AddInterface<EnumDictionary>("data/");
+            AddInterface<EntitySearchDisplayInfo>("data/");
             AddInterface<DefaultDictionary>("data/");
-            AddInterface<ModelByIndex>("data/");
-            AddInterface<ModelDictionary>("data/");
+            AddInterface<ModelMetaData>("data/");
+            AddInterface<ModelDictionary>("data/");            
             AddInterface<EntitySearch>("model/main");
             AddInterface<GeoPointTs>("model/main");
             AddInterface(typeof(BaseProperty<>), "model/main");

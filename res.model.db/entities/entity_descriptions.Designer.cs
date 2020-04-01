@@ -151,7 +151,7 @@ namespace res.model.entities {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Ubicación Geográfica.
         /// </summary>
         public static string GEOPOINT {
             get {

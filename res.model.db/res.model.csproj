@@ -80,15 +80,15 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>double_titles.resx</DependentUpon>
     </Compile>
-    <Compile Update="entities\entity_snames.Designer.cs">
-      <DependentUpon>entity_snames.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
     <Compile Update="entities\entity_descriptions.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>entity_descriptions.resx</DependentUpon>
+    </Compile>
+    <Compile Update="entities\entity_snames.Designer.cs">
+      <DependentUpon>entity_snames.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Update="entities\entity_titles.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -238,12 +238,12 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>double_titles.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Update="entities\entity_descriptions.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>entity_descriptions.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="entities\entity_snames.resx">
       <LastGenOutput>entity_snames.Designer.cs</LastGenOutput>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="entities\entity_descriptions.resx">
-      <LastGenOutput>entity_descriptions.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="entities\entity_titles.resx">
