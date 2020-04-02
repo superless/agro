@@ -16,16 +16,14 @@ namespace trifenix.agro.model.external.Input {
         public string IdOrder { get; set; }
 
         [ReferenceSearch(EntityRelated.DOSES_ORDER, true)]
-
-
         //TODO: Cristian esto válida la existencia de la dosis dentro del objeto DosesOrder.
         [Required, Reference(typeof(Dose))]
         public DosesOrder[] DosesOrder { get; set; }
 
-        [DateSearch(DateRelated.START_DATE)]
+        [DateSearch(DateRelated.START_DATE_EXECUTION_ORDER)]
         public DateTime? StartDate { get; set; }
 
-        [DateSearch(DateRelated.END_DATE)]
+        [DateSearch(DateRelated.END_DATE_EXECUTION_ORDER)]
         public DateTime? EndDate { get; set; }
 
 

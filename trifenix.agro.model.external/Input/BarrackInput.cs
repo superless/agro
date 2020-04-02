@@ -38,7 +38,7 @@ namespace trifenix.agro.model.external.Input
         [Num32Search(NumRelated.NUMBER_OF_PLANTS)]
         public int NumberOfPlants { get; set; }
 
-        [GeoSearch(GeoRelated.GENERIC_LOCATION)]
+        [GeoSearch(GeoRelated.LOCATION_BARRACK)]
         public GeographicalPointInput[] GeographicalPoints { get; set; }
 
         [ReferenceSearch(EntityRelated.POLLINATOR)]

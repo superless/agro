@@ -8,6 +8,7 @@ namespace trifenix.agro.db.model
 {
     [SharedCosmosCollection("agro", "Variety")]
     [ReferenceSearch(EntityRelated.VARIETY)]
+    [ReferenceSearch(EntityRelated.POLLINATOR)]
     public class Variety : DocumentBaseName, ISharedCosmosEntity
     {
     

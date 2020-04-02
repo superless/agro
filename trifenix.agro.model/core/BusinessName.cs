@@ -1,5 +1,6 @@
 ﻿using Cosmonaut;
 using Cosmonaut.Attributes;
+using System.ComponentModel.DataAnnotations;
 using trifenix.agro.attr;
 using trifenix.agro.enums.searchModel;
 
@@ -7,6 +8,7 @@ namespace trifenix.agro.db.model.core {
 
     [SharedCosmosCollection("agro", "BusinessName")]
     [ReferenceSearch(EntityRelated.BUSINESSNAME)]
+    
     public class BusinessName : DocumentBaseName, ISharedCosmosEntity {
         
         public override string Id { get; set; }

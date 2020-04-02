@@ -37,7 +37,7 @@ namespace trifenix.agro.model.external.Input
 
         public string Base64 { get; set; }
 
-        [GeoSearch(GeoRelated.GENERIC_LOCATION)]
+        [GeoSearch(GeoRelated.LOCATION_EVENT)]
         public GeographicalPointInput Location { get; set; }
 
     }

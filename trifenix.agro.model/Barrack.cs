@@ -32,7 +32,7 @@ namespace trifenix.agro.db.model {
         [Num32Search(NumRelated.NUMBER_OF_PLANTS)]
         public int NumberOfPlants { get; set; }
 
-        [GeoSearch(GeoRelated.GENERIC_LOCATION)]
+        [GeoSearch(GeoRelated.LOCATION_BARRACK)]
         public Point[] GeographicalPoints { get; set; }
 
         [ReferenceSearch(EntityRelated.POLLINATOR)]

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using trifenix.agro.enums.searchModel;
+using trifenix.agro.search.model.reflection;
 
 namespace trifenix.agro.search.model.ts
 {
@@ -74,10 +75,15 @@ namespace trifenix.agro.search.model.ts
 
         public string NameProp { get; set; }
 
-        public string Description { get; set; }
+        
 
         public bool isArray { get; set; }
 
+        public EntitySearchDisplayInfo Info { get; set; }
+
+        public bool Required { get; set; }
+
+        public bool Unique { get; set; }
 
     }
 
@@ -86,14 +92,29 @@ namespace trifenix.agro.search.model.ts
         public string Name { get; set; }
     }
 
-    public class ModelByIndex {
 
-        public Dictionary<int, ModelDictionary> Indexes { get; set; }
+    
+
+    public class ModelMetaData {
+        
+
+        public ModelDictionary[] Indexes { get; set; }
     }
+
+
+    
 
     public class ModelDictionary {
 
-        public Dictionary<int, DefaultDictionary> RelatedData { get; set; }
+        public string Title { get; set; }
+
+        public string ShortName { get; set; }
+
+        public string Description { get; set; }
+
+        public EntityRelated Index { get; set; }
+
+        
 
         public Dictionary<int, DefaultDictionary> StringData { get; set; }
 

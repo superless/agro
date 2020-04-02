@@ -10,159 +10,101 @@ namespace trifenix.agro.search.model {
 
         [Key]
         [IsFilterable]
-        public string Id { get; set; }                              
+        public string Id { get; set; }
 
         [IsFilterable, IsFacetable]
-        public int EntityIndex { get; set; }                        
+        public int[] EntityIndex { get; set; }
 
         [IsSortable]
         public DateTime Created { get; set; }
 
-        [JsonProperty("prop_ids")]
-        public Reference[] References { get; set; }
-
-        [JsonProperty("prop_str")]
-        public String[] Strings { get; set; }
-
-        [JsonProperty("prop_num")]
-        public Num32[] Integers { get; set; }
-
-        [JsonProperty("prop_num64")]
-        public Num64[] Longs { get; set; }
-
-        [JsonProperty("prop_dbl")]
-        public Double[] Doubles { get; set; }
-
-        [JsonProperty("prop_bool")]
-        public Bool[] Bools { get; set; }
-
-        [JsonProperty("prop_geo")]
-        public Geo[] GeoPoints { get; set; }
-
-        [JsonProperty("prop_dt")]
-        public Date[] Dates { get; set; }
-
-        [JsonProperty("prop_sug")]
-        public Suggest[] Suggests { get; set; }
-
+        [JsonProperty("rel")]
         public RelatedId[] RelatedIds { get; set; }
 
-        public Property[] RelatedProperties { get; set; }
+        [JsonProperty("sug")]
+        public SuggestProperty[] SuggestProperties { get; set; }
 
-        public RelatedEnumValue[] RelatedEnumValues { get; set; }
+        [JsonProperty("str")]
+        public StrProperty[] StringProperties { get; set; }
+
+        [JsonProperty("enum")]
+        public EnumProperty[] EnumProperties { get; set; }
+
+        [JsonProperty("num32")]
+        public Num32Property[] NumProperties { get; set; }
+
+        [JsonProperty("num64")]
+        public Num64Property[] Num64Properties { get; set; }
+
+        [JsonProperty("dbl")]
+        public DblProperty[] DoubleProperties { get; set; }
+
+        [JsonProperty("dt")]
+        public DtProperty[] DtProperties { get; set; }
+
+        [JsonProperty("geo")]
+        public GeoProperty[] GeoProperties { get; set; }
+
+        [JsonProperty("bl")]
+        public BoolProperty[] BoolProperties { get; set; }
 
     }
 
     public class RelatedId {
-
-        [IsFilterable, IsFacetable]
+        [IsFilterable]
         public int EntityIndex { get; set; }
-
         [IsFilterable]
         public string EntityId { get; set; }
-
-        [IsFilterable, IsFacetable]
-        public string Id { get { return $"{EntityIndex},{EntityId}"; } }
-
+        [IsFacetable]
+        public string Id { get => $"{EntityIndex},{EntityId}"; }
     }
 
-    public class Property {
-
-        [IsFilterable, IsFacetable]
-        public int PropertyIndex { get; set; }
-
-        [IsSearchable]
-        public string Value { get; set; }
-
-        [IsFilterable, IsFacetable]
-        public string Id { get { return $"{PropertyIndex},{Value}"; } }
-
-    }
-
-    public class RelatedEnumValue {
-
-        [IsFilterable, IsFacetable]
-        public int EnumerationIndex { get; set; }
-
+    public class BaseProperty<T> {
         [IsFilterable]
-        public int Value { get; set; }
-
-        [IsFilterable, IsFacetable]
-        public string Id { get { return $"{EnumerationIndex},{Value}"; } }
-    }
-
-    public class Reference {
-
-        [IsFilterable, IsFacetable]
-        public int EntityTypeIndex { get; set; }
-
+        public int PropertyIndex { get; set; }
         [IsFilterable]
-        public string IdReference { get; set; }
+        public virtual T Value { get; set; }
     }
 
-    public class String {
+    public class BaseFacetableProperty<T> : BaseProperty<T> {
 
-        [IsFilterable, IsFacetable]
-        public int PropertyIndex { get; set; }
-
-        [IsSearchable, IsFilterable]
-        public string Value { get; set; }
+        [IsFacetable]
+        public string Id { get => $"{PropertyIndex},{Value}"; }
     }
 
-    public class Num32 {
-
-        [IsFilterable, IsFacetable]
-        public int PropertyIndex { get; set; }
-
-        [IsFilterable, IsSortable]
-        public int Value { get; set; }
+    public class SuggestProperty : BaseProperty<string> {
+        [IsFilterable, IsSearchable]
+        public override string Value { get; set; }
     }
 
-    public class Num64 {
+    public class StrProperty : BaseFacetableProperty<string> {
 
-        [IsFilterable, IsFacetable]
-        public int PropertyIndex { get; set; }
-
-        [IsFilterable, IsSortable]
-        public long Value { get; set; }
+        [IsFilterable, IsSearchable]
+        public override string Value { get; set; }
     }
 
-    public class Double {
+    public class EnumProperty : BaseFacetableProperty<int> { }
 
-        [IsFilterable, IsFacetable]
-        public int PropertyIndex { get; set; }
+    public class Num32Property : BaseProperty<int> { }
 
-        [IsFilterable, IsSortable]
-        public double Value { get; set; }
+    public class Num64Property : BaseProperty<long> { }
+
+    public class DblProperty : BaseProperty<double> { }
+
+    public class DtProperty : BaseProperty<DateTime> { }
+
+    public class BoolProperty : BaseProperty<bool> { }
+
+    public class GeoProperty : BaseProperty<GeographyPoint> { }
+
+    public class GeoPointTs {
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
     }
-
-    public class Bool {
-
-        [IsFilterable, IsFacetable]
+    
+    public class GeographyProperty {   
         public int PropertyIndex { get; set; }
-
-        [IsFilterable]
-        public bool Value { get; set; }
-    }
-
-    public class Geo {
-
-        public int PropertyIndex { get; set; }
-        public GeographyPoint Value { get; set; }
-    }
-
-    public class Date {
-
-        [IsFilterable, IsFacetable]
-        public int PropertyIndex { get; set; }
-
-        [IsFilterable, IsSortable]
-        public DateTime Value { get; set; }
-    }
-
-    public class Suggest {
-        public int PropertyIndex { get; set; }
-        public string Value { get; set; }
+        public GeoPointTs Value { get; set; }
     }
 
 }

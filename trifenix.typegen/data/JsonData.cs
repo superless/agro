@@ -1,76 +1,75 @@
-﻿using Newtonsoft.Json;
+﻿using res.core;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using trifenix.agro.attr;
 using trifenix.agro.db.model;
 using trifenix.agro.enums.searchModel;
+using trifenix.agro.model.external.Input;
+using trifenix.agro.search.model.reflection;
 using trifenix.agro.search.model.ts;
 using trifenix.agro.search.operations.util;
 using TypeGen.Core.Extensions;
-using static trifenix.agro.search.operations.util.AgroHelper;
+using static trifenix.agro.util.AttributesExtension;
+
 
 namespace trifenix.typegen.data
 {
     public static class JsonData
     {
-        public static ModelDictionary GetModel(IEnumerable<PropertySearchInfo> propertySearchInfos)
+        public static ModelDictionary GetModel(IEnumerable<PropertySearchInfo> propertySearchInfos, EntityRelated index)
         {
-            var propByRelatedAndIndex = propertySearchInfos.GroupBy(s => new { s.SearchAttribute.Index, s.SearchAttribute.Related, s.IndexClass }).Select(s => s.FirstOrDefault());
+            var propByRelatedAndIndex = propertySearchInfos.GroupBy(s => new {  s.Related, s.IndexClass, s.Index }).Select(s => s.FirstOrDefault());
 
 
-            var boolEnums = GetDescription(typeof(BoolRelated));
-
-            var stringEnum = GetDescription(typeof(StringRelated));
-
-            var doubleEnum = GetDescription(typeof(DoubleRelated));
-
-            var dateEnum = GetDescription(typeof(DateRelated));
-
-            var geoEnum = GetDescription(typeof(GeoRelated));
-
-            var numEnum = GetDescription(typeof(NumRelated));
 
             var enumEmun = GetDescription(typeof(EnumRelated));
 
-            var enumRelated = GetDescription(typeof(EntityRelated));
 
-
+            var modelInfo = ResourceExtension.ResourceModel(Related.REFERENCE, propByRelatedAndIndex.FirstOrDefault().IndexClass);
 
             var modelDictionary = new ModelDictionary()
             {
-                BoolData = GetDictionaryFromRelated(propByRelatedAndIndex, Related.BOOL, boolEnums),
+                Index = index,
 
-                StringData = GetDictionaryFromRelated(propByRelatedAndIndex, Related.STR, stringEnum),
+                Description = modelInfo.Description,
 
-                DateData = GetDictionaryFromRelated(propByRelatedAndIndex, Related.DATE, dateEnum),
+                ShortName = modelInfo.ShortName,
 
-                DoubleData = GetDictionaryFromRelated(propByRelatedAndIndex, Related.DBL, doubleEnum),
+                Title = modelInfo.Title,
+
+                
+
+                BoolData = GetDictionaryFromRelated(propByRelatedAndIndex, Related.BOOL),
+
+                StringData = GetDictionaryFromRelated(propByRelatedAndIndex, Related.STR),
+
+                DateData = GetDictionaryFromRelated(propByRelatedAndIndex, Related.DATE),
+
+                DoubleData = GetDictionaryFromRelated(propByRelatedAndIndex, Related.DBL),
 
                 EnumData = GetEnumDictionaryFromRelated(propByRelatedAndIndex, enumEmun),
 
-                GeoData = GetDictionaryFromRelated(propByRelatedAndIndex, Related.GEO, geoEnum),
+                GeoData = GetDictionaryFromRelated(propByRelatedAndIndex, Related.GEO),
 
-                NumData = GetDictionaryFromRelated(propByRelatedAndIndex, Related.NUM32, numEnum),
+                NumData = GetDictionaryFromRelated(propByRelatedAndIndex, Related.NUM32),
 
-                RelatedData = GetDictionaryFromRelated(propByRelatedAndIndex, Related.REFERENCE, enumRelated),
+                
 
 
 
             };
 
-            //include suggestion, Refererence Local and num64,
-            var suggestions = GetDictionaryFromRelated(propByRelatedAndIndex, Related.SUGGESTION, stringEnum);
+            
+            var suggestions = GetDictionaryFromRelated(propByRelatedAndIndex, Related.SUGGESTION);
 
-            var referenceLocal = GetDictionaryFromRelated(propByRelatedAndIndex, Related.LOCAL_REFERENCE, enumRelated);
-
-            var num64 = GetDictionaryFromRelated(propByRelatedAndIndex, Related.NUM64, numEnum);
+            var num64 = GetDictionaryFromRelated(propByRelatedAndIndex, Related.NUM64);
 
             var suggestionNotInString = suggestions.Where(sg => !modelDictionary.StringData.Any(s => s.Key == sg.Key));
 
-            var localNotInReference = referenceLocal.Where(sg => !modelDictionary.RelatedData.Any(s => s.Key == sg.Key));
+            
 
             var num64NotInNum = num64.Where(sg => !modelDictionary.NumData.Any(s => s.Key == sg.Key));
 
@@ -82,13 +81,7 @@ namespace trifenix.typegen.data
                 }
             }
 
-            if (localNotInReference.Any())
-            {
-                foreach (var item in localNotInReference)
-                {
-                    modelDictionary.RelatedData.Add(item.Key, item.Value);
-                }
-            }
+            
 
             if (num64NotInNum.Any())
             {
@@ -104,9 +97,9 @@ namespace trifenix.typegen.data
             return modelDictionary;
 
         }
-        public static ModelByIndex GetJsonData() {
+        public static ModelMetaData GetJsonData() {
 
-            // get assemblu
+            // get assembly
             var assembly = Assembly.GetAssembly(typeof(Barrack));
 
             //get model types from namespace
@@ -114,17 +107,16 @@ namespace trifenix.typegen.data
             .Where(x => x.FullName.StartsWith("trifenix.agro.db.model"));
 
             // get property infos
-            var propSearchinfos = modelTypes.Where(s => s.GetTypeInfo().GetCustomAttribute<ReferenceSearchAttribute>(true) != null).SelectMany(GetPropertySearchInfo).ToList();
+            var propSearchinfos = modelTypes.Where(s => s.GetTypeInfo().GetCustomAttributes<ReferenceSearchAttribute>(true).Any()).SelectMany(GetPropertySearchInfo).ToList();
 
             var grpIndexes = propSearchinfos.GroupBy(s => s.IndexClass).Select(s=>s.FirstOrDefault()) ;
 
 
+            var model = grpIndexes.Select(g=> GetModel(propSearchinfos.Where(s => s.IndexClass == g.IndexClass), (EntityRelated)g.IndexClass));
 
-            var indexes = grpIndexes.ToDictionary(i => i.IndexClass, g => GetModel(propSearchinfos.Where(s => s.IndexClass == g.IndexClass)));
 
-
-            return new ModelByIndex {
-                Indexes = indexes
+            return new ModelMetaData {
+                Indexes = model.ToArray()
             };
             
             // group by index and related, get the first element
@@ -135,30 +127,91 @@ namespace trifenix.typegen.data
 
 
  
-        private static Dictionary<int, DefaultDictionary> GetDictionaryFromRelated(IEnumerable<PropertySearchInfo> propSearchInfos, Related related, Dictionary<int, string> enumDescription) {
+        private static Dictionary<int, DefaultDictionary> GetDictionaryFromRelated(IEnumerable<PropertySearchInfo> propSearchInfos, Related related) {
 
-            return propSearchInfos.Where(s => s.SearchAttribute.Related == related).ToDictionary(s => s.SearchAttribute.Index, g => new DefaultDictionary
+            var infos = propSearchInfos.Where(s => s.Related == related).ToList();
+
+            return infos.ToDictionary(s => s.Index, g => new DefaultDictionary
             {
                 NameProp = g.Name,
                 isArray = g.IsEnumerable,
-                Description = enumDescription[g.SearchAttribute.Index]
+                Info = g.Info,
+                Required = g.IsRequired,
+                Unique = g.IsUnique
             });
         }
 
         private static Dictionary<int, EnumDictionary> GetEnumDictionaryFromRelated(IEnumerable<PropertySearchInfo> propSearchInfos, Dictionary<int, string> enumDescription)
         {
 
-            return propSearchInfos.Where(s => s.SearchAttribute.Related == Related.ENUM).ToDictionary(s => s.SearchAttribute.Index, g => new EnumDictionary
+            return propSearchInfos.Where(s => s.Related == Related.ENUM).ToDictionary(s => s.Index, g => new EnumDictionary
             {
                 NameProp = g.Name,
                 isArray = g.IsEnumerable,
-                Description = enumDescription[g.SearchAttribute.Index],
+                Info = g.Info,
                 EnumData = g.Enums
             });
         }
 
 
 
+
+        
+
+        public static PropertySearchInfo[] GetPropertyByIndex(Type type, int index)
+        {
+            var searchAttributesProps = type.GetProperties().Where(prop => Attribute.IsDefined(prop, typeof(SearchAttribute), true));
+
+            
+
+            var elemTypeInput = AgroHelper.GetEntityType((EntityRelated)index, typeof(BarrackInput), "trifenix.agro.model.external.Input");
+
+            var elemTypeInputProps = elemTypeInput.GetProperties().Where(prop => Attribute.IsDefined(prop, typeof(SearchAttribute), true))
+                .Select(s=>new { search = s.GetAttribute<SearchAttribute>(), required = s.GetAttribute<RequiredAttribute>(), unique = s.GetAttribute<UniqueAttribute>() });
+
+
+
+            var props = searchAttributesProps.Select(s => {
+                var searchAttribute = (SearchAttribute)s.GetCustomAttributes(typeof(SearchAttribute), true).FirstOrDefault();
+
+                var searchAttributeInput = elemTypeInputProps.FirstOrDefault(p => p.search.Index == searchAttribute.Index && p.search.Related == searchAttribute.Related);
+
+
+                
+
+
+                return new PropertySearchInfo
+                {
+                    IsEnumerable = IsEnumerableProperty(s),
+                    Name = s.Name,
+                    Index = searchAttribute.Index,
+                    Related = searchAttribute.Related,
+                    Enums = searchAttribute.Related == Related.ENUM ? GetDescription(s.PropertyType) : new Dictionary<int, string>(),
+                    IndexClass = index,
+                    Info = ResourceExtension.ResourceModel(searchAttribute.Related, searchAttribute.Index),
+                    IsRequired = searchAttributeInput?.required!=null,
+                    IsUnique = searchAttributeInput?.unique != null,
+
+
+                };
+            }).ToArray();
+
+            return props;
+        }
+
+
+        
+        public static PropertySearchInfo[] GetPropertySearchInfo(Type type)
+        {
+            var classAtribute = GetAttributes<ReferenceSearchAttribute>(type);
+            if (classAtribute == null || !classAtribute.Any())
+                return Array.Empty<PropertySearchInfo>();
+            return classAtribute.SelectMany(s => GetPropertyByIndex(type, s.Index)).ToArray();
+
+
+        }
+
+       
 
     }
 }

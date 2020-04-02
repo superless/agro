@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -7,7 +6,8 @@ using System.Reflection;
 using trifenix.agro.attr;
 using trifenix.agro.db.model;
 using trifenix.agro.enums.searchModel;
-using TypeGen.Core.Extensions;
+using trifenix.agro.util;
+using static trifenix.agro.util.AttributesExtension;
 
 namespace trifenix.agro.search.operations.util {
     public static class AgroHelper {
@@ -52,7 +52,7 @@ namespace trifenix.agro.search.operations.util {
             if (value == null)
                 return false;
             else {
-                if (IsEnumerable(value)) {
+                if (value.IsEnumerable()) {
                     if (!((IEnumerable<object>)value).Any())
                         return false;
                 }
@@ -75,15 +75,6 @@ namespace trifenix.agro.search.operations.util {
 
         public static object[] GetPropertiesWithoutAttributeWithValues(this object Obj) =>
              GetPropertiesWithoutAttribute(Obj).Where(s => HasValue(s)).ToArray();
-
-        public static bool IsEnumerable(this object element) => !element.GetType().Equals(typeof(string)) && element is IEnumerable<object>;
-
-        public static bool IsEnumerableProperty(PropertyInfo propertyInfo) {
-            var propertyType = propertyInfo.PropertyType;
-            if (propertyType.Equals(typeof(string)))
-                return false;
-            return typeof(IEnumerable).IsAssignableFrom(propertyType);
-        }
 
         public static T CreateInstance<T>() => (T)Activator.CreateInstance(typeof(T));
 

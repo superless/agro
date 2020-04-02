@@ -7,7 +7,6 @@ using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model;
 using trifenix.agro.db.model.local;
-using trifenix.agro.enums;
 using trifenix.agro.enums.input;
 using trifenix.agro.enums.searchModel;
 using trifenix.agro.external.interfaces;
@@ -41,98 +40,98 @@ namespace trifenix.agro.external.operations.entities.ext {
             var dose = (await Get(id)).Result;
             dose.Active = false;
             await repo.CreateUpdate(dose);
-            search.AddElements(new List<EntitySearch> { await GetEntitySearch(dose) });
+            search.AddElements(search.GetEntitySearch(dose).ToList());
         }
         
-        private RelatedId[] GetIdsRelated(Dose dose) {
-            var list = new List<RelatedId> {
-                new RelatedId {
-                    EntityId = dose.IdProduct,
-                    EntityIndex = (int)EntityRelated.PRODUCT
-                }
-            };
-            if (dose.IdsApplicationTarget != null && dose.IdsApplicationTarget.Any())
-                list.AddRange(dose.IdsApplicationTarget.Select(idAppTarget => new RelatedId { 
-                    EntityId = idAppTarget,
-                    EntityIndex = (int)EntityRelated.TARGET
-                }));
-            if (dose.IdSpecies != null && dose.IdSpecies.Any())
-                list.AddRange(dose.IdSpecies.Select(idSpecie => new RelatedId {
-                    EntityId = idSpecie,
-                    EntityIndex = (int)EntityRelated.SPECIE
-                }));
-            if (dose.IdVarieties != null && dose.IdVarieties.Any())
-                list.AddRange(dose.IdVarieties.Select(idVariety => new RelatedId {
-                    EntityId = idVariety,
-                    EntityIndex = (int)EntityRelated.VARIETY
-                }));
-            return list.ToArray();
-        }
+        //private RelatedId[] GetIdsRelated(Dose dose) {
+        //    var list = new List<RelatedId> {
+        //        new RelatedId {
+        //            EntityId = dose.IdProduct,
+        //            EntityIndex = (int)EntityRelated.PRODUCT
+        //        }
+        //    };
+        //    if (dose.IdsApplicationTarget != null && dose.IdsApplicationTarget.Any())
+        //        list.AddRange(dose.IdsApplicationTarget.Select(idAppTarget => new RelatedId { 
+        //            EntityId = idAppTarget,
+        //            EntityIndex = (int)EntityRelated.TARGET
+        //        }));
+        //    if (dose.IdSpecies != null && dose.IdSpecies.Any())
+        //        list.AddRange(dose.IdSpecies.Select(idSpecie => new RelatedId {
+        //            EntityId = idSpecie,
+        //            EntityIndex = (int)EntityRelated.SPECIE
+        //        }));
+        //    if (dose.IdVarieties != null && dose.IdVarieties.Any())
+        //        list.AddRange(dose.IdVarieties.Select(idVariety => new RelatedId {
+        //            EntityId = idVariety,
+        //            EntityIndex = (int)EntityRelated.VARIETY
+        //        }));
+        //    return list.ToArray();
+        //}
 
-        private async Task<Property[]> GetProperties(Dose dose) {
-            var productName = await Queries.GetEntityName<Product>(dose.IdProduct);
-            var properties = new List<Property> {
-                new Property { PropertyIndex = (int)PropertyRelated.PRODUCT_NAME, Value = productName },
-                new Property { PropertyIndex = (int)PropertyRelated.GENERIC_COUNTER, Value = $"{dose.Correlative}" }
-            };
-            if (dose.HoursToReEntryToBarrack != 0)
-                properties.Add(new Property { PropertyIndex = (int)PropertyRelated.DOSES_HOURSENTRYBARRACK, Value = $"{dose.HoursToReEntryToBarrack}" });
-            if (dose.ApplicationDaysInterval != 0)
-                properties.Add(new Property { PropertyIndex = (int)PropertyRelated.DOSES_DAYSINTERVAL, Value = $"{dose.ApplicationDaysInterval}" });
-            if (dose.NumberOfSequentialApplication != 0)
-                properties.Add(new Property { PropertyIndex = (int)PropertyRelated.DOSES_SEQUENCE, Value = $"{dose.NumberOfSequentialApplication}" });
-            if (dose.WettingRecommendedByHectares != 0)
-                properties.Add(new Property { PropertyIndex = (int)PropertyRelated.DOSES_WETTINGRECOMMENDED, Value = $"{dose.WettingRecommendedByHectares}" });
-            if (dose.WaitingDaysLabel.HasValue && dose.WaitingDaysLabel.Value != 0)
-                properties.Add(new Property { PropertyIndex = (int)PropertyRelated.DOSES_WAITINGDAYSLABEL, Value = $"{dose.WaitingDaysLabel}" });
-            if (dose.DosesQuantityMax != 0)
-                properties.Add(new Property { PropertyIndex = (int)PropertyRelated.DOSES_MAX, Value = $"{dose.DosesQuantityMax}" });
-            if (dose.DosesQuantityMin != 0)
-                properties.Add(new Property { PropertyIndex = (int)PropertyRelated.DOSES_MIN, Value = $"{dose.DosesQuantityMin}" });
-            return properties.ToArray();
-        }
+        //private async Task<Property[]> GetProperties(Dose dose) {
+        //    var productName = await Queries.GetEntityName<Product>(dose.IdProduct);
+        //    var properties = new List<Property> {
+        //        new Property { PropertyIndex = (int)PropertyRelated.PRODUCT_NAME, Value = productName },
+        //        new Property { PropertyIndex = (int)PropertyRelated.GENERIC_COUNTER, Value = $"{dose.Correlative}" }
+        //    };
+        //    if (dose.HoursToReEntryToBarrack != 0)
+        //        properties.Add(new Property { PropertyIndex = (int)PropertyRelated.DOSES_HOURSENTRYBARRACK, Value = $"{dose.HoursToReEntryToBarrack}" });
+        //    if (dose.ApplicationDaysInterval != 0)
+        //        properties.Add(new Property { PropertyIndex = (int)PropertyRelated.DOSES_DAYSINTERVAL, Value = $"{dose.ApplicationDaysInterval}" });
+        //    if (dose.NumberOfSequentialApplication != 0)
+        //        properties.Add(new Property { PropertyIndex = (int)PropertyRelated.DOSES_SEQUENCE, Value = $"{dose.NumberOfSequentialApplication}" });
+        //    if (dose.WettingRecommendedByHectares != 0)
+        //        properties.Add(new Property { PropertyIndex = (int)PropertyRelated.DOSES_WETTINGRECOMMENDED, Value = $"{dose.WettingRecommendedByHectares}" });
+        //    if (dose.WaitingDaysLabel.HasValue && dose.WaitingDaysLabel.Value != 0)
+        //        properties.Add(new Property { PropertyIndex = (int)PropertyRelated.DOSES_WAITINGDAYSLABEL, Value = $"{dose.WaitingDaysLabel}" });
+        //    if (dose.DosesQuantityMax != 0)
+        //        properties.Add(new Property { PropertyIndex = (int)PropertyRelated.DOSES_MAX, Value = $"{dose.DosesQuantityMax}" });
+        //    if (dose.DosesQuantityMin != 0)
+        //        properties.Add(new Property { PropertyIndex = (int)PropertyRelated.DOSES_MIN, Value = $"{dose.DosesQuantityMin}" });
+        //    return properties.ToArray();
+        //}
 
-        private RelatedEnumValue[] GetEnums(Dose dose) {
-            var enums = new RelatedEnumValue[] {
-                new RelatedEnumValue { EnumerationIndex = (int)EnumerationRelated.GENERIC_ACTIVE, Value = dose.Active?1:0 },
-                new RelatedEnumValue { EnumerationIndex = (int)EnumerationRelated.GENERIC_DEFAULT, Value = dose.Default?1:0 },
-                new RelatedEnumValue { EnumerationIndex = (int)EnumerationRelated.DOSES_DOSESAPPLICATEDTO, Value = (int)dose.DosesApplicatedTo }
-            };
-            return enums;
-        }
+        //private RelatedEnumValue[] GetEnums(Dose dose) {
+        //    var enums = new RelatedEnumValue[] {
+        //        new RelatedEnumValue { EnumerationIndex = (int)EnumerationRelated.GENERIC_ACTIVE, Value = dose.Active?1:0 },
+        //        new RelatedEnumValue { EnumerationIndex = (int)EnumerationRelated.GENERIC_DEFAULT, Value = dose.Default?1:0 },
+        //        new RelatedEnumValue { EnumerationIndex = (int)EnumerationRelated.DOSES_DOSESAPPLICATEDTO, Value = (int)dose.DosesApplicatedTo }
+        //    };
+        //    return enums;
+        //}
 
-        private async Task<EntitySearch> GetEntitySearch(Dose dose) {
-            var relatedIds = GetIdsRelated(dose).ToList();
-            search.DeleteElementsWithRelatedElement(EntityRelated.WAITINGHARVEST, EntityRelated.DOSES, dose.Id);
-            if (dose.WaitingToHarvest != null && dose.WaitingToHarvest.Any())
-                foreach (var waitingHarvest in dose.WaitingToHarvest) {
-                    var idSearch = Guid.NewGuid().ToString("N");
-                    relatedIds.Add(new RelatedId { EntityIndex = (int)EntityRelated.WAITINGHARVEST, EntityId = idSearch });
-                    search.AddElements(new List<EntitySearch> {
-                        new EntitySearch {
-                             Id= idSearch,
-                             EntityIndex=(int)EntityRelated.WAITINGHARVEST,
-                             Created = DateTime.Now,
-                             RelatedIds = new RelatedId[]{ 
-                                 new RelatedId { EntityIndex = (int)EntityRelated.DOSES,  EntityId = dose.Id},
-                                 new RelatedId { EntityIndex = (int)EntityRelated.CERTIFIED_ENTITY, EntityId = waitingHarvest.IdCertifiedEntity }
-                             },
-                             RelatedProperties = new Property[]{ 
-                                new Property { PropertyIndex = (int)PropertyRelated.WAITINGHARVEST_DAYS, Value = $"{waitingHarvest.WaitingDays}" },
-                                new Property { PropertyIndex = (int)PropertyRelated.WAITINGHARVEST_PPM, Value = $"{waitingHarvest.Ppm}" },
-                             }
-                        }
-                    });
-                }
-            return new EntitySearch {
-                Id = dose.Id,
-                EntityIndex = (int)EntityRelated.DOSES,
-                Created = DateTime.Now,
-                RelatedIds = relatedIds.ToArray(),
-                RelatedProperties = await GetProperties(dose),
-                RelatedEnumValues = GetEnums(dose)
-            };
-        }
+        //private async Task<EntitySearch> GetEntitySearch(Dose dose) {
+        //    var relatedIds = GetIdsRelated(dose).ToList();
+        //    search.DeleteElementsWithRelatedElement(EntityRelated.WAITINGHARVEST, EntityRelated.DOSES, dose.Id);
+        //    if (dose.WaitingToHarvest != null && dose.WaitingToHarvest.Any())
+        //        foreach (var waitingHarvest in dose.WaitingToHarvest) {
+        //            var idSearch = Guid.NewGuid().ToString("N");
+        //            relatedIds.Add(new RelatedId { EntityIndex = (int)EntityRelated.WAITINGHARVEST, EntityId = idSearch });
+        //            search.AddElements(new List<EntitySearch> {
+        //                new EntitySearch {
+        //                     Id= idSearch,
+        //                     EntityIndex=(int)EntityRelated.WAITINGHARVEST,
+        //                     Created = DateTime.Now,
+        //                     RelatedIds = new RelatedId[]{ 
+        //                         new RelatedId { EntityIndex = (int)EntityRelated.DOSES,  EntityId = dose.Id},
+        //                         new RelatedId { EntityIndex = (int)EntityRelated.CERTIFIED_ENTITY, EntityId = waitingHarvest.IdCertifiedEntity }
+        //                     },
+        //                     RelatedProperties = new Property[]{ 
+        //                        new Property { PropertyIndex = (int)PropertyRelated.WAITINGHARVEST_DAYS, Value = $"{waitingHarvest.WaitingDays}" },
+        //                        new Property { PropertyIndex = (int)PropertyRelated.WAITINGHARVEST_PPM, Value = $"{waitingHarvest.Ppm}" },
+        //                     }
+        //                }
+        //            });
+        //        }
+        //    return new EntitySearch {
+        //        Id = dose.Id,
+        //        EntityIndex = (int)EntityRelated.DOSES,
+        //        Created = DateTime.Now,
+        //        RelatedIds = relatedIds.ToArray(),
+        //        RelatedProperties = await GetProperties(dose),
+        //        RelatedEnumValues = GetEnums(dose)
+        //    };
+        //}
 
         public async Task<ExtPostContainer<string>> Save(Dose dose) {
             await repo.CreateUpdate(dose);
@@ -144,13 +143,9 @@ namespace trifenix.agro.external.operations.entities.ext {
                     EntityIndex = (int)EntityRelated.DOSES
                 });
                 productSearch.RelatedIds = relatedIds.ToArray();
-                search.AddElements(new List<EntitySearch> {
-                    productSearch
-                });
+                search.AddElements(new List<EntitySearch> { productSearch });
             }
-            search.AddElements(new List<EntitySearch> {
-                await GetEntitySearch(dose)
-            });
+            search.AddElements(search.GetEntitySearch(dose).ToList());
             return new ExtPostContainer<string> {
                 IdRelated = dose.Id,
                 MessageResult = ExtMessageResult.Ok

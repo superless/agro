@@ -50,7 +50,7 @@ namespace trifenix.agro.db.model
         /// <summary>
         /// Ruta o Url en internet de la imagen subida.
         /// </summary>
-        [StringSearch(StringRelated.GENERIC_PICTURE_PATH)]
+        [StringSearch(StringRelated.PICTURE_PATH_EVENT)]
         public string PicturePath { get; set; }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace trifenix.agro.db.model
         public Weather Weather { get; set; }
 
 
-        [GeoSearch(GeoRelated.GENERIC_LOCATION)]
+        [GeoSearch(GeoRelated.LOCATION_EVENT)]
         public Point Location { get; set; }
 
     }

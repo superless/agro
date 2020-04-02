@@ -6,7 +6,6 @@ using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model;
-using trifenix.agro.enums;
 using trifenix.agro.enums.input;
 using trifenix.agro.enums.searchModel;
 using trifenix.agro.external.interfaces;
@@ -30,20 +29,20 @@ namespace trifenix.agro.external.operations.entities.ext {
         
         public async Task Remove(string id) { }
 
-        private RelatedId[] GetIdsRelated(Product product) {
-            var list = new List<RelatedId> {
-                new RelatedId { EntityIndex = (int)EntityRelated.INGREDIENT, EntityId = product.IdActiveIngredient }
-            };
-            return list.ToArray();
-        }
+        //private RelatedId[] GetIdsRelated(Product product) {
+        //    var list = new List<RelatedId> {
+        //        new RelatedId { EntityIndex = (int)EntityRelated.INGREDIENT, EntityId = product.IdActiveIngredient }
+        //    };
+        //    return list.ToArray();
+        //}
 
-        private Property[] GetElementRelated(Product product) {
-            var list = new List<Property>();
-            if (!string.IsNullOrWhiteSpace(product.Brand))
-                list.Add(new Property { PropertyIndex = (int)PropertyRelated.GENERIC_BRAND, Value = product.Brand });
-            list.Add(new Property { PropertyIndex = (int)PropertyRelated.GENERIC_NAME, Value = product.Name });
-            return list.ToArray();
-        }
+        //private Property[] GetElementRelated(Product product) {
+        //    var list = new List<Property>();
+        //    if (!string.IsNullOrWhiteSpace(product.Brand))
+        //        list.Add(new Property { PropertyIndex = (int)PropertyRelated.GENERIC_BRAND, Value = product.Brand });
+        //    list.Add(new Property { PropertyIndex = (int)PropertyRelated.GENERIC_NAME, Value = product.Name });
+        //    return list.ToArray();
+        //}
 
         private async Task<string> CreateDefaultDoses(string idProduct) {
             var dosesInput = new DosesInput {
@@ -114,10 +113,13 @@ namespace trifenix.agro.external.operations.entities.ext {
         public async Task<ExtPostContainer<string>> Save(Product product) {
             await repo.CreateUpdate(product);
             // obtiene el id de ingrediente
-            var relatedIds = GetIdsRelated(product).ToList();
+            //var relatedIds = GetIdsRelated(product).ToList();
             //Remueve doses y retorna la dosis por defecto
             var dosesDefault = await RemoveDoses(product);
+            var productSearch = search.GetEntitySearch(product).LastOrDefault();
+            var relatedIds = productSearch.RelatedIds.ToList();
             relatedIds.Add(dosesDefault);
+            productSearch.RelatedIds = relatedIds.ToArray();
             //Esto lo agregue a la creacion de la dosis, es ahi donde se busca el producto relacionado y se le agrega el relatedId correspondiente a la dosis en creacion
             //if (product.Doses != null && product.Doses.Any()) {
             //    foreach (var dose in input.Doses) {
@@ -131,19 +133,20 @@ namespace trifenix.agro.external.operations.entities.ext {
             //        });
             //    }
             //}
-            search.AddElements(new List<EntitySearch> {
-                new EntitySearch {
-                    Id = product.Id,
-                    EntityIndex = (int)EntityRelated.PRODUCT,
-                    Created = DateTime.Now,
-                    RelatedProperties = GetElementRelated(product),
-                    RelatedIds = relatedIds.ToArray(),
-                    RelatedEnumValues = new RelatedEnumValue[]{
-                        new RelatedEnumValue { EnumerationIndex = (int)EnumerationRelated.PRODUCT_KINDOFBOTTLE, Value = (int)product.KindOfBottle },
-                        new RelatedEnumValue { EnumerationIndex = (int)EnumerationRelated.PRODUCT_MEASURETYPE, Value = (int)product.MeasureType }
-                    }
-                }
-            });
+            search.AddElements(new List<EntitySearch> { productSearch });
+                //new List<EntitySearch> {
+                //    new EntitySearch {
+                //        Id = product.Id,
+                //        EntityIndex = (int)EntityRelated.PRODUCT,
+                //        Created = DateTime.Now,
+                //        RelatedProperties = GetElementRelated(product),
+                //        RelatedIds = relatedIds.ToArray(),
+                //        RelatedEnumValues = new RelatedEnumValue[]{
+                //            new RelatedEnumValue { EnumerationIndex = (int)EnumerationRelated.PRODUCT_KINDOFBOTTLE, Value = (int)product.KindOfBottle },
+                //            new RelatedEnumValue { EnumerationIndex = (int)EnumerationRelated.PRODUCT_MEASURETYPE, Value = (int)product.MeasureType }
+                //        }
+                //    }
+                //});
             return new ExtPostContainer<string> {
                 IdRelated = product.Id,
                 MessageResult = ExtMessageResult.Ok

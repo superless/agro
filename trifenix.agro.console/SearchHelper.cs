@@ -89,17 +89,17 @@ namespace trifenix.agro.console
                     }
 
 
-                    var relatedIdsDoseByProduct = listEntitySearch.Where(s => s.EntityIndex == (int)EntityRelated.DOSES).Select(s =>
+                    var relatedIdsDoseByProduct = listEntitySearch.Where(s => s.EntityIndex.Contains((int)EntityRelated.DOSES)).Select(s =>
                         new RelatedId
                         {
                             EntityId = s.Id,
-                            EntityIndex = s.EntityIndex
+                            EntityIndex = s.EntityIndex.FirstOrDefault(a=>a == (int)EntityRelated.DOSES)
                         }
                     );
 
                     var entityProducts = searchServiceInstance.GetEntitySearch(item);
 
-                    var product = entityProducts.FirstOrDefault(s => s.EntityIndex == (int)EntityRelated.PRODUCT);
+                    var product = entityProducts.FirstOrDefault(s => s.EntityIndex.Contains((int)EntityRelated.PRODUCT));
                     var related = product.RelatedIds.ToList();
                     related.AddRange(relatedIdsDoseByProduct);
                     product.RelatedIds = related.ToArray();

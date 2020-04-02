@@ -13,7 +13,7 @@ namespace trifenix.agro.db.model {
 
         public override string Id { get; set; }
 
-        [StringSearch(StringRelated.OBJECTID_AAD)]
+        
         public string ObjectIdAAD { get; set; }
 
         [StringSearch(StringRelated.GENERIC_NAME)]

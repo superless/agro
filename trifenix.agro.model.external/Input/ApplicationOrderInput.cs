@@ -21,11 +21,11 @@ namespace trifenix.agro.model.external.Input {
 
 
         [Required]
-        [DateSearch(DateRelated.START_DATE)]
+        [DateSearch(DateRelated.START_DATE_ORDER)]
         public DateTime StartDate { get; set; }
 
         [Required]
-        [DateSearch(DateRelated.END_DATE)]
+        [DateSearch(DateRelated.END_DATE_ORDER)]
         public DateTime EndDate { get; set; }
 
         [Required]

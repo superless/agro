@@ -15,10 +15,9 @@ using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
 using trifenix.agro.search.operations.util;
-using V2 = trifenix.agro.search.model.temp;
+using trifenix.agro.util;
 using static trifenix.agro.search.operations.util.AgroHelper;
-using Newtonsoft.Json;
-using System.Collections;
+using static trifenix.agro.util.AttributesExtension;
 
 namespace trifenix.agro.search.operations {
 
@@ -44,7 +43,7 @@ namespace trifenix.agro.search.operations {
             _queries = new SearchQueries();
             _search = new SearchServiceClient(SearchServiceName, new SearchCredentials(SearchServiceKey));
             if (!_search.Indexes.Exists(_entityIndex))
-                _search.Indexes.CreateOrUpdate(new Index { Name = _entityIndex, Fields = FieldBuilder.BuildForType<V2.EntitySearchV2>() });
+                _search.Indexes.CreateOrUpdate(new Index { Name = _entityIndex, Fields = FieldBuilder.BuildForType<EntitySearch>() });
             if (!_search.Indexes.Exists(_commentIndex))
                 _search.Indexes.CreateOrUpdate(new Index { Name = _commentIndex, Fields = FieldBuilder.BuildForType<CommentSearch>() });
         }
@@ -52,7 +51,7 @@ namespace trifenix.agro.search.operations {
         private string Queries(SearchQuery query) => _queries.Get(query);
 
         private void OperationElements<T>(List<T> elements, SearchOperation operationType) {
-            var indexName = typeof(T).Equals(typeof(V2.EntitySearchV2)) ? _entityIndex : _commentIndex;
+            var indexName = typeof(T).Equals(typeof(EntitySearch)) ? _entityIndex : _commentIndex;
             var indexClient = _search.Indexes.GetClient(indexName);
             var actions = elements.Select(o => operationType == SearchOperation.Add ? IndexAction.Upload(o) : IndexAction.Delete(o));
             var batch = IndexBatch.New(actions);
@@ -86,12 +85,6 @@ namespace trifenix.agro.search.operations {
             return entity;
         }
 
-        public V2.EntitySearchV2 GetEntityV2(EntityRelated entityRelated, string id) {
-            var indexClient = _search.Indexes.GetClient(_entityIndex);
-            var entity = indexClient.Documents.Search<V2.EntitySearchV2>(null, new SearchParameters { Filter = string.Format(Queries(SearchQuery.GET_ELEMENT), (int)entityRelated, id) }).Results.FirstOrDefault()?.Document;
-            return entity;
-        }
-
         public void DeleteElementsWithRelatedElement(EntityRelated elementToDelete, EntityRelated relatedElement, string idRelatedElement) {
             var query = string.Format(Queries(SearchQuery.ENTITIES_WITH_ENTITYID), (int)elementToDelete, (int)relatedElement, idRelatedElement);
             DeleteElements<EntitySearch>(query);
@@ -107,113 +100,111 @@ namespace trifenix.agro.search.operations {
             DeleteElements<EntitySearch>(query);
         }
 
-        private V2.BaseProperty<T> GetProperty<T>(int index, object value) {
-            var element = (V2.BaseProperty<T>)Activator.CreateInstance(typeof(V2.BaseProperty<T>));
+        private BaseProperty<T> GetProperty<T>(int index, object value) {
+            var element = (BaseProperty<T>)Activator.CreateInstance(typeof(BaseProperty<T>));
             element.PropertyIndex = index;
             element.Value = (T)value;
             return element;
         }
 
-        public IEnumerable<V2.RelatedId> GetArrayOfLocalRelatedIds(KeyValuePair<SearchAttribute, object> attribute) {
+        public IEnumerable<RelatedId> GetArrayOfLocalRelatedIds(KeyValuePair<SearchAttribute, object> attribute) {
             var typeValue = attribute.Value.GetType();
             if (typeValue == typeof(IEnumerable<string>))
-                return ((IEnumerable<string>)attribute.Value).Select(s => new V2.RelatedId { EntityIndex = attribute.Key.Index, EntityId = (string)s });
+                return ((IEnumerable<string>)attribute.Value).Select(s => new RelatedId { EntityIndex = attribute.Key.Index, EntityId = (string)s });
             else
-                return new List<V2.RelatedId>() { new V2.RelatedId { EntityIndex = attribute.Key.Index, EntityId = (string)attribute.Value } };
+                return new List<RelatedId>() { new RelatedId { EntityIndex = attribute.Key.Index, EntityId = (string)attribute.Value } };
         }
 
-        public IEnumerable<V2.RelatedId> GetArrayOfRelatedIds(KeyValuePair<SearchAttribute, object> attribute) {
+        public IEnumerable<RelatedId> GetArrayOfRelatedIds(KeyValuePair<SearchAttribute, object> attribute) {
             if (attribute.Value.IsEnumerable()) {
-                var relateds = new List<V2.RelatedId>();
+                var relateds = new List<RelatedId>();
                 foreach (var item in (IEnumerable<string>)attribute.Value)
-                    relateds.Add(new V2.RelatedId { EntityIndex = attribute.Key.Index, EntityId = item });
+                    relateds.Add(new RelatedId { EntityIndex = attribute.Key.Index, EntityId = item });
                 return relateds;
             }
             else
-                return new List<V2.RelatedId>() { new V2.RelatedId { EntityIndex = attribute.Key.Index, EntityId = (string)attribute.Value } };
+                return new List<RelatedId>() { new RelatedId { EntityIndex = attribute.Key.Index, EntityId = (string)attribute.Value } };
         }
         
-        private IEnumerable<V2.BaseProperty<T>> GetArrayOfElements<T>(KeyValuePair<SearchAttribute, object> attribute) {
+        private IEnumerable<BaseProperty<T>> GetArrayOfElements<T>(KeyValuePair<SearchAttribute, object> attribute) {
             var typeValue = attribute.Value.GetType();
             if (attribute.Value.IsEnumerable())
                 return ((IEnumerable<T>)attribute.Value).Select(s => GetProperty<T>(attribute.Key.Index, s));
             else
-                return new List<V2.BaseProperty<T>> { GetProperty<T>(attribute.Key.Index, attribute.Value)};
+                return new List<BaseProperty<T>> { GetProperty<T>(attribute.Key.Index, attribute.Value)};
         }
 
-        private IEnumerable<V2.BaseProperty<T>> GetPropertiesObjects<T>(Related related, Dictionary<SearchAttribute, object> elements) =>
+        private IEnumerable<BaseProperty<T>> GetPropertiesObjects<T>(Related related, Dictionary<SearchAttribute, object> elements) =>
             elements.Where(s => s.Key.Related == related).SelectMany(s => GetArrayOfElements<T>(s)).ToArray();
 
-        private V2.RelatedId[] GetReferences(Dictionary<SearchAttribute, object> elements) =>
+        private RelatedId[] GetReferences(Dictionary<SearchAttribute, object> elements) =>
             elements.Where(s => s.Key.Related == Related.REFERENCE).SelectMany(GetArrayOfRelatedIds).ToArray();
 
-        private V2.RelatedId[] GetLocalReferences(Dictionary<SearchAttribute, object> elements) =>
-            elements.Where(s => s.Key.Related == Related.LOCAL_REFERENCE).SelectMany(GetArrayOfLocalRelatedIds).ToArray();
-
-        private V2.Num32Property[] GetNumProps(Dictionary<SearchAttribute, object> values) =>
-            GetPropertiesObjects<int>(Related.NUM32, values).Select(s => new V2.Num32Property { 
+        
+        private Num32Property[] GetNumProps(Dictionary<SearchAttribute, object> values) =>
+            GetPropertiesObjects<int>(Related.NUM32, values).Select(s => new Num32Property { 
                 PropertyIndex = s.PropertyIndex,
                 Value = s.Value
             }).ToArray();
 
-        private V2.DblProperty[] GetDblProps(Dictionary<SearchAttribute, object> values) =>
-            GetPropertiesObjects<double>(Related.DBL, values).Select(s => new V2.DblProperty {
+        private DblProperty[] GetDblProps(Dictionary<SearchAttribute, object> values) =>
+            GetPropertiesObjects<double>(Related.DBL, values).Select(s => new DblProperty {
                 PropertyIndex = s.PropertyIndex,
                 Value = s.Value
             }).ToArray();
 
-        private V2.DtProperty[] GetDtProps(Dictionary<SearchAttribute, object> values) =>
-            GetPropertiesObjects<DateTime>(Related.DATE, values).Select(s => new V2.DtProperty {
+        private DtProperty[] GetDtProps(Dictionary<SearchAttribute, object> values) =>
+            GetPropertiesObjects<DateTime>(Related.DATE, values).Select(s => new DtProperty {
                 PropertyIndex = s.PropertyIndex,
                 Value = s.Value
             }).ToArray();
 
-        private V2.EnumProperty[] GetEnumProps(Dictionary<SearchAttribute, object> values) =>
-            GetPropertiesObjects<int>(Related.ENUM, values).Select(s => new V2.EnumProperty {
+        private EnumProperty[] GetEnumProps(Dictionary<SearchAttribute, object> values) =>
+            GetPropertiesObjects<int>(Related.ENUM, values).Select(s => new EnumProperty {
                 PropertyIndex = s.PropertyIndex,
                 Value = s.Value
             }).ToArray();
 
-        private V2.BoolProperty[] GetBoolProps(Dictionary<SearchAttribute, object> values) =>
-            GetPropertiesObjects<bool>(Related.BOOL, values).Select(s => new V2.BoolProperty {
+        private BoolProperty[] GetBoolProps(Dictionary<SearchAttribute, object> values) =>
+            GetPropertiesObjects<bool>(Related.BOOL, values).Select(s => new BoolProperty {
                 PropertyIndex = s.PropertyIndex,
                 Value = s.Value
             }).ToArray();
 
-        private V2.GeoProperty[] GetGeoProps(Dictionary<SearchAttribute, object> values) =>
-            GetPropertiesObjects<Point>(Related.GEO, values).Select(s => new V2.GeoProperty {
+        private GeoProperty[] GetGeoProps(Dictionary<SearchAttribute, object> values) =>
+            GetPropertiesObjects<Point>(Related.GEO, values).Select(s => new GeoProperty {
                 PropertyIndex = s.PropertyIndex,
                 Value = GeographyPoint.Create(s.Value.Position.Latitude, s.Value.Position.Longitude)
             }).ToArray();
 
-        private V2.Num64Property[] GetNum64Props(Dictionary<SearchAttribute, object> values) =>
-            GetPropertiesObjects<long>(Related.NUM64, values).Select(s => new V2.Num64Property {
+        private Num64Property[] GetNum64Props(Dictionary<SearchAttribute, object> values) =>
+            GetPropertiesObjects<long>(Related.NUM64, values).Select(s => new Num64Property {
                 PropertyIndex = s.PropertyIndex,
                 Value = s.Value
             }).ToArray();
 
-        private V2.StrProperty[] GetStrProps(Dictionary<SearchAttribute, object> values) =>
-          GetPropertiesObjects<string>(Related.STR, values).Select(s => new V2.StrProperty {
+        private StrProperty[] GetStrProps(Dictionary<SearchAttribute, object> values) =>
+          GetPropertiesObjects<string>(Related.STR, values).Select(s => new StrProperty {
               PropertyIndex = s.PropertyIndex,
               Value = s.Value
           }).ToArray();
 
-        private V2.SuggestProperty[] GetSugProps(Dictionary<SearchAttribute, object> values) =>
-          GetPropertiesObjects<string>(Related.SUGGESTION, values).Select(s => new V2.SuggestProperty {
+        private SuggestProperty[] GetSugProps(Dictionary<SearchAttribute, object> values) =>
+          GetPropertiesObjects<string>(Related.SUGGESTION, values).Select(s => new SuggestProperty {
               PropertyIndex = s.PropertyIndex,
               Value = s.Value
           }).ToArray();
 
-        private V2.EntitySearchV2[] GetEntitySearch(object obj, int index, string id) {
-            var list = new List<V2.EntitySearchV2>();
-            var entitySearch = new V2.EntitySearchV2 {
+        private EntitySearch[] GetEntitySearch(object obj, int[] index, string id) {
+            var list = new List<EntitySearch>();
+            var entitySearch = new EntitySearch {
                 Id = id,
                 EntityIndex = index,
                 Created = DateTime.Now
             };
             var values = obj.GetPropertiesByAttributeWithValue();
             if (!values.Any())
-                return Array.Empty<V2.EntitySearchV2>();
+                return Array.Empty<EntitySearch>();
             entitySearch.NumProperties = GetNumProps(values);
             entitySearch.DoubleProperties = GetDblProps(values);
             entitySearch.DtProperties = GetDtProps(values);
@@ -226,7 +217,7 @@ namespace trifenix.agro.search.operations {
             entitySearch.RelatedIds = GetReferences(values);
             var valuesWithoutProperty = obj.GetPropertiesWithoutAttributeWithValues();
             foreach (var item in valuesWithoutProperty) {
-                var value = GetEntitySearch(item, 0, string.Empty);
+                var value = GetEntitySearch(item, new int[] { 0}, string.Empty);
                 entitySearch.NumProperties = entitySearch.NumProperties.Union(value.SelectMany(s=>s.NumProperties)).ToArray();
                 entitySearch.DoubleProperties = entitySearch.DoubleProperties.Union(value.SelectMany(s => s.DoubleProperties)).ToArray();
                 entitySearch.DtProperties = entitySearch.DtProperties.Union(value.SelectMany(s => s.DtProperties)).ToArray();
@@ -244,9 +235,9 @@ namespace trifenix.agro.search.operations {
                     IEnumerable<object> collection = item.Value.IsEnumerable() ? (IEnumerable<object>)item.Value : new List<object> { item.Value };
                     foreach (var childReferences in collection) {
                         var guid = Guid.NewGuid().ToString("N");
-                        var localEntities = GetEntitySearch(childReferences, item.Key.Index, guid);
+                        var localEntities = GetEntitySearch(childReferences, new int[] { item.Key.Index }, guid);
                         var listReferences = entitySearch.RelatedIds.ToList();
-                        listReferences.Add(new V2.RelatedId { EntityId = guid, EntityIndex = item.Key.Index });
+                        listReferences.Add(new RelatedId { EntityId = guid, EntityIndex = item.Key.Index });
                         entitySearch.RelatedIds = listReferences.ToArray();
                         list.AddRange(localEntities);
                     }
@@ -255,23 +246,22 @@ namespace trifenix.agro.search.operations {
             list.Add(entitySearch);
             return list.ToArray();
         }
-
-        public V2.EntitySearchV2[] GetEntitySearch<T>(T entity)  where T : DocumentBase {
-            var reference = typeof(T).GetTypeInfo().GetCustomAttribute<ReferenceSearchAttribute>(true);
-            if (reference == null)
-                return Array.Empty<V2.EntitySearchV2>();
-            return GetEntitySearch(entity, reference.Index, entity.Id);
+        public EntitySearch[] GetEntitySearch<T>(T entity)  where T : DocumentBase {
+            var references = GetAttributes<ReferenceSearchAttribute>(typeof(T));
+            if (references == null || !references.Any())
+                return Array.Empty<EntitySearch>();
+            return GetEntitySearch(entity, references.Select(s=>s.Index).ToArray(), entity.Id);
         }
 
-        public V2.EntitySearchV2[] GetEntitySearchByInput<T>(T entity) where T : InputBase {
-            var reference = typeof(T).GetTypeInfo().GetCustomAttribute<ReferenceSearchAttribute>(true);
-            if (reference == null)
-                return Array.Empty<V2.EntitySearchV2>();
-            return GetEntitySearch(entity, reference.Index, entity.Id);
+        public EntitySearch[] GetEntitySearchByInput<T>(T entity) where T : InputBase {
+            var references = GetAttributes<ReferenceSearchAttribute>(typeof(T));
+            if (references == null || !references.Any())
+                return Array.Empty<EntitySearch>();
+            return GetEntitySearch(entity, references.Select(s=>s.Index).ToArray(), entity.Id);
         }
 
-        public object GetEntityFromSearch(V2.EntitySearchV2 entitySearch) {
-            var type = GetEntityType(entitySearch.EntityIndex);
+        public object GetEntityFromSearch(EntitySearch entitySearch) {
+            var type = GetEntityType(entitySearch.EntityIndex.FirstOrDefault());
             var entity = CreateEntityInstance(type);
             type.GetProperty("Id")?.SetValue(entity, entitySearch.Id);
             var props = entity.GetType().GetProperties().Where(prop => Attribute.IsDefined(prop,typeof(SearchAttribute),true)).ToList();
@@ -297,7 +287,7 @@ namespace trifenix.agro.search.operations {
             }
         }
         
-        private List<object> GetValues(V2.EntitySearchV2 entitySearch, int typeRelated, int indexProperty) {
+        private List<object> GetValues(EntitySearch entitySearch, int typeRelated, int indexProperty) {
 
             //typeRelated: Representa el tipo de dato 
             /*REFERENCE = 0,
@@ -327,7 +317,7 @@ namespace trifenix.agro.search.operations {
                     break;
                 case 1:
                     entitySearch.RelatedIds?.ToList().FindAll(relatedId => relatedId.EntityIndex == indexProperty).ForEach(relatedId => {
-                        values.Add(GetEntityFromSearch(GetEntityV2((EntityRelated)indexProperty, relatedId.EntityId)));
+                        values.Add(GetEntityFromSearch(GetEntity((EntityRelated)indexProperty, relatedId.EntityId)));
                     });
                     break;
                 case 2:

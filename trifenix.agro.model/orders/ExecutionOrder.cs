@@ -18,10 +18,10 @@ namespace trifenix.agro.db.model.orders {
         [ReferenceSearch(EntityRelated.DOSES_ORDER, true)]
         public DosesOrder[] DosesOrder { get; set; } // se modifica solo si, lo determina el agronomo, al finalizar y poner incompleto.
 
-        [DateSearch(DateRelated.START_DATE)]
+        [DateSearch(DateRelated.START_DATE_EXECUTION_ORDER)]
         public DateTime? StartDate { get; set; } // fecha de inicio que el agronomo puede determinar.
 
-        [DateSearch(DateRelated.END_DATE)]
+        [DateSearch(DateRelated.END_DATE_EXECUTION_ORDER)]
         public DateTime? EndDate { get; set; } // fecha de fin que el agronomo determina
 
         [ReferenceSearch(EntityRelated.USER)]
