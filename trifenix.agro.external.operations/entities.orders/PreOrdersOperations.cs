@@ -6,7 +6,6 @@ using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model;
-using trifenix.agro.enums;
 using trifenix.agro.enums.input;
 using trifenix.agro.enums.searchModel;
 using trifenix.agro.external.interfaces;
@@ -33,6 +32,7 @@ namespace trifenix.agro.external.operations.entities.orders {
         public async Task<ExtPostContainer<string>> Save(PreOrder preOrder) {
             await repo.CreateUpdate(preOrder);
             var specieAbbv = await commonQueries.GetSpecieAbbreviationFromBarrack(preOrder.BarracksId.First());
+            var PreOrderSearch = search.GetEntitySearch(preOrder);
             var entity = new EntitySearch {
                 Id = preOrder.Id,
                 EntityIndex = (int)EntityRelated.PREORDER,

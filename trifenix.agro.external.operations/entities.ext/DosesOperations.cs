@@ -137,12 +137,7 @@ namespace trifenix.agro.external.operations.entities.ext {
             await repo.CreateUpdate(dose);
             var productSearch = search.FilterElements<EntitySearch>($"EntityIndex eq {(int)EntityRelated.PRODUCT} and Id eq {dose.IdProduct}").FirstOrDefault();
             if (!productSearch.RelatedIds.Any(relatedId => relatedId.EntityIndex == (int)EntityRelated.DOSES && relatedId.EntityId == dose.Id)) {
-                var relatedIds = productSearch.RelatedIds.ToList();
-                relatedIds.Add(new RelatedId {
-                    EntityId = dose.Id,
-                    EntityIndex = (int)EntityRelated.DOSES
-                });
-                productSearch.RelatedIds = relatedIds.ToArray();
+                productSearch.RelatedIds = productSearch.RelatedIds.Add(new RelatedId { EntityId = dose.Id, EntityIndex = (int)EntityRelated.DOSES });
                 search.AddElements(new List<EntitySearch> { productSearch });
             }
             search.AddElements(search.GetEntitySearch(dose).ToList());

@@ -117,9 +117,7 @@ namespace trifenix.agro.external.operations.entities.ext {
             //Remueve doses y retorna la dosis por defecto
             var dosesDefault = await RemoveDoses(product);
             var productSearch = search.GetEntitySearch(product).LastOrDefault();
-            var relatedIds = productSearch.RelatedIds.ToList();
-            relatedIds.Add(dosesDefault);
-            productSearch.RelatedIds = relatedIds.ToArray();
+            productSearch.RelatedIds = productSearch.RelatedIds.Add(dosesDefault);
             //Esto lo agregue a la creacion de la dosis, es ahi donde se busca el producto relacionado y se le agrega el relatedId correspondiente a la dosis en creacion
             //if (product.Doses != null && product.Doses.Any()) {
             //    foreach (var dose in input.Doses) {
