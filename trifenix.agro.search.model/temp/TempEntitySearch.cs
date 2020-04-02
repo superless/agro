@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace trifenix.agro.search.model.temp {
 
-    public class EntitySearch {
+    public class EntitySearchV2 {
 
         [Key]
         [IsFilterable]
@@ -18,10 +18,10 @@ namespace trifenix.agro.search.model.temp {
         [IsSortable]
         public DateTime Created { get; set; }
 
-        [JsonProperty("ref")]
+        [JsonProperty("rel")]
         public RelatedId[] RelatedIds { get; set; }
 
-        [JsonProperty("suggest")]
+        [JsonProperty("sug")]
         public SuggestProperty[] SuggestProperties { get; set; }
 
         [JsonProperty("str")]
@@ -36,16 +36,16 @@ namespace trifenix.agro.search.model.temp {
         [JsonProperty("num64")]
         public Num64Property[] Num64Properties { get; set; }
 
-        [JsonProperty("double")]
+        [JsonProperty("dbl")]
         public DblProperty[] DoubleProperties { get; set; }
 
-        [JsonProperty("date")]
+        [JsonProperty("dt")]
         public DtProperty[] DtProperties { get; set; }
 
         [JsonProperty("geo")]
         public GeoProperty[] GeoProperties { get; set; }
 
-        [JsonProperty("bool")]
+        [JsonProperty("bl")]
         public BoolProperty[] BoolProperties { get; set; }
 
     }

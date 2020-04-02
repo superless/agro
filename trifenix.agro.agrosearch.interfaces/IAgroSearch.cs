@@ -24,9 +24,9 @@ namespace trifenix.agro.search.interfaces
 
         void DeleteElementsWithRelatedElementExceptId(EntityRelated elementToDelete, EntityRelated relatedElement, string idRelatedElement, string elementExceptId);
 
-        model.temp.EntitySearch[] GetEntitySearch<T>(T model) where T : DocumentBase;
+        model.temp.EntitySearchV2[] GetEntitySearch<T>(T model) where T : DocumentBase;
 
-        model.temp.EntitySearch[] GetEntitySearchByInput<T>(T model) where T : InputBase;
+        model.temp.EntitySearchV2[] GetEntitySearchByInput<T>(T model) where T : InputBase;
 
     }
 }

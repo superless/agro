@@ -35,14 +35,14 @@ namespace trifenix.typegen.spec
             AddInterface<DefaultDictionary>("data/");
             AddInterface<ModelByIndex>("data/");
             AddInterface<ModelDictionary>("data/");
-            AddInterface<EntitySearch>("model/main");
+            AddInterface<EntitySearchV2>("model/main");
             AddInterface<GeoPointTs>("model/main");
             AddInterface(typeof(BaseProperty<>), "model/main");
             AddInterface<GeographyProperty>("model/main").Member(nameof(GeoProperty.Value));
             AddInterface<ReletadIdTs>("model/main").Member(nameof(RelatedId.Id)).Type(TsType.String);
-            AddInterface<EntitySearch>("model/main")
-                .Member(nameof(EntitySearch.GeoProperties)).Type("IGeographyProperty[]", "./IGeographyProperty")
-                .Member(nameof(EntitySearch.RelatedIds)).Type("IReletadIdTs[]", "./IReletadIdTs");
+            AddInterface<EntitySearchV2>("model/main")
+                .Member(nameof(EntitySearchV2.GeoProperties)).Type("IGeographyProperty[]", "./IGeographyProperty")
+                .Member(nameof(EntitySearchV2.RelatedIds)).Type("IReletadIdTs[]", "./IReletadIdTs");
             AddInterface<DblProperty>("model/main");
             AddInterface<DtProperty>("model/main");
             AddInterface<EnumProperty>("model/main").Member(nameof(EnumProperty.Id)).Type(TsType.String);

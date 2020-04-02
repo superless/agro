@@ -8,7 +8,6 @@ using System.Linq;
 using System.Reflection;
 using trifenix.agro.attr;
 using trifenix.agro.db;
-using trifenix.agro.db.model;
 using trifenix.agro.enums.query;
 using trifenix.agro.enums.search;
 using trifenix.agro.enums.searchModel;
@@ -16,8 +15,10 @@ using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
 using trifenix.agro.search.operations.util;
-using TypeGen.Core.Extensions;
 using V2 = trifenix.agro.search.model.temp;
+using static trifenix.agro.search.operations.util.AgroHelper;
+using Newtonsoft.Json;
+using System.Collections;
 
 namespace trifenix.agro.search.operations {
 
@@ -43,7 +44,7 @@ namespace trifenix.agro.search.operations {
             _queries = new SearchQueries();
             _search = new SearchServiceClient(SearchServiceName, new SearchCredentials(SearchServiceKey));
             if (!_search.Indexes.Exists(_entityIndex))
-                _search.Indexes.CreateOrUpdate(new Index { Name = _entityIndex, Fields = FieldBuilder.BuildForType<V2.EntitySearch>() });
+                _search.Indexes.CreateOrUpdate(new Index { Name = _entityIndex, Fields = FieldBuilder.BuildForType<V2.EntitySearchV2>() });
             if (!_search.Indexes.Exists(_commentIndex))
                 _search.Indexes.CreateOrUpdate(new Index { Name = _commentIndex, Fields = FieldBuilder.BuildForType<CommentSearch>() });
         }
@@ -51,7 +52,7 @@ namespace trifenix.agro.search.operations {
         private string Queries(SearchQuery query) => _queries.Get(query);
 
         private void OperationElements<T>(List<T> elements, SearchOperation operationType) {
-            var indexName = typeof(T).Equals(typeof(V2.EntitySearch)) ? _entityIndex : _commentIndex;
+            var indexName = typeof(T).Equals(typeof(V2.EntitySearchV2)) ? _entityIndex : _commentIndex;
             var indexClient = _search.Indexes.GetClient(indexName);
             var actions = elements.Select(o => operationType == SearchOperation.Add ? IndexAction.Upload(o) : IndexAction.Delete(o));
             var batch = IndexBatch.New(actions);
@@ -82,6 +83,12 @@ namespace trifenix.agro.search.operations {
         public EntitySearch GetEntity(EntityRelated entityRelated, string id) {
             var indexClient = _search.Indexes.GetClient(_entityIndex);
             var entity = indexClient.Documents.Search<EntitySearch>(null, new SearchParameters { Filter = string.Format(Queries(SearchQuery.GET_ELEMENT), (int)entityRelated, id) }).Results.FirstOrDefault()?.Document;
+            return entity;
+        }
+
+        public V2.EntitySearchV2 GetEntityV2(EntityRelated entityRelated, string id) {
+            var indexClient = _search.Indexes.GetClient(_entityIndex);
+            var entity = indexClient.Documents.Search<V2.EntitySearchV2>(null, new SearchParameters { Filter = string.Format(Queries(SearchQuery.GET_ELEMENT), (int)entityRelated, id) }).Results.FirstOrDefault()?.Document;
             return entity;
         }
 
@@ -197,16 +204,16 @@ namespace trifenix.agro.search.operations {
               Value = s.Value
           }).ToArray();
 
-        private V2.EntitySearch[] GetEntitySearch(object obj, int index, string id) {
-            var list = new List<V2.EntitySearch>();
-            var entitySearch = new V2.EntitySearch {
+        private V2.EntitySearchV2[] GetEntitySearch(object obj, int index, string id) {
+            var list = new List<V2.EntitySearchV2>();
+            var entitySearch = new V2.EntitySearchV2 {
                 Id = id,
                 EntityIndex = index,
                 Created = DateTime.Now
             };
             var values = obj.GetPropertiesByAttributeWithValue();
             if (!values.Any())
-                return Array.Empty<V2.EntitySearch>();
+                return Array.Empty<V2.EntitySearchV2>();
             entitySearch.NumProperties = GetNumProps(values);
             entitySearch.DoubleProperties = GetDblProps(values);
             entitySearch.DtProperties = GetDtProps(values);
@@ -249,32 +256,109 @@ namespace trifenix.agro.search.operations {
             return list.ToArray();
         }
 
-        public V2.EntitySearch[] GetEntitySearch<T>(T entity)  where T : DocumentBase {
+        public V2.EntitySearchV2[] GetEntitySearch<T>(T entity)  where T : DocumentBase {
             var reference = typeof(T).GetTypeInfo().GetCustomAttribute<ReferenceSearchAttribute>(true);
             if (reference == null)
-                return Array.Empty<V2.EntitySearch>();
+                return Array.Empty<V2.EntitySearchV2>();
             return GetEntitySearch(entity, reference.Index, entity.Id);
         }
 
-        public V2.EntitySearch[] GetEntitySearchByInput<T>(T entity) where T : InputBase {
+        public V2.EntitySearchV2[] GetEntitySearchByInput<T>(T entity) where T : InputBase {
             var reference = typeof(T).GetTypeInfo().GetCustomAttribute<ReferenceSearchAttribute>(true);
             if (reference == null)
-                return Array.Empty<V2.EntitySearch>();
+                return Array.Empty<V2.EntitySearchV2>();
             return GetEntitySearch(entity, reference.Index, entity.Id);
         }
 
-        //public DocumentBase GetEntityFromSearch(V2.EntitySearch entity) {
-        //    DocumentBase entity = 
-        //    return new object();
-        //}
+        public object GetEntityFromSearch(V2.EntitySearchV2 entitySearch) {
+            var type = GetEntityType(entitySearch.EntityIndex);
+            var entity = CreateEntityInstance(type);
+            type.GetProperty("Id")?.SetValue(entity, entitySearch.Id);
+            var props = entity.GetType().GetProperties().Where(prop => Attribute.IsDefined(prop,typeof(SearchAttribute),true)).ToList();
+            SearchAttribute attr;
+            dynamic values;
+            props.ForEach(prop => {
+                attr = prop.GetCustomAttribute<SearchAttribute>(true);
+                values = FormatValues(prop, GetValues(entitySearch, (int)attr.Related, attr.Index));
+                prop.SetValue(entity, values);
+            });
+            return entity;
+        }
 
-        //public static T CreateEntityInstance<T>() => (T)Activator.CreateInstance(typeof(T));
+        private object FormatValues(PropertyInfo prop, List<object> values) {
+            if (!IsEnumerableProperty(prop))
+                return ((IEnumerable<object>)values).FirstOrDefault();
+            else {
+                var propType = prop.PropertyType;
+                if (propType.IsArray)
+                    return CastToGenericArray(propType.GetElementType(), values);
+                else
+                    return CastToGenericList(propType.GetGenericArguments()[0], values);
+            }
+        }
+        
+        private List<object> GetValues(V2.EntitySearchV2 entitySearch, int typeRelated, int indexProperty) {
 
-        private Type GetEntityType(EntityRelated index) {
-            var assembly = Assembly.GetAssembly(typeof(Barrack));
-            var modelTypes = assembly.GetLoadableTypes().Where(type => type.FullName.StartsWith("trifenix.agro.db.model") && Attribute.IsDefined(type,typeof(ReferenceSearchAttribute)));
-            var entityType = modelTypes.Where(type => type.GetTypeInfo().GetCustomAttribute<ReferenceSearchAttribute>().Index == (int)index).FirstOrDefault();
-            return entityType;
+            //typeRelated: Representa el tipo de dato 
+            /*REFERENCE = 0,
+            LOCAL_REFERENCE = 1,
+            STR = 2,
+            SUGGESTION = 3,
+            NUM64 = 4,
+            NUM32 = 5,
+            DBL = 6,
+            BOOL = 7,
+            GEO = 8,
+            ENUM = 9,
+            DATE = 10*/
+
+            //indexProperty: Representa el indice en la enumeracion de propiedades correspondientes
+            /*NumRelated
+             StringRelated
+             DoubleRelated
+             BoolRelated
+             DateRelated
+             GeoRelated*/
+
+            List<object> values = new List<object>();
+            switch (typeRelated) {
+                case 0:
+                    entitySearch.RelatedIds?.ToList().FindAll(relatedId => relatedId.EntityIndex == indexProperty).ForEach(relatedId => values.Add(relatedId.EntityId));
+                    break;
+                case 1:
+                    entitySearch.RelatedIds?.ToList().FindAll(relatedId => relatedId.EntityIndex == indexProperty).ForEach(relatedId => {
+                        values.Add(GetEntityFromSearch(GetEntityV2((EntityRelated)indexProperty, relatedId.EntityId)));
+                    });
+                    break;
+                case 2:
+                    entitySearch.StringProperties?.ToList().FindAll(stringProp => stringProp.PropertyIndex == indexProperty).ForEach(stringProp => values.Add(stringProp.Value));
+                    break;
+                case 3:
+                    entitySearch.SuggestProperties?.ToList().FindAll(suggestProp => suggestProp.PropertyIndex == indexProperty).ForEach(suggestProp => values.Add(suggestProp.Value));
+                    break;
+                case 4:
+                    entitySearch.Num64Properties?.ToList().FindAll(longProp => longProp.PropertyIndex == indexProperty).ForEach(longProp => values.Add(longProp.Value));
+                    break;
+                case 5:
+                    entitySearch.NumProperties?.ToList().FindAll(intProp => intProp.PropertyIndex == indexProperty).ForEach(intProp => values.Add(intProp.Value));
+                    break;
+                case 6:
+                    entitySearch.DoubleProperties?.ToList().FindAll(doubleProp => doubleProp.PropertyIndex == indexProperty).ForEach(doubleProp => values.Add(doubleProp.Value));
+                    break;
+                case 7:
+                    entitySearch.BoolProperties?.ToList().FindAll(boolProp => boolProp.PropertyIndex == indexProperty).ForEach(boolProp => values.Add(boolProp.Value));
+                    break;
+                case 8:
+                    entitySearch.GeoProperties?.ToList().FindAll(geoProp => geoProp.PropertyIndex == indexProperty).ForEach(geoProp => values.Add(geoProp.Value));
+                    break;
+                case 9:
+                    entitySearch.EnumProperties?.ToList().FindAll(enumProp => enumProp.PropertyIndex == indexProperty).ForEach(enumProp => values.Add(enumProp.Value));
+                    break;
+                case 10:
+                    entitySearch.DtProperties?.ToList().FindAll(dateProp => dateProp.PropertyIndex == indexProperty).ForEach(dateProp => values.Add(dateProp.Value));
+                    break;
+            }
+            return values;
         }
 
     }

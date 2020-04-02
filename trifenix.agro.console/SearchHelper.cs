@@ -80,7 +80,7 @@ namespace trifenix.agro.console
                 {
                     
                     var dosesProductId = doses.Result.Where(s => s.IdProduct.Equals(item.Id) && s.Active).ToList();
-                    var listEntitySearch = new List<EntitySearch>();
+                    var listEntitySearch = new List<EntitySearchV2>();
 
                     if (dosesProductId.Any())
                     {

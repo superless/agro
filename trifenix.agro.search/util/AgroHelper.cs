@@ -5,7 +5,9 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using trifenix.agro.attr;
+using trifenix.agro.db.model;
 using trifenix.agro.enums.searchModel;
+using TypeGen.Core.Extensions;
 
 namespace trifenix.agro.search.operations.util {
     public static class AgroHelper {
@@ -82,6 +84,25 @@ namespace trifenix.agro.search.operations.util {
                 return false;
             return typeof(IEnumerable).IsAssignableFrom(propertyType);
         }
+
+        public static T CreateInstance<T>() => (T)Activator.CreateInstance(typeof(T));
+
+        public static object CreateEntityInstance(Type genericParameterType) => typeof(AgroHelper).GetMethod("CreateInstance").MakeGenericMethod(genericParameterType).Invoke(null, null);
+
+        public static Type GetEntityType(int index) {
+            var assembly = Assembly.GetAssembly(typeof(Barrack));
+            var modelTypes = assembly.GetLoadableTypes().Where(type => type.FullName.StartsWith("trifenix.agro.db.model") && Attribute.IsDefined(type,typeof(ReferenceSearchAttribute)));
+            var entityType = modelTypes.Where(type => type.GetTypeInfo().GetCustomAttribute<ReferenceSearchAttribute>().Index == index).FirstOrDefault();
+            return entityType;
+        }
+
+        public static object CastToGenericArray(Type genericParameterType, IEnumerable<object> list) => typeof(AgroHelper).GetMethod("CastToArray").MakeGenericMethod(genericParameterType).Invoke(null, new object[] { list });
+
+        public static T[] CastToArray<T>(IEnumerable<object> list) => list.Select(element => (T)element).ToArray();
+
+        public static object CastToGenericList(Type genericParameterType, IEnumerable<object> list) => typeof(AgroHelper).GetMethod("CastToList").MakeGenericMethod(genericParameterType).Invoke(null, new object[] { list });
+
+        public static List<T> CastToList<T>(IEnumerable<object> list) => list.Select(element => (T)element).ToList();
 
     }
 

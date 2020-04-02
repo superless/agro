@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using trifenix.agro.db;
 using trifenix.agro.db.applicationsReference;
@@ -13,6 +15,7 @@ using trifenix.agro.db.model.orders;
 using trifenix.agro.enums;
 using trifenix.agro.enums.model;
 using trifenix.agro.enums.searchModel;
+using trifenix.agro.search.model.temp;
 using trifenix.agro.search.operations;
 using trifenix.agro.search.operations.util;
 
@@ -26,8 +29,81 @@ namespace trifenix.agro.console {
             //Console.WriteLine("Hora de inicio: {0}", DateTime.Now.ToString("hh\\:mm\\:ss"));
             //Stopwatch timer = Stopwatch.StartNew();
 
-            await SearchHelper.UpdateSearch();
+            //await SearchHelper.UpdateSearch();
 
+
+            var search = new AgroSearch("agrosearch", "016DAA5EF1158FEEEE58DA60996D5981");
+            //var entitySearch = new EntitySearchV2()
+            //{
+            //    EntityIndex = 1,
+            //    Id = "Id",
+            //    RelatedIds = new RelatedId[] {
+            //        new RelatedId {
+            //            EntityId = "1f369d8e5e744839b0ab185475617593",
+            //            EntityIndex = 15
+            //        },
+            //        new RelatedId {
+            //            EntityId = "648c0cce3b5541b69947ae0c79adc127",
+            //            EntityIndex = 11
+            //        },
+            //        new RelatedId {
+            //            EntityId = "b60665985f3a4df5afb77a6fe7a3231c",
+            //            EntityIndex = 21
+            //        },
+            //        new RelatedId {
+            //            EntityId = "b65d72b335a247bb9c98b89721154afd",
+            //            EntityIndex = 23
+            //        },
+            //        new RelatedId {
+            //            EntityId = "6fd20d32e0c04d56b84c57e3bd7d018b",
+            //            EntityIndex = 14
+            //        }
+            //    },
+            //    NumProperties = new Num32Property[] {
+            //        new Num32Property {
+            //            PropertyIndex = 7,
+            //            Value = 1990
+            //        },
+            //        new Num32Property {
+            //            PropertyIndex = 6,
+            //            Value = 2000
+            //        }
+            //    },
+            //    DoubleProperties = new DblProperty[] {
+            //        new DblProperty {
+            //            PropertyIndex = 6,
+            //            Value = 4.3
+            //        }
+            //    }
+            //};
+            var entitySearch = new EntitySearchV2()
+            {
+                EntityIndex = 6,
+                Id = "Id",
+                RelatedIds = new RelatedId[] {
+                    new RelatedId {
+                        EntityIndex = 0,
+                        EntityId = "f7ee4e67a99c408880fe1fb39c63985c"
+                    },
+                    new RelatedId {
+                        EntityIndex = 0,
+                        EntityId = "50a1c384700b4e56a95d2935e585c77e"
+                    },
+                    new RelatedId {
+                        EntityIndex = 21,
+                        EntityId = "b60665985f3a4df5afb77a6fe7a3231c"
+                    },
+                    new RelatedId {
+                        EntityIndex = 18,
+                        EntityId = "2fae7e0211594203a2820becdecdbf54"
+                    },
+                    new RelatedId {
+                        EntityIndex = 12,
+                        EntityId = "3b42a82973a24241a7a88124359a13fd"
+                    }
+                }
+            };
+            var entity = search.GetEntityFromSearch(entitySearch);
             return;
 
             #region Reflexion
