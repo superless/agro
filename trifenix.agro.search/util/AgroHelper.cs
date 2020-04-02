@@ -4,12 +4,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using trifenix.agro.attr;
-using trifenix.agro.db.model;
 using trifenix.agro.enums.searchModel;
 using trifenix.agro.util;
-using static trifenix.agro.util.AttributesExtension;
 
 namespace trifenix.agro.search.operations.util {
+
     public static class AgroHelper {
 
         public static string GetDescription(this Enum GenericEnum) {      
@@ -30,23 +29,23 @@ namespace trifenix.agro.search.operations.util {
             return dict;
         }
 
-        public static PropertySearchInfo[] GetPropertySearchInfo(Type type) {
-            var classAtribute = type.GetCustomAttribute<ReferenceSearchAttribute>();
-            if (classAtribute == null)
-                return Array.Empty<PropertySearchInfo>();
-            var indexClass = classAtribute.Index;
-            var searchAttributesProps = type.GetProperties().Where(prop => Attribute.IsDefined(prop, typeof(SearchAttribute), true));
-            return searchAttributesProps.Select(s => {
-                var SearchAttribute = (SearchAttribute)s.GetCustomAttributes(typeof(SearchAttribute), true).FirstOrDefault();
-                return new PropertySearchInfo {
-                    IsEnumerable = IsEnumerableProperty(s),
-                    Name = s.Name,
-                    SearchAttribute = SearchAttribute,
-                    Enums = SearchAttribute.Related == Related.ENUM ? GetDescription(s.PropertyType) : new Dictionary<int, string>(),
-                    IndexClass = indexClass
-                };
-            }).ToArray();
-        }
+        //public static PropertySearchInfo[] GetPropertySearchInfo(Type type) {
+        //    var classAtribute = type.GetCustomAttribute<ReferenceSearchAttribute>();
+        //    if (classAtribute == null)
+        //        return Array.Empty<PropertySearchInfo>();
+        //    var indexClass = classAtribute.Index;
+        //    var searchAttributesProps = type.GetProperties().Where(prop => Attribute.IsDefined(prop, typeof(SearchAttribute), true));
+        //    return searchAttributesProps.Select(s => {
+        //        var SearchAttribute = (SearchAttribute)s.GetCustomAttributes(typeof(SearchAttribute), true).FirstOrDefault();
+        //        return new PropertySearchInfo {
+        //            IsEnumerable = IsEnumerableProperty(s),
+        //            Name = s.Name,
+        //            SearchAttribute = SearchAttribute,
+        //            Enums = SearchAttribute.Related == Related.ENUM ? GetDescription(s.PropertyType) : new Dictionary<int, string>(),
+        //            IndexClass = indexClass
+        //        };
+        //    }).ToArray();
+        //}
 
         private static bool HasValue(this object value) {
             if (value == null)
@@ -80,10 +79,10 @@ namespace trifenix.agro.search.operations.util {
 
         public static object CreateEntityInstance(Type genericParameterType) => typeof(AgroHelper).GetMethod("CreateInstance").MakeGenericMethod(genericParameterType).Invoke(null, null);
 
-        public static Type GetEntityType(int index) {
-            var assembly = Assembly.GetAssembly(typeof(Barrack));
-            var modelTypes = assembly.GetLoadableTypes().Where(type => type.FullName.StartsWith("trifenix.agro.db.model") && Attribute.IsDefined(type,typeof(ReferenceSearchAttribute)));
-            var entityType = modelTypes.Where(type => type.GetTypeInfo().GetCustomAttribute<ReferenceSearchAttribute>().Index == index).FirstOrDefault();
+        public static Type GetEntityType(EntityRelated index, Type typeOfAssembly, string Namespace) {
+            var assembly = Assembly.GetAssembly(typeOfAssembly);
+            var modelTypes = assembly.GetLoadableTypes().Where(type => type.FullName.StartsWith(Namespace) && Attribute.IsDefined(type,typeof(ReferenceSearchAttribute)));
+            var entityType = modelTypes.Where(type => type.GetTypeInfo().GetCustomAttribute<ReferenceSearchAttribute>().Index == (int)index).FirstOrDefault();
             return entityType;
         }
 
@@ -95,14 +94,6 @@ namespace trifenix.agro.search.operations.util {
 
         public static List<T> CastToList<T>(IEnumerable<object> list) => list.Select(element => (T)element).ToList();
 
-    }
-
-    public class PropertySearchInfo {
-        public SearchAttribute SearchAttribute { get; set; }
-        public string Name { get; set; }
-        public int IndexClass { get; set; }
-        public Dictionary<int, string> Enums { get; set; }
-        public bool IsEnumerable { get; set; }
     }
 
 }

@@ -2,23 +2,15 @@
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
-using trifenix.agro.search.model.temp;
 using trifenix.typegen.data;
 using trifenix.typegen.spec;
 using TypeGen.Core.Converters;
 using TypeGen.Core.Generator;
 using TypeGen.Core.SpecGeneration;
 
-namespace trifenix.typegen
-{
-    class Program
-    {
-        static void Main(string[] args)
-        {
-
-
-
+namespace trifenix.typegen {
+    class Program {
+        static void Main(string[] args) {
 
             // genera los datos
             var jsonDataElements = JsonData.GetJsonData();

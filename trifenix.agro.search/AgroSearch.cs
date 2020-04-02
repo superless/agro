@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using trifenix.agro.attr;
 using trifenix.agro.db;
+using trifenix.agro.db.model;
 using trifenix.agro.enums.query;
 using trifenix.agro.enums.search;
 using trifenix.agro.enums.searchModel;
@@ -261,7 +262,7 @@ namespace trifenix.agro.search.operations {
         }
 
         public object GetEntityFromSearch(EntitySearch entitySearch) {
-            var type = GetEntityType(entitySearch.EntityIndex.FirstOrDefault());
+            var type = GetEntityType((EntityRelated)entitySearch.EntityIndex.FirstOrDefault(), typeof(Barrack), "trifenix.agro.db.model");
             var entity = CreateEntityInstance(type);
             type.GetProperty("Id")?.SetValue(entity, entitySearch.Id);
             var props = entity.GetType().GetProperties().Where(prop => Attribute.IsDefined(prop,typeof(SearchAttribute),true)).ToList();
