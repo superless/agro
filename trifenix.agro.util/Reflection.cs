@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Reflection;
 using System.Linq;
 using System.Collections;
@@ -46,7 +45,7 @@ namespace trifenix.agro.util
                 return false;
             return typeof(IEnumerable).IsAssignableFrom(propertyType);
         }
-
+        public static T GetAttribute<T>(this PropertyInfo propInfo) where T : Attribute => (T)propInfo.GetCustomAttributes(typeof(T), true).FirstOrDefault();
         public static string GetDescription(this Enum GenericEnum)
         {
             Type genericEnumType = GenericEnum.GetType();

@@ -81,6 +81,10 @@ namespace trifenix.agro.search.model.ts
 
         public EntitySearchDisplayInfo Info { get; set; }
 
+        public bool Required { get; set; }
+
+        public bool Unique { get; set; }
+
     }
 
     public class ReletadIdTs : RelatedId {

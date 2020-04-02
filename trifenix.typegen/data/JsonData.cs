@@ -1,13 +1,16 @@
 ﻿using res.core;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using trifenix.agro.attr;
 using trifenix.agro.db.model;
 using trifenix.agro.enums.searchModel;
+using trifenix.agro.model.external.Input;
 using trifenix.agro.search.model.reflection;
 using trifenix.agro.search.model.ts;
+using trifenix.agro.search.operations.util;
 using TypeGen.Core.Extensions;
 using static trifenix.agro.util.AttributesExtension;
 
@@ -36,6 +39,8 @@ namespace trifenix.typegen.data
                 ShortName = modelInfo.ShortName,
 
                 Title = modelInfo.Title,
+
+                
 
                 BoolData = GetDictionaryFromRelated(propByRelatedAndIndex, Related.BOOL),
 
@@ -130,7 +135,9 @@ namespace trifenix.typegen.data
             {
                 NameProp = g.Name,
                 isArray = g.IsEnumerable,
-                Info = g.Info
+                Info = g.Info,
+                Required = g.IsRequired,
+                Unique = g.IsUnique
             });
         }
 
@@ -147,26 +154,44 @@ namespace trifenix.typegen.data
         }
 
 
-       
+
+
+        
+
         public static PropertySearchInfo[] GetPropertyByIndex(Type type, int index)
         {
             var searchAttributesProps = type.GetProperties().Where(prop => Attribute.IsDefined(prop, typeof(SearchAttribute), true));
 
+            
+
+            var elemTypeInput = AgroHelper.GetEntityType((EntityRelated)index, typeof(BarrackInput), "trifenix.agro.model.external.Input");
+
+            var elemTypeInputProps = elemTypeInput.GetProperties().Where(prop => Attribute.IsDefined(prop, typeof(SearchAttribute), true))
+                .Select(s=>new { search = s.GetAttribute<SearchAttribute>(), required = s.GetAttribute<RequiredAttribute>(), unique = s.GetAttribute<UniqueAttribute>() });
+
+
 
             var props = searchAttributesProps.Select(s => {
-                var SearchAttribute = (SearchAttribute)s.GetCustomAttributes(typeof(SearchAttribute), true).FirstOrDefault();
+                var searchAttribute = (SearchAttribute)s.GetCustomAttributes(typeof(SearchAttribute), true).FirstOrDefault();
 
+                var searchAttributeInput = elemTypeInputProps.FirstOrDefault(p => p.search.Index == searchAttribute.Index && p.search.Related == searchAttribute.Related);
+
+
+                
 
 
                 return new PropertySearchInfo
                 {
                     IsEnumerable = IsEnumerableProperty(s),
                     Name = s.Name,
-                    Index = SearchAttribute.Index,
-                    Related = SearchAttribute.Related,
-                    Enums = SearchAttribute.Related == Related.ENUM ? GetDescription(s.PropertyType) : new Dictionary<int, string>(),
+                    Index = searchAttribute.Index,
+                    Related = searchAttribute.Related,
+                    Enums = searchAttribute.Related == Related.ENUM ? GetDescription(s.PropertyType) : new Dictionary<int, string>(),
                     IndexClass = index,
-                    Info = ResourceExtension.ResourceModel(SearchAttribute.Related, SearchAttribute.Index)
+                    Info = ResourceExtension.ResourceModel(searchAttribute.Related, searchAttribute.Index),
+                    IsRequired = searchAttributeInput?.required!=null,
+                    IsUnique = searchAttributeInput?.unique != null,
+
 
                 };
             }).ToArray();

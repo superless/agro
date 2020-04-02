@@ -6,6 +6,7 @@ using trifenix.agro.enums.searchModel;
 namespace trifenix.agro.model.external.Input {
 
     [ReferenceSearch(EntityRelated.VARIETY)]
+    [ReferenceSearch(EntityRelated.POLLINATOR)]
     public class VarietyInput : InputBase {
 
         [Required, Unique]

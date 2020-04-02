@@ -37,7 +37,7 @@ namespace trifenix.agro.search.operations.util {
         {
             var assembly = Assembly.GetAssembly(typeInNameSpace);
             var modelTypes = assembly.GetLoadableTypes().Where(type => type.FullName.StartsWith(nameSpace) && Attribute.IsDefined(type, typeof(ReferenceSearchAttribute)));
-            var entityType = modelTypes.Where(type => type.GetTypeInfo().GetCustomAttribute<ReferenceSearchAttribute>().Index == (int)index).FirstOrDefault();
+            var entityType = modelTypes.Where(type => type.GetTypeInfo().GetCustomAttributes<ReferenceSearchAttribute>().Any(s=>s.Index == (int)index)).FirstOrDefault();
             return entityType;
         }
 
