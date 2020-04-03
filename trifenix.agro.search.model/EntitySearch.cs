@@ -12,9 +12,12 @@ namespace trifenix.agro.search.model {
 
         [Key]
         [IsFilterable]
+        [JsonProperty("id")]
         public string Id { get; set; }
 
         [IsFilterable, IsFacetable]
+
+        [JsonProperty("entityIndex")]
         public int[] EntityIndex { get; set; }
 
         [IsSortable]
@@ -54,34 +57,43 @@ namespace trifenix.agro.search.model {
 
     public class RelatedId {
         [IsFilterable]
+        [JsonProperty("entityIndex")]
         public int EntityIndex { get; set; }
         [IsFilterable]
+        [JsonProperty("entityId")]
         public string EntityId { get; set; }
         [IsFacetable]
+        [JsonProperty("id")]
         public string Id { get => $"{EntityIndex},{EntityId}"; }
     }
 
     public class BaseProperty<T> {
         [IsFilterable]
+        [JsonProperty("propertyIndex")]
         public int PropertyIndex { get; set; }
         [IsFilterable]
+        [JsonProperty("value")]
         public virtual T Value { get; set; }
     }
 
     public class BaseFacetableProperty<T> : BaseProperty<T> {
 
         [IsFacetable]
+        [JsonProperty("id")]
         public string Id { get => $"{PropertyIndex},{Value}"; }
     }
 
     public class SuggestProperty : BaseProperty<string> {
         [IsFilterable, IsSearchable]
+        [JsonProperty("value")]
+        
         public override string Value { get; set; }
     }
 
     public class StrProperty : BaseFacetableProperty<string> {
 
         [IsFilterable, IsSearchable]
+        [JsonProperty("value")]
         public override string Value { get; set; }
     }
 
@@ -100,6 +112,7 @@ namespace trifenix.agro.search.model {
     public class GeoProperty : BaseProperty<GeographyPoint> { }
 
     public class GeoPointTs {
+        
         public double Latitude { get; set; }
         public double Longitude { get; set; }
     }

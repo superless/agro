@@ -17,18 +17,21 @@ namespace trifenix.typegen {
 
 
 
-            
+
 
             var options = new GeneratorOptions
-            {   
+            {
                 BaseOutputDirectory = @"D:\aresa\developments\components\trifenix.search.model\src\",
                 FileNameConverters = new TypeNameConverterCollection(new List<ITypeNameConverter>() { new CustomTypeConverter() }),
                 TypeNameConverters = new TypeNameConverterCollection(new List<ITypeNameConverter>() { new CustomTypeConverter() }),
-                PropertyNameConverters = new MemberNameConverterCollection(new IMemberNameConverter[] { new JsonMemberNameConverter()  })
-                
+                PropertyNameConverters = new MemberNameConverterCollection(new IMemberNameConverter[] { new JsonMemberNameConverter(), new PascalCaseToCamelCaseConverter() })
+
             };
 
-            string json = JsonConvert.SerializeObject(jsonDataElements);
+            string json = JsonConvert.SerializeObject(jsonDataElements, new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            });
 
             var gen = new Generator(options);
             gen.Generate(new List<GenerationSpec>() { new ModelSpec() });
