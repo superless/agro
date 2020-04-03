@@ -10,9 +10,8 @@ using trifenix.agro.enums.input;
 using trifenix.agro.enums.searchModel;
 using trifenix.agro.external.operations;
 using trifenix.agro.model.external.Input;
-using trifenix.agro.search.model.temp;
+using trifenix.agro.search.model;
 using trifenix.agro.search.operations;
-using v2 = trifenix.agro.search.model.temp;
 
 namespace trifenix.agro.console
 {
@@ -80,7 +79,7 @@ namespace trifenix.agro.console
                 {
                     
                     var dosesProductId = doses.Result.Where(s => s.IdProduct.Equals(item.Id) && s.Active).ToList();
-                    var listEntitySearch = new List<EntitySearchV2>();
+                    var listEntitySearch = new List<EntitySearch>();
 
                     if (dosesProductId.Any())
                     {
