@@ -13,6 +13,7 @@ using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
+using trifenix.agro.util;
 using trifenix.agro.validator.interfaces;
 
 namespace trifenix.agro.external.operations.entities.ext {
@@ -58,16 +59,20 @@ namespace trifenix.agro.external.operations.entities.ext {
             if (!string.IsNullOrWhiteSpace(product.Id)) {
                 //obtiene el identificador de la dosis por defecto
                 var defaultDoses = await queries.GetDefaultDosesId(product.Id);
+
                 if (string.IsNullOrWhiteSpace(defaultDoses))
                     defaultDoses = await CreateDefaultDoses(product.Id);
+
                 // elimina todas las dosis que no sean por defecto relacionadas con el producto
                 search.DeleteElementsWithRelatedElementExceptId(EntityRelated.DOSES, EntityRelated.PRODUCT, product.Id, defaultDoses);
+
                 // obtiene todas las dosis que no sean por defecto
                 var dosesPrevIds = await queries.GetActiveDosesIdsFromProductId(product.Id);
                 if (dosesPrevIds.Any())
                     foreach (var idDoses in dosesPrevIds)
                         // elimina cada dosis, internamente elimina si no hay dependencias, si existen dependencias la desactiva y la deja en el search.
                         await dosesOperation.Remove(idDoses);
+
                 return new RelatedId { EntityIndex = (int)EntityRelated.DOSES, EntityId = defaultDoses };
             }
             else {
@@ -112,39 +117,21 @@ namespace trifenix.agro.external.operations.entities.ext {
 
         public async Task<ExtPostContainer<string>> Save(Product product) {
             await repo.CreateUpdate(product);
-            // obtiene el id de ingrediente
-            //var relatedIds = GetIdsRelated(product).ToList();
-            //Remueve doses y retorna la dosis por defecto
+          
             var dosesDefault = await RemoveDoses(product);
             var productSearch = search.GetEntitySearch(product).LastOrDefault();
-            productSearch.RelatedIds = productSearch.RelatedIds.Add(dosesDefault);
-            //Esto lo agregue a la creacion de la dosis, es ahi donde se busca el producto relacionado y se le agrega el relatedId correspondiente a la dosis en creacion
-            //if (product.Doses != null && product.Doses.Any()) {
-            //    foreach (var dose in input.Doses) {
-            //        dose.IdProduct = product.Id;
-            //        dose.Default = false;
-            //        dose.Active = true;
-            //        var idDoses = await dosesOperation.Save(dose);
-            //        relatedIds.Add(new RelatedId {
-            //            EntityId = idDoses.IdRelated,
-            //            EntityIndex = (int)EntityRelated.DOSES
-            //        });
-            //    }
-            //}
+            var dosesFound = search.GetElementsWithRelatedElement(EntityRelated.DOSES, EntityRelated.PRODUCT, product.Id);
+
+            var doses = new List<RelatedId> {
+                dosesDefault
+            };
+
+            if (dosesFound.Any()) doses.AddRange(dosesFound.Select(d => new RelatedId { EntityId = d.Id, EntityIndex = (int)EntityRelated.DOSES }));
+
+            productSearch.RelatedIds = productSearch.RelatedIds.Add(doses);
+          
             search.AddElements(new List<EntitySearch> { productSearch });
-                //new List<EntitySearch> {
-                //    new EntitySearch {
-                //        Id = product.Id,
-                //        EntityIndex = (int)EntityRelated.PRODUCT,
-                //        Created = DateTime.Now,
-                //        RelatedProperties = GetElementRelated(product),
-                //        RelatedIds = relatedIds.ToArray(),
-                //        RelatedEnumValues = new RelatedEnumValue[]{
-                //            new RelatedEnumValue { EnumerationIndex = (int)EnumerationRelated.PRODUCT_KINDOFBOTTLE, Value = (int)product.KindOfBottle },
-                //            new RelatedEnumValue { EnumerationIndex = (int)EnumerationRelated.PRODUCT_MEASURETYPE, Value = (int)product.MeasureType }
-                //        }
-                //    }
-                //});
+               
             return new ExtPostContainer<string> {
                 IdRelated = product.Id,
                 MessageResult = ExtMessageResult.Ok
