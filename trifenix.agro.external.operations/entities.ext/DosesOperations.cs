@@ -14,6 +14,7 @@ using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
+using trifenix.agro.util;
 using trifenix.agro.validator.interfaces;
 
 namespace trifenix.agro.external.operations.entities.ext {
@@ -135,12 +136,14 @@ namespace trifenix.agro.external.operations.entities.ext {
 
         public async Task<ExtPostContainer<string>> Save(Dose dose) {
             await repo.CreateUpdate(dose);
-            var productSearch = search.FilterElements<EntitySearch>($"EntityIndex eq {(int)EntityRelated.PRODUCT} and Id eq {dose.IdProduct}").FirstOrDefault();
+            var productSearch = search.GetEntity(EntityRelated.PRODUCT, dose.IdProduct);
+
             if (!productSearch.RelatedIds.Any(relatedId => relatedId.EntityIndex == (int)EntityRelated.DOSES && relatedId.EntityId == dose.Id)) {
                 productSearch.RelatedIds = productSearch.RelatedIds.Add(new RelatedId { EntityId = dose.Id, EntityIndex = (int)EntityRelated.DOSES });
                 search.AddElements(new List<EntitySearch> { productSearch });
             }
-            search.AddElements(search.GetEntitySearch(dose).ToList());
+            search.AddDocument(dose);
+
             return new ExtPostContainer<string> {
                 IdRelated = dose.Id,
                 MessageResult = ExtMessageResult.Ok
