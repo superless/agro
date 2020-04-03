@@ -33,52 +33,8 @@ namespace trifenix.agro.external.operations.entities.fields {
 
         public async Task<ExtPostContainer<string>> Save(Barrack barrack) {
             await repo.CreateUpdate(barrack);
-            var specieAbbv = await commonQueries.GetSpecieAbbreviationFromVariety(barrack.IdVariety);
-            var relatedEntities = new List<RelatedId> {
-                new RelatedId { EntityIndex = (int)EntityRelated.PLOTLAND, EntityId = barrack.IdPlotLand },
-                new RelatedId { EntityIndex = (int)EntityRelated.SEASON , EntityId = barrack.SeasonId },
-                new RelatedId { EntityIndex = (int)EntityRelated.VARIETY, EntityId = barrack.IdVariety }
-            };
-            if (!string.IsNullOrWhiteSpace(barrack.IdRootstock))
-                relatedEntities.Add(new RelatedId { EntityIndex = (int)EntityRelated.ROOTSTOCK, EntityId = barrack.IdRootstock });
-            if (!string.IsNullOrWhiteSpace(barrack.IdPollinator))
-                relatedEntities.Add(new RelatedId { EntityIndex = (int)EntityRelated.POLLINATOR, EntityId = barrack.IdPollinator });
-            // Eliminar antes de agregar
-            search.DeleteElements<EntitySearch>($"EntityIndex eq {(int)EntityRelated.GEOPOINT} and RelatedIds/any(elementId: elementId/EntityIndex eq {(int)EntityRelated.BARRACK} and elementId/EntityId eq '{barrack.Id}')");
-            if (barrack.GeographicalPoints != null && barrack.GeographicalPoints.Any()) {
-                var keysGeo = new List<EntitySearch>();
-                foreach (var geo in barrack.GeographicalPoints) {
-                    keysGeo.Add(new EntitySearch {
-                        Id = Guid.NewGuid().ToString("N"),
-                        EntityIndex = (int)EntityRelated.GEOPOINT,
-                        Created = DateTime.Now,
-                        RelatedProperties = new Property[] {
-                            new Property { PropertyIndex = (int)PropertyRelated.GENERIC_LATITUDE, Value = $"{geo.Position.Latitude}" },
-                            new Property { PropertyIndex = (int)PropertyRelated.GENERIC_LONGITUDE, Value = $"{geo.Position.Longitude}" }
-                        },
-                        RelatedIds = new RelatedId[] {
-                            new RelatedId { EntityIndex = (int)EntityRelated.BARRACK, EntityId = barrack.Id }
-                        }
-                    });
-                }
-                relatedEntities.AddRange(keysGeo.Select(s => new RelatedId { EntityIndex = (int)EntityRelated.GEOPOINT, EntityId = s.Id }));
-                search.AddElements(keysGeo);
-            }
-            search.AddElements(new List<EntitySearch> {
-                new EntitySearch {
-                    Id = barrack.Id,
-                    EntityIndex = (int)EntityRelated.BARRACK,
-                    Created = DateTime.Now,
-                    RelatedProperties= new Property[]{
-                        new Property { PropertyIndex = (int)PropertyRelated.GENERIC_NAME, Value = barrack.Name },
-                        new Property { PropertyIndex = (int)PropertyRelated.GENERIC_ABBREVIATION, Value = specieAbbv },
-                        new Property { PropertyIndex = (int)PropertyRelated.GENERIC_NUMBER_OF_PLANTS, Value = $"{barrack.NumberOfPlants}" },
-                        new Property { PropertyIndex = (int)PropertyRelated.GENERIC_PLANT_IN_YEAR, Value = $"{barrack.PlantingYear}" },
-                        new Property{ PropertyIndex = (int)PropertyRelated.GENERIC_HECTARES, Value = $"{barrack.Hectares}" }
-                    },
-                    RelatedIds = relatedEntities.ToArray()
-                }
-            });
+            search.DeleteElementsWithRelatedElement(EntityRelated.GEOPOINT, EntityRelated.BARRACK, barrack.Id);
+            search.AddDocument(barrack);
             return new ExtPostContainer<string> {
                 IdRelated = barrack.Id,
                 MessageResult = ExtMessageResult.Ok

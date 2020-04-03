@@ -27,17 +27,7 @@ namespace trifenix.agro.external.operations.entities.main {
 
         public async Task<ExtPostContainer<string>> Save(Tractor tractor) {
             await repo.CreateUpdate(tractor);
-            search.AddElements(new List<EntitySearch> {
-                new EntitySearch {
-                    Id = tractor.Id,
-                    EntityIndex = (int)EntityRelated.TRACTOR,
-                    Created = DateTime.Now,
-                    RelatedProperties = new Property[] {
-                        new Property { PropertyIndex = (int)PropertyRelated.GENERIC_BRAND, Value = tractor.Brand },
-                        new Property { PropertyIndex = (int)PropertyRelated.GENERIC_CODE, Value = tractor.Code }
-                    }
-                }
-            });
+            search.AddDocument(tractor);
             return new ExtPostContainer<string> {
                 IdRelated = tractor.Id,
                 MessageResult = ExtMessageResult.Ok

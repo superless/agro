@@ -25,23 +25,7 @@ namespace trifenix.agro.external.operations.entities.main {
 
         public async Task<ExtPostContainer<string>> Save(Nebulizer nebulizer) {
             await repo.CreateUpdate(nebulizer);
-            search.AddElements(new List<EntitySearch> {
-                new EntitySearch {
-                    Id = nebulizer.Id,
-                    EntityIndex = (int)EntityRelated.NEBULIZER,
-                    Created = DateTime.Now,
-                    RelatedProperties = new Property[] {
-                        new Property {
-                            PropertyIndex = (int)PropertyRelated.GENERIC_BRAND,
-                            Value = nebulizer.Brand
-                        },
-                        new Property {
-                            PropertyIndex = (int)PropertyRelated.GENERIC_CODE,
-                            Value = nebulizer.Code
-                        }
-                    }
-                }
-            });
+            search.AddDocument(nebulizer);
             return new ExtPostContainer<string> {
                 IdRelated = nebulizer.Id,
                 MessageResult = ExtMessageResult.Ok

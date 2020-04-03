@@ -92,7 +92,7 @@ namespace trifenix.agro.console
                         new RelatedId
                         {
                             EntityId = s.Id,
-                            EntityIndex = s.EntityIndex.FirstOrDefault(a=>a == (int)EntityRelated.DOSES)
+                            EntityIndex = (int)EntityRelated.DOSES
                         }
                     );
 

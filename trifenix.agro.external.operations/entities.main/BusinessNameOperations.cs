@@ -26,25 +26,7 @@ namespace trifenix.agro.external.operations.entities.main {
 
         public async Task<ExtPostContainer<string>> Save(BusinessName businessName) {
             await repo.CreateUpdate(businessName);
-            var properties = new List<Property> {
-                new Property { PropertyIndex = (int)PropertyRelated.GENERIC_RUT, Value = businessName.Rut },
-                new Property { PropertyIndex = (int)PropertyRelated.GENERIC_NAME, Value = businessName.Name },       
-                new Property { PropertyIndex = (int)PropertyRelated.GENERIC_EMAIL, Value = businessName.Email }
-            };
-            if (!string.IsNullOrWhiteSpace(businessName.WebPage))
-                properties.Add(new Property { PropertyIndex = (int)PropertyRelated.GENERIC_WEBPAGE, Value = businessName.WebPage });
-            if (!string.IsNullOrWhiteSpace(businessName.Phone))
-                properties.Add(new Property { PropertyIndex = (int)PropertyRelated.GENERIC_PHONE, Value = businessName.Phone });
-            if (!string.IsNullOrWhiteSpace(businessName.Giro))
-                properties.Add(new Property { PropertyIndex = (int)PropertyRelated.GENERIC_GIRO, Value = businessName.Giro });
-            search.AddElements(new List<EntitySearch> {
-                new EntitySearch{
-                    Id = businessName.Id,
-                    EntityIndex = (int)EntityRelated.BUSINESSNAME,
-                    Created = DateTime.Now,
-                    RelatedProperties = properties.ToArray()
-                }
-            });
+            search.AddDocument(businessName);
             return new ExtPostContainer<string> {
                 IdRelated = businessName.Id,
                 MessageResult = ExtMessageResult.Ok

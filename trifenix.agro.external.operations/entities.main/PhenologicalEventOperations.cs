@@ -31,27 +31,7 @@ namespace trifenix.agro.external.operations.entities.main {
 
         public async Task<ExtPostContainer<string>> Save(PhenologicalEvent phenologicalEvent) {
             await repo.CreateUpdate(phenologicalEvent);
-            search.AddElements(new List<EntitySearch> {
-                new EntitySearch{
-                    Id = phenologicalEvent.Id,
-                    EntityIndex = (int)EntityRelated.PHENOLOGICAL_EVENT,
-                    Created = DateTime.Now,
-                    RelatedProperties = new Property[] {
-                        new Property {
-                            PropertyIndex = (int)PropertyRelated.GENERIC_NAME,
-                            Value = phenologicalEvent.Name
-                        },
-                        new Property {
-                            PropertyIndex = (int)PropertyRelated.GENERIC_START_DATE,
-                            Value = string.Format("{0:dd/MM/yyyy}", phenologicalEvent.StartDate)
-                        },
-                        new Property {
-                            PropertyIndex = (int)PropertyRelated.GENERIC_END_DATE,
-                            Value = string.Format("{0:dd/MM/yyyy}", phenologicalEvent.EndDate)
-                        }
-                    }
-                }
-            });
+            search.AddDocument(phenologicalEvent);
             return new ExtPostContainer<string> {
                 IdRelated = phenologicalEvent.Id,
                 MessageResult = ExtMessageResult.Ok

@@ -102,8 +102,7 @@ namespace trifenix.typegen.spec {
     public class CustomTypeConverter : ITypeNameConverter {
         public string Convert(string name, Type type) {
             if (type.IsClass) {
-                if (name.Contains("Swagger"))
-                    name = name.Replace("Swagger", "");
+                
                 if (name.Equals("Data"))
                     return "data";
                 return $"I{name}";

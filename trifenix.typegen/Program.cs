@@ -24,20 +24,18 @@ namespace trifenix.typegen {
                 BaseOutputDirectory = @"D:\aresa\developments\components\trifenix.search.model\src\",
                 FileNameConverters = new TypeNameConverterCollection(new List<ITypeNameConverter>() { new CustomTypeConverter() }),
                 TypeNameConverters = new TypeNameConverterCollection(new List<ITypeNameConverter>() { new CustomTypeConverter() }),
-                PropertyNameConverters = new MemberNameConverterCollection(new IMemberNameConverter[] { new JsonMemberNameConverter() , new PascalCaseToCamelCaseConverter() })
+                PropertyNameConverters = new MemberNameConverterCollection(new IMemberNameConverter[] { new JsonMemberNameConverter()  })
                 
             };
 
-            string json = JsonConvert.SerializeObject(jsonDataElements, new JsonSerializerSettings {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
-            });
+            string json = JsonConvert.SerializeObject(jsonDataElements);
 
             var gen = new Generator(options);
             gen.Generate(new List<GenerationSpec>() { new ModelSpec() });
 
 
             // genera el json con datos
-            System.IO.File.WriteAllText($@"{options.BaseOutputDirectory}\data\data.ts", $"import {{IModelByIndex }} from \"./IModelByIndex\"; \nexport const data:IModelByIndex = {json} as IModelByIndex");
+            System.IO.File.WriteAllText($@"{options.BaseOutputDirectory}\data\data.ts", $"import {{ IModelMetaData }} from \"./IModelMetaData\"; \nexport const data:IModelMetaData = {json} as IModelMetaData");
 
             Console.WriteLine("Codigo Generado en TypeScript");
         }

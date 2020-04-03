@@ -31,36 +31,8 @@ namespace trifenix.agro.external.operations.entities.orders {
 
         public async Task<ExtPostContainer<string>> Save(PreOrder preOrder) {
             await repo.CreateUpdate(preOrder);
-            var specieAbbv = await commonQueries.GetSpecieAbbreviationFromBarrack(preOrder.BarracksId.First());
-            var PreOrderSearch = search.GetEntitySearch(preOrder);
-            var entity = new EntitySearch {
-                Id = preOrder.Id,
-                EntityIndex = (int)EntityRelated.PREORDER,
-                Created = DateTime.Now,
-                RelatedProperties = new Property[] {
-                        new Property {
-                            PropertyIndex = (int)PropertyRelated.GENERIC_NAME,
-                            Value = preOrder.Name
-                        },
-                        new Property {
-                            PropertyIndex = (int)PropertyRelated.GENERIC_ABBREVIATION,
-                            Value = specieAbbv
-                        }
-                    },
-                RelatedEnumValues = new RelatedEnumValue[] {
-                    new RelatedEnumValue{ EnumerationIndex = (int)EnumerationRelated.PREORDER_TYPE, Value = (int)preOrder.PreOrderType }
-                }
-            };
-            var entities = preOrder.BarracksId.Select(s => new RelatedId { EntityIndex = (int)EntityRelated.BARRACK, EntityId = s }).ToList();
-                //TODO: Revisar
-            if (preOrder.PreOrderType == PreOrderType.DEFAULT)
-                entities.Add(new RelatedId { EntityIndex = (int)EntityRelated.INGREDIENT, EntityId = preOrder.IdIngredient });
-            if (preOrder.PreOrderType == PreOrderType.PHENOLOGICAL)
-                entities.Add(new RelatedId { EntityIndex = (int)EntityRelated.ORDER_FOLDER, EntityId = preOrder.OrderFolderId });
-            var idSeason = await commonQueries.GetSeasonId(preOrder.BarracksId.First());
-            entities.Add(new RelatedId { EntityIndex = (int)EntityRelated.SEASON, EntityId = idSeason });
-            entity.RelatedIds = entities.ToArray();
-            search.AddElements(new List<EntitySearch> { entity });
+            search.AddDocument(preOrder);
+
             return new ExtPostContainer<string> {
                 IdRelated = preOrder.Id,
                 MessageResult = ExtMessageResult.Ok

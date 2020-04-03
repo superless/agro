@@ -8,7 +8,6 @@ using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model;
-using trifenix.agro.db.model;
 using trifenix.agro.db.model.core;
 using trifenix.agro.db.model.orders;
 using trifenix.agro.email.interfaces;

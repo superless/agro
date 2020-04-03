@@ -24,24 +24,8 @@ namespace trifenix.agro.external.operations.entities.ext {
         }
 
         public async Task<ExtPostContainer<string>> Save(CertifiedEntity certifiedEntity) {
-            await repo.CreateUpdate(certifiedEntity); 
-            search.AddElements(new List<EntitySearch> {
-                new EntitySearch{
-                    Id = certifiedEntity.Id,
-                    EntityIndex = (int)EntityRelated.CERTIFIED_ENTITY,
-                    Created = DateTime.Now,
-                    RelatedProperties = new Property[] {
-                        new Property {
-                            PropertyIndex = (int)PropertyRelated.GENERIC_NAME,
-                            Value = certifiedEntity.Name
-                        },
-                        new Property {
-                            PropertyIndex = (int)PropertyRelated.GENERIC_ABBREVIATION,
-                            Value = certifiedEntity.Abbreviation
-                        }
-                    }
-                }
-            });
+            await repo.CreateUpdate(certifiedEntity);
+            search.AddDocument(certifiedEntity);
             return new ExtPostContainer<string> {
                 IdRelated = certifiedEntity.Id,
                 MessageResult = ExtMessageResult.Ok

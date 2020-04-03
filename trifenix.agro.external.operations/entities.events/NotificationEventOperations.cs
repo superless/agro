@@ -18,6 +18,7 @@ using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
 using trifenix.agro.storage.interfaces;
+using trifenix.agro.util;
 using trifenix.agro.validator.interfaces;
 using trifenix.agro.weather.interfaces;
 
@@ -67,32 +68,8 @@ namespace trifenix.agro.external.operations.entities.events {
             var picturePath = await uploadImage.UploadImageBase64(notificationEvent.PicturePath);
             notificationEvent.PicturePath = picturePath;
             await repo.CreateUpdate(notificationEvent);
-            var specieAbbv = await commonQueries.GetSpecieAbbreviationFromBarrack(notificationEvent.IdBarrack);
-            var idSeason = await commonQueries.GetSeasonId(notificationEvent.IdBarrack);
-            //search.AddElements(new List<EntitySearch> {
-            //    new EntitySearch {
-            //        Id = notificationEvent.Id,
-            //        EntityIndex = (int)EntityRelated.NOTIFICATION_EVENT,
-            //        Created = notificationEvent.Created,
-            //        RelatedProperties= new Property[]{
-            //           new Property{ PropertyIndex=(int)PropertyRelated.GENERIC_DESC, Value = notificationEvent.Description },
-            //           new Property{ PropertyIndex=(int)PropertyRelated.GENERIC_ABBREVIATION, Value = specieAbbv },
-            //           new Property{ PropertyIndex=(int)PropertyRelated.GENERIC_PATH, Value = notificationEvent.PicturePath }
-            //        },
-            //        RelatedIds = new RelatedId[]{
-            //          new RelatedId{  EntityIndex=(int)EntityRelated.PHENOLOGICAL_EVENT, EntityId = notificationEvent.IdPhenologicalEvent},
-            //          new RelatedId{  EntityIndex=(int)EntityRelated.BARRACK, EntityId = notificationEvent.IdBarrack},
-            //          new RelatedId{ EntityIndex=(int)EntityRelated.SEASON, EntityId = idSeason }
-            //        },
-            //        RelatedEnumValues = new RelatedEnumValue[]{
-            //            new RelatedEnumValue{ EnumerationIndex = (int)EnumerationRelated.NOTIFICATION_TYPE, Value = (int)notificationEvent.NotificationType  }
-            //        }
-            //    }
-            //});
-            var notificationSearch = search.GetEntitySearch(notificationEvent).LastOrDefault();
-            notificationSearch.StringProperties = notificationSearch?.StringProperties.Add(new StrProperty { PropertyIndex = (int)StringRelated.GENERIC_ABBREVIATION, Value = specieAbbv });
-            notificationSearch.RelatedIds = notificationSearch?.RelatedIds.Add(new RelatedId { EntityId = idSeason, EntityIndex = (int)EntityRelated.SEASON });
-            search.AddElements(new List<EntitySearch> { notificationSearch });
+            search.AddDocument(notificationEvent);
+
             //TODO: Definir el origen de la lista de idsRoles
             var usersEmails = await commonQueries.GetUsersMailsFromRoles(new List<string> { "24beac75d4bb4f8d8fae8373426af780" });
             email.SendEmail(usersEmails, "Notificacion",

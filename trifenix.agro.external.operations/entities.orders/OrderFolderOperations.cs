@@ -29,28 +29,8 @@ namespace trifenix.agro.external.operations.entities.orders {
 
         public async Task<ExtPostContainer<string>> Save(OrderFolder orderFolder) {
             await repo.CreateUpdate(orderFolder);
-            var specieAbbv = await commonQueries.GetSpecieAbbreviation(orderFolder.IdSpecie);
-            search.AddElements(new List<EntitySearch> {
-                new EntitySearch {
-                    Id = orderFolder.Id,
-                    EntityIndex = (int)EntityRelated.ORDER_FOLDER,
-                    Created = DateTime.Now,
-                    RelatedIds = new RelatedId[]{
-                        new RelatedId{ EntityIndex = (int)EntityRelated.TARGET, EntityId = orderFolder.IdApplicationTarget  },
-                        new RelatedId{ EntityIndex = (int)EntityRelated.CATEGORY_INGREDIENT, EntityId = orderFolder.IdIngredientCategory  },
-                        new RelatedId{ EntityIndex = (int)EntityRelated.PHENOLOGICAL_EVENT, EntityId = orderFolder.IdPhenologicalEvent },
-                        new RelatedId{ EntityIndex = (int)EntityRelated.INGREDIENT, EntityId = orderFolder.IdIngredient },
-                        new RelatedId{ EntityIndex = (int)EntityRelated.PREORDER, EntityId = orderFolder.IdSpecie}
-                    },
-                    RelatedProperties = new Property[]{
-                        new Property{
-                            PropertyIndex = (int)PropertyRelated.GENERIC_ABBREVIATION,
-                            Value = specieAbbv
-                        }
-                    }
-
-                }
-            });
+            search.AddDocument(orderFolder);
+            
             return new ExtPostContainer<string> {
                 IdRelated = orderFolder.Id,
                 MessageResult = ExtMessageResult.Ok

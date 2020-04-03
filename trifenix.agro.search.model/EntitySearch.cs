@@ -109,17 +109,6 @@ namespace trifenix.agro.search.model {
         public GeoPointTs Value { get; set; }
     }
 
-    public static class ArrayExtension {
-        public static T[] Add<T>(this T[] array, T element) {
-            var list = array.Cast<T>().ToList();
-            list.Add(element);
-            return list.ToArray();
-        }
-        public static T[] Remove<T>(this T[] array, int indexToRemove) {
-            var list = array.Cast<T>().ToList();
-            list.RemoveAt(indexToRemove);
-            return list.ToArray();
-        }
-    }
+    
 
 }

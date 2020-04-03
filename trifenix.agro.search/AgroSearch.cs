@@ -80,6 +80,12 @@ namespace trifenix.agro.search.operations {
                 DeleteElements(elements);
         }
 
+        public EntitySearch[] GetElementsWithRelatedElement(EntityRelated elementToGet, EntityRelated relatedElement, string idRelatedElement) {
+            var indexClient = _search.Indexes.GetClient(_entityIndex);
+            var entities = indexClient.Documents.Search<EntitySearch>(null, new SearchParameters { Filter = string.Format(Queries(SearchQuery.ENTITIES_WITH_ENTITYID), (int)elementToGet, (int)relatedElement, idRelatedElement) }).Results.Select(s=>s.Document);
+            return entities.ToArray();
+        }
+
         public EntitySearch GetEntity(EntityRelated entityRelated, string id) {
             var indexClient = _search.Indexes.GetClient(_entityIndex);
             var entity = indexClient.Documents.Search<EntitySearch>(null, new SearchParameters { Filter = string.Format(Queries(SearchQuery.GET_ELEMENT), (int)entityRelated, id) }).Results.FirstOrDefault()?.Document;
@@ -352,6 +358,10 @@ namespace trifenix.agro.search.operations {
             return values;
         }
 
+        public void AddDocument<T>(T document) where T : DocumentBase
+        {
+            AddElements(GetEntitySearch(document).ToList());
+        }
     }
 
 }

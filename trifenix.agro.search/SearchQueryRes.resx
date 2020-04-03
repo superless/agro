@@ -118,12 +118,12 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ENTITIES_WITH_ENTITYID" xml:space="preserve">
-    <value>EntityIndex eq {0} and RelatedIds/any(elementId: elementId/EntityIndex eq {1} and elementId/EntityId eq '{2}')</value>
+    <value>EntityIndex/any(element: element eq {0})  and RelatedIds/any(elementId: elementId/EntityIndex eq {1} and elementId/EntityId eq '{2}')</value>
   </data>
   <data name="ENTITIES_WITH_ENTITYID_EXCEPTID" xml:space="preserve">
-    <value>EntityIndex eq {0} and  Id ne '{3}' and RelatedIds/any(elementId: elementId/EntityIndex eq {1} and elementId/EntityId eq '{2}')</value>
+    <value>EntityIndex/any(element: element eq {0}) and  Id ne '{3}' and RelatedIds/any(elementId: elementId/EntityIndex eq {1} and elementId/EntityId eq '{2}')</value>
   </data>
   <data name="GET_ELEMENT" xml:space="preserve">
-    <value>EntityIndex eq {0} and Id eq '{1}'</value>
+    <value>EntityIndex/any(element: element eq {0}) and Id eq '{1}'</value>
   </data>
 </root>
