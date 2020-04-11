@@ -9,9 +9,28 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\res.core\res.core.csproj" />
     <ProjectReference Include="..\trifenix.agro.agrosearch.interfaces\trifenix.agro.search.interfaces.csproj" />
+    <ProjectReference Include="..\trifenix.agro.attr\trifenix.agro.attr.csproj" />
+    <ProjectReference Include="..\trifenix.agro.db\trifenix.agro.db.csproj" />
     <ProjectReference Include="..\trifenix.agro.enums\trifenix.agro.enums.csproj" />
     <ProjectReference Include="..\trifenix.agro.search.model\trifenix.agro.search.model.csproj" />
+    <ProjectReference Include="..\trifenix.agro.util\trifenix.agro.util.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="SearchQueryRes.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SearchQueryRes.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="SearchQueryRes.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SearchQueryRes.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

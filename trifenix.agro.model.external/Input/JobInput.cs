@@ -1,13 +1,17 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using trifenix.agro.attr;
+using trifenix.agro.enums.searchModel;
 
 namespace trifenix.agro.model.external.Input {
-    public class JobInput : InputBaseName { }
 
-    public class JobSwaggerInput {
+    [ReferenceSearch(EntityRelated.JOB)]
+    public class JobInput : InputBase {
 
-        [Required]
+        [Required, Unique]
+        [StringSearch(StringRelated.GENERIC_NAME)]
         public string Name { get; set; }
-
     }
+
+ 
 
 }

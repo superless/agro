@@ -150,6 +150,9 @@
   <data name="MAXCORRELATIVE_DOSES_BY_PRODUCTID" xml:space="preserve">
     <value>SELECT value max(c.Correlative) from c where c.IdProduct ='{0}'</value>
   </data>
+  <data name="NAME_BY_ID" xml:space="preserve">
+    <value>SELECT value c.Name FROM c where  c.id = '{0}'</value>
+  </data>
   <data name="SEASONID_FROM_BARRACKID" xml:space="preserve">
     <value>SELECT value c.SeasonId FROM c where c.id = '{0}'</value>
   </data>

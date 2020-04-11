@@ -38,8 +38,8 @@ namespace trifenix.agro.external.operations
                     throw new Validation_Exception { ErrorMessages = new List<string> { $"No existe {typeof(T).Name} con id '{input.Id}'." } };
             }
             await validator.ValidateRecursively<RequiredAttribute>(input);
-            await validator.ValidateRecursively<Reference>(input);
-            await validator.ValidateRecursively<Unique>(input);
+            await validator.ValidateRecursively<ReferenceAttribute>(input);
+            await validator.ValidateRecursively<UniqueAttribute>(input);
 
         }
 

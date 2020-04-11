@@ -6,6 +6,8 @@ using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model;
 using trifenix.agro.enums;
+using trifenix.agro.enums.input;
+using trifenix.agro.enums.searchModel;
 using trifenix.agro.external.interfaces;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
@@ -23,23 +25,7 @@ namespace trifenix.agro.external.operations.entities.main {
 
         public async Task<ExtPostContainer<string>> Save(Nebulizer nebulizer) {
             await repo.CreateUpdate(nebulizer);
-            search.AddElements(new List<EntitySearch> {
-                new EntitySearch {
-                    Id = nebulizer.Id,
-                    EntityIndex = (int)EntityRelated.NEBULIZER,
-                    Created = DateTime.Now,
-                    RelatedProperties = new Property[] {
-                        new Property {
-                            PropertyIndex = (int)PropertyRelated.GENERIC_BRAND,
-                            Value = nebulizer.Brand
-                        },
-                        new Property {
-                            PropertyIndex = (int)PropertyRelated.GENERIC_CODE,
-                            Value = nebulizer.Code
-                        }
-                    }
-                }
-            });
+            search.AddDocument(nebulizer);
             return new ExtPostContainer<string> {
                 IdRelated = nebulizer.Id,
                 MessageResult = ExtMessageResult.Ok

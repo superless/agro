@@ -4,8 +4,10 @@ using System.Threading.Tasks;
 using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.interfaces.common;
-using trifenix.agro.db.model.agro.orders;
+using trifenix.agro.db.model.orders;
 using trifenix.agro.enums;
+using trifenix.agro.enums.input;
+using trifenix.agro.enums.searchModel;
 using trifenix.agro.external.interfaces;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
@@ -32,21 +34,7 @@ namespace trifenix.agro.external.operations.entities.orders {
 
         public async Task<ExtPostContainer<string>> Save(ExecutionOrderStatus executionOrderStatus) {
             await repo.CreateUpdate(executionOrderStatus);
-            var executionStatusSearch = new EntitySearch {
-                Id = executionOrderStatus.Id,
-                EntityIndex = (int)EntityRelated.EXECUTION_ORDER_STATUS,
-                Created = executionOrderStatus.Created,
-                RelatedIds = new RelatedId[] { new RelatedId { EntityIndex = (int)EntityRelated.EXECUTION_ORDER, EntityId = executionOrderStatus.IdExecutionOrder } }
-            };
-            if (!string.IsNullOrWhiteSpace(executionOrderStatus.Comment))
-                executionStatusSearch.RelatedProperties = new Property[] { new Property { PropertyIndex = (int)PropertyRelated.GENERIC_COMMENT, Value = executionOrderStatus.Comment } };
-            var enums = new List<RelatedEnumValue> { new RelatedEnumValue { EnumerationIndex = (int)EnumerationRelated.EXECUTION_STATUS, Value = (int)executionOrderStatus.ExecutionStatus } };
-            if (executionOrderStatus.FinishStatus != 0)
-                enums.Add(new RelatedEnumValue { EnumerationIndex = (int)EnumerationRelated.EXECUTION_FINISH_STATUS, Value = (int)executionOrderStatus.FinishStatus });
-            if (executionOrderStatus.ClosedStatus != 0)
-                enums.Add(new RelatedEnumValue { EnumerationIndex = (int)EnumerationRelated.EXECUTION_CLOSED_STATUS, Value = (int)executionOrderStatus.ClosedStatus });
-            executionStatusSearch.RelatedEnumValues = enums.ToArray();
-            search.AddElements(new List<EntitySearch> { executionStatusSearch });
+            search.AddDocument(executionOrderStatus);
             return new ExtPostContainer<string> {
                 IdRelated = executionOrderStatus.Id,
                 MessageResult = ExtMessageResult.Ok

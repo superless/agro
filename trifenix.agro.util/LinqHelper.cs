@@ -4,7 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using trifenix.util.exceptions;
 
-namespace trifenix.agro.util {
+namespace trifenix.agro.util
+{
     public static class LinqHelper {
 
         /// <summary>
@@ -26,5 +27,7 @@ namespace trifenix.agro.util {
             }
             return listLocal;
         }
+
+
     }
 }

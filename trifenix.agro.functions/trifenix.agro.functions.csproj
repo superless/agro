@@ -18,15 +18,15 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DatabaseInitializer\trifenix.agro.cosmosdbinitializer.operations.csproj" />
+    <ProjectReference Include="..\trifenix.agro.authentication.interfaces\trifenix.agro.authentication.interfaces.csproj" />
     <ProjectReference Include="..\trifenix.agro.authentication.operations\trifenix.agro.authentication.operations.csproj" />
-    <ProjectReference Include="..\trifenix.agro.db.applicationsReference\trifenix.agro.db.applicationsReference.csproj" />
     <ProjectReference Include="..\trifenix.agro.email.operations\trifenix.agro.email.operations.csproj" />
+    <ProjectReference Include="..\trifenix.agro.external.interfaces\trifenix.agro.external.interfaces.csproj" />
     <ProjectReference Include="..\trifenix.agro.external.operations\trifenix.agro.external.operations.csproj" />
-    <ProjectReference Include="..\trifenix.agro.microsoftgraph.operations\trifenix.agro.microsoftgraph.operations.csproj" />
+    <ProjectReference Include="..\trifenix.agro.search\trifenix.agro.search.operations.csproj" />
     <ProjectReference Include="..\trifenix.agro.storage.operations\trifenix.agro.storage.operations.csproj" />
     <ProjectReference Include="..\trifenix.agro.swagger.model\trifenix.agro.swagger.model.csproj" />
     <ProjectReference Include="..\trifenix.agro.weather.operations\trifenix.agro.weather.operations.csproj" />
-    <ProjectReference Include="..\trifenix.util.extensions\trifenix.util.extensions.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">

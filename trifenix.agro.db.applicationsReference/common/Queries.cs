@@ -1,6 +1,7 @@
 ﻿using trifenix.agro.db.applicationsReference.common.res;
 using trifenix.agro.db.interfaces.common;
 using trifenix.agro.enums;
+using trifenix.agro.enums.query;
 
 namespace trifenix.agro.db.applicationsReference.common {
     public class Queries : IQueries {
@@ -38,6 +39,8 @@ namespace trifenix.agro.db.applicationsReference.common {
                     return QueryRes.DEFAULTDOSESID_BY_PRODUCTID;
                 case DbQuery.ACTIVEDOSESIDS_FROM_PRODUCTID:
                     return QueryRes.ACTIVEDOSESIDS_FROM_PRODUCTID;
+                case DbQuery.NAME_BY_ID:
+                    return QueryRes.NAME_BY_ID;
                 default:
                     return "";
             }

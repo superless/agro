@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\res.model.db\res.model.csproj" />
+    <ProjectReference Include="..\trifenix.agro.attr\trifenix.agro.attr.csproj" />
+  </ItemGroup>
+
+</Project>

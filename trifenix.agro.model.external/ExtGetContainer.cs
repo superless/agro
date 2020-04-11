@@ -1,5 +1,6 @@
 ﻿using System;
 using trifenix.agro.enums;
+using trifenix.agro.enums.input;
 
 namespace trifenix.agro.model.external
 {

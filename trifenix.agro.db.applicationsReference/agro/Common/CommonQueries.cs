@@ -3,9 +3,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.model;
-using trifenix.agro.db.model.agro;
-using trifenix.agro.db.model.agro.orders;
+using trifenix.agro.db.model;
+using trifenix.agro.db.model.orders;
 using trifenix.agro.enums;
+using trifenix.agro.enums.query;
 
 namespace trifenix.agro.db.applicationsReference.agro.Common {
 
@@ -43,7 +44,9 @@ namespace trifenix.agro.db.applicationsReference.agro.Common {
         public async Task<string> GetDefaultDosesId(string idProduct) => await SingleQuery<Dose, string>(Queries(DbQuery.DEFAULTDOSESID_BY_PRODUCTID), idProduct);
 
         public async Task<IEnumerable<string>> GetActiveDosesIdsFromProductId(string idProduct) => await MultipleQuery<Dose, string>(Queries(DbQuery.ACTIVEDOSESIDS_FROM_PRODUCTID), idProduct);
-    
+
+        public async Task<string> GetEntityName<T>(string id) where T : DocumentBaseName => await SingleQuery<T, string>(Queries(DbQuery.NAME_BY_ID), id);
+
     }
 
 }

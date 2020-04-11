@@ -23,6 +23,7 @@ namespace trifenix.agro.db.interfaces.agro.common {
 
         Task<IEnumerable<string>> GetActiveDosesIdsFromProductId(string idProduct);
 
+        Task<string> GetEntityName<T>(string id) where T : DocumentBaseName;
 
 
 
@@ -31,9 +32,9 @@ namespace trifenix.agro.db.interfaces.agro.common {
     public interface ICounters {
         Task<long> GetCounter<T>(string query) where T:DocumentBase;
 
-        Task<long> GetLastCounterDoses(string idProduct);
+        Task<int> GetLastCounterDoses(string idProduct);
 
-        Task<long> GetCorrelativeFromDoses(string idDoses);
+        Task<int> GetCorrelativeFromDoses(string idDoses);
     }
 
 }

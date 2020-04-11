@@ -8,6 +8,7 @@ using System.Linq.Expressions;
 using trifenix.agro.db.interfaces.common;
 using trifenix.agro.enums;
 using trifenix.agro.db.interfaces.agro.common;
+using trifenix.agro.enums.input;
 
 namespace trifenix.agro.external.operations.helper
 {

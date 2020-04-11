@@ -1,5 +1,4 @@
 ﻿using Cosmonaut;
-using System;
 using System.Collections.Generic;
 using trifenix.agro.db;
 using trifenix.agro.db.applicationsReference;
@@ -9,9 +8,8 @@ using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model;
-using trifenix.agro.db.model.agro;
-using trifenix.agro.db.model.agro.core;
-using trifenix.agro.db.model.agro.orders;
+using trifenix.agro.db.model.core;
+using trifenix.agro.db.model.orders;
 using trifenix.agro.email.interfaces;
 using trifenix.agro.external.interfaces;
 using trifenix.agro.external.operations.entities;
@@ -59,8 +57,9 @@ namespace trifenix.agro.external.operations {
 
         private ICommonQueries CommonQueries => new CommonQueries(Arguments);
 
-        private IValidator Validators => new Validator(new Dictionary<string, IValidate> { { "Reference", new ReferenceValidation(ExistsElements) }, { "Required", new RequiredValidation() }, { "Unique", new UniqueValidation(ExistsElements) } });
+        private IValidator Validators => new Validator(new Dictionary<string, IValidate> { { "ReferenceAttribute", new ReferenceValidation(ExistsElements) }, { "RequiredAttribute", new RequiredValidation() }, { "UniqueAttribute", new UniqueValidation(ExistsElements) } });
 
+        public ICounters Counters => new Counters(Arguments);
 
         public IGenericOperation<UserActivity, UserActivityInput> UserActivity => new UserActivityOperations(GetMainDb<UserActivity>(), ExistsElements, _searchServiceInstance, GetCommonDbOp<UserActivity>(), UserId, Validators);
 
@@ -84,7 +83,7 @@ namespace trifenix.agro.external.operations {
 
         public IGenericOperation<Product, ProductInput> Product => new ProductOperations(GetMainDb<Product>(), ExistsElements, _searchServiceInstance, Dose, GetCommonDbOp<Product>(), CommonQueries, Validators);
 
-        public IGenericOperation<Dose, DosesInput> Dose => new DosesOperations(GetMainDb<Dose>(), ExistsElements, _searchServiceInstance, GetCommonDbOp<Dose>(), new Counters(Arguments), Validators);
+        public IGenericOperation<Dose, DosesInput> Dose => new DosesOperations(GetMainDb<Dose>(), ExistsElements, _searchServiceInstance, GetCommonDbOp<Dose>(), new Counters(Arguments), CommonQueries, Validators);
 
         public IGenericOperation<Role, RoleInput> Role => new RoleOperations(GetMainDb<Role>(), ExistsElements, _searchServiceInstance, GetCommonDbOp<Role>(), Validators);
 

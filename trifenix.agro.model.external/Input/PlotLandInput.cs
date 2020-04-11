@@ -1,27 +1,24 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using trifenix.agro.db.model.agro;
+using trifenix.agro.attr;
+using trifenix.agro.db.model;
+using trifenix.agro.enums.searchModel;
 
 namespace trifenix.agro.model.external.Input {
-    public class PlotLandInput : InputBaseName {
+
+    [ReferenceSearch(EntityRelated.PLOTLAND)]
+    public class PlotLandInput : InputBase {
+
+
         [Required, Reference(typeof(Sector))]
+        [ReferenceSearch(EntityRelated.SECTOR)]
         public string IdSector { get; set; }
 
-    }
-
-    public class PlotLandSwaggerInput  {
-
-        /// <summary>
-        /// Nombre de Parcela
-        /// </summary>
-        [Required]
+        [Required, Unique]
+        [StringSearch(StringRelated.GENERIC_NAME)]
         public string Name { get; set; }
 
-        /// <summary>
-        /// Id del sector al que pertenece la parcela.
-        /// </summary>
-        [Required]
-        public string IdSector { get; set; }
-
     }
+
+  
 
 }

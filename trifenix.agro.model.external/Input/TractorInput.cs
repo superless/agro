@@ -1,20 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using trifenix.agro.attr;
+using trifenix.agro.enums.searchModel;
 
 namespace trifenix.agro.model.external.Input {
+
+    [ReferenceSearch(EntityRelated.TRACTOR)]
     public class TractorInput : InputBase {
 
         [Required]
+        [StringSearch(StringRelated.GENERIC_BRAND)]
         public string Brand { get; set; }
 
+        [StringSearch(StringRelated.GENERIC_CODE)]
         [Required, Unique]
-        public string Code { get; set; }
-
-    }
-
-    public class TractorSwaggerInput {
-
-        public string Brand { get; set; }
-
         public string Code { get; set; }
 
     }

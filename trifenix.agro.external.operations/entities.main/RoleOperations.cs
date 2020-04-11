@@ -4,8 +4,10 @@ using System.Threading.Tasks;
 using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.interfaces.common;
-using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model;
 using trifenix.agro.enums;
+using trifenix.agro.enums.input;
+using trifenix.agro.enums.searchModel;
 using trifenix.agro.external.interfaces;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
@@ -23,19 +25,7 @@ namespace trifenix.agro.external.operations.entities.main {
 
         public async Task<ExtPostContainer<string>> Save(Role role) {
             await repo.CreateUpdate(role);
-            search.AddElements(new List<EntitySearch> {
-                new EntitySearch{
-                    Id = role.Id,
-                    EntityIndex = (int)EntityRelated.ROLE,
-                    Created = DateTime.Now,
-                    RelatedProperties = new Property[] {
-                        new Property {
-                            PropertyIndex = (int)PropertyRelated.GENERIC_NAME,
-                            Value = role.Name
-                        }
-                    }
-                }
-            });
+            search.AddDocument(role);
             return new ExtPostContainer<string> {
                 IdRelated = role.Id,
                 MessageResult = ExtMessageResult.Ok

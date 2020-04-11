@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using trifenix.agro.db.model.agro.orders;
+using trifenix.agro.db.model.orders;
 using trifenix.agro.enums;
+using trifenix.agro.enums.model;
 
 namespace trifenix.agro.model.external.output
 {
@@ -18,7 +19,7 @@ namespace trifenix.agro.model.external.output
 
         public string IdNubulizer { get; set; }
 
-        public DateTime InitDate { get; set; }
+        public DateTime StartDate { get; set; }
 
         public DateTime EndDate { get; set; }
 

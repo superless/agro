@@ -1,20 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.interfaces.common;
-using trifenix.agro.db.model.agro;
-using trifenix.agro.enums;
+using trifenix.agro.db.model;
+using trifenix.agro.enums.input;
 using trifenix.agro.external.interfaces;
 using trifenix.agro.microsoftgraph.interfaces;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
-using trifenix.agro.search.model;
 using trifenix.agro.validator.interfaces;
 
 namespace trifenix.agro.external.operations.entities.main {
+
     public class UserOperations : MainOperation<UserApplicator, UserApplicatorInput>, IGenericOperation<UserApplicator, UserApplicatorInput> {
 
         private readonly IGraphApi graphApi;
@@ -22,45 +22,36 @@ namespace trifenix.agro.external.operations.entities.main {
         public UserOperations(IMainGenericDb<UserApplicator> repo, IExistElement existElement, IAgroSearch search, IGraphApi graphApi, ICommonDbOperations<UserApplicator> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
             this.graphApi = graphApi;
         }
-        public async Task Remove(string id)
-        {
 
-        }
-        private RelatedId[] GetIdsRelated(UserApplicator input) {
-            var relatedIds = new List<RelatedId>();
-            if (!string.IsNullOrWhiteSpace(input.IdJob))
-                relatedIds.Add(new RelatedId { EntityIndex = (int)EntityRelated.JOB, EntityId = input.IdJob });
-            if (!string.IsNullOrWhiteSpace(input.IdTractor))
-                relatedIds.Add(new RelatedId { EntityIndex = (int)EntityRelated.TRACTOR, EntityId = input.IdTractor });
-            if (!string.IsNullOrWhiteSpace(input.IdNebulizer))
-                relatedIds.Add(new RelatedId { EntityIndex = (int)EntityRelated.NEBULIZER, EntityId = input.IdNebulizer });
-            foreach (var idRole in input.IdsRoles)
-                relatedIds.Add(new RelatedId { EntityIndex = (int)EntityRelated.ROLE, EntityId = idRole });
-            return relatedIds.ToArray();
-        }
+        public async Task Remove(string id) { }
 
-        private Property[] GetPropertiesRelated(UserApplicator userApp) {
-            var properties = new List<Property> {
-                new Property { PropertyIndex = (int)PropertyRelated.OBJECT_ID_AAD, Value = userApp.ObjectIdAAD },
-                new Property { PropertyIndex = (int)PropertyRelated.GENERIC_NAME, Value = userApp.Name },
-                new Property { PropertyIndex = (int)PropertyRelated.GENERIC_RUT, Value = userApp.Rut }
-            };
-            if (!string.IsNullOrWhiteSpace(userApp.Email))
-                properties.Add(new Property { PropertyIndex = (int)PropertyRelated.GENERIC_EMAIL, Value = userApp.Email });
-            return properties.ToArray();
-        }
+        //private RelatedId[] GetIdsRelated(UserApplicator input) {
+        //    var relatedIds = new List<RelatedId>();
+        //    if (!string.IsNullOrWhiteSpace(input.IdJob))
+        //        relatedIds.Add(new RelatedId { EntityIndex = (int)EntityRelated.JOB, EntityId = input.IdJob });
+        //    if (!string.IsNullOrWhiteSpace(input.IdTractor))
+        //        relatedIds.Add(new RelatedId { EntityIndex = (int)EntityRelated.TRACTOR, EntityId = input.IdTractor });
+        //    if (!string.IsNullOrWhiteSpace(input.IdNebulizer))
+        //        relatedIds.Add(new RelatedId { EntityIndex = (int)EntityRelated.NEBULIZER, EntityId = input.IdNebulizer });
+        //    foreach (var idRole in input.IdsRoles)
+        //        relatedIds.Add(new RelatedId { EntityIndex = (int)EntityRelated.ROLE, EntityId = idRole });
+        //    return relatedIds.ToArray();
+        //}
+
+        //private Property[] GetPropertiesRelated(UserApplicator userApp) {
+        //    var properties = new List<Property> {
+        //        new Property { PropertyIndex = (int)PropertyRelated.OBJECT_ID_AAD, Value = userApp.ObjectIdAAD },
+        //        new Property { PropertyIndex = (int)PropertyRelated.GENERIC_NAME, Value = userApp.Name },
+        //        new Property { PropertyIndex = (int)PropertyRelated.GENERIC_RUT, Value = userApp.Rut }
+        //    };
+        //    if (!string.IsNullOrWhiteSpace(userApp.Email))
+        //        properties.Add(new Property { PropertyIndex = (int)PropertyRelated.GENERIC_EMAIL, Value = userApp.Email });
+        //    return properties.ToArray();
+        //}
 
         public async Task<ExtPostContainer<string>> Save(UserApplicator userApp) {
             await repo.CreateUpdate(userApp);
-            search.AddElements(new List<EntitySearch> {
-                new EntitySearch {
-                    Id = userApp.Id,
-                    EntityIndex = (int)EntityRelated.USER,
-                    Created = DateTime.Now,
-                    RelatedProperties = GetPropertiesRelated(userApp),
-                    RelatedIds = GetIdsRelated(userApp)
-                }
-            });
+            search.AddDocument(userApp);
             return new ExtPostContainer<string> {
                 IdRelated = userApp.Id,
                 MessageResult = ExtMessageResult.Ok

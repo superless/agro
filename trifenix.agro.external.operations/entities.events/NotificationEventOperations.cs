@@ -1,18 +1,24 @@
-﻿using System;
+﻿using Microsoft.Azure.Documents.Spatial;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.interfaces.common;
-using trifenix.agro.db.model.agro;
+using trifenix.agro.db.model;
 using trifenix.agro.email.interfaces;
 using trifenix.agro.enums;
+using trifenix.agro.enums.input;
+using trifenix.agro.enums.model;
+using trifenix.agro.enums.searchModel;
 using trifenix.agro.external.interfaces;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
 using trifenix.agro.storage.interfaces;
+using trifenix.agro.util;
 using trifenix.agro.validator.interfaces;
 using trifenix.agro.weather.interfaces;
 
@@ -62,28 +68,8 @@ namespace trifenix.agro.external.operations.entities.events {
             var picturePath = await uploadImage.UploadImageBase64(notificationEvent.PicturePath);
             notificationEvent.PicturePath = picturePath;
             await repo.CreateUpdate(notificationEvent);
-            var specieAbbv = await commonQueries.GetSpecieAbbreviationFromBarrack(notificationEvent.IdBarrack);
-            var idSeason = await commonQueries.GetSeasonId(notificationEvent.IdBarrack);
-            search.AddElements(new List<EntitySearch> {
-                new EntitySearch {
-                    Id = notificationEvent.Id,
-                    EntityIndex = (int)EntityRelated.NOTIFICATION_EVENT,
-                    Created = notificationEvent.Created,
-                    RelatedProperties= new Property[]{
-                       new Property{ PropertyIndex=(int)PropertyRelated.GENERIC_DESC, Value = notificationEvent.Description },
-                       new Property{ PropertyIndex=(int)PropertyRelated.GENERIC_ABBREVIATION, Value = specieAbbv },
-                       new Property{ PropertyIndex=(int)PropertyRelated.GENERIC_PATH, Value = notificationEvent.PicturePath }
-                    },
-                    RelatedIds = new RelatedId[]{
-                      new RelatedId{  EntityIndex=(int)EntityRelated.PHENOLOGICAL_EVENT, EntityId = notificationEvent.IdPhenologicalEvent},
-                      new RelatedId{  EntityIndex=(int)EntityRelated.BARRACK, EntityId = notificationEvent.IdBarrack},
-                      new RelatedId{ EntityIndex=(int)EntityRelated.SEASON, EntityId = idSeason }
-                    },
-                    RelatedEnumValues = new RelatedEnumValue[]{
-                        new RelatedEnumValue{ EnumerationIndex = (int)EnumerationRelated.NOTIFICATION_TYPE, Value = (int)notificationEvent.NotificationType  }
-                    }
-                }
-            });
+            search.AddDocument(notificationEvent);
+
             //TODO: Definir el origen de la lista de idsRoles
             var usersEmails = await commonQueries.GetUsersMailsFromRoles(new List<string> { "24beac75d4bb4f8d8fae8373426af780" });
             email.SendEmail(usersEmails, "Notificacion",
@@ -112,11 +98,11 @@ namespace trifenix.agro.external.operations.entities.events {
                 NotificationType = input.NotificationType,
                 PicturePath = input.Base64,
                 Description = input.Description,
-                Lat = input.Lat,
-                Long = input.Long
             };
-            if (input.Lat.HasValue && input.Long.HasValue)
-                notification.Weather = await weather.GetWeather(input.Lat.Value, input.Long.Value);
+            if (input.Location != null) {
+                notification.Location = new Point(input.Location.Longitude, input.Location.Latitude);
+                notification.Weather = await weather.GetWeather((float)input.Location.Latitude, (float)input.Location.Longitude);
+            }
             if (!isBatch)
                 return await Save(notification);
             await repo.CreateEntityContainer(notification);
