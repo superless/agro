@@ -21,6 +21,7 @@ namespace trifenix.agro.search.model {
         public int[] EntityIndex { get; set; }
 
         [IsSortable]
+        [JsonProperty("created")]
         public DateTime Created { get; set; }
 
         [JsonProperty("rel")]

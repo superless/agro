@@ -7,6 +7,8 @@ using System;
 using System.Threading;
 using Newtonsoft.Json;
 using System.Reflection;
+using trifenix.agro.old.applicationsReference;
+using trifenix.agro.old.db.applicationsReference;
 
 namespace trifenix.agro.console {
 
@@ -21,28 +23,32 @@ namespace trifenix.agro.console {
 
         static async Task Main(string[] args) {
 
-            var allCultures = CultureInfo.GetCultures(CultureTypes.AllCultures);
 
 
-            //Console.WriteLine("Hora de inicio: {0}", DateTime.Now.ToString("hh\\:mm\\:ss"));
-            //Stopwatch timer = Stopwatch.StartNew();
             
-            var ns = new EntitySearch { Id = "sadsad", EntityIndex = new int[] { 1} };
 
-            var nsJson = JsonConvert.SerializeObject(ns);
+            //var allCultures = CultureInfo.GetCultures(CultureTypes.AllCultures);
 
-            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("es");
 
-            var display = typeof(TestDesc).GetProperty(nameof(TestDesc.Test1)).GetCustomAttribute<DisplayAttribute>();
+            ////Console.WriteLine("Hora de inicio: {0}", DateTime.Now.ToString("hh\\:mm\\:ss"));
+            ////Stopwatch timer = Stopwatch.StartNew();
             
-            var name = display.GetName();
-            var description = display.GetDescription();
-            Console.WriteLine(name);
-            Console.WriteLine(description);
+            //var ns = new EntitySearch { Id = "sadsad", EntityIndex = new int[] { 1} };
+
+            //var nsJson = JsonConvert.SerializeObject(ns);
+
+            //Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("es");
+
+            //var display = typeof(TestDesc).GetProperty(nameof(TestDesc.Test1)).GetCustomAttribute<DisplayAttribute>();
+            
+            //var name = display.GetName();
+            //var description = display.GetDescription();
+            //Console.WriteLine(name);
+            //Console.WriteLine(description);
 
 
 
-            await SearchHelper.UpdateSearch();
+            //await SearchHelper.UpdateSearch();
 
 
             var search = new AgroSearch("agrosearch", "016DAA5EF1158FEEEE58DA60996D5981");
@@ -353,7 +359,8 @@ namespace trifenix.agro.console {
             //7.PlotLand
             //8.Rootstock
             //9.Barrack
-            //10.IngredientCategory
+            //10.Ingredient
+            
             //11.Ingredient
             //12.ApplicationTarget
             //13.CertifiedEntity

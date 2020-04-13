@@ -31,18 +31,26 @@ namespace trifenix.typegen.data {
                 DoubleData = GetDictionaryFromRelated(propByRelatedAndIndex, Related.DBL),
                 EnumData = GetEnumDictionaryFromRelated(propByRelatedAndIndex, enumEmun),
                 GeoData = GetDictionaryFromRelated(propByRelatedAndIndex, Related.GEO),
-                NumData = GetDictionaryFromRelated(propByRelatedAndIndex, Related.NUM32)
+                NumData = GetDictionaryFromRelated(propByRelatedAndIndex, Related.NUM32),
+                relData = GetDictionaryFromRelated(propByRelatedAndIndex, Related.REFERENCE),
+
             };
             var suggestions = GetDictionaryFromRelated(propByRelatedAndIndex, Related.SUGGESTION);
             var num64 = GetDictionaryFromRelated(propByRelatedAndIndex, Related.NUM64);
             var suggestionNotInString = suggestions.Where(sg => !modelDictionary.StringData.Any(s => s.Key == sg.Key));
             var num64NotInNum = num64.Where(sg => !modelDictionary.NumData.Any(s => s.Key == sg.Key));
+            var relLocal = GetDictionaryFromRelated(propByRelatedAndIndex, Related.LOCAL_REFERENCE);
             if (suggestionNotInString.Any())
                 foreach (var item in suggestionNotInString)
                     modelDictionary.StringData.Add(item.Key, item.Value);
             if (num64NotInNum.Any())
                 foreach (var item in num64NotInNum)
                     modelDictionary.NumData.Add(item.Key, item.Value);
+            if (relLocal.Any())
+                foreach (var item in relLocal)
+                    modelDictionary.relData.Add(item.Key, item.Value);
+
+            
             return modelDictionary;
         }
 
@@ -63,7 +71,7 @@ namespace trifenix.typegen.data {
         private static Dictionary<int, DefaultDictionary> GetDictionaryFromRelated(IEnumerable<PropertySearchInfo> propSearchInfos, Related related) {
             var infos = propSearchInfos.Where(s => s.Related == related).ToList();
             return infos.ToDictionary(s => s.Index, g => new DefaultDictionary {
-                NameProp = g.Name,
+                NameProp = char.ToLower(g.Name[0]) + g.Name.Substring(1) ,
                 isArray = g.IsEnumerable,
                 Info = g.Info,
                 Required = g.IsRequired,
@@ -73,18 +81,25 @@ namespace trifenix.typegen.data {
 
         private static Dictionary<int, EnumDictionary> GetEnumDictionaryFromRelated(IEnumerable<PropertySearchInfo> propSearchInfos, Dictionary<int, string> enumDescription) {
             return propSearchInfos.Where(s => s.Related == Related.ENUM).ToDictionary(s => s.Index, g => new EnumDictionary {
-                NameProp = g.Name,
+                NameProp = char.ToLower(g.Name[0]) + g.Name.Substring(1),
                 isArray = g.IsEnumerable,
                 Info = g.Info,
                 EnumData = g.Enums
             });
         }
 
+
+
+
         public static PropertySearchInfo[] GetPropertyByIndex(Type type, int index) {
             var searchAttributesProps = type.GetProperties().Where(prop => Attribute.IsDefined(prop, typeof(SearchAttribute), true));
             var elemTypeInput = AgroHelper.GetEntityType((EntityRelated)index, typeof(BarrackInput), "trifenix.agro.model.external.Input");
+
             var elemTypeInputProps = elemTypeInput.GetProperties().Where(prop => Attribute.IsDefined(prop, typeof(SearchAttribute), true))
-                .Select(s=>new { search = s.GetAttribute<SearchAttribute>(), required = s.GetAttribute<RequiredAttribute>(), unique = s.GetAttribute<UniqueAttribute>() });
+                .Select(s=>new { info = s, search = s.GetAttribute<SearchAttribute>(), required = s.GetAttribute<RequiredAttribute>(), unique = s.GetAttribute<UniqueAttribute>() });
+
+
+
             var props = searchAttributesProps.Select(s => {
                 var searchAttribute = (SearchAttribute)s.GetCustomAttributes(typeof(SearchAttribute), true).FirstOrDefault();
                 var searchAttributeInput = elemTypeInputProps.FirstOrDefault(p => p.search.Index == searchAttribute.Index && p.search.Related == searchAttribute.Related);
@@ -100,6 +115,29 @@ namespace trifenix.typegen.data {
                     IsUnique = searchAttributeInput?.unique != null,
                 };
             }).ToArray();
+
+            if (elemTypeInputProps.Any(s=>!props.Any(a=>a.Name.Equals(s.info.Name))))
+            {
+                var extra = elemTypeInputProps.Where(s => !props.Any(a => a.Name.Equals(s.info.Name)));
+                var list = props.ToList();
+                foreach (var item in extra)
+                {
+                    list.Add(new PropertySearchInfo
+                    {
+                        IsEnumerable = IsEnumerableProperty(item.info),
+                        Name = item.info.Name,
+                        Index = item.search.Index,
+                        Related = item.search.Related,
+                        Enums = item.search.Related == Related.ENUM ? GetDescription(item.info.PropertyType) : new Dictionary<int, string>(),
+                        IndexClass = index,
+                        Info = ResourceExtension.ResourceModel(item.search.Related, item.search.Index),
+                        IsRequired = item?.required != null,
+                        IsUnique = item?.unique != null,
+                    });
+                }
+                props = list.ToArray();
+
+            }
             return props;
         }
 

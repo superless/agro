@@ -33,6 +33,9 @@ namespace trifenix.agro.db.model {
         [EnumSearch(EnumRelated.GENERIC_KIND_CONTAINER)]
         public KindOfProductContainer KindOfBottle { get; set; }
 
+
+
+
     }
 
 }

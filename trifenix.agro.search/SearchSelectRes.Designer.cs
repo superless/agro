@@ -22,14 +22,14 @@ namespace trifenix.agro.search.operations {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class SearchQueryRes {
+    internal class SearchSelectRes {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal SearchQueryRes() {
+        internal SearchSelectRes() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace trifenix.agro.search.operations {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("trifenix.agro.search.operations.SearchQueryRes", typeof(SearchQueryRes).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("trifenix.agro.search.operations.SearchSelectRes", typeof(SearchSelectRes).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,60 +57,6 @@ namespace trifenix.agro.search.operations {
             }
             set {
                 resourceCulture = value;
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to str/any(element: element/propertyIndex eq {0}) and (id eq &apos;{1}&apos;).
-        /// </summary>
-        internal static string ELEMENTS_WITHSTRINDEX_AND_IDS {
-            get {
-                return ResourceManager.GetString("ELEMENTS_WITHSTRINDEX_AND_IDS", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to entityIndex/any(element: element eq {0}).
-        /// </summary>
-        internal static string ENTITIES_BYINDEX {
-            get {
-                return ResourceManager.GetString("ENTITIES_BYINDEX", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to entityIndex/any(element: element eq {0})  and rel/any(elementId: elementId/entityIndex eq {1} and elementId/entityId eq &apos;{2}&apos;).
-        /// </summary>
-        internal static string ENTITIES_WITH_ENTITYID {
-            get {
-                return ResourceManager.GetString("ENTITIES_WITH_ENTITYID", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to entityIndex/any(element: element eq {0}) and  Id ne &apos;{3}&apos; and rel/any(elementId: elementId/entityIndex eq {1} and elementId/entityId eq &apos;{2}&apos;).
-        /// </summary>
-        internal static string ENTITIES_WITH_ENTITYID_EXCEPTID {
-            get {
-                return ResourceManager.GetString("ENTITIES_WITH_ENTITYID_EXCEPTID", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to entityIndex/any(element: element eq {0}) and Id eq &apos;{1}&apos;.
-        /// </summary>
-        internal static string GET_ELEMENT {
-            get {
-                return ResourceManager.GetString("GET_ELEMENT", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &apos; or id eq &apos;.
-        /// </summary>
-        internal static string IDS_JOIN {
-            get {
-                return ResourceManager.GetString("IDS_JOIN", resourceCulture);
             }
         }
     }

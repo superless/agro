@@ -132,7 +132,10 @@ namespace trifenix.agro.search.model.ts
 
         public Dictionary<int, EnumDictionary> EnumData { get; set; }
 
-        
+
+        public Dictionary<int, DefaultDictionary> relData { get; set; }
+
+
 
 
 
