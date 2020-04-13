@@ -7,8 +7,7 @@ using System;
 using System.Threading;
 using Newtonsoft.Json;
 using System.Reflection;
-using trifenix.agro.old.applicationsReference;
-using trifenix.agro.old.db.applicationsReference;
+
 
 namespace trifenix.agro.console {
 
