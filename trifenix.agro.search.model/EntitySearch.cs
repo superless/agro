@@ -2,9 +2,7 @@
 using Microsoft.Spatial;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 
 namespace trifenix.agro.search.model {
 
@@ -21,6 +19,7 @@ namespace trifenix.agro.search.model {
         public int[] EntityIndex { get; set; }
 
         [IsSortable]
+        [JsonProperty("created")]
         public DateTime Created { get; set; }
 
         [JsonProperty("rel")]

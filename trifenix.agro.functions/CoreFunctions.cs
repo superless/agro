@@ -1,6 +1,7 @@
 ﻿using AzureFunctions.Extensions.Swashbuckle.Attribute;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.ServiceBus;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
@@ -13,11 +14,15 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using trifenix.agro.authentication.operations;
+using trifenix.agro.db.exceptions;
+using trifenix.agro.enums.input;
+using trifenix.agro.enums.model;
 using trifenix.agro.external.operations.helper;
 using trifenix.agro.functions.Helper;
 using trifenix.agro.functions.mantainers;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
+using trifenix.agro.servicebus.operations;
 using trifenix.agro.swagger.model.input;
 
 namespace trifenix.agro.functions {
@@ -33,9 +38,9 @@ namespace trifenix.agro.functions {
         /// <param name="req">cabecera que debe incluir el modelo de entrada </param>
         /// <param name="log"></param>
         /// <returns></returns>
-        [FunctionName("login")]        
+        [FunctionName("Login")]        
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
-        public static async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] [RequestBodyType(typeof(LoginInput), "Nombre de usuario y contraseña")] HttpRequest req, ILogger log) {
+        public static async Task<IActionResult> Login([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] [RequestBodyType(typeof(LoginInput), "Nombre de usuario y contraseña")] HttpRequest req, ILogger log) {
             var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic credenciales = JsonConvert.DeserializeObject(requestBody);
             string clientId = Environment.GetEnvironmentVariable("clientID", EnvironmentVariableTarget.Process);
@@ -65,6 +70,38 @@ namespace trifenix.agro.functions {
             return ContainerMethods.GetJsonGetContainer(OperationHelper.GetElement(accessToken), log);
         }
 
+        [FunctionName("ServiceBus")]
+        public static async Task Handler([ServiceBusTrigger("agroqueue", Connection = "ServiceBusConnectionString", IsSessionsEnabled = true)]Message message, ILogger log) {
+            var opInstance = ServiceBus.Deserialize(message.Body);
+            var agro = await ContainerMethods.AgroManager(opInstance.Value<string>("ObjectIdAAD"), false);
+            var entityType = opInstance["EntityType"].ToObject<Type>();
+            var repo = agro.GetOperationByInputType(entityType);
+            dynamic element = opInstance["Element"].ToObject(entityType);
+            try {
+                var saveReturn = await repo.SaveInput(element, false);
+                var recordActivity = agro.GetOperationByInputType(typeof(UserActivityInput));
+                await recordActivity.SaveInput(new UserActivityInput {
+                    Action = opInstance.Value<string>("HttpMethod").Equals("post") ? UserActivityAction.CREATE : UserActivityAction.MODIFY,
+                    Date = DateTime.Now,
+                    EntityName = opInstance.Value<string>("EntityName"),
+                    EntityId = saveReturn.IdRelated
+                }, false);
+            }
+            catch (Exception ex) {
+                var extPostError = new ExtPostErrorContainer<string> {
+                    InternalException = ex,
+                    Message = ex.Message,
+                    MessageResult = ExtMessageResult.Error
+                };
+                if (ex is Validation_Exception)
+                    extPostError.ValidationMessages = ((Validation_Exception)ex).ErrorMessages;
+                log.LogError(extPostError.InternalException, extPostError.Message);
+                //return new ActionResultWithId {
+                //    Id = null,
+                //    JsonResult = ContainerMethods.GetJsonPostContainer(extPostError, log)
+                //};
+            }
+        }
 
         /// <summary>
         /// Creación de Sector
