@@ -1,6 +1,7 @@
 {
   "IsEncrypted": false,
   "Values": {
+    "AzureSignalRConnectionString": "Endpoint=https://agrosignalr.service.signalr.net;AccessKey=QqAjcjoUiPvKufPxIl1V0aXlK3HG3MaEVf3TLPkztYo=;Version=1.0;",
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "clientID": "34d9266f-43f9-4fb2-8cdd-ae21be551342",
     "clientSecret": "B._H_uAwEdg7K1FzVboS3S/oF4IKNbtf",
