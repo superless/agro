@@ -7,11 +7,10 @@ namespace trifenix.agro.model.external.Input {
     [ReferenceSearch(EntityRelated.ROLE)]
     public class RoleInput : InputBase {
 
-
         [Required, Unique]
         [StringSearch(StringRelated.GENERIC_NAME)]
         public string Name { get; set; }
+
     }
 
-  
 }

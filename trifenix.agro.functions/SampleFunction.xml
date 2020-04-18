@@ -9,7 +9,7 @@
             Funciones 
             </summary>
         </member>
-        <member name="M:trifenix.agro.functions.CoreFunctions.Run(Microsoft.AspNetCore.Http.HttpRequest,Microsoft.Extensions.Logging.ILogger)">
+        <member name="M:trifenix.agro.functions.CoreFunctions.Login(Microsoft.AspNetCore.Http.HttpRequest,Microsoft.Extensions.Logging.ILogger)">
             <summary>
             Login, donde usa usuario y contraseña para obtener el token.
             </summary>
