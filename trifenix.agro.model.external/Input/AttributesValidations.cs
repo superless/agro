@@ -27,12 +27,15 @@ namespace trifenix.agro.model.external.Input {
         }
 
         private async Task<bool> AlreadyExists(object Obj, Type EntityType, string PropertyName, string Id){
-            switch (Obj.GetType().Name) {
-                case "string":
-                    return await(Task<bool>)ExistElement.GetType().GetMethod("ExistsWithPropertyValue").MakeGenericMethod(EntityType).Invoke(ExistElement, new object[] { PropertyName, Obj, Id });
-                default:
-                    return false;
-            }
+            //TODO: Hacer conversor de InputBase a DocumentBase, deseable viceversa
+            //string type = Obj.GetType().Name.ToLower();
+            //switch (type) {
+            //    case "string":
+            //        return await(Task<bool>)ExistElement.GetType().GetMethod("ExistsWithPropertyValue").MakeGenericMethod(EntityType).Invoke(ExistElement, new object[] { PropertyName, Obj, Id });
+            //    default:
+            //        return false;
+            //}
+            return false;
         }
 
     }
@@ -56,7 +59,8 @@ namespace trifenix.agro.model.external.Input {
             }
         }
 
-        private async Task<bool> ExistEntityReferenced(string reference, Type referencedEntityType) => await (Task<bool>)ExistElement.GetType().GetMethod("ExistsById").MakeGenericMethod(referencedEntityType).Invoke(ExistElement, new object[] { reference });
+        private async Task<bool> ExistEntityReferenced(string reference, Type referencedEntityType) =>
+            await (Task<bool>)ExistElement.GetType().GetMethod("ExistsById").MakeGenericMethod(referencedEntityType).Invoke(ExistElement, new object[] { reference });
 
     }
 

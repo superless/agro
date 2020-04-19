@@ -1,5 +1,7 @@
 ﻿using Cosmonaut;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using trifenix.agro.db;
 using trifenix.agro.db.applicationsReference;
 using trifenix.agro.db.applicationsReference.agro.Common;
@@ -118,6 +120,12 @@ namespace trifenix.agro.external.operations {
         public IGenericOperation<ExecutionOrderStatus, ExecutionOrderStatusInput> ExecutionOrderStatus => new ExecutionOrderStatusOperations(GetMainDb<ExecutionOrderStatus>(), ExistsElements, _searchServiceInstance, GetCommonDbOp<ExecutionOrderStatus>(), Validators);
         
         public IGenericOperation<Comment, CommentInput> Comments => new CommentOperation(GetMainDb<Comment>(), ExistsElements, _searchServiceInstance, GetCommonDbOp<Comment>(), Validators);
+
+        public dynamic GetOperationByInputType(Type InputType) {
+            var operationsProps = typeof(IAgroManager).GetProperties().Where(prop => prop.PropertyType.Name.StartsWith("IGenericOperation`2")).ToList();
+            var genProp = operationsProps.FirstOrDefault(prop => prop.PropertyType.GenericTypeArguments[1].Equals(InputType));
+            return (dynamic)genProp.GetValue(this);
+        }
 
     }
 

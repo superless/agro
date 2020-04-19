@@ -30,21 +30,6 @@ namespace trifenix.agro.external.operations.entities.ext {
         
         public async Task Remove(string id) { }
 
-        //private RelatedId[] GetIdsRelated(Product product) {
-        //    var list = new List<RelatedId> {
-        //        new RelatedId { EntityIndex = (int)EntityRelated.INGREDIENT, EntityId = product.IdActiveIngredient }
-        //    };
-        //    return list.ToArray();
-        //}
-
-        //private Property[] GetElementRelated(Product product) {
-        //    var list = new List<Property>();
-        //    if (!string.IsNullOrWhiteSpace(product.Brand))
-        //        list.Add(new Property { PropertyIndex = (int)PropertyRelated.GENERIC_BRAND, Value = product.Brand });
-        //    list.Add(new Property { PropertyIndex = (int)PropertyRelated.GENERIC_NAME, Value = product.Name });
-        //    return list.ToArray();
-        //}
-
         private async Task<string> CreateDefaultDoses(string idProduct) {
             var dosesInput = new DosesInput {
                 IdProduct = idProduct,
@@ -59,20 +44,16 @@ namespace trifenix.agro.external.operations.entities.ext {
             if (!string.IsNullOrWhiteSpace(product.Id)) {
                 //obtiene el identificador de la dosis por defecto
                 var defaultDoses = await queries.GetDefaultDosesId(product.Id);
-
                 if (string.IsNullOrWhiteSpace(defaultDoses))
                     defaultDoses = await CreateDefaultDoses(product.Id);
-
                 // elimina todas las dosis que no sean por defecto relacionadas con el producto
                 search.DeleteElementsWithRelatedElementExceptId(EntityRelated.DOSES, EntityRelated.PRODUCT, product.Id, defaultDoses);
-
                 // obtiene todas las dosis que no sean por defecto
                 var dosesPrevIds = await queries.GetActiveDosesIdsFromProductId(product.Id);
                 if (dosesPrevIds.Any())
                     foreach (var idDoses in dosesPrevIds)
                         // elimina cada dosis, internamente elimina si no hay dependencias, si existen dependencias la desactiva y la deja en el search.
                         await dosesOperation.Remove(idDoses);
-
                 return new RelatedId { EntityIndex = (int)EntityRelated.DOSES, EntityId = defaultDoses };
             }
             else {
@@ -117,21 +98,10 @@ namespace trifenix.agro.external.operations.entities.ext {
 
         public async Task<ExtPostContainer<string>> Save(Product product) {
             await repo.CreateUpdate(product);
-          
             var dosesDefault = await RemoveDoses(product);
             var productSearch = search.GetEntitySearch(product).LastOrDefault();
-            var dosesFound = search.GetElementsWithRelatedElement(EntityRelated.DOSES, EntityRelated.PRODUCT, product.Id);
-
-            var doses = new List<RelatedId> {
-                dosesDefault
-            };
-
-            if (dosesFound.Any()) doses.AddRange(dosesFound.Select(d => new RelatedId { EntityId = d.Id, EntityIndex = (int)EntityRelated.DOSES }));
-
-            productSearch.RelatedIds = productSearch.RelatedIds.Add(doses);
-          
+            productSearch.RelatedIds = productSearch.RelatedIds.Add(new List<RelatedId> { dosesDefault });
             search.AddElements(new List<EntitySearch> { productSearch });
-               
             return new ExtPostContainer<string> {
                 IdRelated = product.Id,
                 MessageResult = ExtMessageResult.Ok

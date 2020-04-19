@@ -1,8 +1,10 @@
 ﻿using AzureFunctions.Extensions.Swashbuckle.Attribute;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.ServiceBus;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.Azure.WebJobs.Extensions.SignalRService;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -12,12 +14,19 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using trifenix.agro.authentication.interfaces;
 using trifenix.agro.authentication.operations;
+using trifenix.agro.db.applicationsReference.agro.Common;
+using trifenix.agro.db.exceptions;
+using trifenix.agro.enums.input;
+using trifenix.agro.enums.model;
 using trifenix.agro.external.operations.helper;
 using trifenix.agro.functions.Helper;
 using trifenix.agro.functions.mantainers;
+using trifenix.agro.functions.settings;
 using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
+using trifenix.agro.servicebus.operations;
 using trifenix.agro.swagger.model.input;
 
 namespace trifenix.agro.functions {
@@ -33,9 +42,9 @@ namespace trifenix.agro.functions {
         /// <param name="req">cabecera que debe incluir el modelo de entrada </param>
         /// <param name="log"></param>
         /// <returns></returns>
-        [FunctionName("login")]        
+        [FunctionName("Login")]        
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
-        public static async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] [RequestBodyType(typeof(LoginInput), "Nombre de usuario y contraseña")] HttpRequest req, ILogger log) {
+        public static async Task<IActionResult> Login([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] [RequestBodyType(typeof(LoginInput), "Nombre de usuario y contraseña")] HttpRequest req, ILogger log) {
             var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic credenciales = JsonConvert.DeserializeObject(requestBody);
             string clientId = Environment.GetEnvironmentVariable("clientID", EnvironmentVariableTarget.Process);
@@ -65,6 +74,73 @@ namespace trifenix.agro.functions {
             return ContainerMethods.GetJsonGetContainer(OperationHelper.GetElement(accessToken), log);
         }
 
+        [FunctionName("MessagesNegotiateBinding")]
+        public static async Task<IActionResult> NegotiatBindingAsync(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "negotiate")] HttpRequest req,
+        IBinder binder,
+        ILogger log) {
+            string AUTH_HEADER_NAME = "Authorization";
+            string BEARER_PREFIX = "Bearer ";
+            if (req.Headers.ContainsKey(AUTH_HEADER_NAME) && req.Headers[AUTH_HEADER_NAME].ToString().StartsWith(BEARER_PREFIX)) {
+                var token = req.Headers[AUTH_HEADER_NAME].ToString().Substring(BEARER_PREFIX.Length);
+                log.LogInformation("with binding " + token);
+                IAuthentication auth = new Authentication(
+                    Environment.GetEnvironmentVariable("clientID", EnvironmentVariableTarget.Process),
+                    Environment.GetEnvironmentVariable("tenant", EnvironmentVariableTarget.Process),
+                    Environment.GetEnvironmentVariable("tenantID", EnvironmentVariableTarget.Process)
+                );
+                var claims = await auth.ValidateAccessToken(token);
+                string ObjectIdAAD = claims.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
+                var queries = new CommonQueries(ConfigManager.GetDbArguments);
+                // extract userId from token
+                var userId = await queries.GetUserIdFromAAD(ObjectIdAAD);
+                var connectionInfo = binder.Bind<SignalRConnectionInfo>(new SignalRConnectionInfoAttribute { HubName = "AsyncConnection", UserId = userId });
+                log.LogInformation("negotiated " + connectionInfo);
+                //https://gist.github.com/ErikAndreas/72c94a0c8a9e6e632f44522c41be8ee7
+                // connectionInfo contains an access key token with a name identifier claim set to the authenticated user
+                return new OkObjectResult(connectionInfo);
+            }
+            else
+                return new UnauthorizedResult();
+        }
+
+        [FunctionName("ServiceBus")]
+        public static async Task Handler(
+        [ServiceBusTrigger("agroqueue", Connection = "ServiceBusConnectionString", IsSessionsEnabled = true)]Message message,
+        [SignalR(HubName = "AsyncConnection")]IAsyncCollector<SignalRMessage> signalRMessages,
+        ILogger log) {
+            var opInstance = ServiceBus.Deserialize(message.Body);
+            var ObjectIdAAD = opInstance.Value<string>("ObjectIdAAD");
+            var queries = new CommonQueries(ConfigManager.GetDbArguments);
+            var userId = await queries.GetUserIdFromAAD(ObjectIdAAD);
+            var EntityName = opInstance.Value<string>("EntityName");
+            var agro = await ContainerMethods.AgroManager(ObjectIdAAD, false);
+            var entityType = opInstance["EntityType"].ToObject<Type>();
+            var repo = agro.GetOperationByInputType(entityType);
+            dynamic element = opInstance["Element"].ToObject(entityType);
+            try {
+                var saveReturn = await repo.SaveInput(element, false);
+                var recordActivity = agro.GetOperationByInputType(typeof(UserActivityInput));
+                await recordActivity.SaveInput(new UserActivityInput {
+                    Action = opInstance.Value<string>("HttpMethod").Equals("post") ? UserActivityAction.CREATE : UserActivityAction.MODIFY,
+                    Date = DateTime.Now,
+                    EntityName = EntityName,
+                    EntityId = saveReturn.IdRelated
+                }, false);
+                await signalRMessages.AddAsync(new SignalRMessage { Target = "Success", UserId = userId, Arguments = new object[] { EntityName, saveReturn.IdRelated } });
+            }
+            catch (Exception ex) {
+                var extPostError = new ExtPostErrorContainer<string> {
+                    InternalException = ex,
+                    Message = ex.Message,
+                    MessageResult = ExtMessageResult.Error
+                };
+                if (ex is Validation_Exception)
+                    extPostError.ValidationMessages = ((Validation_Exception)ex).ErrorMessages;
+                log.LogError(extPostError.InternalException, extPostError.Message);
+                await signalRMessages.AddAsync(new SignalRMessage { Target = "Error", UserId = userId, Arguments = new object[] { extPostError.Message, extPostError.ValidationMessages } });
+            }
+        }
 
         /// <summary>
         /// Creación de Sector
