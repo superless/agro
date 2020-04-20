@@ -33,8 +33,8 @@ namespace trifenix.agro.microsoftgraph.operations
             var invitation = new Invitation {
                 InvitedUserDisplayName = name,
                 InvitedUserEmailAddress = email,
-                InvitedUserMessageInfo = new InvitedUserMessageInfo() { CustomizedMessageBody = "Bienvenido a Aresa", MessageLanguage = "es-es"},
-                InviteRedirectUrl = "https://agro-dev.trifenix.io",
+                InvitedUserMessageInfo = new InvitedUserMessageInfo() { CustomizedMessageBody = "Bienvenido(a) a la plataforma agrícola", MessageLanguage = "es-es"},
+                InviteRedirectUrl = "https://aresa.trifenix.io",
                 SendInvitationMessage = true,
             };
             await graphServiceClient.Invitations.Request().AddAsync(invitation);

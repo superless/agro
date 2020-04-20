@@ -11,7 +11,7 @@
     "FUNCTIONS_WORKER_RUNTIME": "dotnet",
     "KeyWeatherApi": "7eb9d18077256697f3e1bea03605bdd2",
     "QueueName": "agroqueue",
-    "scope": "https://agro-dev.trifenix.io/App.access",
+    "scope": "https://dev-aresa.trifenix.io/App.access",
     "SearchServiceKey": "016DAA5EF1158FEEEE58DA60996D5981",
     "SearchServiceName": "agrosearch",
     "ServiceBusConnectionString": "Endpoint=sb://paid-bus.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=g+v1x2DzE3fB7GKa+LB3YmOszK79sXAke0mmWYtm2Jk=",

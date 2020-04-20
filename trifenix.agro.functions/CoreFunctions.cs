@@ -120,8 +120,7 @@ namespace trifenix.agro.functions {
             dynamic element = opInstance["Element"].ToObject(entityType);
             try {
                 var saveReturn = await repo.SaveInput(element, false);
-                var recordActivity = agro.GetOperationByInputType(typeof(UserActivityInput));
-                await recordActivity.SaveInput(new UserActivityInput {
+                await agro.UserActivity.SaveInput(new UserActivityInput {
                     Action = opInstance.Value<string>("HttpMethod").Equals("post") ? UserActivityAction.CREATE : UserActivityAction.MODIFY,
                     Date = DateTime.Now,
                     EntityName = EntityName,
