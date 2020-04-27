@@ -44,7 +44,7 @@ namespace trifenix.agro.authentication.operations {
             // Initialize the token validation parameters
             TokenValidationParameters validationParameters = new TokenValidationParameters {
                 // App Id URI and AppId of this service application are both valid audiences.
-                ValidAudiences = new[] {"https://dev-aresa.trifenix.io" },
+                ValidAudiences = new[] { "https://aresa.trifenix.io", "https://dev-aresa.trifenix.io" },
                 ValidIssuers = validIssuers,
                 IssuerSigningKeys = config.SigningKeys
             };
