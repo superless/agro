@@ -25,7 +25,7 @@ namespace trifenix.agro.search.operations {
     public class AgroSearch : IAgroSearch {
     
         private readonly SearchServiceClient _search;
-        private readonly string _entityIndex = "entities-v2";
+        private readonly string _entityIndex = "entities";
         private readonly string _commentIndex = "comments";
 
         private readonly ISearchQueries _queries;
