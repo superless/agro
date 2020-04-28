@@ -40,12 +40,14 @@ namespace trifenix.agro.servicebus.operations {
 
     public class OperationInstance<InputElement> where InputElement : InputBase {
         public InputElement Element;
+        public string Id;
         public Type EntityType;
         public string EntityName;
         public string HttpMethod;
         public string ObjectIdAAD;
-        public OperationInstance(InputElement _element, string _entityName, string _httpMethod, string _objectIdAAD) {
+        public OperationInstance(InputElement _element, string _id, string _entityName, string _httpMethod, string _objectIdAAD) {
             Element = _element;
+            Id = _id;
             EntityType = _element.GetType();
             EntityName = _entityName;
             HttpMethod = _httpMethod;
