@@ -72,7 +72,7 @@ namespace trifenix.agro.functions.mantainers {
                 default:
                     //ExtPostContainer<string> saveReturn;
                     string EntityName = ((DbElement)Activator.CreateInstance(typeof(DbElement))).CosmosEntityName;
-                    var opInstance = new OperationInstance<InputElement>(element, EntityName, method, ObjectIdAAD);
+                    var opInstance = new OperationInstance<InputElement>(element, element.Id, EntityName, method, ObjectIdAAD);
                     await ServiceBus.PushElement(opInstance, EntityName);
                     return new ActionResultWithId {
                         Id = null,
