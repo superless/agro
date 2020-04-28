@@ -118,6 +118,7 @@ namespace trifenix.agro.functions {
             var entityType = opInstance["EntityType"].ToObject<Type>();
             var repo = agro.GetOperationByInputType(entityType);
             dynamic element = opInstance["Element"].ToObject(entityType);
+            element.Id = opInstance.Value<string>("Id");
             try {
                 var saveReturn = await repo.SaveInput(element, false);
                 await agro.UserActivity.SaveInput(new UserActivityInput {
