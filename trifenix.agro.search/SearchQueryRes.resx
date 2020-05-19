@@ -127,10 +127,10 @@
     <value>entityIndex/any(element: element eq {0})  and rel/any(elementId: elementId/entityIndex eq {1} and elementId/entityId eq '{2}')</value>
   </data>
   <data name="ENTITIES_WITH_ENTITYID_EXCEPTID" xml:space="preserve">
-    <value>entityIndex/any(element: element eq {0}) and  Id ne '{3}' and rel/any(elementId: elementId/entityIndex eq {1} and elementId/entityId eq '{2}')</value>
+    <value>entityIndex/any(element: element eq {0}) and  id ne '{3}' and rel/any(elementId: elementId/entityIndex eq {1} and elementId/entityId eq '{2}')</value>
   </data>
   <data name="GET_ELEMENT" xml:space="preserve">
-    <value>entityIndex/any(element: element eq {0}) and Id eq '{1}'</value>
+    <value>entityIndex/any(element: element eq {0}) and id eq '{1}'</value>
   </data>
   <data name="IDS_JOIN" xml:space="preserve">
     <value>' or id eq '</value>

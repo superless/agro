@@ -7,6 +7,7 @@ using System;
 using System.Threading;
 using Newtonsoft.Json;
 using System.Reflection;
+using trifenix.agro.enums.searchModel;
 
 namespace trifenix.agro.console {
 
@@ -21,31 +22,35 @@ namespace trifenix.agro.console {
 
         static async Task Main(string[] args) {
 
-            var allCultures = CultureInfo.GetCultures(CultureTypes.AllCultures);
+            //var allCultures = CultureInfo.GetCultures(CultureTypes.AllCultures);
 
 
             //Console.WriteLine("Hora de inicio: {0}", DateTime.Now.ToString("hh\\:mm\\:ss"));
             //Stopwatch timer = Stopwatch.StartNew();
             
-            var ns = new EntitySearch { Id = "sadsad", EntityIndex = new int[] { 1} };
+            //var ns = new EntitySearch { Id = "sadsad", EntityIndex = new int[] { 1} };
 
-            var nsJson = JsonConvert.SerializeObject(ns);
+            //var nsJson = JsonConvert.SerializeObject(ns);
 
-            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("es");
+            //Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("es");
 
-            var display = typeof(TestDesc).GetProperty(nameof(TestDesc.Test1)).GetCustomAttribute<DisplayAttribute>();
+            //var display = typeof(TestDesc).GetProperty(nameof(TestDesc.Test1)).GetCustomAttribute<DisplayAttribute>();
             
-            var name = display.GetName();
-            var description = display.GetDescription();
-            Console.WriteLine(name);
-            Console.WriteLine(description);
+            //var name = display.GetName();
+            //var description = display.GetDescription();
+            //Console.WriteLine(name);
+            //Console.WriteLine(description);
 
 
 
-            await SearchHelper.UpdateSearch();
+            //await SearchHelper.UpdateSearch();
 
 
             var search = new AgroSearch("agrosearch", "016DAA5EF1158FEEEE58DA60996D5981");
+            search.DeleteEntity(EntityRelated.USER, "7f3a7fd21db54e2aa61540ec22d3a709");
+            search.DeleteEntity(EntityRelated.USER, "df93fad949ca40d3af4cf6a77a2d554c");
+            search.DeleteEntity(EntityRelated.USER, "c4d76073c1b34a8ea4b8e6bd98d8561d");
+            search.DeleteEntity(EntityRelated.USER, "4ed0437c51ff4b28a275cb42385f54bf");
             //var entitySearch = new EntitySearchV2()
             //{
             //    EntityIndex = 1,
@@ -89,34 +94,34 @@ namespace trifenix.agro.console {
             //        }
             //    }
             //};
-            var entitySearch = new EntitySearch() {
-                EntityIndex = new int[] { 6 },
-                Id = "Id",
-                RelatedIds = new RelatedId[] {
-                    new RelatedId {
-                        EntityIndex = 0,
-                        EntityId = "f7ee4e67a99c408880fe1fb39c63985c"
-                    },
-                    new RelatedId {
-                        EntityIndex = 0,
-                        EntityId = "50a1c384700b4e56a95d2935e585c77e"
-                    },
-                    new RelatedId {
-                        EntityIndex = 21,
-                        EntityId = "b60665985f3a4df5afb77a6fe7a3231c"
-                    },
-                    new RelatedId {
-                        EntityIndex = 18,
-                        EntityId = "2fae7e0211594203a2820becdecdbf54"
-                    },
-                    new RelatedId {
-                        EntityIndex = 12,
-                        EntityId = "3b42a82973a24241a7a88124359a13fd"
-                    }
-                }
-            };
-            var entity = search.GetEntityFromSearch(entitySearch);
-            return;
+            //var entitySearch = new EntitySearch() {
+            //    EntityIndex = new int[] { 6 },
+            //    Id = "Id",
+            //    RelatedIds = new RelatedId[] {
+            //        new RelatedId {
+            //            EntityIndex = 0,
+            //            EntityId = "f7ee4e67a99c408880fe1fb39c63985c"
+            //        },
+            //        new RelatedId {
+            //            EntityIndex = 0,
+            //            EntityId = "50a1c384700b4e56a95d2935e585c77e"
+            //        },
+            //        new RelatedId {
+            //            EntityIndex = 21,
+            //            EntityId = "b60665985f3a4df5afb77a6fe7a3231c"
+            //        },
+            //        new RelatedId {
+            //            EntityIndex = 18,
+            //            EntityId = "2fae7e0211594203a2820becdecdbf54"
+            //        },
+            //        new RelatedId {
+            //            EntityIndex = 12,
+            //            EntityId = "3b42a82973a24241a7a88124359a13fd"
+            //        }
+            //    }
+            //};
+            //var entity = search.GetEntityFromSearch(entitySearch);
+            //return;
 
             #region Reflexion
             //Console.WriteLine("typeof(Barrack).Name:            " + typeof(Barrack).Name);
