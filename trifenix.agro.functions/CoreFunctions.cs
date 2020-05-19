@@ -138,7 +138,7 @@ namespace trifenix.agro.functions {
                 if (ex is Validation_Exception)
                     extPostError.ValidationMessages = ((Validation_Exception)ex).ErrorMessages;
                 log.LogError(extPostError.InternalException, extPostError.Message);
-                await signalRMessages.AddAsync(new SignalRMessage { Target = "Error", UserId = userId, Arguments = new object[] { extPostError.Message, extPostError.ValidationMessages } });
+                await signalRMessages.AddAsync(new SignalRMessage { Target = "Error", UserId = userId, Arguments = new object[] { string.IsNullOrEmpty(extPostError.Message)?extPostError.ValidationMessages: new List<string> { extPostError.Message } } });
             }
         }
 

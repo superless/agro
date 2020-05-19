@@ -20,6 +20,7 @@
     "tenantID": "13f71027-8389-436e-bdaf-7bd34382fbff"
   },
   "Host": {
-    "CORS": "*"
+    "CORS": "http://localhost:3000",
+    "CORSCredentials": true
   }
 }
