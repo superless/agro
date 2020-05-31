@@ -1,0 +1,437 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>trifenix.agro.functions</name>
+    </assembly>
+    <members>
+        <member name="T:trifenix.agro.functions.CoreFunctions">
+            <summary>
+            Funciones 
+            </summary>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.Login(Microsoft.AspNetCore.Http.HttpRequest,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Login, donde usa usuario y contraseña para obtener el token.
+            </summary>
+            <param name="req">cabecera que debe incluir el modelo de entrada </param>
+            <param name="log"></param>
+            <returns></returns>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.SectorPost(Microsoft.AspNetCore.Http.HttpRequest,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Creación de Sector
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.SectorPut(Microsoft.AspNetCore.Http.HttpRequest,System.String,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Modificación del Sector
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.PlotLandsPost(Microsoft.AspNetCore.Http.HttpRequest,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Creación de parcela
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.PlotLandsPut(Microsoft.AspNetCore.Http.HttpRequest,System.String,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Modificación de parcela
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.SpeciesPost(Microsoft.AspNetCore.Http.HttpRequest,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Añadir Especie
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.SpeciesPut(Microsoft.AspNetCore.Http.HttpRequest,System.String,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Modificar Especie
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.NotificationsPost(Microsoft.AspNetCore.Http.HttpRequest,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Añadir Notificación
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.NotificationPut(Microsoft.AspNetCore.Http.HttpRequest,System.String,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Editar Notificación
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.VarietyPost(Microsoft.AspNetCore.Http.HttpRequest,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Añadir Variedad
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.VarietyPut(Microsoft.AspNetCore.Http.HttpRequest,System.String,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Añadir Variedad
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.TargetPost(Microsoft.AspNetCore.Http.HttpRequest,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Añadir Objetivo de aplicación
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.TargetPut(Microsoft.AspNetCore.Http.HttpRequest,System.String,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Modificar objetivo de aplicación
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.PhenologicalEventPost(Microsoft.AspNetCore.Http.HttpRequest,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Añadir Evento fenológico
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.PhenologicalEventPut(Microsoft.AspNetCore.Http.HttpRequest,System.String,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Modificación de evento fenológico
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.CertifiedEntityPost(Microsoft.AspNetCore.Http.HttpRequest,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Añadir Entidad Certificadora
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.CertifiedEntityPut(Microsoft.AspNetCore.Http.HttpRequest,System.String,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Modificación de Entidad Certificadora
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.CategoryIngredientPost(Microsoft.AspNetCore.Http.HttpRequest,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Añadir Categoría de ingrediente
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.CategoryIngredientPut(Microsoft.AspNetCore.Http.HttpRequest,System.String,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Modificación de Categoría de ingredientes
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.IngredientsPost(Microsoft.AspNetCore.Http.HttpRequest,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Añadir Ingredientes
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.IngredientPut(Microsoft.AspNetCore.Http.HttpRequest,System.String,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Modificación de Ingrediente
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.ProductsPost(Microsoft.AspNetCore.Http.HttpRequest,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Añadir Producto
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.ProductPut(Microsoft.AspNetCore.Http.HttpRequest,System.String,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Modificación de Productos
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.RolePost(Microsoft.AspNetCore.Http.HttpRequest,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Añadir Rol
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.RolePut(Microsoft.AspNetCore.Http.HttpRequest,System.String,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Modificación de Rol
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.JobPost(Microsoft.AspNetCore.Http.HttpRequest,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Añadir Trabajo
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.JobPut(Microsoft.AspNetCore.Http.HttpRequest,System.String,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Modificación de Trabajo
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.UserPost(Microsoft.AspNetCore.Http.HttpRequest,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Añadir Usuario
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.UsersPut(Microsoft.AspNetCore.Http.HttpRequest,System.String,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Modificación de Usuario
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.NebulizersPost(Microsoft.AspNetCore.Http.HttpRequest,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Añadir Nebulizador
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.NebulizerPut(Microsoft.AspNetCore.Http.HttpRequest,System.String,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Modificación de Nebulizador
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.TractorPost(Microsoft.AspNetCore.Http.HttpRequest,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Añadir Tractor
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.TractorPut(Microsoft.AspNetCore.Http.HttpRequest,System.String,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Modificación de Trabajo
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.BusinessNamePost(Microsoft.AspNetCore.Http.HttpRequest,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Añadir Razón social
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.BusinessNamePut(Microsoft.AspNetCore.Http.HttpRequest,System.String,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Modificación de Razón Social
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.CostCenterPost(Microsoft.AspNetCore.Http.HttpRequest,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Añadir centro de costos
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.CostCenterPut(Microsoft.AspNetCore.Http.HttpRequest,System.String,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Modificación de centro de costos
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.SeasonPost(Microsoft.AspNetCore.Http.HttpRequest,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Añadir Temporada
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.SeasonPut(Microsoft.AspNetCore.Http.HttpRequest,System.String,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Modificación de Temporada
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.RootStockPost(Microsoft.AspNetCore.Http.HttpRequest,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Añadir Raíz
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.RootStockPut(Microsoft.AspNetCore.Http.HttpRequest,System.String,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Modificación de Raíz
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.OrderFolderPost(Microsoft.AspNetCore.Http.HttpRequest,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Añadir Carpeta de Órdenes
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.OrderFolderPut(Microsoft.AspNetCore.Http.HttpRequest,System.String,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Modificación de Carpeta de órdenes
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.BarracksPost(Microsoft.AspNetCore.Http.HttpRequest,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Añadir cuartel
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.BarrackPut(Microsoft.AspNetCore.Http.HttpRequest,System.String,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Modificación de Cuartel
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.OrderPost(Microsoft.AspNetCore.Http.HttpRequest,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Añadir Orden de aplicación
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.OrderPut(Microsoft.AspNetCore.Http.HttpRequest,System.String,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Modificación de Orden de aplicación
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.PreOrderPost(Microsoft.AspNetCore.Http.HttpRequest,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Añadir Pre Orden de aplicación
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.PreOrderPut(Microsoft.AspNetCore.Http.HttpRequest,System.String,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Modificación de Pre Orden de aplicación
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.ExecutionsPost(Microsoft.AspNetCore.Http.HttpRequest,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Añadir Ejecución
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.ExecutionsPut(Microsoft.AspNetCore.Http.HttpRequest,System.String,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Modificación de Ejecución
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.ExecutionsStatusPost(Microsoft.AspNetCore.Http.HttpRequest,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Añadir Ejecución
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+        <member name="M:trifenix.agro.functions.CoreFunctions.ExecutionsStatusPut(Microsoft.AspNetCore.Http.HttpRequest,System.String,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Modificación de Estatus Ejecución
+            </summary>
+            <return>
+            Retorna un contenedor con el id
+            </return>
+        </member>
+    </members>
+</doc>

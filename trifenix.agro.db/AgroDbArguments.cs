@@ -1,9 +1,5 @@
-﻿using System;
-
-namespace trifenix.agro.db
-{
-    public class AgroDbArguments
-    {
+﻿namespace trifenix.agro.db {
+    public class AgroDbArguments {
         /// <summary>
         /// EndPoint of the db
         /// </summary>
@@ -28,5 +24,6 @@ namespace trifenix.agro.db
         /// The name database.
         /// </value>
         public string NameDb { get; set; }
+                      
     }
 }
