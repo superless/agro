@@ -10,7 +10,7 @@ namespace trifenix.agro.db.model
 {
 
     [SharedCosmosCollection("agro", "IngredientCategory")]
-    [ReferenceSearch(EntityRelated.CATEGORY_INGREDIENT)]
+    [ReferenceSearchHeader(EntityRelated.CATEGORY_INGREDIENT, PathName = "ingredient_categories", Kind = EntityKind.ENTITY)]
     public class IngredientCategory : DocumentBaseName, ISharedCosmosEntity
     {
         public override string Id { get; set; }

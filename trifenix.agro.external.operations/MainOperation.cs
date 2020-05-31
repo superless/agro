@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using trifenix.agro.attr;
 using trifenix.agro.db;
 using trifenix.agro.db.exceptions;
 using trifenix.agro.db.interfaces;

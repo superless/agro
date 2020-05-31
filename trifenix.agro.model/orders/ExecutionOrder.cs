@@ -7,11 +7,12 @@ using trifenix.agro.enums.searchModel;
 namespace trifenix.agro.db.model.orders {
 
     [SharedCosmosCollection("agro", "ExecutionOrder")]
-    [ReferenceSearch(EntityRelated.EXECUTION_ORDER)]
-    public class ExecutionOrder : DocumentBase, ISharedCosmosEntity {
+    [ReferenceSearchHeader(EntityRelated.EXECUTION_ORDER, Kind = EntityKind.PROCESS, PathName = "execution_orders")]
+    public class ExecutionOrder : DocumentBase<long>, ISharedCosmosEntity {
 
         public override string Id { get; set; }
-
+        [AutoNumericSearch(NumRelated.GENERIC_CORRELATIVE)]
+        public override long ClientId { get; set; }
         [ReferenceSearch(EntityRelated.ORDER)]
         public string IdOrder { get; set; } // orden
 

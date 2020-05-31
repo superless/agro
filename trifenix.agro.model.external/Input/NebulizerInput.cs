@@ -4,7 +4,7 @@ using trifenix.agro.enums.searchModel;
 
 namespace trifenix.agro.model.external.Input {
 
-    [ReferenceSearch(EntityRelated.NEBULIZER)]
+    [ReferenceSearchHeader(EntityRelated.NEBULIZER)]
     public class NebulizerInput : InputBase {
 
         [Required]

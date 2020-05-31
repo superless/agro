@@ -5,7 +5,7 @@ using trifenix.agro.enums.searchModel;
 
 namespace trifenix.agro.model.external.Input
 {
-    [ReferenceSearch(EntityRelated.BARRACK)]
+    [ReferenceSearchHeader(EntityRelated.BARRACK)]
     public class BarrackInput : InputBase {
 
         [Required, Unique]

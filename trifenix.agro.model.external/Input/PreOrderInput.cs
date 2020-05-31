@@ -6,7 +6,7 @@ using trifenix.agro.enums.searchModel;
 
 namespace trifenix.agro.model.external.Input {
 
-    [ReferenceSearch(EntityRelated.PREORDER)]
+    [ReferenceSearchHeader(EntityRelated.PREORDER)]
     public class PreOrderInput : InputBase {
 
         [Required, Unique]

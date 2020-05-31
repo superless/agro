@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using trifenix.agro.enums.searchModel;
 using trifenix.agro.search.model.reflection;
 
@@ -9,9 +8,17 @@ namespace trifenix.agro.attr
     public class SearchAttribute : Attribute {
         public virtual Related Related { get; }
         public virtual int Index { get; }
+
+        public bool Visible { get; set; } = true;
+
+        
     }
 
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property, AllowMultiple = true)]
+    //Solo asignar a valores primitivos
+    [AttributeUsage(AttributeTargets.Property)]
+    public class UniqueAttribute : Attribute { }
+
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
     public class ReferenceSearchAttribute : SearchAttribute {
         private readonly EntityRelated _index;
         public bool Local { get; }
@@ -21,25 +28,62 @@ namespace trifenix.agro.attr
         }
         public override int Index => (int)_index;
         public override Related Related => Local ? Related.LOCAL_REFERENCE : Related.REFERENCE;
+
+    }
+
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+    public class ReferenceSearchHeaderAttribute : ReferenceSearchAttribute
+    {
+        public ReferenceSearchHeaderAttribute(EntityRelated index, bool local = false) : base(index, local)
+        {
+        }
+
+
+        public string PathName { get; set; }
+
+        public EntityKind Kind { get; set; }
+
+
+
     }
 
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property, AllowMultiple = true)]
     public class GroupAttribute : Attribute {
 
         public GroupInput Group { get; private set; }
-        public GroupAttribute(int index, string title, Device device)
+        public GroupAttribute(int index, Device device, int proportion = 12,  string title = null)
         {
             Group = new GroupInput
             {
                 Index = index,
-                Title = title,
-                Device = device
+                Title = !string.IsNullOrWhiteSpace(title)? title : string.Empty,
+                Device = device,
+                ColumnProportion = proportion
             };
         }
 
     }
 
 
+    public class AutoNumericSearchAttribute : SearchAttribute
+    {
+        private readonly NumRelated _index;
+        public AutoNumericSearchAttribute(NumRelated index)
+        {
+            _index = index;
+            
+        }
+
+        public AutoNumericSearchAttribute(NumRelated index, EntityRelated dependant): this(index)
+        {
+            Dependant = dependant;
+        }
+        public override int Index => (int)_index;
+        public override Related Related => Related.NUM64;
+
+        public EntityRelated? Dependant { get;}
+
+    }
 
     public class StringSearchAttribute : SearchAttribute {
         private readonly StringRelated _index;

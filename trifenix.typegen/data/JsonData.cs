@@ -61,21 +61,48 @@ namespace trifenix.typegen.data {
             var modelTypes = assembly.GetLoadableTypes()
             .Where(x => x.FullName.StartsWith("trifenix.agro.db.model"));
             // get property infos
-            var propSearchinfos = modelTypes.Where(s => s.GetTypeInfo().GetCustomAttributes<ReferenceSearchAttribute>(true).Any()).SelectMany(GetPropertySearchInfo).ToList();
-            var grpIndexes = propSearchinfos.GroupBy(s => s.IndexClass).Select(s=>s.FirstOrDefault()) ;
-            var model = grpIndexes.Select(g=> GetModel(propSearchinfos.Where(s => s.IndexClass == g.IndexClass), (EntityRelated)g.IndexClass));
-            return new ModelMetaData { Indexes = model.ToArray() };
+            var propSearchinfos = modelTypes.Where(s => s.GetTypeInfo().GetCustomAttributes<ReferenceSearchHeaderAttribute>(true).Any()).SelectMany(s=> {
+
+                var infoHeaders = s.GetTypeInfo().GetCustomAttributes<ReferenceSearchHeaderAttribute>(true);
+
+                return infoHeaders.Select(infoHeader => new
+                {
+                    index = infoHeader.Index,
+                    visible = infoHeader.Visible,
+                    pathName = infoHeader.PathName,
+                    kindEntity = infoHeader.Kind,
+                    propInfos = GetPropertySearchInfo(s).Where(a=>a.IndexClass == infoHeader.Index),
+                    className = s.Name
+                });
+
+            }).ToList();
+          
+            var modelDict = propSearchinfos.Select(s =>
+            {
+                var model = GetModel(s.propInfos, (EntityRelated)s.index);
+                model.Visible = s.visible;
+                model.PathName = s.pathName;
+                model.EntityKind = s.kindEntity;
+                model.ClassName = s.className;
+                model.AutoNumeric = s.propInfos.Any(a => a.AutoNumeric);
+                return model;
+
+            });
+            return new ModelMetaData { Indexes = modelDict.ToArray() };
             // group by index and related, get the first element
         }
  
         private static Dictionary<int, DefaultDictionary> GetDictionaryFromRelated(IEnumerable<PropertySearchInfo> propSearchInfos, Related related) {
             var infos = propSearchInfos.Where(s => s.Related == related).ToList();
             return infos.ToDictionary(s => s.Index, g => new DefaultDictionary {
+                Visible = g.Visible,
+                AutoNumeric = g.AutoNumeric,
                 NameProp = char.ToLower(g.Name[0]) + g.Name.Substring(1) ,
                 isArray = g.IsEnumerable,
                 Info = g.Info,
                 Required = g.IsRequired,
-                Unique = g.IsUnique
+                Unique = g.IsUnique,
+                HasInput = g.HasInput
             });
         }
 
@@ -95,6 +122,7 @@ namespace trifenix.typegen.data {
             var searchAttributesProps = type.GetProperties().Where(prop => Attribute.IsDefined(prop, typeof(SearchAttribute), true));
             var elemTypeInput = AgroHelper.GetEntityType((EntityRelated)index, typeof(BarrackInput), "trifenix.agro.model.external.Input");
 
+
             var elemTypeInputProps = elemTypeInput.GetProperties().Where(prop => Attribute.IsDefined(prop, typeof(SearchAttribute), true))
                 .Select(s=>new { info = s, search = s.GetAttribute<SearchAttribute>(), required = s.GetAttribute<RequiredAttribute>(), unique = s.GetAttribute<UniqueAttribute>() });
 
@@ -103,6 +131,7 @@ namespace trifenix.typegen.data {
             var props = searchAttributesProps.Select(s => {
                 var searchAttribute = (SearchAttribute)s.GetCustomAttributes(typeof(SearchAttribute), true).FirstOrDefault();
                 var searchAttributeInput = elemTypeInputProps.FirstOrDefault(p => p.search.Index == searchAttribute.Index && p.search.Related == searchAttribute.Related);
+
                 return new PropertySearchInfo {
                     IsEnumerable = IsEnumerableProperty(s),
                     Name = s.Name,
@@ -113,9 +142,16 @@ namespace trifenix.typegen.data {
                     Info = ResourceExtension.ResourceModel(searchAttribute.Related, searchAttribute.Index),
                     IsRequired = searchAttributeInput?.required!=null,
                     IsUnique = searchAttributeInput?.unique != null,
+                    AutoNumeric = searchAttribute.GetType() == typeof(AutoNumericSearchAttribute),
+                    Visible = searchAttribute.Visible,
+                    HasInput = searchAttributeInput != null
+                    
+                    
                 };
             }).ToArray();
 
+
+            //si existe alguna propiead que esté en el input y no esté en la entidad.
             if (elemTypeInputProps.Any(s=>!props.Any(a=>a.Name.Equals(s.info.Name))))
             {
                 var extra = elemTypeInputProps.Where(s => !props.Any(a => a.Name.Equals(s.info.Name)));
@@ -133,6 +169,7 @@ namespace trifenix.typegen.data {
                         Info = ResourceExtension.ResourceModel(item.search.Related, item.search.Index),
                         IsRequired = item?.required != null,
                         IsUnique = item?.unique != null,
+                       
                     });
                 }
                 props = list.ToArray();
@@ -142,7 +179,7 @@ namespace trifenix.typegen.data {
         }
 
         public static PropertySearchInfo[] GetPropertySearchInfo(Type type) {
-            var classAtribute = GetAttributes<ReferenceSearchAttribute>(type);
+            var classAtribute = GetAttributes<ReferenceSearchHeaderAttribute>(type);
             if (classAtribute == null || !classAtribute.Any())
                 return Array.Empty<PropertySearchInfo>();
             return classAtribute.SelectMany(s => GetPropertyByIndex(type, s.Index)).ToArray();

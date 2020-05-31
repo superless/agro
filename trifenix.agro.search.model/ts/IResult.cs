@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using trifenix.agro.enums.searchModel;
 using trifenix.agro.search.model.reflection;
 
@@ -11,52 +12,37 @@ namespace trifenix.agro.search.model.ts
         public EntitySearch[] Entities { get; set; }
 
         public int Current { get; set; }
-    }
 
+        public Facet[] Facets { get; set; }
 
-    public class SearchType {
-        public TypeEntity EntityType { get; set; }
+        /// <summary>
+        /// filter
+        /// </summary>
+        public FilterModel Filter { get; set; }
 
-        public string Name { get; set; }
+        public Related? EntityKindSort { get; set; }
 
+        public bool? ByDesc { get; set; }
 
-        public int MaxOptions { get; set; }
+        public int? IndexSorted { get; set; }
 
-        public bool Default { get; set; }
-
-
-        public int MainEntityIndex { get; set; }
-
-
-        public int EntitySearchTypeIndex { get; set; }
-
-
-        public bool DataDependant { get; set; }
-
-
-        public int PropertyIndex { get; set; }
-
-
-        public int PropertyCategoryIndex { get; set; }
-
-
-        public int CategoryIndex { get; set; }
-
-
-        public string MessageNotFound { get; set; }
-
-
-        public string PlaceHolder { get; set; }
-    }
+        
 
 
 
-    public enum TypeEntity {
-        SEARCH = 0,
-        SELECTED = 1,
-        SELECTED_GROUP = 2
 
     }
+
+    public class Facet {
+        public int Index { get; set; }
+
+        public string Title { get; set; }
+
+        public string Value { get; set; }
+
+        public long Count { get; set; }
+    }
+
 
 
 
@@ -84,6 +70,12 @@ namespace trifenix.agro.search.model.ts
         public bool Required { get; set; }
 
         public bool Unique { get; set; }
+
+        public bool Visible { get; set; }
+
+        public bool AutoNumeric { get; set; }
+
+        public bool HasInput { get; set; }
 
     }
 
@@ -114,7 +106,17 @@ namespace trifenix.agro.search.model.ts
 
         public EntityRelated Index { get; set; }
 
-        
+
+        public bool Visible { get; set; }
+
+        public EntityKind EntityKind { get; set; }
+
+        public string PathName { get; set; }
+
+        public bool AutoNumeric { get; set; }
+
+        public string ClassName { get; set; }
+
 
         public Dictionary<int, DefaultDictionary> StringData { get; set; }
 
@@ -135,11 +137,40 @@ namespace trifenix.agro.search.model.ts
 
         public Dictionary<int, DefaultDictionary> relData { get; set; }
 
+    }
+
+    public class FilterModel {
+        public Dictionary<int, FilterBase<string>[]> FilterStr { get; set; }
+        public Dictionary<int, FilterBase<string>[]> FilterEntity { get; set; }
+
+        public Dictionary <int, FilterBase<int>[]> EnumFilter { get; set; }
+
+        public Dictionary<int, FilterBase<long>[]> LongFilter { get; set; }
+
+        public Dictionary <int, FilterBase<int>[]> NumFilter { get; set; }
+
+        public Dictionary<int, FilterBase<bool>[]> BoolFilters { get; set; }
+
+        public Dictionary<int, FilterBase<DateTime>[]> DateFilters { get; set; }
+
+        public Dictionary<int, FilterBase<double>[]> DoubleFilters { get; set; }
 
 
 
 
     }
+
+
+    public class FilterBase<T> {        
+
+        public FilterType FilterType { get; set; }
+
+        public T Value { get; set; }
+
+
+    }
+
+   
 
     
 

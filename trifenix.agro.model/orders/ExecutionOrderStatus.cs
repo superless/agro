@@ -8,9 +8,10 @@ using trifenix.agro.enums.searchModel;
 namespace trifenix.agro.db.model.orders {
 
     [SharedCosmosCollection("agro", "ExecutionOrderStatus")]
-    [ReferenceSearch(EntityRelated.EXECUTION_ORDER_STATUS)]
+    [ReferenceSearchHeader(EntityRelated.EXECUTION_ORDER_STATUS, Kind = EntityKind.CUSTOM_ENTITY)]
     public class ExecutionOrderStatus : DocumentBase, ISharedCosmosEntity {
-        public override string Id { get; set; }
+        public override string Id { get; set; }        
+        
         public DateTime Created { get; set; }  // fecha de creacion     
 
         [EnumSearch(EnumRelated.EXECUTION_STATUS)]

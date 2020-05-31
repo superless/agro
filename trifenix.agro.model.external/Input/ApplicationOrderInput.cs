@@ -8,7 +8,7 @@ using trifenix.agro.enums.searchModel;
 
 namespace trifenix.agro.model.external.Input {
 
-    [ReferenceSearch(EntityRelated.ORDER)]
+    [ReferenceSearchHeader(EntityRelated.ORDER)]
     public class ApplicationOrderInput : InputBase {
 
         [Required, Unique]

@@ -6,9 +6,12 @@ namespace trifenix.agro.db.model
 {
 
     [SharedCosmosCollection("agro", "Comment")]
-    public class Comment : DocumentBase, ISharedCosmosEntity
+    public class Comment : DocumentBase<long>, ISharedCosmosEntity
     {
         public override string Id { get; set; }
+
+        public override long ClientId { get; set; }
+
 
         public string Commentary { get; set; }
 

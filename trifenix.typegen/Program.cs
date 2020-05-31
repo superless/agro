@@ -21,7 +21,7 @@ namespace trifenix.typegen {
 
             var options = new GeneratorOptions
             {
-                BaseOutputDirectory = @"D:\aresa\developments\components\trifenix.search.model\src\",
+                BaseOutputDirectory = @"H:\ale-folder\fullgit\temp\model-agro\src",
                 FileNameConverters = new TypeNameConverterCollection(new List<ITypeNameConverter>() { new CustomTypeConverter() }),
                 TypeNameConverters = new TypeNameConverterCollection(new List<ITypeNameConverter>() { new CustomTypeConverter() }),
                 PropertyNameConverters = new MemberNameConverterCollection(new IMemberNameConverter[] { new JsonMemberNameConverter(), new PascalCaseToCamelCaseConverter() })

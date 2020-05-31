@@ -4,7 +4,7 @@ using trifenix.agro.enums.searchModel;
 
 namespace trifenix.agro.model.external.Input {
 
-    [ReferenceSearch(EntityRelated.CERTIFIED_ENTITY)]
+    [ReferenceSearchHeader(EntityRelated.CERTIFIED_ENTITY)]
     public class CertifiedEntityInput : InputBase {
         [Required,Unique]
         [StringSearch(StringRelated.GENERIC_ABBREVIATION)]

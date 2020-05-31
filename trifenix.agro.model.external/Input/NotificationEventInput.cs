@@ -7,7 +7,7 @@ using trifenix.agro.enums.searchModel;
 
 namespace trifenix.agro.model.external.Input
 {
-    [ReferenceSearch(EntityRelated.NOTIFICATION_EVENT)]
+    [ReferenceSearchHeader(EntityRelated.NOTIFICATION_EVENT)]
     public class NotificationEventInput : InputBase {
         /// <summary>
         /// Cuartel asignado a la notificación

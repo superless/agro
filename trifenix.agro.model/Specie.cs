@@ -7,10 +7,15 @@ using trifenix.agro.enums.searchModel;
 namespace trifenix.agro.db.model {
 
     [SharedCosmosCollection("agro", "Specie")]
-    [ReferenceSearch(EntityRelated.SPECIE)]
-    public class Specie : DocumentBaseName, ISharedCosmosEntity {
+    [ReferenceSearchHeader(EntityRelated.SPECIE, PathName = "species", Kind = EntityKind.ENTITY )]
+    public class Specie : DocumentBaseName<long>, ISharedCosmosEntity {
         public override string Id { get; set; }
 
+        /// <summary>
+        /// Identificador visual 
+        /// </summary>
+        [AutoNumericSearch(NumRelated.GENERIC_CORRELATIVE)]
+        public override long ClientId { get; set; }
 
         [StringSearch(StringRelated.GENERIC_NAME)]
         public override string Name { get; set; }

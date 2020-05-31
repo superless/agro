@@ -39,6 +39,7 @@ namespace trifenix.typegen.spec {
             AddInterface<Num64Property>("model/main");
             AddInterface<SuggestProperty>("model/main");
             AddInterface<BoolProperty>("model/main");
+           
             AddInterface(typeof(BaseFacetableProperty<>), "model/main").Member(nameof(StrProperty.Id)).Type(TsType.String);
             AddInterface<RelatedId>("model/main").Member(nameof(StrProperty.Id)).Type(TsType.String);
             AddClass<Data>("data");
@@ -46,45 +47,40 @@ namespace trifenix.typegen.spec {
             var enumAssembly = Assembly.GetAssembly(typeof(EntityRelated));
             IEnumerable<Type> enumTypes = enumAssembly.GetLoadableTypes();
 
-            //var enumModel = enumTypes.Where(x => x.FullName.StartsWith("trifenix.agro.enums.input") || x.FullName.StartsWith("trifenix.agro.enums.model"));
-
-            //foreach (Type type in enumModel)
-            //    AddEnum(type, "model/agro/enums");
+           
 
             var enumSearch = enumTypes.Where(x => x.FullName.StartsWith("trifenix.agro.enums.searchModel"));
 
             foreach (Type type in enumSearch)
                 AddEnum(type, "model/enums");
 
-            //var assembly = Assembly.GetAssembly(typeof(ApplicationOrderInput));
-            //IEnumerable<Type> types = assembly.GetLoadableTypes()
-            //.Where(x => x.FullName.StartsWith("trifenix.agro.model.external.Input") && x.Name.Contains("Swagger"));
-            //foreach (Type type in types) {
-            //    AddInterface(type, "model/agro/main");
-            //}
-            //AddInterface(typeof(ExtGetContainer<>), "model/agro");
-            //AddInterface(typeof(ExtPostContainer<>), "model/agro");
 
-            AddEnum(typeof(TypeEntity), "model/ts/enum");
-            AddInterface(typeof(SearchType), "model/ts")
-                .Member(nameof(SearchType.MainEntityIndex)).Optional()
-                .Member(nameof(SearchType.DataDependant)).Optional()
-                .Member(nameof(SearchType.EntitySearchTypeIndex)).Optional()
-                .Member(nameof(SearchType.CategoryIndex)).Optional()
-                .Member(nameof(SearchType.PlaceHolder)).Optional()
-                .Member(nameof(SearchType.MessageNotFound)).Optional()
-                .Member(nameof(SearchType.PropertyCategoryIndex)).Optional()
-                .Member(nameof(SearchType.PropertyIndex)).Optional();
-            AddInterface(typeof(Result), "model/ts").Member(nameof(Result.Entities)).Type("IEntitySearch[]", "./../main/IEntitySearch");
+
+            AddInterface<FilterModel>("model/ts")
+                .Member(nameof(FilterModel.BoolFilters)).Optional()
+                .Member(nameof(FilterModel.DateFilters)).Optional()
+                .Member(nameof(FilterModel.DoubleFilters)).Optional()
+                .Member(nameof(FilterModel.EnumFilter)).Optional()
+                .Member(nameof(FilterModel.FilterEntity)).Optional()
+                .Member(nameof(FilterModel.FilterStr)).Optional()
+                .Member(nameof(FilterModel.LongFilter)).Optional()
+                .Member(nameof(FilterModel.NumFilter)).Optional()                
+                ;
+            AddInterface(typeof(FilterBase<>), "model/ts");
+            AddInterface<Facet>("model/ts");
+            AddInterface(typeof(Result), "model/ts").Member(nameof(Result.Entities)).Type("IEntitySearch[]", "./../main/IEntitySearch")
+                .Member(nameof(Result.ByDesc)).Optional()
+                .Member(nameof(Result.IndexSorted)).Optional()
+                .Member(nameof(Result.EntityKindSort)).Optional()
+                .Member(nameof(Result.Filter)).Optional()
+                .Member(nameof(Result.Facets)).Optional()
+
+                ;
         }
 
         public override void OnBeforeBarrelGeneration(OnBeforeBarrelGenerationArgs args) {
             AddBarrel("model/main", BarrelScope.Files);
             AddBarrel("model/enums", BarrelScope.Files);
-            //AddBarrel("model/agro/enums", BarrelScope.Files);
-            //AddBarrel("model/agro/main", BarrelScope.Files);
-            // AddBarrel("model/agro/", BarrelScope.Files | BarrelScope.Directories);
-            AddBarrel("model/ts/enum", BarrelScope.Files);
             AddBarrel("model/ts", BarrelScope.Files | BarrelScope.Directories);
             AddBarrel("data", BarrelScope.Files | BarrelScope.Directories);
             AddBarrel("model", BarrelScope.Directories);

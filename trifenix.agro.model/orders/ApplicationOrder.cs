@@ -7,12 +7,15 @@ using trifenix.agro.enums.searchModel;
 namespace trifenix.agro.db.model.orders {
 
     [SharedCosmosCollection("agro", "ApplicationOrder")]
-    [ReferenceSearch(EntityRelated.ORDER)]
-    public class ApplicationOrder : DocumentBaseName, ISharedCosmosEntity {
+    [ReferenceSearchHeader(EntityRelated.ORDER, Kind = EntityKind.PROCESS, PathName = "orders")]
+    public class ApplicationOrder : DocumentBaseName<long>, ISharedCosmosEntity {
         /// <summary>
         /// Identificador de la entidad
         /// </summary>
         public override string Id { get; set; }
+
+        [AutoNumericSearch(NumRelated.GENERIC_CORRELATIVE)]
+        public override long ClientId { get; set; }
 
         [EnumSearch(EnumRelated.ORDER_TYPE)]
         public OrderType OrderType { get; set; }

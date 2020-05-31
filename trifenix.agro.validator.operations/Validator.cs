@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using trifenix.agro.attr;
 using trifenix.agro.db.exceptions;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.validator.interfaces;

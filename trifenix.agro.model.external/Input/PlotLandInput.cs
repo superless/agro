@@ -5,7 +5,7 @@ using trifenix.agro.enums.searchModel;
 
 namespace trifenix.agro.model.external.Input {
 
-    [ReferenceSearch(EntityRelated.PLOTLAND)]
+    [ReferenceSearchHeader(EntityRelated.PLOTLAND)]
     public class PlotLandInput : InputBase {
 
 

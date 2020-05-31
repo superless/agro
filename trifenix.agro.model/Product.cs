@@ -10,7 +10,7 @@ namespace trifenix.agro.db.model {
     /// Producto Quimico usado por las órdenes
     /// </summary>
     [SharedCosmosCollection("agro", "Product")]
-    [ReferenceSearch(EntityRelated.PRODUCT)]
+    [ReferenceSearchHeader(EntityRelated.PRODUCT, Kind = EntityKind.CUSTOM_ENTITY, PathName = "products")]
     public class Product : DocumentBaseName, ISharedCosmosEntity {
 
         public override string Id { get; set; }
@@ -18,8 +18,12 @@ namespace trifenix.agro.db.model {
         [SuggestSearch(StringRelated.GENERIC_NAME)]
         public override string Name { get; set; }
 
+
+
         [ReferenceSearch(EntityRelated.INGREDIENT)]
         public string IdActiveIngredient { get; set; }
+
+
 
         [StringSearch(StringRelated.GENERIC_BRAND)]
         public string Brand { get; set; }

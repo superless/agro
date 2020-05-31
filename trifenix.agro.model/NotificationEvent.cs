@@ -17,14 +17,20 @@ namespace trifenix.agro.db.model
     /// evento fenológico.
     /// </summary>
     [SharedCosmosCollection("agro", "NotificationEvent")]
-    [ReferenceSearch(EntityRelated.NOTIFICATION_EVENT)]
-    public class NotificationEvent : DocumentBase, ISharedCosmosEntity
+    [ReferenceSearchHeader(EntityRelated.NOTIFICATION_EVENT, PathName = "notification_events", Kind = EntityKind.CUSTOM_ENTITY)]
+    public class NotificationEvent : DocumentBase<long>, ISharedCosmosEntity
     {
         /// <summary>
         /// Identificador de la Notificación
         /// </summary>
         public override string Id { get; set; }
 
+
+        /// <summary>
+        /// Identificador visual 
+        /// </summary>
+        [AutoNumericSearch(NumRelated.GENERIC_CORRELATIVE)]
+        public override long ClientId { get; set; }
 
         /// <summary>
         /// Cuartel asignado a la notificación

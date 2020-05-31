@@ -6,10 +6,17 @@ using trifenix.agro.enums.searchModel;
 namespace trifenix.agro.db.model {
 
     [SharedCosmosCollection("agro", "Nebulizer")]
-    [ReferenceSearch(EntityRelated.NEBULIZER)]
-    public class Nebulizer : DocumentBase, ISharedCosmosEntity {
+    [ReferenceSearchHeader(EntityRelated.NEBULIZER, PathName ="nebulizers", Kind = EntityKind.ENTITY)]
+    public class Nebulizer : DocumentBase<long>, ISharedCosmosEntity {
 
         public override string Id { get; set; }
+
+        /// <summary>
+        /// Identificador visual de la entidad certificadora
+        /// </summary>
+        [AutoNumericSearch(NumRelated.GENERIC_CORRELATIVE)]
+        public override long ClientId { get; set; }
+
 
         [StringSearch(StringRelated.GENERIC_BRAND)]
         public string Brand { get; set; }

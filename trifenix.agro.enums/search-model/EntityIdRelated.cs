@@ -15,6 +15,12 @@ namespace trifenix.agro.enums.searchModel {
         DATE = 10
     }
 
+    public enum EntityKind { 
+        ENTITY = 0,
+        CUSTOM_ENTITY = 1,
+        PROCESS = 2
+    }
+
     
 
     public enum EntityRelated {
@@ -350,5 +356,14 @@ namespace trifenix.agro.enums.searchModel {
     public enum Device { 
         WEB = 0,
         MOBILE = 1
+    }
+
+    public enum FilterType
+    {
+        EQUAL = 0,
+        CONTAINS = 1,
+        MORE_THAN = 2,
+        LESS_THAN = 3
+
     }
 }

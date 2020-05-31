@@ -1,15 +1,22 @@
 ﻿using Cosmonaut;
 using Cosmonaut.Attributes;
+using System.IO;
 using trifenix.agro.attr;
 using trifenix.agro.enums.searchModel;
 
 namespace trifenix.agro.db.model
 {
     [SharedCosmosCollection("agro", "PreOrder")]
-    [ReferenceSearch(EntityRelated.PREORDER)]
-    public class PreOrder : DocumentBaseName, ISharedCosmosEntity
+    [ReferenceSearchHeader(EntityRelated.PREORDER, PathName = "pre-orders", Kind = EntityKind.PROCESS)]
+    public class PreOrder : DocumentBaseName<long>, ISharedCosmosEntity
     {
         public override string Id { get; set; }
+
+        /// <summary>
+        /// Identificador visual 
+        /// </summary>
+        [AutoNumericSearch(NumRelated.GENERIC_CORRELATIVE)]
+        public override long ClientId { get; set; }
 
 
         [SuggestSearch(StringRelated.GENERIC_NAME)]

@@ -6,7 +6,7 @@ using trifenix.agro.enums.searchModel;
 
 namespace trifenix.agro.model.external.Input {
 
-    [ReferenceSearch(EntityRelated.USER)]
+    [ReferenceSearchHeader(EntityRelated.USER)]
     public class UserApplicatorInput : InputBase {
 
         [Required, Unique]

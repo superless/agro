@@ -8,7 +8,7 @@ using trifenix.agro.enums.searchModel;
 
 namespace trifenix.agro.model.external.Input {
 
-    [ReferenceSearch(EntityRelated.DOSES)]
+    [ReferenceSearchHeader(EntityRelated.DOSES)]
     public class DosesInput : InputBase {
 
         [Required, Reference(typeof(Product))]
@@ -69,7 +69,7 @@ namespace trifenix.agro.model.external.Input {
 
     }
 
-    [ReferenceSearch(EntityRelated.WAITINGHARVEST, true)]
+    [ReferenceSearchHeader(EntityRelated.WAITINGHARVEST, true, Kind = EntityKind.CUSTOM_ENTITY)]
     public class WaitingHarvestInput {
 
         [DoubleSearch(DoubleRelated.PPM)]

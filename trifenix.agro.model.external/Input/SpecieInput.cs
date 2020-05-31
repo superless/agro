@@ -5,7 +5,7 @@ using trifenix.agro.enums.searchModel;
 namespace trifenix.agro.model.external.Input {
 
 
-    [ReferenceSearch(EntityRelated.SPECIE)]
+    [ReferenceSearchHeader(EntityRelated.SPECIE)]
     public class SpecieInput : InputBase {
 
         [Required, Unique]

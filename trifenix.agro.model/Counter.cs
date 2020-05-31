@@ -9,6 +9,8 @@ namespace trifenix.agro.db.model {
 
         public override string Id { get; set; }
 
+        
+
         //{ApplicationOrder:{CI:5,DU:10...}}
         public Dictionary<string, Dictionary<string,int>> Count { get; set; }
 

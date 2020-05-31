@@ -7,12 +7,14 @@ using trifenix.agro.enums.searchModel;
 namespace trifenix.agro.db.model
 {
     [SharedCosmosCollection("agro", "Variety")]
-    [ReferenceSearch(EntityRelated.VARIETY)]
-    [ReferenceSearch(EntityRelated.POLLINATOR)]
-    public class Variety : DocumentBaseName, ISharedCosmosEntity
+    [ReferenceSearchHeader(EntityRelated.VARIETY, Kind = EntityKind.ENTITY, PathName = "varieties")]
+    [ReferenceSearchHeader(EntityRelated.POLLINATOR, Kind = EntityKind.ENTITY, PathName = "pollinators")]
+    public class Variety : DocumentBaseName<long>, ISharedCosmosEntity
     {
     
         public override string Id { get; set; }
+
+
 
 
         [StringSearch(StringRelated.GENERIC_NAME)]
@@ -25,5 +27,7 @@ namespace trifenix.agro.db.model
         [ReferenceSearch(EntityRelated.SPECIE)]
         public string IdSpecie { get; set; }
 
+        [AutoNumericSearch(NumRelated.GENERIC_CORRELATIVE)]
+        public override long ClientId { get; set; }
     }
 }

@@ -4,7 +4,7 @@ using trifenix.agro.enums.searchModel;
 
 namespace trifenix.agro.model.external.Input {
 
-    [ReferenceSearch(EntityRelated.TRACTOR)]
+    [ReferenceSearchHeader(EntityRelated.TRACTOR)]
     public class TractorInput : InputBase {
 
         [Required]

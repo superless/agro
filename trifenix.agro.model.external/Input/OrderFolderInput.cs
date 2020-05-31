@@ -6,7 +6,7 @@ using trifenix.agro.enums.searchModel;
 namespace trifenix.agro.model.external.Input {
 
 
-    [ReferenceSearch(EntityRelated.ORDER_FOLDER)]
+    [ReferenceSearchHeader(EntityRelated.ORDER_FOLDER)]
     public class OrderFolderInput : InputBase {
 
         [ReferenceSearch(EntityRelated.PHENOLOGICAL_EVENT)]

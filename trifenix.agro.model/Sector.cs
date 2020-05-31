@@ -11,15 +11,21 @@ namespace trifenix.agro.db.model
 {
 
     [SharedCosmosCollection("agro", "Sector")]
-    [ReferenceSearch(EntityRelated.SECTOR)]
-    public class Sector : DocumentBaseName, ISharedCosmosEntity
+    [ReferenceSearchHeader(EntityRelated.SECTOR, PathName = "sectors", Kind = EntityKind.ENTITY)]
+    public class Sector : DocumentBaseName<long>, ISharedCosmosEntity
     {
         public override string Id { get; set; }
 
         [StringSearch(StringRelated.GENERIC_NAME)]
         public override string Name { get; set; }
 
-        
+        /// <summary>
+        /// Identificador visual 
+        /// </summary>
+        [AutoNumericSearch(NumRelated.GENERIC_CORRELATIVE)]
+        public override long ClientId { get; set; }
+
+
 
     }
 

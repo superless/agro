@@ -5,7 +5,7 @@ using trifenix.agro.enums.searchModel;
 
 namespace trifenix.agro.model.external.Input {
 
-    [ReferenceSearch(EntityRelated.COSTCENTER)]
+    [ReferenceSearchHeader(EntityRelated.COSTCENTER)]
     public class CostCenterInput : InputBase {
 
         [Required, Unique]

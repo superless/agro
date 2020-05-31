@@ -5,7 +5,7 @@ using trifenix.agro.enums.searchModel;
 namespace trifenix.agro.model.external.Input {
 
 
-    [ReferenceSearch(EntityRelated.BUSINESSNAME)]
+    [ReferenceSearchHeader(EntityRelated.BUSINESSNAME)]
     public class BusinessNameInput : InputBase {
 
         [StringSearch(StringRelated.GENERIC_NAME)]

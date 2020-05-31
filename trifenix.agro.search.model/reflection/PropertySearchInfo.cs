@@ -16,6 +16,16 @@ namespace trifenix.agro.search.model.reflection {
         public int? MinLength { get; set; }
         public GroupInput[] Group { get; set; }
         public EntitySearchDisplayInfo Info { get; set; }
+
+        public bool Visible { get; set; }
+
+        public bool AutoNumeric { get; set; }
+
+        public bool HasInput { get; set; }
+
+
+
+
     }
 
     public class EntitySearchDisplayInfo {
@@ -29,6 +39,7 @@ namespace trifenix.agro.search.model.reflection {
         public int Index { get; set; }
         public string Title { get; set; }
         public Device Device { get; set; }
+        public int ColumnProportion { get; set; }
     }
 
 }

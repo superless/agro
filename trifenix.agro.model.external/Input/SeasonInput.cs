@@ -6,7 +6,7 @@ using trifenix.agro.enums.searchModel;
 
 namespace trifenix.agro.model.external.Input {
 
-    [ReferenceSearch(EntityRelated.SEASON)]
+    [ReferenceSearchHeader(EntityRelated.SEASON)]
     public class SeasonInput : InputBase {
 
         [Required]

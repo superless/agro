@@ -7,9 +7,15 @@ namespace trifenix.agro.db.model
 {
 
     [SharedCosmosCollection("agro", "Job")]
-    [ReferenceSearch(EntityRelated.JOB)]
-    public class Job : DocumentBaseName, ISharedCosmosEntity
+    [ReferenceSearchHeader(EntityRelated.JOB, PathName = "jobs", Kind = EntityKind.ENTITY)]
+    public class Job : DocumentBaseName<long>, ISharedCosmosEntity
     {
+        /// <summary>
+        /// Identificador visual de la entidad certificadora
+        /// </summary>
+        [AutoNumericSearch(NumRelated.GENERIC_CORRELATIVE)]
+        public override long ClientId { get; set; }
+
         public override string Id { get; set; }
 
 

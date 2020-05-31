@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoBogus" Version="2.7.3" />
-    <PackageReference Include="Bogus" Version="28.4.1" />
+    <PackageReference Include="AutoBogus" Version="2.8.1" />
+    <PackageReference Include="Bogus" Version="29.0.2" />
   </ItemGroup>
 
   <ItemGroup>

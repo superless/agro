@@ -7,7 +7,7 @@ using trifenix.agro.enums.searchModel;
 
 namespace trifenix.agro.model.external.Input {
 
-    [ReferenceSearch(EntityRelated.EXECUTION_ORDER_STATUS)]
+    [ReferenceSearchHeader(EntityRelated.EXECUTION_ORDER_STATUS)]
     public class ExecutionOrderStatusInput : InputBase {
         
         [Required]

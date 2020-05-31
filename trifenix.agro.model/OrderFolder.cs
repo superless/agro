@@ -8,12 +8,18 @@ namespace trifenix.agro.db.model
 {
 
     [SharedCosmosCollection("agro", "OrderFolder")]
-    [ReferenceSearch(EntityRelated.ORDER_FOLDER)]
-    public class OrderFolder : DocumentBase, ISharedCosmosEntity
+    [ReferenceSearchHeader(EntityRelated.ORDER_FOLDER, PathName = "order_folders", Kind = EntityKind.ENTITY)]
+    public class OrderFolder : DocumentBase<long>, ISharedCosmosEntity
     {
 
 
         public override string Id { get; set; }
+
+        /// <summary>
+        /// Identificador visual 
+        /// </summary>
+        [AutoNumericSearch(NumRelated.GENERIC_CORRELATIVE)]
+        public override long ClientId { get; set; }
 
 
         [ReferenceSearch(EntityRelated.PHENOLOGICAL_EVENT)]

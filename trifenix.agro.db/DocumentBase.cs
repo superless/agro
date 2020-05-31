@@ -13,6 +13,16 @@ namespace trifenix.agro.db {
 
     }
 
+    public abstract class DocumentBase<T> : DocumentBase
+    {
+        public abstract T ClientId { get; set; }
+    }
+
+    public abstract class DocumentBaseName<T> : DocumentBaseName
+    {
+        public abstract T ClientId { get; set; }
+    }
+
     public abstract class DocumentBaseName : DocumentBase {
 
         public abstract string Name { get; set; }

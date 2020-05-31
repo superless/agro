@@ -5,7 +5,7 @@ using trifenix.agro.enums.searchModel;
 
 namespace trifenix.agro.model.external.Input {
 
-    [ReferenceSearch(EntityRelated.PHENOLOGICAL_EVENT)]
+    [ReferenceSearchHeader(EntityRelated.PHENOLOGICAL_EVENT)]
     public class PhenologicalEventInput : InputBase {
 
         [Required, Unique]

@@ -11,10 +11,13 @@ using trifenix.agro.enums.searchModel;
 namespace trifenix.agro.db.model {
 
     [SharedCosmosCollection("agro", "Doses")]
-    [ReferenceSearch(EntityRelated.DOSES)]
-    public class Dose : DocumentBase, ISharedCosmosEntity {
+    [ReferenceSearchHeader(EntityRelated.DOSES, Kind = EntityKind.CUSTOM_ENTITY)]
+    public class Dose : DocumentBase<int>, ISharedCosmosEntity {
 
         public override string Id { get; set; }
+
+        [AutoNumericSearch(NumRelated.GENERIC_CORRELATIVE, EntityRelated.PRODUCT)]
+        public override int ClientId { get; set; }
 
         [Num32Search(NumRelated.GENERIC_CORRELATIVE)]
         public int Correlative { get; set; }
