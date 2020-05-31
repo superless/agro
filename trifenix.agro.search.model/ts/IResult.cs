@@ -26,11 +26,7 @@ namespace trifenix.agro.search.model.ts
 
         public int? IndexSorted { get; set; }
 
-        
-
-
-
-
+        public int IndexPropName { get; set; }
     }
 
     public class Facet {
