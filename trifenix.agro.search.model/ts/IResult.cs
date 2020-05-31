@@ -29,6 +29,13 @@ namespace trifenix.agro.search.model.ts
         public int IndexPropName { get; set; }
     }
 
+
+    public class FilterGlobalInput {
+        public EntityRelated indexMain { get; set; }
+
+        
+    }
+
     public class Facet {
         public int Index { get; set; }
 
