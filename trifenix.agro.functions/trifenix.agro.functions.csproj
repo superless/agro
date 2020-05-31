@@ -3,6 +3,7 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <AzureFunctionsVersion>v2</AzureFunctionsVersion>
     <DocumentationFile>SampleFunction.xml</DocumentationFile>
+    <DisableFunctionExtensionVersionUpdate>true</DisableFunctionExtensionVersionUpdate>
   </PropertyGroup>
   <PropertyGroup>
     <Product>AgroFenix</Product>
