@@ -33,7 +33,7 @@ namespace trifenix.agro.search.model.ts
     public class FilterGlobalInput {
         public EntityRelated indexMain { get; set; }
 
-        
+        //clase para almacenar el resultado de los filtros globales.
     }
 
     public class Facet {
