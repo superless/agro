@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="trifenix.agro.model.external.Input.ApplicationOrderInput">
+    <Position X="1.75" Y="0.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAABAAAAAAAAAAAAQAAAAAAABAAAAAAAAABAA=</HashCode>
+      <FileName>Input\ApplicationOrderInput.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Applications" />
+      <Property Name="BarracksInput" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="trifenix.agro.model.external.Input.ApplicationInOrderInput">
+    <Position X="5.5" Y="0.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>EAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>Input\ApplicationOrderInput.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Doses" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="trifenix.agro.model.external.Input.BarrackEventInput">
+    <Position X="5.5" Y="4.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAABAAAAAABAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Input\ApplicationOrderInput.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="trifenix.agro.model.external.Input.DosesInput">
+    <Position X="8.75" Y="0.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAoAAAACAAgAARAAAAAAiAEAAEAQAQAAAIAAAA=</HashCode>
+      <FileName>Input\DosesInput.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="WaitingHarvest" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="trifenix.agro.model.external.Input.WaitingHarvestInput">
+    <Position X="12.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>Input\DosesInput.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

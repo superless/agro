@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Text;
+﻿using trifenix.agro.enums.input;
 
 namespace trifenix.agro.model.external
 {

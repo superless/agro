@@ -1,16 +1,35 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>    
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AzureFunctionsVersion>v3</AzureFunctionsVersion>
+    <DisableFunctionExtensionVersionUpdate>true</DisableFunctionExtensionVersionUpdate>
+  </PropertyGroup>
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
-    <AzureFunctionsVersion>v2</AzureFunctionsVersion>
+    <Product>AgroFenix</Product>
+    <Company>Trifenix</Company>
+    <Authors>Trifenix Team</Authors>
+    <Description>AgroFenix la aplicación de la agricultura</Description>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.28" />
+    <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.0.0" />
+    <PackageReference Include="Microsoft.Azure.WebJobs" Version="3.0.16" />
+    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.ServiceBus" Version="4.1.1" />
+    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.SignalRService" Version="1.1.0" />
+    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.6" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\trifenix.agro.applicationsReference\trifenix.agro.applicationsReference.csproj" />
-    <ProjectReference Include="..\trifenix.agro.db.applicationsReference\trifenix.agro.db.applicationsReference.csproj" />
-    <ProjectReference Include="..\trifenix.agro.model.external.interfaces\trifenix.agro.model.external.interfaces.csproj" />
-    <ProjectReference Include="..\trifenix.util.extensions\trifenix.util.extensions.csproj" />
+    <ProjectReference Include="..\DatabaseInitializer\trifenix.agro.cosmosdbinitializer.operations.csproj" />
+    <ProjectReference Include="..\trifenix.agro.authentication.interfaces\trifenix.agro.authentication.interfaces.csproj" />
+    <ProjectReference Include="..\trifenix.agro.authentication.operations\trifenix.agro.authentication.operations.csproj" />
+    <ProjectReference Include="..\trifenix.agro.email.operations\trifenix.agro.email.operations.csproj" />
+    <ProjectReference Include="..\trifenix.agro.external.interfaces\trifenix.agro.external.interfaces.csproj" />
+    <ProjectReference Include="..\trifenix.agro.external.operations\trifenix.agro.external.operations.csproj" />
+    <ProjectReference Include="..\trifenix.agro.search\trifenix.agro.search.operations.csproj" />
+    <ProjectReference Include="..\trifenix.agro.servicebus.operations\trifenix.agro.servicebus.operations.csproj" />
+    <ProjectReference Include="..\trifenix.agro.storage.operations\trifenix.agro.storage.operations.csproj" />
+    <ProjectReference Include="..\trifenix.agro.swagger.model\trifenix.agro.swagger.model.csproj" />
+    <ProjectReference Include="..\trifenix.agro.weather.operations\trifenix.agro.weather.operations.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">
