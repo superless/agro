@@ -46,7 +46,8 @@ namespace trifenix.agro.authentication.operations {
                 // App Id URI and AppId of this service application are both valid audiences.
                 ValidAudiences = new[] { "https://aresa.trifenix.io", "https://dev-aresa.trifenix.io" },
                 ValidIssuers = validIssuers,
-                IssuerSigningKeys = config.SigningKeys
+                IssuerSigningKeys = config.SigningKeys,
+                ValidateIssuer = false
             };
             try {
                 SecurityToken securityToken;
