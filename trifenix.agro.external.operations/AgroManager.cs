@@ -127,6 +127,12 @@ namespace trifenix.agro.external.operations {
             return (dynamic)genProp.GetValue(this);
         }
 
+        public dynamic GetOperationByDbType(Type DbType) {
+            var operationsProps = typeof(IAgroManager).GetProperties().Where(prop => prop.PropertyType.Name.StartsWith("IGenericOperation`2")).ToList();
+            var genProp = operationsProps.FirstOrDefault(prop => prop.PropertyType.GenericTypeArguments[0].Equals(DbType));
+            return (dynamic)genProp.GetValue(this);
+        }
+
     }
 
 }

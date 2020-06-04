@@ -110,7 +110,14 @@ namespace trifenix.agro.search.operations {
         private BaseProperty<T> GetProperty<T>(int index, object value) {
             var element = (BaseProperty<T>)Activator.CreateInstance(typeof(BaseProperty<T>));
             element.PropertyIndex = index;
-            element.Value = (T)value;
+            try { 
+                element.Value = (T)value;
+            } catch (Exception e) {
+                if(e.Message.Equals("Unable to cast object of type 'System.Int32' to type 'System.Int64'."))
+                    element.Value = (T)(object)Convert.ToInt64(value);
+                else
+                    throw;
+            }
             return element;
         }
 
@@ -358,9 +365,13 @@ namespace trifenix.agro.search.operations {
             return values;
         }
 
-        public void AddDocument<T>(T document) where T : DocumentBase
-        {
+        public void AddDocument<T>(T document) where T : DocumentBase {
             AddElements(GetEntitySearch(document).ToList());
+        }
+
+        public void EmptyIndex(string indexName) {
+            _search.Indexes.Delete(indexName);
+            _search.Indexes.Create(new Index { Name = _entityIndex, Fields = indexName.Equals(_entityIndex)?FieldBuilder.BuildForType<EntitySearch>():FieldBuilder.BuildForType<CommentSearch>() });
         }
     }
 
