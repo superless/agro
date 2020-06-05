@@ -10,7 +10,7 @@ using trifenix.agro.enums.searchModel;
 
 namespace trifenix.agro.db.model {
 
-    [SharedCosmosCollection("agro", "Doses")]
+    [SharedCosmosCollection("agro", "Dose")]
     [ReferenceSearchHeader(EntityRelated.DOSES, Kind = EntityKind.CUSTOM_ENTITY)]
     public class Dose : DocumentBase<int>, ISharedCosmosEntity {
 

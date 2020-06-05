@@ -13,7 +13,6 @@ using trifenix.agro.db;
 using trifenix.agro.db.exceptions;
 using trifenix.agro.db.model;
 using trifenix.agro.db.model.core;
-using trifenix.agro.enums;
 using trifenix.agro.enums.input;
 using trifenix.agro.external.interfaces;
 using trifenix.agro.model.external;
@@ -118,7 +117,7 @@ namespace trifenix.agro.authentication.operations {
             var EntityContainers = await Manager.BatchStore.Query().ToListAsync();
             await SaveFromEntityContainersToDb(EntityContainers);
             timer.Stop();
-            return new JsonResult($"Operacion exitosa. Tiempo transcurrido: {timer.Elapsed.ToString("hh\\:mm\\:ss")}");
+            return new JsonResult($"Operacion exitosa. Tiempo transcurrido: {timer.Elapsed:hh\\:mm\\:ss}");
         }
 
     }

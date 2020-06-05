@@ -98,10 +98,8 @@ namespace trifenix.agro.external.operations.entities.ext {
 
         public async Task<ExtPostContainer<string>> Save(Product product) {
             await repo.CreateUpdate(product);
-            var dosesDefault = await RemoveDoses(product);
-            var productSearch = search.GetEntitySearch(product).LastOrDefault();
-            productSearch.RelatedIds = productSearch.RelatedIds.Add(new List<RelatedId> { dosesDefault });
-            search.AddElements(new List<EntitySearch> { productSearch });
+            search.AddDocument(product);
+            await RemoveDoses(product);
             return new ExtPostContainer<string> {
                 IdRelated = product.Id,
                 MessageResult = ExtMessageResult.Ok

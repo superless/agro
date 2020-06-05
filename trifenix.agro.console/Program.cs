@@ -1,127 +1,181 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Globalization;
-using System.Threading.Tasks;
-using trifenix.agro.search.operations;
-using trifenix.agro.search.model;
+﻿using Cosmonaut;
+using Cosmonaut.Response;
 using System;
-using System.Threading;
-using Newtonsoft.Json;
-using System.Reflection;
-using trifenix.agro.enums.searchModel;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
+using trifenix.agro.db;
+using trifenix.agro.db.model;
+using trifenix.agro.db.model.core;
+using trifenix.agro.external.operations;
+using trifenix.agro.search.model;
+using trifenix.agro.search.operations;
+using trifenix.agro.util;
 
 namespace trifenix.agro.console {
 
-    public class TestDesc {
-
-        [Display(ResourceType = typeof(temp), Name = nameof(Test1), Description = nameof(Test1)+"_descr")]
-        public string Test1 { get; set; }
-
-    }
-
     class Program {
+
+        public static Task<CosmosMultipleResponse<T>> RemoveAsync<T>(CosmosStoreSettings StoreSettings) where T : class => new CosmosStore<T>(StoreSettings).RemoveAsync(entity => true);
 
         static async Task Main(string[] args) {
 
-            //var allCultures = CultureInfo.GetCultures(CultureTypes.AllCultures);
+            Console.WriteLine("Hora de inicio: {0}", DateTime.Now.ToString("hh\\:mm\\:ss"));
+            Stopwatch timer = Stopwatch.StartNew();
 
+            // Inicio Script
 
-            //Console.WriteLine("Hora de inicio: {0}", DateTime.Now.ToString("hh\\:mm\\:ss"));
-            //Stopwatch timer = Stopwatch.StartNew();
+            Environment.SetEnvironmentVariable("clientSecret", "B._H_uAwEdg7K1FzVboS3S/oF4IKNbtf");
+            Environment.SetEnvironmentVariable("clientID", "34d9266f-43f9-4fb2-8cdd-ae21be551342");
+            Environment.SetEnvironmentVariable("tenantID", "13f71027-8389-436e-bdaf-7bd34382fbff");
+
+            bool vaciarCosmosDb = true, vaciarSearch = false, vaciarAmbos = false;
+
+            var search = new AgroSearch("agrosearch-produccion", "CCD703CF82D6DD003C7C69C312E172A7");
+            if(vaciarAmbos || vaciarSearch)
+                search.EmptyIndex<EntitySearch>("entities");
+
+            var agroDbArguments = new AgroDbArguments { EndPointUrl = "https://agricola-jhm-produccion.documents.azure.com:443/", NameDb = "agrodb", PrimaryKey = "k9pxrkHwcO22sKPKlREl0CQHYEXPlHwTNh7YlNfHTI40GQ5kFQVUWVpXPFIdIDfNfftHiS5yBZGMP4FyfBymhQ==" };
+
+            IEnumerable<Task> tasks;
+            ConcurrentBag<object> bag;
+
+            if (vaciarAmbos || vaciarCosmosDb) {
+                var storeSettings = new CosmosStoreSettings(agroDbArguments.NameDb, agroDbArguments.EndPointUrl, agroDbArguments.PrimaryKey);
+                bag = new ConcurrentBag<object>();
+                var assm = typeof(BusinessName).Assembly;
+                var types = assm.GetTypes().Where(type => type.GetProperty("CosmosEntityName") != null).ToList();
+                tasks = types.Select(async type => {
+                    var response = typeof(Program).GetMethod("RemoveAsync").MakeGenericMethod(type).Invoke(null, new object[] { storeSettings });
+                    bag.Add(response);
+                });
+                await Task.WhenAll(tasks);
+            }
             
-            //var ns = new EntitySearch { Id = "sadsad", EntityIndex = new int[] { 1} };
+            var elements = new List<object> {
+                new BusinessName { Name = "Agrícola Juan Henriquez Marich", Giro = "Agronomía", WebPage = "www.aresa.trifenix.io" },
+                new BusinessName { Name = "Agrícola Azapa Ltda.", Giro = "Agronomía", WebPage = "www.aresa.trifenix.io" },
+                new BusinessName { Name = "Agrícola El Delirio", Giro = "Agronomía", WebPage = "www.aresa.trifenix.io" },
+                new CostCenter { Name = "Esmeralda", IdBusinessName = "0" },
+                new CostCenter { Name = "Lechería", IdBusinessName = "0" },
+                new CostCenter { Name = "Azapa", IdBusinessName = "1" },
+                new CostCenter { Name = "El Delirio", IdBusinessName = "2" },
+                new Season { Current = true, StartDate = new DateTime(2020, 5, 1), EndDate = new DateTime(2021, 4, 30), IdCostCenter = "3" },
+                new Season { Current = true, StartDate = new DateTime(2020, 5, 1), EndDate = new DateTime(2021, 4, 30), IdCostCenter = "4" },
+                new Season { Current = true, StartDate = new DateTime(2020, 5, 1), EndDate = new DateTime(2021, 4, 30), IdCostCenter = "5" },
+                new Season { Current = true, StartDate = new DateTime(2020, 5, 1), EndDate = new DateTime(2021, 4, 30), IdCostCenter = "6" },
+                new Specie { Name = "Cereza", Abbreviation = "CE" },
+                new Specie { Name = "Nectarín", Abbreviation = "NE" },
+                new Specie { Name = "Durazno", Abbreviation = "DU" }, //13
+                new Specie { Name = "Ciruela", Abbreviation = "CI" }, //14
+                new Specie { Name = "Manzana", Abbreviation = "MA" },
+                new Specie { Name = "Kiwi", Abbreviation = "KI" },
+                new Specie { Name = "Pera", Abbreviation = "PE" },
+                new Variety { Name = "Royal Dawn", Abbreviation = "C-14", IdSpecie = "11" },
+                new Variety { Name = "Van", Abbreviation = "VN", IdSpecie = "11" },
+                new Variety { Name = "New Star", Abbreviation = "NSTR", IdSpecie = "11" },
+                new Variety { Name = "Bing", Abbreviation = "BNG", IdSpecie = "11" },
+                new Variety { Name = "Lapins", Abbreviation = "LPNS", IdSpecie = "11" },
+                new Variety { Name = "Summit", Abbreviation = "SMMT", IdSpecie = "11" },
+                new Variety { Name = "Santina", Abbreviation = "SNTN", IdSpecie = "11" },
+                new Variety { Name = "Royal Lynn", Abbreviation = "RYLN", IdSpecie = "11" },
+                new Variety { Name = "Royal Hazel", Abbreviation = "RYHZL", IdSpecie = "11" },
+                new Variety { Name = "Sweet Heart", Abbreviation = "SWHRT", IdSpecie = "11" },
+                new Variety { Name = "Cristalina", Abbreviation = "CRSTLN", IdSpecie = "11" },
+                new Variety { Name = "Regina", Abbreviation = "RGN", IdSpecie = "11" },
+                new Variety { Name = "Summer Bright", Abbreviation = "SMRBRGT", IdSpecie = "12" },
+                new Variety { Name = "July Red", Abbreviation = "JLRD", IdSpecie = "12" },
+                new Variety { Name = "Flamekist", Abbreviation = "FLMKST", IdSpecie = "12" },
+                new Variety { Name = "Arctic Snow", Abbreviation = "ATSNW", IdSpecie = "12" },
+                new Variety { Name = "Firebrite", Abbreviation = "FRBRT", IdSpecie = "12" },
+                new Variety { Name = "August Red", Abbreviation = "AGTRD", IdSpecie = "12" },
+                new Variety { Name = "Bright Pearl", Abbreviation = "BRGTPRL", IdSpecie = "12" },
+                new Variety { Name = "August Pearl", Abbreviation = "AGTPRL", IdSpecie = "12" },
+                new Variety { Name = "Andes Nec Uno", Abbreviation = "ADNC1", IdSpecie = "12" },
+                new Variety { Name = "Andes Nec Dos", Abbreviation = "ADNC2", IdSpecie = "12" },
+                new Variety { Name = "Super Queen", Abbreviation = "SPRQN", IdSpecie = "12" },
+                new Variety { Name = "NE-289", Abbreviation = "NE-289", IdSpecie = "12" },
+                new Variety { Name = "Isi White", Abbreviation = "IWHT", IdSpecie = "12" },
+                new Variety { Name = "Candy White", Abbreviation = "CNDWHT", IdSpecie = "12" },
+                new Variety { Name = "Magnum Red", Abbreviation = "MGNRD", IdSpecie = "12" },
+                new Variety { Name = "Ruby Red", Abbreviation = "RBRD", IdSpecie = "12" },
+                new Variety { Name = "Venus", Abbreviation = "VNS", IdSpecie = "12" },
+                new Variety { Name = "Sunrise", Abbreviation = "SNRS", IdSpecie = "12" },
+                new Variety { Name = "Granny Smith", Abbreviation = "GRNYSMTH", IdSpecie = "15" },
+                new Variety { Name = "Fuji", Abbreviation = "FJ", IdSpecie = "15" },
+                new Variety { Name = "Starkrimson", Abbreviation = "STRKMSN", IdSpecie = "15" },
+                new Variety { Name = "Hayward", Abbreviation = "HYWRD", IdSpecie = "16" },
+                new Variety { Name = "Winter Nelis", Abbreviation = "WNTRNLS", IdSpecie = "17" },
+                new Variety { Name = "Packham", Abbreviation = "PCKHM", IdSpecie = "17" },
+                new Variety { Name = "Red Sensation", Abbreviation = "RDSNSTN", IdSpecie = "17" }
+                
+                //new Sector { Name = "Esmeralda" },
+                //new PlotLand { Name = "Esmeralda", IdSector = "6" },
+                //new Rootstock { Name = "Nemaguard", Abbreviation = "NEMG" },
+                //new Barrack { SeasonId = "2", Name = "Cuartel X", Hectares = 1.5, NumberOfPlants = 453, PlantingYear = 2000, IdRootstock = "8", IdPlotLand = "7", IdVariety = "4", IdPollinator = "5" },
+                //new IngredientCategory { Name = "Insecticida" },
+                //new Ingredient { Name = "Lambda-cihalotrina", idCategory = "10" },
+                //new Ingredient { Name = "Imidacloprid", idCategory = "10" },
+                //new ApplicationTarget { Name = "Control de plaga" },
+                //new CertifiedEntity { Name = "Union Europea", Abbreviation = "UEA" },
+                //new Product { Name = "Geminis Wp", Brand = "Anasac", IdActiveIngredient = "12", KindOfBottle = 0, MeasureType = (MeasureType)1, Quantity = 500 },
+                //new Dose { IdProduct = "15", IdsApplicationTarget = new string[] { "13" }, IdSpecies = new string[] { "3" }, IdVarieties = new string[] { "4", "5" }, ApplicationDaysInterval = 15, HoursToReEntryToBarrack = 5, DosesApplicatedTo = (DosesApplicatedTo)1, DosesQuantityMin = 500, DosesQuantityMax = 800, NumberOfSequentialApplication = 3, WaitingDaysLabel = 25, WaitingToHarvest = new List<WaitingHarvest> { new WaitingHarvest { IdCertifiedEntity = "14", WaitingDays = 25 } }, WettingRecommendedByHectares = 2000 },
+                //new PhenologicalEvent { Name = "Aparicion de flor", StartDate = new DateTime(2020, 5, 1), EndDate = new DateTime(2020, 7, 1) },
+                //new OrderFolder { IdSpecie = "3", IdApplicationTarget = "13", IdPhenologicalEvent = "17", IdIngredientCategory = "10", IdIngredient = "12" },
+                //new PreOrder { Name = "Eulia", OrderFolderId = "18", IdIngredient = "12", PreOrderType = (PreOrderType)1, BarracksId = new string[] { "9" } },
+                //new Tractor { Brand = "John Deere", Code = "JDT" },
+                //new Nebulizer { Brand = "Lerpain", Code = "LRP" },
+                //new Role { Name = "Administrador" },
+                //new Role { Name = "Aplicador" },
+                //new Job { Name = "Administrador" },
+                //new UserApplicator { Name = "Cristian Rojas", Email = "cristian.rojas@alumnos.uv.cl", Rut = "19.193.382-6", IdJob = "24", IdsRoles = new List<string> { "22", "23" }, ObjectIdAAD = "d273305e-9a05-4bbb-9bfc-ae724610b93a" }
+            };
 
-            //var nsJson = JsonConvert.SerializeObject(ns);
+            var guids = new List<string>();
 
-            //Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("es");
+            elements.ForEach(element => guids.Add(Guid.NewGuid().ToString("N")));
+            int position = 0;
+            elements.ForEach(element => {
+                element.GetType().GetProperties().Where(prop => prop.Name.ToLower().Contains("id") && !prop.Name.Equals("ClientId") && !prop.Name.Equals("ObjectIdAAD")).ToList().ForEach(
+                    prop => {
+                        if (prop.GetValue(element).HasValue()) {
+                            if (!AttributesExtension.IsEnumerableProperty(prop)) {
+                                var indexString = prop.GetValue(element).ToString();
+                                var index = int.Parse(indexString);
+                                prop.SetValue(element, guids[index]);
+                            }
+                            else {
+                                //Obtengo el IEnumerable(Array o List), valor de propiedad de tipo id, para luego recorrerlo y generar nueva lista con guids reemplazados
+                                var listGuids = ((IEnumerable<object>)prop.GetValue(element)).Select(id => guids[int.Parse(id.ToString())]);
+                                prop.SetValue(element, prop.PropertyType.IsArray ? listGuids.ToArray() : (object)listGuids.ToList());
+                            }
+                        }
+                        else if (prop.Name.Equals("Id"))
+                            prop.SetValue(element, guids[position]);
+                    }
+                );
+                position++;
+            });
 
-            //var display = typeof(TestDesc).GetProperty(nameof(TestDesc.Test1)).GetCustomAttribute<DisplayAttribute>();
-            
-            //var name = display.GetName();
-            //var description = display.GetDescription();
-            //Console.WriteLine(name);
-            //Console.WriteLine(description);
+            var agro = new AgroManager(agroDbArguments, null, null, null, search, null, false);
+
+            bag = new ConcurrentBag<object>();
+            tasks = elements.Select(async element => {
+                var response = await agro.GetOperationByDbType(element.GetType()).Save(element as dynamic);
+                bag.Add(response);
+            });
+            await Task.WhenAll(tasks);
+
+            //var search = new AgroSearch("agrosearch", "016DAA5EF1158FEEEE58DA60996D5981");
+            //var entity = search.GetEntity(EntityRelated.PHENOLOGICAL_EVENT, "e158ffd87a27410ab1b0b73cda2ecccb");
+            //entity.Num64Properties = new Num64Property[] { };
+            //search.AddElements(new List<EntitySearch> { entity });
+
+            // Fin Script
 
 
-
-            //await SearchHelper.UpdateSearch();
-
-
-            var search = new AgroSearch("agrosearch", "016DAA5EF1158FEEEE58DA60996D5981");
-            search.DeleteEntity(EntityRelated.USER, "7f3a7fd21db54e2aa61540ec22d3a709");
-            search.DeleteEntity(EntityRelated.USER, "df93fad949ca40d3af4cf6a77a2d554c");
-            search.DeleteEntity(EntityRelated.USER, "c4d76073c1b34a8ea4b8e6bd98d8561d");
-            search.DeleteEntity(EntityRelated.USER, "4ed0437c51ff4b28a275cb42385f54bf");
-            //var entitySearch = new EntitySearchV2()
-            //{
-            //    EntityIndex = 1,
-            //    Id = "Id",
-            //    RelatedIds = new RelatedId[] {
-            //        new RelatedId {
-            //            EntityId = "1f369d8e5e744839b0ab185475617593",
-            //            EntityIndex = 15
-            //        },
-            //        new RelatedId {
-            //            EntityId = "648c0cce3b5541b69947ae0c79adc127",
-            //            EntityIndex = 11
-            //        },
-            //        new RelatedId {
-            //            EntityId = "b60665985f3a4df5afb77a6fe7a3231c",
-            //            EntityIndex = 21
-            //        },
-            //        new RelatedId {
-            //            EntityId = "b65d72b335a247bb9c98b89721154afd",
-            //            EntityIndex = 23
-            //        },
-            //        new RelatedId {
-            //            EntityId = "6fd20d32e0c04d56b84c57e3bd7d018b",
-            //            EntityIndex = 14
-            //        }
-            //    },
-            //    NumProperties = new Num32Property[] {
-            //        new Num32Property {
-            //            PropertyIndex = 7,
-            //            Value = 1990
-            //        },
-            //        new Num32Property {
-            //            PropertyIndex = 6,
-            //            Value = 2000
-            //        }
-            //    },
-            //    DoubleProperties = new DblProperty[] {
-            //        new DblProperty {
-            //            PropertyIndex = 6,
-            //            Value = 4.3
-            //        }
-            //    }
-            //};
-            //var entitySearch = new EntitySearch() {
-            //    EntityIndex = new int[] { 6 },
-            //    Id = "Id",
-            //    RelatedIds = new RelatedId[] {
-            //        new RelatedId {
-            //            EntityIndex = 0,
-            //            EntityId = "f7ee4e67a99c408880fe1fb39c63985c"
-            //        },
-            //        new RelatedId {
-            //            EntityIndex = 0,
-            //            EntityId = "50a1c384700b4e56a95d2935e585c77e"
-            //        },
-            //        new RelatedId {
-            //            EntityIndex = 21,
-            //            EntityId = "b60665985f3a4df5afb77a6fe7a3231c"
-            //        },
-            //        new RelatedId {
-            //            EntityIndex = 18,
-            //            EntityId = "2fae7e0211594203a2820becdecdbf54"
-            //        },
-            //        new RelatedId {
-            //            EntityIndex = 12,
-            //            EntityId = "3b42a82973a24241a7a88124359a13fd"
-            //        }
-            //    }
-            //};
-            //var entity = search.GetEntityFromSearch(entitySearch);
-            //return;
 
             #region Reflexion
             //Console.WriteLine("typeof(Barrack).Name:            " + typeof(Barrack).Name);
@@ -445,13 +499,9 @@ namespace trifenix.agro.console {
 
             #endregion
 
-            //AgroSearch search = new AgroSearch("agrosearch", "016DAA5EF1158FEEEE58DA60996D5981");
-            //var entitySearch = search.GetEntitySearch(new Barrack { Id = "IdBarrack", PlantingYear = 10, NumberOfPlants = 5}).First();
-            //Console.WriteLine(entitySearch.Id);
-
-            //timer.Stop();
-            //Console.WriteLine("Hora de termino: {0}", DateTime.Now.ToString("hh\\:mm\\:ss"));
-            //Console.WriteLine("Tiempo transcurrido: {0}", timer.Elapsed.ToString("hh\\:mm\\:ss"));
+            timer.Stop();
+            Console.WriteLine("Hora de termino: {0}", DateTime.Now.ToString("hh\\:mm\\:ss"));
+            Console.WriteLine("Tiempo transcurrido: {0}", timer.Elapsed.ToString("hh\\:mm\\:ss"));
 
         }
 

@@ -44,12 +44,17 @@ namespace trifenix.agro.search.operations {
             _queries = new SearchQueries();
             _search = new SearchServiceClient(SearchServiceName, new SearchCredentials(SearchServiceKey));
             if (!_search.Indexes.Exists(_entityIndex))
-                _search.Indexes.CreateOrUpdate(new Index { Name = _entityIndex, Fields = FieldBuilder.BuildForType<EntitySearch>() });
+                CreateOrUpdateIndex<EntitySearch>(_entityIndex);
             if (!_search.Indexes.Exists(_commentIndex))
-                _search.Indexes.CreateOrUpdate(new Index { Name = _commentIndex, Fields = FieldBuilder.BuildForType<CommentSearch>() });
+                CreateOrUpdateIndex<CommentSearch>(_commentIndex); 
         }
 
         private string Queries(SearchQuery query) => _queries.Get(query);
+
+        private void CreateOrUpdateIndex<T>(string indexName) {
+            string[] allowedOrigins = new string[] { "https://aresa.trifenix.io", "https://dev-aresa.trifenix.io", "https://agro.trifenix.io", "https://agro-dev.trifenix.io", "http://localhost:3000", "http://localhost:9009", "https://portal.azure.com" };
+            _search.Indexes.CreateOrUpdate(new Index { Name = indexName, Fields = FieldBuilder.BuildForType<T>(), CorsOptions = new CorsOptions(allowedOrigins) });
+        }
 
         private void OperationElements<T>(List<T> elements, SearchOperation operationType) {
             var indexName = typeof(T).Equals(typeof(EntitySearch)) ? _entityIndex : _commentIndex;
@@ -110,7 +115,14 @@ namespace trifenix.agro.search.operations {
         private BaseProperty<T> GetProperty<T>(int index, object value) {
             var element = (BaseProperty<T>)Activator.CreateInstance(typeof(BaseProperty<T>));
             element.PropertyIndex = index;
-            element.Value = (T)value;
+            try { 
+                element.Value = (T)value;
+            } catch (Exception e) {
+                if(e.Message.Equals("Unable to cast object of type 'System.Int32' to type 'System.Int64'."))
+                    element.Value = (T)(object)Convert.ToInt64(value);
+                else
+                    throw;
+            }
             return element;
         }
 
@@ -358,9 +370,13 @@ namespace trifenix.agro.search.operations {
             return values;
         }
 
-        public void AddDocument<T>(T document) where T : DocumentBase
-        {
+        public void AddDocument<T>(T document) where T : DocumentBase {
             AddElements(GetEntitySearch(document).ToList());
+        }
+
+        public void EmptyIndex<IndexSearch>(string indexName) {
+            _search.Indexes.Delete(indexName);
+            CreateOrUpdateIndex<IndexSearch>(indexName);
         }
     }
 

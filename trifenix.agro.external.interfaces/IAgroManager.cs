@@ -42,6 +42,7 @@ namespace trifenix.agro.external.interfaces {
         IGenericOperation<Variety, VarietyInput> Variety { get; }
 
         dynamic GetOperationByInputType(Type InputType);
+        dynamic GetOperationByDbType(Type DbType);
 
     }
 
