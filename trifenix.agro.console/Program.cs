@@ -10,6 +10,7 @@ using trifenix.agro.db;
 using trifenix.agro.db.model;
 using trifenix.agro.db.model.core;
 using trifenix.agro.external.operations;
+using trifenix.agro.search.model;
 using trifenix.agro.search.operations;
 using trifenix.agro.util;
 
@@ -30,11 +31,11 @@ namespace trifenix.agro.console {
             Environment.SetEnvironmentVariable("clientID", "34d9266f-43f9-4fb2-8cdd-ae21be551342");
             Environment.SetEnvironmentVariable("tenantID", "13f71027-8389-436e-bdaf-7bd34382fbff");
 
-            bool vaciarCosmosDb = false, vaciarSearch = false, vaciarAmbos = true;
+            bool vaciarCosmosDb = true, vaciarSearch = false, vaciarAmbos = false;
 
             var search = new AgroSearch("agrosearch-produccion", "CCD703CF82D6DD003C7C69C312E172A7");
             if(vaciarAmbos || vaciarSearch)
-                search.EmptyIndex("entities");
+                search.EmptyIndex<EntitySearch>("entities");
 
             var agroDbArguments = new AgroDbArguments { EndPointUrl = "https://agricola-jhm-produccion.documents.azure.com:443/", NameDb = "agrodb", PrimaryKey = "k9pxrkHwcO22sKPKlREl0CQHYEXPlHwTNh7YlNfHTI40GQ5kFQVUWVpXPFIdIDfNfftHiS5yBZGMP4FyfBymhQ==" };
 

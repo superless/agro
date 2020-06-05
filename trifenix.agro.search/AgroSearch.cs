@@ -44,12 +44,17 @@ namespace trifenix.agro.search.operations {
             _queries = new SearchQueries();
             _search = new SearchServiceClient(SearchServiceName, new SearchCredentials(SearchServiceKey));
             if (!_search.Indexes.Exists(_entityIndex))
-                _search.Indexes.CreateOrUpdate(new Index { Name = _entityIndex, Fields = FieldBuilder.BuildForType<EntitySearch>() });
+                CreateOrUpdateIndex<EntitySearch>(_entityIndex);
             if (!_search.Indexes.Exists(_commentIndex))
-                _search.Indexes.CreateOrUpdate(new Index { Name = _commentIndex, Fields = FieldBuilder.BuildForType<CommentSearch>() });
+                CreateOrUpdateIndex<CommentSearch>(_commentIndex); 
         }
 
         private string Queries(SearchQuery query) => _queries.Get(query);
+
+        private void CreateOrUpdateIndex<T>(string indexName) {
+            string[] allowedOrigins = new string[] { "https://aresa.trifenix.io", "https://dev-aresa.trifenix.io", "https://agro.trifenix.io", "https://agro-dev.trifenix.io", "http://localhost:3000", "http://localhost:9009", "https://portal.azure.com" };
+            _search.Indexes.CreateOrUpdate(new Index { Name = indexName, Fields = FieldBuilder.BuildForType<T>(), CorsOptions = new CorsOptions(allowedOrigins) });
+        }
 
         private void OperationElements<T>(List<T> elements, SearchOperation operationType) {
             var indexName = typeof(T).Equals(typeof(EntitySearch)) ? _entityIndex : _commentIndex;
@@ -369,9 +374,9 @@ namespace trifenix.agro.search.operations {
             AddElements(GetEntitySearch(document).ToList());
         }
 
-        public void EmptyIndex(string indexName) {
+        public void EmptyIndex<IndexSearch>(string indexName) {
             _search.Indexes.Delete(indexName);
-            _search.Indexes.Create(new Index { Name = _entityIndex, Fields = indexName.Equals(_entityIndex)?FieldBuilder.BuildForType<EntitySearch>():FieldBuilder.BuildForType<CommentSearch>() });
+            CreateOrUpdateIndex<IndexSearch>(indexName);
         }
     }
 

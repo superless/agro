@@ -126,18 +126,11 @@ namespace trifenix.agro.functions
                     EntityName = EntityName,
                     EntityId = saveReturn.IdRelated
                 }, false);
-                await signalRMessages.AddAsync(new SignalRMessage { Target = "Success", UserId = userId, Arguments = new object[] { EntityName, saveReturn.IdRelated } });
+                await signalRMessages.AddAsync(new SignalRMessage { Target = "Success", UserId = userId, Arguments = new object[] { EntityName } });
             }
             catch (Exception ex) {
-                var extPostError = new ExtPostErrorContainer<string> {
-                    InternalException = ex,
-                    Message = ex.Message,
-                    MessageResult = ExtMessageResult.Error
-                };
-                if (ex is Validation_Exception)
-                    extPostError.ValidationMessages = ((Validation_Exception)ex).ErrorMessages;
-                log.LogError(extPostError.InternalException, extPostError.Message);
-                await signalRMessages.AddAsync(new SignalRMessage { Target = "Error", UserId = userId, Arguments = new object[] { string.IsNullOrEmpty(extPostError.Message)?extPostError.ValidationMessages: new List<string> { extPostError.Message } } });
+                log.LogError(ex, ex.Message);
+                await signalRMessages.AddAsync(new SignalRMessage { Target = "Error", UserId = userId, Arguments = new object[] { ex is Validation_Exception ? ((Validation_Exception)ex).ErrorMessages : (object)new string[] { $"{ex.Message}" } } });
             }
         }
 

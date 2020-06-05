@@ -15,7 +15,7 @@ namespace trifenix.agro.search.interfaces
 
         void DeleteElements<T>(string query);
 
-        void EmptyIndex(string indexName);
+        void EmptyIndex<IndexSearch>(string indexName);
 
         
         List<T> FilterElements<T>(string filter);
