@@ -5,15 +5,10 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
 using System.Threading.Tasks;
 using trifenix.agro.db;
 using trifenix.agro.db.model;
 using trifenix.agro.db.model.core;
-using trifenix.agro.db.model.local;
-using trifenix.agro.enums.model;
-using trifenix.agro.enums.searchModel;
 using trifenix.agro.external.operations;
 using trifenix.agro.search.operations;
 using trifenix.agro.util;
@@ -28,9 +23,6 @@ namespace trifenix.agro.console {
 
             Console.WriteLine("Hora de inicio: {0}", DateTime.Now.ToString("hh\\:mm\\:ss"));
             Stopwatch timer = Stopwatch.StartNew();
-
-            //await SearchHelper.UpdateSearch();
-
 
             // Inicio Script
 
@@ -61,35 +53,86 @@ namespace trifenix.agro.console {
                 await Task.WhenAll(tasks);
             }
             
-            var guids = new List<string>();
             var elements = new List<object> {
-                new BusinessName { Name = "Agro", Rut = "9.876.543-2", Email = "agro@gmail.com", Giro = "Agronomia", Phone = "88884444", WebPage = "www.agro.trifenix.com" },
+                new BusinessName { Name = "Agrícola Juan Henriquez Marich", Giro = "Agronomía", WebPage = "www.aresa.trifenix.io" },
+                new BusinessName { Name = "Agrícola Azapa Ltda.", Giro = "Agronomía", WebPage = "www.aresa.trifenix.io" },
+                new BusinessName { Name = "Agrícola El Delirio", Giro = "Agronomía", WebPage = "www.aresa.trifenix.io" },
                 new CostCenter { Name = "Esmeralda", IdBusinessName = "0" },
-                new Season { Current = true, StartDate = new DateTime(2020, 1, 1), EndDate = new DateTime(2021, 1, 1), IdCostCenter = "1" },
-                new Specie { Name = "Ciruela", Abbreviation = "CI" },
-                new Variety { Name = "Pink Delight", Abbreviation = "PKD", IdSpecie = "3" },
-                new Variety { Name = "Early Queen", Abbreviation = "EARQ", IdSpecie = "3" },
-                new Sector { Name = "Esmeralda" },
-                new PlotLand { Name = "Esmeralda", IdSector = "6" },
-                new Rootstock { Name = "Nemaguard", Abbreviation = "NEMG" },
-                new Barrack { SeasonId = "2", Name = "Cuartel X", Hectares = 1.5, NumberOfPlants = 453, PlantingYear = 2000, IdRootstock = "8", IdPlotLand = "7", IdVariety = "4", IdPollinator = "5" },
-                new IngredientCategory { Name = "Insecticida" },
-                new Ingredient { Name = "Lambda-cihalotrina", idCategory = "10" },
-                new Ingredient { Name = "Imidacloprid", idCategory = "10" },
-                new ApplicationTarget { Name = "Control de plaga" },
-                new CertifiedEntity { Name = "Union Europea", Abbreviation = "UEA" },
-                new Product { Name = "Geminis Wp", Brand = "Anasac", IdActiveIngredient = "12", KindOfBottle = 0, MeasureType = (MeasureType)1, Quantity = 500 },
-                new Dose { IdProduct = "15", IdsApplicationTarget = new string[] { "13" }, IdSpecies = new string[] { "3" }, IdVarieties = new string[] { "4", "5" }, ApplicationDaysInterval = 15, HoursToReEntryToBarrack = 5, DosesApplicatedTo = (DosesApplicatedTo)1, DosesQuantityMin = 500, DosesQuantityMax = 800, NumberOfSequentialApplication = 3, WaitingDaysLabel = 25, WaitingToHarvest = new List<WaitingHarvest> { new WaitingHarvest { IdCertifiedEntity = "14", WaitingDays = 25 } }, WettingRecommendedByHectares = 2000 },
-                new PhenologicalEvent { Name = "Aparicion de flor", StartDate = new DateTime(2020, 5, 1), EndDate = new DateTime(2020, 7, 1) },
-                new OrderFolder { IdSpecie = "3", IdApplicationTarget = "13", IdPhenologicalEvent = "17", IdIngredientCategory = "10", IdIngredient = "12" },
-                new PreOrder { Name = "Eulia", OrderFolderId = "18", IdIngredient = "12", PreOrderType = (PreOrderType)1, BarracksId = new string[] { "9" } },
-                new Tractor { Brand = "John Deere", Code = "JDT" },
-                new Nebulizer { Brand = "Lerpain", Code = "LRP" },
-                new Role { Name = "Administrador" },
-                new Role { Name = "Aplicador" },
-                new Job { Name = "Administrador" },
-                new UserApplicator { Name = "Cristian Rojas", Email = "cristian.rojas@alumnos.uv.cl", Rut = "19.193.382-6", IdJob = "24", IdsRoles = new List<string> { "22", "23" }, ObjectIdAAD = "d273305e-9a05-4bbb-9bfc-ae724610b93a" }
+                new CostCenter { Name = "Lechería", IdBusinessName = "0" },
+                new CostCenter { Name = "Azapa", IdBusinessName = "1" },
+                new CostCenter { Name = "El Delirio", IdBusinessName = "2" },
+                new Season { Current = true, StartDate = new DateTime(2020, 5, 1), EndDate = new DateTime(2021, 4, 30), IdCostCenter = "3" },
+                new Season { Current = true, StartDate = new DateTime(2020, 5, 1), EndDate = new DateTime(2021, 4, 30), IdCostCenter = "4" },
+                new Season { Current = true, StartDate = new DateTime(2020, 5, 1), EndDate = new DateTime(2021, 4, 30), IdCostCenter = "5" },
+                new Season { Current = true, StartDate = new DateTime(2020, 5, 1), EndDate = new DateTime(2021, 4, 30), IdCostCenter = "6" },
+                new Specie { Name = "Cereza", Abbreviation = "CE" },
+                new Specie { Name = "Nectarín", Abbreviation = "NE" },
+                new Specie { Name = "Durazno", Abbreviation = "DU" }, //13
+                new Specie { Name = "Ciruela", Abbreviation = "CI" }, //14
+                new Specie { Name = "Manzana", Abbreviation = "MA" },
+                new Specie { Name = "Kiwi", Abbreviation = "KI" },
+                new Specie { Name = "Pera", Abbreviation = "PE" },
+                new Variety { Name = "Royal Dawn", Abbreviation = "C-14", IdSpecie = "11" },
+                new Variety { Name = "Van", Abbreviation = "VN", IdSpecie = "11" },
+                new Variety { Name = "New Star", Abbreviation = "NSTR", IdSpecie = "11" },
+                new Variety { Name = "Bing", Abbreviation = "BNG", IdSpecie = "11" },
+                new Variety { Name = "Lapins", Abbreviation = "LPNS", IdSpecie = "11" },
+                new Variety { Name = "Summit", Abbreviation = "SMMT", IdSpecie = "11" },
+                new Variety { Name = "Santina", Abbreviation = "SNTN", IdSpecie = "11" },
+                new Variety { Name = "Royal Lynn", Abbreviation = "RYLN", IdSpecie = "11" },
+                new Variety { Name = "Royal Hazel", Abbreviation = "RYHZL", IdSpecie = "11" },
+                new Variety { Name = "Sweet Heart", Abbreviation = "SWHRT", IdSpecie = "11" },
+                new Variety { Name = "Cristalina", Abbreviation = "CRSTLN", IdSpecie = "11" },
+                new Variety { Name = "Regina", Abbreviation = "RGN", IdSpecie = "11" },
+                new Variety { Name = "Summer Bright", Abbreviation = "SMRBRGT", IdSpecie = "12" },
+                new Variety { Name = "July Red", Abbreviation = "JLRD", IdSpecie = "12" },
+                new Variety { Name = "Flamekist", Abbreviation = "FLMKST", IdSpecie = "12" },
+                new Variety { Name = "Arctic Snow", Abbreviation = "ATSNW", IdSpecie = "12" },
+                new Variety { Name = "Firebrite", Abbreviation = "FRBRT", IdSpecie = "12" },
+                new Variety { Name = "August Red", Abbreviation = "AGTRD", IdSpecie = "12" },
+                new Variety { Name = "Bright Pearl", Abbreviation = "BRGTPRL", IdSpecie = "12" },
+                new Variety { Name = "August Pearl", Abbreviation = "AGTPRL", IdSpecie = "12" },
+                new Variety { Name = "Andes Nec Uno", Abbreviation = "ADNC1", IdSpecie = "12" },
+                new Variety { Name = "Andes Nec Dos", Abbreviation = "ADNC2", IdSpecie = "12" },
+                new Variety { Name = "Super Queen", Abbreviation = "SPRQN", IdSpecie = "12" },
+                new Variety { Name = "NE-289", Abbreviation = "NE-289", IdSpecie = "12" },
+                new Variety { Name = "Isi White", Abbreviation = "IWHT", IdSpecie = "12" },
+                new Variety { Name = "Candy White", Abbreviation = "CNDWHT", IdSpecie = "12" },
+                new Variety { Name = "Magnum Red", Abbreviation = "MGNRD", IdSpecie = "12" },
+                new Variety { Name = "Ruby Red", Abbreviation = "RBRD", IdSpecie = "12" },
+                new Variety { Name = "Venus", Abbreviation = "VNS", IdSpecie = "12" },
+                new Variety { Name = "Sunrise", Abbreviation = "SNRS", IdSpecie = "12" },
+                new Variety { Name = "Granny Smith", Abbreviation = "GRNYSMTH", IdSpecie = "15" },
+                new Variety { Name = "Fuji", Abbreviation = "FJ", IdSpecie = "15" },
+                new Variety { Name = "Starkrimson", Abbreviation = "STRKMSN", IdSpecie = "15" },
+                new Variety { Name = "Hayward", Abbreviation = "HYWRD", IdSpecie = "16" },
+                new Variety { Name = "Winter Nelis", Abbreviation = "WNTRNLS", IdSpecie = "17" },
+                new Variety { Name = "Packham", Abbreviation = "PCKHM", IdSpecie = "17" },
+                new Variety { Name = "Red Sensation", Abbreviation = "RDSNSTN", IdSpecie = "17" }
+                
+                //new Sector { Name = "Esmeralda" },
+                //new PlotLand { Name = "Esmeralda", IdSector = "6" },
+                //new Rootstock { Name = "Nemaguard", Abbreviation = "NEMG" },
+                //new Barrack { SeasonId = "2", Name = "Cuartel X", Hectares = 1.5, NumberOfPlants = 453, PlantingYear = 2000, IdRootstock = "8", IdPlotLand = "7", IdVariety = "4", IdPollinator = "5" },
+                //new IngredientCategory { Name = "Insecticida" },
+                //new Ingredient { Name = "Lambda-cihalotrina", idCategory = "10" },
+                //new Ingredient { Name = "Imidacloprid", idCategory = "10" },
+                //new ApplicationTarget { Name = "Control de plaga" },
+                //new CertifiedEntity { Name = "Union Europea", Abbreviation = "UEA" },
+                //new Product { Name = "Geminis Wp", Brand = "Anasac", IdActiveIngredient = "12", KindOfBottle = 0, MeasureType = (MeasureType)1, Quantity = 500 },
+                //new Dose { IdProduct = "15", IdsApplicationTarget = new string[] { "13" }, IdSpecies = new string[] { "3" }, IdVarieties = new string[] { "4", "5" }, ApplicationDaysInterval = 15, HoursToReEntryToBarrack = 5, DosesApplicatedTo = (DosesApplicatedTo)1, DosesQuantityMin = 500, DosesQuantityMax = 800, NumberOfSequentialApplication = 3, WaitingDaysLabel = 25, WaitingToHarvest = new List<WaitingHarvest> { new WaitingHarvest { IdCertifiedEntity = "14", WaitingDays = 25 } }, WettingRecommendedByHectares = 2000 },
+                //new PhenologicalEvent { Name = "Aparicion de flor", StartDate = new DateTime(2020, 5, 1), EndDate = new DateTime(2020, 7, 1) },
+                //new OrderFolder { IdSpecie = "3", IdApplicationTarget = "13", IdPhenologicalEvent = "17", IdIngredientCategory = "10", IdIngredient = "12" },
+                //new PreOrder { Name = "Eulia", OrderFolderId = "18", IdIngredient = "12", PreOrderType = (PreOrderType)1, BarracksId = new string[] { "9" } },
+                //new Tractor { Brand = "John Deere", Code = "JDT" },
+                //new Nebulizer { Brand = "Lerpain", Code = "LRP" },
+                //new Role { Name = "Administrador" },
+                //new Role { Name = "Aplicador" },
+                //new Job { Name = "Administrador" },
+                //new UserApplicator { Name = "Cristian Rojas", Email = "cristian.rojas@alumnos.uv.cl", Rut = "19.193.382-6", IdJob = "24", IdsRoles = new List<string> { "22", "23" }, ObjectIdAAD = "d273305e-9a05-4bbb-9bfc-ae724610b93a" }
             };
+
+            var guids = new List<string>();
 
             elements.ForEach(element => guids.Add(Guid.NewGuid().ToString("N")));
             int position = 0;
