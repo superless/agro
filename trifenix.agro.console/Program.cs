@@ -20,6 +20,26 @@ namespace trifenix.agro.console {
 
         public static Task<CosmosMultipleResponse<T>> RemoveAsync<T>(CosmosStoreSettings StoreSettings) where T : class => new CosmosStore<T>(StoreSettings).RemoveAsync(entity => true);
 
+        private static async Task DoAsync(AgroManager agro, Type dbType) {
+            var extGetContainer = await agro.GetOperationByDbType(dbType).GetElements();
+            var elements = extGetContainer.Result as List<DocumentBase>;
+            elements?.ForEach(element => agro.Search.AddDocument(element));
+        }
+
+        public static async Task RegenerateIndex(AgroManager agro) {
+            var assm = typeof(BusinessName).Assembly;
+            var types = assm.GetTypes().Where(type => type.GetProperty("CosmosEntityName") != null && !(new[] { typeof(EntityContainer), typeof(User) }).Contains(type)).ToList();
+            
+            IEnumerable<Task> tasks;
+            ConcurrentBag<object> bag;
+
+            bag = new ConcurrentBag<object>();
+            tasks = types.Select(async type =>
+                bag.Add(DoAsync(agro,type))
+            );
+            await Task.WhenAll(tasks);
+        }
+
         static async Task Main(string[] args) {
 
             Console.WriteLine("Hora de inicio: {0}", DateTime.Now.ToString("hh\\:mm\\:ss"));
@@ -31,13 +51,14 @@ namespace trifenix.agro.console {
             Environment.SetEnvironmentVariable("clientID", "34d9266f-43f9-4fb2-8cdd-ae21be551342");
             Environment.SetEnvironmentVariable("tenantID", "13f71027-8389-436e-bdaf-7bd34382fbff");
 
-            bool vaciarCosmosDb = true, vaciarSearch = false, vaciarAmbos = false;
+            //Aquí defino si se vaciará CosmosDb, Index Search, ambos o ninguno
+            bool vaciarCosmosDb = false, vaciarSearch = false, vaciarAmbos = false;
 
-            var search = new AgroSearch("agrosearch-produccion", "CCD703CF82D6DD003C7C69C312E172A7");
-            if(vaciarAmbos || vaciarSearch)
+            var search = new AgroSearch("agrosearch", "016DAA5EF1158FEEEE58DA60996D5981");
+            if (vaciarAmbos || vaciarSearch)
                 search.EmptyIndex<EntitySearch>("entities");
 
-            var agroDbArguments = new AgroDbArguments { EndPointUrl = "https://agricola-jhm-produccion.documents.azure.com:443/", NameDb = "agrodb", PrimaryKey = "k9pxrkHwcO22sKPKlREl0CQHYEXPlHwTNh7YlNfHTI40GQ5kFQVUWVpXPFIdIDfNfftHiS5yBZGMP4FyfBymhQ==" };
+            var agroDbArguments = new AgroDbArguments { EndPointUrl = "https://agricola-jhm.documents.azure.com:443/", NameDb = "agrodb", PrimaryKey = "yG6EIAT1dKSBaS7oSZizTrWQGGfwSb2ot2prYJwQOLHYk3cGmzvvhGohSzFZYHueSFDiptUAqCQYYSeSetTiKw==" };
 
             IEnumerable<Task> tasks;
             ConcurrentBag<object> bag;
@@ -53,7 +74,7 @@ namespace trifenix.agro.console {
                 });
                 await Task.WhenAll(tasks);
             }
-            
+
             var elements = new List<object> {
                 new BusinessName { Name = "Agrícola Juan Henriquez Marich", Giro = "Agronomía", WebPage = "www.aresa.trifenix.io" },
                 new BusinessName { Name = "Agrícola Azapa Ltda.", Giro = "Agronomía", WebPage = "www.aresa.trifenix.io" },
@@ -110,27 +131,27 @@ namespace trifenix.agro.console {
                 new Variety { Name = "Winter Nelis", Abbreviation = "WNTRNLS", IdSpecie = "17" },
                 new Variety { Name = "Packham", Abbreviation = "PCKHM", IdSpecie = "17" },
                 new Variety { Name = "Red Sensation", Abbreviation = "RDSNSTN", IdSpecie = "17" }
-                
-                //new Sector { Name = "Esmeralda" },
-                //new PlotLand { Name = "Esmeralda", IdSector = "6" },
-                //new Rootstock { Name = "Nemaguard", Abbreviation = "NEMG" },
-                //new Barrack { SeasonId = "2", Name = "Cuartel X", Hectares = 1.5, NumberOfPlants = 453, PlantingYear = 2000, IdRootstock = "8", IdPlotLand = "7", IdVariety = "4", IdPollinator = "5" },
-                //new IngredientCategory { Name = "Insecticida" },
-                //new Ingredient { Name = "Lambda-cihalotrina", idCategory = "10" },
-                //new Ingredient { Name = "Imidacloprid", idCategory = "10" },
-                //new ApplicationTarget { Name = "Control de plaga" },
-                //new CertifiedEntity { Name = "Union Europea", Abbreviation = "UEA" },
-                //new Product { Name = "Geminis Wp", Brand = "Anasac", IdActiveIngredient = "12", KindOfBottle = 0, MeasureType = (MeasureType)1, Quantity = 500 },
-                //new Dose { IdProduct = "15", IdsApplicationTarget = new string[] { "13" }, IdSpecies = new string[] { "3" }, IdVarieties = new string[] { "4", "5" }, ApplicationDaysInterval = 15, HoursToReEntryToBarrack = 5, DosesApplicatedTo = (DosesApplicatedTo)1, DosesQuantityMin = 500, DosesQuantityMax = 800, NumberOfSequentialApplication = 3, WaitingDaysLabel = 25, WaitingToHarvest = new List<WaitingHarvest> { new WaitingHarvest { IdCertifiedEntity = "14", WaitingDays = 25 } }, WettingRecommendedByHectares = 2000 },
-                //new PhenologicalEvent { Name = "Aparicion de flor", StartDate = new DateTime(2020, 5, 1), EndDate = new DateTime(2020, 7, 1) },
-                //new OrderFolder { IdSpecie = "3", IdApplicationTarget = "13", IdPhenologicalEvent = "17", IdIngredientCategory = "10", IdIngredient = "12" },
-                //new PreOrder { Name = "Eulia", OrderFolderId = "18", IdIngredient = "12", PreOrderType = (PreOrderType)1, BarracksId = new string[] { "9" } },
-                //new Tractor { Brand = "John Deere", Code = "JDT" },
-                //new Nebulizer { Brand = "Lerpain", Code = "LRP" },
-                //new Role { Name = "Administrador" },
-                //new Role { Name = "Aplicador" },
-                //new Job { Name = "Administrador" },
-                //new UserApplicator { Name = "Cristian Rojas", Email = "cristian.rojas@alumnos.uv.cl", Rut = "19.193.382-6", IdJob = "24", IdsRoles = new List<string> { "22", "23" }, ObjectIdAAD = "d273305e-9a05-4bbb-9bfc-ae724610b93a" }
+
+            //new Sector { Name = "Esmeralda" },
+            //new PlotLand { Name = "Esmeralda", IdSector = "6" },
+            //new Rootstock { Name = "Nemaguard", Abbreviation = "NEMG" },
+            //new Barrack { SeasonId = "2", Name = "Cuartel X", Hectares = 1.5, NumberOfPlants = 453, PlantingYear = 2000, IdRootstock = "8", IdPlotLand = "7", IdVariety = "4", IdPollinator = "5" },
+            //new IngredientCategory { Name = "Insecticida" },
+            //new Ingredient { Name = "Lambda-cihalotrina", idCategory = "10" },
+            //new Ingredient { Name = "Imidacloprid", idCategory = "10" },
+            //new ApplicationTarget { Name = "Control de plaga" },
+            //new CertifiedEntity { Name = "Union Europea", Abbreviation = "UEA" },
+            //new Product { Name = "Geminis Wp", Brand = "Anasac", IdActiveIngredient = "12", KindOfBottle = 0, MeasureType = (MeasureType)1, Quantity = 500 },
+            //new Dose { IdProduct = "15", IdsApplicationTarget = new string[] { "13" }, IdSpecies = new string[] { "3" }, IdVarieties = new string[] { "4", "5" }, ApplicationDaysInterval = 15, HoursToReEntryToBarrack = 5, DosesApplicatedTo = (DosesApplicatedTo)1, DosesQuantityMin = 500, DosesQuantityMax = 800, NumberOfSequentialApplication = 3, WaitingDaysLabel = 25, WaitingToHarvest = new List<WaitingHarvest> { new WaitingHarvest { IdCertifiedEntity = "14", WaitingDays = 25 } }, WettingRecommendedByHectares = 2000 },
+            //new PhenologicalEvent { Name = "Aparicion de flor", StartDate = new DateTime(2020, 5, 1), EndDate = new DateTime(2020, 7, 1) },
+            //new OrderFolder { IdSpecie = "3", IdApplicationTarget = "13", IdPhenologicalEvent = "17", IdIngredientCategory = "10", IdIngredient = "12" },
+            //new PreOrder { Name = "Eulia", OrderFolderId = "18", IdIngredient = "12", PreOrderType = (PreOrderType)1, BarracksId = new string[] { "9" } },
+            //new Tractor { Brand = "John Deere", Code = "JDT" },
+            //new Nebulizer { Brand = "Lerpain", Code = "LRP" },
+            //new Role { Name = "Administrador" },
+            //new Role { Name = "Aplicador" },
+            //new Job { Name = "Administrador" },
+            //new UserApplicator { Name = "Cristian Rojas", Email = "cristian.rojas@alumnos.uv.cl", Rut = "19.193.382-6", IdJob = "24", IdsRoles = new List<string> { "22", "23" }, ObjectIdAAD = "d273305e-9a05-4bbb-9bfc-ae724610b93a" }
             };
 
             var guids = new List<string>();
@@ -167,6 +188,8 @@ namespace trifenix.agro.console {
                 bag.Add(response);
             });
             await Task.WhenAll(tasks);
+
+            await RegenerateIndex(agro);
 
             //var search = new AgroSearch("agrosearch", "016DAA5EF1158FEEEE58DA60996D5981");
             //var entity = search.GetEntity(EntityRelated.PHENOLOGICAL_EVENT, "e158ffd87a27410ab1b0b73cda2ecccb");
