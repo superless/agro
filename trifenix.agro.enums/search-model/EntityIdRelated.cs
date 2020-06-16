@@ -168,26 +168,20 @@ namespace trifenix.agro.enums.searchModel {
     public enum NumRelated {
         
         WAITING_DAYS = 0,
-
         
         GENERIC_CORRELATIVE = 1,
 
-        
         HOURS_TO_ENTRY = 2,
-
         
         DAYS_INTERVAL = 3,
-
         
         NUMBER_OF_SECQUENTIAL_APPLICATION = 4,
-
         
         WETTING_RECOMMENDED = 5,
         
         NUMBER_OF_PLANTS = 6,
-
         
-        PLANTING_YEAR = 7
+        PLANTING_YEAR = 7,
     }
 
     public enum DoubleRelated{
@@ -277,58 +271,59 @@ namespace trifenix.agro.enums.searchModel {
         EXECUTION_STATUS = 8,
     }
 
-    public enum PropertyRelated {
-        GENERIC_GIRO = 0,
-        GENERIC_ABBREVIATION = 1,
-        GENERIC_BRAND = 2,
-        GENERIC_CODE = 3,
-        GENERIC_EMAIL = 4 ,
-        GENERIC_END_DATE= 5,
-        GENERIC_NAME = 6,
-        GENERIC_RUT = 7,
-        GENERIC_START_DATE = 8,
-        GENERIC_DESC = 9,
-        GENERIC_PATH = 10,
-        GENERIC_QUANTITY_HECTARE = 11,
-        GENERIC_COMMENT = 12,
-        GENERIC_PHONE=13,
-        GENERIC_NUMBER_OF_PLANTS=14,
-        GENERIC_PLANT_IN_YEAR = 15,
-        GENERIC_HECTARES = 16,
-        GENERIC_LATITUDE = 17,
-        GENERIC_LONGITUDE = 18,
-        GENERIC_WETTING = 19,
-        OBJECT_ID_AAD = 20,
-        GENERIC_WEBPAGE = 21,
-        GENERIC_QUANTITY = 22,
-        DOSES_HOURSENTRYBARRACK= 23,
-        DOSES_DAYSINTERVAL = 24,
-        DOSES_SEQUENCE = 25,
-        DOSES_WETTINGRECOMMENDED = 26,        
-        DOSES_WAITINGDAYSLABEL = 27,        
-        GENERIC_COUNTER = 28,
-        WAITINGHARVEST_DAYS = 29,
-        WAITINGHARVEST_PPM = 30,
-        DOSES_MIN = 31,
-        DOSES_MAX= 32,
-        PRODUCT_NAME = 33
-    }
+    //public enum PropertyRelated {
+    //    GENERIC_GIRO = 0,
+    //    GENERIC_ABBREVIATION = 1,
+    //    GENERIC_BRAND = 2,
+    //    GENERIC_CODE = 3,
+    //    GENERIC_EMAIL = 4 ,
+    //    GENERIC_END_DATE= 5,
+    //    GENERIC_NAME = 6,
+    //    GENERIC_RUT = 7,
+    //    GENERIC_START_DATE = 8,
+    //    GENERIC_DESC = 9,
+    //    GENERIC_PATH = 10,
+    //    GENERIC_QUANTITY_HECTARE = 11,
+    //    GENERIC_COMMENT = 12,
+    //    GENERIC_PHONE=13,
+    //    GENERIC_NUMBER_OF_PLANTS=14,
+    //    GENERIC_PLANT_IN_YEAR = 15,
+    //    GENERIC_HECTARES = 16,
+    //    GENERIC_LATITUDE = 17,
+    //    GENERIC_LONGITUDE = 18,
+    //    GENERIC_WETTING = 19,
+    //    OBJECT_ID_AAD = 20,
+    //    GENERIC_WEBPAGE = 21,
+    //    GENERIC_QUANTITY = 22,
+    //    DOSES_HOURSENTRYBARRACK= 23,
+    //    DOSES_DAYSINTERVAL = 24,
+    //    DOSES_SEQUENCE = 25,
+    //    DOSES_WETTINGRECOMMENDED = 26,        
+    //    DOSES_WAITINGDAYSLABEL = 27,        
+    //    GENERIC_COUNTER = 28,
+    //    WAITINGHARVEST_DAYS = 29,
+    //    WAITINGHARVEST_PPM = 30,
+    //    DOSES_MIN = 31,
+    //    DOSES_MAX= 32,
+    //    PRODUCT_NAME = 33,
+    //    CLIENT_ID = 34,
+    //}
 
-    public enum EnumerationRelated {
-        ORDER_TYPE= 1,
-        SEASON_CURRENT=2, //0 false. 1 true
-        NOTIFICATION_TYPE = 3,
-        PREORDER_TYPE = 4,
-        EXECUTION_STATUS = 5,
-        EXECUTION_CLOSED_STATUS = 6,
-        EXECUTION_FINISH_STATUS = 7,
-        PRODUCT_KINDOFBOTTLE = 8,
-        PRODUCT_MEASURETYPE = 9,
-        GENERIC_ACTIVE = 10, //0 false, 1 true,
-        GENERIC_DEFAULT = 11, //0 false, 1 true
-        DOSES_DOSESAPPLICATEDTO = 12,
+    //public enum EnumerationRelated {
+    //    ORDER_TYPE= 1,
+    //    SEASON_CURRENT=2, //0 false. 1 true
+    //    NOTIFICATION_TYPE = 3,
+    //    PREORDER_TYPE = 4,
+    //    EXECUTION_STATUS = 5,
+    //    EXECUTION_CLOSED_STATUS = 6,
+    //    EXECUTION_FINISH_STATUS = 7,
+    //    PRODUCT_KINDOFBOTTLE = 8,
+    //    PRODUCT_MEASURETYPE = 9,
+    //    GENERIC_ACTIVE = 10, //0 false, 1 true,
+    //    GENERIC_DEFAULT = 11, //0 false, 1 true
+    //    DOSES_DOSESAPPLICATEDTO = 12,
         
-    }
+    //}
 
     public enum OrderType {
 

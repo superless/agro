@@ -14,6 +14,7 @@
     <ProjectReference Include="..\trifenix.agro.attr\trifenix.agro.attr.csproj" />
     <ProjectReference Include="..\trifenix.agro.db\trifenix.agro.db.csproj" />
     <ProjectReference Include="..\trifenix.agro.enums\trifenix.agro.enums.csproj" />
+    <ProjectReference Include="..\trifenix.agro.external.interfaces\trifenix.agro.external.interfaces.csproj" />
     <ProjectReference Include="..\trifenix.agro.search.model\trifenix.agro.search.model.csproj" />
     <ProjectReference Include="..\trifenix.agro.util\trifenix.agro.util.csproj" />
   </ItemGroup>

@@ -17,7 +17,6 @@ using trifenix.agro.authentication.interfaces;
 using trifenix.agro.authentication.operations;
 using trifenix.agro.db.applicationsReference.agro.Common;
 using trifenix.agro.db.exceptions;
-using trifenix.agro.enums.input;
 using trifenix.agro.enums.model;
 using trifenix.agro.external.operations.helper;
 using trifenix.agro.functions.Helper;
@@ -27,8 +26,7 @@ using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.servicebus.operations;
 
-namespace trifenix.agro.functions
-{
+namespace trifenix.agro.functions {
 
     /// <summary>
     /// Funciones 

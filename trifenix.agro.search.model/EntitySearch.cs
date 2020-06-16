@@ -2,9 +2,7 @@
 using Microsoft.Spatial;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 
 namespace trifenix.agro.search.model {
 

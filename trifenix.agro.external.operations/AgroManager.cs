@@ -55,13 +55,13 @@ namespace trifenix.agro.external.operations {
 
         public ICosmosStore<EntityContainer> BatchStore => new CosmosStore<EntityContainer>(new CosmosStoreSettings(Arguments.NameDb, Arguments.EndPointUrl, Arguments.PrimaryKey));
 
+        public IAgroSearch Search => _searchServiceInstance;
+
         public IExistElement ExistsElements => isBatch ? (IExistElement)new BatchExistsElements(Arguments) : new CosmosExistElement(Arguments);
 
         private ICommonQueries CommonQueries => new CommonQueries(Arguments);
 
         private IValidator Validators => new Validator(new Dictionary<string, IValidate> { { "ReferenceAttribute", new ReferenceValidation(ExistsElements) }, { "RequiredAttribute", new RequiredValidation() }, { "UniqueAttribute", new UniqueValidation(ExistsElements) } });
-
-        public ICounters Counters => new Counters(Arguments);
 
         public IGenericOperation<UserActivity, UserActivityInput> UserActivity => new UserActivityOperations(GetMainDb<UserActivity>(), ExistsElements, _searchServiceInstance, GetCommonDbOp<UserActivity>(), UserId, Validators);
 
@@ -130,7 +130,7 @@ namespace trifenix.agro.external.operations {
         public dynamic GetOperationByDbType(Type DbType) {
             var operationsProps = typeof(IAgroManager).GetProperties().Where(prop => prop.PropertyType.Name.StartsWith("IGenericOperation`2")).ToList();
             var genProp = operationsProps.FirstOrDefault(prop => prop.PropertyType.GenericTypeArguments[0].Equals(DbType));
-            return (dynamic)genProp.GetValue(this);
+            return (dynamic)genProp?.GetValue(this);
         }
 
     }

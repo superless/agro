@@ -5,12 +5,14 @@ using trifenix.agro.db.model;
 using trifenix.agro.db.model.core;
 using trifenix.agro.db.model.orders;
 using trifenix.agro.model.external.Input;
+using trifenix.agro.search.interfaces;
 
 namespace trifenix.agro.external.interfaces {
     public interface IAgroManager {
 
         ICosmosStore<EntityContainer> BatchStore { get; }
         IExistElement ExistsElements { get; }
+        IAgroSearch Search { get; }
         IGenericOperation<UserActivity, UserActivityInput> UserActivity { get; }
         IGenericOperation<ApplicationOrder, ApplicationOrderInput> ApplicationOrder { get; }
         IGenericOperation<ApplicationTarget, ApplicationTargetInput> ApplicationTarget { get; }

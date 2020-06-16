@@ -1,10 +1,13 @@
 ﻿using Cosmonaut;
 using System;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
+using trifenix.agro.attr;
 using trifenix.agro.db.exceptions;
 using trifenix.agro.db.interfaces;
 using trifenix.agro.db.model;
+using trifenix.agro.util;
 
 namespace trifenix.agro.db.applicationsReference {
 
@@ -21,9 +24,44 @@ namespace trifenix.agro.db.applicationsReference {
 
         private EntityContainer GetContainer(T entity) => new EntityContainer { Id = Guid.NewGuid().ToString("N"), Entity = entity };
 
+        private async Task<T> SetClientId(T entity, PropertyInfo prop_ClientId) {
+            dynamic castedEntity = entity;
+            var autoNumericSearchAttribute = prop_ClientId.GetAttribute<AutoNumericSearchAttribute>();
+            bool numerateByDependence = autoNumericSearchAttribute.Dependant.HasValue;
+            if (numerateByDependence) {
+                var prop_referenceToIndependent = entity.GetType().GetProperties().FirstOrDefault(prop => Attribute.IsDefined(prop, typeof(ReferenceSearchAttribute)) && prop.GetAttribute<ReferenceSearchAttribute>().Index == (int)autoNumericSearchAttribute.Dependant);
+                var idIndependent = (string)prop_referenceToIndependent?.GetValue(entity);
+                var dependentElements = await Store.QueryMultipleAsync<DocumentBase<int>>($"SELECT * FROM c WHERE c.{prop_referenceToIndependent.Name} = '{idIndependent}'");
+                castedEntity.ClientId = dependentElements.Max(element => element.ClientId) + 1;
+            } else
+                castedEntity.ClientId = Store.Query().Max(element => ((DocumentBase<int>)(object)element).ClientId) + 1;
+            return castedEntity;
+        }
+
+        //public async Task updateClientId(T entity) {
+        //    dynamic castedEntity = entity;
+        //    var prop_ClientId = entity.GetType().GetProperty("ClientId");
+        //    if(prop_ClientId != null) {
+        //        var autoNumericSearchAttribute = prop_ClientId.GetAttribute<AutoNumericSearchAttribute>();
+        //        bool numerateByDependence = autoNumericSearchAttribute.Dependant.HasValue;
+        //        if (numerateByDependence) {
+        //            var prop_referenceToIndependent = entity.GetType().GetProperties().FirstOrDefault(prop => Attribute.IsDefined(prop, typeof(ReferenceSearchAttribute)) && prop.GetAttribute<ReferenceSearchAttribute>().Index == (int)autoNumericSearchAttribute.Dependant);
+        //            var idIndependent = (string)prop_referenceToIndependent?.GetValue(entity);
+        //            var dependentElements = await Store.QueryMultipleAsync<DocumentBase<int>>($"SELECT * FROM c WHERE c.{prop_referenceToIndependent.Name} = '{idIndependent}'");
+        //            castedEntity.ClientId = dependentElements.Max(element => element.ClientId) + 1;
+        //        } else
+        //            castedEntity.ClientId = Store.Query().Max(element => ((DocumentBase<int>)(object)element).ClientId) + 1;
+        //        await Store.UpsertAsync(castedEntity);
+        //    }
+        //}
+
         public async Task<string> CreateUpdate(T entity) {
             if (string.IsNullOrWhiteSpace(entity.Id))
                 throw new NonIdException<DocumentBase>(entity);
+            var alreadyExists = (await Store.QuerySingleAsync($"SELECT * FROM c WHERE c.Id = '{entity.Id}'")) != null;
+            var prop_ClientId = entity.GetType().GetProperty("ClientId");
+            if (!alreadyExists && prop_ClientId != null)
+                entity = await SetClientId(entity, prop_ClientId);
             var result = await Store.UpsertAsync(entity);
             if (!result.IsSuccess)
                 throw result.Exception;

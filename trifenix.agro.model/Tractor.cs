@@ -1,7 +1,6 @@
 ﻿using Cosmonaut;
 using Cosmonaut.Attributes;
 using trifenix.agro.attr;
-using trifenix.agro.enums;
 using trifenix.agro.enums.searchModel;
 
 namespace trifenix.agro.db.model {
@@ -9,8 +8,8 @@ namespace trifenix.agro.db.model {
     [SharedCosmosCollection("agro", "Tractor")]
     [ReferenceSearchHeader(EntityRelated.TRACTOR, Kind = EntityKind.ENTITY, PathName = "tractors")]
     public class Tractor : DocumentBase<long>, ISharedCosmosEntity {
-        public override string Id { get; set; }
 
+        public override string Id { get; set; }
 
         /// <summary>
         /// Identificador visual 
@@ -25,5 +24,7 @@ namespace trifenix.agro.db.model {
 
         [StringSearch(StringRelated.GENERIC_CODE)]
         public string Code { get; set; }
+
     }
+
 }

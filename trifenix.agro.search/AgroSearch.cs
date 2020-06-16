@@ -3,15 +3,19 @@ using Microsoft.Azure.Search;
 using Microsoft.Azure.Search.Models;
 using Microsoft.Spatial;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using trifenix.agro.attr;
 using trifenix.agro.db;
 using trifenix.agro.db.model;
+using trifenix.agro.db.model.core;
 using trifenix.agro.enums.query;
 using trifenix.agro.enums.search;
 using trifenix.agro.enums.searchModel;
+using trifenix.agro.external.interfaces;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.search.model;
@@ -378,6 +382,27 @@ namespace trifenix.agro.search.operations {
             _search.Indexes.Delete(indexName);
             CreateOrUpdateIndex<IndexSearch>(indexName);
         }
+
+        public async Task GenerateIndex(IAgroManager agro) {
+            var assm = typeof(BusinessName).Assembly;
+            var types = assm.GetTypes().Where(type => type.GetProperty("CosmosEntityName") != null && !(new[] { typeof(EntityContainer), typeof(User) }).Contains(type)).ToList();
+
+            IEnumerable<Task> tasks;
+            ConcurrentBag<object> bag;
+
+            bag = new ConcurrentBag<object>();
+            tasks = types.Select(async type =>
+                bag.Add(GetElementsAndInsertIntoIndex(agro, type))
+            );
+            await Task.WhenAll(tasks);
+        }
+
+        private async Task GetElementsAndInsertIntoIndex(IAgroManager agro, Type dbType) {
+            var extGetContainer = await agro.GetOperationByDbType(dbType).GetElements();
+            var elements = extGetContainer.Result as List<DocumentBase>;
+            elements?.ForEach(element => AddDocument(element));
+        }
+
     }
 
 }
