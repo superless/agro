@@ -129,6 +129,7 @@ namespace trifenix.agro.functions {
             catch (Exception ex) {
                 log.LogError(ex, ex.Message);
                 await signalRMessages.AddAsync(new SignalRMessage { Target = "Error", UserId = userId, Arguments = new object[] { ex is Validation_Exception ? ((Validation_Exception)ex).ErrorMessages : (object)new string[] { $"{ex.Message}" } } });
+                await signalRMessages.AddAsync(new SignalRMessage { Target = "StackTrace", UserId = userId, Arguments = new object[] { ex.StackTrace } });
             }
         }
 
