@@ -1,5 +1,6 @@
 ﻿using Cosmonaut;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -9,7 +10,8 @@ using trifenix.agro.db.interfaces;
 using trifenix.agro.db.model;
 using trifenix.agro.util;
 
-namespace trifenix.agro.db.applicationsReference {
+namespace trifenix.agro.db.applicationsReference
+{
 
     public class MainGenericDb<T> : IMainGenericDb<T> where T : DocumentBase {
 
@@ -31,8 +33,9 @@ namespace trifenix.agro.db.applicationsReference {
             if (numerateByDependence) {
                 var prop_referenceToIndependent = entity.GetType().GetProperties().FirstOrDefault(prop => Attribute.IsDefined(prop, typeof(ReferenceSearchAttribute)) && prop.GetAttribute<ReferenceSearchAttribute>().Index == (int)autoNumericSearchAttribute.Dependant);
                 var idIndependent = (string)prop_referenceToIndependent?.GetValue(entity);
-                var dependentElements = await Store.QueryMultipleAsync<DocumentBase<int>>($"SELECT * FROM c WHERE c.{prop_referenceToIndependent.Name} = '{idIndependent}'");
-                castedEntity.ClientId = dependentElements.Max(element => element.ClientId) + 1;
+                var query = $"SELECT * FROM c WHERE c.{prop_referenceToIndependent.Name} = '{idIndependent}'";
+                var dependentElements = (IEnumerable<DocumentBase<int>>)await Store.QueryMultipleAsync(query);
+                castedEntity.ClientId = dependentElements.Max(element => (int?)element.ClientId) ?? 0 + 1;
             } else
                 castedEntity.ClientId = Store.Query().Max(element => ((DocumentBase<int>)(object)element).ClientId) + 1;
             return castedEntity;

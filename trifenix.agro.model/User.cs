@@ -8,13 +8,14 @@ using trifenix.agro.enums.searchModel;
 namespace trifenix.agro.db.model {
     [SharedCosmosCollection("agro", "User")]
     [ReferenceSearchHeader(EntityRelated.USER, PathName ="users", Kind = EntityKind.ENTITY)]
-    public class User : DocumentBaseName<string>, ISharedCosmosEntity {
+    public class User : DocumentBaseName<long>, ISharedCosmosEntity {
 
       
         public override string Id { get; set; }
 
 
-        public override string ClientId { get; set; }
+        [AutoNumericSearch(NumRelated.GENERIC_CORRELATIVE)]
+        public override long ClientId { get; set; }
 
         public string ObjectIdAAD { get; set; }
 
