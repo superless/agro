@@ -2,7 +2,9 @@
 using System.Threading.Tasks;
 using trifenix.agro.db;
 using trifenix.agro.model.external;
-using trifenix.agro.model.external.Input;
+
+using trifenix.connect.agro.model_input;
+using trifenix.connect.mdm.containers;
 
 namespace trifenix.agro.external.interfaces {
 

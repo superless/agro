@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using trifenix.agro.enums;
-using trifenix.agro.enums.query;
+﻿using trifenix.agro.enums.query;
 
 namespace trifenix.agro.db.interfaces.common
 {

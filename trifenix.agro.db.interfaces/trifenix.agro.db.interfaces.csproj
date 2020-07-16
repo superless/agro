@@ -5,8 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\trifenix.agro.db\trifenix.agro.db.csproj" />
+    <ProjectReference Include="..\trifenix.agro.enums\trifenix.agro.enums.csproj" />
     <ProjectReference Include="..\trifenix.agro.microsoftgraph.interfaces\trifenix.agro.microsoftgraph.interfaces.csproj" />
-    <ProjectReference Include="..\trifenix.agro.model\trifenix.agro.db.model.csproj" />
   </ItemGroup>
 
 </Project>

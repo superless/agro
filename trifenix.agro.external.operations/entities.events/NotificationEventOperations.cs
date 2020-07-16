@@ -1,28 +1,23 @@
 ﻿using Microsoft.Azure.Documents.Spatial;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.interfaces.common;
-using trifenix.agro.db.model;
 using trifenix.agro.email.interfaces;
-using trifenix.agro.enums;
-using trifenix.agro.enums.input;
-using trifenix.agro.enums.model;
-using trifenix.agro.enums.searchModel;
 using trifenix.agro.external.interfaces;
-using trifenix.agro.model.external;
-using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
-using trifenix.agro.search.model;
 using trifenix.agro.storage.interfaces;
-using trifenix.agro.util;
 using trifenix.agro.validator.interfaces;
 using trifenix.agro.weather.interfaces;
+using trifenix.connect.agro.model;
+using trifenix.connect.agro.model_input;
+using trifenix.connect.mdm.containers;
+using trifenix.connect.mdm.enums;
 
-namespace trifenix.agro.external.operations.entities.events {
+namespace trifenix.agro.external.operations.entities.events
+{
 
     /// <summary>
     /// Todos las funciones necesarias para interactuar con eventos registrados en el monitoreo.

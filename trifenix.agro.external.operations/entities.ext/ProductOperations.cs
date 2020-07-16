@@ -1,22 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.interfaces.common;
-using trifenix.agro.db.model;
-using trifenix.agro.enums.input;
-using trifenix.agro.enums.searchModel;
 using trifenix.agro.external.interfaces;
-using trifenix.agro.model.external;
-using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
-using trifenix.agro.search.model;
-using trifenix.agro.util;
 using trifenix.agro.validator.interfaces;
+using trifenix.connect.agro.index_model.props;
+using trifenix.connect.agro.model;
+using trifenix.connect.agro.model_input;
+using trifenix.connect.mdm.az_search;
+using trifenix.connect.mdm.containers;
+using trifenix.connect.mdm.enums;
 
-namespace trifenix.agro.external.operations.entities.ext {
+namespace trifenix.agro.external.operations.entities.ext
+{
 
     public class ProductOperations : MainOperation<Product, ProductInput>, IGenericOperation<Product, ProductInput> {
 
@@ -54,13 +53,13 @@ namespace trifenix.agro.external.operations.entities.ext {
                     foreach (var idDoses in dosesPrevIds)
                         // elimina cada dosis, internamente elimina si no hay dependencias, si existen dependencias la desactiva y la deja en el search.
                         await dosesOperation.Remove(idDoses);
-                return new RelatedId { EntityIndex = (int)EntityRelated.DOSES, EntityId = defaultDoses };
+                return new RelatedId { index = (int)EntityRelated.DOSES, id = defaultDoses };
             }
             else {
                 var dosesDefaultId = await CreateDefaultDoses(product.Id);
                 return new RelatedId {
-                    EntityIndex = (int)EntityRelated.DOSES,
-                    EntityId = dosesDefaultId
+                    index = (int)EntityRelated.DOSES,
+                    id = dosesDefaultId
                 };
             }
         }

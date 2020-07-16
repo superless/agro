@@ -11,14 +11,15 @@ using System.Threading.Tasks;
 using trifenix.agro.cosmosdbinitializer.interfaces;
 using trifenix.agro.db;
 using trifenix.agro.db.exceptions;
-using trifenix.agro.db.model;
-using trifenix.agro.db.model.core;
-using trifenix.agro.enums.input;
 using trifenix.agro.external.interfaces;
-using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
+using trifenix.connect.agro.model;
+using trifenix.connect.agro.model_input;
+using trifenix.connect.mdm.containers;
+using trifenix.connect.mdm.enums;
 
-namespace trifenix.agro.authentication.operations {
+namespace trifenix.agro.authentication.operations
+{
     public class CosmosDbInitializer : ICosmosDbInitializer {
 
         private readonly Assembly Assembly_Inputs;

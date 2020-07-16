@@ -1,17 +1,13 @@
-﻿using Microsoft.Azure.Documents.Spatial;
-using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using trifenix.agro.db;
-using trifenix.agro.db.model;
-using trifenix.agro.enums;
-using trifenix.agro.enums.input;
-using trifenix.agro.enums.searchModel;
+
 using trifenix.agro.external.operations;
-using trifenix.agro.model.external.Input;
-using trifenix.agro.search.model;
 using trifenix.agro.search.operations;
+using trifenix.connect.agro.index_model.props;
+using trifenix.connect.mdm.az_search;
+using trifenix.connect.mdm.enums;
 
 namespace trifenix.agro.console
 {
@@ -83,26 +79,26 @@ namespace trifenix.agro.console
 
                     if (dosesProductId.Any())
                     {
-                        var dosesEntities = dosesProductId.SelectMany(searchServiceInstance.GetEntitySearch).ToList();
+                        var dosesEntities = dosesProductId.Select(searchServiceInstance.GetEntitySearch).ToList();
                         listEntitySearch.AddRange(dosesEntities);
                     }
 
 
-                    var relatedIdsDoseByProduct = listEntitySearch.Where(s => s.EntityIndex.Contains((int)EntityRelated.DOSES)).Select(s =>
+                    var relatedIdsDoseByProduct = listEntitySearch.Where(s => s.index == (int)EntityRelated.DOSES).Select(s =>
                         new RelatedId
                         {
-                            EntityId = s.Id,
-                            EntityIndex = (int)EntityRelated.DOSES
+                            id = s.id,
+                            index = (int)EntityRelated.DOSES
                         }
                     );
 
-                    var entityProducts = searchServiceInstance.GetEntitySearch(item);
+                    var product = searchServiceInstance.GetEntitySearch(item);
+                    var related = product.rel.ToList();
 
-                    var product = entityProducts.FirstOrDefault(s => s.EntityIndex.Contains((int)EntityRelated.PRODUCT));
-                    var related = product.RelatedIds.ToList();
                     related.AddRange(relatedIdsDoseByProduct);
-                    product.RelatedIds = related.ToArray();
-                    listEntitySearch.AddRange(entityProducts);
+                    product.rel = related.ToArray();
+
+                    listEntitySearch.Add(product);
 
                     var searchs = searchServiceInstance.GetEntitySearch(item);
                     searchServiceInstance.AddElements(listEntitySearch.ToList());
@@ -116,8 +112,8 @@ namespace trifenix.agro.console
                 foreach (var item in targets.Result)
                 {
                     
-                    var searchs = searchServiceInstance.GetEntitySearch(item);
-                    searchServiceInstance.AddElements(searchs.ToList());
+                    var search = searchServiceInstance.GetEntitySearch(item);
+                    searchServiceInstance.AddElement(search);
                 }
             }
 
@@ -128,8 +124,8 @@ namespace trifenix.agro.console
                 foreach (var item in ingredients.Result)
                 {
                    
-                    var searchs = searchServiceInstance.GetEntitySearch(item);
-                    searchServiceInstance.AddElements(searchs.ToList());
+                    var search = searchServiceInstance.GetEntitySearch(item);
+                    searchServiceInstance.AddElement(search);
                 }
             }
 
@@ -139,8 +135,8 @@ namespace trifenix.agro.console
                 foreach (var item in jobs.Result)
                 {
                    
-                    var searchs = searchServiceInstance.GetEntitySearch(item);
-                    searchServiceInstance.AddElements(searchs.ToList());
+                    var search = searchServiceInstance.GetEntitySearch(item);
+                    searchServiceInstance.AddElement(search);
                 }
             }
 
@@ -149,37 +145,20 @@ namespace trifenix.agro.console
                 foreach (var item in costCenter.Result)
                 {
                    
-                    var searchs = searchServiceInstance.GetEntitySearch(item);
-                    searchServiceInstance.AddElements(searchs.ToList());
+                    var search = searchServiceInstance.GetEntitySearch(item);
+                    searchServiceInstance.AddElement(search);
                 }
             }
 
-            //if (users.StatusResult == ExtGetDataResult.Success)
-            //{
-            //    foreach (var item in users.Result)
-            //    {
-            //        await agroManager.UserApplicator.Save(new UserApplicatorInput
-            //        {
-            //            Id = item.Id,
-            //            Name = item.Name,
-            //            Email = item.Email,
-            //            IdJob = item.IdJob,
-            //            IdNebulizer = item.IdNebulizer,
-            //            IdsRoles = item.IdsRoles,
-            //            IdTractor = item.IdTractor,
-            //            Rut = item.Rut
-            //        });
-            //    }
-            //}
-
+      
 
             if (roles.StatusResult == ExtGetDataResult.Success)
             {
                 foreach (var item in roles.Result)
                 {
                     
-                    var searchs = searchServiceInstance.GetEntitySearch(item);
-                    searchServiceInstance.AddElements(searchs.ToList());
+                    var search = searchServiceInstance.GetEntitySearch(item);
+                    searchServiceInstance.AddElement(search);
                 }
                 
             }
@@ -190,8 +169,8 @@ namespace trifenix.agro.console
                 foreach (var item in plotlands.Result)
                 {
                     
-                    var searchs = searchServiceInstance.GetEntitySearch(item);
-                    searchServiceInstance.AddElements(searchs.ToList());
+                    var search = searchServiceInstance.GetEntitySearch(item);
+                    searchServiceInstance.AddElement(search);
                 }
                 
             }
@@ -203,8 +182,8 @@ namespace trifenix.agro.console
                 foreach (var item in certifiedEntity.Result)
                 {
                     
-                    var searchs = searchServiceInstance.GetEntitySearch(item);
-                    searchServiceInstance.AddElements(searchs.ToList());
+                    var search = searchServiceInstance.GetEntitySearch(item);
+                    searchServiceInstance.AddElement(search);
                 }
 
                 
@@ -215,8 +194,8 @@ namespace trifenix.agro.console
                 foreach (var item in rootStocks.Result)
                 {
                     
-                    var searchs = searchServiceInstance.GetEntitySearch(item);
-                    searchServiceInstance.AddElements(searchs.ToList());
+                    var search = searchServiceInstance.GetEntitySearch(item);
+                    searchServiceInstance.AddElement(search);
                 }
 
                 
@@ -227,8 +206,8 @@ namespace trifenix.agro.console
                 foreach (var item in sectors.Result)
                 {
                     
-                    var searchs = searchServiceInstance.GetEntitySearch(item);
-                    searchServiceInstance.AddElements(searchs.ToList());
+                    var search = searchServiceInstance.GetEntitySearch(item);
+                    searchServiceInstance.AddElement(search);
                 }
                 
             }
@@ -239,8 +218,8 @@ namespace trifenix.agro.console
                 foreach (var item in seasons.Result)
                 {
                     
-                    var searchs = searchServiceInstance.GetEntitySearch(item);
-                    searchServiceInstance.AddElements(searchs.ToList());
+                    var search = searchServiceInstance.GetEntitySearch(item);
+                    searchServiceInstance.AddElement(search);
                 }
             }
 
@@ -250,8 +229,8 @@ namespace trifenix.agro.console
                 foreach (var item in businessNames.Result)
                 {
                     
-                    var searchs = searchServiceInstance.GetEntitySearch(item);
-                    searchServiceInstance.AddElements(searchs.ToList());
+                    var search = searchServiceInstance.GetEntitySearch(item);
+                    searchServiceInstance.AddElement(search);
                 }
             }
 
@@ -260,8 +239,8 @@ namespace trifenix.agro.console
                 foreach (var item in species.Result)
                 {
                     
-                    var searchs = searchServiceInstance.GetEntitySearch(item);
-                    searchServiceInstance.AddElements(searchs.ToList());
+                    var search = searchServiceInstance.GetEntitySearch(item);
+                    searchServiceInstance.AddElement(search);
                 }
             }
 
@@ -270,8 +249,8 @@ namespace trifenix.agro.console
                 foreach (var item in varieties.Result)
                 {
                     
-                    var searchs = searchServiceInstance.GetEntitySearch(item);
-                    searchServiceInstance.AddElements(searchs.ToList());
+                    var search = searchServiceInstance.GetEntitySearch(item);
+                    searchServiceInstance.AddElement(search);
                 }
             }
 
@@ -280,8 +259,8 @@ namespace trifenix.agro.console
                 
                 foreach (var item in barracks.Result)
                 {  
-                    var searchs = searchServiceInstance.GetEntitySearch(item);
-                    searchServiceInstance.AddElements(searchs.ToList());
+                    var search = searchServiceInstance.GetEntitySearch(item);
+                    searchServiceInstance.AddElement(search);
                 }
             }
         }

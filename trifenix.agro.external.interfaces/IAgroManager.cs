@@ -2,10 +2,11 @@
 using System;
 using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.model;
-using trifenix.agro.db.model.core;
-using trifenix.agro.db.model.orders;
+
 using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
+using trifenix.connect.agro.model;
+using trifenix.connect.agro.model_input;
 
 namespace trifenix.agro.external.interfaces {
     public interface IAgroManager {

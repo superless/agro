@@ -121,16 +121,19 @@
     <value>str/any(element: element/propertyIndex eq {0}) and (id eq '{1}')</value>
   </data>
   <data name="ENTITIES_BYINDEX" xml:space="preserve">
-    <value>entityIndex/any(element: element eq {0})</value>
+    <value>entityIndex eq {0}</value>
   </data>
   <data name="ENTITIES_WITH_ENTITYID" xml:space="preserve">
-    <value>entityIndex/any(element: element eq {0})  and rel/any(elementId: elementId/entityIndex eq {1} and elementId/entityId eq '{2}')</value>
+    <value>entityIndex eq {0}  and rel/any(elementId: elementId/entityIndex eq {1} and elementId/entityId eq '{2}')</value>
+    <comment>obtiene entidades con un indice como filtro y que tenga entidades relacionadas que tengan un índice y un identificador como filtro</comment>
   </data>
   <data name="ENTITIES_WITH_ENTITYID_EXCEPTID" xml:space="preserve">
-    <value>entityIndex/any(element: element eq {0}) and  id ne '{3}' and rel/any(elementId: elementId/entityIndex eq {1} and elementId/entityId eq '{2}')</value>
+    <value>entityIndex eq {0} and  id ne '{3}' and rel/any(elementId: elementId/entityIndex eq {1} and elementId/entityId eq '{2}')</value>
+    <comment>sirve para comprobar si un elemento existe, sin consultar por si mismo, por ejemplo, quiero saber si existe mi nombre en la base, pero no me incluya a mi.</comment>
   </data>
   <data name="GET_ELEMENT" xml:space="preserve">
-    <value>entityIndex/any(element: element eq {0}) and id eq '{1}'</value>
+    <value>entityIndex eq {0} and id eq '{1}'</value>
+    <comment>Consulta para obtener un elemento</comment>
   </data>
   <data name="IDS_JOIN" xml:space="preserve">
     <value>' or id eq '</value>

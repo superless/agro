@@ -12,11 +12,13 @@ using trifenix.agro.db.model.core;
 using trifenix.agro.db.model.local;
 using trifenix.agro.enums.model;
 using trifenix.agro.external.operations;
-using trifenix.agro.search.model;
 using trifenix.agro.search.operations;
 using trifenix.agro.util;
+using trifenix.connect.agro.model;
+using trifenix.connect.mdm.az_search;
 
-namespace trifenix.agro.console {
+namespace trifenix.agro.console
+{
 
     class Program {
 
@@ -249,13 +251,6 @@ namespace trifenix.agro.console {
             await Task.WhenAll(tasks);
 
             await RegenerateIndex(agro);
-
-            //var search = new AgroSearch("agrosearch", "016DAA5EF1158FEEEE58DA60996D5981");
-            //var entity = search.GetEntity(EntityRelated.PHENOLOGICAL_EVENT, "e158ffd87a27410ab1b0b73cda2ecccb");
-            //entity.Num64Properties = new Num64Property[] { };
-            //search.AddElements(new List<EntitySearch> { entity });
-
-            // Fin Script
 
 
 

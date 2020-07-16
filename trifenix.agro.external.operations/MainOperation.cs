@@ -1,17 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using trifenix.agro.attr;
 using trifenix.agro.db;
 using trifenix.agro.db.exceptions;
 using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.interfaces.common;
 using trifenix.agro.external.operations.helper;
-using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.validator.interfaces;
+using trifenix.connect.agro.model_input;
+using trifenix.connect.mdm.containers;
+using trifenix.connect.mdm_attributes;
 
 namespace trifenix.agro.external.operations
 {

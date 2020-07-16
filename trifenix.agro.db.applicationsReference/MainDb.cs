@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using trifenix.agro.attr;
 using trifenix.agro.db.exceptions;
 using trifenix.agro.db.interfaces;
 using trifenix.agro.db.model;
 using trifenix.agro.util;
+using trifenix.connect.agro.mdm_attributes;
+using trifenix.connect.agro.model;
 
 namespace trifenix.agro.db.applicationsReference
 {
@@ -41,23 +42,6 @@ namespace trifenix.agro.db.applicationsReference
             return castedEntity;
         }
 
-        //public async Task updateClientId(T entity) {
-        //    dynamic castedEntity = entity;
-        //    var prop_ClientId = entity.GetType().GetProperty("ClientId");
-        //    if(prop_ClientId != null) {
-        //        var autoNumericSearchAttribute = prop_ClientId.GetAttribute<AutoNumericSearchAttribute>();
-        //        bool numerateByDependence = autoNumericSearchAttribute.Dependant.HasValue;
-        //        if (numerateByDependence) {
-        //            var prop_referenceToIndependent = entity.GetType().GetProperties().FirstOrDefault(prop => Attribute.IsDefined(prop, typeof(ReferenceSearchAttribute)) && prop.GetAttribute<ReferenceSearchAttribute>().Index == (int)autoNumericSearchAttribute.Dependant);
-        //            var idIndependent = (string)prop_referenceToIndependent?.GetValue(entity);
-        //            var dependentElements = await Store.QueryMultipleAsync<DocumentBase<int>>($"SELECT * FROM c WHERE c.{prop_referenceToIndependent.Name} = '{idIndependent}'");
-        //            castedEntity.ClientId = dependentElements.Max(element => element.ClientId) + 1;
-        //        } else
-        //            castedEntity.ClientId = Store.Query().Max(element => ((DocumentBase<int>)(object)element).ClientId) + 1;
-        //        await Store.UpsertAsync(castedEntity);
-        //    }
-        //}
-
         public async Task<string> CreateUpdate(T entity) {
             if (string.IsNullOrWhiteSpace(entity.Id))
                 throw new NonIdException<DocumentBase>(entity);
@@ -81,14 +65,10 @@ namespace trifenix.agro.db.applicationsReference
         }
 
         public async Task<T> GetEntity(string id) => await Store.FindAsync(id);
-        //{
-        //    var entity = (T)Activator.CreateInstance(typeof(T));
-        //    return await Store.FindAsync(uniqueId, entity.CosmosEntityName);
-        //}
+       
 
         public async Task DeleteEntity(string id) {
-            //var entity = (T)Activator.CreateInstance(typeof(T));
-            //await Store.RemoveByIdAsync(id, entity.CosmosEntityName);
+            
             await Store.RemoveByIdAsync(id);
         } 
 

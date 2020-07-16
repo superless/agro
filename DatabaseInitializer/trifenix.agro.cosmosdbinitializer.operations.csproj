@@ -12,7 +12,6 @@
   <ItemGroup>
     <ProjectReference Include="..\trifenix.agro.cosmosdbinitializer.interfaces\trifenix.agro.cosmosdbinitializer.interfaces.csproj" />
     <ProjectReference Include="..\trifenix.agro.external.interfaces\trifenix.agro.external.interfaces.csproj" />
-    <ProjectReference Include="..\trifenix.agro.model\trifenix.agro.db.model.csproj" />
   </ItemGroup>
 
 </Project>

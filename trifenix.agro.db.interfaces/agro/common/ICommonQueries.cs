@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using trifenix.agro.enums;
+
 
 namespace trifenix.agro.db.interfaces.agro.common {
     public interface ICommonQueries {

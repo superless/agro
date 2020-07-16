@@ -70,7 +70,7 @@ namespace trifenix.agro.search.operations {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to entityIndex/any(element: element eq {0}).
+        ///   Looks up a localized string similar to entityIndex eq {0}.
         /// </summary>
         internal static string ENTITIES_BYINDEX {
             get {
@@ -79,7 +79,7 @@ namespace trifenix.agro.search.operations {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to entityIndex/any(element: element eq {0})  and rel/any(elementId: elementId/entityIndex eq {1} and elementId/entityId eq &apos;{2}&apos;).
+        ///   Looks up a localized string similar to entityIndex eq {0}  and rel/any(elementId: elementId/entityIndex eq {1} and elementId/entityId eq &apos;{2}&apos;).
         /// </summary>
         internal static string ENTITIES_WITH_ENTITYID {
             get {
@@ -88,7 +88,7 @@ namespace trifenix.agro.search.operations {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to entityIndex/any(element: element eq {0}) and  id ne &apos;{3}&apos; and rel/any(elementId: elementId/entityIndex eq {1} and elementId/entityId eq &apos;{2}&apos;).
+        ///   Looks up a localized string similar to entityIndex eq {0} and  id ne &apos;{3}&apos; and rel/any(elementId: elementId/entityIndex eq {1} and elementId/entityId eq &apos;{2}&apos;).
         /// </summary>
         internal static string ENTITIES_WITH_ENTITYID_EXCEPTID {
             get {
@@ -97,7 +97,7 @@ namespace trifenix.agro.search.operations {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to entityIndex/any(element: element eq {0}) and id eq &apos;{1}&apos;.
+        ///   Looks up a localized string similar to entityIndex eq {0} and id eq &apos;{1}&apos;.
         /// </summary>
         internal static string GET_ELEMENT {
             get {

@@ -1,23 +1,27 @@
 ﻿using System.Collections.Generic;
 using trifenix.agro.db;
-using trifenix.agro.enums.searchModel;
-using trifenix.agro.model.external.Input;
-using trifenix.agro.search.model;
+using trifenix.connect.agro.index_model.props;
+using trifenix.connect.agro.model_input;
+using trifenix.connect.mdm.az_search;
+using trifenix.connect.mdm.entity_model;
 
-namespace trifenix.agro.search.interfaces {
+namespace trifenix.agro.search.interfaces
+{
     public interface IAgroSearch {
 
-        void AddElements<T>(List<T> elements);
+        void AddElements(List<EntitySearch> elements);
 
-        void DeleteElements<T>(List<T> elements);
+        void AddElement(EntitySearch element);
 
-        void DeleteElements<T>(string query);
+        void DeleteElements(List<EntitySearch> elements);
+
+        void DeleteElements(string query);
 
         void EmptyIndex<IndexSearch>(string indexName);
 
-        //Task GenerateIndex(IAgroManager agro);
+        
 
-        List<T> FilterElements<T>(string filter);
+        List<EntitySearch> FilterElements(string filter);
 
         EntitySearch GetEntity(EntityRelated entityRelated, string id);
 
@@ -29,9 +33,9 @@ namespace trifenix.agro.search.interfaces {
 
         void DeleteElementsWithRelatedElementExceptId(EntityRelated elementToDelete, EntityRelated relatedElement, string idRelatedElement, string elementExceptId);
 
-        EntitySearch[] GetEntitySearch<T>(T model) where T : DocumentBase;
+        EntitySearch GetEntitySearch<T>(T model) where T : DocumentBase;
 
-        EntitySearch[] GetEntitySearchByInput<T>(T model) where T : InputBase;
+        EntitySearch GetEntitySearchByInput<T>(T model) where T : InputBase;
         void AddDocument<T>(T document) where T:DocumentBase;
     }
 }

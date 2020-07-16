@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using trifenix.agro.model.external;
 using trifenix.agro.db;
 using System.Linq.Expressions;
 using trifenix.agro.db.interfaces.common;
-using trifenix.agro.enums;
-using trifenix.agro.db.interfaces.agro.common;
-using trifenix.agro.enums.input;
+using trifenix.connect.mdm.containers;
+using trifenix.connect.mdm.enums;
 
 namespace trifenix.agro.external.operations.helper
 {

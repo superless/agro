@@ -6,19 +6,19 @@ using trifenix.agro.db.exceptions;
 using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.interfaces.common;
-using trifenix.agro.db.model;
-using trifenix.agro.db.model.orders;
-using trifenix.agro.enums;
-using trifenix.agro.enums.input;
-using trifenix.agro.enums.searchModel;
 using trifenix.agro.external.interfaces;
-using trifenix.agro.model.external;
-using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
-using trifenix.agro.search.model;
 using trifenix.agro.validator.interfaces;
+using trifenix.connect.agro.index_model.enums;
+using trifenix.connect.agro.index_model.props;
+using trifenix.connect.agro.model;
+using trifenix.connect.agro.model_input;
+using trifenix.connect.mdm.az_search;
+using trifenix.connect.mdm.containers;
+using trifenix.connect.mdm.enums;
 
-namespace trifenix.agro.external.operations.entities.orders {
+namespace trifenix.agro.external.operations.entities.orders
+{
 
     public class ApplicationOrderOperations : MainOperation<ApplicationOrder, ApplicationOrderInput>, IGenericOperation<ApplicationOrder, ApplicationOrderInput> {
 

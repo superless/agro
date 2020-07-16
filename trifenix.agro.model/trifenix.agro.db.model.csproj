@@ -17,6 +17,12 @@
     <ProjectReference Include="..\trifenix.agro.weather.model\trifenix.agro.weather.model.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="core\" />
+    <Folder Include="local\" />
+    <Folder Include="orders\" />
+  </ItemGroup>
+
  
 
 </Project>

@@ -8,6 +8,7 @@
     <ProjectReference Include="..\trifenix.agro.db\trifenix.agro.db.csproj" />
     <ProjectReference Include="..\trifenix.agro.model.external\trifenix.agro.model.external.csproj" />
     <ProjectReference Include="..\trifenix.agro.validator.interfaces\trifenix.agro.validator.interfaces.csproj" />
+    <ProjectReference Include="..\yofenix\trifenix.connect.mdm.csproj" />
   </ItemGroup>
 
 </Project>

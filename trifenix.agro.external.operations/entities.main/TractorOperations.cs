@@ -3,15 +3,16 @@ using System.Threading.Tasks;
 using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.interfaces.common;
-using trifenix.agro.db.model;
-using trifenix.agro.enums.input;
 using trifenix.agro.external.interfaces;
-using trifenix.agro.model.external;
-using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.validator.interfaces;
+using trifenix.connect.agro.model;
+using trifenix.connect.agro.model_input;
+using trifenix.connect.mdm.containers;
+using trifenix.connect.mdm.enums;
 
-namespace trifenix.agro.external.operations.entities.main {
+namespace trifenix.agro.external.operations.entities.main
+{
 
     public class TractorOperations : MainOperation<Tractor, TractorInput>, IGenericOperation<Tractor, TractorInput> {
 

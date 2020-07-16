@@ -10,8 +10,7 @@ using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model;
-using trifenix.agro.db.model.core;
-using trifenix.agro.db.model.orders;
+
 using trifenix.agro.email.interfaces;
 using trifenix.agro.external.interfaces;
 using trifenix.agro.external.operations.entities;
@@ -27,6 +26,8 @@ using trifenix.agro.storage.interfaces;
 using trifenix.agro.validator.interfaces;
 using trifenix.agro.validator.operations;
 using trifenix.agro.weather.interfaces;
+using trifenix.connect.agro.model;
+using trifenix.connect.agro.model_input;
 
 namespace trifenix.agro.external.operations {
     public class AgroManager : IAgroManager {
@@ -85,7 +86,7 @@ namespace trifenix.agro.external.operations {
 
         public IGenericOperation<Product, ProductInput> Product => new ProductOperations(GetMainDb<Product>(), ExistsElements, _searchServiceInstance, Dose, GetCommonDbOp<Product>(), CommonQueries, Validators);
 
-        public IGenericOperation<Dose, DosesInput> Dose => new DosesOperations(GetMainDb<Dose>(), ExistsElements, _searchServiceInstance, GetCommonDbOp<Dose>(), new Counters(Arguments), CommonQueries, Validators);
+        public IGenericOperation<Dose, DosesInput> Dose => new DosesOperations(GetMainDb<Dose>(), ExistsElements, _searchServiceInstance, GetCommonDbOp<Dose>(), CommonQueries, Validators);
 
         public IGenericOperation<Role, RoleInput> Role => new RoleOperations(GetMainDb<Role>(), ExistsElements, _searchServiceInstance, GetCommonDbOp<Role>(), Validators);
 

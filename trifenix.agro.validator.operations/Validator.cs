@@ -3,10 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using trifenix.agro.attr;
 using trifenix.agro.db.exceptions;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.validator.interfaces;
+using trifenix.connect.mdm_attributes;
 
 namespace trifenix.agro.validator.operations {
     public class Validator : IValidator {

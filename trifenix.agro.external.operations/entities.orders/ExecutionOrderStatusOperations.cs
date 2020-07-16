@@ -1,21 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.interfaces.common;
-using trifenix.agro.db.model.orders;
-using trifenix.agro.enums;
-using trifenix.agro.enums.input;
-using trifenix.agro.enums.searchModel;
 using trifenix.agro.external.interfaces;
-using trifenix.agro.model.external;
-using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
-using trifenix.agro.search.model;
 using trifenix.agro.validator.interfaces;
+using trifenix.connect.agro.model;
+using trifenix.connect.agro.model_input;
+using trifenix.connect.mdm.containers;
+using trifenix.connect.mdm.enums;
 
-namespace trifenix.agro.external.operations.entities.orders {
+namespace trifenix.agro.external.operations.entities.orders
+{
     public class ExecutionOrderStatusOperations : MainOperation<ExecutionOrderStatus, ExecutionOrderStatusInput>, IGenericOperation<ExecutionOrderStatus, ExecutionOrderStatusInput> {
         public ExecutionOrderStatusOperations(IMainGenericDb<ExecutionOrderStatus> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<ExecutionOrderStatus> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
 
@@ -27,7 +24,9 @@ namespace trifenix.agro.external.operations.entities.orders {
         * Al iniciar la ejecucion (En proceso) el usuario aplicador asignado es obligatorio.
         * El closedStatus solo puede ser seteado si el usuario posee el rol de "Administrador".
         * Si la ejecucion ya finalizo(finishStatus != 0) solo se pueden recibir comentarios y cierre de ejecucion(set closedStatus to != 0)
-        * Si la orden relacionada ya posee una ejecucion exitosa no se puede crear una nueva ejecucion.*/
+        * Si la orden relacionada ya posee una ejecucion exitosa no se puede crear una nueva ejecucion.
+        * Excelente Trabajo en documentar!!!!
+         */        
         public override async Task Validate(ExecutionOrderStatusInput executionOrderStatusInput) {
             await base.Validate(executionOrderStatusInput);
         }
