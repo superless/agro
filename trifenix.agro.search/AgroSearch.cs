@@ -18,7 +18,7 @@ using trifenix.connect.agro.model;
 using trifenix.connect.agro.model_input;
 using trifenix.connect.mdm.az_search;
 using trifenix.connect.mdm.entity_model;
-using trifenix.connect.mdm.indexes;
+using trifenix.connect.mdm.enums;
 using trifenix.connect.mdm_attributes;
 using trifenix.connect.util;
 

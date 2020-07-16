@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using trifenix.connect.mdm.entity_model;
-using trifenix.connect.mdm.indexes;
+using trifenix.connect.mdm.enums;
 using trifenix.connect.mdm.ts_model;
 using trifenix.connect.ts_model.enums;
 using TypeGen.Core.Converters;
