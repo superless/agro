@@ -1,4 +1,5 @@
 ﻿using System;
+using trifenix.connect.mdm.enums;
 using trifenix.connect.mdm.indexes;
 
 namespace trifenix.connect.mdm_attributes

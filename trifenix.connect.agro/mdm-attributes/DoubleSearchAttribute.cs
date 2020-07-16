@@ -9,7 +9,7 @@ namespace trifenix.connect.agro.mdm_attributes
     /// </summary>
     public class DoubleSearchAttribute : PropertyIndexAttribute
     {
-        private readonly DoubleRelated _index;
+        
         public DoubleSearchAttribute(DoubleRelated index) {
             Index = (int)index;
             KindIndex = (int)KindProperty.DBL;

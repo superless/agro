@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using trifenix.connect.mdm.entity_model;
-using trifenix.connect.mdm.indexes;
+using trifenix.connect.mdm.enums;
 using trifenix.connect.mdm_attributes;
 using trifenix.connect.search_mdl;
 
@@ -21,8 +21,9 @@ namespace trifenix.connect.util
     {
 
         /// <summary>
-        /// Retorna un objeto desde un entitySearch, el tipo del objeto de retorno será del tipo que utilice el atributo .
-        /// para esto buscará 
+        /// Retorna un objeto desde un entitySearch, el tipo del objeto de retorno será del tipo que utilice el atributo EntityIndexAttribute .
+        /// para esto buscará todas las clases que tnengan el atributo EntityIndexAttribute que vincula la clase con el índice
+        /// del entitySearch, una vez encontrada hará lo mismo con los atributos de cada propiedad para finalmente crear un objeto tipado con todos los valores del entitySearch.
         /// </summary>
         /// <typeparam name="T">Las entidades tienen un tipo de dato geo, que depende de la base de datos a usar.</typeparam>        
         /// <param name="entitySearch">entitySearch a convertir</param>
@@ -46,16 +47,20 @@ namespace trifenix.connect.util
             type.GetProperty("Id")?.SetValue(entity, entitySearch.id);
 
 
-            // busca todas las propiedades que tengan el atributo 
+            // busca todas las propiedades que tengan el atributo baseIndexAttribute que identifica la metadata donde reside el índice y el tipo de dato.
             var props = entity.GetType().GetProperties().Where(prop => Attribute.IsDefined(prop, typeof(BaseIndexAttribute), true)).ToList();
 
 
-            BaseIndexAttribute attr;
-
-            dynamic values;
+           
+            // recorre las propiedades de una clase y le asigna los valores correspondientes a las propiedades del entitySearch
             props.ForEach(prop => {
-                attr = prop.GetCustomAttribute<BaseIndexAttribute>(true);
-                values = Reflection.Collections.FormatValues(prop, GetValues<T>(entitySearch, attr.IsEntity, attr.KindIndex, attr.Index));
+
+                // obtiene el atributo y su metadata
+                var attr = prop.GetCustomAttribute<BaseIndexAttribute>(true);
+
+                // con la metadata de la propiedad (índice, tipo de dato y si es o no)
+                var values = Reflection.Collections.FormatValues(prop, GetValues<T>(entitySearch, attr.IsEntity, attr.KindIndex, attr.Index));
+
                 prop.SetValue(entity, values);
             });
             return entity;
@@ -67,8 +72,13 @@ namespace trifenix.connect.util
         /// </summary>
         /// <param name="attribute"></param>
         /// <returns></returns>
-        public IRelatedId GetLocalRelatedId(KeyValuePair<BaseIndexAttribute, object> attribute, Type typeToCast)
+        public static IRelatedId GetLocalRelatedId(KeyValuePair<BaseIndexAttribute, object> attribute, Type typeToCast)
         {
+
+            if (!CheckImplementsIRelatedId(typeToCast))
+            {
+                throw new Exception("Debe implementar IRelatedId");
+            }
             if (attribute.Key.IsEntity && attribute.Key.KindIndex == (int)KindEntityProperty.LOCAL_REFERENCE)
             {
                 return GetEntityProperty(attribute.Key.Index, (string)attribute.Value, typeToCast);
@@ -76,7 +86,7 @@ namespace trifenix.connect.util
             return null;
         }
 
-        public IRelatedId GetRelatedId(KeyValuePair<BaseIndexAttribute, object> attribute, Type typeToCast)
+        public static IRelatedId GetRelatedId(KeyValuePair<BaseIndexAttribute, object> attribute, Type typeToCast)
         {
             if (attribute.Key.IsEntity && attribute.Key.KindIndex == (int)KindEntityProperty.REFERENCE)
             {

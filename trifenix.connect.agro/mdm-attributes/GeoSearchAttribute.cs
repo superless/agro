@@ -9,7 +9,7 @@ namespace trifenix.connect.agro.mdm_attributes
     /// </summary>
     public class GeoSearchAttribute : PropertyIndexAttribute
     {
-        private readonly GeoRelated _index;
+        
         public GeoSearchAttribute(GeoRelated index) {
             Index = (int)index;
             KindIndex = (int)KindProperty.GEO;

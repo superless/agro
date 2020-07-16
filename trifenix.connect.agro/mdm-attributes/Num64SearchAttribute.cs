@@ -9,7 +9,7 @@ namespace trifenix.connect.agro.mdm_attributes
     /// </summary>
     public class Num64SearchAttribute : PropertyIndexAttribute
     {
-        private readonly NumRelated _index;
+        
         public Num64SearchAttribute(NumRelated index) {
             Index = (int)index;
             KindIndex = (int)KindProperty.NUM64;
