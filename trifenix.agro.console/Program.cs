@@ -1,5 +1,6 @@
 ﻿using Cosmonaut;
 using Cosmonaut.Response;
+using Microsoft.Spatial;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -7,17 +8,16 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using trifenix.agro.db;
-using trifenix.agro.db.model;
-using trifenix.agro.db.model.core;
 using trifenix.agro.db.model.local;
-using trifenix.agro.enums.model;
-using trifenix.agro.enums.searchModel;
 using trifenix.agro.external.operations;
-using trifenix.agro.search.model;
 using trifenix.agro.search.operations;
-using trifenix.agro.util;
+using trifenix.connect.agro.index_model.enums;
+using trifenix.connect.agro.index_model.props;
+using trifenix.connect.agro.model;
+using static trifenix.connect.util.Mdm.Reflection;
 
-namespace trifenix.agro.console {
+namespace trifenix.agro.console
+{
 
     class Program {
 
@@ -34,7 +34,7 @@ namespace trifenix.agro.console {
             Environment.SetEnvironmentVariable("tenantID", "13f71027-8389-436e-bdaf-7bd34382fbff");
 
             var agroDbArguments = new AgroDbArguments { EndPointUrl = "https://agricola-jhm.documents.azure.com:443/", NameDb = "agrodb", PrimaryKey = "yG6EIAT1dKSBaS7oSZizTrWQGGfwSb2ot2prYJwQOLHYk3cGmzvvhGohSzFZYHueSFDiptUAqCQYYSeSetTiKw==" };
-            var search = new AgroSearch("agrosearch", "016DAA5EF1158FEEEE58DA60996D5981");
+            var search = new AgroSearch<GeographyPoint>("agrosearch", "016DAA5EF1158FEEEE58DA60996D5981");
             var agro = new AgroManager(agroDbArguments, null, null, null, search, null, false);
 
             var assm = typeof(BusinessName).Assembly;
@@ -60,7 +60,7 @@ namespace trifenix.agro.console {
             }
 
             //search.EmptyIndex<EntitySearch>("entities");
-            search.DeleteElements<EntitySearch>($"entityIndex/any(index: index eq {(int)EntityRelated.USER})");
+            search.DeleteElements($"entityIndex/any(index: index eq {(int)EntityRelated.USER})");
             await search.GenerateIndex(agro);
 
             
@@ -242,8 +242,8 @@ namespace trifenix.agro.console {
             elements.ForEach(element => {
                 element.GetType().GetProperties().Where(prop => prop.Name.ToLower().Contains("id") && !prop.Name.Equals("ClientId") && !prop.Name.Equals("ObjectIdAAD")).ToList().ForEach(
                     prop => {
-                        if (prop.GetValue(element).HasValue()) {
-                            if (!AttributesExtension.IsEnumerableProperty(prop)) {
+                        if (HasValue(prop.GetValue(element))) {
+                            if (!IsEnumerableProperty(prop)) {
                                 var indexString = prop.GetValue(element).ToString();
                                 var index = int.Parse(indexString);
                                 prop.SetValue(element, guids[index]);

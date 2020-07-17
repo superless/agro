@@ -4,12 +4,17 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using trifenix.connect.agro.index_model.props;
+using trifenix.connect.agro.mdm_attributes;
 using trifenix.connect.agro.model;
+using trifenix.connect.agro.model_input;
 using trifenix.connect.mdm.enums;
 using trifenix.connect.mdm.resources;
 using trifenix.connect.mdm.ts_model;
+using trifenix.connect.mdm_attributes;
 using trifenix.connect.util;
 using TypeGen.Core.Extensions;
+using static trifenix.connect.util.Mdm.Reflection;
+using static trifenix.connect.util.Mdm.Reflection.Attributes;
 
 namespace trifenix.typegen.data
 {

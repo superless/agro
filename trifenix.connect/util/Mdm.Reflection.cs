@@ -16,7 +16,7 @@ namespace trifenix.connect.util
     public static partial class Mdm
     {
         /// <summary>
-        /// Colección de métodos destinados a obtener metada desde las clases utilizando el modelo de atributos del metadata model de trifenix.
+        /// Colección de métodos destinados a obtener metadata desde las clases utilizando el modelo de atributos del metadata model de trifenix.
         /// </summary>
         public static partial class Reflection {
 
@@ -71,20 +71,14 @@ namespace trifenix.connect.util
             /// </summary>
             /// <param name="value">objeto a evaluar</param>
             /// <returns>true, si es un valor y no es nulo o es una colección con al menos un valor.</returns>
-            public static bool HasValue(object value)
-            {
+            public static bool HasValue(object value) {
                 if (value == null)
                     return false;
                 else
                     if (IsEnumerable(value))
-                {
-                    if (!((IEnumerable<object>)value).Any())
-                        return false;
-                }
-                else
-                        if (!(value is object))
-                    return false;
-                return true;
+                        return ((IEnumerable<object>)value).Any();
+                    else
+                        return value is object;
             }
 
             /// <summary>

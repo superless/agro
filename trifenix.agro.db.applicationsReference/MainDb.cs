@@ -1,4 +1,5 @@
 ﻿using Cosmonaut;
+using Cosmonaut.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +32,7 @@ namespace trifenix.agro.db.applicationsReference
             var autoNumericSearchAttribute = Mdm.Reflection.Attributes.GetAttribute<AutoNumericSearchAttribute>(prop_ClientId);
             bool numerateByDependence = autoNumericSearchAttribute.Dependant.HasValue;
             if (numerateByDependence) {
-                var prop_referenceToIndependent = entity.GetType().GetProperties().FirstOrDefault(prop => Attribute.IsDefined(prop, typeof(ReferenceSearchAttribute)) && Mdm.Reflection.Attributes.GetAttribute<AutoNumericSearchAttribute>(prop).Index == (int)autoNumericSearchAttribute.Dependant);
+                var prop_referenceToIndependent = entity.GetType().GetProperties().FirstOrDefault(prop => Attribute.IsDefined(prop, typeof(ReferenceSearchAttribute)) && Mdm.Reflection.Attributes.GetAttribute<AutoNumericSearchAttribute>(prop).Index == autoNumericSearchAttribute.Dependant);
                 var idIndependent = (string)prop_referenceToIndependent?.GetValue(entity);
                 var query = $"SELECT * FROM c WHERE c.{prop_referenceToIndependent.Name} = '{idIndependent}'";
                 var dependentElements = (IEnumerable<DocumentBase<int>>)await Store.QueryMultipleAsync(query);
@@ -45,11 +46,11 @@ namespace trifenix.agro.db.applicationsReference
             var prop_ClientId = typeof(T).GetProperty("ClientId"); 
             if(prop_ClientId != null) {
                 dynamic entities = await GetEntities().ToListAsync();
-                var autoNumericSearchAttribute = prop_ClientId.GetAttribute<AutoNumericSearchAttribute>();
+                var autoNumericSearchAttribute = Mdm.Reflection.Attributes.GetAttribute<AutoNumericSearchAttribute>(prop_ClientId);
                 bool numerateByDependence = autoNumericSearchAttribute.Dependant.HasValue;
                 if (numerateByDependence) {
                     var dictionary = new Dictionary<string,int>();
-                    var prop_referenceToIndependent = typeof(T).GetProperties().FirstOrDefault(prop => Attribute.IsDefined(prop, typeof(ReferenceSearchAttribute)) && prop.GetAttribute<ReferenceSearchAttribute>().Index == (int)autoNumericSearchAttribute.Dependant);
+                    var prop_referenceToIndependent = typeof(T).GetProperties().FirstOrDefault(prop => Attribute.IsDefined(prop, typeof(ReferenceSearchAttribute)) && Mdm.Reflection.Attributes.GetAttribute<AutoNumericSearchAttribute>(prop_ClientId).Index == autoNumericSearchAttribute.Dependant);
                     foreach (var entity in entities) {
                         var idIndependent = (string)prop_referenceToIndependent?.GetValue(entity);
                         if(dictionary.TryGetValue(idIndependent, out int max)) {

@@ -4,22 +4,16 @@ using System.Linq;
 using System.Reflection;
 using trifenix.connect.mdm_attributes;
 
-namespace trifenix.connect.util
-{
+namespace trifenix.connect.util {
 
+    public static partial class Mdm {
 
-
-
-
-    public static partial class Mdm
-    {
-public static partial class Reflection {
+        public static partial class Reflection {
             /// <summary>
             /// Métodos estáticos útiles para el modelo de atributos del
             /// Metadata-Model de trifenix.
             /// </summary>
-            public static class Attributes
-            {
+            public static class Attributes {
 
                 /// <summary>
                 /// Obtiene un array de atributos del tipo que se le indique 

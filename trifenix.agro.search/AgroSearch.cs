@@ -24,7 +24,7 @@ namespace trifenix.agro.search.operations {
     /// importante! es muy probable que los comentarios sean eliminados 
     /// refactorizar esta clase para soportar mejor el modelo.
     /// </summary>
-    public class AgroSearch : IAgroSearch {
+    public class AgroSearch<GeoPointType> : IAgroSearch<GeoPointType> {
     
         // cliente azure
         private readonly SearchServiceClient _search;
@@ -106,7 +106,7 @@ namespace trifenix.agro.search.operations {
         /// </summary>
         /// <typeparam name="T">Esto debería ser EntitySearch</typeparam>
         /// <param name="elements"></param>
-        public void AddElements(List<IEntitySearch<GeographyPoint>> elements) {
+        public void AddElements(List<IEntitySearch<GeoPointType>> elements) {
             OperationElements(elements, SearchOperation.Add);
         }
 
@@ -115,9 +115,9 @@ namespace trifenix.agro.search.operations {
         /// </summary>
         /// <typeparam name="T">Esto debería ser EntitySearch</typeparam>
         /// <param name="elements"></param>
-        public void AddElement(IEntitySearch<GeographyPoint> element)
+        public void AddElement(IEntitySearch<GeoPointType> element)
         {
-            OperationElements(new List<IEntitySearch<GeographyPoint>> { element}, SearchOperation.Add);
+            OperationElements(new List<IEntitySearch<GeoPointType>> { element}, SearchOperation.Add);
         }
 
         //public async Task DeleteElements(IAgroManager agro, Type dbType) {
@@ -130,7 +130,7 @@ namespace trifenix.agro.search.operations {
         /// Borra elementos desde el search.
         /// </summary>        
         /// <param name="elements">entidades a eliminar</param>
-        public void DeleteElements(List<IEntitySearch<GeographyPoint>> elements) {
+        public void DeleteElements(List<IEntitySearch<GeoPointType>> elements) {
             OperationElements(elements, SearchOperation.Delete);
         }
 
@@ -139,10 +139,10 @@ namespace trifenix.agro.search.operations {
         /// </summary>
         /// <param name="filter">filtro de azure (Odata)</param>
         /// <returns>Entidades encontradas</returns>
-        public List<IEntitySearch<GeographyPoint>> FilterElements(string filter) {
+        public List<IEntitySearch<GeoPointType>> FilterElements(string filter) {
             var indexName = _entityIndex;
             var indexClient = _search.Indexes.GetClient(indexName);
-            var result = indexClient.Documents.Search<IEntitySearch<GeographyPoint>>(null, new SearchParameters { Filter = filter });
+            var result = indexClient.Documents.Search<IEntitySearch<GeoPointType>>(null, new SearchParameters { Filter = filter });
             return result.Results.Select(v => v.Document).ToList();
         }
 
@@ -166,9 +166,9 @@ namespace trifenix.agro.search.operations {
         /// <param name="relatedElement">elemento relacionado por el cual se debe filtrar</param>
         /// <param name="idRelatedElement">identificar del elemento relacionado</param>
         /// <returns></returns>
-        public IEntitySearch<GeographyPoint>[] GetElementsWithRelatedElement(EntityRelated elementToGet, EntityRelated relatedElement, string idRelatedElement) {
+        public IEntitySearch<GeoPointType>[] GetElementsWithRelatedElement(EntityRelated elementToGet, EntityRelated relatedElement, string idRelatedElement) {
             var indexClient = _search.Indexes.GetClient(_entityIndex);
-            var entities = indexClient.Documents.Search<IEntitySearch<GeographyPoint>>(null, new SearchParameters { Filter = string.Format(Queries(SearchQuery.ENTITIES_WITH_ENTITYID), (int)elementToGet, (int)relatedElement, idRelatedElement) }).Results.Select(s=>s.Document);
+            var entities = indexClient.Documents.Search<IEntitySearch<GeoPointType>>(null, new SearchParameters { Filter = string.Format(Queries(SearchQuery.ENTITIES_WITH_ENTITYID), (int)elementToGet, (int)relatedElement, idRelatedElement) }).Results.Select(s=>s.Document);
             return entities.ToArray();
         }
 
@@ -179,12 +179,12 @@ namespace trifenix.agro.search.operations {
         /// <param name="entityRelated">Tipo entidad que obtendremos</param>
         /// <param name="id">identificador de la entidad</param>
         /// <returns></returns>
-        public IEntitySearch<GeographyPoint> GetEntity(EntityRelated entityRelated, string id) {
+        public IEntitySearch<GeoPointType> GetEntity(EntityRelated entityRelated, string id) {
             // cliente
             var indexClient = _search.Indexes.GetClient(_entityIndex);
 
             // consulta al search
-            return indexClient.Documents.Search<IEntitySearch<GeographyPoint>>(null, new SearchParameters { Filter = string.Format(Queries(SearchQuery.GET_ELEMENT), (int)entityRelated, id) }).Results.FirstOrDefault()?.Document;
+            return indexClient.Documents.Search<IEntitySearch<GeoPointType>>(null, new SearchParameters { Filter = string.Format(Queries(SearchQuery.GET_ELEMENT), (int)entityRelated, id) }).Results.FirstOrDefault()?.Document;
             
         }
 
@@ -235,7 +235,7 @@ namespace trifenix.agro.search.operations {
         /// <typeparam name="T">tipo de dato tipo base de datos.</typeparam>
         /// <param name="document"></param>
         public void AddDocument<T>(T document) where T : DocumentBase {
-            AddElements(Mdm.GetEntitySearch(new Implements(), document, typeof(EntitySearch)).Cast<IEntitySearch<GeographyPoint>>().ToList());
+            AddElements(Mdm.GetEntitySearch(new Implements(), document, typeof(EntitySearch)).Cast<IEntitySearch<GeoPointType>>().ToList());
         }
 
         /// <summary>
@@ -248,14 +248,14 @@ namespace trifenix.agro.search.operations {
         /// <typeparam name="T2">modelo del objeto que se convertirá a entity Search</typeparam>
         /// <param name="model">objeto a convertir</param>
         /// <returns>Colección de entity Search</returns>
-        public IEntitySearch<GeographyPoint>[] GetEntitySearch<T2>(T2 model) where T2 : DocumentBase
+        public IEntitySearch<GeoPointType>[] GetEntitySearch<T2>(T2 model) where T2 : DocumentBase
         {
-            return Mdm.GetEntitySearch(new Implements(), model, typeof(EntitySearch)).Cast<EntitySearch>().ToArray();
+            return (IEntitySearch<GeoPointType>[])Mdm.GetEntitySearch(new Implements(), model, typeof(EntitySearch)).Cast<EntitySearch>().ToArray();
         }
 
-        public IEntitySearch<GeographyPoint>[] GetEntitySearchByInput<T2>(T2 model) where T2: InputBase
+        public IEntitySearch<GeoPointType>[] GetEntitySearchByInput<T2>(T2 model) where T2: InputBase
         {
-            return Mdm.GetEntitySearch(new Implements(), model, typeof(EntitySearch)).Cast<EntitySearch>().ToArray();
+            return (IEntitySearch<GeoPointType>[])Mdm.GetEntitySearch(new Implements(), model, typeof(EntitySearch)).Cast<EntitySearch>().ToArray();
         }
 
 
@@ -270,7 +270,7 @@ namespace trifenix.agro.search.operations {
 
 
 
-        public async Task GenerateIndex(IAgroManager<GeographyPoint> agro) {
+        public async Task GenerateIndex(IAgroManager<GeoPointType> agro) {
             var assm = typeof(BusinessName).Assembly;
             var types = assm.GetTypes().Where(type => type.GetProperty("CosmosEntityName") != null && !(new[] { typeof(EntityContainer), typeof(User), typeof(UserActivity) }).Contains(type)).ToList();
 
@@ -284,7 +284,7 @@ namespace trifenix.agro.search.operations {
             }
         }
 
-        private async Task GetElementsAndInsertIntoIndex(IAgroManager<GeographyPoint> agro, Type dbType) {
+        private async Task GetElementsAndInsertIntoIndex(IAgroManager<GeoPointType> agro, Type dbType) {
             var extGetContainer = await agro.GetOperationByDbType(dbType).GetElements();
             var elements = (IEnumerable<dynamic>)extGetContainer.Result;
             elements?.ToList().ForEach(element => AddDocument(element));
