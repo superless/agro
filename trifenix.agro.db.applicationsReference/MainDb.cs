@@ -6,10 +6,9 @@ using System.Reflection;
 using System.Threading.Tasks;
 using trifenix.agro.db.exceptions;
 using trifenix.agro.db.interfaces;
-using trifenix.agro.db.model;
-using trifenix.agro.util;
 using trifenix.connect.agro.mdm_attributes;
 using trifenix.connect.agro.model;
+using trifenix.connect.util;
 
 namespace trifenix.agro.db.applicationsReference
 {
@@ -29,10 +28,10 @@ namespace trifenix.agro.db.applicationsReference
 
         private async Task<T> SetClientId(T entity, PropertyInfo prop_ClientId) {
             dynamic castedEntity = entity;
-            var autoNumericSearchAttribute = prop_ClientId.GetAttribute<AutoNumericSearchAttribute>();
+            var autoNumericSearchAttribute = Mdm.Reflection.Attributes.GetAttribute<AutoNumericSearchAttribute>(prop_ClientId);
             bool numerateByDependence = autoNumericSearchAttribute.Dependant.HasValue;
             if (numerateByDependence) {
-                var prop_referenceToIndependent = entity.GetType().GetProperties().FirstOrDefault(prop => Attribute.IsDefined(prop, typeof(ReferenceSearchAttribute)) && prop.GetAttribute<ReferenceSearchAttribute>().Index == (int)autoNumericSearchAttribute.Dependant);
+                var prop_referenceToIndependent = entity.GetType().GetProperties().FirstOrDefault(prop => Attribute.IsDefined(prop, typeof(ReferenceSearchAttribute)) && Mdm.Reflection.Attributes.GetAttribute<AutoNumericSearchAttribute>(prop).Index == (int)autoNumericSearchAttribute.Dependant);
                 var idIndependent = (string)prop_referenceToIndependent?.GetValue(entity);
                 var query = $"SELECT * FROM c WHERE c.{prop_referenceToIndependent.Name} = '{idIndependent}'";
                 var dependentElements = (IEnumerable<DocumentBase<int>>)await Store.QueryMultipleAsync(query);

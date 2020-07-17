@@ -14,7 +14,7 @@ using trifenix.connect.mdm.enums;
 namespace trifenix.agro.external.operations.entities.main
 {
     public class SeasonOperations : MainOperation<Season, SeasonInput>, IGenericOperation<Season, SeasonInput> {
-        public SeasonOperations(IMainGenericDb<Season> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Season> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
+        public SeasonOperations(IMainGenericDb<Season> repo, IExistElement existElement, IAgroSearch<GeographyPoint> search, ICommonDbOperations<Season> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
 
         public override async Task Validate(SeasonInput executionOrderStatusInput) {
             await base.Validate(executionOrderStatusInput);

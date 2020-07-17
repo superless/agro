@@ -7,15 +7,13 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using trifenix.agro.db;
-using trifenix.agro.db.model;
-using trifenix.agro.db.model.core;
 using trifenix.agro.db.model.local;
-using trifenix.agro.enums.model;
 using trifenix.agro.external.operations;
 using trifenix.agro.search.operations;
-using trifenix.agro.util;
+using trifenix.connect.agro.index_model.enums;
 using trifenix.connect.agro.model;
 using trifenix.connect.mdm.az_search;
+using trifenix.connect.util;
 
 namespace trifenix.agro.console
 {
@@ -60,7 +58,7 @@ namespace trifenix.agro.console
 
             var search = new AgroSearch("search-agro-produccion", "A256D7F2BD95055691460D358CA870BA");
             if (vaciarAmbos || vaciarSearch)
-                search.EmptyIndex<EntitySearch>("entities");
+                search.EmptyIndex("entities");
 
             var agroDbArguments = new AgroDbArguments { EndPointUrl = "https://agro-jhm-produccion.documents.azure.com:443/", NameDb = "agrodb", PrimaryKey = "sZTarTcwaiO2LUghxZEuIGd9FXIZ7ziqkVAbVmJWBucREVQ3YWYr5Jke7E1gR9UlJUkdYOLHZWteiuKE37LbLA==" };
 
@@ -222,8 +220,8 @@ namespace trifenix.agro.console
             elements.ForEach(element => {
                 element.GetType().GetProperties().Where(prop => prop.Name.ToLower().Contains("id") && !prop.Name.Equals("ClientId") && !prop.Name.Equals("ObjectIdAAD")).ToList().ForEach(
                     prop => {
-                        if (prop.GetValue(element).HasValue()) {
-                            if (!AttributesExtension.IsEnumerableProperty(prop)) {
+                        if (Mdm.Reflection.HasValue(prop.GetValue(element))) {
+                            if (!Mdm.Reflection.IsEnumerableProperty(prop)) {
                                 var indexString = prop.GetValue(element).ToString();
                                 var index = int.Parse(indexString);
                                 prop.SetValue(element, guids[index]);

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Spatial;
+using System;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.common;
@@ -20,7 +21,7 @@ namespace trifenix.agro.external.operations.entities.fields {
 
         private readonly string UserId;
 
-        public UserActivityOperations(IMainGenericDb<UserActivity> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<UserActivity> commonDb, string userId, IValidator validator) : base(repo, existElement, search, commonDb, validator) {
+        public UserActivityOperations(IMainGenericDb<UserActivity> repo, IExistElement existElement, IAgroSearch<GeographyPoint> search, ICommonDbOperations<UserActivity> commonDb, string userId, IValidator validator) : base(repo, existElement, search, commonDb, validator) {
             UserId = userId;
         }
 

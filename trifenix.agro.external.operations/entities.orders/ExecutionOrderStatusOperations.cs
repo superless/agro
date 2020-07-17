@@ -14,7 +14,7 @@ using trifenix.connect.mdm.enums;
 namespace trifenix.agro.external.operations.entities.orders
 {
     public class ExecutionOrderStatusOperations : MainOperation<ExecutionOrderStatus, ExecutionOrderStatusInput>, IGenericOperation<ExecutionOrderStatus, ExecutionOrderStatusInput> {
-        public ExecutionOrderStatusOperations(IMainGenericDb<ExecutionOrderStatus> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<ExecutionOrderStatus> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
+        public ExecutionOrderStatusOperations(IMainGenericDb<ExecutionOrderStatus> repo, IExistElement existElement, IAgroSearch<GeographyPoint> search, ICommonDbOperations<ExecutionOrderStatus> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
 
         /*Ejecucion Status
         * El nuevo executionStatus debe ser siempre igual o superior al anterior (Como maximo en una unidad, ya que este estado es serial)

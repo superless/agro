@@ -16,7 +16,7 @@ namespace trifenix.agro.external.operations.entities.main
 
     public class IngredientOperations : MainOperation<Ingredient, IngredientInput>, IGenericOperation<Ingredient, IngredientInput> {
 
-        public IngredientOperations(IMainGenericDb<Ingredient> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Ingredient> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) {}
+        public IngredientOperations(IMainGenericDb<Ingredient> repo, IExistElement existElement, IAgroSearch<GeographyPoint> search, ICommonDbOperations<Ingredient> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) {}
 
         public Task Remove(string id) {
             throw new NotImplementedException();

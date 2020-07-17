@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using trifenix.agro.db;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
-using trifenix.connect.mdm.indexes;
+using trifenix.connect.mdm.enums;
 using trifenix.connect.mdm_attributes;
 
 namespace trifenix.connect.agro.model
@@ -87,9 +87,10 @@ namespace trifenix.connect.agro.model
         /// Polinizador, 
         /// la variedad y el polinizador son el misma entidad,
         /// para asignar la segunda se usa una referencia local.
+        /// importante! 
         /// </summary>
         [Group(2, PhisicalDevice.WEB, 3)]
-        [ReferenceSearch(EntityRelated.POLLINATOR, false, true, EntityRelated.VARIETY)]
+        [ReferenceSearch(EntityRelated.POLLINATOR, EntityRelated.VARIETY)]
         public string IdPollinator { get; set; }
 
         /// <summary>

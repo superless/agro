@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Spatial;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,7 +9,6 @@ using trifenix.agro.db.interfaces.common;
 using trifenix.agro.db.model.local;
 using trifenix.agro.external.interfaces;
 using trifenix.agro.search.interfaces;
-using trifenix.agro.util;
 using trifenix.agro.validator.interfaces;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.model;
@@ -16,6 +16,7 @@ using trifenix.connect.agro.model_input;
 using trifenix.connect.mdm.az_search;
 using trifenix.connect.mdm.containers;
 using trifenix.connect.mdm.enums;
+using trifenix.connect.util;
 
 namespace trifenix.agro.external.operations.entities.ext
 {
@@ -24,7 +25,7 @@ namespace trifenix.agro.external.operations.entities.ext
         
         private readonly ICommonQueries Queries;
 
-        public DosesOperations(IMainGenericDb<Dose> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Dose> commonDb, ICommonQueries queries, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
+        public DosesOperations(IMainGenericDb<Dose> repo, IExistElement existElement, IAgroSearch<GeographyPoint> search, ICommonDbOperations<Dose> commonDb, ICommonQueries queries, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
             
             Queries = queries;
         }
@@ -42,7 +43,7 @@ namespace trifenix.agro.external.operations.entities.ext
             var dose = (await Get(id)).Result;
             dose.Active = false;
             await repo.CreateUpdate(dose);
-            search.AddElements(new List<EntitySearch> { search.GetEntitySearch(dose) });
+            search.AddElements(search.GetEntitySearch(dose).ToList());
         }
 
         public async Task<ExtPostContainer<string>> Save(Dose dose) {
@@ -51,7 +52,7 @@ namespace trifenix.agro.external.operations.entities.ext
 
             if (!productSearch.rel.Any(relatedId => relatedId.index == (int)EntityRelated.DOSES && relatedId.id == dose.Id)) {
                 productSearch.rel = productSearch.rel.Add(new RelatedId { id = dose.Id, index = (int)EntityRelated.DOSES });
-                search.AddElements(new List<EntitySearch> { productSearch });
+                search.AddElement(productSearch);
             }
             search.AddDocument(dose);
 

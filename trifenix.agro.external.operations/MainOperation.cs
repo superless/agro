@@ -21,11 +21,11 @@ namespace trifenix.agro.external.operations
         
         protected readonly IMainGenericDb<T> repo;
         protected readonly IExistElement existElement;
-        protected readonly IAgroSearch search;
+        protected readonly IAgroSearch<GeographyPoint> search;
         private readonly ICommonDbOperations<T> commonDb;
         private readonly IValidator validator;
 
-        public MainOperation(IMainGenericDb<T> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<T> commonDb, IValidator validator) {
+        public MainOperation(IMainGenericDb<T> repo, IExistElement existElement, IAgroSearch<GeographyPoint> search, ICommonDbOperations<T> commonDb, IValidator validator) {
             this.repo = repo;
             this.existElement = existElement;
             this.search = search;

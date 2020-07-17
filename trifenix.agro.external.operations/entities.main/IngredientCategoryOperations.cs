@@ -14,7 +14,7 @@ using trifenix.connect.mdm.enums;
 namespace trifenix.agro.external.operations.entities.main
 {
     public class IngredientCategoryOperations : MainOperation<IngredientCategory, IngredientCategoryInput>, IGenericOperation<IngredientCategory, IngredientCategoryInput> {
-        public IngredientCategoryOperations(IMainGenericDb<IngredientCategory> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<IngredientCategory> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
+        public IngredientCategoryOperations(IMainGenericDb<IngredientCategory> repo, IExistElement existElement, IAgroSearch<GeographyPoint> search, ICommonDbOperations<IngredientCategory> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
 
         public Task Remove(string id) {
             throw new NotImplementedException();
