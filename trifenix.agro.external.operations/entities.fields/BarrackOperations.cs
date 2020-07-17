@@ -48,7 +48,7 @@ namespace trifenix.agro.external.operations.entities.fields
                 Name = input.Name,
                 Hectares = input.Hectares,
                 IdPlotLand = input.IdPlotLand,
-                Pollinator = input.Pollinator,
+                IdPollinator = input.IdPollinator,
                 IdRootstock = input.IdRootstock,
                 IdVariety = input.IdVariety,
                 NumberOfPlants = input.NumberOfPlants,

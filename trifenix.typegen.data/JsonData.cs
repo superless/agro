@@ -1,20 +1,13 @@
-﻿using res.core;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
-using trifenix.agro.attr;
-using trifenix.agro.db.model;
-using trifenix.agro.enums.searchModel;
-using trifenix.agro.model.external.Input;
-using trifenix.agro.search.model.reflection;
-using trifenix.agro.search.model.ts;
-using trifenix.agro.search.operations.util;
+using trifenix.connect.mdm.ts_model;
 using TypeGen.Core.Extensions;
-using static trifenix.agro.util.AttributesExtension;
 
-namespace trifenix.typegen.data {
+namespace trifenix.typegen.data
+{
     public static class JsonData {
         public static EntityMetadata GetModel(IEnumerable<PropertySearchInfo> propertySearchInfos, int index) {
             var propByRelatedAndIndex = propertySearchInfos.GroupBy(s => new {  s.Related, s.IndexClass, s.Index }).Select(s => s.FirstOrDefault());
