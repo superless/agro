@@ -3,7 +3,7 @@ using Cosmonaut.Attributes;
 using trifenix.agro.db;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
-using trifenix.connect.mdm.indexes;
+using trifenix.connect.mdm.enums;
 
 namespace trifenix.connect.agro.model
 {

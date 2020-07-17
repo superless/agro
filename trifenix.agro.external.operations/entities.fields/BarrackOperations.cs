@@ -1,4 +1,5 @@
 ﻿using Microsoft.Azure.Documents.Spatial;
+using Microsoft.Spatial;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,7 +22,7 @@ namespace trifenix.agro.external.operations.entities.fields
 
         private readonly ICommonQueries commonQueries;
 
-        public BarrackOperations(IMainGenericDb<Barrack> repo, IExistElement existElement, IAgroSearch search, ICommonQueries commonQueries, ICommonDbOperations<Barrack> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
+        public BarrackOperations(IMainGenericDb<Barrack> repo, IExistElement existElement, IAgroSearch<GeographyPoint> search, ICommonQueries commonQueries, ICommonDbOperations<Barrack> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
             this.commonQueries = commonQueries;
         }
 
@@ -47,7 +48,7 @@ namespace trifenix.agro.external.operations.entities.fields
                 Name = input.Name,
                 Hectares = input.Hectares,
                 IdPlotLand = input.IdPlotLand,
-                Pollinator = input.Pollinator,
+                IdPollinator = input.IdPollinator,
                 IdRootstock = input.IdRootstock,
                 IdVariety = input.IdVariety,
                 NumberOfPlants = input.NumberOfPlants,

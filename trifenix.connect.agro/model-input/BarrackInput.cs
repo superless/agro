@@ -43,9 +43,9 @@ namespace trifenix.connect.agro.model_input
         [GeoSearch(GeoRelated.LOCATION_BARRACK)]
         public GeographicalPointInput[] GeographicalPoints { get; set; }
 
-        [ReferenceSearch(EntityRelated.POLLINATOR, true)]
+        [ReferenceSearch(EntityRelated.POLLINATOR,EntityRelated.POLLINATOR)]
         [Reference(typeof(Variety))]
-        public Pollinator Pollinator { get; set; }
+        public string IdPollinator { get; set; }
 
 
         [ReferenceSearch(EntityRelated.ROOTSTOCK)]

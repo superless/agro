@@ -9,11 +9,11 @@ using trifenix.connect.agro.model;
 using trifenix.connect.agro.model_input;
 
 namespace trifenix.agro.external.interfaces {
-    public interface IAgroManager {
+    public interface IAgroManager<T> {
 
         ICosmosStore<EntityContainer> BatchStore { get; }
         IExistElement ExistsElements { get; }
-        IAgroSearch Search { get; }
+        
         IGenericOperation<UserActivity, UserActivityInput> UserActivity { get; }
         IGenericOperation<ApplicationOrder, ApplicationOrderInput> ApplicationOrder { get; }
         IGenericOperation<ApplicationTarget, ApplicationTargetInput> ApplicationTarget { get; }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Spatial;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,7 +25,7 @@ namespace trifenix.agro.external.operations.entities.orders
 
         private readonly ICommonQueries commonQueries;
 
-        public ApplicationOrderOperations(IMainGenericDb<ApplicationOrder> repo, IExistElement existElement, IAgroSearch search, ICommonQueries commonQueries, ICommonDbOperations<ApplicationOrder> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
+        public ApplicationOrderOperations(IMainGenericDb<ApplicationOrder> repo, IExistElement existElement, IAgroSearch<GeographyPoint> search, ICommonQueries commonQueries, ICommonDbOperations<ApplicationOrder> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
             this.commonQueries = commonQueries;
         }
 

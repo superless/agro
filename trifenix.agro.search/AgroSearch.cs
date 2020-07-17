@@ -1,13 +1,10 @@
-﻿using Microsoft.Azure.Documents.Spatial;
-using Microsoft.Azure.Search;
+﻿using Microsoft.Azure.Search;
 using Microsoft.Azure.Search.Models;
 using Microsoft.Spatial;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Threading;
 using System.Threading.Tasks;
 using trifenix.agro.db;
 using trifenix.agro.enums.query;
@@ -19,12 +16,9 @@ using trifenix.connect.agro.model;
 using trifenix.connect.agro.model_input;
 using trifenix.connect.mdm.az_search;
 using trifenix.connect.mdm.entity_model;
-using trifenix.connect.mdm.enums;
-using trifenix.connect.mdm_attributes;
 using trifenix.connect.util;
 
-namespace trifenix.agro.search.operations
-{
+namespace trifenix.agro.search.operations {
     /// <summary>
     /// Clase que interactua con azure search
     /// importante! es muy probable que los comentarios sean eliminados 
@@ -59,7 +53,7 @@ namespace trifenix.agro.search.operations
 
             // crea índice de entidades si no existe.
             if (!_search.Indexes.Exists(_entityIndex))
-                CreateOrUpdateIndex<EntitySearch>(_entityIndex);
+                CreateOrUpdateIndex(_entityIndex);
         }
 
        /// <summary>
@@ -72,16 +66,15 @@ namespace trifenix.agro.search.operations
         
         /// <summary>
         /// Crea índice en el azure search.
-        /// </summary>
-        /// <typeparam name="T">Tipo de entidad en el índicd</typeparam>
+        /// </summary>        
         /// <param name="indexName"></param>
-        private void CreateOrUpdateIndex<T>(string indexName) {
+        private void CreateOrUpdateIndex(string indexName) {
 
             // dominios permitidos, cambiar para ponerlo en un json u otro archivo.
             string[] allowedOrigins = new string[] { "https://aresa.trifenix.io", "https://dev-aresa.trifenix.io", "https://agro.trifenix.io", "https://agro-dev.trifenix.io", "http://localhost:3000", "http://localhost:9009", "https://portal.azure.com" };
 
             // creación del índice.
-            _search.Indexes.CreateOrUpdate(new Index { Name = indexName, Fields = FieldBuilder.BuildForType<T>(), CorsOptions = new CorsOptions(allowedOrigins) });
+            _search.Indexes.CreateOrUpdate(new Index { Name = indexName, Fields = FieldBuilder.BuildForType<EntitySearch>(), CorsOptions = new CorsOptions(allowedOrigins) });
         }
 
         /// <summary>
@@ -113,7 +106,7 @@ namespace trifenix.agro.search.operations
         /// </summary>
         /// <typeparam name="T">Esto debería ser EntitySearch</typeparam>
         /// <param name="elements"></param>
-        public void AddElements(List<EntitySearch> elements) {
+        public void AddElements(List<IEntitySearch<GeographyPoint>> elements) {
             OperationElements(elements, SearchOperation.Add);
         }
 
@@ -122,8 +115,9 @@ namespace trifenix.agro.search.operations
         /// </summary>
         /// <typeparam name="T">Esto debería ser EntitySearch</typeparam>
         /// <param name="elements"></param>
-        public void AddElement(EntitySearch element) {
-            OperationElements(new List<EntitySearch> { element}, SearchOperation.Add);
+        public void AddElement(IEntitySearch<GeographyPoint> element)
+        {
+            OperationElements(new List<IEntitySearch<GeographyPoint>> { element}, SearchOperation.Add);
         }
 
         //public async Task DeleteElements(IAgroManager agro, Type dbType) {
@@ -136,7 +130,7 @@ namespace trifenix.agro.search.operations
         /// Borra elementos desde el search.
         /// </summary>        
         /// <param name="elements">entidades a eliminar</param>
-        public void DeleteElements(List<EntitySearch> elements) {
+        public void DeleteElements(List<IEntitySearch<GeographyPoint>> elements) {
             OperationElements(elements, SearchOperation.Delete);
         }
 
@@ -145,10 +139,10 @@ namespace trifenix.agro.search.operations
         /// </summary>
         /// <param name="filter">filtro de azure (Odata)</param>
         /// <returns>Entidades encontradas</returns>
-        public List<EntitySearch> FilterElements(string filter) {
+        public List<IEntitySearch<GeographyPoint>> FilterElements(string filter) {
             var indexName = _entityIndex;
             var indexClient = _search.Indexes.GetClient(indexName);
-            var result = indexClient.Documents.Search<EntitySearch>(null, new SearchParameters { Filter = filter });
+            var result = indexClient.Documents.Search<IEntitySearch<GeographyPoint>>(null, new SearchParameters { Filter = filter });
             return result.Results.Select(v => v.Document).ToList();
         }
 
@@ -172,9 +166,9 @@ namespace trifenix.agro.search.operations
         /// <param name="relatedElement">elemento relacionado por el cual se debe filtrar</param>
         /// <param name="idRelatedElement">identificar del elemento relacionado</param>
         /// <returns></returns>
-        public EntitySearch[] GetElementsWithRelatedElement(EntityRelated elementToGet, EntityRelated relatedElement, string idRelatedElement) {
+        public IEntitySearch<GeographyPoint>[] GetElementsWithRelatedElement(EntityRelated elementToGet, EntityRelated relatedElement, string idRelatedElement) {
             var indexClient = _search.Indexes.GetClient(_entityIndex);
-            var entities = indexClient.Documents.Search<EntitySearch>(null, new SearchParameters { Filter = string.Format(Queries(SearchQuery.ENTITIES_WITH_ENTITYID), (int)elementToGet, (int)relatedElement, idRelatedElement) }).Results.Select(s=>s.Document);
+            var entities = indexClient.Documents.Search<IEntitySearch<GeographyPoint>>(null, new SearchParameters { Filter = string.Format(Queries(SearchQuery.ENTITIES_WITH_ENTITYID), (int)elementToGet, (int)relatedElement, idRelatedElement) }).Results.Select(s=>s.Document);
             return entities.ToArray();
         }
 
@@ -185,12 +179,12 @@ namespace trifenix.agro.search.operations
         /// <param name="entityRelated">Tipo entidad que obtendremos</param>
         /// <param name="id">identificador de la entidad</param>
         /// <returns></returns>
-        public EntitySearch GetEntity(EntityRelated entityRelated, string id) {
+        public IEntitySearch<GeographyPoint> GetEntity(EntityRelated entityRelated, string id) {
             // cliente
             var indexClient = _search.Indexes.GetClient(_entityIndex);
 
             // consulta al search
-            return indexClient.Documents.Search<EntitySearch>(null, new SearchParameters { Filter = string.Format(Queries(SearchQuery.GET_ELEMENT), (int)entityRelated, id) }).Results.FirstOrDefault()?.Document;
+            return indexClient.Documents.Search<IEntitySearch<GeographyPoint>>(null, new SearchParameters { Filter = string.Format(Queries(SearchQuery.GET_ELEMENT), (int)entityRelated, id) }).Results.FirstOrDefault()?.Document;
             
         }
 
@@ -235,192 +229,50 @@ namespace trifenix.agro.search.operations
             DeleteElements(query);
         }
 
-
-        
-
-
+        /// <summary>
+        /// Toma un objeto cualquiera, lo convierte a un entitySearch y lo guarda en azure search.
+        /// </summary>
+        /// <typeparam name="T">tipo de dato tipo base de datos.</typeparam>
+        /// <param name="document"></param>
+        public void AddDocument<T>(T document) where T : DocumentBase {
+            AddElements(Mdm.GetEntitySearch(new Implements(), document, typeof(EntitySearch)).Cast<IEntitySearch<GeographyPoint>>().ToList());
+        }
 
         /// <summary>
-        /// Obtiene 
+        /// Obtiene un entitySearch desde un objeto de la base de datos
+        /// el tipo de dato es por comodidad, si púede revisar internamente convierte cualquier objeto a entitySearch.
+        /// Retorna una colección de EntitySearch, una de referencia y el resto local, ver atributos de la clase para más detalle.
+        /// Vea EntityIndexAtribute, en el se asigna una referencia local o de referenci
         /// </summary>
-        /// <param name="attribute"></param>
-        /// <returns></returns>
-        public IEnumerable<RelatedId> GetArrayOfLocalRelatedIds(KeyValuePair<BaseIndexAttribute, object> attribute) {
-            var typeValue = attribute.Value.GetType();
-            if (typeValue == typeof(IEnumerable<string>))
-                return ((IEnumerable<string>)attribute.Value).Select(s => new RelatedId { index = attribute.Key.Index, id = (string)s });
-            else
-                return new List<RelatedId>() { new RelatedId { index = attribute.Key.Index, id = (string)attribute.Value } };
+        /// <see cref="EntityIndexAtribute"/>
+        /// <typeparam name="T2">modelo del objeto que se convertirá a entity Search</typeparam>
+        /// <param name="model">objeto a convertir</param>
+        /// <returns>Colección de entity Search</returns>
+        public IEntitySearch<GeographyPoint>[] GetEntitySearch<T2>(T2 model) where T2 : DocumentBase
+        {
+            return Mdm.GetEntitySearch(new Implements(), model, typeof(EntitySearch)).Cast<EntitySearch>().ToArray();
         }
 
-        public IEnumerable<RelatedId> GetArrayOfRelatedIds(KeyValuePair<BaseIndexAttribute, object> attribute) {
-            if (attribute.Value.IsEnumerable()) {
-                var relateds = new List<RelatedId>();
-                foreach (var item in (IEnumerable<string>)attribute.Value)
-                    relateds.Add(new RelatedId { index = attribute.Key.Index, id = item });
-                return relateds;
-            }
-            else
-                return new List<RelatedId>() { new RelatedId { index = attribute.Key.Index, id = (string)attribute.Value } };
-        }
-        
-        private IEnumerable<BaseProperty<T>> GetArrayOfElements<T>(KeyValuePair<BaseIndexAttribute, object> attribute) {
-            var typeValue = attribute.Value.GetType();
-            if (attribute.Value.IsEnumerable())
-                return ((IEnumerable<T>)attribute.Value).Select(s => GetProperty<T>(attribute.Key.Index, s));
-            else
-                return new List<BaseProperty<T>> { GetProperty<T>(attribute.Key.Index, attribute.Value)};
+        public IEntitySearch<GeographyPoint>[] GetEntitySearchByInput<T2>(T2 model) where T2: InputBase
+        {
+            return Mdm.GetEntitySearch(new Implements(), model, typeof(EntitySearch)).Cast<EntitySearch>().ToArray();
         }
 
-        private IEnumerable<BaseProperty<T>> GetPropertiesObjects<T>(KindProperty related, Dictionary<BaseIndexAttribute, object> elements) =>
-            elements.Where(s => !s.Key.IsEntity  && s.Key.KindIndex == (int)related).SelectMany(s => GetArrayOfElements<T>(s)).ToArray();
-
-        private RelatedId[] GetReferences(Dictionary<BaseIndexAttribute, object> elements) =>
-            elements.Where(s => s.Key.IsEntity).SelectMany(GetArrayOfRelatedIds).ToArray();
-
-        
-        private Num32Property[] GetNumProps(Dictionary<BaseIndexAttribute, object> values) =>
-            GetPropertiesObjects<int>(KindProperty.NUM32, values).Select(s => new Num32Property { 
-                index = s.index,
-                value = s.value
-            }).ToArray();
-
-        private DblProperty[] GetDblProps(Dictionary<BaseIndexAttribute, object> values) =>
-            GetPropertiesObjects<double>(KindProperty.DBL, values).Select(s => new DblProperty {
-                index = s.index,
-                value = s.value
-            }).ToArray();
-
-        private DtProperty[] GetDtProps(Dictionary<BaseIndexAttribute, object> values) =>
-            GetPropertiesObjects<DateTime>(KindProperty.DATE, values).Select(s => new DtProperty {
-                index = s.index,
-                value = s.value
-            }).ToArray();
-
-        private EnumProperty[] GetEnumProps(Dictionary<BaseIndexAttribute, object> values) =>
-            GetPropertiesObjects<int>(KindProperty.ENUM, values).Select(s => new EnumProperty {
-                index = s.index,
-                value = s.value
-            }).ToArray();
-
-        private BoolProperty[] GetBoolProps(Dictionary<BaseIndexAttribute, object> values) =>
-            GetPropertiesObjects<bool>(KindProperty.BOOL, values).Select(s => new BoolProperty {
-                index = s.index,
-                value = s.value
-            }).ToArray();
-
-        private GeoProperty[] GetGeoProps(Dictionary<BaseIndexAttribute, object> values) =>
-            GetPropertiesObjects<Point>(KindProperty.GEO, values).Select(s => new GeoProperty {
-                index = s.index,
-                value = GeographyPoint.Create(s.value.Position.Latitude, s.value.Position.Longitude)
-            }).ToArray();
-
-        private Num64Property[] GetNum64Props(Dictionary<BaseIndexAttribute, object> values) =>
-            GetPropertiesObjects<long>(KindProperty.NUM64, values).Select(s => new Num64Property {
-                index = s.index,
-                value = s.value
-            }).ToArray();
-
-        private StrProperty[] GetStrProps(Dictionary<BaseIndexAttribute, object> values) =>
-          GetPropertiesObjects<string>(KindProperty.STR, values).Select(s => new StrProperty {
-              index = s.index,
-              value = s.value
-          }).ToArray();
-
-
-        private EntitySearch GetEntitySearch(object obj, int index, string id) {
-
-            // Código modificado para soportar que en vez de enviar un entity search, envie solo uno, dado un cambio en el requerimiento, donde se define un solo indice por entidad y no una colección.
-            var entitySearch = new EntitySearch {
-                id = id,
-                index = index,
-                created = DateTime.Now
-            };
-            var values = Mdm.Reflection.Attributes.GetPropertiesByAttributeWithValue(obj);
-            if (!values.Any())
-                return null;
-
-            entitySearch.num32 = GetNumProps(values);
-            entitySearch.dbl = GetDblProps(values);
-            entitySearch.dt = GetDtProps(values);
-            entitySearch.enm = GetEnumProps(values);
-            entitySearch.bl = GetBoolProps(values);
-            entitySearch.geo = GetGeoProps(values);
-            entitySearch.num64 = GetNum64Props(values);
-            entitySearch.str = GetStrProps(values);
-            entitySearch.sug = GetStrProps(values);
-            entitySearch.rel = GetReferences(values);
-            var valuesWithoutProperty = Mdm.Reflection.Attributes.GetPropertiesWithoutAttributeWithValues(obj);
-
-            foreach (var item in valuesWithoutProperty) {
-                // porque llama a barrack solamente
-                var value = GetEntitySearch(item, 0, string.Empty);
-                entitySearch.num32 = entitySearch.num32.Union(value.num32).ToArray();
-                entitySearch.dbl = entitySearch.dbl.Union(value.dbl).ToArray();
-                entitySearch.dt = entitySearch.dt.Union(value.dt).ToArray();
-                entitySearch.enm = entitySearch.enm.Union(value.enm).ToArray();
-                entitySearch.geo = entitySearch.geo.Union(value.geo).ToArray();
-                entitySearch.num64 = entitySearch.num64.Union(value.num64).ToArray();
-                entitySearch.str = entitySearch.str.Union(value.str).ToArray();
-                entitySearch.bl = entitySearch.bl.Union(value.bl).ToArray();
-                entitySearch.sug = entitySearch.sug.Union(value.sug).ToArray();
-                entitySearch.rel = entitySearch.rel.Union(value.rel).ToArray();
-            }
-            var localReference = values.Where(s => s.Key.IsEntity);
-            if (localReference.Any()) {
-                foreach (var item in localReference) {
-                    IEnumerable<object> collection = item.Value.IsEnumerable() ? (IEnumerable<object>)item.Value : new List<object> { item.Value };
-                    foreach (var childReferences in collection) {
-                        var guid = Guid.NewGuid().ToString("N");
-                        var localEntities = GetEntitySearch(childReferences, item.Key.Index, guid);
-                        var listReferences = entitySearch.rel.ToList();
-                        listReferences.Add(new RelatedId { id = guid, index = item.Key.Index });
-                        entitySearch.rel = listReferences.ToArray();
-                        return localEntities;
-                    }
-                }
-            }
-            
-            return entitySearch;
-        }
-        public EntitySearch GetEntitySearch<T>(T entity)  where T : DocumentBase {
-            var references = GetAttributes<EntityIndexAttribute>(typeof(T));
-            if (references == null || !references.Any())
-                return null;
-            return GetEntitySearch(entity, references.First().Index, entity.Id);
-        }
-
-        public EntitySearch GetEntitySearchByInput<T>(T entity) where T : InputBase {
-            var references = GetAttributes<EntityIndexAttribute>(typeof(T));
-            if (references == null || !references.Any())
-                return null;
-            return GetEntitySearch(entity, references.First().Index, entity.Id);
-        }
-
-        
-
-        
-
-
-        
 
 
 
-        
 
-        public void AddDocument<T>(T document) where T : DocumentBase {
-            AddElements(new List<EntitySearch> { GetEntitySearch(document) });
-        }
-
-        public void EmptyIndex<IndexSearch>(string indexName) {
+        public void EmptyIndex(string indexName) {
             _search.Indexes.Delete(indexName);
-            CreateOrUpdateIndex<IndexSearch>(indexName);
+            CreateOrUpdateIndex(indexName);
         }
 
-        public async Task GenerateIndex(IAgroManager agro) {
+
+
+
+        public async Task GenerateIndex(IAgroManager<GeographyPoint> agro) {
             var assm = typeof(BusinessName).Assembly;
-            var types = new[] { typeof(UserApplicator) };
-            //var types = assm.GetTypes().Where(type => type.GetProperty("CosmosEntityName") != null && !(new[] { typeof(EntityContainer), typeof(User), typeof(Comment), typeof(UserActivity) }).Contains(type)).ToList();
+            var types = assm.GetTypes().Where(type => type.GetProperty("CosmosEntityName") != null && !(new[] { typeof(EntityContainer), typeof(User), typeof(UserActivity) }).Contains(type)).ToList();
 
             foreach (var type in types) {
                 try {
@@ -432,12 +284,13 @@ namespace trifenix.agro.search.operations
             }
         }
 
-        private async Task GetElementsAndInsertIntoIndex(IAgroManager agro, Type dbType) {
+        private async Task GetElementsAndInsertIntoIndex(IAgroManager<GeographyPoint> agro, Type dbType) {
             var extGetContainer = await agro.GetOperationByDbType(dbType).GetElements();
             var elements = (IEnumerable<dynamic>)extGetContainer.Result;
             elements?.ToList().ForEach(element => AddDocument(element));
         }
 
+       
     }
 
 }

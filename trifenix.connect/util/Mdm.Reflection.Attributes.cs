@@ -39,6 +39,7 @@ public static partial class Reflection {
                 public static T GetAttribute<T>(PropertyInfo propInfo) where T : Attribute => (T)propInfo.GetCustomAttributes(typeof(T), true).FirstOrDefault();
 
 
+                
                 /// <summary>
                 /// obtiene un diccionario con propiedades que deben ser mapeadas al metadata model de trifenix.
                 /// Los elementos que son mapeados son agrupados con la propiedad que tiene la metadata 

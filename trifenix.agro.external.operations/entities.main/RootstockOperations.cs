@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Spatial;
+using System;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.common;
@@ -14,7 +15,7 @@ using trifenix.connect.mdm.enums;
 namespace trifenix.agro.external.operations.entities.main
 {
     public class RootstockOperations : MainOperation<Rootstock, RootstockInput>, IGenericOperation<Rootstock, RootstockInput> {
-        public RootstockOperations(IMainGenericDb<Rootstock> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Rootstock> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
+        public RootstockOperations(IMainGenericDb<Rootstock> repo, IExistElement existElement, IAgroSearch<GeographyPoint> search, ICommonDbOperations<Rootstock> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
 
         public Task Remove(string id) {
             throw new NotImplementedException();

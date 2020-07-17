@@ -1,19 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Spatial;
 using System;
 using System.Threading.Tasks;
 using trifenix.agro.email.operations;
 using trifenix.agro.external.interfaces;
 using trifenix.agro.external.operations;
 using trifenix.agro.functions.settings;
-using trifenix.agro.model.external;
 using trifenix.agro.search.operations;
 using trifenix.agro.storage.operations;
 using trifenix.agro.weather.operations;
+using trifenix.connect.mdm.containers;
 
-namespace trifenix.agro.functions.Helper {
+namespace trifenix.agro.functions.Helper
+{
     public static class ContainerMethods {
-        public static async Task<IAgroManager> AgroManager(string ObjectIdAAD, bool isBatch){
+        public static async Task<IAgroManager<GeographyPoint>> AgroManager(string ObjectIdAAD, bool isBatch){
             var email = new Email("aresa.notificaciones@gmail.com", "Aresa2019");
             var uploadImage = new UploadImage(Environment.GetEnvironmentVariable("StorageConnectionStrings", EnvironmentVariableTarget.Process));
             var weatherApi = new WeatherApi(Environment.GetEnvironmentVariable("KeyWeatherApi", EnvironmentVariableTarget.Process));

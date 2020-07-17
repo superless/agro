@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using trifenix.connect.agro.index_model.props;
 using trifenix.connect.mdm.entity_model;
 using trifenix.connect.mdm.enums;
 using trifenix.connect.mdm.ts_model;

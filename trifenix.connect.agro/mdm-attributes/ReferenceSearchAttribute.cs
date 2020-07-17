@@ -24,9 +24,9 @@ namespace trifenix.connect.agro.mdm_attributes
             Visible = visible;
         }
 
-        public ReferenceSearchAttribute(EntityRelated index, EntityRelated bypass, bool local = false, bool visible = true) : base()
+        public ReferenceSearchAttribute(EntityRelated index, EntityRelated bypass, bool visible = true) : base()
         {
-            KindIndex = (int)(local ? KindEntityProperty.LOCAL_REFERENCE : KindEntityProperty.REFERENCE);
+            KindIndex = (int)KindEntityProperty.REFERENCE;
             Index = (int)index;
             Visible = visible;
             Bypass = (int)bypass;

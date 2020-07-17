@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Spatial;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using trifenix.agro.db.exceptions;
@@ -16,7 +17,7 @@ using trifenix.connect.mdm.enums;
 namespace trifenix.agro.external.operations.entities.main
 {
     public class PhenologicalEventOperations : MainOperation<PhenologicalEvent, PhenologicalEventInput>, IGenericOperation<PhenologicalEvent, PhenologicalEventInput> {
-        public PhenologicalEventOperations(IMainGenericDb<PhenologicalEvent> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<PhenologicalEvent> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
+        public PhenologicalEventOperations(IMainGenericDb<PhenologicalEvent> repo, IExistElement existElement, IAgroSearch<GeographyPoint> search, ICommonDbOperations<PhenologicalEvent> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
 
         public override async Task Validate(PhenologicalEventInput phenologicalEventInput) {
             await base.Validate(phenologicalEventInput);

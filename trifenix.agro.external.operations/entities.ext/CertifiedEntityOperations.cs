@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Spatial;
+using System;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.common;
@@ -14,7 +15,7 @@ using trifenix.connect.mdm.enums;
 namespace trifenix.agro.external.operations.entities.ext
 {
     public class CertifiedEntityOperations : MainOperation<CertifiedEntity, CertifiedEntityInput>, IGenericOperation<CertifiedEntity, CertifiedEntityInput> {
-        public CertifiedEntityOperations(IMainGenericDb<CertifiedEntity> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<CertifiedEntity> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
+        public CertifiedEntityOperations(IMainGenericDb<CertifiedEntity> repo, IExistElement existElement, IAgroSearch<GeographyPoint> search, ICommonDbOperations<CertifiedEntity> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
 
         public Task Remove(string id) {
             throw new NotImplementedException();

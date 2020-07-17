@@ -1,4 +1,5 @@
 ﻿using Microsoft.Azure.Documents.Spatial;
+using Microsoft.Spatial;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -29,7 +30,7 @@ namespace trifenix.agro.external.operations.entities.events
         private readonly IUploadImage uploadImage;
         private readonly IWeatherApi weather;
 
-        public NotificationEventOperations(IMainGenericDb<NotificationEvent> repo, IExistElement existElement, IAgroSearch search, ICommonQueries commonQueries, IEmail email, IUploadImage uploadImage, IWeatherApi weather, ICommonDbOperations<NotificationEvent> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
+        public NotificationEventOperations(IMainGenericDb<NotificationEvent> repo, IExistElement existElement, IAgroSearch<GeographyPoint> search, ICommonQueries commonQueries, IEmail email, IUploadImage uploadImage, IWeatherApi weather, ICommonDbOperations<NotificationEvent> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
             this.commonQueries = commonQueries;
             this.email = email;
             this.uploadImage = uploadImage;

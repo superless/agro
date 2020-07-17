@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Spatial;
+using System;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.common;
@@ -16,7 +17,7 @@ namespace trifenix.agro.external.operations.entities.main
 
     public class TractorOperations : MainOperation<Tractor, TractorInput>, IGenericOperation<Tractor, TractorInput> {
 
-        public TractorOperations(IMainGenericDb<Tractor> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Tractor> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
+        public TractorOperations(IMainGenericDb<Tractor> repo, IExistElement existElement, IAgroSearch<GeographyPoint> search, ICommonDbOperations<Tractor> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
 
         public Task Remove(string id) {
             throw new NotImplementedException();

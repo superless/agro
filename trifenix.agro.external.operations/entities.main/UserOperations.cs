@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Spatial;
+using System;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.common;
@@ -19,7 +20,7 @@ namespace trifenix.agro.external.operations.entities.main
 
         private readonly IGraphApi graphApi;
 
-        public UserOperations(IMainGenericDb<UserApplicator> repo, IExistElement existElement, IAgroSearch search, IGraphApi graphApi, ICommonDbOperations<UserApplicator> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
+        public UserOperations(IMainGenericDb<UserApplicator> repo, IExistElement existElement, IAgroSearch<GeographyPoint> search, IGraphApi graphApi, ICommonDbOperations<UserApplicator> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
             this.graphApi = graphApi;
         }
 

@@ -1,4 +1,5 @@
 ﻿using Cosmonaut;
+using Microsoft.Spatial;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,17 +31,17 @@ using trifenix.connect.agro.model;
 using trifenix.connect.agro.model_input;
 
 namespace trifenix.agro.external.operations {
-    public class AgroManager : IAgroManager {
+    public class AgroManager : IAgroManager<GeographyPoint> {
 
         private readonly AgroDbArguments Arguments;
         private readonly IEmail _email;
         private readonly IUploadImage _uploadImage;
         private readonly IWeatherApi _weatherApi;
-        private readonly IAgroSearch _searchServiceInstance;
+        private readonly IAgroSearch<GeographyPoint> _searchServiceInstance;
         private readonly string UserId;
         private readonly bool isBatch;
 
-        public AgroManager(AgroDbArguments arguments, IEmail email, IUploadImage uploadImage, IWeatherApi weatherApi, IAgroSearch searchServiceInstance, string ObjectIdAAD, bool _isBatch) {
+        public AgroManager(AgroDbArguments arguments, IEmail email, IUploadImage uploadImage, IWeatherApi weatherApi, IAgroSearch<GeographyPoint> searchServiceInstance, string ObjectIdAAD, bool _isBatch) {
             Arguments = arguments;
             _email = email;
             _uploadImage = uploadImage;
@@ -56,7 +57,7 @@ namespace trifenix.agro.external.operations {
 
         public ICosmosStore<EntityContainer> BatchStore => new CosmosStore<EntityContainer>(new CosmosStoreSettings(Arguments.NameDb, Arguments.EndPointUrl, Arguments.PrimaryKey));
 
-        public IAgroSearch Search => _searchServiceInstance;
+        public IAgroSearch<GeographyPoint> Search => _searchServiceInstance;
 
         public IExistElement ExistsElements => isBatch ? (IExistElement)new BatchExistsElements(Arguments) : new CosmosExistElement(Arguments);
 
@@ -123,13 +124,13 @@ namespace trifenix.agro.external.operations {
         public IGenericOperation<Comment, CommentInput> Comments => new CommentOperation(GetMainDb<Comment>(), ExistsElements, _searchServiceInstance, GetCommonDbOp<Comment>(), Validators);
 
         public dynamic GetOperationByInputType(Type InputType) {
-            var operationsProps = typeof(IAgroManager).GetProperties().Where(prop => prop.PropertyType.Name.StartsWith("IGenericOperation`2")).ToList();
+            var operationsProps = typeof(IAgroManager<GeographyPoint>).GetProperties().Where(prop => prop.PropertyType.Name.StartsWith("IGenericOperation`2")).ToList();
             var genProp = operationsProps.FirstOrDefault(prop => prop.PropertyType.GenericTypeArguments[1].Equals(InputType));
             return (dynamic)genProp.GetValue(this);
         }
 
         public dynamic GetOperationByDbType(Type DbType) {
-            var operationsProps = typeof(IAgroManager).GetProperties().Where(prop => prop.PropertyType.Name.StartsWith("IGenericOperation`2")).ToList();
+            var operationsProps = typeof(IAgroManager<GeographyPoint>).GetProperties().Where(prop => prop.PropertyType.Name.StartsWith("IGenericOperation`2")).ToList();
             var genProp = operationsProps.FirstOrDefault(prop => prop.PropertyType.GenericTypeArguments[0].Equals(DbType));
             return (dynamic)genProp?.GetValue(this);
         }

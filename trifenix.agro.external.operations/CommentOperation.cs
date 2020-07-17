@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.Spatial;
+using System;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.interfaces.common;
 using trifenix.agro.external.interfaces;
 using trifenix.agro.search.interfaces;
-using trifenix.agro.search.model;
 using trifenix.agro.validator.interfaces;
 using trifenix.connect.agro.model;
 using trifenix.connect.agro.model_input;
@@ -18,20 +17,11 @@ namespace trifenix.agro.external.operations.entities
 
     public class CommentOperation : MainOperation<Comment, CommentInput>, IGenericOperation<Comment, CommentInput> {
 
-        public CommentOperation(IMainGenericDb<Comment> repo, IExistElement existElement, IAgroSearch search, ICommonDbOperations<Comment> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
+        public CommentOperation(IMainGenericDb<Comment> repo, IExistElement existElement, IAgroSearch<GeographyPoint> search, ICommonDbOperations<Comment> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
 
         public async Task<ExtPostContainer<string>> Save(Comment comment) {
             await repo.CreateUpdate(comment);
-            search.AddElements(new List<CommentSearch> {
-                new CommentSearch {
-                    IdUser = comment.IdUser,
-                    Comment = comment.Commentary,
-                    Created = DateTime.Now,
-                    EntityIndex = comment.EntityIndex,
-                    Id = comment.Id,
-                    EntityId = comment.EntityId
-                }
-            });
+            search.AddDocument(comment);
             return new ExtPostContainer<string> {
                 IdRelated = comment.Id,
                 MessageResult = ExtMessageResult.Ok

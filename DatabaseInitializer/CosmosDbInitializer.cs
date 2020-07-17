@@ -1,5 +1,6 @@
 ﻿using Cosmonaut.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Spatial;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -24,9 +25,9 @@ namespace trifenix.agro.authentication.operations
 
         private readonly Assembly Assembly_Inputs;
         private readonly Assembly Assembly_Entities;
-        private readonly IAgroManager Manager;
+        private readonly IAgroManager<GeographyPoint> Manager;
 
-        public CosmosDbInitializer(IAgroManager manager, string assembly_Inputs, string assembly_Entities) {
+        public CosmosDbInitializer(IAgroManager<GeographyPoint> manager, string assembly_Inputs, string assembly_Entities) {
             Manager = manager;
             Assembly_Inputs = !string.IsNullOrWhiteSpace(assembly_Inputs) ? Assembly.Load(assembly_Inputs) : typeof(BusinessNameInput).Assembly;
             Assembly_Entities = !string.IsNullOrWhiteSpace(assembly_Entities) ? Assembly.Load(assembly_Entities) : typeof(BusinessName).Assembly;

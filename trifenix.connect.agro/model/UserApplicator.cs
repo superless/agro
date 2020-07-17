@@ -1,5 +1,4 @@
-﻿
-using trifenix.connect.agro.index_model.props;
+﻿using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
 
 namespace trifenix.connect.agro.model

@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="util\**" />
+    <EmbeddedResource Remove="util\**" />
+    <None Remove="util\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.Azure.Search" Version="10.1.0" />
   </ItemGroup>
 
@@ -15,6 +21,7 @@
     <ProjectReference Include="..\trifenix.agro.enums\trifenix.agro.enums.csproj" />
     <ProjectReference Include="..\trifenix.agro.external.interfaces\trifenix.agro.external.interfaces.csproj" />
     <ProjectReference Include="..\trifenix.agro.search.model\trifenix.agro.search.model.csproj" />
+    <ProjectReference Include="..\trifenix.connect.mdm.az-search\trifenix.connect.mdm.az-search.csproj" />
     <ProjectReference Include="..\trifenix.connect\trifenix.connect.csproj" />
   </ItemGroup>
 
@@ -31,10 +38,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>SearchQueryRes.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="util\" />
   </ItemGroup>
 
 </Project>

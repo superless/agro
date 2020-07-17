@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Spatial;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces;
@@ -22,7 +23,7 @@ namespace trifenix.agro.external.operations.entities.ext
         private readonly IGenericOperation<Dose, DosesInput> dosesOperation;
         private readonly ICommonQueries queries;
 
-        public ProductOperations(IMainGenericDb<Product> repo, IExistElement existElement, IAgroSearch search, IGenericOperation<Dose, DosesInput> dosesOperation, ICommonDbOperations<Product> commonDb, ICommonQueries queries, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
+        public ProductOperations(IMainGenericDb<Product> repo, IExistElement existElement, IAgroSearch<GeographyPoint> search, IGenericOperation<Dose, DosesInput> dosesOperation, ICommonDbOperations<Product> commonDb, ICommonQueries queries, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
             this.dosesOperation = dosesOperation;
             this.queries = queries;
         }

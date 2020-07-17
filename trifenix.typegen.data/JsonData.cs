@@ -1,38 +1,42 @@
-﻿using res.core;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
-using trifenix.agro.attr;
-using trifenix.agro.db.model;
-using trifenix.agro.enums.searchModel;
-using trifenix.agro.model.external.Input;
-using trifenix.agro.search.model.reflection;
-using trifenix.agro.search.model.ts;
-using trifenix.agro.search.operations.util;
+using trifenix.connect.agro.index_model.props;
+using trifenix.connect.agro.model;
+using trifenix.connect.mdm.enums;
+using trifenix.connect.mdm.resources;
+using trifenix.connect.mdm.ts_model;
+using trifenix.connect.util;
 using TypeGen.Core.Extensions;
-using static trifenix.agro.util.AttributesExtension;
 
-namespace trifenix.typegen.data {
+namespace trifenix.typegen.data
+{
     public static class JsonData {
-        public static EntityMetadata GetModel(IEnumerable<PropertySearchInfo> propertySearchInfos, int index) {
-            var propByRelatedAndIndex = propertySearchInfos.GroupBy(s => new {  s.Related, s.IndexClass, s.Index }).Select(s => s.FirstOrDefault());
-            var enumEmun = GetDescription(typeof(EnumRelated));
-            var modelInfo = ResourceExtension.ResourceModel(KindProperty.REFERENCE, propByRelatedAndIndex.FirstOrDefault().IndexClass);
+
+
+
+
+        public static EntityMetadata GetModel(PropertySearchInfo propertySearchInfo, IMdmDocumentation doc, int index) {
+            
+            var enumEmun = Mdm.Reflection.GetDescription(typeof(EnumRelated));
+
+            var modelInfo = doc.GetInfoFromEntity(propertySearchInfo.IndexClass);
+
             var modelDictionary = new EntityMetadata() {
                 Index = index,
                 Description = modelInfo.Description,
                 ShortName = modelInfo.ShortName,
                 Title = modelInfo.Title,
-                BoolData = GetDictionaryFromRelated(propByRelatedAndIndex, KindProperty.BOOL),
-                StringData = GetDictionaryFromRelated(propByRelatedAndIndex, KindProperty.STR),
-                DateData = GetDictionaryFromRelated(propByRelatedAndIndex, KindProperty.DATE),
-                DoubleData = GetDictionaryFromRelated(propByRelatedAndIndex, KindProperty.DBL),
-                EnumData = GetEnumDictionaryFromRelated(propByRelatedAndIndex, enumEmun),
-                GeoData = GetDictionaryFromRelated(propByRelatedAndIndex, KindProperty.GEO),
-                NumData = GetDictionaryFromRelated(propByRelatedAndIndex, KindProperty.NUM32),
-                relData = GetDictionaryFromRelated(propByRelatedAndIndex, KindProperty.REFERENCE),
+                BoolData = GetDictionaryFromRelated(propertySearchInfo, KindProperty.BOOL),
+                StringData = GetDictionaryFromRelated(propertySearchInfo, KindProperty.STR),
+                DateData = GetDictionaryFromRelated(propertySearchInfo, KindProperty.DATE),
+                DoubleData = GetDictionaryFromRelated(propertySearchInfo, KindProperty.DBL),
+                EnumData = GetEnumDictionaryFromRelated(propertySearchInfo, enumEmun),
+                GeoData = GetDictionaryFromRelated(propertySearchInfo, KindProperty.GEO),
+                NumData = GetDictionaryFromRelated(propertySearchInfo, KindProperty.NUM32),
+                relData = GetDictionaryFromRelated(propertySearchInfo, KindProperty.REFERENCE),
 
             };
             var suggestions = GetDictionaryFromRelated(propByRelatedAndIndex, KindProperty.SUGGESTION);
