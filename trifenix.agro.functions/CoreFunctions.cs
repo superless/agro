@@ -17,16 +17,17 @@ using trifenix.agro.authentication.interfaces;
 using trifenix.agro.authentication.operations;
 using trifenix.agro.db.applicationsReference.agro.Common;
 using trifenix.agro.db.exceptions;
-using trifenix.agro.enums.model;
 using trifenix.agro.external.operations.helper;
 using trifenix.agro.functions.Helper;
 using trifenix.agro.functions.mantainers;
 using trifenix.agro.functions.settings;
-using trifenix.agro.model.external;
-using trifenix.agro.model.external.Input;
 using trifenix.agro.servicebus.operations;
+using trifenix.connect.agro.index_model.enums;
+using trifenix.connect.agro.model_input;
+using trifenix.connect.mdm.containers;
 
-namespace trifenix.agro.functions {
+namespace trifenix.agro.functions
+{
 
     /// <summary>
     /// Funciones 

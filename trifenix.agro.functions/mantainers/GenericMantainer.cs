@@ -1,25 +1,27 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Spatial;
 using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Threading.Tasks;
 using trifenix.agro.db;
-using trifenix.agro.enums.input;
 using trifenix.agro.external.interfaces;
 using trifenix.agro.functions.Helper;
-using trifenix.agro.model.external;
-using trifenix.agro.model.external.Input;
 using trifenix.agro.servicebus.operations;
+using trifenix.connect.agro.model_input;
+using trifenix.connect.mdm.containers;
+using trifenix.connect.mdm.enums;
 
-namespace trifenix.agro.functions.mantainers {
+namespace trifenix.agro.functions.mantainers
+{
 
     public static class GenericMantainer {
 
         private static readonly ServiceBus ServiceBus = new ServiceBus(Environment.GetEnvironmentVariable("ServiceBusConnectionString", EnvironmentVariableTarget.Process), Environment.GetEnvironmentVariable("QueueName", EnvironmentVariableTarget.Process));
 
-        public static async Task<ActionResultWithId> SendInternalHttp<DbElement, InputElement>(HttpRequest req, ILogger log, Func<IAgroManager, IGenericOperation<DbElement, InputElement>> repo, string id = null) where DbElement : DocumentBase where InputElement : InputBase {
+        public static async Task<ActionResultWithId> SendInternalHttp<DbElement, InputElement>(HttpRequest req, ILogger log, Func<IAgroManager<GeographyPoint>, IGenericOperation<DbElement, InputElement>> repo, string id = null) where DbElement : DocumentBase where InputElement : InputBase {
             var claims = await Auth.Validate(req);
             if (claims == null)
                 return new ActionResultWithId {
@@ -30,7 +32,7 @@ namespace trifenix.agro.functions.mantainers {
             return await HttpProcessing(req, log, ObjectIdAAD, repo, id);
         }
 
-        public static async Task<ActionResultWithId> HttpProcessing<DbElement, InputElement>(HttpRequest req, ILogger log, string ObjectIdAAD, Func<IAgroManager, IGenericOperation<DbElement, InputElement>> repo, string id = null) where DbElement : DocumentBase where InputElement : InputBase {
+        public static async Task<ActionResultWithId> HttpProcessing<DbElement, InputElement>(HttpRequest req, ILogger log, string ObjectIdAAD, Func<IAgroManager<GeographyPoint>, IGenericOperation<DbElement, InputElement>> repo, string id = null) where DbElement : DocumentBase where InputElement : InputBase {
             var body = await new StreamReader(req.Body).ReadToEndAsync();
             var method = req.Method.ToLower();
             var inputElement = ConvertToElement<InputElement>(body, id, method);
@@ -53,7 +55,7 @@ namespace trifenix.agro.functions.mantainers {
             return element;
         }
 
-        public static async Task<ActionResultWithId> HttpProcessing<DbElement, InputElement>(HttpRequest req, ILogger log, string ObjectIdAAD, Func<IAgroManager, IGenericOperation<DbElement, InputElement>> repo, InputElement element) where DbElement : DocumentBase where InputElement : InputBase {
+        public static async Task<ActionResultWithId> HttpProcessing<DbElement, InputElement>(HttpRequest req, ILogger log, string ObjectIdAAD, Func<IAgroManager<GeographyPoint>, IGenericOperation<DbElement, InputElement>> repo, InputElement element) where DbElement : DocumentBase where InputElement : InputBase {
             var method = req.Method.ToLower();
             switch (method) {
                 case "get":
@@ -78,32 +80,7 @@ namespace trifenix.agro.functions.mantainers {
                         Id = null,
                         JsonResult = new JsonResult("Operacion en cola.")
                     };
-                    //try {
-                    //    saveReturn = await repo.SaveInput(element, false);
-                    //    await recordAcitvity.SaveInput(new UserActivityInput {
-                    //        Action = method.Equals("post") ? UserActivityAction.CREATE : UserActivityAction.MODIFY,
-                    //        Date = DateTime.Now,
-                    //        EntityName = ((DbElement)Activator.CreateInstance(typeof(DbElement))).CosmosEntityName,
-                    //        EntityId = saveReturn.IdRelated
-                    //    }, false);
-                    //}
-                    //catch (Exception ex) {
-                    //    var extPostError = new ExtPostErrorContainer<string> {
-                    //        InternalException = ex,
-                    //        Message = ex.Message,
-                    //        MessageResult = ExtMessageResult.Error
-                    //    };
-                    //    if (ex is Validation_Exception)
-                    //        extPostError.ValidationMessages = ((Validation_Exception)ex).ErrorMessages;
-                    //    return new ActionResultWithId {
-                    //        Id = null,
-                    //        JsonResult = ContainerMethods.GetJsonPostContainer(extPostError, log)
-                    //    };
-                    //}
-                    //return new ActionResultWithId {
-                    //    Id = saveReturn.IdRelated,
-                    //    JsonResult = ContainerMethods.GetJsonPostContainer(saveReturn, log)
-                    //};
+                    
             }
         }
 

@@ -45,7 +45,7 @@ namespace trifenix.connect.agro.model_input
 
         [ReferenceSearch(EntityRelated.POLLINATOR,EntityRelated.POLLINATOR)]
         [Reference(typeof(Variety))]
-        public Pollinator IdPollinator { get; set; }
+        public string IdPollinator { get; set; }
 
 
         [ReferenceSearch(EntityRelated.ROOTSTOCK)]
