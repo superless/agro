@@ -20,6 +20,7 @@ using trifenix.connect.mdm.az_search;
 using trifenix.connect.mdm.entity_model;
 using trifenix.connect.mdm.enums;
 using trifenix.connect.mdm_attributes;
+using trifenix.connect.search_mdl;
 using trifenix.connect.util;
 
 namespace trifenix.agro.search.operations
@@ -230,181 +231,10 @@ namespace trifenix.agro.search.operations
             DeleteElements(query);
         }
 
-
-        
-
-
-
-        /// <summary>
-        /// Obtiene 
-        /// </summary>
-        /// <param name="attribute"></param>
-        /// <returns></returns>
-        public IEnumerable<RelatedId> GetArrayOfLocalRelatedIds(KeyValuePair<BaseIndexAttribute, object> attribute) {
-            var typeValue = attribute.Value.GetType();
-            if (typeValue == typeof(IEnumerable<string>))
-                return ((IEnumerable<string>)attribute.Value).Select(s => new RelatedId { index = attribute.Key.Index, id = (string)s });
-            else
-                return new List<RelatedId>() { new RelatedId { index = attribute.Key.Index, id = (string)attribute.Value } };
-        }
-
-        public IEnumerable<RelatedId> GetArrayOfRelatedIds(KeyValuePair<BaseIndexAttribute, object> attribute) {
-            if (attribute.Value.IsEnumerable()) {
-                var relateds = new List<RelatedId>();
-                foreach (var item in (IEnumerable<string>)attribute.Value)
-                    relateds.Add(new RelatedId { index = attribute.Key.Index, id = item });
-                return relateds;
-            }
-            else
-                return new List<RelatedId>() { new RelatedId { index = attribute.Key.Index, id = (string)attribute.Value } };
-        }
-        
-        private IEnumerable<BaseProperty<T>> GetArrayOfElements<T>(KeyValuePair<BaseIndexAttribute, object> attribute) {
-            var typeValue = attribute.Value.GetType();
-            if (attribute.Value.IsEnumerable())
-                return ((IEnumerable<T>)attribute.Value).Select(s => GetProperty<T>(attribute.Key.Index, s));
-            else
-                return new List<BaseProperty<T>> { GetProperty<T>(attribute.Key.Index, attribute.Value)};
-        }
-
-        private IEnumerable<BaseProperty<T>> GetPropertiesObjects<T>(KindProperty related, Dictionary<BaseIndexAttribute, object> elements) =>
-            elements.Where(s => !s.Key.IsEntity  && s.Key.KindIndex == (int)related).SelectMany(s => GetArrayOfElements<T>(s)).ToArray();
-
-        private RelatedId[] GetReferences(Dictionary<BaseIndexAttribute, object> elements) =>
-            elements.Where(s => s.Key.IsEntity).SelectMany(GetArrayOfRelatedIds).ToArray();
-
-        
-        private Num32Property[] GetNumProps(Dictionary<BaseIndexAttribute, object> values) =>
-            GetPropertiesObjects<int>(KindProperty.NUM32, values).Select(s => new Num32Property { 
-                index = s.index,
-                value = s.value
-            }).ToArray();
-
-        private DblProperty[] GetDblProps(Dictionary<BaseIndexAttribute, object> values) =>
-            GetPropertiesObjects<double>(KindProperty.DBL, values).Select(s => new DblProperty {
-                index = s.index,
-                value = s.value
-            }).ToArray();
-
-        private DtProperty[] GetDtProps(Dictionary<BaseIndexAttribute, object> values) =>
-            GetPropertiesObjects<DateTime>(KindProperty.DATE, values).Select(s => new DtProperty {
-                index = s.index,
-                value = s.value
-            }).ToArray();
-
-        private EnumProperty[] GetEnumProps(Dictionary<BaseIndexAttribute, object> values) =>
-            GetPropertiesObjects<int>(KindProperty.ENUM, values).Select(s => new EnumProperty {
-                index = s.index,
-                value = s.value
-            }).ToArray();
-
-        private BoolProperty[] GetBoolProps(Dictionary<BaseIndexAttribute, object> values) =>
-            GetPropertiesObjects<bool>(KindProperty.BOOL, values).Select(s => new BoolProperty {
-                index = s.index,
-                value = s.value
-            }).ToArray();
-
-        private GeoProperty[] GetGeoProps(Dictionary<BaseIndexAttribute, object> values) =>
-            GetPropertiesObjects<Point>(KindProperty.GEO, values).Select(s => new GeoProperty {
-                index = s.index,
-                value = GeographyPoint.Create(s.value.Position.Latitude, s.value.Position.Longitude)
-            }).ToArray();
-
-        private Num64Property[] GetNum64Props(Dictionary<BaseIndexAttribute, object> values) =>
-            GetPropertiesObjects<long>(KindProperty.NUM64, values).Select(s => new Num64Property {
-                index = s.index,
-                value = s.value
-            }).ToArray();
-
-        private StrProperty[] GetStrProps(Dictionary<BaseIndexAttribute, object> values) =>
-          GetPropertiesObjects<string>(KindProperty.STR, values).Select(s => new StrProperty {
-              index = s.index,
-              value = s.value
-          }).ToArray();
-
-
-        private EntitySearch GetEntitySearch(object obj, int index, string id) {
-
-            // Código modificado para soportar que en vez de enviar un entity search, envie solo uno, dado un cambio en el requerimiento, donde se define un solo indice por entidad y no una colección.
-            var entitySearch = new EntitySearch {
-                id = id,
-                index = index,
-                created = DateTime.Now
-            };
-            var values = Mdm.Reflection.Attributes.GetPropertiesByAttributeWithValue(obj);
-            if (!values.Any())
-                return null;
-
-            entitySearch.num32 = GetNumProps(values);
-            entitySearch.dbl = GetDblProps(values);
-            entitySearch.dt = GetDtProps(values);
-            entitySearch.enm = GetEnumProps(values);
-            entitySearch.bl = GetBoolProps(values);
-            entitySearch.geo = GetGeoProps(values);
-            entitySearch.num64 = GetNum64Props(values);
-            entitySearch.str = GetStrProps(values);
-            entitySearch.sug = GetStrProps(values);
-            entitySearch.rel = GetReferences(values);
-            var valuesWithoutProperty = Mdm.Reflection.Attributes.GetPropertiesWithoutAttributeWithValues(obj);
-
-            foreach (var item in valuesWithoutProperty) {
-                // porque llama a barrack solamente
-                var value = GetEntitySearch(item, 0, string.Empty);
-                entitySearch.num32 = entitySearch.num32.Union(value.num32).ToArray();
-                entitySearch.dbl = entitySearch.dbl.Union(value.dbl).ToArray();
-                entitySearch.dt = entitySearch.dt.Union(value.dt).ToArray();
-                entitySearch.enm = entitySearch.enm.Union(value.enm).ToArray();
-                entitySearch.geo = entitySearch.geo.Union(value.geo).ToArray();
-                entitySearch.num64 = entitySearch.num64.Union(value.num64).ToArray();
-                entitySearch.str = entitySearch.str.Union(value.str).ToArray();
-                entitySearch.bl = entitySearch.bl.Union(value.bl).ToArray();
-                entitySearch.sug = entitySearch.sug.Union(value.sug).ToArray();
-                entitySearch.rel = entitySearch.rel.Union(value.rel).ToArray();
-            }
-            var localReference = values.Where(s => s.Key.IsEntity);
-            if (localReference.Any()) {
-                foreach (var item in localReference) {
-                    IEnumerable<object> collection = item.Value.IsEnumerable() ? (IEnumerable<object>)item.Value : new List<object> { item.Value };
-                    foreach (var childReferences in collection) {
-                        var guid = Guid.NewGuid().ToString("N");
-                        var localEntities = GetEntitySearch(childReferences, item.Key.Index, guid);
-                        var listReferences = entitySearch.rel.ToList();
-                        listReferences.Add(new RelatedId { id = guid, index = item.Key.Index });
-                        entitySearch.rel = listReferences.ToArray();
-                        return localEntities;
-                    }
-                }
-            }
-            
-            return entitySearch;
-        }
-        public EntitySearch GetEntitySearch<T>(T entity)  where T : DocumentBase {
-            var references = GetAttributes<EntityIndexAttribute>(typeof(T));
-            if (references == null || !references.Any())
-                return null;
-            return GetEntitySearch(entity, references.First().Index, entity.Id);
-        }
-
-        public EntitySearch GetEntitySearchByInput<T>(T entity) where T : InputBase {
-            var references = GetAttributes<EntityIndexAttribute>(typeof(T));
-            if (references == null || !references.Any())
-                return null;
-            return GetEntitySearch(entity, references.First().Index, entity.Id);
-        }
-
-        
-
-        
-
-
-        
-
-
-
         
 
         public void AddDocument<T>(T document) where T : DocumentBase {
-            AddElements(new List<EntitySearch> { GetEntitySearch(document) });
+            AddElements(Mdm.GetEntitySearch(new Implements(), document, typeof(EntitySearch)).Cast<EntitySearch>().ToList());
         }
 
         public void EmptyIndex<IndexSearch>(string indexName) {
@@ -435,6 +265,42 @@ namespace trifenix.agro.search.operations
             elements?.ForEach(element => AddDocument(element));
         }
 
+        public EntitySearch[] GetEntitySearch<T>(T model) where T : DocumentBase
+        {
+            return Mdm.GetEntitySearch(new Implements(), model, typeof(EntitySearch)).Cast<EntitySearch>().ToArray();
+        }
+
+        public EntitySearch[] GetEntitySearchByInput<T>(T model) where T : InputBase
+        {
+            return Mdm.GetEntitySearch(new Implements(), model, typeof(EntitySearch)).Cast<EntitySearch>().ToArray();
+        }
+    }
+
+    public class Implements : Implements<GeographyPoint>
+    {
+        public Type num32 => typeof(Num32Property);
+
+        public Type dbl => typeof(DblProperty);
+
+        public Type bl => typeof(BoolProperty);
+
+        public Type num64 => typeof(Num64Property);
+
+        public Type dt => typeof(DtProperty);
+
+        public Type enm => typeof(EnumProperty);
+
+        public Type rel => typeof(RelatedId);
+
+        public Type str => typeof(StrProperty);
+
+        public Type sug => typeof(StrProperty);
+
+        public Type geo => typeof(GeoProperty);
+
+
+        // refactorizar.
+        public Func<object, GeographyPoint> GeoObjetoToGeoSearch => (ob)=>GeographyPoint.Create(0,0);
     }
 
 }
