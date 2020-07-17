@@ -12,6 +12,8 @@ namespace trifenix.agro.db.interfaces {
         Task<T> GetEntity(string uniqueId);
         IQueryable<T> GetEntities();
 
+        Task RenewClientIds();
+
         Task DeleteEntity(string id);
 
     }

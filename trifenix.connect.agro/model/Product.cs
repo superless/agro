@@ -6,15 +6,14 @@ using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
 using trifenix.connect.mdm.enums;
 
-namespace trifenix.connect.agro.model
-{
+namespace trifenix.connect.agro.model {
 
     /// <summary>
     /// Producto usado por las órdenes
     /// </summary>
     [SharedCosmosCollection("agro", "Product")]
     [ReferenceSearchHeader(EntityRelated.PRODUCT, Kind = EntityKind.CUSTOM_ENTITY, PathName = "products")]
-    public class Product : DocumentBaseName, ISharedCosmosEntity {
+    public class Product : DocumentBaseName<int>, ISharedCosmosEntity {
 
 
         /// <summary>
@@ -29,6 +28,11 @@ namespace trifenix.connect.agro.model
         [SuggestSearch(StringRelated.GENERIC_NAME)]
         public override string Name { get; set; }
 
+        /// <summary>
+        /// Identificador visual de producto
+        /// </summary>
+        [AutoNumericSearch(NumRelated.GENERIC_CORRELATIVE)]
+        public override int ClientId { get; set; }
 
         /// <summary>
         /// Ingrediente activo.

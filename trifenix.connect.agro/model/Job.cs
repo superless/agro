@@ -5,16 +5,15 @@ using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
 using trifenix.connect.mdm.enums;
 
-namespace trifenix.connect.agro.model
-{
+namespace trifenix.connect.agro.model {
 
     [SharedCosmosCollection("agro", "Job")]
     [ReferenceSearchHeader(EntityRelated.JOB, PathName = "jobs", Kind = EntityKind.ENTITY)]
     [GroupMenu(MenuEntityRelated.MANTENEDORES, PhisicalDevice.ALL, SubMenuEntityRelated.USUARIOS)]
-    public class Job : DocumentBaseName<long>, ISharedCosmosEntity
-    {
+    public class Job : DocumentBaseName<long>, ISharedCosmosEntity {
+
         /// <summary>
-        /// Identificador visual de la entidad certificadora
+        /// Identificador visual de cargo
         /// </summary>
         [AutoNumericSearch(NumRelated.GENERIC_CORRELATIVE)]
         public override long ClientId { get; set; }
@@ -23,7 +22,6 @@ namespace trifenix.connect.agro.model
         /// identificador
         /// </summary>
         public override string Id { get; set; }
-
 
         /// <summary>
         /// nombre del cargo.

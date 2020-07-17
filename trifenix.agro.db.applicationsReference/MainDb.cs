@@ -1,15 +1,15 @@
 ﻿using Cosmonaut;
+using Cosmonaut.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using trifenix.agro.attr;
 using trifenix.agro.db.exceptions;
 using trifenix.agro.db.interfaces;
 using trifenix.agro.db.model;
 using trifenix.agro.util;
-using trifenix.connect.agro.mdm_attributes;
-using trifenix.connect.agro.model;
 
 namespace trifenix.agro.db.applicationsReference
 {
@@ -38,8 +38,35 @@ namespace trifenix.agro.db.applicationsReference
                 var dependentElements = (IEnumerable<DocumentBase<int>>)await Store.QueryMultipleAsync(query);
                 castedEntity.ClientId = dependentElements.Max(element => (int?)element.ClientId) ?? 0 + 1;
             } else
-                castedEntity.ClientId = Store.Query().Max(element => ((DocumentBase<int>)(object)element).ClientId) + 1;
+                castedEntity.ClientId = Store.Query().Max(element => (int?)((DocumentBase<int>)(object)element).ClientId) ?? 0 + 1;
             return castedEntity;
+        }
+
+        public async Task RenewClientIds() {
+            var prop_ClientId = typeof(T).GetProperty("ClientId"); 
+            if(prop_ClientId != null) {
+                dynamic entities = await GetEntities().ToListAsync();
+                var autoNumericSearchAttribute = prop_ClientId.GetAttribute<AutoNumericSearchAttribute>();
+                bool numerateByDependence = autoNumericSearchAttribute.Dependant.HasValue;
+                if (numerateByDependence) {
+                    var dictionary = new Dictionary<string,int>();
+                    var prop_referenceToIndependent = typeof(T).GetProperties().FirstOrDefault(prop => Attribute.IsDefined(prop, typeof(ReferenceSearchAttribute)) && prop.GetAttribute<ReferenceSearchAttribute>().Index == (int)autoNumericSearchAttribute.Dependant);
+                    foreach (var entity in entities) {
+                        var idIndependent = (string)prop_referenceToIndependent?.GetValue(entity);
+                        if(dictionary.TryGetValue(idIndependent, out int max)) {
+                            dictionary[idIndependent] = ++max;
+                            entity.ClientId = max;
+                        } else {
+                            dictionary.Add(idIndependent,1);
+                            entity.ClientId = 1;
+                        }
+                    }
+                } else {
+                    for (int index = 1; index <= entities.Count; index++)
+                        entities[index-1].ClientId = index;
+                }
+                await Store.UpsertRangeAsync((IEnumerable<T>)entities);
+            }
         }
 
         public async Task<string> CreateUpdate(T entity) {
@@ -65,10 +92,14 @@ namespace trifenix.agro.db.applicationsReference
         }
 
         public async Task<T> GetEntity(string id) => await Store.FindAsync(id);
-       
+        //{
+        //    var entity = (T)Activator.CreateInstance(typeof(T));
+        //    return await Store.FindAsync(uniqueId, entity.CosmosEntityName);
+        //}
 
         public async Task DeleteEntity(string id) {
-            
+            //var entity = (T)Activator.CreateInstance(typeof(T));
+            //await Store.RemoveByIdAsync(id, entity.CosmosEntityName);
             await Store.RemoveByIdAsync(id);
         } 
 

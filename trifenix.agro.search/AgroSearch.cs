@@ -7,6 +7,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using trifenix.agro.db;
 using trifenix.agro.enums.query;
@@ -121,11 +122,15 @@ namespace trifenix.agro.search.operations
         /// </summary>
         /// <typeparam name="T">Esto debería ser EntitySearch</typeparam>
         /// <param name="elements"></param>
-        public void AddElement(EntitySearch element)
-        {
+        public void AddElement(EntitySearch element) {
             OperationElements(new List<EntitySearch> { element}, SearchOperation.Add);
         }
 
+        //public async Task DeleteElements(IAgroManager agro, Type dbType) {
+        //    var extGetContainer = await agro.GetOperationByDbType(dbType).GetElements();
+        //    var elements = extGetContainer.Result as List<DocumentBase>;
+        //    DeleteElements(elements.SelectMany(element => GetEntitySearch(element)).ToList());
+        //}
 
         /// <summary>
         /// Borra elementos desde el search.
@@ -412,27 +417,25 @@ namespace trifenix.agro.search.operations
             CreateOrUpdateIndex<IndexSearch>(indexName);
         }
 
-
-
-
         public async Task GenerateIndex(IAgroManager agro) {
             var assm = typeof(BusinessName).Assembly;
-            var types = assm.GetTypes().Where(type => type.GetProperty("CosmosEntityName") != null && !(new[] { typeof(EntityContainer), typeof(User) }).Contains(type)).ToList();
+            var types = new[] { typeof(UserApplicator) };
+            //var types = assm.GetTypes().Where(type => type.GetProperty("CosmosEntityName") != null && !(new[] { typeof(EntityContainer), typeof(User), typeof(Comment), typeof(UserActivity) }).Contains(type)).ToList();
 
-            IEnumerable<Task> tasks;
-            ConcurrentBag<object> bag;
-
-            bag = new ConcurrentBag<object>();
-            tasks = types.Select(async type =>
-                bag.Add(GetElementsAndInsertIntoIndex(agro, type))
-            );
-            await Task.WhenAll(tasks);
+            foreach (var type in types) {
+                try {
+                    await GetElementsAndInsertIntoIndex(agro, type);
+                }
+                catch (Exception ex) {
+                    Console.WriteLine(ex.StackTrace);
+                }
+            }
         }
 
         private async Task GetElementsAndInsertIntoIndex(IAgroManager agro, Type dbType) {
             var extGetContainer = await agro.GetOperationByDbType(dbType).GetElements();
-            var elements = extGetContainer.Result as List<DocumentBase>;
-            elements?.ForEach(element => AddDocument(element));
+            var elements = (IEnumerable<dynamic>)extGetContainer.Result;
+            elements?.ToList().ForEach(element => AddDocument(element));
         }
 
     }
