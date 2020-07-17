@@ -10,6 +10,7 @@ using trifenix.connect.agro.model;
 using trifenix.connect.agro.model_input;
 using trifenix.connect.mdm.containers;
 using trifenix.connect.mdm.enums;
+using Microsoft.Spatial;
 
 namespace trifenix.agro.external.operations.entities.main
 {
