@@ -86,7 +86,7 @@ namespace trifenix.agro.functions
                     Environment.GetEnvironmentVariable("clientID", EnvironmentVariableTarget.Process),
                     Environment.GetEnvironmentVariable("tenant", EnvironmentVariableTarget.Process),
                     Environment.GetEnvironmentVariable("tenantID", EnvironmentVariableTarget.Process),
-                    Environment.GetEnvironmentVariable("validAudiences", EnvironmentVariableTarget.Process).Split()
+                    Environment.GetEnvironmentVariable("validAudiences", EnvironmentVariableTarget.Process).Split(";")
                 );
                 var claims = await auth.ValidateAccessToken(token);
                 string ObjectIdAAD = claims.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
