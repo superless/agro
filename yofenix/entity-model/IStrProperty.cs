@@ -8,6 +8,12 @@
 
     }
 
+    public class StrProperty : IProperty<string>
+    {
+        public int index { get; set; }
+        public string value { get; set; }
+    }
 
-    
+
+
 }

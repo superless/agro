@@ -10,7 +10,7 @@ namespace trifenix.connect.mdm.az_search
     /// facets, como enumeraciones, entidades y fechas.
     /// </summary>
     /// <typeparam name="T">Tipo de valor que tiene asignado la propiedad (bool, num, etc.)</typeparam>
-    public class BaseFacetableProperty<T> : BaseProperty<T>, IPropertyFaceTable<T>
+    public class BaseFacetableProperty<T> : BaseProperty<T>, IPropertyBaseFaceTable<T>
     {
 
         /// <summary>

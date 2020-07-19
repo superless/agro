@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using trifenix.connect.agro.index_model.props;
+using trifenix.connect.agro.mdm_attributes;
 using trifenix.connect.agro.model;
 using trifenix.connect.mdm.enums;
 using trifenix.connect.mdm.resources;
@@ -65,6 +66,8 @@ namespace trifenix.typegen.data
             //get model types from namespace
             var modelTypes = assembly.GetLoadableTypes()
             .Where(x => x.FullName.StartsWith("trifenix.agro.db.model"));
+
+
             // get property infos
             var propSearchinfos = modelTypes.Where(s => s.GetTypeInfo().GetCustomAttributes<ReferenceSearchHeaderAttribute>(true).Any()).SelectMany(s=> {
 

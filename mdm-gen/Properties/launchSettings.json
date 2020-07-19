@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "mdm-gen": {
+      "commandName": "Project",
+      "commandLineArgs": "typescript \"https://pat:q247f7y7wkk2qcfdny4oeh44esadjxmdvzwdqzsworh4zoqpp6ua@dev.azure.com/yo-fenix/front/_git/fenix-mdm\"  -u \"alejandro.iglesias\" -e \"alejandro.iglesias@trifenix.io\" "
+    }
+  }
+}

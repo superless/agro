@@ -9,6 +9,12 @@
 
     }
 
+    public class Num32Property : INum32Property
+    {
+        public int index { get; set; }
+        public int value { get; set; }
+    }
+
 
 
 }

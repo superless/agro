@@ -47,8 +47,7 @@ namespace trifenix.typegen.spec
             AddInterface<EntitySearch>("model/main");
             AddInterface<GeoPointTs>("model/main");
             AddInterface(typeof(IProperty<>), "model/main");
-            AddInterface<GeographyProperty>("model/main");
-            AddInterface<ReletadIdTs>("model/main");
+            AddInterface<GeographyProperty>("model/main");            
             AddInterface<EntitySearch>("model/main");
             AddInterface<IDblProperty>("model/main");
             AddInterface<IDtProperty>("model/main");
@@ -57,7 +56,7 @@ namespace trifenix.typegen.spec
             AddInterface<INum32Property>("model/main");
             AddInterface<INum64Property>("model/main");            
             AddInterface<IBoolProperty>("model/main");
-            AddInterface(typeof(IPropertyFaceTable<>), "model/main");
+            AddInterface(typeof(IPropertyBaseFaceTable<>), "model/main");
             AddInterface<IRelatedId>("model/main");
             AddInterface<IStrProperty>("model/main");
             AddEnum<PhisicalDevice>("model/enums");
