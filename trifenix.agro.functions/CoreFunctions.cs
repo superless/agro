@@ -85,7 +85,8 @@ namespace trifenix.agro.functions
                 IAuthentication auth = new Authentication(
                     Environment.GetEnvironmentVariable("clientID", EnvironmentVariableTarget.Process),
                     Environment.GetEnvironmentVariable("tenant", EnvironmentVariableTarget.Process),
-                    Environment.GetEnvironmentVariable("tenantID", EnvironmentVariableTarget.Process)
+                    Environment.GetEnvironmentVariable("tenantID", EnvironmentVariableTarget.Process),
+                    Environment.GetEnvironmentVariable("validAudiences", EnvironmentVariableTarget.Process).Split(";")
                 );
                 var claims = await auth.ValidateAccessToken(token);
                 string ObjectIdAAD = claims.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
@@ -129,8 +130,7 @@ namespace trifenix.agro.functions
             }
             catch (Exception ex) {
                 log.LogError(ex, ex.Message);
-                await signalRMessages.AddAsync(new SignalRMessage { Target = "Error", UserId = userId, Arguments = new object[] { ex is Validation_Exception ? ((Validation_Exception)ex).ErrorMessages : (object)new string[] { $"{ex.Message}" } } });
-                await signalRMessages.AddAsync(new SignalRMessage { Target = "StackTrace", UserId = userId, Arguments = new object[] { ex.StackTrace } });
+                await signalRMessages.AddAsync(new SignalRMessage { Target = "Error", UserId = userId, Arguments = new object[] { ex is Validation_Exception ? ((Validation_Exception)ex).ErrorMessages : (object)new string[] { $"{ex.Message}" }, ex.StackTrace } });
             }
         }
 

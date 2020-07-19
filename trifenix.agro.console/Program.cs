@@ -1,5 +1,6 @@
 ﻿using Cosmonaut;
 using Cosmonaut.Response;
+using Microsoft.Spatial;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -11,9 +12,9 @@ using trifenix.agro.db.model.local;
 using trifenix.agro.external.operations;
 using trifenix.agro.search.operations;
 using trifenix.connect.agro.index_model.enums;
+using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.model;
-using trifenix.connect.mdm.az_search;
-using trifenix.connect.util;
+using static trifenix.connect.util.Mdm.Reflection;
 
 namespace trifenix.agro.console
 {
@@ -22,27 +23,48 @@ namespace trifenix.agro.console
 
         public static Task<CosmosMultipleResponse<T>> RemoveAsync<T>(CosmosStoreSettings StoreSettings) where T : class => new CosmosStore<T>(StoreSettings).RemoveAsync(entity => true);
 
-        private static async Task DoAsync(AgroManager agro, Type dbType) {
-            var extGetContainer = await agro.GetOperationByDbType(dbType).GetElements();
-            var elements = extGetContainer.Result as List<DocumentBase>;
-            elements?.ForEach(element => agro.Search.AddDocument(element));
-        }
-
-        public static async Task RegenerateIndex(AgroManager agro) {
-            var assm = typeof(BusinessName).Assembly;
-            var types = assm.GetTypes().Where(type => type.GetProperty("CosmosEntityName") != null && !(new[] { typeof(EntityContainer), typeof(User) }).Contains(type)).ToList();
-            
-            IEnumerable<Task> tasks;
-            ConcurrentBag<object> bag;
-
-            bag = new ConcurrentBag<object>();
-            tasks = types.Select(async type =>
-                bag.Add(DoAsync(agro,type))
-            );
-            await Task.WhenAll(tasks);
+        public static async Task RenewClientIds(AgroManager agro, Type dbType) {
+            await agro.GetOperationByDbType(dbType).RenewClientIds();
         }
 
         static async Task Main(string[] args) {
+
+            Environment.SetEnvironmentVariable("clientSecret", "B._H_uAwEdg7K1FzVboS3S/oF4IKNbtf");
+            Environment.SetEnvironmentVariable("clientID", "34d9266f-43f9-4fb2-8cdd-ae21be551342");
+            Environment.SetEnvironmentVariable("tenantID", "13f71027-8389-436e-bdaf-7bd34382fbff");
+
+            var agroDbArguments = new AgroDbArguments { EndPointUrl = "https://agricola-jhm.documents.azure.com:443/", NameDb = "agrodb", PrimaryKey = "yG6EIAT1dKSBaS7oSZizTrWQGGfwSb2ot2prYJwQOLHYk3cGmzvvhGohSzFZYHueSFDiptUAqCQYYSeSetTiKw==" };
+            var search = new AgroSearch<GeographyPoint>("agrosearch", "016DAA5EF1158FEEEE58DA60996D5981");
+            var agro = new AgroManager(agroDbArguments, null, null, null, search, null, false);
+
+            var assm = typeof(BusinessName).Assembly;
+            var types = new[] { typeof(UserApplicator) };
+            //var types = assm.GetTypes().Where(type => type.GetProperty("CosmosEntityName") != null && !(new[] { typeof(EntityContainer), typeof(User), typeof(Comment) }).Contains(type)).ToList();
+
+            IEnumerable<Task> tasks;
+            ConcurrentBag<object> bag;
+
+            //bag = new ConcurrentBag<object>();
+            //tasks = types.Select(async type =>
+            //    bag.Add(RenewClientIds(agro, type))
+            //);
+            //await Task.WhenAll(tasks);
+
+            foreach (var type in types) {
+                try {
+                    await RenewClientIds(agro, type);
+                }
+                catch (Exception ex) {
+                    Console.WriteLine(ex.StackTrace);
+                }
+            }
+
+            //search.EmptyIndex<EntitySearch>("entities");
+            search.DeleteElements($"entityIndex/any(index: index eq {(int)EntityRelated.USER})");
+            await search.GenerateIndex(agro);
+
+            
+            return;
 
             Console.WriteLine("Hora de inicio: {0}", DateTime.Now.ToString("hh\\:mm\\:ss"));
             Stopwatch timer = Stopwatch.StartNew();
@@ -56,20 +78,20 @@ namespace trifenix.agro.console
             //Aquí defino si se vaciará CosmosDb, Index Search, ambos o ninguno
             bool vaciarCosmosDb = false, vaciarSearch = false, vaciarAmbos = true;
 
-            var search = new AgroSearch("search-agro-produccion", "A256D7F2BD95055691460D358CA870BA");
-            if (vaciarAmbos || vaciarSearch)
-                search.EmptyIndex("entities");
+            //var search = new AgroSearch("search-agro-produccion", "A256D7F2BD95055691460D358CA870BA");
+            //if (vaciarAmbos || vaciarSearch)
+            //    search.EmptyIndex<EntitySearch>("entities");
 
-            var agroDbArguments = new AgroDbArguments { EndPointUrl = "https://agro-jhm-produccion.documents.azure.com:443/", NameDb = "agrodb", PrimaryKey = "sZTarTcwaiO2LUghxZEuIGd9FXIZ7ziqkVAbVmJWBucREVQ3YWYr5Jke7E1gR9UlJUkdYOLHZWteiuKE37LbLA==" };
+            //var agroDbArguments = new AgroDbArguments { EndPointUrl = "https://agro-jhm-produccion.documents.azure.com:443/", NameDb = "agrodb", PrimaryKey = "sZTarTcwaiO2LUghxZEuIGd9FXIZ7ziqkVAbVmJWBucREVQ3YWYr5Jke7E1gR9UlJUkdYOLHZWteiuKE37LbLA==" };
 
-            IEnumerable<Task> tasks;
-            ConcurrentBag<object> bag;
+            //IEnumerable<Task> tasks;
+            //ConcurrentBag<object> bag;
 
             if (vaciarAmbos || vaciarCosmosDb) {
                 var storeSettings = new CosmosStoreSettings(agroDbArguments.NameDb, agroDbArguments.EndPointUrl, agroDbArguments.PrimaryKey);
                 bag = new ConcurrentBag<object>();
-                var assm = typeof(BusinessName).Assembly;
-                var types = assm.GetTypes().Where(type => type.GetProperty("CosmosEntityName") != null).ToList();
+                //var assm = typeof(BusinessName).Assembly;
+                //var types = assm.GetTypes().Where(type => type.GetProperty("CosmosEntityName") != null).ToList();
                 tasks = types.Select(async type => {
                     var response = typeof(Program).GetMethod("RemoveAsync").MakeGenericMethod(type).Invoke(null, new object[] { storeSettings });
                     bag.Add(response);
@@ -220,8 +242,8 @@ namespace trifenix.agro.console
             elements.ForEach(element => {
                 element.GetType().GetProperties().Where(prop => prop.Name.ToLower().Contains("id") && !prop.Name.Equals("ClientId") && !prop.Name.Equals("ObjectIdAAD")).ToList().ForEach(
                     prop => {
-                        if (Mdm.Reflection.HasValue(prop.GetValue(element))) {
-                            if (!Mdm.Reflection.IsEnumerableProperty(prop)) {
+                        if (HasValue(prop.GetValue(element))) {
+                            if (!IsEnumerableProperty(prop)) {
                                 var indexString = prop.GetValue(element).ToString();
                                 var index = int.Parse(indexString);
                                 prop.SetValue(element, guids[index]);
@@ -239,7 +261,7 @@ namespace trifenix.agro.console
                 position++;
             });
 
-            var agro = new AgroManager(agroDbArguments, null, null, null, search, null, false);
+            //var agro = new AgroManager(agroDbArguments, null, null, null, search, null, false);
 
             bag = new ConcurrentBag<object>();
             tasks = elements.Select(async element => {
@@ -248,7 +270,13 @@ namespace trifenix.agro.console
             });
             await Task.WhenAll(tasks);
 
-            await RegenerateIndex(agro);
+            await search.GenerateIndex(agro);
+            //var search = new AgroSearch("agrosearch", "016DAA5EF1158FEEEE58DA60996D5981");
+            //var entity = search.GetEntity(EntityRelated.PHENOLOGICAL_EVENT, "e158ffd87a27410ab1b0b73cda2ecccb");
+            //entity.Num64Properties = new Num64Property[] { };
+            //search.AddElements(new List<EntitySearch> { entity });
+
+            // Fin Script
 
 
 

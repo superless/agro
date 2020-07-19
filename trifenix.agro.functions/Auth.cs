@@ -18,7 +18,8 @@ namespace trifenix.agro.functions {
             IAuthentication auth = new Authentication(
                 Environment.GetEnvironmentVariable("clientID", EnvironmentVariableTarget.Process),
                 Environment.GetEnvironmentVariable("tenant", EnvironmentVariableTarget.Process),
-                Environment.GetEnvironmentVariable("tenantID", EnvironmentVariableTarget.Process)
+                Environment.GetEnvironmentVariable("tenantID", EnvironmentVariableTarget.Process),
+                Environment.GetEnvironmentVariable("validAudiences", EnvironmentVariableTarget.Process).Split(";")
             );
             //Console.WriteLine("El Token que recibo:");
             //Console.WriteLine(GetAccessToken(request));

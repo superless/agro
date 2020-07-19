@@ -70,7 +70,7 @@ namespace trifenix.agro.db.applicationsReference.common.res {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SELECT value c.Correlative FROM c where c.id =&apos;{0}&apos;.
+        ///   Looks up a localized string similar to SELECT value c.ClientId FROM c where c.id =&apos;{0}&apos;.
         /// </summary>
         internal static string CORRELATIVE_FROM_DOSESID {
             get {
@@ -151,7 +151,7 @@ namespace trifenix.agro.db.applicationsReference.common.res {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SELECT value max(c.Correlative) from c where c.IdProduct =&apos;{0}&apos;.
+        ///   Looks up a localized string similar to SELECT value max(c.ClientId) from c where c.IdProduct =&apos;{0}&apos;.
         /// </summary>
         internal static string MAXCORRELATIVE_DOSES_BY_PRODUCTID {
             get {

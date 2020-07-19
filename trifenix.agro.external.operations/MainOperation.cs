@@ -56,6 +56,10 @@ namespace trifenix.agro.external.operations
             return OperationHelper.GetElements(entities);
         }
 
+        public async Task RenewClientIds() {
+            await repo.RenewClientIds();
+        }
+
     }
 
 }

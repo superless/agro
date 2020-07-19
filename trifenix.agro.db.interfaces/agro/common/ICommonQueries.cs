@@ -29,12 +29,4 @@ namespace trifenix.agro.db.interfaces.agro.common {
 
     }
 
-    public interface ICounters {
-        Task<long> GetCounter<T>(string query) where T:DocumentBase;
-
-        Task<int> GetLastCounterDoses(string idProduct);
-
-        Task<int> GetCorrelativeFromDoses(string idDoses);
-    }
-
 }

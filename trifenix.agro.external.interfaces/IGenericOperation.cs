@@ -17,6 +17,8 @@ namespace trifenix.agro.external.interfaces {
         Task<ExtPostContainer<string>> SaveInput(T2 entityInput, bool isBatch);
         Task Remove(string id);
 
+        Task RenewClientIds();
+
     }
 
 }

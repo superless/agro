@@ -17,7 +17,7 @@ namespace trifenix.agro.db.applicationsReference.common {
         public async Task<List<T>> TolistAsync(IQueryable<T> list) {
             if (list == null)
                 return new List<T>();
-            return await list.ToListAsync(); ;
+            return await list.ToListAsync();
         }
 
         public IQueryable<T> WithPagination(IQueryable<T> list, int page, int totalElementsOnPage) {

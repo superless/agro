@@ -121,7 +121,7 @@
     <value>SELECT DISTINCT value c.id from c where c.IdProduct='{0}' and c.Active=true and c.Default=false</value>
   </data>
   <data name="CORRELATIVE_FROM_DOSESID" xml:space="preserve">
-    <value>SELECT value c.Correlative FROM c where c.id ='{0}'</value>
+    <value>SELECT value c.ClientId FROM c where c.id ='{0}'</value>
   </data>
   <data name="COUNT_BY_ID" xml:space="preserve">
     <value>SELECT value count(1) FROM c where c.id = '{0}'</value>
@@ -148,7 +148,7 @@
     <value>SELECT DISTINCT value c.Email  FROM c join Rol in c.IdsRoles where Rol IN ({0})</value>
   </data>
   <data name="MAXCORRELATIVE_DOSES_BY_PRODUCTID" xml:space="preserve">
-    <value>SELECT value max(c.Correlative) from c where c.IdProduct ='{0}'</value>
+    <value>SELECT value max(c.ClientId) from c where c.IdProduct ='{0}'</value>
   </data>
   <data name="NAME_BY_ID" xml:space="preserve">
     <value>SELECT value c.Name FROM c where  c.id = '{0}'</value>
