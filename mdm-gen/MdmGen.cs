@@ -348,8 +348,6 @@ namespace mdm_gen
                 var searchAttributeInput = elemTypeInputProps.FirstOrDefault(p => p.search.Index == searchAttribute.Index && p.search.IsEntity == searchAttribute.IsEntity);
                 var grp = (GroupAttribute[])s.GetCustomAttributes(typeof(GroupAttribute), true);
 
-
-
                 return new PropertySearchInfo
                 {
                     IsEnumerable =  Mdm.Reflection.IsEnumerableProperty(s),
