@@ -77,6 +77,8 @@ namespace mdm_gen
                     var commit = actionMessage.Key;
                     actionMessage.Value.Invoke();
                     Commands.Stage(repo, "*");
+
+                    // corregir, falla cuando no hay cambios, igual funciona por ahora.
                     repo.Commit(commit, new Signature(username, email, DateTimeOffset.Now), new Signature(username, email, DateTimeOffset.Now));
 
                 }
