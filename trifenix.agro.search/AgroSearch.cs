@@ -71,7 +71,9 @@ namespace trifenix.agro.search.operations {
         private void CreateOrUpdateIndex(string indexName) {
 
             // dominios permitidos, cambiar para ponerlo en un json u otro archivo.
-            string[] allowedOrigins = new string[] { "https://aresa.trifenix.io", "https://dev-aresa.trifenix.io", "https://agro.trifenix.io", "https://agro-dev.trifenix.io", "http://localhost:3000", "http://localhost:9009", "https://portal.azure.com" };
+            string[] allowedOrigins = new string[] { "https://aresa.trifenix.io", "https://dev-aresa.trifenix.io", "https://agro.trifenix.io", "https://agro-dev.trifenix.io", "http://localhost:3000", "http://localhost:4000", "https://aresa2-dev.trifenix.io", "https://aresa2.trifenix.io", "http://localhost:9009", "https://portal.azure.com" };
+
+
 
             // creación del índice.
             _search.Indexes.CreateOrUpdate(new Index { Name = indexName, Fields = FieldBuilder.BuildForType<EntitySearch>(), CorsOptions = new CorsOptions(allowedOrigins) });
