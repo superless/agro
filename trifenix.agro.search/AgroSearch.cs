@@ -98,6 +98,8 @@ namespace trifenix.agro.search.operations {
             indexClient.Documents.Index(batch);
         }
 
+
+
         /// <summary>
         /// Añade elementos al search.
         /// </summary>
