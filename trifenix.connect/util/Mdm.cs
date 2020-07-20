@@ -71,9 +71,6 @@ namespace trifenix.connect.util
         }
 
 
-       
-
-
         /// <summary>
         /// Obtiene la propiedad o contenedor con el índice de una entidad y su identificador (index = 1, id = [guid]), donde el 1 representa una entidad.
         /// el método genera una nueva propiedad del tipo que se le asigne en el atributo typeToCast.
@@ -83,7 +80,7 @@ namespace trifenix.connect.util
         /// <param name="attribute">atributo con la metadata de la propiedad</param>
         /// <param name="typeToCast">tipo de dato a convertir, debe implementar IRelatedId</param>
         /// <returns>nueva propiedad de tipo entidad desde un objeto.</returns>
-        public static IRelatedId GetRelatedId(KeyValuePair<BaseIndexAttribute, object> attribute, Type typeToCast)
+        public static IRelatedId[] GetRelatedId(KeyValuePair<BaseIndexAttribute, object> attribute, Type typeToCast)
         {
             // lanza error si no implementa IRelatedId
             if (!CheckImplementsIRelatedId(typeToCast))
@@ -214,7 +211,8 @@ namespace trifenix.connect.util
         /// <returns>true, si implementa IRelatedId</returns>
         public static bool CheckImplementsIRelatedId(Type typeToCheck)
         {
-            return typeToCheck.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IRelatedId));
+            var isRelated = typeof(IRelatedId).IsAssignableFrom(typeToCheck);
+            return isRelated;
         }
 
 
@@ -266,10 +264,11 @@ namespace trifenix.connect.util
         /// este método crea una propiedad de este tipo
         /// </summary>
         /// <param name="index">índice del tipo de entidad</param>
-        /// <param name="id">identificador de la entidad</param>
+        /// <param name="value">identificador de la entidad</param>
         /// <param name="typeToCast">Tipo al que debe ser convertido (debe implementar IRelatedId)</param>
         /// <returns></returns>
-        public static IRelatedId GetEntityProperty(int index, string id, Type typeToCast) {
+        public static IRelatedId[] GetEntityProperty(int index, object value, Type typeToCast) {
+
 
             // verifica si implementa IRelatedId
             if (!CheckImplementsIRelatedId(typeToCast))
@@ -279,11 +278,24 @@ namespace trifenix.connect.util
 
             // crea una nueva instancia de una propiedad (entrada de un entity search).
             var element = (IRelatedId)Reflection.Collections.CreateEntityInstance(typeToCast);
+            var isEnumerable = Reflection.IsEnumerable(value);
+
+            if (isEnumerable)
+            {
+                return ((IEnumerable<string>)value).Select(s =>
+                {
+                    var lcl = (IRelatedId)Reflection.Collections.CreateEntityInstance(typeToCast);
+                    lcl.index = index;
+                    lcl.id = s;
+                    return lcl;
+                }).ToArray();
+            }
+           
 
             // asigna el índice
             element.index = index;
-            element.id = id;
-            return element;
+            element.id = (string)value;
+            return new IRelatedId[] { element};
         }
 
 
@@ -323,8 +335,8 @@ namespace trifenix.connect.util
         /// <param name="castGeoToSearch">Función para convertir el elemento geo de la clase a la de la entidad de busqueda</param>
         /// <returns>listado de propiedades de un tipo</returns>
         public static IEnumerable<T2_Cast> GetPropertiesObjects<T,T2_Cast>(KindProperty related, Dictionary<BaseIndexAttribute, object> elements, Func<object, T> castGeoToSearch = null) where T2_Cast : IProperty<T> {
-            IEnumerable<IProperty<T>> array = elements.Where(s => !s.Key.IsEntity && s.Key.KindIndex == (int)related).SelectMany(s => GetArrayOfElements<T>(s, typeof(T2_Cast), castGeoToSearch));
-            return !array.Any() ? Array.Empty<T2_Cast>() : (IEnumerable<T2_Cast>)array;
+            var array = elements.Where(s => !s.Key.IsEntity && s.Key.KindIndex == (int)related).SelectMany(s => GetArrayOfElements<T>(s, typeof(T2_Cast), castGeoToSearch)).ToList();
+            return !array.Any() ? Array.Empty<T2_Cast>() : (IEnumerable<T2_Cast>)array.Cast<T2_Cast>();
         }
 
         /// <summary>
@@ -334,8 +346,28 @@ namespace trifenix.connect.util
         /// <param name="elements">Diccionario con la metadata y valor de la propiedad</param>
         /// <param name="typeToCast">Tipo a convertir que implemente IRelatedId</param>
         /// <returns>array de clase indicada que implementa IRelatdId</returns>
-        public static IRelatedId[] GetReferences(Dictionary<BaseIndexAttribute, object> elements, Type typeToCast) =>
-            elements.Where(s => s.Key.IsEntity && s.Key.KindIndex == (int)KindEntityProperty.REFERENCE).Select(s=>GetEntityProperty(s.Key.Index, (string)s.Value, typeToCast)).ToArray();
+        public static IRelatedId[] GetReferences(Dictionary<BaseIndexAttribute, object> elements, Type typeToCast) {
+
+            try
+            {
+                /*
+                 * var array = elements.Where(s => !s.Key.IsEntity && s.Key.KindIndex == (int)related).SelectMany(s => GetArrayOfElements<T>(s, typeof(T2_Cast), castGeoToSearch)).ToList();
+                    return !array.Any() ? Array.Empty<T2_Cast>() : (IEnumerable<T2_Cast>)array.Cast<T2_Cast>();
+                 */
+                var array = elements.Where(s => s.Key.IsEntity && s.Key.KindIndex == (int)KindEntityProperty.REFERENCE);
+
+                var refes = array.SelectMany(s => GetEntityProperty(s.Key.Index, s.Value, typeToCast)).ToArray();
+                return !refes.Any() ? Array.Empty<IRelatedId>() : refes;
+
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
+        
+        }
+            
 
 
         /// <summary>
@@ -432,7 +464,7 @@ namespace trifenix.connect.util
         /// <param name="values">Diccionario con la metadata y valor de la propiedad</param>
         /// <returns>retorna una array de propiedades de tipo string que implemente IStrProperty, de propiedades que consideren suggest en su atributo mdm</returns>
         public static IStrProperty[] GetSugProps<T>(Dictionary<BaseIndexAttribute, object> values) where T : class, IStrProperty =>
-          GetPropertiesObjects<string, T>(KindProperty.STR, values).ToArray();
+          GetPropertiesObjects<string, T>(KindProperty.SUGGESTION, values).ToArray();
 
 
 
@@ -474,15 +506,15 @@ namespace trifenix.connect.util
         public static IEntitySearch<T> FillProps<T>(Implements<T> implements, Dictionary<BaseIndexAttribute, object> mdl, Type typeToCast) {
 
             var entitySearch = (IEntitySearch<T>)Reflection.Collections.CreateEntityInstance(typeToCast);
-            entitySearch.num32 = (INum32Property[])Reflection.InvokeDynamicGeneric(typeof(Mdm), "GetNumProps", implements.num32, null, new object[] { mdl });
-            entitySearch.dbl = (IDblProperty[])Reflection.InvokeDynamicGeneric(typeof(Mdm), "GetDblProps", implements.dbl, null, new object[] { mdl });
-            entitySearch.dt = (IDtProperty[])Reflection.InvokeDynamicGeneric(typeof(Mdm), "GetDtProps", implements.dt, null, new object[] { mdl });
-            entitySearch.enm = (IEnumProperty[])Reflection.InvokeDynamicGeneric(typeof(Mdm), "GetEnumProps", implements.enm, null, new object[] { mdl });
-            entitySearch.bl = (IBoolProperty[])Reflection.InvokeDynamicGeneric(typeof(Mdm), "GetBoolProps", implements.bl, null, new object[] { mdl });
-            entitySearch.geo = (IProperty<T>[])Reflection.InvokeDynamicGeneric(typeof(Mdm), "GetGeoProps", implements.geo, null, new object[] { mdl, implements.GeoObjetoToGeoSearch });
-            entitySearch.num64 = (INum64Property[])Reflection.InvokeDynamicGeneric(typeof(Mdm), "GetNum64Props", implements.num64, null, new object[] { mdl });
-            entitySearch.str = (IStrProperty[])Reflection.InvokeDynamicGeneric(typeof(Mdm), "GetStrProps", implements.str, null, new object[] { mdl });
-            entitySearch.sug = (IStrProperty[])Reflection.InvokeDynamicGeneric(typeof(Mdm), "GetSugProps", implements.sug, null, new object[] { mdl });
+            entitySearch.num32 = (INum32Property[])Reflection.InvokeDynamicGeneric("GetNumProps", implements.num32, new object[] { mdl });
+            entitySearch.dbl = (IDblProperty[])Reflection.InvokeDynamicGeneric("GetDblProps", implements.dbl, new object[] { mdl });
+            entitySearch.dt = (IDtProperty[])Reflection.InvokeDynamicGeneric("GetDtProps", implements.dt, new object[] { mdl });
+            entitySearch.enm = (IEnumProperty[])Reflection.InvokeDynamicGeneric("GetEnumProps", implements.enm, new object[] { mdl });
+            entitySearch.bl = (IBoolProperty[])Reflection.InvokeDynamicGeneric("GetBoolProps", implements.bl, new object[] { mdl });
+            entitySearch.geo = (IProperty<T>[])Reflection.InvokeDynamicGeneric("GetGeoProps", implements.geo, new object[] { mdl, implements.GeoObjetoToGeoSearch }, typeof(T));
+            entitySearch.num64 = (INum64Property[])Reflection.InvokeDynamicGeneric("GetNum64Props", implements.num64, new object[] { mdl });
+            entitySearch.str = (IStrProperty[])Reflection.InvokeDynamicGeneric("GetStrProps", implements.str, new object[] { mdl });
+            entitySearch.sug = (IStrProperty[])Reflection.InvokeDynamicGeneric("GetSugProps", implements.sug, new object[] { mdl });
             entitySearch.rel = GetReferences(mdl, implements.rel);
             return entitySearch;
         }
@@ -531,21 +563,31 @@ namespace trifenix.connect.util
            
             // si la entidad es la inicial, es decir es de referencia (no local), obtendrá el id desde el mismo elemento.
             // si no es el primero será una referencia de tipo local y deberá generarse una nueva entidad con un nuevo id.
-            entitySearch.id = collection == null ? obj.GetType().GetProperty("id").GetValue(obj).ToString() : Guid.NewGuid().ToString("N");
+            entitySearch.id = parent == null ? obj.GetType().GetProperty("Id").GetValue(obj).ToString() : Guid.NewGuid().ToString("N");
 
 
 
             // si la colección no es nula, significa que pasó por el primer nivel de recursión.
             // si ese es el caso, asignamos la relación con el padre que es asignada como parámetro de entrada.
-            if (collection != null)
+            if (parent != null)
             {
-                entitySearch.rel.Add(GetEntityProperty(parent.index, parent.id, implements.rel));
+                var entity = GetEntityProperty(parent.index, parent.id, implements.rel);
+
+                if (entity.Any())
+                {
+                    var arr = entitySearch.rel.ToList();
+                    arr.AddRange(entity);
+
+                    entitySearch.rel = arr.ToArray();
+                }
+
+                
             }
 
             // toma todos los valores de propiedad que sean de tipo local reference o no tengan atributos de metadata y que los valores deben ser clases y no valores primitivos, para poder identificar entidades locales.
             // el método recorrerá el objeto y verificará que tenga el atributo que lo identifique como entidad, sino lo tiene no será reconocido como entidad, no importa si la propiedad tiene el atributo de entidad local.
             // el atributo de la clase es el que vale (EntityIndexAttribute).
-            var posibleLocals = valuesWithoutProperty.Union(values.Where(s => s.Key.IsEntity && s.Key.KindIndex == (int)KindEntityProperty.LOCAL_REFERENCE).Select(s => s.Value));
+            var posibleLocals = valuesWithoutProperty.Union(values.Where(s => s.Key.IsEntity && s.Key.KindIndex == (int)KindEntityProperty.LOCAL_REFERENCE).Select(s => s.Value)).ToList();
 
            
 
@@ -564,10 +606,10 @@ namespace trifenix.connect.util
                         // si no es una colección retornará una lista de entidades para esta propiedad, si tiene el atributo que lo identifica como identidad local.
                         return GetEntitySearch<T>(implements, item, typeToCast, new List<IEntitySearch<T>>(), entitySearch);
                     }
-                );
+                ).ToList();
 
                 // dentro de las entidades encontradas chequea si alguna tiene su identificador (del entitySearch actual), para asignarlo en sus relaciones.
-                var localsRelated = locals.Where(s => s.rel.Any(a => a.index == entitySearch.index && a.id.Equals(entitySearch.id)));
+                var localsRelated = locals.Where(s => s.rel.Any(a => a.index == entitySearch.index && a.id.Equals(entitySearch.id))).ToList();
 
                 // si encuentra las asociará a la lista de entidades relacionadas.
                 if (localsRelated.Any())
@@ -575,8 +617,10 @@ namespace trifenix.connect.util
                     // recorre las en entidades para asignarla como propiedad de relación de entidades.
                     foreach (var entity in localsRelated)
                     {
+                        var arr = entitySearch.rel.ToList();
+                        arr.AddRange(GetEntityProperty(entity.index, entity.id, implements.rel));
 
-                        entitySearch.rel.Add(GetEntityProperty(entity.index, entity.id, implements.rel));
+                        entitySearch.rel = arr.ToArray();
                     }
                 }
 
