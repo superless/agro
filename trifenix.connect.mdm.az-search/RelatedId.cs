@@ -15,7 +15,7 @@ namespace trifenix.connect.mdm.az_search
         /// índice de una entidad
         /// </summary>
         [IsFilterable]
-        [JsonProperty("entityIndex")]
+        [JsonProperty("index")]
         public int index { get; set; }
 
 
@@ -23,7 +23,7 @@ namespace trifenix.connect.mdm.az_search
         /// identificador de una entidad
         /// </summary>
         [IsFilterable]
-        [JsonProperty("entityId")]
+        [JsonProperty("id")]
         public string id { get; set; }
 
 
