@@ -12,6 +12,7 @@
     "KeyWeatherApi": "7eb9d18077256697f3e1bea03605bdd2",
     "QueueName": "agroqueue",
     "scope": "https://dev-aresa.trifenix.io/App.access",
+    "Search_allowedOrigins": "https://aresa.trifenix.io;https://dev-aresa.trifenix.io;https://agro.trifenix.io;https://agro-dev.trifenix.io;http://localhost:3000;http://localhost:4000;https://aresa2-dev.trifenix.io;https://aresa2.trifenix.io;http://localhost:9009;https://portal.azure.com",
     "SearchServiceKey": "A256D7F2BD95055691460D358CA870BA",
     "SearchServiceName": "search-agro-produccion",
     "ServiceBusConnectionString": "Endpoint=sb://bus-agro-produccion.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=BSWzupMjciaxCsBpDOy4PRU1+BZMf/TEPyDY8s/Gt34=",

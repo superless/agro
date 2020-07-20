@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using trifenix.agro.db;
+using trifenix.agro.external.interfaces;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro_model_input;
 using trifenix.connect.mdm.entity_model;
 
-namespace trifenix.agro.search.interfaces
-{
-
+namespace trifenix.agro.search.interfaces {
 
     public interface IAgroSearch<T> {
 
@@ -18,9 +18,11 @@ namespace trifenix.agro.search.interfaces
 
         void DeleteElements(string query);
 
-        void EmptyIndex(string indexName);
+        void EmptyIndex();
 
-        
+        Task GenerateIndex(IAgroManager<T> agro);
+
+        Task RegenerateIndex(IAgroManager<T> agro);
 
         List<IEntitySearch<T>> FilterElements(string filter);
 
@@ -37,6 +39,9 @@ namespace trifenix.agro.search.interfaces
         IEntitySearch<T>[] GetEntitySearch<T2>(T2 model) where T2 : DocumentBase;
 
         IEntitySearch<T>[] GetEntitySearchByInput<T2>(T2 model) where T2 : InputBase;
+
         void AddDocument<T2>(T2 document) where T2:DocumentBase;
+
     }
+
 }

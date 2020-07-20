@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.Search.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Spatial;
 using System;
@@ -19,7 +20,7 @@ namespace trifenix.agro.functions.Helper
             var email = new Email("aresa.notificaciones@gmail.com", "Aresa2019");
             var uploadImage = new UploadImage(Environment.GetEnvironmentVariable("StorageConnectionStrings", EnvironmentVariableTarget.Process));
             var weatherApi = new WeatherApi(Environment.GetEnvironmentVariable("KeyWeatherApi", EnvironmentVariableTarget.Process));
-            var searchServiceInstance = new AgroSearch<GeographyPoint>(Environment.GetEnvironmentVariable("SearchServiceName", EnvironmentVariableTarget.Process), Environment.GetEnvironmentVariable("SearchServiceKey", EnvironmentVariableTarget.Process));
+            var searchServiceInstance = new AgroSearch<GeographyPoint>(Environment.GetEnvironmentVariable("SearchServiceName", EnvironmentVariableTarget.Process), Environment.GetEnvironmentVariable("SearchServiceKey", EnvironmentVariableTarget.Process), new CorsOptions(Environment.GetEnvironmentVariable("Search_allowedOrigins", EnvironmentVariableTarget.Process).Split(";")));
             return new AgroManager(ConfigManager.GetDbArguments, email, uploadImage, weatherApi, searchServiceInstance, ObjectIdAAD, isBatch);
         }
 

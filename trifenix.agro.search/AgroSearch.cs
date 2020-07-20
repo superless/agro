@@ -1,8 +1,6 @@
 ﻿using Microsoft.Azure.Search;
 using Microsoft.Azure.Search.Models;
-using Microsoft.Spatial;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -29,20 +27,22 @@ namespace trifenix.agro.search.operations {
         // cliente azure
         private readonly SearchServiceClient _search;
 
+        private readonly CorsOptions _corsOptions;
+
         // índice para las entidades, nombre del indice en azure
         private readonly string _entityIndex = "entities";
 
-       
         // consultas 
         private readonly ISearchQueries _queries;
 
-       
+
         /// <summary>
         /// Consultas y mutación en Azure search.
         /// </summary>
         /// <param name="SearchServiceName">nombre del servicio</param>
         /// <param name="SearchServiceKey">clave del servicio</param>
-        public AgroSearch(string SearchServiceName, string SearchServiceKey) {
+        /// <param name="corsOptions">opciones de cors</param>
+        public AgroSearch(string SearchServiceName, string SearchServiceKey, CorsOptions corsOptions) {
 
             // consultas genéricas de azure search.
             _queries = new SearchQueries();
@@ -50,10 +50,11 @@ namespace trifenix.agro.search.operations {
             // cliente de azure search.
             _search = new SearchServiceClient(SearchServiceName, new SearchCredentials(SearchServiceKey));
 
+            _corsOptions = corsOptions;
 
             // crea índice de entidades si no existe.
             if (!_search.Indexes.Exists(_entityIndex))
-                CreateOrUpdateIndex(_entityIndex);
+                CreateOrUpdateIndex();
         }
 
        /// <summary>
@@ -63,20 +64,14 @@ namespace trifenix.agro.search.operations {
        /// <returns>consulta</returns>
         private string Queries(SearchQuery query) => _queries.Get(query);
 
-        
+
         /// <summary>
-        /// Crea índice en el azure search.
-        /// </summary>        
-        /// <param name="indexName"></param>
-        private void CreateOrUpdateIndex(string indexName) {
-
-            // dominios permitidos, cambiar para ponerlo en un json u otro archivo.
-            string[] allowedOrigins = new string[] { "https://aresa.trifenix.io", "https://dev-aresa.trifenix.io", "https://agro.trifenix.io", "https://agro-dev.trifenix.io", "http://localhost:3000", "http://localhost:4000", "https://aresa2-dev.trifenix.io", "https://aresa2.trifenix.io", "http://localhost:9009", "https://portal.azure.com" };
-
-
-
+        /// Crea o actualiza el índice en el azure search.
+        /// </summary>
+        private void CreateOrUpdateIndex() {
+            var indexName = _entityIndex;
             // creación del índice.
-            _search.Indexes.CreateOrUpdate(new Index { Name = indexName, Fields = FieldBuilder.BuildForType<EntitySearch>(), CorsOptions = new CorsOptions(allowedOrigins) });
+            _search.Indexes.CreateOrUpdate(new Index { Name = indexName, Fields = FieldBuilder.BuildForType<EntitySearch>(), CorsOptions = _corsOptions });
         }
 
         /// <summary>
@@ -117,16 +112,9 @@ namespace trifenix.agro.search.operations {
         /// </summary>
         /// <typeparam name="T">Esto debería ser EntitySearch</typeparam>
         /// <param name="elements"></param>
-        public void AddElement(IEntitySearch<GeoPointType> element)
-        {
+        public void AddElement(IEntitySearch<GeoPointType> element) {
             OperationElements(new List<IEntitySearch<GeoPointType>> { element}, SearchOperation.Add);
         }
-
-        //public async Task DeleteElements(IAgroManager agro, Type dbType) {
-        //    var extGetContainer = await agro.GetOperationByDbType(dbType).GetElements();
-        //    var elements = extGetContainer.Result as List<DocumentBase>;
-        //    DeleteElements(elements.SelectMany(element => GetEntitySearch(element)).ToList());
-        //}
 
         /// <summary>
         /// Borra elementos desde el search.
@@ -222,7 +210,7 @@ namespace trifenix.agro.search.operations {
 
 
         /// <summary>
-        /// Elimina entridades que tengan un tipo y un id.
+        /// Elimina entidades que tengan un tipo y un id.
         /// </summary>
         /// <param name="entityRelated">Tipo de elemento a eliminar</param>
         /// <param name="id">identificador de la entidad</param>
@@ -250,35 +238,35 @@ namespace trifenix.agro.search.operations {
         /// <typeparam name="T2">modelo del objeto que se convertirá a entity Search</typeparam>
         /// <param name="model">objeto a convertir</param>
         /// <returns>Colección de entity Search</returns>
-        public IEntitySearch<GeoPointType>[] GetEntitySearch<T2>(T2 model) where T2 : DocumentBase
-        {
+        public IEntitySearch<GeoPointType>[] GetEntitySearch<T2>(T2 model) where T2 : DocumentBase {
             return (IEntitySearch<GeoPointType>[])Mdm.GetEntitySearch(new Implements(), model, typeof(EntitySearch)).Cast<EntitySearch>().ToArray();
         }
 
-        public IEntitySearch<GeoPointType>[] GetEntitySearchByInput<T2>(T2 model) where T2: InputBase
-        {
+        public IEntitySearch<GeoPointType>[] GetEntitySearchByInput<T2>(T2 model) where T2: InputBase {
             return (IEntitySearch<GeoPointType>[])Mdm.GetEntitySearch(new Implements(), model, typeof(EntitySearch)).Cast<EntitySearch>().ToArray();
         }
 
-
-
-
-
-        public void EmptyIndex(string indexName) {
+        /// <summary>
+        /// Vacía el índice.
+        /// </summary>
+        public void EmptyIndex() {
+            var indexName = _entityIndex;
             _search.Indexes.Delete(indexName);
-            CreateOrUpdateIndex(indexName);
+            CreateOrUpdateIndex();
         }
 
-
-
-
+        /// <summary>
+        /// Agrega al índice los datos de cosmosDb.
+        /// </summary>
+        /// <param name="agro">IAgroManager, el cual conecta a Operations</param>
         public async Task GenerateIndex(IAgroManager<GeoPointType> agro) {
             var assm = typeof(BusinessName).Assembly;
-            var types = assm.GetTypes().Where(type => type.GetProperty("CosmosEntityName") != null && !(new[] { typeof(EntityContainer), typeof(User), typeof(UserActivity) }).Contains(type)).ToList();
-
+            var types = assm.GetTypes().Where(type => type.GetProperty("CosmosEntityName") != null && !(new[] { typeof(EntityContainer), typeof(User), typeof(UserActivity), typeof(Comment) }).Contains(type)).ToList();
             foreach (var type in types) {
                 try {
-                    await GetElementsAndInsertIntoIndex(agro, type);
+                    var extGetContainer = await agro.GetOperationByDbType(type).GetElements();
+                    var elements = (IEnumerable<dynamic>)extGetContainer.Result;
+                    elements?.ToList().ForEach(element => AddDocument(element));
                 }
                 catch (Exception ex) {
                     Console.WriteLine(ex.StackTrace);
@@ -286,13 +274,15 @@ namespace trifenix.agro.search.operations {
             }
         }
 
-        private async Task GetElementsAndInsertIntoIndex(IAgroManager<GeoPointType> agro, Type dbType) {
-            var extGetContainer = await agro.GetOperationByDbType(dbType).GetElements();
-            var elements = (IEnumerable<dynamic>)extGetContainer.Result;
-            elements?.ToList().ForEach(element => AddDocument(element));
+        /// <summary>
+        /// Regenera el índice a partir de los datos de cosmosDb.
+        /// </summary>
+        /// <param name="agro">IAgroManager, el cual conecta a Operations</param>
+        public async Task RegenerateIndex(IAgroManager<GeoPointType> agro) {
+            EmptyIndex();
+            await GenerateIndex(agro);
         }
 
-       
     }
 
 }
