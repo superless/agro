@@ -320,12 +320,12 @@ namespace trifenix.connect.util
         /// <typeparam name="T">Tipo de valor la propiedad</typeparam>
         /// <param name="related">Tipo de propiedad</param>
         /// <param name="elements">metadata y datos de un objeto</param>
-        /// <param name="typeToCast">elemento al que convertir, debe implementar IProperty</param>
         /// <param name="castGeoToSearch">Función para convertir el elemento geo de la clase a la de la entidad de busqueda</param>
         /// <returns>listado de propiedades de un tipo</returns>
-        public static IEnumerable<IProperty<T>> GetPropertiesObjects<T>(KindProperty related, Dictionary<BaseIndexAttribute, object> elements, Type typeToCast, Func<object, T> castGeoToSearch = null) =>
-            elements.Where(s => !s.Key.IsEntity && s.Key.KindIndex == (int)related).SelectMany(s => GetArrayOfElements<T>(s, typeToCast, castGeoToSearch));
-
+        public static IEnumerable<T2_Cast> GetPropertiesObjects<T,T2_Cast>(KindProperty related, Dictionary<BaseIndexAttribute, object> elements, Func<object, T> castGeoToSearch = null) where T2_Cast : IProperty<T> {
+            IEnumerable<IProperty<T>> array = elements.Where(s => !s.Key.IsEntity && s.Key.KindIndex == (int)related).SelectMany(s => GetArrayOfElements<T>(s, typeof(T2_Cast), castGeoToSearch));
+            return !array.Any() ? Array.Empty<T2_Cast>() : (IEnumerable<T2_Cast>)array;
+        }
 
         /// <summary>
         /// Obtiene referencias de una entidad (no locales), desde el listado de metadata y valores de un objeto.
@@ -344,21 +344,18 @@ namespace trifenix.connect.util
         /// base del entitySearch
         /// </summary>
         /// <param name="values">Diccionario con la metadata y valor de la propiedad</param>
-        /// <param name="typeToCast">Tipo a convertir que implemente INum32Property</param>
         /// <returns>array de clase indicada que implementa INum32Property</returns>
-        public static INum32Property[] GetNumProps(Dictionary<BaseIndexAttribute, object> values, Type typeToCast) =>
-            (INum32Property[])GetPropertiesObjects<int>(KindProperty.NUM32, values, typeToCast).ToArray();
-
-
+        public static INum32Property[] GetNumProps<T>(Dictionary<BaseIndexAttribute, object> values) where T : class, INum32Property =>
+            GetPropertiesObjects<int, T>(KindProperty.NUM32, values).ToArray();
+            
         /// <summary>
         /// Obtiene las propiedades de tipo double encontradas en un objeto
         /// base del entitySearch
         /// </summary>
         /// <param name="values">Diccionario con la metadata y valor de la propiedad</param>
-        /// <param name="typeToCast">Tipo a convertir que implemente IDblProperty</param>
         /// <returns>array de clase indicada que implementa IDblProperty</returns>
-        public static IDblProperty[] GetDblProps(Dictionary<BaseIndexAttribute, object> values, Type typeToCast) =>
-            (IDblProperty[])GetPropertiesObjects<double>(KindProperty.DBL, values, typeToCast).ToArray();
+        public static IDblProperty[] GetDblProps<T>(Dictionary<BaseIndexAttribute, object> values) where T : class, IDblProperty =>
+            GetPropertiesObjects<double, T>(KindProperty.DBL, values).ToArray();
 
 
         /// <summary>
@@ -366,10 +363,9 @@ namespace trifenix.connect.util
         /// base del entitySearch
         /// </summary>
         /// <param name="values">Diccionario con la metadata y valor de la propiedad</param>
-        /// <param name="typeToCast">Tipo a convertir que implemente IDtProperty</param>
         /// <returns>array de clase indicada que implementa IDtProperty</returns>
-        public static IDtProperty[] GetDtProps(Dictionary<BaseIndexAttribute, object> values, Type typeToCast) =>
-            (IDtProperty[])GetPropertiesObjects<DateTime>(KindProperty.DATE, values, typeToCast).ToArray();
+        public static IDtProperty[] GetDtProps<T>(Dictionary<BaseIndexAttribute, object> values) where T : class, IDtProperty =>
+            GetPropertiesObjects<DateTime, T>(KindProperty.DATE, values).ToArray();
 
 
         /// <summary>
@@ -377,10 +373,9 @@ namespace trifenix.connect.util
         /// base del entitySearch
         /// </summary>
         /// <param name="values">Diccionario con la metadata y valor de la propiedad</param>
-        /// <param name="typeToCast">Tipo a convertir que implemente IEnumProperty</param>
         /// <returns>array de clase indicada que implementa IEnumProperty</returns>
-        public static IEnumProperty[] GetEnumProps(Dictionary<BaseIndexAttribute, object> values, Type typeToCast) =>
-            (IEnumProperty[])GetPropertiesObjects<int>(KindProperty.ENUM, values, typeToCast).ToArray();
+        public static IEnumProperty[] GetEnumProps<T>(Dictionary<BaseIndexAttribute, object> values) where T : class, IEnumProperty =>
+            GetPropertiesObjects<int, T>(KindProperty.ENUM, values).ToArray();
 
 
         /// <summary>
@@ -388,10 +383,9 @@ namespace trifenix.connect.util
         /// base del entitySearch
         /// </summary>
         /// <param name="values">Diccionario con la metadata y valor de la propiedad</param>
-        /// <param name="typeToCast">Tipo a convertir que implemente IBoolProperty</param>
         /// <returns>array de clase indicada que implementa IBoolProperty</returns>
-        public static IBoolProperty[] GetBoolProps(Dictionary<BaseIndexAttribute, object> values, Type typeToCast) =>
-            (IBoolProperty[])GetPropertiesObjects<bool>(KindProperty.BOOL, values, typeToCast).ToArray();
+        public static IBoolProperty[] GetBoolProps<T>(Dictionary<BaseIndexAttribute, object> values) where T : class, IBoolProperty =>
+            GetPropertiesObjects<bool, T>(KindProperty.BOOL, values).ToArray();
 
 
         /// <summary>
@@ -403,21 +397,19 @@ namespace trifenix.connect.util
         /// <typeparam name="T">Tipo de dato de la propiedad geo de una entidad</typeparam>
         /// <param name="castGeoToSearch">Convierte el objeto geo de una instancia de una clase al entitySearch.</param>
         /// <param name="values">Diccionario con la metadata y valor de la propiedad.</param>
-        /// <param name="typeToCast">Tipo a convertir que implemente IProperty<T> donde T es el tipo geo que usa el entitySearch</param>
         /// <returns>retorna un array de clase indicada que implementa IBoolProperty</returns>
-        public static IProperty<T>[] GetGeoProps<T>(Dictionary<BaseIndexAttribute, object> values, Type typeToCast, Func<object, T> castGeoToSearch) =>
-            GetPropertiesObjects<T>(KindProperty.GEO, values, typeToCast, castGeoToSearch).ToArray();
+        public static IProperty<T>[] GetGeoProps<T, T2>(Dictionary<BaseIndexAttribute, object> values, Func<object, T> castGeoToSearch) where T2 : class, IProperty<T> =>
+            GetPropertiesObjects<T, T2>(KindProperty.GEO, values, castGeoToSearch).ToArray();
 
 
         /// <summary>
         /// Obtiene las propiedades de tipo long encontradas en un objeto
         /// base del entitySearch
         /// </summary>
-        /// <param name="values">Diccionario con la metadata y valor de la propiedad</param>
-        /// <param name="typeToCast">Tipo a convertir que implemente INum64Property</param>        
+        /// <param name="values">Diccionario con la metadata y valor de la propiedad</param>   
         /// <returns>retorna una array de propiedades de tipo  long que implemente INum64Property</returns>
-        public static INum64Property[] GetNum64Props(Dictionary<BaseIndexAttribute, object> values, Type typeToCast) =>
-            (INum64Property[])GetPropertiesObjects<long>(KindProperty.NUM64, values, typeToCast).ToArray();
+        public static INum64Property[] GetNum64Props<T>(Dictionary<BaseIndexAttribute, object> values) where T : class, INum64Property =>
+            GetPropertiesObjects<long, T>(KindProperty.NUM64, values).ToArray();
 
 
 
@@ -426,10 +418,9 @@ namespace trifenix.connect.util
         /// base del entitySearch
         /// </summary>
         /// <param name="values">Diccionario con la metadata y valor de la propiedad</param>
-        /// <param name="typeToCast">Tipo a convertir que implemente IStrProperty</param>
         /// <returns>retorna una array de propiedades de tipo string que implemente IStrProperty</returns>
-        public static IStrProperty[] GetStrProps(Dictionary<BaseIndexAttribute, object> values, Type typeToCast) =>
-          (IStrProperty[])GetPropertiesObjects<string>(KindProperty.STR, values, typeToCast).ToArray();
+        public static IStrProperty[] GetStrProps<T>(Dictionary<BaseIndexAttribute, object> values) where T : class, IStrProperty =>
+          GetPropertiesObjects<string, T>(KindProperty.STR, values).ToArray();
 
 
 
@@ -439,10 +430,9 @@ namespace trifenix.connect.util
         /// base del entitySearch
         /// </summary>
         /// <param name="values">Diccionario con la metadata y valor de la propiedad</param>
-        /// <param name="typeToCast">Tipo a convertir que implemente IStrProperty</param>
         /// <returns>retorna una array de propiedades de tipo string que implemente IStrProperty, de propiedades que consideren suggest en su atributo mdm</returns>
-        public static IStrProperty[] GetSugProps(Dictionary<BaseIndexAttribute, object> values, Type typeToCast) =>
-          (IStrProperty[])GetPropertiesObjects<string>(KindProperty.STR, values, typeToCast).ToArray();
+        public static IStrProperty[] GetSugProps<T>(Dictionary<BaseIndexAttribute, object> values) where T : class, IStrProperty =>
+          GetPropertiesObjects<string, T>(KindProperty.STR, values).ToArray();
 
 
 
@@ -484,15 +474,15 @@ namespace trifenix.connect.util
         public static IEntitySearch<T> FillProps<T>(Implements<T> implements, Dictionary<BaseIndexAttribute, object> mdl, Type typeToCast) {
 
             var entitySearch = (IEntitySearch<T>)Reflection.Collections.CreateEntityInstance(typeToCast);
-            entitySearch.num32 = GetNumProps(mdl, implements.num32);
-            entitySearch.dbl = GetDblProps(mdl, implements.dbl);
-            entitySearch.dt = GetDtProps(mdl, implements.dt);
-            entitySearch.enm = GetEnumProps(mdl, implements.enm);
-            entitySearch.bl = GetBoolProps(mdl, implements.bl);
-            entitySearch.geo = GetGeoProps(mdl, implements.geo, implements.GeoObjetoToGeoSearch);
-            entitySearch.num64 = GetNum64Props(mdl, implements.num64);
-            entitySearch.str = GetStrProps(mdl, implements.str);
-            entitySearch.sug = GetSugProps(mdl, implements.sug);
+            entitySearch.num32 = (INum32Property[])Reflection.InvokeDynamicGeneric(typeof(Mdm), "GetNumProps", implements.num32, null, new object[] { mdl });
+            entitySearch.dbl = (IDblProperty[])Reflection.InvokeDynamicGeneric(typeof(Mdm), "GetDblProps", implements.dbl, null, new object[] { mdl });
+            entitySearch.dt = (IDtProperty[])Reflection.InvokeDynamicGeneric(typeof(Mdm), "GetDtProps", implements.dt, null, new object[] { mdl });
+            entitySearch.enm = (IEnumProperty[])Reflection.InvokeDynamicGeneric(typeof(Mdm), "GetEnumProps", implements.enm, null, new object[] { mdl });
+            entitySearch.bl = (IBoolProperty[])Reflection.InvokeDynamicGeneric(typeof(Mdm), "GetBoolProps", implements.bl, null, new object[] { mdl });
+            entitySearch.geo = (IProperty<T>[])Reflection.InvokeDynamicGeneric(typeof(Mdm), "GetGeoProps", implements.geo, null, new object[] { mdl, implements.GeoObjetoToGeoSearch });
+            entitySearch.num64 = (INum64Property[])Reflection.InvokeDynamicGeneric(typeof(Mdm), "GetNum64Props", implements.num64, null, new object[] { mdl });
+            entitySearch.str = (IStrProperty[])Reflection.InvokeDynamicGeneric(typeof(Mdm), "GetStrProps", implements.str, null, new object[] { mdl });
+            entitySearch.sug = (IStrProperty[])Reflection.InvokeDynamicGeneric(typeof(Mdm), "GetSugProps", implements.sug, null, new object[] { mdl });
             entitySearch.rel = GetReferences(mdl, implements.rel);
             return entitySearch;
         }
