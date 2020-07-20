@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using trifenix.agro.db.interfaces;
 using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.interfaces.common;
-using trifenix.agro.db.model.local;
 using trifenix.agro.external.interfaces;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.validator.interfaces;
