@@ -2,7 +2,7 @@
 
 
 
-namespace trifenix.connect.agro.model_input
+namespace trifenix.connect.agro_model_input
 {
     public abstract class InputBase {
 

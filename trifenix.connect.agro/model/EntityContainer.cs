@@ -2,7 +2,7 @@
 using Cosmonaut.Attributes;
 using trifenix.agro.db;
 
-namespace trifenix.connect.agro.model
+namespace trifenix.connect.agro_model
 {
 
 

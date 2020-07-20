@@ -27,8 +27,8 @@ using trifenix.agro.storage.interfaces;
 using trifenix.agro.validator.interfaces;
 using trifenix.agro.validator.operations;
 using trifenix.agro.weather.interfaces;
-using trifenix.connect.agro.model;
-using trifenix.connect.agro.model_input;
+using trifenix.connect.agro_model;
+using trifenix.connect.agro_model_input;
 
 namespace trifenix.agro.external.operations {
     public class AgroManager : IAgroManager<GeographyPoint> {

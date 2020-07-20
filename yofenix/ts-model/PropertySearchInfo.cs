@@ -16,10 +16,20 @@ namespace trifenix.connect.mdm.ts_model
         public int Index { get; set; }
 
 
+        public bool IsEntity { get; set; }
+
+
         /// <summary>
         /// tipo de propiedad.
         /// </summary>
         public KindProperty Related { get; set; }
+
+
+        /// <summary>
+        /// tipo de propiedad.
+        /// </summary>
+        public KindEntityProperty RelatedEntity { get; set; }
+
 
         /// <summary>
         /// Nombre de la propiedad
@@ -88,6 +98,8 @@ namespace trifenix.connect.mdm.ts_model
         /// Grupo al que pertenece. 
         /// </summary>
         public GroupInput[] Group { get; set; }
+
+
 
 
 

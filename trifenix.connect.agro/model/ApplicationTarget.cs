@@ -7,7 +7,7 @@ using trifenix.connect.agro.mdm_attributes;
 using trifenix.connect.mdm.enums;
 using trifenix.connect.mdm_attributes;
 
-namespace trifenix.connect.agro.model
+namespace trifenix.connect.agro_model
 {
 
 

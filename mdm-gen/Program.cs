@@ -29,23 +29,15 @@ namespace mdm_gen
         public class TypeScriptArguments {
 
 
-            //[Option('n', "namespaces", Required = false, HelpText = "Namespaces donde se encuentra los modelos")]
-            //public string[] Namespaces { get; set; }
+            [Option('m', "model-namespace", Required = false, HelpText = "namespace del modelo de clases")]
+            public string modelNamespace { get; set; }
+
+            [Option('i', "input-namespace", Required = false, HelpText = "namespace de las clases input")]
+            public string inputNamespace { get; set; }
 
 
-            //[Option('i', "index-namespace", Required = false, HelpText = "namespace de las enumeraciones que representan los índices del metadata moddel")]
-            //public string indexNamespace { get; set; }
-
-            //[Option('m', "model-namespace", Required = false, HelpText = "namespace del modelo de clases")]
-            //public string modelNamespace { get; set; }
-
-            //[Option('i', "input-namespace", Required = false, HelpText = "namespace de las clases input")]
-            //public string Namespace { get; set; }
-
-
-
-
-
+            [Option('d', "docs-namespace", Required = false, HelpText = "namespace donde se encuentre la implementación de IMdmDocumentation")]
+            public string docsNamespace { get; set; }
 
 
             [Option('a', "assembly", Required = false, HelpText = "ruta del assembly")]
@@ -62,6 +54,9 @@ namespace mdm_gen
 
             [Option('e', "email", Required = true, HelpText = "correo que registra el cambio en el repositorio del componente")]
             public string email { get; set; }
+
+
+
         }
 
        
@@ -92,10 +87,17 @@ namespace mdm_gen
 
             Colorful.Console.WriteLine("Usted ha seleccionado la generación de paquetes de Typescript", Color.DarkGreen);
 
-            if (ts.GenKind == GenKind.model)
-            {   
+            if (ts.GenKind == GenKind.model && string.IsNullOrWhiteSpace(ts.modelNamespace))
+            {
                 Colorful.Console.WriteLine("Generación de paquete con los tipos base de MDM", Color.DarkGreen);
                 CreateBaseModelPackage(ts.GitAddress, ts.email, ts.username);
+            }
+            else if (ts.GenKind == GenKind.data) {
+
+                Colorful.Console.WriteLine("Generación datos del modelo", Color.DarkGreen);
+                CreateDataModel(ts.Assembly, ts.modelNamespace, ts.inputNamespace, ts.docsNamespace, ts.GitAddress, ts.username, ts.email);
+
+                
             }
 
 
@@ -114,6 +116,11 @@ namespace mdm_gen
         public static void CreateBaseModelPackage(string gitAddress, string email, string username) {
             MdmGen.GenerateMdm(gitAddress, email, username);
         }
+
+        public static void CreateDataModel(string assembly, string modelNamespace, string inputNamespace, string documentNamespace, string gitRepo, string user, string email) {
+            MdmGen.GenerateDataMdm(assembly, modelNamespace, inputNamespace, documentNamespace, gitRepo, user, email);
+        }
+
 
     }
 

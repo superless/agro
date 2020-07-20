@@ -10,8 +10,8 @@ using trifenix.agro.model.external;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.validator.interfaces;
-using trifenix.connect.agro.model;
-using trifenix.connect.agro.model_input;
+using trifenix.connect.agro_model;
+using trifenix.connect.agro_model_input;
 using trifenix.connect.mdm.containers;
 using trifenix.connect.mdm.enums;
 

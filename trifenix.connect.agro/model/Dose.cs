@@ -3,13 +3,12 @@ using Cosmonaut.Attributes;
 using System;
 using System.Collections.Generic;
 using trifenix.agro.db;
-using trifenix.agro.db.model.local;
 using trifenix.connect.agro.index_model.enums;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
 using trifenix.connect.mdm.enums;
 
-namespace trifenix.connect.agro.model
+namespace trifenix.connect.agro_model
 {
 
     [SharedCosmosCollection("agro", "Dose")]

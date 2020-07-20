@@ -6,7 +6,7 @@ using System;
 using System.Text;
 using System.Threading.Tasks;
 using trifenix.agro.model.external.Input;
-using trifenix.connect.agro.model_input;
+using trifenix.connect.agro_model_input;
 
 namespace trifenix.agro.servicebus.operations {
     public class ServiceBus {

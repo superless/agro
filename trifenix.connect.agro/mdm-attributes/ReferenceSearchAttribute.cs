@@ -17,19 +17,21 @@ namespace trifenix.connect.agro.mdm_attributes
         /// <param name="index">índice que representa la propiedad</param>
         /// <param name="local">si es local, significa que no tiene su propio key value en la base de dato de persistencia.</param>
         /// <param name="visible">determina si la propiedad es visible en el cliente.</param>
-        public ReferenceSearchAttribute(EntityRelated index, bool local = false, bool visible = true):base()
+        public ReferenceSearchAttribute(EntityRelated index, bool local = false, bool visible = true)
         {
             KindIndex = (int)(local ? KindEntityProperty.LOCAL_REFERENCE : KindEntityProperty.REFERENCE);
             Index = (int)index;
             Visible = visible;
+            IsEntity = true;
         }
 
-        public ReferenceSearchAttribute(EntityRelated index, EntityRelated bypass, bool visible = true) : base()
+        public ReferenceSearchAttribute(EntityRelated index, EntityRelated bypass, bool visible = true)
         {
             KindIndex = (int)KindEntityProperty.REFERENCE;
             Index = (int)index;
             Visible = visible;
             Bypass = (int)bypass;
+            IsEntity = true;
         }
 
 

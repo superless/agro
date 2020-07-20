@@ -2,7 +2,7 @@
 using trifenix.connect.agro.mdm_attributes;
 using trifenix.connect.mdm.enums;
 
-namespace trifenix.connect.agro.model_input
+namespace trifenix.connect.agro_model_input
 {
     [ReferenceSearchHeader(EntityRelated.WAITINGHARVEST, true, Kind = EntityKind.CUSTOM_ENTITY)]
     public class WaitingHarvestInput {

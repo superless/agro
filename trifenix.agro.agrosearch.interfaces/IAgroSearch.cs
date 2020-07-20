@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using trifenix.agro.db;
 using trifenix.connect.agro.index_model.props;
-using trifenix.connect.agro.model_input;
+using trifenix.connect.agro_model_input;
 using trifenix.connect.mdm.entity_model;
 
 namespace trifenix.agro.search.interfaces

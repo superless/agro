@@ -1,7 +1,7 @@
 ﻿using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
 
-namespace trifenix.connect.agro.model
+namespace trifenix.connect.agro_model
 {
     /// <summary>
     /// usuario aplicador, a diferencia de un usuario este tiene asignado un tractor y una nebulizadora.

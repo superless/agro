@@ -4,7 +4,7 @@ using System;
 using trifenix.agro.db;
 using trifenix.connect.agro.index_model.enums;
 
-namespace trifenix.connect.agro.model
+namespace trifenix.connect.agro_model
 {
 
     /// <summary>

@@ -2,7 +2,7 @@
 using trifenix.agro.db.interfaces.agro.common;
 
 using trifenix.agro.enums.query;
-using trifenix.connect.agro.model;
+using trifenix.connect.agro_model;
 
 namespace trifenix.agro.db.applicationsReference.agro.Common {
     public class CosmosExistElement : BaseQueries, IExistElement {

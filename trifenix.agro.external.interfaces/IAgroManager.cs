@@ -5,8 +5,8 @@ using trifenix.agro.db.model;
 
 using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
-using trifenix.connect.agro.model;
-using trifenix.connect.agro.model_input;
+using trifenix.connect.agro_model;
+using trifenix.connect.agro_model_input;
 
 namespace trifenix.agro.external.interfaces {
     public interface IAgroManager<T> {

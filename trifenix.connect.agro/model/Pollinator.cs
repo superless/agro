@@ -2,7 +2,7 @@
 using trifenix.connect.agro.mdm_attributes;
 using trifenix.connect.mdm.enums;
 
-namespace trifenix.connect.agro.model
+namespace trifenix.connect.agro_model
 {
     /// <summary>
     /// clase local para hacer referencia a variedad.

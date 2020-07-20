@@ -7,7 +7,7 @@ using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
 using trifenix.connect.mdm.enums;
 
-namespace trifenix.connect.agro.model
+namespace trifenix.connect.agro_model
 {
 
     [SharedCosmosCollection("agro", "ApplicationOrder")]
@@ -87,6 +87,7 @@ namespace trifenix.connect.agro.model
     /// asocia cuarteles a una orden y las notificaciones desde 
     /// monitoreo.
     /// </summary>
+    [ReferenceSearchHeader(EntityRelated.BARRACK_EVENT, true)]
     public class BarrackOrderInstance {
 
 
@@ -110,6 +111,7 @@ namespace trifenix.connect.agro.model
     /// asocia las dosis a la orden, 
     /// la dosis viene asociada con el producto.
     /// </summary>
+    [ReferenceSearchHeader(EntityRelated.DOSES_ORDER, true)]
     public class DosesOrder {
 
 

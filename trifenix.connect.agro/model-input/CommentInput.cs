@@ -1,9 +1,9 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
 using trifenix.agro.model.external.Input;
-using trifenix.connect.agro.model;
+using trifenix.connect.agro_model;
 
-namespace trifenix.connect.agro.model_input
+namespace trifenix.connect.agro_model_input
 {
     public class CommentInput : InputBase {
 

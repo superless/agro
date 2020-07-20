@@ -8,8 +8,8 @@ using trifenix.agro.external.interfaces;
 using trifenix.agro.microsoftgraph.interfaces;
 using trifenix.agro.search.interfaces;
 using trifenix.agro.validator.interfaces;
-using trifenix.connect.agro.model;
-using trifenix.connect.agro.model_input;
+using trifenix.connect.agro_model;
+using trifenix.connect.agro_model_input;
 using trifenix.connect.mdm.containers;
 using trifenix.connect.mdm.enums;
 

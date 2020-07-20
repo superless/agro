@@ -79,15 +79,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.cosmosdbiniti
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.attr", "trifenix.agro.attr\trifenix.agro.attr.csproj", "{9F512D4C-BB7F-4E04-B910-5ED9D66196F6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.typegen", "trifenix.typegen\trifenix.typegen.csproj", "{0AA42D20-30E0-4A29-908A-211393200176}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.validator.operations", "trifenix.agro.validator.operations\trifenix.agro.validator.operations.csproj", "{B7CABCB2-B345-4988-9C60-6CCB8DF2F74C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.validator.interfaces", "trifenix.agro.validator.interfaces\trifenix.agro.validator.interfaces.csproj", "{EBF55AAD-4E5D-4A24-BC7F-92FF4BD67F4D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.servicebus.operations", "trifenix.agro.servicebus.operations\trifenix.agro.servicebus.operations.csproj", "{28A6DDC2-A2F8-43AC-BDB8-AB5FF333AA26}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.typegen.data", "trifenix.typegen.data\trifenix.typegen.data.csproj", "{3ED203C2-4588-4551-BDA2-EE749C582A9A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "yo-fenix", "yo-fenix", "{297C0E5E-8B8E-4365-8E45-B795596FB57A}"
 EndProject
@@ -99,7 +95,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mdm-gen", "mdm-gen\mdm-gen.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.connect.mdm.az-search", "trifenix.connect.mdm.az-search\trifenix.connect.mdm.az-search.csproj", "{78B0648F-97AC-485B-8B0A-F2584B63FCEC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "trifenix.connect", "trifenix.connect\trifenix.connect.csproj", "{75FF7996-B064-40C7-A099-8029DC07262A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.connect", "trifenix.connect\trifenix.connect.csproj", "{75FF7996-B064-40C7-A099-8029DC07262A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -231,10 +227,6 @@ Global
 		{9F512D4C-BB7F-4E04-B910-5ED9D66196F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F512D4C-BB7F-4E04-B910-5ED9D66196F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F512D4C-BB7F-4E04-B910-5ED9D66196F6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0AA42D20-30E0-4A29-908A-211393200176}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0AA42D20-30E0-4A29-908A-211393200176}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0AA42D20-30E0-4A29-908A-211393200176}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0AA42D20-30E0-4A29-908A-211393200176}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B7CABCB2-B345-4988-9C60-6CCB8DF2F74C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B7CABCB2-B345-4988-9C60-6CCB8DF2F74C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7CABCB2-B345-4988-9C60-6CCB8DF2F74C}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -247,10 +239,6 @@ Global
 		{28A6DDC2-A2F8-43AC-BDB8-AB5FF333AA26}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28A6DDC2-A2F8-43AC-BDB8-AB5FF333AA26}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{28A6DDC2-A2F8-43AC-BDB8-AB5FF333AA26}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3ED203C2-4588-4551-BDA2-EE749C582A9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3ED203C2-4588-4551-BDA2-EE749C582A9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3ED203C2-4588-4551-BDA2-EE749C582A9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3ED203C2-4588-4551-BDA2-EE749C582A9A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E6A09456-0499-4124-9170-C46A70344131}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E6A09456-0499-4124-9170-C46A70344131}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E6A09456-0499-4124-9170-C46A70344131}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -307,11 +295,9 @@ Global
 		{F31E535C-C8AE-4836-8035-755D49658A46} = {C7EA10FB-7451-4775-B7B7-FE8D1DF9E7F7}
 		{31B8C9E9-1271-47D4-B27A-D2984E715F0A} = {874ECDB1-116E-49AB-825B-82384C5A57D5}
 		{9F512D4C-BB7F-4E04-B910-5ED9D66196F6} = {E281F827-E0A7-469B-B19D-20C697EA7C3A}
-		{0AA42D20-30E0-4A29-908A-211393200176} = {85917EE6-3B67-4DEF-8521-9C4C946E5D1B}
 		{B7CABCB2-B345-4988-9C60-6CCB8DF2F74C} = {C7EA10FB-7451-4775-B7B7-FE8D1DF9E7F7}
 		{EBF55AAD-4E5D-4A24-BC7F-92FF4BD67F4D} = {874ECDB1-116E-49AB-825B-82384C5A57D5}
 		{28A6DDC2-A2F8-43AC-BDB8-AB5FF333AA26} = {C7EA10FB-7451-4775-B7B7-FE8D1DF9E7F7}
-		{3ED203C2-4588-4551-BDA2-EE749C582A9A} = {85917EE6-3B67-4DEF-8521-9C4C946E5D1B}
 		{E6A09456-0499-4124-9170-C46A70344131} = {297C0E5E-8B8E-4365-8E45-B795596FB57A}
 		{70445617-9BA5-4DEF-8380-24A359BFE323} = {297C0E5E-8B8E-4365-8E45-B795596FB57A}
 		{F471F8BD-12BA-4D30-863A-77D847EAB5A1} = {297C0E5E-8B8E-4365-8E45-B795596FB57A}

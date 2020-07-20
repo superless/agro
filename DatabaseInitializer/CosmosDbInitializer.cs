@@ -14,8 +14,8 @@ using trifenix.agro.db;
 using trifenix.agro.db.exceptions;
 using trifenix.agro.external.interfaces;
 using trifenix.agro.model.external.Input;
-using trifenix.connect.agro.model;
-using trifenix.connect.agro.model_input;
+using trifenix.connect.agro_model;
+using trifenix.connect.agro_model_input;
 using trifenix.connect.mdm.containers;
 using trifenix.connect.mdm.enums;
 

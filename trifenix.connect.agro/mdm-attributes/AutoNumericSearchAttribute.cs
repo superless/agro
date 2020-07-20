@@ -18,7 +18,7 @@ namespace trifenix.connect.agro.mdm_attributes
         public AutoNumericSearchAttribute(NumRelated index)
         {
             Index = (int)index;
-            
+            KindIndex = (int)KindProperty.NUM64;
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace trifenix.connect.agro.mdm_attributes
         public AutoNumericSearchAttribute(NumRelated index, EntityRelated dependant): this(index)
         {
             Dependant = (int?)dependant;
-            KindIndex = (int)KindProperty.NUM64;
+            
         }
         
 

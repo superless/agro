@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.enums.query;
-using trifenix.connect.agro.model;
+using trifenix.connect.agro_model;
 
 namespace trifenix.agro.db.applicationsReference.agro.Common {
 

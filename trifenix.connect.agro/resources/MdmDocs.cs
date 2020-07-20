@@ -6,6 +6,8 @@ using trifenix.connect.mdm.ts_model;
 
 namespace trifenix.connect.agro.resources
 {
+
+
     public class MdmDocs : IMdmDocumentation
     {
         public EntitySearchDisplayInfo GetInfoFromEntity(int index)

@@ -5,7 +5,7 @@ using trifenix.connect.agro.index_model.enums;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
 
-namespace trifenix.connect.agro.model_input
+namespace trifenix.connect.agro_model_input
 {
     [ReferenceSearchHeader(EntityRelated.NOTIFICATION_EVENT)]
     public class NotificationEventInput : InputBase {

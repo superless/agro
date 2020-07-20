@@ -36,6 +36,10 @@ namespace trifenix.connect.mdm.ts_model
         /// </summary>
         public bool Visible { get; set; }
 
+
+
+        public GroupMenu[] Menus { get; set; }
+
         /// <summary>
         /// Tipo de entidad, si es de tipo entity, se podría indicar que es común,
         /// por tanto puede ser generada automáticamente.

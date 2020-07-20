@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using trifenix.agro.db.exceptions;
 using trifenix.agro.db.interfaces;
 using trifenix.connect.agro.mdm_attributes;
-using trifenix.connect.agro.model;
+using trifenix.connect.agro_model;
 using trifenix.connect.util;
 
 namespace trifenix.agro.db.applicationsReference

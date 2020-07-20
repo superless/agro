@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using trifenix.connect.agro.index_model.enums;
 
-namespace trifenix.connect.agro.model_input
+namespace trifenix.connect.agro_model_input
 {
 
     public class UserActivityInput : InputBase {

@@ -13,7 +13,7 @@ using trifenix.agro.external.operations;
 using trifenix.agro.search.operations;
 using trifenix.connect.agro.index_model.enums;
 using trifenix.connect.agro.index_model.props;
-using trifenix.connect.agro.model;
+using trifenix.connect.agro_model;
 using static trifenix.connect.util.Mdm.Reflection;
 
 namespace trifenix.agro.console

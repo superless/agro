@@ -10,7 +10,7 @@ using trifenix.agro.db;
 using trifenix.agro.external.interfaces;
 using trifenix.agro.functions.Helper;
 using trifenix.agro.servicebus.operations;
-using trifenix.connect.agro.model_input;
+using trifenix.connect.agro_model_input;
 using trifenix.connect.mdm.containers;
 using trifenix.connect.mdm.enums;
 

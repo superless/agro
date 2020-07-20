@@ -4,7 +4,7 @@ using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
 using trifenix.connect.mdm.enums;
 
-namespace trifenix.agro.db.model.local
+namespace trifenix.connect.agro_model
 {
     /// <summary>
     /// Días de espera antes de cosechar
