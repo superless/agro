@@ -60,7 +60,7 @@ namespace trifenix.agro.console
             }
 
             //search.EmptyIndex<EntitySearch>("entities");
-            search.DeleteElements($"entityIndex/any(index: index eq {(int)EntityRelated.USER})");
+            search.DeleteElements($"entityIndex eq {(int)EntityRelated.USER}");
             await search.GenerateIndex(agro);
 
             
