@@ -25,10 +25,21 @@ namespace trifenix.connect.util
             /// </summary>
             /// <param name="ClassContainer">Clase que contiene el método genérico</param>
             /// <param name="MethodName">Nombre del método genérico</param>
-            /// <param name="GenericType">Tipo de dato usado como genérico</param>
-            /// <param name="Obj">Objeto para métodos de instancia</param>
+            /// <param name="GenericType">Tipo de dato usado como genérico</param>            
             /// <param name="Parameters">Conjunto de parámetros utilizados por el método genérico</param>
-            public static object InvokeDynamicGeneric(Type ClassContainer, string MethodName, Type GenericType, object Obj, object[] Parameters) => ClassContainer.GetMethod(MethodName).MakeGenericMethod(GenericType).Invoke(Obj, Parameters);
+            /// <param name="genericProp"></param>
+            public static object InvokeDynamicGeneric(string MethodName, Type GenericType, object[] Parameters, Type genericProp = null) {
+
+                var mtd = typeof(Mdm).GetMethod(MethodName, BindingFlags.Public | BindingFlags.Static);
+                if (genericProp == null)
+                {
+                    return mtd.MakeGenericMethod(GenericType).Invoke(null, Parameters);
+                }
+                else
+                {
+                    return mtd.MakeGenericMethod(genericProp, GenericType).Invoke(null, Parameters);
+                }
+            }
 
 
             /// <summary>
