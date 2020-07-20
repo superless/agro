@@ -30,7 +30,7 @@ namespace trifenix.agro.search.operations {
         private readonly CorsOptions _corsOptions;
 
         // índice para las entidades, nombre del indice en azure
-        private readonly string _entityIndex = "entities";
+        private readonly string _entityIndex = "entitiesv2";
 
         // consultas 
         private readonly ISearchQueries _queries;

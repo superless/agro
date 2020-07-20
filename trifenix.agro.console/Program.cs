@@ -32,16 +32,19 @@ namespace trifenix.agro.console {
             Environment.SetEnvironmentVariable("tenantID", "13f71027-8389-436e-bdaf-7bd34382fbff");
             Environment.SetEnvironmentVariable("Search_allowedOrigins", "https://aresa.trifenix.io;https://dev-aresa.trifenix.io;https://agro.trifenix.io;https://agro-dev.trifenix.io;http://localhost:3000;http://localhost:4000;https://aresa2-dev.trifenix.io;https://aresa2.trifenix.io;http://localhost:9009;https://portal.azure.com");
 
-            //var agroDbArguments = new AgroDbArguments { EndPointUrl = "https://agricola-jhm.documents.azure.com:443/", NameDb = "agrodb", PrimaryKey = "yG6EIAT1dKSBaS7oSZizTrWQGGfwSb2ot2prYJwQOLHYk3cGmzvvhGohSzFZYHueSFDiptUAqCQYYSeSetTiKw==" };
-            //var search = new AgroSearch<GeographyPoint>("agrosearch", "016DAA5EF1158FEEEE58DA60996D5981", new CorsOptions(Environment.GetEnvironmentVariable("Search_allowedOrigins", EnvironmentVariableTarget.Process).Split(";")));
-            //var agro = new AgroManager(agroDbArguments, null, null, null, search, null, false);
+            var agroDbArguments = new AgroDbArguments { EndPointUrl = "https://agricola-jhm.documents.azure.com:443/", NameDb = "agrodb", PrimaryKey = "yG6EIAT1dKSBaS7oSZizTrWQGGfwSb2ot2prYJwQOLHYk3cGmzvvhGohSzFZYHueSFDiptUAqCQYYSeSetTiKw==" };
+            var search = new AgroSearch<GeographyPoint>("agrosearch", "016DAA5EF1158FEEEE58DA60996D5981", new CorsOptions(Environment.GetEnvironmentVariable("Search_allowedOrigins", EnvironmentVariableTarget.Process).Split(";")));
+            var agro = new AgroManager(agroDbArguments, null, null, null, search, null, false);
 
             #region Vaciar Search y/o CosmosDb
-            ////Aquí defino si se vaciará CosmosDb, Index Search, ambos o ninguno
-            //bool vaciarCosmosDb = false, vaciarSearch = false, vaciarAmbos = false;
+            //Aquí defino si se vaciará CosmosDb, Index Search, ambos o ninguno
+            bool vaciarCosmosDb = false, vaciarSearch = true, vaciarAmbos = false;
 
-            //if (vaciarAmbos || vaciarSearch)
-            //    search.EmptyIndex();
+            if (vaciarAmbos || vaciarSearch)
+                search.EmptyIndex();
+            await search.GenerateIndex(agro);
+
+            //search.RegenerateIndex(agro);
 
             //IEnumerable<Task> tasks;
             //ConcurrentBag<object> bag;
@@ -173,7 +176,7 @@ namespace trifenix.agro.console {
             //    new PhenologicalEvent { Name = "Aparicion de flor", StartDate = new DateTime(2020, 5, 1), EndDate = new DateTime(2020, 7, 1) },
             //    new OrderFolder { IdSpecie = "14", IdApplicationTarget = "104", IdPhenologicalEvent = "108", IdIngredientCategory = "101", IdIngredient = "102" },
             ////new PreOrder { Name = "Eulia", OrderFolderId = "18", IdIngredient = "12", PreOrderType = (PreOrderType)1, BarracksId = new string[] { "9" } },
-                
+
             //    new Tractor { Brand = "John Deere", Code = "JD" },  //110
             //    new Tractor { Brand = "Kubota", Code = "KBT" },
             //    new Tractor { Brand = "New Holland TF75", Code = "NHTF" },
