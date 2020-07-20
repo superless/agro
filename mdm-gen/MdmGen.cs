@@ -272,7 +272,7 @@ namespace mdm_gen
 
                 var infoHeader = s.GetTypeInfo().GetCustomAttributes<EntityIndexAttribute>(true).FirstOrDefault();
 
-                var groupHeader = s.GetTypeInfo().GetCustomAttributes<EntityGroupMenuAttribute>(true);
+                var grp = s.GetCustomAttributes(typeof(EntityGroupMenuAttribute), true).Select(s => (EntityGroupMenuAttribute)s).ToList();
 
 
                 return new
@@ -283,7 +283,7 @@ namespace mdm_gen
                     kindEntity = infoHeader.Kind,
                     propInfos = GetPropertySearchInfo(s, assemblyInput, inputNamespace, documentation),
                     className = s.Name,
-                    GroupMenu = groupHeader?.Select(s=>s.Grupo).ToArray()??Array.Empty<GroupMenu>()
+                    GroupMenu = grp?.Select(s=>s.Grupo).ToArray()??Array.Empty<GroupMenu>()
                 };
 
 
@@ -297,6 +297,7 @@ namespace mdm_gen
                 model.EntityKind = s.kindEntity;
                 model.ClassName = s.className;
                 model.AutoNumeric = s.propInfos.Any(a => a.AutoNumeric);
+                model.Menus = s.GroupMenu;
                 return model;
 
             }).ToList();
@@ -348,7 +349,10 @@ namespace mdm_gen
                 // buscando atributos. 
                 var searchAttribute = (BaseIndexAttribute)s.GetCustomAttributes(typeof(BaseIndexAttribute), true).FirstOrDefault();
                 var searchAttributeInput = elemTypeInputProps.FirstOrDefault(p => p.search.Index == searchAttribute.Index && p.search.IsEntity == searchAttribute.IsEntity);
-                var grp = (GroupAttribute[])s.GetCustomAttributes(typeof(GroupAttribute), true);
+                var grp = s.GetCustomAttributes(typeof(GroupAttribute), true).Select(s=>(GroupAttribute)s).ToList();
+
+
+
 
                 return new PropertySearchInfo
                 {
