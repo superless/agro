@@ -9,15 +9,5 @@
     }
 
 
-    public class EnumProperty : IPropertyBaseFaceTable<int>
-    {
-        public int index { get; set; }
-
-        public int value { get; set; }
-
-        public string facet { get; set; }
-    }
-
-
 
 }

@@ -6,16 +6,5 @@
     public interface IDblProperty : IProperty<double> { }
 
 
-    /// <summary>
-    /// implementación para typegen.
-    /// </summary>
-    public class DblProperty : IProperty<double>
-    {
-        
-        public int index { get; set; }
-        public double value { get; set; }
-    }
-
-
 
 }

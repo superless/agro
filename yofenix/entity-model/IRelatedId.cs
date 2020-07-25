@@ -17,19 +17,6 @@
 
     }
 
-    public class RelatedId : IPropertyFaceTable {
-
-
-        public string facet {get; set;}
-
-        public int index { get; set; }
-      
-        public string id { get; set; }
-
-
-
-    }
-
 
 
 }
