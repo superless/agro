@@ -1,4 +1,5 @@
 ﻿using System;
+using trifenix.connect.mdm.enums;
 
 namespace trifenix.connect.mdm_attributes
 {
@@ -8,6 +9,11 @@ namespace trifenix.connect.mdm_attributes
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
     public class AutoNumericDependantAttribute : PropertyIndexAttribute
     {
+
+        public AutoNumericDependantAttribute()
+        {
+            KindIndex = (int)KindProperty.NUM64;
+        }
 
         /// <summary>
         /// la autonumeneración puede depnder de otra entidad, para comenzar desde el principio,

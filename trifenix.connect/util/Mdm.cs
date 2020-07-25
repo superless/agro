@@ -140,7 +140,7 @@ namespace trifenix.connect.util
 
                     // si es referencia retornará la colección de ids del tipo de entidad solicitada.
                     case KindEntityProperty.REFERENCE:
-                        return (List<object>)entitySearch.rel?.ToList().FindAll(relatedId => relatedId.index == indexProperty).Select(s => s.id) ?? values;
+                        return (List<object>)entitySearch.rel?.Where(relatedId => relatedId.index == indexProperty).Select(s => s.id).Cast<object>().ToList() ?? values;
 
                     // al ser local, debe ir a buscar el objeto al repositorio del search y convertirlo en el objeto que indica la metadata de la propidad
                     case KindEntityProperty.LOCAL_REFERENCE:
