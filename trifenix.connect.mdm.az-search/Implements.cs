@@ -1,9 +1,9 @@
 ﻿using Microsoft.Spatial;
 using System;
-using trifenix.connect.mdm.az_search;
+
 using trifenix.connect.search_mdl;
 
-namespace trifenix.agro.search.operations
+namespace trifenix.connect.mdm.az_search
 {
     public class Implements : Implements<GeographyPoint>
     {
