@@ -97,6 +97,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.connect.mdm.az-sea
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.connect", "trifenix.connect\trifenix.connect.csproj", "{75FF7996-B064-40C7-A099-8029DC07262A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "trifenix.connect.test", "trifenix.connect.test\trifenix.connect.test.csproj", "{F9813F3A-0F57-46B2-BE1E-DECA341E6F42}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -259,6 +261,10 @@ Global
 		{75FF7996-B064-40C7-A099-8029DC07262A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75FF7996-B064-40C7-A099-8029DC07262A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{75FF7996-B064-40C7-A099-8029DC07262A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9813F3A-0F57-46B2-BE1E-DECA341E6F42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9813F3A-0F57-46B2-BE1E-DECA341E6F42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9813F3A-0F57-46B2-BE1E-DECA341E6F42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9813F3A-0F57-46B2-BE1E-DECA341E6F42}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -303,6 +309,7 @@ Global
 		{F471F8BD-12BA-4D30-863A-77D847EAB5A1} = {297C0E5E-8B8E-4365-8E45-B795596FB57A}
 		{78B0648F-97AC-485B-8B0A-F2584B63FCEC} = {297C0E5E-8B8E-4365-8E45-B795596FB57A}
 		{75FF7996-B064-40C7-A099-8029DC07262A} = {297C0E5E-8B8E-4365-8E45-B795596FB57A}
+		{F9813F3A-0F57-46B2-BE1E-DECA341E6F42} = {297C0E5E-8B8E-4365-8E45-B795596FB57A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2C0C9D82-464E-4741-8541-CDC460278FEC}
