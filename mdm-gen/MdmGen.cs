@@ -13,6 +13,7 @@ using trifenix.connect.mdm.entity_model;
 using trifenix.connect.mdm.enums;
 using trifenix.connect.mdm.resources;
 using trifenix.connect.mdm.ts_model;
+using trifenix.connect.mdm.ts_model.props;
 using trifenix.connect.mdm_attributes;
 using trifenix.connect.ts_model.enums;
 using trifenix.connect.util;
@@ -435,7 +436,7 @@ namespace mdm_gen
             AddInterface<PropertyMetadata>("data/");
             AddInterface<ModelMetaData>("data/");
             AddInterface<EntityMetadata>("data/");
-            AddInterface<EntitySearch>("model/main");
+            AddInterface<EntityBaseSearch>("model/main");
             AddInterface<GeoPointTs>("model/main").CustomBase("");
             AddInterface(typeof(IProperty<>), "model/main");
             AddInterface<GeographyProperty>("model/main").CustomBase("");
@@ -535,20 +536,5 @@ namespace mdm_gen
 
 
 
-    public class EntitySearch 
-    {
-        public string id { get; set; }
-        public DateTime created { get; set; }
-        public int index { get; set; }
-        public BoolProperty[] bl { get; set; }
-        public DblProperty[] dbl { get; set; }
-        public DtProperty[] dt { get; set; }
-        public EnumProperty[] enm { get; set; }
-        public Num32Property[] num32 { get; set; }
-        public Num64Property[] num64 { get; set; }
-        public RelatedId[] rel { get; set; }
-        public StrProperty[] str { get; set; }
-        public StrProperty[] sug { get; set; }
-        public GeographyProperty geo { get; set; }
-    }
+    
 }
