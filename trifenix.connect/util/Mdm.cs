@@ -504,8 +504,9 @@ namespace trifenix.connect.util
         /// <param name="mdl">diccionario con la metadata y los datos de cada propiedad.</param>
         /// <returns>nueva entidad desde ub objeto</returns>
         public static IEntitySearch<T> FillProps<T>(Implements<T> implements, Dictionary<BaseIndexAttribute, object> mdl, Type typeToCast) {
+            var objSearch = Reflection.Collections.CreateEntityInstance(typeToCast);
+            var entitySearch = GetEntityBaseSearch<T>(objSearch);
 
-            var entitySearch = (IEntitySearch<T>)Reflection.Collections.CreateEntityInstance(typeToCast);
             entitySearch.num32 = (INum32Property[])Reflection.InvokeDynamicGeneric("GetNumProps", implements.num32, new object[] { mdl });
             entitySearch.dbl = (IDblProperty[])Reflection.InvokeDynamicGeneric("GetDblProps", implements.dbl, new object[] { mdl });
             entitySearch.dt = (IDtProperty[])Reflection.InvokeDynamicGeneric("GetDtProps", implements.dt, new object[] { mdl });
@@ -518,6 +519,24 @@ namespace trifenix.connect.util
             entitySearch.rel = GetReferences(mdl, implements.rel);
             return entitySearch;
         }
+
+        public static EntityBaseSearch<T> GetEntityBaseSearch<T>(object entity) {
+            var entitySearch = new EntityBaseSearch<T>();
+
+            entitySearch.num32 = (INum32Property[])entity.GetType().GetProperty("num32").GetValue(entity);
+
+            entitySearch.dbl = (IDblProperty[])entity.GetType().GetProperty("dbl").GetValue(entity);
+            entitySearch.dt = (IDtProperty[])entity.GetType().GetProperty("dt").GetValue(entity);
+            entitySearch.enm = (IEnumProperty[])entity.GetType().GetProperty("enm").GetValue(entity); 
+            entitySearch.bl = (IBoolProperty[])entity.GetType().GetProperty("bl").GetValue(entity); ;
+            entitySearch.geo = (IProperty<T>[])entity.GetType().GetProperty("geo").GetValue(entity); ;
+            entitySearch.num64 = (INum64Property[])entity.GetType().GetProperty("num64").GetValue(entity); ;
+            entitySearch.str = (IStrProperty[])entity.GetType().GetProperty("str").GetValue(entity); ;
+            entitySearch.sug = (IStrProperty[])entity.GetType().GetProperty("sug").GetValue(entity); ;
+
+            return entitySearch;
+        }
+
 
         /// <summary>
         /// Obtiene 
