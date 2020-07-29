@@ -1,5 +1,7 @@
-﻿using Microsoft.Azure.Search;
+﻿using AutoMapper;
+using Microsoft.Azure.Search;
 using Microsoft.Azure.Search.Models;
+using Microsoft.Spatial;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,6 +37,7 @@ namespace trifenix.agro.search.operations {
         // consultas 
         private readonly ISearchQueries _queries;
 
+        
 
         /// <summary>
         /// Consultas y mutación en Azure search.
@@ -134,8 +137,28 @@ namespace trifenix.agro.search.operations {
         public List<IEntitySearch<GeoPointType>> FilterElements(string filter) {
             var indexName = _entityIndex;
             var indexClient = _search.Indexes.GetClient(indexName);
-            var result = indexClient.Documents.Search<IEntitySearch<GeoPointType>>(null, new SearchParameters { Filter = filter });
-            return result.Results.Select(v => v.Document).ToList();
+            var result = indexClient.Documents.Search<EntitySearch>(null, new SearchParameters { Filter = filter });
+
+            
+            
+
+            return result.Results.Select(v => (IEntitySearch<GeoPointType>)new EntityBaseSearch<GeographyPoint> { 
+                bl = v.Document.bl,
+                created = v.Document.created,
+                dbl = v.Document.dbl,
+                dt = v.Document.dt,
+                enm = v.Document.enm,
+                geo = v.Document.geo,
+                id = v.Document.id,
+                index = v.Document.index,
+                num32 = v.Document.num32,
+                num64 = v.Document.num64,
+                rel = v.Document.rel,
+                str = v.Document.str,
+                sug = v.Document.sug
+
+
+            }).ToList();
         }
 
 

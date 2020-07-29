@@ -77,10 +77,19 @@ namespace trifenix.agro.functions
         [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "negotiate")] HttpRequest req,
         IBinder binder,
         ILogger log) {
+
             string AUTH_HEADER_NAME = "Authorization";
             string BEARER_PREFIX = "Bearer ";
-            if (req.Headers.ContainsKey(AUTH_HEADER_NAME) && req.Headers[AUTH_HEADER_NAME].ToString().StartsWith(BEARER_PREFIX)) {
+            if (req.Headers.ContainsKey(AUTH_HEADER_NAME) && req.Headers[AUTH_HEADER_NAME].ToString().StartsWith(BEARER_PREFIX))
+            {
                 var token = req.Headers[AUTH_HEADER_NAME].ToString().Substring(BEARER_PREFIX.Length);
+
+                if (token.Equals("cloud-app"))
+                {
+                    var conn = binder.Bind<SignalRConnectionInfo>(new SignalRConnectionInfoAttribute { HubName = "agro", UserId = "cloud-app" });
+
+                    return new OkObjectResult(conn);
+                }
                 log.LogInformation("with binding " + token);
                 IAuthentication auth = new Authentication(
                     Environment.GetEnvironmentVariable("clientID", EnvironmentVariableTarget.Process),
@@ -93,46 +102,63 @@ namespace trifenix.agro.functions
                 var queries = new CommonQueries(ConfigManager.GetDbArguments);
                 // extract userId from token
                 var userId = await queries.GetUserIdFromAAD(ObjectIdAAD);
-                var connectionInfo = binder.Bind<SignalRConnectionInfo>(new SignalRConnectionInfoAttribute { HubName = "AsyncConnection", UserId = userId });
+                var connectionInfo = binder.Bind<SignalRConnectionInfo>(new SignalRConnectionInfoAttribute { HubName = "agro", UserId = userId });
                 log.LogInformation("negotiated " + connectionInfo);
                 //https://gist.github.com/ErikAndreas/72c94a0c8a9e6e632f44522c41be8ee7
                 // connectionInfo contains an access key token with a name identifier claim set to the authenticated user
                 return new OkObjectResult(connectionInfo);
             }
-            else
+            else {
+                // temporal, para conectar winform sin autenticación
                 return new UnauthorizedResult();
+
+            }
+
         }
+
+        
 
         [FunctionName("ServiceBus")]
         public static async Task Handler(
         [ServiceBusTrigger("agroqueue", Connection = "ServiceBusConnectionString", IsSessionsEnabled = true)]Message message,
-        [SignalR(HubName = "AsyncConnection")]IAsyncCollector<SignalRMessage> signalRMessages,
+        [SignalR(HubName = "agro")]IAsyncCollector<SignalRMessage> signalRMessages,
         ILogger log) {
             var opInstance = ServiceBus.Deserialize(message.Body);
             var ObjectIdAAD = opInstance.Value<string>("ObjectIdAAD");
+            
             var queries = new CommonQueries(ConfigManager.GetDbArguments);
-            var userId = await queries.GetUserIdFromAAD(ObjectIdAAD);
+            
             var EntityName = opInstance.Value<string>("EntityName");
             var agro = await ContainerMethods.AgroManager(ObjectIdAAD, false);
             var entityType = opInstance["EntityType"].ToObject<Type>();
             var repo = agro.GetOperationByInputType(entityType);
             dynamic element = opInstance["Element"].ToObject(entityType);
             element.Id = opInstance.Value<string>("Id");
+            string userId = null;
+
             try {
                 var saveReturn = await repo.SaveInput(element, false);
-                await agro.UserActivity.SaveInput(new UserActivityInput {
-                    Action = opInstance.Value<string>("HttpMethod").Equals("post") ? UserActivityAction.CREATE : UserActivityAction.MODIFY,
-                    Date = DateTime.Now,
-                    EntityName = EntityName,
-                    EntityId = saveReturn.IdRelated
-                }, false);
-                await signalRMessages.AddAsync(new SignalRMessage { Target = "Success", UserId = userId, Arguments = new object[] { EntityName } });
+                if (!string.IsNullOrWhiteSpace(ObjectIdAAD))
+                {
+                    userId = await queries.GetUserIdFromAAD(ObjectIdAAD);
+                    await agro.UserActivity.SaveInput(new UserActivityInput
+                    {
+                        Action = opInstance.Value<string>("HttpMethod").Equals("post") ? UserActivityAction.CREATE : UserActivityAction.MODIFY,
+                        Date = DateTime.Now,
+                        EntityName = EntityName,
+                        EntityId = saveReturn.IdRelated
+                    }, false); 
+                }
+                
+                await signalRMessages.AddAsync(new SignalRMessage { Target = "Success", UserId = userId??"cloud-app", Arguments = new object[] { EntityName } });
             }
             catch (Exception ex) {
                 log.LogError(ex, ex.Message);
-                await signalRMessages.AddAsync(new SignalRMessage { Target = "Error", UserId = userId, Arguments = new object[] { ex is Validation_Exception ? ((Validation_Exception)ex).ErrorMessages : (object)new string[] { $"{ex.Message}" }, ex.StackTrace } });
+                await signalRMessages.AddAsync(new SignalRMessage { Target = "Error", UserId = userId ?? "cloud-app", Arguments = new object[] { ex is Validation_Exception ? ((Validation_Exception)ex).ErrorMessages : (object)new string[] { $"{ex.Message}" }, ex.StackTrace } });
             }
         }
+
+        
 
         /// <summary>
         /// Creación de Sector

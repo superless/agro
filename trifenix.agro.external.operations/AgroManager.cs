@@ -46,7 +46,11 @@ namespace trifenix.agro.external.operations {
             _uploadImage = uploadImage;
             _weatherApi = weatherApi;
             Search = searchServiceInstance;
-            UserId = CommonQueries.GetUserIdFromAAD(ObjectIdAAD).Result;
+            if (!string.IsNullOrWhiteSpace(ObjectIdAAD))
+            {
+                UserId = CommonQueries.GetUserIdFromAAD(ObjectIdAAD).Result;
+            }
+            
             isBatch = _isBatch;
         }
 
