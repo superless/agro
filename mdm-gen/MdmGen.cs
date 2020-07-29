@@ -436,7 +436,7 @@ namespace mdm_gen
             AddInterface<PropertyMetadata>("data/");
             AddInterface<ModelMetaData>("data/");
             AddInterface<EntityMetadata>("data/");
-            AddInterface<EntityBaseSearch>("model/main");
+            AddInterface<EntityBaseSearch<GeoPointTs>>("model/main");
             AddInterface<GeoPointTs>("model/main").CustomBase("");
             AddInterface(typeof(IProperty<>), "model/main");
             AddInterface<GeographyProperty>("model/main").CustomBase("");

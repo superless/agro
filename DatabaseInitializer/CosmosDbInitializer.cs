@@ -47,6 +47,8 @@ namespace trifenix.agro.authentication.operations
         private object InvokeGenericMethod(string methodName, Type genericParameterType, object[] args) => typeof(CosmosDbInitializer).GetMethod(methodName).MakeGenericMethod(genericParameterType).Invoke(null, args);
         
         private Type GetTypeFromAssembly(Assembly assm, string typeName) => assm.GetTypes().SingleOrDefault(type => type.Name.Equals(typeName));
+
+
         private async Task SaveFromJsonToEntityContainers(JObject json) {
             Type EntityType;
             dynamic dbInstance, EntityOperations, Value;
