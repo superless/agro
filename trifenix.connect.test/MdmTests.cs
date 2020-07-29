@@ -45,7 +45,7 @@ namespace trifenix.connect.test
             };
 
             // action
-            var entities = Mdm.GetEntitySearch(new Implementation(), objs, typeof(EntityBaseSearch));
+            var entities = Mdm.GetEntitySearch(new Implementation(), objs, typeof(EntityBaseSearch<GeoPointTs>));
 
             // assert
             // test simple para verificar que es el mismo nombre.
@@ -56,7 +56,7 @@ namespace trifenix.connect.test
         public void ConvertEntityToObject() {
 
             // assign
-            var entity = new EntityBaseSearch
+            var entity = new EntityBaseSearch<GeoPointTs>
             {
                 bl = Array.Empty<BoolBaseProperty>(),
                 created = DateTime.Now,
@@ -95,7 +95,7 @@ namespace trifenix.connect.test
     {
         public IEntitySearch<GeoPointTs> GetEntity(int entityKind, string idEntity)
         {
-            return new EntityBaseSearch();
+            return new EntityBaseSearch<GeoPointTs>();
         }
     }
 }
