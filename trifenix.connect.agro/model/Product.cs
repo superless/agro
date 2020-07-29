@@ -13,7 +13,7 @@ namespace trifenix.connect.agro_model {
     /// </summary>
     [SharedCosmosCollection("agro", "Product")]
     [ReferenceSearchHeader(EntityRelated.PRODUCT, Kind = EntityKind.CUSTOM_ENTITY, PathName = "products")]
-    public class Product : DocumentBaseName<int>, ISharedCosmosEntity {
+    public class Product : DocumentBaseName<long>, ISharedCosmosEntity {
 
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace trifenix.connect.agro_model {
         /// Identificador visual de producto
         /// </summary>
         [AutoNumericSearch(NumRelated.GENERIC_CORRELATIVE)]
-        public override int ClientId { get; set; }
+        public override long ClientId { get; set; }
 
         /// <summary>
         /// Ingrediente activo.
