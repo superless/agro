@@ -26,7 +26,7 @@ namespace trifenix.connect.mdm.az_search
     /// si se identifica una entidad con el índice de una clase, las propiedades que no tengan valores en este modelo
     /// se entenderán como nulas.
     /// </summary>
-    public class EntitySearch : IEntitySearch<GeographyPoint>
+    public class EntitySearch
     {
 
         /// <summary>
@@ -67,7 +67,10 @@ namespace trifenix.connect.mdm.az_search
         /// esta propiedad implementa facet por lo que permite agrupación de busquedas.
         /// </summary>
         [JsonProperty("rel")]
-        public IRelatedId[] rel { get; set; }
+        public RelatedId[] rel { get; set; }
+
+
+        
 
         /// <summary>
         /// todas las propiedades que sean asignadas como suggest,
@@ -75,14 +78,14 @@ namespace trifenix.connect.mdm.az_search
         /// esto permite mejorar las busquedas, pero también aumentará el tamaño de la base de datos.
         /// </summary>
         [JsonProperty("sug")]
-        public IStrProperty[] sug { get; set; }
+        public StrProperty[] sug { get; set; }
 
 
         /// <summary>
         /// colección de valores de tipo cadena de texto.
         /// </summary>
         [JsonProperty("str")]
-        public IStrProperty[] str { get; set; }
+        public StrProperty[] str { get; set; }
 
 
         /// <summary>
@@ -90,48 +93,48 @@ namespace trifenix.connect.mdm.az_search
         /// este tipo de propiedad es de tipo facetable por tanto se puede agrupar por valor de la enumeración.
         /// </summary>
         [JsonProperty("enm")]
-        public IEnumProperty[] enm { get; set; }
+        public EnumProperty[] enm { get; set; }
 
 
         /// <summary>
         /// colección de propiedades de tipo entero.
         /// </summary>
         [JsonProperty("num32")]
-        public INum32Property[] num32 { get; set; }
+        public Num32Property[] num32 { get; set; }
 
         /// <summary>
         /// colección de propiedades de tipo long.
         /// </summary>
         [JsonProperty("num64")]
-        public INum64Property[] num64 { get; set; }
+        public Num64Property[] num64 { get; set; }
 
 
         /// <summary>
         /// colección de propiedades de tipo doble.
         /// </summary>
         [JsonProperty("dbl")]
-        public IDblProperty[] dbl { get; set; }
+        public DblProperty[] dbl { get; set; }
 
 
         /// <summary>
         /// colección de propiedades de tipo fecha.
         /// </summary>
         [JsonProperty("dt")]
-        public IDtProperty[] dt { get; set; }
+        public DtProperty[] dt { get; set; }
 
 
         /// <summary>
         /// colección de propiedades de tipo geo.
         /// </summary>
         [JsonProperty("geo")]
-        public IProperty<GeographyPoint>[] geo { get; set; }
+        public GeoProperty[] geo { get; set; }
 
 
         /// <summary>
         /// colección de propiedades de tipo bool.
         /// </summary>
         [JsonProperty("bl")]
-        public IBoolProperty[] bl { get; set; }
+        public BoolProperty[] bl { get; set; }
 
     }
 }
