@@ -292,11 +292,59 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CurrentFormState.cs" />
-    <Compile Include="frm\mantenedores\SectorFrm.cs">
+    <Compile Include="frm\mantenedores\Barrack\Frm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frm\mantenedores\SectorFrm.Designer.cs">
-      <DependentUpon>SectorFrm.cs</DependentUpon>
+    <Compile Include="frm\mantenedores\Barrack\Frm.Designer.cs">
+      <DependentUpon>Frm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frm\mantenedores\CertifiedEntity\Frm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm\mantenedores\CertifiedEntity\Frm.Designer.cs">
+      <DependentUpon>Frm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frm\mantenedores\ApplicationTarget\Frm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm\mantenedores\ApplicationTarget\Frm.Designer.cs">
+      <DependentUpon>Frm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frm\mantenedores\BusinessName\Frm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm\mantenedores\BusinessName\Frm.Designer.cs">
+      <DependentUpon>Frm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frm\mantenedores\CostCenter\Frm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm\mantenedores\CostCenter\Frm.Designer.cs">
+      <DependentUpon>Frm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frm\mantenedores\jobs\Frm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm\mantenedores\jobs\Frm.Designer.cs">
+      <DependentUpon>Frm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frm\mantenedores\sector\Frm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm\mantenedores\sector\Frm.Designer.cs">
+      <DependentUpon>Frm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frm\mantenedores\Specie\Frm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm\mantenedores\Specie\Frm.Designer.cs">
+      <DependentUpon>Frm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frm\mantenedores\Variety\Frm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm\mantenedores\Variety\Frm.Designer.cs">
+      <DependentUpon>Frm.cs</DependentUpon>
     </Compile>
     <Compile Include="frm\PreOrden\MainPreOrdenes.cs">
       <SubType>Form</SubType>
@@ -304,6 +352,7 @@
     <Compile Include="frm\PreOrden\MainPreOrdenes.Designer.cs">
       <DependentUpon>MainPreOrdenes.cs</DependentUpon>
     </Compile>
+    <Compile Include="interfaces\IFenixForm.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -312,8 +361,32 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="frm\mantenedores\SectorFrm.resx">
-      <DependentUpon>SectorFrm.cs</DependentUpon>
+    <EmbeddedResource Include="frm\mantenedores\Barrack\Frm.resx">
+      <DependentUpon>Frm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm\mantenedores\CertifiedEntity\Frm.resx">
+      <DependentUpon>Frm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm\mantenedores\ApplicationTarget\Frm.resx">
+      <DependentUpon>Frm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm\mantenedores\BusinessName\Frm.resx">
+      <DependentUpon>Frm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm\mantenedores\CostCenter\Frm.resx">
+      <DependentUpon>Frm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm\mantenedores\jobs\Frm.resx">
+      <DependentUpon>Frm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm\mantenedores\sector\Frm.resx">
+      <DependentUpon>Frm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm\mantenedores\Specie\Frm.resx">
+      <DependentUpon>Frm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm\mantenedores\Variety\Frm.resx">
+      <DependentUpon>Frm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frm\PreOrden\MainPreOrdenes.resx">
       <DependentUpon>MainPreOrdenes.cs</DependentUpon>
@@ -332,7 +405,15 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\trifenix.connect.agro_model.ApplicationTarget.datasource" />
+    <None Include="Properties\DataSources\trifenix.connect.agro_model.Barrack.datasource" />
+    <None Include="Properties\DataSources\trifenix.connect.agro_model.BusinessName.datasource" />
+    <None Include="Properties\DataSources\trifenix.connect.agro_model.CertifiedEntity.datasource" />
+    <None Include="Properties\DataSources\trifenix.connect.agro_model.CostCenter.datasource" />
+    <None Include="Properties\DataSources\trifenix.connect.agro_model.Job.datasource" />
+    <None Include="Properties\DataSources\trifenix.connect.agro_model.PlotLand.datasource" />
     <None Include="Properties\DataSources\trifenix.connect.agro_model.Sector.datasource" />
+    <None Include="Properties\DataSources\trifenix.connect.agro_model.Specie.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -347,6 +428,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\trifenix.agro.db\trifenix.agro.db.csproj">
+      <Project>{20102C52-DADD-458A-8771-6313919A807F}</Project>
+      <Name>trifenix.agro.db</Name>
+    </ProjectReference>
     <ProjectReference Include="..\trifenix.connect.agro\trifenix.connect.agro.csproj">
       <Project>{70445617-9ba5-4def-8380-24a359bfe323}</Project>
       <Name>trifenix.connect.agro</Name>
@@ -354,6 +439,10 @@
     <ProjectReference Include="..\trifenix.connect.app.cloud\trifenix.connect.app.cloud.csproj">
       <Project>{FF9ED374-6CB2-42A5-A30E-F00140834DBE}</Project>
       <Name>trifenix.connect.app.cloud</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\yofenix\trifenix.connect.mdm.csproj">
+      <Project>{E6A09456-0499-4124-9170-C46A70344131}</Project>
+      <Name>trifenix.connect.mdm</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -37,8 +37,18 @@
             this.sectorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.parcelaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cuartelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aplicacionesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.objetivoDeAplicaciónToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.entidadCertificadoraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.usuariosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cargoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.configuraciónToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.razonesSocialesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.centroDeCostosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lbxEvents = new System.Windows.Forms.ListBox();
+            this.especiesVariedadesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.especieToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.variedadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -74,7 +84,10 @@
             // mantenedoresToolStripMenuItem
             // 
             this.mantenedoresToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.superficieToolStripMenuItem});
+            this.superficieToolStripMenuItem,
+            this.aplicacionesToolStripMenuItem,
+            this.usuariosToolStripMenuItem,
+            this.especiesVariedadesToolStripMenuItem});
             this.mantenedoresToolStripMenuItem.Name = "mantenedoresToolStripMenuItem";
             this.mantenedoresToolStripMenuItem.Size = new System.Drawing.Size(142, 29);
             this.mantenedoresToolStripMenuItem.Text = "Mantenedores";
@@ -86,7 +99,7 @@
             this.parcelaToolStripMenuItem,
             this.cuartelToolStripMenuItem});
             this.superficieToolStripMenuItem.Name = "superficieToolStripMenuItem";
-            this.superficieToolStripMenuItem.Size = new System.Drawing.Size(191, 34);
+            this.superficieToolStripMenuItem.Size = new System.Drawing.Size(276, 34);
             this.superficieToolStripMenuItem.Text = "Superficie";
             // 
             // sectorToolStripMenuItem
@@ -101,6 +114,7 @@
             this.parcelaToolStripMenuItem.Name = "parcelaToolStripMenuItem";
             this.parcelaToolStripMenuItem.Size = new System.Drawing.Size(169, 34);
             this.parcelaToolStripMenuItem.Text = "Parcela";
+            this.parcelaToolStripMenuItem.Click += new System.EventHandler(this.parcelaToolStripMenuItem_Click);
             // 
             // cuartelToolStripMenuItem
             // 
@@ -108,11 +122,66 @@
             this.cuartelToolStripMenuItem.Size = new System.Drawing.Size(169, 34);
             this.cuartelToolStripMenuItem.Text = "Cuartel";
             // 
+            // aplicacionesToolStripMenuItem
+            // 
+            this.aplicacionesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.objetivoDeAplicaciónToolStripMenuItem,
+            this.entidadCertificadoraToolStripMenuItem});
+            this.aplicacionesToolStripMenuItem.Name = "aplicacionesToolStripMenuItem";
+            this.aplicacionesToolStripMenuItem.Size = new System.Drawing.Size(276, 34);
+            this.aplicacionesToolStripMenuItem.Text = "Aplicaciones";
+            // 
+            // objetivoDeAplicaciónToolStripMenuItem
+            // 
+            this.objetivoDeAplicaciónToolStripMenuItem.Name = "objetivoDeAplicaciónToolStripMenuItem";
+            this.objetivoDeAplicaciónToolStripMenuItem.Size = new System.Drawing.Size(293, 34);
+            this.objetivoDeAplicaciónToolStripMenuItem.Text = "Objetivo de Aplicación";
+            this.objetivoDeAplicaciónToolStripMenuItem.Click += new System.EventHandler(this.objetivoDeAplicaciónToolStripMenuItem_Click);
+            // 
+            // entidadCertificadoraToolStripMenuItem
+            // 
+            this.entidadCertificadoraToolStripMenuItem.Name = "entidadCertificadoraToolStripMenuItem";
+            this.entidadCertificadoraToolStripMenuItem.Size = new System.Drawing.Size(293, 34);
+            this.entidadCertificadoraToolStripMenuItem.Text = "Entidad Certificadora";
+            this.entidadCertificadoraToolStripMenuItem.Click += new System.EventHandler(this.entidadCertificadoraToolStripMenuItem_Click);
+            // 
+            // usuariosToolStripMenuItem
+            // 
+            this.usuariosToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cargoToolStripMenuItem});
+            this.usuariosToolStripMenuItem.Name = "usuariosToolStripMenuItem";
+            this.usuariosToolStripMenuItem.Size = new System.Drawing.Size(276, 34);
+            this.usuariosToolStripMenuItem.Text = "Usuarios";
+            // 
+            // cargoToolStripMenuItem
+            // 
+            this.cargoToolStripMenuItem.Name = "cargoToolStripMenuItem";
+            this.cargoToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.cargoToolStripMenuItem.Text = "Cargo";
+            this.cargoToolStripMenuItem.Click += new System.EventHandler(this.cargoToolStripMenuItem_Click);
+            // 
             // configuraciónToolStripMenuItem
             // 
+            this.configuraciónToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.razonesSocialesToolStripMenuItem,
+            this.centroDeCostosToolStripMenuItem});
             this.configuraciónToolStripMenuItem.Name = "configuraciónToolStripMenuItem";
             this.configuraciónToolStripMenuItem.Size = new System.Drawing.Size(139, 29);
             this.configuraciónToolStripMenuItem.Text = "Configuración";
+            // 
+            // razonesSocialesToolStripMenuItem
+            // 
+            this.razonesSocialesToolStripMenuItem.Name = "razonesSocialesToolStripMenuItem";
+            this.razonesSocialesToolStripMenuItem.Size = new System.Drawing.Size(252, 34);
+            this.razonesSocialesToolStripMenuItem.Text = "Razones Sociales";
+            this.razonesSocialesToolStripMenuItem.Click += new System.EventHandler(this.razonesSocialesToolStripMenuItem_Click);
+            // 
+            // centroDeCostosToolStripMenuItem
+            // 
+            this.centroDeCostosToolStripMenuItem.Name = "centroDeCostosToolStripMenuItem";
+            this.centroDeCostosToolStripMenuItem.Size = new System.Drawing.Size(252, 34);
+            this.centroDeCostosToolStripMenuItem.Text = "Centro de Costos";
+            this.centroDeCostosToolStripMenuItem.Click += new System.EventHandler(this.centroDeCostosToolStripMenuItem_Click);
             // 
             // lbxEvents
             // 
@@ -122,6 +191,28 @@
             this.lbxEvents.Name = "lbxEvents";
             this.lbxEvents.Size = new System.Drawing.Size(1620, 864);
             this.lbxEvents.TabIndex = 1;
+            // 
+            // especiesVariedadesToolStripMenuItem
+            // 
+            this.especiesVariedadesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.especieToolStripMenuItem,
+            this.variedadToolStripMenuItem});
+            this.especiesVariedadesToolStripMenuItem.Name = "especiesVariedadesToolStripMenuItem";
+            this.especiesVariedadesToolStripMenuItem.Size = new System.Drawing.Size(276, 34);
+            this.especiesVariedadesToolStripMenuItem.Text = "Especies & Variedades";
+            // 
+            // especieToolStripMenuItem
+            // 
+            this.especieToolStripMenuItem.Name = "especieToolStripMenuItem";
+            this.especieToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.especieToolStripMenuItem.Text = "Especie";
+            this.especieToolStripMenuItem.Click += new System.EventHandler(this.especieToolStripMenuItem_Click);
+            // 
+            // variedadToolStripMenuItem
+            // 
+            this.variedadToolStripMenuItem.Name = "variedadToolStripMenuItem";
+            this.variedadToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.variedadToolStripMenuItem.Text = "Variedad";
             // 
             // Main
             // 
@@ -155,6 +246,16 @@
         private System.Windows.Forms.ToolStripMenuItem parcelaToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem cuartelToolStripMenuItem;
         private System.Windows.Forms.ListBox lbxEvents;
+        private System.Windows.Forms.ToolStripMenuItem razonesSocialesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aplicacionesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem objetivoDeAplicaciónToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem entidadCertificadoraToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem centroDeCostosToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem usuariosToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem cargoToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem especiesVariedadesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem especieToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem variedadToolStripMenuItem;
     }
 }
 

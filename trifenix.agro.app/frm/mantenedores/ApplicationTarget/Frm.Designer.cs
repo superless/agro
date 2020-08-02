@@ -1,6 +1,6 @@
-﻿namespace trifenix.agro.app.frm.mantenedores
+﻿namespace trifenix.agro.app.frm.mantenedores.applicationtarget
 {
-    partial class SectorFrm
+    partial class Frm
     {
         /// <summary>
         /// Required designer variable.
@@ -29,53 +29,36 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SectorFrm));
-            this.tbxCorrelativo = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Frm));
             this.label2 = new System.Windows.Forms.Label();
             this.tbxName = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.lblDescripcion = new System.Windows.Forms.Label();
-            this.gbxSector = new System.Windows.Forms.GroupBox();
-            this.btnSave = new System.Windows.Forms.Button();
+            this.gbxItem = new System.Windows.Forms.GroupBox();
             this.btnCancel = new System.Windows.Forms.Button();
-            this.lbxSectors = new System.Windows.Forms.ListBox();
-            this.bsSectors = new System.Windows.Forms.BindingSource(this.components);
+            this.btnSave = new System.Windows.Forms.Button();
+            this.lbxItems = new System.Windows.Forms.ListBox();
+            this.bsMain = new System.Windows.Forms.BindingSource(this.components);
             this.ValidationForm = new System.Windows.Forms.ErrorProvider(this.components);
             this.btnDeleteSector = new System.Windows.Forms.Button();
             this.btnEditSector = new System.Windows.Forms.Button();
             this.btnAddSector = new System.Windows.Forms.Button();
             this.pnlButtons = new System.Windows.Forms.Panel();
+            this.pb = new System.Windows.Forms.ProgressBar();
+            this.lblProgress = new System.Windows.Forms.Label();
+            this.tbxAbbreviation = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
-            this.gbxSector.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.bsSectors)).BeginInit();
+            this.gbxItem.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bsMain)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ValidationForm)).BeginInit();
             this.pnlButtons.SuspendLayout();
             this.SuspendLayout();
             // 
-            // tbxCorrelativo
-            // 
-            this.tbxCorrelativo.Enabled = false;
-            this.tbxCorrelativo.Location = new System.Drawing.Point(26, 66);
-            this.tbxCorrelativo.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.tbxCorrelativo.Name = "tbxCorrelativo";
-            this.tbxCorrelativo.Size = new System.Drawing.Size(82, 26);
-            this.tbxCorrelativo.TabIndex = 0;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(26, 37);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(84, 20);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Correlativo";
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(129, 37);
+            this.label2.Location = new System.Drawing.Point(22, 36);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(73, 20);
@@ -84,12 +67,11 @@
             // 
             // tbxName
             // 
-            this.ValidationForm.SetError(this.tbxName, "El nombre es obligatorio");
-            this.tbxName.Location = new System.Drawing.Point(134, 66);
+            this.tbxName.Location = new System.Drawing.Point(27, 65);
             this.tbxName.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tbxName.MaxLength = 200;
             this.tbxName.Name = "tbxName";
-            this.tbxName.Size = new System.Drawing.Size(498, 26);
+            this.tbxName.Size = new System.Drawing.Size(497, 26);
             this.tbxName.TabIndex = 3;
             this.tbxName.Validated += new System.EventHandler(this.tbxName_Validated);
             // 
@@ -109,66 +91,70 @@
             this.lblDescripcion.Location = new System.Drawing.Point(18, 15);
             this.lblDescripcion.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblDescripcion.Name = "lblDescripcion";
-            this.lblDescripcion.Size = new System.Drawing.Size(84, 20);
+            this.lblDescripcion.Size = new System.Drawing.Size(92, 20);
             this.lblDescripcion.TabIndex = 5;
-            this.lblDescripcion.Text = "Correlativo";
+            this.lblDescripcion.Text = "Descripción";
             // 
-            // gbxSector
+            // gbxItem
             // 
-            this.gbxSector.Controls.Add(this.tbxName);
-            this.gbxSector.Controls.Add(this.tbxCorrelativo);
-            this.gbxSector.Controls.Add(this.label1);
-            this.gbxSector.Controls.Add(this.label2);
-            this.gbxSector.Location = new System.Drawing.Point(320, 89);
-            this.gbxSector.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.gbxSector.Name = "gbxSector";
-            this.gbxSector.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.gbxSector.Size = new System.Drawing.Size(656, 480);
-            this.gbxSector.TabIndex = 5;
-            this.gbxSector.TabStop = false;
-            this.gbxSector.Text = "Sector {0}";
-            this.gbxSector.Visible = false;
-            // 
-            // btnSave
-            // 
-            this.btnSave.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnSave.Location = new System.Drawing.Point(864, 581);
-            this.btnSave.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(112, 35);
-            this.btnSave.TabIndex = 6;
-            this.btnSave.Text = "Guardar";
-            this.btnSave.UseVisualStyleBackColor = true;
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            this.gbxItem.Controls.Add(this.tbxAbbreviation);
+            this.gbxItem.Controls.Add(this.label3);
+            this.gbxItem.Controls.Add(this.tbxName);
+            this.gbxItem.Controls.Add(this.btnCancel);
+            this.gbxItem.Controls.Add(this.label2);
+            this.gbxItem.Controls.Add(this.btnSave);
+            this.gbxItem.Enabled = false;
+            this.gbxItem.Location = new System.Drawing.Point(320, 89);
+            this.gbxItem.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.gbxItem.Name = "gbxItem";
+            this.gbxItem.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.gbxItem.Size = new System.Drawing.Size(656, 520);
+            this.gbxItem.TabIndex = 5;
+            this.gbxItem.TabStop = false;
+            this.gbxItem.Text = "{0}";
+            this.gbxItem.Visible = false;
+            this.gbxItem.Enter += new System.EventHandler(this.gbxItem_Enter);
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(743, 581);
+            this.btnCancel.Location = new System.Drawing.Point(407, 479);
             this.btnCancel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(113, 35);
+            this.btnCancel.Size = new System.Drawing.Size(112, 35);
             this.btnCancel.TabIndex = 8;
             this.btnCancel.Text = "Cancelar";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // lbxSectors
+            // btnSave
             // 
-            this.lbxSectors.DataSource = this.bsSectors;
-            this.lbxSectors.DisplayMember = "Name";
-            this.lbxSectors.FormattingEnabled = true;
-            this.lbxSectors.ItemHeight = 20;
-            this.lbxSectors.Location = new System.Drawing.Point(20, 105);
-            this.lbxSectors.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.lbxSectors.Name = "lbxSectors";
-            this.lbxSectors.Size = new System.Drawing.Size(289, 464);
-            this.lbxSectors.TabIndex = 9;
-            this.lbxSectors.ValueMember = "Id";
+            this.btnSave.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnSave.Location = new System.Drawing.Point(528, 479);
+            this.btnSave.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(111, 35);
+            this.btnSave.TabIndex = 6;
+            this.btnSave.Text = "Guardar";
+            this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // bsSectors
+            // lbxItems
             // 
-            this.bsSectors.DataSource = typeof(trifenix.connect.agro_model.Sector);
-            this.bsSectors.CurrentChanged += new System.EventHandler(this.bsSectors_CurrentChanged);
+            this.lbxItems.DataSource = this.bsMain;
+            this.lbxItems.DisplayMember = "Name";
+            this.lbxItems.FormattingEnabled = true;
+            this.lbxItems.ItemHeight = 20;
+            this.lbxItems.Location = new System.Drawing.Point(20, 105);
+            this.lbxItems.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.lbxItems.Name = "lbxItems";
+            this.lbxItems.Size = new System.Drawing.Size(289, 464);
+            this.lbxItems.TabIndex = 9;
+            this.lbxItems.ValueMember = "Id";
+            // 
+            // bsMain
+            // 
+            this.bsMain.DataSource = typeof(trifenix.connect.agro_model.ApplicationTarget);
+            this.bsMain.CurrentChanged += new System.EventHandler(this.bsSectors_CurrentChanged);
             // 
             // ValidationForm
             // 
@@ -220,50 +206,94 @@
             this.pnlButtons.Size = new System.Drawing.Size(200, 38);
             this.pnlButtons.TabIndex = 4;
             // 
-            // SectorFrm
+            // pb
+            // 
+            this.pb.Location = new System.Drawing.Point(876, 611);
+            this.pb.Name = "pb";
+            this.pb.Size = new System.Drawing.Size(100, 23);
+            this.pb.TabIndex = 9;
+            this.pb.Visible = false;
+            // 
+            // lblProgress
+            // 
+            this.lblProgress.AutoSize = true;
+            this.lblProgress.Location = new System.Drawing.Point(819, 614);
+            this.lblProgress.Name = "lblProgress";
+            this.lblProgress.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.lblProgress.Size = new System.Drawing.Size(51, 20);
+            this.lblProgress.TabIndex = 10;
+            this.lblProgress.Text = "label3";
+            this.lblProgress.Visible = false;
+            // 
+            // tbxAbbreviation
+            // 
+            this.tbxAbbreviation.Location = new System.Drawing.Point(26, 141);
+            this.tbxAbbreviation.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.tbxAbbreviation.MaxLength = 10;
+            this.tbxAbbreviation.Name = "tbxAbbreviation";
+            this.tbxAbbreviation.Size = new System.Drawing.Size(119, 26);
+            this.tbxAbbreviation.TabIndex = 10;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(21, 112);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(99, 20);
+            this.label3.TabIndex = 9;
+            this.label3.Text = "Abreviación :";
+            // 
+            // Frm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(993, 645);
+            this.Controls.Add(this.lblProgress);
+            this.Controls.Add(this.pb);
             this.Controls.Add(this.pnlButtons);
-            this.Controls.Add(this.lbxSectors);
-            this.Controls.Add(this.btnCancel);
-            this.Controls.Add(this.gbxSector);
-            this.Controls.Add(this.btnSave);
+            this.Controls.Add(this.lbxItems);
+            this.Controls.Add(this.gbxItem);
             this.Controls.Add(this.panel1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.Name = "SectorFrm";
-            this.Text = "Sector";
-            this.Load += new System.EventHandler(this.Sector_Load);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "Frm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Text = "Objetivo de la aplicación";
+            this.Load += new System.EventHandler(this.SectorFrm_Load_1);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            this.gbxSector.ResumeLayout(false);
-            this.gbxSector.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.bsSectors)).EndInit();
+            this.gbxItem.ResumeLayout(false);
+            this.gbxItem.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bsMain)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ValidationForm)).EndInit();
             this.pnlButtons.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.TextBox tbxCorrelativo;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox tbxName;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label lblDescripcion;
-        private System.Windows.Forms.GroupBox gbxSector;
+        private System.Windows.Forms.GroupBox gbxItem;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnCancel;
-        private System.Windows.Forms.ListBox lbxSectors;
+        private System.Windows.Forms.ListBox lbxItems;
         private System.Windows.Forms.ErrorProvider ValidationForm;
         private System.Windows.Forms.Button btnDeleteSector;
         private System.Windows.Forms.Button btnEditSector;
         private System.Windows.Forms.Button btnAddSector;
-        private System.Windows.Forms.BindingSource bsSectors;
+        private System.Windows.Forms.BindingSource bsMain;
         private System.Windows.Forms.Panel pnlButtons;
+        private System.Windows.Forms.ProgressBar pb;
+        private System.Windows.Forms.Label lblProgress;
+        private System.Windows.Forms.TextBox tbxAbbreviation;
+        private System.Windows.Forms.Label label3;
     }
 }

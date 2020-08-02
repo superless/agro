@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using trifenix.agro.db;
 using trifenix.agro.search.operations;
 using trifenix.agro.servicebus.operations;
 using trifenix.connect.agro.index_model.props;
@@ -21,56 +22,44 @@ namespace trifenix.connect.app.cloud
     {
         private static string connectionString = "Endpoint=sb://agrobus.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=28iKIG/njebR7TMqZh5e9KDdI0Jhv3D6gjUUI198Gog=";
 
-        
+
         public static AgroSearch<GeographyPoint> search = new AgroSearch<GeographyPoint>("agrocloud", "6D2BA6AF3373D17A341F7A099BA8FA6A", null);
 
-        public async static Task CreateSector(string name) {
+      
 
-
-            var bus = new ServiceBus(connectionString, "agroqueue");
-
-            var sector = new SectorInput
-            {
-                Name = name
-            };
-            var opInstance = new OperationInstance<SectorInput>(sector, sector.Id, new Sector().CosmosEntityName, "POST", string.Empty);
-
-            await bus.PushElement(opInstance
-            , new Sector().CosmosEntityName);
-
-
+        public static string GetCosmosEntityName<T>() where T : DocumentBase
+        {
+            return ((T)Activator.CreateInstance(typeof(T))).CosmosEntityName;
         }
 
-        public async static Task EditSector(string id, string name)
+        public async static Task PushElement<T>(T element, string entityName) where T : InputBase
         {
 
-
             var bus = new ServiceBus(connectionString, "agroqueue");
-
-            var sector = new SectorInput
-            {
-                Id = id,
-                Name = name
-            };
-            var opInstance = new OperationInstance<SectorInput>(sector, sector.Id, new Sector().CosmosEntityName, "POST", string.Empty);
+            var opInstance = new OperationInstance<T>(element, element.Id, entityName, "POST", string.Empty);
 
             await bus.PushElement(opInstance
-            , new Sector().CosmosEntityName);
-
-
+            , entityName);
         }
 
-        public static Sector[] GetSectors() {
+        public static T[] GetElements<T>(EntityRelated entity) where T:DocumentBase
+        {
 
-            var entities = search.FilterElements($"index eq {(int)EntityRelated.SECTOR}");
+            var entities = search.FilterElements($"index eq {(int)entity}");
 
-            var sectors = entities.Select(s => (Sector)Mdm.GetEntityFromSearch(s, typeof(Sector), "trifenix.connect.agro_model", a=>a, new SearchElement()));
+            var sectors = entities.Select(s => (T)Mdm.GetEntityFromSearch(s, typeof(T), "trifenix.connect.agro_model", a => a, new SearchElement()));
 
             return sectors.ToArray();
         }
 
-        public static async Task<long> GetLastSectorCorrelative() {
-            return 10;
+        public static T GetElement<T>(EntityRelated entity, string id) where T : DocumentBase
+        {
+
+            var entities = search.FilterElements($"index eq {(int)entity} and id eq '{id}'");
+
+
+
+            return (T)Mdm.GetEntityFromSearch(entities.FirstOrDefault(), typeof(T), "trifenix.connect.agro_model", a => a, new SearchElement());
         }
 
 

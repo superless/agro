@@ -45,6 +45,7 @@ namespace trifenix.connect.agro_model
         /// </summary>
         [ReferenceSearch(EntityRelated.BUSINESSNAME)]
         public string IdBusinessName { get; set; }
+
         
     }
 
