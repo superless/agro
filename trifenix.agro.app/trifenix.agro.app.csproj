@@ -328,6 +328,18 @@
     <Compile Include="frm\mantenedores\jobs\Frm.Designer.cs">
       <DependentUpon>Frm.cs</DependentUpon>
     </Compile>
+    <Compile Include="frm\mantenedores\Roostock\Frm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm\mantenedores\Roostock\Frm.Designer.cs">
+      <DependentUpon>Frm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frm\mantenedores\Season\Frm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm\mantenedores\Season\Frm.Designer.cs">
+      <DependentUpon>Frm.cs</DependentUpon>
+    </Compile>
     <Compile Include="frm\mantenedores\sector\Frm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -352,6 +364,7 @@
     <Compile Include="frm\PreOrden\MainPreOrdenes.Designer.cs">
       <DependentUpon>MainPreOrdenes.cs</DependentUpon>
     </Compile>
+    <Compile Include="helper\Validaciones.cs" />
     <Compile Include="interfaces\IFenixForm.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
@@ -359,6 +372,7 @@
     <Compile Include="Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
+    <Compile Include="model-extend\SeasonExtend.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="frm\mantenedores\Barrack\Frm.resx">
@@ -377,6 +391,12 @@
       <DependentUpon>Frm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frm\mantenedores\jobs\Frm.resx">
+      <DependentUpon>Frm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm\mantenedores\Roostock\Frm.resx">
+      <DependentUpon>Frm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm\mantenedores\Season\Frm.resx">
       <DependentUpon>Frm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frm\mantenedores\sector\Frm.resx">
@@ -405,6 +425,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\trifenix.agro.app.model_extend.SeasonExtend.datasource" />
     <None Include="Properties\DataSources\trifenix.connect.agro_model.ApplicationTarget.datasource" />
     <None Include="Properties\DataSources\trifenix.connect.agro_model.Barrack.datasource" />
     <None Include="Properties\DataSources\trifenix.connect.agro_model.BusinessName.datasource" />
@@ -412,8 +433,10 @@
     <None Include="Properties\DataSources\trifenix.connect.agro_model.CostCenter.datasource" />
     <None Include="Properties\DataSources\trifenix.connect.agro_model.Job.datasource" />
     <None Include="Properties\DataSources\trifenix.connect.agro_model.PlotLand.datasource" />
+    <None Include="Properties\DataSources\trifenix.connect.agro_model.Rootstock.datasource" />
     <None Include="Properties\DataSources\trifenix.connect.agro_model.Sector.datasource" />
     <None Include="Properties\DataSources\trifenix.connect.agro_model.Specie.datasource" />
+    <None Include="Properties\DataSources\trifenix.connect.agro_model.Variety.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -475,6 +498,7 @@
   <ItemGroup>
     <None Include="Resources\09b24e31234507.564a1d23c07b4.gif" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

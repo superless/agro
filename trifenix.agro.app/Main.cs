@@ -32,7 +32,7 @@ namespace trifenix.agro.app
             InitializeComponent();
             connection = new HubConnectionBuilder()
                 
-                .WithUrl("http://192.168.0.10:7071/api",c=> { c.AccessTokenProvider = () => Task.FromResult("cloud-app"); ;  })
+                .WithUrl("http://192.168.0.13:7071/api",c=> { c.AccessTokenProvider = () => Task.FromResult("cloud-app"); ;  })
                 .WithAutomaticReconnect()
                 .Build();
             connection.ServerTimeout = TimeSpan.FromSeconds(120);
@@ -69,10 +69,9 @@ namespace trifenix.agro.app
         
         
 
-        async private void Main_Load(object sender, EventArgs e)
+        private void Main_Load(object sender, EventArgs e)
         {
             
-
         }
 
         async private void Main_Shown(object sender, EventArgs e)
@@ -141,6 +140,36 @@ namespace trifenix.agro.app
             forms.Add(frm);
             frm.ShowDialog();
             forms.Remove(frm);
+        }
+
+        private void variedadToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var frm = new mantenedores.variety.Frm();
+            forms.Add(frm);
+            frm.ShowDialog();
+            forms.Remove(frm);
+        }
+
+        private void portaInjertoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var frm = new mantenedores.rootstoock.Frm();
+            forms.Add(frm);
+            frm.ShowDialog();
+            forms.Remove(frm);
+
+        }
+
+        private void cuartelToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var frm = new mantenedores.barrack.Frm();
+            forms.Add(frm);
+            frm.ShowDialog();
+            forms.Remove(frm);
+        }
+
+        private void temporadasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

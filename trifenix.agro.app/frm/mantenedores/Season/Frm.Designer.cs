@@ -1,4 +1,4 @@
-﻿namespace trifenix.agro.app.frm.mantenedores.variety
+﻿namespace trifenix.agro.app.frm.mantenedores.season
 {
     partial class Frm
     {
@@ -30,10 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Frm));
-            this.tbxCorrelativo = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.tbxName = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.lblDescripcion = new System.Windows.Forms.Label();
             this.gbxItem = new System.Windows.Forms.GroupBox();
@@ -48,57 +44,16 @@
             this.pnlButtons = new System.Windows.Forms.Panel();
             this.pb = new System.Windows.Forms.ProgressBar();
             this.lblProgress = new System.Windows.Forms.Label();
-            this.tbxAbbreviation = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.bsSpecie = new System.Windows.Forms.BindingSource(this.components);
-            this.cbSpecie = new System.Windows.Forms.ComboBox();
-            this.label4 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.bsCostCenter = new System.Windows.Forms.BindingSource(this.components);
             this.panel1.SuspendLayout();
             this.gbxItem.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bsMain)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ValidationForm)).BeginInit();
             this.pnlButtons.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.bsSpecie)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bsCostCenter)).BeginInit();
             this.SuspendLayout();
-            // 
-            // tbxCorrelativo
-            // 
-            this.tbxCorrelativo.Enabled = false;
-            this.tbxCorrelativo.Location = new System.Drawing.Point(23, 53);
-            this.tbxCorrelativo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.tbxCorrelativo.Name = "tbxCorrelativo";
-            this.tbxCorrelativo.Size = new System.Drawing.Size(73, 22);
-            this.tbxCorrelativo.TabIndex = 0;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(23, 30);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(76, 17);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Correlativo";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(115, 30);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(66, 17);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "Nombre :";
-            // 
-            // tbxName
-            // 
-            this.tbxName.Location = new System.Drawing.Point(119, 53);
-            this.tbxName.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.tbxName.MaxLength = 200;
-            this.tbxName.Name = "tbxName";
-            this.tbxName.Size = new System.Drawing.Size(443, 22);
-            this.tbxName.TabIndex = 3;
-            this.tbxName.Validated += new System.EventHandler(this.tbxName_Validated);
             // 
             // panel1
             // 
@@ -122,15 +77,9 @@
             // 
             // gbxItem
             // 
-            this.gbxItem.Controls.Add(this.label4);
-            this.gbxItem.Controls.Add(this.cbSpecie);
-            this.gbxItem.Controls.Add(this.tbxAbbreviation);
-            this.gbxItem.Controls.Add(this.label3);
-            this.gbxItem.Controls.Add(this.tbxName);
-            this.gbxItem.Controls.Add(this.tbxCorrelativo);
-            this.gbxItem.Controls.Add(this.btnCancel);
+            this.gbxItem.Controls.Add(this.comboBox1);
             this.gbxItem.Controls.Add(this.label1);
-            this.gbxItem.Controls.Add(this.label2);
+            this.gbxItem.Controls.Add(this.btnCancel);
             this.gbxItem.Controls.Add(this.btnSave);
             this.gbxItem.Enabled = false;
             this.gbxItem.Location = new System.Drawing.Point(284, 71);
@@ -170,7 +119,7 @@
             // lbxItems
             // 
             this.lbxItems.DataSource = this.bsMain;
-            this.lbxItems.DisplayMember = "Name";
+            this.lbxItems.DisplayMember = "CostCenterName";
             this.lbxItems.FormattingEnabled = true;
             this.lbxItems.ItemHeight = 16;
             this.lbxItems.Location = new System.Drawing.Point(18, 84);
@@ -182,7 +131,7 @@
             // 
             // bsMain
             // 
-            this.bsMain.DataSource = typeof(trifenix.connect.agro_model.Variety);
+            this.bsMain.DataSource = typeof(trifenix.agro.app.model_extend.SeasonExtend);
             this.bsMain.CurrentChanged += new System.EventHandler(this.bsSectors_CurrentChanged);
             // 
             // ValidationForm
@@ -253,50 +202,28 @@
             this.lblProgress.Text = "label3";
             this.lblProgress.Visible = false;
             // 
-            // tbxAbbreviation
+            // label1
             // 
-            this.tbxAbbreviation.Location = new System.Drawing.Point(23, 118);
-            this.tbxAbbreviation.Margin = new System.Windows.Forms.Padding(4);
-            this.tbxAbbreviation.MaxLength = 10;
-            this.tbxAbbreviation.Name = "tbxAbbreviation";
-            this.tbxAbbreviation.Size = new System.Drawing.Size(106, 22);
-            this.tbxAbbreviation.TabIndex = 14;
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(7, 32);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(129, 17);
+            this.label1.TabIndex = 9;
+            this.label1.Text = "Centro de Costos : ";
             // 
-            // label3
+            // comboBox1
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(23, 98);
-            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(90, 17);
-            this.label3.TabIndex = 13;
-            this.label3.Text = "Abreviación :";
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(10, 53);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(404, 24);
+            this.comboBox1.TabIndex = 10;
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
-            // bsSpecie
+            // bsCostCenter
             // 
-            this.bsSpecie.DataSource = typeof(trifenix.connect.agro_model.Specie);
-            // 
-            // cbSpecie
-            // 
-            this.cbSpecie.DataSource = this.bsSpecie;
-            this.cbSpecie.DisplayMember = "Name";
-            this.cbSpecie.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbSpecie.FormattingEnabled = true;
-            this.cbSpecie.Location = new System.Drawing.Point(147, 118);
-            this.cbSpecie.Name = "cbSpecie";
-            this.cbSpecie.Size = new System.Drawing.Size(421, 24);
-            this.cbSpecie.TabIndex = 15;
-            this.cbSpecie.ValueMember = "Id";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(144, 98);
-            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(66, 17);
-            this.label4.TabIndex = 16;
-            this.label4.Text = "Especie :";
+            this.bsCostCenter.DataSource = typeof(trifenix.agro.app.model_extend.SeasonExtend);
             // 
             // Frm
             // 
@@ -316,7 +243,7 @@
             this.MinimizeBox = false;
             this.Name = "Frm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Variedad";
+            this.Text = "Sector";
             this.Load += new System.EventHandler(this.SectorFrm_Load_1);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
@@ -325,18 +252,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.bsMain)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ValidationForm)).EndInit();
             this.pnlButtons.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.bsSpecie)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bsCostCenter)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.TextBox tbxCorrelativo;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox tbxName;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label lblDescripcion;
         private System.Windows.Forms.GroupBox gbxItem;
@@ -351,10 +273,8 @@
         private System.Windows.Forms.Panel pnlButtons;
         private System.Windows.Forms.ProgressBar pb;
         private System.Windows.Forms.Label lblProgress;
-        private System.Windows.Forms.TextBox tbxAbbreviation;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.ComboBox cbSpecie;
-        private System.Windows.Forms.BindingSource bsSpecie;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.BindingSource bsCostCenter;
     }
 }

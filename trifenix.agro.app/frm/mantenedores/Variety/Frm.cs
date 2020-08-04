@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing.Text;
 using System.Linq;
@@ -48,6 +49,8 @@ namespace trifenix.agro.app.frm.mantenedores.variety
         }
         public void SetElements()
         {
+            bsSpecie.DataSource = Cloud.GetElements<Specie>(EntityRelated.SPECIE);
+
             pb.Visible = true;
             lblProgress.Text = "40%";
             pb.Value = 40;
@@ -260,38 +263,52 @@ namespace trifenix.agro.app.frm.mantenedores.variety
                 ValidationForm.SetError(tbxName, "El nombre es obligatorio");
                 return false;
             };
+            if (string.IsNullOrWhiteSpace(tbxAbbreviation.Text))
+            {
+                ValidationForm.SetError(tbxAbbreviation, "La abreviación es obligatoria");
+                return false;
+            };
             return true;
         }
-        public string GetEntityName() => Cloud.GetCosmosEntityName<Job>();
 
-        public string FriendlyName() => "Cargo";
+        public string GetEntityName() => Cloud.GetCosmosEntityName<Variety>();
+
+        public string FriendlyName() => "Variedad";
 
         
 
         public void Edit(object obj)
         {
-            var current = (Job)obj;            
-            Cloud.PushElement(new JobInput { Name = tbxName.Text, Id = current.Id }, entityName).Wait();
-            
+            var current = (Variety)obj;
+            var currentSpecie = (Specie)bsSpecie.Current;
+            Cloud.PushElement(new VarietyInput {Id = current.Id,  Name = tbxName.Text, Abbreviation = tbxAbbreviation.Text, IdSpecie = currentSpecie.Id }, entityName).Wait();
+
         }
 
         public void New()
         {
-            Cloud.PushElement(new JobInput { Name = tbxName.Text }, entityName).Wait();
+            var current = (Specie)bsSpecie.Current;
+            Cloud.PushElement(new VarietyInput { Name = tbxName.Text, Abbreviation = tbxAbbreviation.Text, IdSpecie = current.Id }, entityName).Wait();
          
         }
 
         public void ChangedList(object obj) {
             if (obj!=null)
             {
-                var current = (Job)obj;
+                var current = (Variety)obj;
                 tbxCorrelativo.Text = current.ClientId.ToString();
                 tbxName.Text = current.Name;
                 gbxItem.Text = $"Cargo {tbxName.Text}";
+                tbxAbbreviation.Text = current.Abbreviation;
+                // especie
+                var specie = ((IEnumerable<Specie>)bsSpecie.DataSource).FirstOrDefault(s => s.Id.Equals(current.Id));
+                var index = bsSpecie.IndexOf(specie);
+                bsSpecie.Position = index;
+                
             }
         }
 
-        public object GetList() => Cloud.GetElements<Job>(EntityRelated.JOB);
+        public object GetList() => Cloud.GetElements<Variety>(EntityRelated.VARIETY);
         public string Description() => new MdmDocs().GetInfoFromEntity((int)EntityRelated.VARIETY).Description;
         private void gbxItem_Enter(object sender, EventArgs e)
         {

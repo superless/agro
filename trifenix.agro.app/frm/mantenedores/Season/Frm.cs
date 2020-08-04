@@ -1,23 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using AutoMapper;
+using System;
 using System.ComponentModel;
 using System.Drawing.Text;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using trifenix.agro.app.helper;
 using trifenix.agro.app.interfaces;
+using trifenix.agro.app.model_extend;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.resources;
 using trifenix.connect.agro_model;
 using trifenix.connect.agro_model_input;
 using trifenix.connect.app.cloud;
 
-namespace trifenix.agro.app.frm.mantenedores.barrack
+namespace trifenix.agro.app.frm.mantenedores.season
 {
     public partial class Frm : Form, IFenixForm
     {
+        MapperConfiguration config = new MapperConfiguration(cfg => {
+            cfg.CreateMap<Season, SeasonExtend>();
+        });
+
         BackgroundWorker bworker;
 
         private string entityName;
@@ -73,13 +77,23 @@ namespace trifenix.agro.app.frm.mantenedores.barrack
             pb.Visible = false;
             lblProgress.Visible = false;
             Loading = false;
+            //bindingSources
+            var seasons = Cloud.GetElements<Season>(EntityRelated.SEASON);
+            if (seasons.Any())
+            {
+                var costcenters = Cloud.GetElements<CostCenter>(EntityRelated.COSTCENTER);
 
-            // bindingSources
-            var varieties = Cloud.GetElements<Variety>(EntityRelated.VARIETY);
-            var pollinatores = new List<Variety>() { new Variety { Id = "", Name = "Seleccione Polinizador" } };
-            pollinatores.AddRange(varieties);
-            var plotlands = Cloud.GetElements<PlotLand>(EntityRelated.PLOTLAND);
-            var sectors = Cloud.GetElements<Sector>(EntityRelated.SECTOR);
+                var mapper = config.CreateMapper();
+
+
+                bsMain.DataSource = seasons.Select(s => {
+                    var eseason = mapper.Map<SeasonExtend>(s);
+                    var localCostCenter = costcenters.FirstOrDefault(a => a.Id.Equals(eseason.IdCostCenter));
+                    eseason.CostCenterName = $"{localCostCenter.Name} [desde: {eseason.StartDate:dd-MM-yyyy}, hasta : {eseason.EndDate:dd-MM-yyyy}]";
+                    return eseason;
+
+                });
+            }
 
 
         }
@@ -92,7 +106,6 @@ namespace trifenix.agro.app.frm.mantenedores.barrack
             gbxItem.Visible = true;
             gbxItem.Enabled = true;
             gbxItem.Text = $"Nuevo {FriendlyName()}";
-            tbxName.Text = "";
             State = CurrentFormState.NEW;
             pnlButtons.Enabled = false;
         }
@@ -137,7 +150,7 @@ namespace trifenix.agro.app.frm.mantenedores.barrack
         {
             if (!Valida())
             {
-                ValidationForm.SetError(tbxName, "Descripción es obligatorio");
+                
                 return;
             }
             LoadProgress(DoWork);
@@ -192,6 +205,9 @@ namespace trifenix.agro.app.frm.mantenedores.barrack
         private void btnAddSector_Click(object sender, EventArgs e)
         {
             OnAdd();
+            
+
+
         }
 
         private void btnEditSector_Click(object sender, EventArgs e)
@@ -262,14 +278,10 @@ namespace trifenix.agro.app.frm.mantenedores.barrack
 
         public bool Valida()
         {
-            if (string.IsNullOrWhiteSpace(tbxName.Text))
-            {
-                ValidationForm.SetError(tbxName, "El nombre es obligatorio");
-                return false;
-            };
+           
             return true;
         }
-        public string GetEntityName() => Cloud.GetCosmosEntityName<Barrack>();
+        public string GetEntityName() => Cloud.GetCosmosEntityName<Sector>();
 
         public string FriendlyName() => "Sector";
 
@@ -278,48 +290,38 @@ namespace trifenix.agro.app.frm.mantenedores.barrack
         public void Edit(object obj)
         {
             var current = (Sector)obj;            
-            Cloud.PushElement(new SectorInput { Name = tbxName.Text, Id = current.Id }, entityName).Wait();
+            //Cloud.PushElement(new SectorInput { Name = tbxName.Text, Id = current.Id }, entityName).Wait();
             
         }
 
         public void New()
         {
-            Cloud.PushElement(new SectorInput { Name = tbxName.Text }, entityName).Wait();
+            //Cloud.PushElement(new SectorInput { Name = tbxName.Text }, entityName).Wait();
          
         }
 
         public void ChangedList(object obj) {
             if (obj!=null)
             {
-                var current = (Barrack)obj;
-                tbxCorrelativo.Text = current.ClientId.ToString();
-                tbxName.Text = current.Name;
-                gbxItem.Text = $"{FriendlyName()} {tbxName.Text}";
+                var current = (Sector)obj;
+              
+              
+                //gbxItem.Text = $"Sector {tbxName.Text}";
             }
         }
 
-        public object GetList() => Cloud.GetElements<Barrack>(EntityRelated.BARRACK);
+        public object GetList() => Cloud.GetElements<Sector>(EntityRelated.SECTOR);
+
+        public string Description() => new MdmDocs().GetInfoFromEntity((int)EntityRelated.SECTOR).Description;
 
         private void gbxItem_Enter(object sender, EventArgs e)
         {
 
         }
 
-        public string Description() => new MdmDocs().GetInfoFromEntity((int)EntityRelated.BARRACK).Description;
-
-        private void tbxHectares_KeyPress(object sender, KeyPressEventArgs e)
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Validaciones.ValidaDecimalParaKeyPress(((TextBox)sender).Text, e.KeyChar, 4, 2);
-        }
 
-        private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            Validaciones.ValidaEnteroParaKeyPress(e.KeyChar);
-        }
-
-        private void tbxNroPlants_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            Validaciones.ValidaEnteroParaKeyPress(e.KeyChar);
         }
     }
 }
