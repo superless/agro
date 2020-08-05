@@ -29,7 +29,7 @@ namespace trifenix.connect.agro_model
         /// <summary>
         /// Campo autonumérico que identifica el barrack.
         /// </summary>
-        [AutoNumericSearch(NumRelated.GENERIC_CORRELATIVE)]
+        [AutoNumericSearch(StringRelated.GENERIC_CORRELATIVE)]
         public override string ClientId { get; set; }
 
 

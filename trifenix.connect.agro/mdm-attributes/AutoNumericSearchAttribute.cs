@@ -15,10 +15,10 @@ namespace trifenix.connect.agro.mdm_attributes
         /// indica si una propiedad es autonumérica.
         /// </summary>
         /// <param name="index">índice de la propiedad</param>
-        public AutoNumericSearchAttribute(NumRelated index)
+        public AutoNumericSearchAttribute(StringRelated index)
         {
             Index = (int)index;
-            KindIndex = (int)KindProperty.NUM64;
+            KindIndex = (int)KindProperty.STR;
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace trifenix.connect.agro.mdm_attributes
         /// </summary>
         /// <param name="index">índice de la propiedad numérica que será autonumérica</param>
         /// <param name="dependant">índice de la entidad de la que depende</param>
-        public AutoNumericSearchAttribute(NumRelated index, EntityRelated dependant): this(index)
+        public AutoNumericSearchAttribute(StringRelated index, EntityRelated dependant): this(index)
         {
             Dependant = (int?)dependant;
             

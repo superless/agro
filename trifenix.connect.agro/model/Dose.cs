@@ -25,7 +25,7 @@ namespace trifenix.connect.agro_model
         /// genera un correlativo, pero este depende de producto.
         /// por tanto por cada producto volverá la secuencia a 1.
         /// </summary>
-        [AutoNumericSearch(NumRelated.GENERIC_CORRELATIVE, EntityRelated.PRODUCT)]
+        [AutoNumericSearch(StringRelated.GENERIC_CORRELATIVE, EntityRelated.PRODUCT)]
         public override string ClientId { get; set; }
 
 

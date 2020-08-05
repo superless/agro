@@ -30,7 +30,7 @@ namespace trifenix.connect.agro_model
         /// <summary>
         /// El identificador de cliente el que será mostrado en el formulario y la vista.
         /// </summary>
-        [AutoNumericSearch(NumRelated.GENERIC_CORRELATIVE)]
+        [AutoNumericSearch(StringRelated.GENERIC_CORRELATIVE)]
         public override string ClientId { get; set; }
 
 

@@ -41,5 +41,7 @@
 
 
         GENERIC_COMMENT = 12,
+
+        GENERIC_CORRELATIVE = 13,
     }
 }

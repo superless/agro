@@ -12,7 +12,7 @@ namespace trifenix.connect.mdm_attributes
 
         public AutoNumericDependantAttribute()
         {
-            KindIndex = (int)KindProperty.NUM64;
+            KindIndex = (int)KindProperty.STR;
         }
 
         /// <summary>

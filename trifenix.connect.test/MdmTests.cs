@@ -67,7 +67,7 @@ namespace trifenix.connect.test
                 geo = new GeographyProperty[] { new GeographyProperty { index = (int)GeoRelated.LOCATION_BARRACK, value = new GeoPointTs { latitude = 1.3, longitude = 1.45 } } },
                 id = Guid.NewGuid().ToString("N"),
                 num32 = new Num32BaseProperty[] { new Num32BaseProperty { index = (int)NumRelated.NUMBER_OF_PLANTS, value = 1221 } },
-                num64 = new Num64BaseProperty[] { new Num64BaseProperty { index = (int)NumRelated.GENERIC_CORRELATIVE, value = 1 } },
+                num64 = new Num64BaseProperty[] { new Num64BaseProperty { index = (int)StringRelated.GENERIC_CORRELATIVE, value = 1 } },
                 rel = new IRelatedId[] {
                     new RelatedBaseId{ id = Guid.NewGuid().ToString("N"), index = (int)EntityRelated.PLOTLAND },
                     new RelatedBaseId{ id = Guid.NewGuid().ToString("N"), index = (int)EntityRelated.POLLINATOR },

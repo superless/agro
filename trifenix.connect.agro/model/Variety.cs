@@ -39,7 +39,7 @@ namespace trifenix.connect.agro_model
         /// <summary>
         /// autonumérico.
         /// </summary>
-        [AutoNumericSearch(NumRelated.GENERIC_CORRELATIVE)]
+        [AutoNumericSearch(StringRelated.GENERIC_CORRELATIVE)]
         public override string ClientId { get; set; }
     }
 }
