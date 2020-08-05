@@ -10,7 +10,7 @@ namespace trifenix.connect.agro_model
     [SharedCosmosCollection("agro", "Variety")]    
     [ReferenceSearchHeader(EntityRelated.VARIETY, Kind = EntityKind.ENTITY, PathName = "varieties")]
     [GroupMenu(MenuEntityRelated.MANTENEDORES, PhisicalDevice.ALL, SubMenuEntityRelated.ESPECIES)]
-    public class Variety : DocumentBaseName<long>, ISharedCosmosEntity
+    public class Variety : DocumentBaseName, ISharedCosmosEntity
     {
         /// <summary>
         /// identificador
@@ -40,6 +40,6 @@ namespace trifenix.connect.agro_model
         /// autonumérico.
         /// </summary>
         [AutoNumericSearch(NumRelated.GENERIC_CORRELATIVE)]
-        public override long ClientId { get; set; }
+        public override string ClientId { get; set; }
     }
 }

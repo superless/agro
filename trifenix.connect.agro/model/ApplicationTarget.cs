@@ -18,7 +18,7 @@ namespace trifenix.connect.agro_model
     [SharedCosmosCollection("agro", "ApplicationTarget")]
     [ReferenceSearchHeader(EntityRelated.TARGET, PathName = "targets", Kind = EntityKind.ENTITY)]
     [GroupMenu(MenuEntityRelated.MANTENEDORES, PhisicalDevice.ALL, SubMenuEntityRelated.ORDEN_APLICACION)]
-    public class ApplicationTarget : DocumentBaseName<long>, ISharedCosmosEntity {
+    public class ApplicationTarget : DocumentBaseName, ISharedCosmosEntity {
 
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace trifenix.connect.agro_model
         /// El identificador de cliente el que será mostrado en el formulario y la vista.
         /// </summary>
         [AutoNumericSearch(NumRelated.GENERIC_CORRELATIVE)]
-        public override long ClientId { get; set; }
+        public override string ClientId { get; set; }
 
 
         /// <summary>

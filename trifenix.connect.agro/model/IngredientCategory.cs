@@ -24,6 +24,12 @@ namespace trifenix.connect.agro_model
         [StringSearch(StringRelated.GENERIC_NAME)]
         public override string Name { get; set; }
 
+        /// <summary>
+        /// Autonumérico del identificador del cliente.
+        /// </summary>
+        [AutoNumericSearch(NumRelated.GENERIC_CORRELATIVE)]
+        public override string ClientId { get; set; }
+
 
     }
 }

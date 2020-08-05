@@ -11,14 +11,14 @@ namespace trifenix.connect.agro_model
     [SharedCosmosCollection("agro", "Specie")]
     [ReferenceSearchHeader(EntityRelated.SPECIE, PathName = "species", Kind = EntityKind.ENTITY )]
     [GroupMenu(MenuEntityRelated.MANTENEDORES, PhisicalDevice.ALL, SubMenuEntityRelated.ESPECIES)]
-    public class Specie : DocumentBaseName<long>, ISharedCosmosEntity {
+    public class Specie : DocumentBaseName, ISharedCosmosEntity {
         public override string Id { get; set; }
 
         /// <summary>
         /// Identificador visual 
         /// </summary>
         [AutoNumericSearch(NumRelated.GENERIC_CORRELATIVE)]
-        public override long ClientId { get; set; }
+        public override string ClientId { get; set; }
 
 
         /// <summary>

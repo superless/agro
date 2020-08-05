@@ -10,13 +10,13 @@ namespace trifenix.connect.agro_model {
     [SharedCosmosCollection("agro", "Job")]
     [ReferenceSearchHeader(EntityRelated.JOB, PathName = "jobs", Kind = EntityKind.ENTITY)]
     [GroupMenu(MenuEntityRelated.MANTENEDORES, PhisicalDevice.ALL, SubMenuEntityRelated.USUARIOS)]
-    public class Job : DocumentBaseName<long>, ISharedCosmosEntity {
+    public class Job : DocumentBaseName, ISharedCosmosEntity {
 
         /// <summary>
         /// Identificador visual de cargo
         /// </summary>
         [AutoNumericSearch(NumRelated.GENERIC_CORRELATIVE)]
-        public override long ClientId { get; set; }
+        public override string ClientId { get; set; }
 
         /// <summary>
         /// identificador

@@ -16,7 +16,7 @@ namespace trifenix.connect.agro_model
     [SharedCosmosCollection("agro", "CostCenter")]
     [ReferenceSearchHeader(EntityRelated.COSTCENTER, PathName = "cost-centers", Kind = EntityKind.ENTITY)]
     [GroupMenu(MenuEntityRelated.MANTENEDORES, PhisicalDevice.ALL, SubMenuEntityRelated.GESTION)]
-    public class CostCenter : DocumentBaseName<long>, ISharedCosmosEntity {
+    public class CostCenter : DocumentBaseName, ISharedCosmosEntity {
 
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace trifenix.connect.agro_model
         /// Autonumérico del centro de costo
         /// </summary>
         [AutoNumericSearch(NumRelated.GENERIC_CORRELATIVE)]
-        public override long ClientId { get; set; }
+        public override string ClientId { get; set; }
         
 
 

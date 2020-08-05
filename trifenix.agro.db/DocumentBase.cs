@@ -3,6 +3,7 @@ namespace trifenix.agro.db {
     public abstract class DocumentBase {
 
         public abstract string Id { get; set; }
+        public abstract string ClientId { get; set; }
 
         [CosmosPartitionKey]
         public string CosmosEntityName { get; set; }
@@ -11,16 +12,6 @@ namespace trifenix.agro.db {
             CosmosEntityName = GetType().Name;
         }
 
-    }
-
-    public abstract class DocumentBase<T> : DocumentBase
-    {
-        public abstract T ClientId { get; set; }
-    }
-
-    public abstract class DocumentBaseName<T> : DocumentBaseName
-    {
-        public abstract T ClientId { get; set; }
     }
 
     public abstract class DocumentBaseName : DocumentBase {

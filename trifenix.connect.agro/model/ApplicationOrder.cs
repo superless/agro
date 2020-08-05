@@ -12,7 +12,7 @@ namespace trifenix.connect.agro_model
 
     [SharedCosmosCollection("agro", "ApplicationOrder")]
     [ReferenceSearchHeader(EntityRelated.ORDER, Kind = EntityKind.PROCESS, PathName = "orders")]
-    public class ApplicationOrder : DocumentBaseName<long>, ISharedCosmosEntity {
+    public class ApplicationOrder : DocumentBaseName, ISharedCosmosEntity {
         /// <summary>
         /// Identificador de la entidad
         /// </summary>
@@ -23,7 +23,7 @@ namespace trifenix.connect.agro_model
         /// Identificador autonumérico.
         /// </summary>
         [AutoNumericSearch(NumRelated.GENERIC_CORRELATIVE)]
-        public override long ClientId { get; set; }
+        public override string ClientId { get; set; }
 
 
         /// <summary>

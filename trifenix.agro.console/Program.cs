@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using trifenix.agro.db;
+using trifenix.agro.db.applicationsReference;
 using trifenix.agro.external.operations;
 using trifenix.agro.search.operations;
 using trifenix.connect.agro.index_model.enums;
@@ -33,17 +34,17 @@ namespace trifenix.agro.console {
             Environment.SetEnvironmentVariable("Search_allowedOrigins", "https://aresa.trifenix.io;https://dev-aresa.trifenix.io;https://agro.trifenix.io;https://agro-dev.trifenix.io;http://localhost:3000;http://localhost:4000;https://aresa2-dev.trifenix.io;https://aresa2.trifenix.io;http://localhost:9009;https://portal.azure.com");
 
             var agroDbArguments = new AgroDbArguments { EndPointUrl = "https://agricola-jhm.documents.azure.com:443/", NameDb = "agrodb", PrimaryKey = "yG6EIAT1dKSBaS7oSZizTrWQGGfwSb2ot2prYJwQOLHYk3cGmzvvhGohSzFZYHueSFDiptUAqCQYYSeSetTiKw==" };
-            var search = new AgroSearch<GeographyPoint>("agrosearch", "016DAA5EF1158FEEEE58DA60996D5981", new CorsOptions(Environment.GetEnvironmentVariable("Search_allowedOrigins", EnvironmentVariableTarget.Process).Split(";")));
+            var search = new AgroSearch<GeographyPoint>("agrocloud", "6D2BA6AF3373D17A341F7A099BA8FA6A", new CorsOptions(Environment.GetEnvironmentVariable("Search_allowedOrigins", EnvironmentVariableTarget.Process).Split(";")));
             var agro = new AgroManager(agroDbArguments, null, null, null, search, null, false);
 
             #region Vaciar Search y/o CosmosDb
             //Aquí defino si se vaciará CosmosDb, Index Search, ambos o ninguno
-            bool vaciarCosmosDb = false, vaciarSearch = true, vaciarAmbos = false;
+            //bool vaciarCosmosDb = false, vaciarSearch = false, vaciarAmbos = false;
 
-            if (vaciarAmbos || vaciarSearch)
-                search.EmptyIndex();
-            await search.GenerateIndex(agro);
-
+            //if (vaciarAmbos || vaciarSearch)
+            //    search.EmptyIndex();
+            //await search.GenerateIndex(agro);
+            
             //search.RegenerateIndex(agro);
 
             //IEnumerable<Task> tasks;

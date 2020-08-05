@@ -35,10 +35,10 @@ namespace trifenix.agro.db.applicationsReference
                 var prop_referenceToIndependent = entity.GetType().GetProperties().FirstOrDefault(prop => Attribute.IsDefined(prop, typeof(ReferenceSearchAttribute)) && Mdm.Reflection.Attributes.GetAttribute<AutoNumericSearchAttribute>(prop).Index == autoNumericSearchAttribute.Dependant);
                 var idIndependent = (string)prop_referenceToIndependent?.GetValue(entity);
                 var query = $"SELECT * FROM c WHERE c.{prop_referenceToIndependent.Name} = '{idIndependent}'";
-                var dependentElements = (IEnumerable<DocumentBase<int>>)await Store.QueryMultipleAsync(query);
-                castedEntity.ClientId = dependentElements.Max(element => (int?)element.ClientId) ?? 0 + 1;
+                var dependentElements = await Store.QueryMultipleAsync<DocumentBase>(query);
+                castedEntity.ClientId = dependentElements.Max(element => int.TryParse(element.ClientId, out int value)? value : 1).ToString();
             } else
-                castedEntity.ClientId = Store.Query().Max(element => (int?)((DocumentBase<int>)(object)element).ClientId) ?? 0 + 1;
+                castedEntity.ClientId = (await GetEntities().ToListAsync<DocumentBase>()).Max(element => int.TryParse(element.ClientId, out int value) ? value : 1).ToString();
             return castedEntity;
         }
 
@@ -55,15 +55,15 @@ namespace trifenix.agro.db.applicationsReference
                         var idIndependent = (string)prop_referenceToIndependent?.GetValue(entity);
                         if(dictionary.TryGetValue(idIndependent, out int max)) {
                             dictionary[idIndependent] = ++max;
-                            entity.ClientId = max;
+                            entity.ClientId = max.ToString();
                         } else {
                             dictionary.Add(idIndependent,1);
-                            entity.ClientId = 1;
+                            entity.ClientId = "1";
                         }
                     }
                 } else {
                     for (int index = 1; index <= entities.Count; index++)
-                        entities[index-1].ClientId = index;
+                        entities[index-1].ClientId = index.ToString();
                 }
                 await Store.UpsertRangeAsync((IEnumerable<T>)entities);
             }

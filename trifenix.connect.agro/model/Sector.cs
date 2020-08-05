@@ -14,7 +14,7 @@ namespace trifenix.connect.agro_model
     [SharedCosmosCollection("agro", "Sector")]
     [ReferenceSearchHeader(EntityRelated.SECTOR, PathName = "sectors", Kind = EntityKind.ENTITY)]
     [GroupMenu(MenuEntityRelated.MANTENEDORES, PhisicalDevice.ALL, SubMenuEntityRelated.TERRENO)]
-    public class Sector : DocumentBaseName<long>, ISharedCosmosEntity
+    public class Sector : DocumentBaseName, ISharedCosmosEntity
     {
         /// <summary>
         /// identificador
@@ -32,7 +32,7 @@ namespace trifenix.connect.agro_model
         /// Identificador visual 
         /// </summary>
         [AutoNumericSearch(NumRelated.GENERIC_CORRELATIVE)]
-        public override long ClientId { get; set; }
+        public override string ClientId { get; set; }
 
 
 

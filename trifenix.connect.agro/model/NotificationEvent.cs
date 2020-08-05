@@ -18,7 +18,7 @@ namespace trifenix.connect.agro_model
     /// </summary>
     [SharedCosmosCollection("agro", "NotificationEvent")]
     [ReferenceSearchHeader(EntityRelated.NOTIFICATION_EVENT, PathName = "notification_events", Kind = EntityKind.CUSTOM_ENTITY)]
-    public class NotificationEvent : DocumentBase<long>, ISharedCosmosEntity
+    public class NotificationEvent : DocumentBase, ISharedCosmosEntity
     {
         /// <summary>
         /// Identificador de la Notificación
@@ -30,7 +30,7 @@ namespace trifenix.connect.agro_model
         /// Identificador visual 
         /// </summary>
         [AutoNumericSearch(NumRelated.GENERIC_CORRELATIVE)]
-        public override long ClientId { get; set; }
+        public override string ClientId { get; set; }
 
         /// <summary>
         /// Cuartel asignado a la notificación

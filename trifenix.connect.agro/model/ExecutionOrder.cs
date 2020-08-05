@@ -15,7 +15,7 @@ namespace trifenix.connect.agro_model
     /// </summary>
     [SharedCosmosCollection("agro", "ExecutionOrder")]
     [ReferenceSearchHeader(EntityRelated.EXECUTION_ORDER, Kind = EntityKind.PROCESS, PathName = "execution_orders")]
-    public class ExecutionOrder : DocumentBase<long>, ISharedCosmosEntity {
+    public class ExecutionOrder : DocumentBase, ISharedCosmosEntity {
 
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace trifenix.connect.agro_model
         /// Autonumérico.
         /// </summary>
         [AutoNumericSearch(NumRelated.GENERIC_CORRELATIVE)]
-        public override long ClientId { get; set; }
+        public override string ClientId { get; set; }
 
         /// <summary>
         /// Orden relacionada a la ejeución.

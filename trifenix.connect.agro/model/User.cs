@@ -15,7 +15,7 @@ namespace trifenix.connect.agro_model
     /// </summary>
     [SharedCosmosCollection("agro", "User")]
     [ReferenceSearchHeader(EntityRelated.USER, PathName = "users", Kind = EntityKind.ENTITY)]
-    public class User : DocumentBaseName<long>, ISharedCosmosEntity
+    public class User : DocumentBaseName, ISharedCosmosEntity
     {
 
 
@@ -27,7 +27,7 @@ namespace trifenix.connect.agro_model
 
         // clave que vería el cliente.
         [AutoNumericSearch(NumRelated.GENERIC_CORRELATIVE)]
-        public override long ClientId { get; set; }
+        public override string ClientId { get; set; }
 
         
         public string ObjectIdAAD { get; set; }

@@ -18,7 +18,7 @@ namespace trifenix.connect.agro_model
     [SharedCosmosCollection("agro", "Barrack")]
     [ReferenceSearchHeader(EntityRelated.BARRACK, Kind =EntityKind.ENTITY, PathName ="barracks")]
     [GroupMenu(MenuEntityRelated.MANTENEDORES, PhisicalDevice.ALL, SubMenuEntityRelated.TERRENO)]
-    public class Barrack : DocumentBaseName<long>, ISharedCosmosEntity {
+    public class Barrack : DocumentBaseName, ISharedCosmosEntity {
 
         /// <summary>
         /// identificador del barrack
@@ -27,10 +27,10 @@ namespace trifenix.connect.agro_model
 
 
         /// <summary>
-        /// campo autonumérico que identifica el barrack.
+        /// Campo autonumérico que identifica el barrack.
         /// </summary>
         [AutoNumericSearch(NumRelated.GENERIC_CORRELATIVE)]
-        public override long ClientId { get; set; }
+        public override string ClientId { get; set; }
 
 
         /// <summary>

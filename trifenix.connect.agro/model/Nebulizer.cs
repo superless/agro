@@ -11,7 +11,7 @@ namespace trifenix.connect.agro_model
     [SharedCosmosCollection("agro", "Nebulizer")]
     [ReferenceSearchHeader(EntityRelated.NEBULIZER, PathName ="nebulizers", Kind = EntityKind.ENTITY)]
     [GroupMenu(MenuEntityRelated.MANTENEDORES, PhisicalDevice.ALL, SubMenuEntityRelated.MAQUINARIA)]
-    public class Nebulizer : DocumentBase<long>, ISharedCosmosEntity {
+    public class Nebulizer : DocumentBase, ISharedCosmosEntity {
 
         public override string Id { get; set; }
 
@@ -19,7 +19,7 @@ namespace trifenix.connect.agro_model
         /// Identificador visual de la entidad certificadora
         /// </summary>
         [AutoNumericSearch(NumRelated.GENERIC_CORRELATIVE)]
-        public override long ClientId { get; set; }
+        public override string ClientId { get; set; }
 
 
         /// <summary>

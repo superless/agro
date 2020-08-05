@@ -16,7 +16,7 @@ namespace trifenix.connect.agro_model
     [SharedCosmosCollection("agro", "BusinessName")]
     [ReferenceSearchHeader(EntityRelated.BUSINESSNAME, PathName = "business_names", Kind =EntityKind.ENTITY)]
     [GroupMenu(MenuEntityRelated.MANTENEDORES, PhisicalDevice.ALL, SubMenuEntityRelated.GESTION)]
-    public class BusinessName : DocumentBaseName<long>, ISharedCosmosEntity {
+    public class BusinessName : DocumentBaseName, ISharedCosmosEntity {
         
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace trifenix.connect.agro_model
         /// Autonumérico del identificador del cliente.
         /// </summary>
         [AutoNumericSearch(NumRelated.GENERIC_CORRELATIVE)]
-        public override long ClientId { get; set; }
+        public override string ClientId { get; set; }
 
 
 
