@@ -44,18 +44,37 @@ namespace trifenix.agro.app.frm.mantenedores.barrack
         }
         private async void SectorFrm_Load_1(object sender, EventArgs e)
         {
-            
+
             SetElements();
 
-            
-            
+
+
         }
         public void SetElements()
         {
             pb.Visible = true;
-            lblProgress.Text ="40";
+            lblProgress.Text = "40";
             pb.Value = 40;
+            
+           
+
+            // bindingSources
+            var varieties = Cloud.GetElements<Variety>($"index eq {(int)EntityRelated.VARIETY} and rel/any(element:element/id eq '{currentSpecie.Id}' and element/index eq {(int)EntityRelated.SPECIE })");
+            var pollinatores = new List<Variety>() { new Variety { Id = "", Name = "Seleccione Polinizador" } };
+            var rootStocks = new List<Rootstock>() { new Rootstock { Id = "", Name = "Seleccione Porta-injerto" } };
+
+            pollinatores.AddRange(varieties);
+            rootStocks.AddRange(Cloud.GetElements<Rootstock>(EntityRelated.ROOTSTOCK));
+
+            var sectors = Cloud.GetElements<Sector>(EntityRelated.SECTOR);
+
+            bsPolinator.DataSource = pollinatores;
+            bsVariety.DataSource = varieties;
+            bsSectors.DataSource = sectors;
+            bsRootStock.DataSource = rootStocks;
+
             bsMain.DataSource = GetList();
+
             if (bsMain.Count != 0)
             {
                 gbxItem.Visible = true;
@@ -71,38 +90,22 @@ namespace trifenix.agro.app.frm.mantenedores.barrack
                 btnDeleteSector.Enabled = false;
             }
             pb.Value = 100;
-            lblProgress.Text ="100";
+            lblProgress.Text = "100";
             pb.Visible = false;
             lblProgress.Visible = false;
             Loading = false;
 
-            // bindingSources
-            var varieties = Cloud.GetElements<Variety>($"index eq {(int)EntityRelated.VARIETY} and rel/any(element:element/id eq '{currentSpecie.Id}' and element/index eq {(int)EntityRelated.SPECIE })");
-            var pollinatores = new List<Variety>() { new Variety { Id ="", Name ="Seleccione Polinizador" } };
-            var rootStocks = new List<Rootstock>() { new Rootstock { Id ="", Name ="Seleccione Porta-injerto" } };
-
-            pollinatores.AddRange(varieties);
-            rootStocks.AddRange(Cloud.GetElements<Rootstock>(EntityRelated.ROOTSTOCK));
-            
-            var sectors = Cloud.GetElements<Sector>(EntityRelated.SECTOR);
-            
-            bsPolinator.DataSource = pollinatores;
-            bsVariety.DataSource = varieties;
-            bsSectors.DataSource = sectors;
-            bsRootStock.DataSource = rootStocks;
-
-
         }
 
 
-        
+
 
         private void OnAdd()
         {
             gbxItem.Visible = true;
             gbxItem.Enabled = true;
             gbxItem.Text = $"Nuevo {FriendlyName()}";
-            tbxName.Text ="";
+            tbxName.Text = "";
             State = CurrentFormState.NEW;
             pnlButtons.Enabled = false;
         }
@@ -122,10 +125,10 @@ namespace trifenix.agro.app.frm.mantenedores.barrack
             pnlButtons.Enabled = !Loading;
         }
 
-        
-        
 
-        
+
+
+
 
 
 
@@ -135,24 +138,24 @@ namespace trifenix.agro.app.frm.mantenedores.barrack
         private void tbxName_Validated(object sender, EventArgs e)
         {
             var tbx = ((TextBox)sender);
-            ValidationForm.SetError(tbx, string.IsNullOrWhiteSpace(tbx.Text) ?"campo obligatorio" : null);
+            ValidationForm.SetError(tbx, string.IsNullOrWhiteSpace(tbx.Text) ? "campo obligatorio" : null);
         }
 
-        
 
 
-        
+
+
 
         private void btnSave_Click(object sender, EventArgs e)
         {
             if (!Valida())
             {
-                ValidationForm.SetError(tbxName,"Descripción es obligatoria");
+                ValidationForm.SetError(tbxName, "Descripción es obligatoria");
                 return;
             }
             LoadProgress(DoWork);
 
-            
+
 
         }
 
@@ -175,7 +178,7 @@ namespace trifenix.agro.app.frm.mantenedores.barrack
         private void Bworker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             pb.Value = 100;
-            lblProgress.Text ="";
+            lblProgress.Text = "";
             lblProgress.Visible = false;
             pb.Visible = false;
 
@@ -195,9 +198,9 @@ namespace trifenix.agro.app.frm.mantenedores.barrack
             bworker.ReportProgress(100);
         }
 
-        
 
-        
+
+
 
         private void btnAddSector_Click(object sender, EventArgs e)
         {
@@ -214,12 +217,12 @@ namespace trifenix.agro.app.frm.mantenedores.barrack
         {
             gbxItem.Visible = true;
             gbxItem.Enabled = false;
-            gbxItem.Text ="";
+            gbxItem.Text = "";
             State = CurrentFormState.READONLY;
             pnlButtons.Enabled = true;
         }
 
-        
+
 
         private void bworker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
@@ -255,7 +258,7 @@ namespace trifenix.agro.app.frm.mantenedores.barrack
             {
 
                 Edit(bsMain.Current);
-                
+
                 while (Loading)
                 {
                     Thread.Sleep(300);
@@ -274,27 +277,27 @@ namespace trifenix.agro.app.frm.mantenedores.barrack
         {
             if (string.IsNullOrWhiteSpace(tbxName.Text))
             {
-                ValidationForm.SetError(tbxName,"El nombre es obligatorio");
+                ValidationForm.SetError(tbxName, "El nombre es obligatorio");
                 return false;
             };
             if (bsSectors.Current == null)
             {
-                ValidationForm.SetError(cbSector,"el sector es obligatorio");
+                ValidationForm.SetError(cbSector, "el sector es obligatorio");
                 return false;
             }
             if (bsPlotland.Current == null)
             {
-                ValidationForm.SetError(cbPlotland,"la parcela es obligatoria");
+                ValidationForm.SetError(cbPlotland, "la parcela es obligatoria");
                 return false;
             }
             if (bsVariety.Current == null)
             {
-                ValidationForm.SetError(cbVariety,"Debe seleccionar una variedad");
+                ValidationForm.SetError(cbVariety, "Debe seleccionar una variedad");
                 return false;
             }
             if (string.IsNullOrWhiteSpace(tbxAnioPlant.Text))
             {
-                ValidationForm.SetError(tbxAnioPlant,"Indique el año de plantación");
+                ValidationForm.SetError(tbxAnioPlant, "Indique el año de plantación");
                 return false;
             }
             if (string.IsNullOrWhiteSpace(tbxHectares.Text))
@@ -311,7 +314,7 @@ namespace trifenix.agro.app.frm.mantenedores.barrack
             var anioPlant = int.Parse(tbxAnioPlant.Text);
             var currentYear = DateTime.Now.Year;
 
-            if (anioPlant<1950 || anioPlant>currentYear)
+            if (anioPlant < 1950 || anioPlant > currentYear)
             {
                 ValidationForm.SetError(tbxAnioPlant, "el año debe estar entre 1950 y el año actual");
                 return false;
@@ -322,14 +325,14 @@ namespace trifenix.agro.app.frm.mantenedores.barrack
         }
         public string GetEntityName() => Cloud.GetCosmosEntityName<Barrack>();
 
-        public string FriendlyName() =>"Cuartel";
+        public string FriendlyName() => "Cuartel";
 
-        
+
 
         public void Edit(object obj)
         {
             var current = (Barrack)obj;
-            
+
             var currentVariety = (Variety)bsVariety.Current;
             var currentPollinator = (Variety)bsPolinator.Current;
             var currentRootstock = (Rootstock)bsRootStock.Current;
@@ -346,7 +349,7 @@ namespace trifenix.agro.app.frm.mantenedores.barrack
 
         public void New()
         {
-         
+
             var currentVariety = (Variety)bsVariety.Current;
             var currentPollinator = (Variety)bsPolinator.Current;
             var currentRootstock = (Rootstock)bsRootStock.Current;
@@ -362,7 +365,7 @@ namespace trifenix.agro.app.frm.mantenedores.barrack
         }
 
         public void ChangedList(object obj) {
-            if (obj!=null)
+            if (obj != null)
             {
                 var current = (Barrack)obj;
                 tbxCorrelativo.Text = current.ClientId.ToString();
@@ -382,13 +385,26 @@ namespace trifenix.agro.app.frm.mantenedores.barrack
                 tbxNroPlants.Text = current.NumberOfPlants.ToString();
 
 
-                
-                
-                
+
+
+
             }
         }
 
-        public object GetList() => Cloud.GetElements<Barrack>(EntityRelated.BARRACK);
+        public object GetList() {
+
+            var queryVariety = $"index eq {(int)EntityRelated.VARIETY} and rel/any(elem:elem/id eq '{currentSpecie.Id}' and elem/index eq {(int)EntityRelated.SPECIE})";
+            var varieties = Cloud.GetElements<Variety>(queryVariety);
+
+            if (!varieties.Any()) return new List<Barrack>();
+
+
+            var join = string.Join(",", varieties.Select(s => s.Id));
+
+
+            var query = $"index eq {(int)EntityRelated.BARRACK} and rel/any(elem:elem/id eq '{currentSeason.Id}' and elem/index eq {(int)EntityRelated.SEASON}) and rel/any(element:search.in(element/id,'{join}') and element/index eq {(int)EntityRelated.VARIETY})";
+            return Cloud.GetElements<Barrack>(query);
+        }
 
         private void gbxItem_Enter(object sender, EventArgs e)
         {

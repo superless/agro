@@ -12,7 +12,7 @@ namespace trifenix.connect.agro_model_input
     [ReferenceSearchHeader(EntityRelated.DOSES)]
     public class DosesInput : InputBase {
 
-        [Required, Reference(typeof(Product))]
+        [Reference(typeof(Product))]
         [ReferenceSearch(EntityRelated.PRODUCT)]
         public string IdProduct { get; set; }
 

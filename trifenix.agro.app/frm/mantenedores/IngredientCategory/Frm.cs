@@ -1,9 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Drawing.Text;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using trifenix.agro.app.helper;
 using trifenix.agro.app.interfaces;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.resources;
@@ -11,7 +12,7 @@ using trifenix.connect.agro_model;
 using trifenix.connect.agro_model_input;
 using trifenix.connect.app.cloud;
 
-namespace trifenix.agro.app.frm.mantenedores.costcenter
+namespace trifenix.agro.app.frm.mantenedores.ingredient_category
 {
     public partial class Frm : Form, IFenixForm
     {
@@ -40,11 +41,6 @@ namespace trifenix.agro.app.frm.mantenedores.costcenter
         private async void SectorFrm_Load_1(object sender, EventArgs e)
         {
             
-            var bnames = Cloud.GetElements<BusinessName>(EntityRelated.BUSINESSNAME);
-            bsBusinessName.DataSource = bnames;
-            
-            
-
             SetElements();
 
             
@@ -266,46 +262,43 @@ namespace trifenix.agro.app.frm.mantenedores.costcenter
             };
             return true;
         }
-        public string GetEntityName() => Cloud.GetCosmosEntityName<CostCenter>();
+        public string GetEntityName() => Cloud.GetCosmosEntityName<IngredientCategory>();
 
-        public string FriendlyName() => "Centro de Costo";
+        public string FriendlyName() => "Categoría de ingrediente";
 
         
 
         public void Edit(object obj)
         {
-            var current = (CostCenter)obj;
-            var currentBusinessName = (BusinessName)bsBusinessName.Current;
-
-            Cloud.PushElement(new CostCenterInput { Name = tbxName.Text, Id = current.Id, IdBusinessName = currentBusinessName.Id }, entityName).Wait();
+            var current = (Sector)obj;            
+            Cloud.PushElement(new IngredientCategoryInput { Name = tbxName.Text, Id = current.Id }, entityName).Wait();
             
         }
 
         public void New()
         {
-            var currentBusinessName = (BusinessName)bsBusinessName.Current;
-            Cloud.PushElement(new CostCenterInput { Name = tbxName.Text, IdBusinessName = currentBusinessName.Id  }, entityName).Wait();
+            Cloud.PushElement(new IngredientCategoryInput { Name = tbxName.Text }, entityName).Wait();
          
         }
 
         public void ChangedList(object obj) {
             if (obj!=null)
             {
-                var current = (CostCenter)obj;
-                tbxCorrelativo.Text = current.ClientId.ToString();
+                var current = (IngredientCategory)obj;
                 tbxName.Text = current.Name;
-                gbxItem.Text = $"Centro de costos {tbxName.Text}";
-                //business names
-                bsBusinessName.SelectItem(current.IdBusinessName);
-                
+                gbxItem.Text = $"{FriendlyName()} {tbxName.Text}";
             }
         }
 
-        public object GetList() => Cloud.GetElements<CostCenter>(EntityRelated.COSTCENTER);
-        public string Description() => new MdmDocs().GetInfoFromEntity((int)EntityRelated.COSTCENTER).Description;
+        public object GetList() => Cloud.GetElements<IngredientCategory>(EntityRelated.CATEGORY_INGREDIENT);
+
+        public string Description() => new MdmDocs().GetInfoFromEntity((int)EntityRelated.CATEGORY_INGREDIENT).Description;
+
         private void gbxItem_Enter(object sender, EventArgs e)
         {
 
         }
+
+        
     }
 }

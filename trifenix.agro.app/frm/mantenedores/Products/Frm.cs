@@ -11,7 +11,7 @@ using trifenix.connect.agro_model;
 using trifenix.connect.agro_model_input;
 using trifenix.connect.app.cloud;
 
-namespace trifenix.agro.app.frm.mantenedores.costcenter
+namespace trifenix.agro.app.frm.mantenedores.product
 {
     public partial class Frm : Form, IFenixForm
     {
@@ -41,7 +41,7 @@ namespace trifenix.agro.app.frm.mantenedores.costcenter
         {
             
             var bnames = Cloud.GetElements<BusinessName>(EntityRelated.BUSINESSNAME);
-            bsBusinessName.DataSource = bnames;
+            bsIngredient.DataSource = bnames;
             
             
 
@@ -275,7 +275,7 @@ namespace trifenix.agro.app.frm.mantenedores.costcenter
         public void Edit(object obj)
         {
             var current = (CostCenter)obj;
-            var currentBusinessName = (BusinessName)bsBusinessName.Current;
+            var currentBusinessName = (BusinessName)bsIngredient.Current;
 
             Cloud.PushElement(new CostCenterInput { Name = tbxName.Text, Id = current.Id, IdBusinessName = currentBusinessName.Id }, entityName).Wait();
             
@@ -283,7 +283,7 @@ namespace trifenix.agro.app.frm.mantenedores.costcenter
 
         public void New()
         {
-            var currentBusinessName = (BusinessName)bsBusinessName.Current;
+            var currentBusinessName = (BusinessName)bsIngredient.Current;
             Cloud.PushElement(new CostCenterInput { Name = tbxName.Text, IdBusinessName = currentBusinessName.Id  }, entityName).Wait();
          
         }
@@ -296,7 +296,7 @@ namespace trifenix.agro.app.frm.mantenedores.costcenter
                 tbxName.Text = current.Name;
                 gbxItem.Text = $"Centro de costos {tbxName.Text}";
                 //business names
-                bsBusinessName.SelectItem(current.IdBusinessName);
+                bsIngredient.SelectItem(current.IdBusinessName);
                 
             }
         }
