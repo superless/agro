@@ -51,7 +51,16 @@ namespace trifenix.agro.app.frm.mantenedores.sector
             pb.Visible = true;
             lblProgress.Text = "40%";
             pb.Value = 40;
+            
+            pb.Value = 100;
+            lblProgress.Text = "100%";
+            pb.Visible = false;
+            lblProgress.Visible = false;
+            Loading = false;
+            
             bsMain.DataSource = GetList();
+
+
             if (bsMain.Count != 0)
             {
                 gbxItem.Visible = true;
@@ -66,11 +75,6 @@ namespace trifenix.agro.app.frm.mantenedores.sector
                 btnEditSector.Enabled = false;
                 btnDeleteSector.Enabled = false;
             }
-            pb.Value = 100;
-            lblProgress.Text = "100%";
-            pb.Visible = false;
-            lblProgress.Visible = false;
-            Loading = false;
 
         }
 
