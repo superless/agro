@@ -13,7 +13,7 @@ namespace trifenix.connect.agro_model
 
     [SharedCosmosCollection("agro", "Dose")]
     [ReferenceSearchHeader(EntityRelated.DOSES, Kind = EntityKind.CUSTOM_ENTITY)]
-    public class Dose : DocumentBase<int>, ISharedCosmosEntity {
+    public class Dose : DocumentBase, ISharedCosmosEntity {
 
         /// <summary>
         /// Identificador de una dosis        
@@ -26,7 +26,7 @@ namespace trifenix.connect.agro_model
         /// por tanto por cada producto volverá la secuencia a 1.
         /// </summary>
         [AutoNumericSearch(NumRelated.GENERIC_CORRELATIVE, EntityRelated.PRODUCT)]
-        public override int ClientId { get; set; }
+        public override string ClientId { get; set; }
 
 
 

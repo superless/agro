@@ -3,6 +3,8 @@ using Cosmonaut.Attributes;
 using System;
 using trifenix.agro.db;
 using trifenix.connect.agro.index_model.enums;
+using trifenix.connect.agro.index_model.props;
+using trifenix.connect.agro.mdm_attributes;
 
 namespace trifenix.connect.agro_model
 {
@@ -19,7 +21,13 @@ namespace trifenix.connect.agro_model
         /// </summary>
         public override string Id { get; set; }
 
-        
+        /// <summary>
+        /// Autonumérico del identificador del cliente.
+        /// </summary>
+        [AutoNumericSearch(NumRelated.GENERIC_CORRELATIVE)]
+        public override string ClientId { get; set; }
+
+
         /// <summary>
         /// Identificador de usuario
         /// </summary>

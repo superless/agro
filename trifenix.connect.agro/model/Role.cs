@@ -11,7 +11,7 @@ namespace trifenix.connect.agro_model
     [SharedCosmosCollection("agro", "Role")]
     [ReferenceSearchHeader(EntityRelated.ROLE, Kind = EntityKind.ENTITY, PathName = "roles")]
     [GroupMenu(MenuEntityRelated.MANTENEDORES, PhisicalDevice.ALL, SubMenuEntityRelated.USUARIOS)]
-    public class Role : DocumentBaseName<long>, ISharedCosmosEntity
+    public class Role : DocumentBaseName, ISharedCosmosEntity
     {
         /// <summary>
         /// identificador del rol
@@ -22,7 +22,7 @@ namespace trifenix.connect.agro_model
         /// Identificador visual 
         /// </summary>
         [AutoNumericSearch(NumRelated.GENERIC_CORRELATIVE)]
-        public override long ClientId { get; set; }
+        public override string ClientId { get; set; }
 
         /// <summary>
         /// nombre del rol

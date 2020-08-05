@@ -13,7 +13,7 @@ namespace trifenix.connect.agro_model
     /// </summary>
     [SharedCosmosCollection("agro", "Rootstock")]
     [ReferenceSearchHeader(EntityRelated.ROOTSTOCK, PathName = "rootstock", Kind = EntityKind.ENTITY)]
-    public class Rootstock : DocumentBaseName<long>, ISharedCosmosEntity {
+    public class Rootstock : DocumentBaseName, ISharedCosmosEntity {
 
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace trifenix.connect.agro_model
         /// Identificador visual 
         /// </summary>
         [AutoNumericSearch(NumRelated.GENERIC_CORRELATIVE)]
-        public override long ClientId { get; set; }
+        public override string ClientId { get; set; }
 
         /// <summary>
         /// abreviación.

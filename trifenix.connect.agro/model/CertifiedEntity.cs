@@ -13,7 +13,7 @@ namespace trifenix.connect.agro_model
     /// </summary>
     [SharedCosmosCollection("agro", "CertifiedEntity")]
     [ReferenceSearchHeader(EntityRelated.CERTIFIED_ENTITY, PathName ="certified_entities", Kind = EntityKind.ENTITY)]    
-    public class CertifiedEntity : DocumentBaseName<long>, ISharedCosmosEntity {
+    public class CertifiedEntity : DocumentBaseName, ISharedCosmosEntity {
 
         /// <summary>
         /// Identificador de la entidad
@@ -27,12 +27,11 @@ namespace trifenix.connect.agro_model
         [StringSearch(StringRelated.GENERIC_NAME)]
         public override string Name { get; set; }
 
-
         /// <summary>
-        /// Identificador visual de la entidad certificadora
+        /// Autonumérico del identificador del cliente.
         /// </summary>
         [AutoNumericSearch(NumRelated.GENERIC_CORRELATIVE)]
-        public override long ClientId { get; set; }
+        public override string ClientId { get; set; }
 
 
 

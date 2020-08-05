@@ -18,8 +18,14 @@ namespace trifenix.connect.agro_model
         /// <summary>
         /// identificador de la ejecución.
         /// </summary>
-        public override string Id { get; set; }        
-        
+        public override string Id { get; set; }
+
+        /// <summary>
+        /// Autonumérico del identificador del cliente.
+        /// </summary>
+        [AutoNumericSearch(NumRelated.GENERIC_CORRELATIVE)]
+        public override string ClientId { get; set; }
+
         /// <summary>
         /// Fecha de creación, la último estado de una orden, determina el estado actual.
         /// </summary>

@@ -14,7 +14,7 @@ namespace trifenix.connect.agro_model
     /// </summary>
     [SharedCosmosCollection("agro", "PreOrder")]
     [ReferenceSearchHeader(EntityRelated.PREORDER, PathName = "pre-orders", Kind = EntityKind.PROCESS)]
-    public class PreOrder : DocumentBaseName<long>, ISharedCosmosEntity
+    public class PreOrder : DocumentBaseName, ISharedCosmosEntity
     {
         /// <summary>
         /// identificador
@@ -25,7 +25,7 @@ namespace trifenix.connect.agro_model
         /// Identificador visual 
         /// </summary>
         [AutoNumericSearch(NumRelated.GENERIC_CORRELATIVE)]
-        public override long ClientId { get; set; }
+        public override string ClientId { get; set; }
 
         /// <summary>
         /// nombre de la pre-orden.

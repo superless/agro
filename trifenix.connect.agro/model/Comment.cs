@@ -2,16 +2,22 @@
 using Cosmonaut.Attributes;
 using System;
 using trifenix.agro.db;
+using trifenix.connect.agro.index_model.props;
+using trifenix.connect.agro.mdm_attributes;
 
 namespace trifenix.connect.agro_model
 {
 
     [SharedCosmosCollection("agro", "Comment")]
-    public class Comment : DocumentBase<long>, ISharedCosmosEntity
+    public class Comment : DocumentBase, ISharedCosmosEntity
     {
         public override string Id { get; set; }
 
-        public override long ClientId { get; set; }
+        /// <summary>
+        /// Autonumérico del identificador del cliente.
+        /// </summary>
+        [AutoNumericSearch(NumRelated.GENERIC_CORRELATIVE)]
+        public override string ClientId { get; set; }
 
 
         public string Commentary { get; set; }

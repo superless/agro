@@ -11,7 +11,7 @@ namespace trifenix.connect.agro_model
     [SharedCosmosCollection("agro", "Ingredient")]
     [ReferenceSearchHeader(EntityRelated.INGREDIENT, Kind = EntityKind.ENTITY, PathName = "ingredients")]
     [GroupMenu(MenuEntityRelated.MANTENEDORES, PhisicalDevice.ALL, SubMenuEntityRelated.PRODUCTO)]
-    public class Ingredient : DocumentBaseName<long>, ISharedCosmosEntity {
+    public class Ingredient : DocumentBaseName, ISharedCosmosEntity {
 
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace trifenix.connect.agro_model
         /// autonumérico
         /// </summary>
         [AutoNumericSearch(NumRelated.GENERIC_CORRELATIVE)]
-        public override long ClientId { get; set; }
+        public override string ClientId { get; set; }
 
         /// <summary>
         /// nombre del ingrediente.

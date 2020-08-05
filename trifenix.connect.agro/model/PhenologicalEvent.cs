@@ -15,7 +15,7 @@ namespace trifenix.connect.agro_model
     [SharedCosmosCollection("agro", "PhenologicalEvent")]
     [ReferenceSearchHeader(EntityRelated.PHENOLOGICAL_EVENT, Kind = EntityKind.ENTITY, PathName = "phenological_events")]
     [GroupMenu(MenuEntityRelated.MANTENEDORES, PhisicalDevice.ALL, SubMenuEntityRelated.ORDEN_APLICACION)]
-    public class PhenologicalEvent : DocumentBaseName<long>, ISharedCosmosEntity {
+    public class PhenologicalEvent : DocumentBaseName, ISharedCosmosEntity {
 
         public override string Id { get; set; }
 
@@ -24,7 +24,7 @@ namespace trifenix.connect.agro_model
         /// Identificador visual 
         /// </summary>
         [AutoNumericSearch(NumRelated.GENERIC_CORRELATIVE)]
-        public override long ClientId { get; set; }
+        public override string ClientId { get; set; }
 
         /// <summary>
         /// nombre del evento fenológico.
