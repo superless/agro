@@ -221,5 +221,13 @@ namespace trifenix.agro.app
             frm.ShowDialog();
             forms.Remove(frm);
         }
+
+        private void ingredienteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var frm = new mantenedores.ingredient.Frm();
+            forms.Add(frm);
+            frm.ShowDialog();
+            forms.Remove(frm);
+        }
     }
 }

@@ -279,17 +279,17 @@ namespace trifenix.agro.app.frm.mantenedores.ingredient
 
         public void Edit(object obj)
         {
-            var current = (CostCenter)obj;
-            var currentBusinessName = (BusinessName)bsIngredientCategory.Current;
+            var current = (Ingredient)obj;
+            
 
-            var currentCategory = (Ingredient)bsIngredientCategory.Current;
+            var currentCategory = (IngredientCategory)bsIngredientCategory.Current;
             Cloud.PushElement(new IngredientInput { Id = current.Id, Name = tbxName.Text, idCategory = currentCategory.Id }, entityName).Wait();
 
         }
 
         public void New()
         {
-            var currentCategory = (Ingredient)bsIngredientCategory.Current;
+            var currentCategory = (IngredientCategory)bsIngredientCategory.Current;
             Cloud.PushElement(new IngredientInput { Name = tbxName.Text, idCategory = currentCategory.Id  }, entityName).Wait();
          
         }
@@ -310,6 +310,11 @@ namespace trifenix.agro.app.frm.mantenedores.ingredient
         public object GetList() => Cloud.GetElements<Ingredient>(EntityRelated.INGREDIENT);
         public string Description() => new MdmDocs().GetInfoFromEntity((int)EntityRelated.INGREDIENT).Description;
         private void gbxItem_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
         {
 
         }
