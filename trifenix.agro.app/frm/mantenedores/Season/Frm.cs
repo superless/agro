@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing.Text;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using trifenix.agro.app.helper;
 using trifenix.agro.app.interfaces;
 using trifenix.agro.app.model_extend;
 using trifenix.connect.agro.index_model.props;
@@ -44,7 +46,7 @@ namespace trifenix.agro.app.frm.mantenedores.season
 
 
         }
-        private async void SectorFrm_Load_1(object sender, EventArgs e)
+        private void SectorFrm_Load_1(object sender, EventArgs e)
         {
             
             SetElements();
@@ -52,79 +54,12 @@ namespace trifenix.agro.app.frm.mantenedores.season
             
             
         }
-        public void SetElements()
-        {
-            pb.Visible = true;
-            lblProgress.Text = "40%";
-            pb.Value = 40;
-            bsMain.DataSource = GetList();
-            if (bsMain.Count != 0)
-            {
-                gbxItem.Visible = true;
-                gbxItem.Enabled = false;
-                pnlButtons.Enabled = true;
-                btnEditSector.Enabled = true;
-                btnDeleteSector.Enabled = true;
-            }
-            else
-            {
-                pnlButtons.Enabled = true;
-                btnEditSector.Enabled = false;
-                btnDeleteSector.Enabled = false;
-            }
-            pb.Value = 100;
-            lblProgress.Text = "100%";
-            pb.Visible = false;
-            lblProgress.Visible = false;
-            Loading = false;
-            //bindingSources
-            var seasons = Cloud.GetElements<Season>(EntityRelated.SEASON);
-            if (seasons.Any())
-            {
-                var costcenters = Cloud.GetElements<CostCenter>(EntityRelated.COSTCENTER);
-
-                var mapper = config.CreateMapper();
-
-
-                bsMain.DataSource = seasons.Select(s => {
-                    var eseason = mapper.Map<SeasonExtend>(s);
-                    var localCostCenter = costcenters.FirstOrDefault(a => a.Id.Equals(eseason.IdCostCenter));
-                    eseason.CostCenterName = $"{localCostCenter.Name} [desde: {eseason.StartDate:dd-MM-yyyy}, hasta : {eseason.EndDate:dd-MM-yyyy}]";
-                    return eseason;
-
-                });
-            }
-
-
-        }
+        
 
 
         
 
-        private void OnAdd()
-        {
-            gbxItem.Visible = true;
-            gbxItem.Enabled = true;
-            gbxItem.Text = $"Nuevo {FriendlyName()}";
-            State = CurrentFormState.NEW;
-            pnlButtons.Enabled = false;
-        }
-
-        private void OnEdit()
-        {
-            gbxItem.Visible = true;
-            gbxItem.Enabled = true;
-            gbxItem.Text = $"Nuevo {FriendlyName()}";
-            State = CurrentFormState.EDIT;
-            pnlButtons.Enabled = false;
-        }
-
-        private void OnCurrentChange() {
-            gbxItem.Visible = true;
-            gbxItem.Enabled = false;
-            pnlButtons.Enabled = !Loading;
-        }
-
+       
         
         
 
@@ -275,53 +210,188 @@ namespace trifenix.agro.app.frm.mantenedores.season
             Loading = false;
         }
 
+        public void SetElements()
+        {
+            var costcenters = Cloud.GetElements<CostCenter>(EntityRelated.COSTCENTER);
+
+            if (!costcenters.Any())
+            {
+                MessageBox.Show("Debe existir al menos un centro de costo para crear una temporada");
+                DialogResult = DialogResult.Cancel;
+                Close();
+                return;
+            }
+            bsCostCenter.DataSource = costcenters;
+
+            pb.Visible = true;
+            lblProgress.Text = "40%";
+            pb.Value = 40;
+            
+            //bindingSources
+            var seasons = Cloud.GetElements<Season>(EntityRelated.SEASON);
+            
+
+            var mapper = config.CreateMapper();
+
+
+            bsMain.DataSource = seasons.Select(s => {
+                var eseason = mapper.Map<SeasonExtend>(s);
+                var localCostCenter = costcenters.FirstOrDefault(a => a.Id.Equals(eseason.IdCostCenter));
+                eseason.CostCenterName = $"{localCostCenter.Name} [desde: {eseason.StartDate:dd-MM-yyyy}, hasta : {eseason.EndDate:dd-MM-yyyy}]";
+                return eseason;
+
+            });
+
+            
+            
+            if (bsMain.Count != 0)
+            {
+                gbxItem.Visible = true;
+                gbxItem.Enabled = false;
+                pnlButtons.Enabled = true;
+                btnEditSector.Enabled = true;
+                btnDeleteSector.Enabled = true;
+            }
+            else
+            {
+                pnlButtons.Enabled = true;
+                btnEditSector.Enabled = false;
+                btnDeleteSector.Enabled = false;
+            }
+            pb.Value = 100;
+            lblProgress.Text = "100%";
+            pb.Visible = false;
+            lblProgress.Visible = false;
+            Loading = false;
+
+
+
+        }
+
+
+        private void OnAdd()
+        {
+            gbxItem.Visible = true;
+            gbxItem.Enabled = true;
+            gbxItem.Text = $"Nuevo {FriendlyName()}";
+            State = CurrentFormState.NEW;
+            pnlButtons.Enabled = false;
+            DefaultFormatDates();
+        }
+
+        private void OnEdit()
+        {
+            gbxItem.Visible = true;
+            gbxItem.Enabled = true;
+            gbxItem.Text = $"Nuevo {FriendlyName()}";
+            State = CurrentFormState.EDIT;
+            cbCostCenter.Enabled = false;
+            
+            pnlButtons.Enabled = false;
+        }
+
+        private void OnCurrentChange()
+        {
+            gbxItem.Visible = true;
+            gbxItem.Enabled = false;
+            pnlButtons.Enabled = !Loading;
+        }
 
         public bool Valida()
         {
-           
+            
+            if (State == CurrentFormState.NEW)
+            {
+                var currentSeasons = ((IEnumerable<Season>)bsMain.DataSource).ToList();
+                var currentCenterCost = (CostCenter)bsCostCenter.Current;
+                if (currentSeasons.Any(s=>s.IdCostCenter.Equals(currentCenterCost.Id)))
+                {
+                    ValidationForm.SetError(dtEndSeason, "ya existe una temporada para este centro, solo puede editar");
+                    return false;
+                }
+
+            }
+            var initDate = dtStartSeason.Value;
+            var endDate = dtEndSeason.Value;
+
+            if (initDate.Year != DateTime.Now.Year)
+            {
+                ValidationForm.SetError(dtEndSeason, "Por el momento, las temporadas solo se pueden crear para el año actual");
+                return false;
+            }
+
+            if (endDate<initDate)
+            {
+                ValidationForm.SetError(dtEndSeason, "la fecha de inicio no puede ser mayor a la final");
+                return false;
+            }
+            var diff = (endDate - initDate).TotalDays;
+
+            if (diff > 365)
+            {
+                ValidationForm.SetError(dtEndSeason, "No puede existir más de un año de diferencia entre las fechas");
+                return false;
+            }
+
+            if (diff < 60)
+            {
+                ValidationForm.SetError(dtEndSeason, "Deben existir al menos 2 meses de diferencia");
+                return false;
+            }
+
+
+
+
             return true;
         }
-        public string GetEntityName() => Cloud.GetCosmosEntityName<Sector>();
+        public string GetEntityName() => Cloud.GetCosmosEntityName<Season>();
 
-        public string FriendlyName() => "Sector";
+        public string FriendlyName() => "Temporada";
 
         
 
         public void Edit(object obj)
         {
-            var current = (Sector)obj;            
-            //Cloud.PushElement(new SectorInput { Name = tbxName.Text, Id = current.Id }, entityName).Wait();
+            var current = (SeasonExtend)obj;
+            var currentCostCenter = (CostCenter)bsCostCenter.Current;
+
+            
+            Cloud.PushElement(new SeasonInput { Id = current.Id, Current = true, StartDate = dtStartSeason.Value, EndDate = dtEndSeason.Value, IdCostCenter = currentCostCenter.Id }, entityName).Wait();
             
         }
 
         public void New()
         {
-            //Cloud.PushElement(new SectorInput { Name = tbxName.Text }, entityName).Wait();
-         
+            var currentCostCenter = (CostCenter)bsCostCenter.Current;
+
+
+            Cloud.PushElement(new SeasonInput { Current = true, StartDate = dtStartSeason.Value, EndDate = dtEndSeason.Value, IdCostCenter = currentCostCenter.Id }, entityName).Wait();
+
         }
 
         public void ChangedList(object obj) {
             if (obj!=null)
             {
-                var current = (Sector)obj;
+                var current = (SeasonExtend)obj;
+                dtStartSeason.Value = current.StartDate;
+                dtEndSeason.Value = current.EndDate;
+                bsCostCenter.SelectItem(current.IdCostCenter);
+
+                
               
-              
-                //gbxItem.Text = $"Sector {tbxName.Text}";
+                gbxItem.Text = $"Temporada {current.CostCenterName}";
             }
         }
 
-        public object GetList() => Cloud.GetElements<Sector>(EntityRelated.SECTOR);
+        public object GetList() => Cloud.GetElements<Season>(EntityRelated.SEASON);
 
-        public string Description() => new MdmDocs().GetInfoFromEntity((int)EntityRelated.SECTOR).Description;
+        public string Description() => new MdmDocs().GetInfoFromEntity((int)EntityRelated.SEASON).Description;
 
-        private void gbxItem_Enter(object sender, EventArgs e)
-        {
-
-        }
-
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
+        public void DefaultFormatDates() {
+            var currentYear = DateTime.Now.Year;
+            var nextYear = currentYear + 1;
+            dtStartSeason.Value = new DateTime(currentYear, 3, 1);
+            dtEndSeason.Value = new DateTime(nextYear, 2, DateTime.DaysInMonth(nextYear, 2));
         }
     }
 }

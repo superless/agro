@@ -14,7 +14,7 @@ using trifenix.connect.agro_model;
 using trifenix.connect.agro_model_input;
 using trifenix.connect.app.cloud;
 
-namespace trifenix.agro.app.frm.mantenedores.variety
+namespace trifenix.agro.app.frm.mantenedores.plotland
 {
     public partial class Frm : Form, IFenixForm
     {
@@ -50,7 +50,7 @@ namespace trifenix.agro.app.frm.mantenedores.variety
         }
         public void SetElements()
         {
-            bsSpecie.DataSource = Cloud.GetElements<Specie>(EntityRelated.SPECIE);
+            bsSectors.DataSource = Cloud.GetElements<Sector>(EntityRelated.SECTOR);
 
             pb.Visible = true;
             lblProgress.Text = "40%";
@@ -264,11 +264,7 @@ namespace trifenix.agro.app.frm.mantenedores.variety
                 ValidationForm.SetError(tbxName, "El nombre es obligatorio");
                 return false;
             };
-            if (string.IsNullOrWhiteSpace(tbxAbbreviation.Text))
-            {
-                ValidationForm.SetError(tbxAbbreviation, "La abreviación es obligatoria");
-                return false;
-            };
+           
             return true;
         }
 
@@ -281,34 +277,35 @@ namespace trifenix.agro.app.frm.mantenedores.variety
         public void Edit(object obj)
         {
             var current = (Variety)obj;
-            var currentSpecie = (Specie)bsSpecie.Current;
-            Cloud.PushElement(new VarietyInput {Id = current.Id,  Name = tbxName.Text, Abbreviation = tbxAbbreviation.Text, IdSpecie = currentSpecie.Id }, entityName).Wait();
+            var currentSector = (Sector)bsSectors.Current;
+            Cloud.PushElement(new PlotLandInput { Name = tbxName.Text, IdSector = currentSector.Id, Id = current.Id }, entityName).Wait();
 
         }
 
         public void New()
         {
-            var current = (Specie)bsSpecie.Current;
-            Cloud.PushElement(new VarietyInput { Name = tbxName.Text, Abbreviation = tbxAbbreviation.Text, IdSpecie = current.Id }, entityName).Wait();
+            
+            var currentSector = (Sector)bsSectors.Current;
+            Cloud.PushElement(new PlotLandInput { Name = tbxName.Text, IdSector = currentSector.Id  }, entityName).Wait();
          
         }
 
         public void ChangedList(object obj) {
             if (obj!=null)
             {
-                var current = (Variety)obj;
+                var current = (PlotLand)obj;
                 tbxCorrelativo.Text = current.ClientId.ToString();
                 tbxName.Text = current.Name;
                 gbxItem.Text = $"Cargo {tbxName.Text}";
-                tbxAbbreviation.Text = current.Abbreviation;
-                // especie
-                bsSpecie.SelectItem(current.IdSpecie);
+
+                // sector
+                bsSectors.SelectItem(current.IdSector);
                 
             }
         }
 
-        public object GetList() => Cloud.GetElements<Variety>(EntityRelated.VARIETY);
-        public string Description() => new MdmDocs().GetInfoFromEntity((int)EntityRelated.VARIETY).Description;
+        public object GetList() => Cloud.GetElements<PlotLand>(EntityRelated.PLOTLAND);
+        public string Description() => new MdmDocs().GetInfoFromEntity((int)EntityRelated.PLOTLAND).Description;
         private void gbxItem_Enter(object sender, EventArgs e)
         {
 

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+
 using trifenix.agro.app.interfaces;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.resources;
@@ -299,13 +300,8 @@ namespace trifenix.agro.app.frm.mantenedores.costcenter
                 tbxName.Text = current.Name;
                 gbxItem.Text = $"Centro de costos {tbxName.Text}";
                 //business names
-                var businessNames = (IEnumerable<BusinessName>)bsBusinessName.DataSource;
-                if (businessNames.Any())
-                {
-                    var businessName = businessNames.FirstOrDefault(s => s.Id.Equals(current.IdBusinessName));
-                    var index = bsBusinessName.IndexOf(businessName);
-                    bsBusinessName.Position = index;
-                }
+                bsBusinessName.SelectItem(current.Id);
+                
             }
         }
 

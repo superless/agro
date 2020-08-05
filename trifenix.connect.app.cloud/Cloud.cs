@@ -52,6 +52,16 @@ namespace trifenix.connect.app.cloud
             return sectors.ToArray();
         }
 
+        public static T[] GetElements<T>(string filter) where T : DocumentBase
+        {
+
+            var entities = search.FilterElements(filter);
+
+            var sectors = entities.Select(s => (T)Mdm.GetEntityFromSearch(s, typeof(T), "trifenix.connect.agro_model", a => a, new SearchElement()));
+
+            return sectors.ToArray();
+        }
+
         public static T GetElement<T>(EntityRelated entity, string id) where T : DocumentBase
         {
 

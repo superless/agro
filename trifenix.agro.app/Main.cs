@@ -1,21 +1,19 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using mantenedores = trifenix.agro.app.frm.mantenedores;
 
 using trifenix.agro.app.interfaces;
-using trifenix.agro.db;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro_model;
 
 using trifenix.connect.app.cloud;
+using trifenix.agro.app.model_extend;
+using AutoMapper;
 
 namespace trifenix.agro.app
 {
@@ -26,13 +24,18 @@ namespace trifenix.agro.app
 
         List<IFenixForm> forms = new List<IFenixForm>();
 
+        MapperConfiguration config = new MapperConfiguration(cfg => {
+            cfg.CreateMap<Season, SeasonExtend>();
+        });
+
+
 
         public Main()
         {
             InitializeComponent();
             connection = new HubConnectionBuilder()
                 
-                .WithUrl("http://192.168.0.13:7071/api",c=> { c.AccessTokenProvider = () => Task.FromResult("cloud-app"); ;  })
+                .WithUrl("http://192.168.0.8:7071/api",c=> { c.AccessTokenProvider = () => Task.FromResult("cloud-app"); ;  })
                 .WithAutomaticReconnect()
                 .Build();
             connection.ServerTimeout = TimeSpan.FromSeconds(120);
@@ -52,11 +55,44 @@ namespace trifenix.agro.app
 
             });
 
+            SetSpecies();
+            SetSeason();
             
 
 
 
 
+
+
+        }
+
+        private Specie GetSpecie() => (Specie)tsCbSpecie.SelectedItem;
+
+        private SeasonExtend GetSeason() => (SeasonExtend)tsCbCentroCostos.SelectedItem;
+
+        private void SetSpecies() {
+
+            tsCbSpecie.ComboBox.DataSource = Cloud.GetElements<Specie>(EntityRelated.SPECIE);
+            tsCbSpecie.ComboBox.DisplayMember = "Name";
+
+        }
+
+        private void SetSeason() {
+            var costcenters = Cloud.GetElements<CostCenter>(EntityRelated.COSTCENTER);
+
+            var seasons = Cloud.GetElements<Season>(EntityRelated.SEASON);
+            var mapper = config.CreateMapper();
+
+            tsCbCentroCostos.ComboBox.DataSource = seasons.Select(s =>
+            {
+                var eseason = mapper.Map<SeasonExtend>(s);
+                var localCostCenter = costcenters.FirstOrDefault(a => a.Id.Equals(eseason.IdCostCenter));
+                eseason.CostCenterName = $"{localCostCenter.Name}";
+                return eseason;
+
+            }).ToArray();
+
+            tsCbCentroCostos.ComboBox.DisplayMember = nameof(SeasonExtend.CostCenterName);
 
 
         }
@@ -91,7 +127,10 @@ namespace trifenix.agro.app
 
         private void parcelaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-           
+            var frm = new mantenedores.plotland.Frm();
+            forms.Add(frm);
+            frm.ShowDialog();
+            forms.Remove(frm);
         }
 
         private void razonesSocialesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -161,7 +200,7 @@ namespace trifenix.agro.app
 
         private void cuartelToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var frm = new mantenedores.barrack.Frm();
+            var frm = new mantenedores.barrack.Frm(GetSpecie(), GetSeason());
             forms.Add(frm);
             frm.ShowDialog();
             forms.Remove(frm);
@@ -169,7 +208,10 @@ namespace trifenix.agro.app
 
         private void temporadasToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            var frm = new mantenedores.season.Frm();
+            forms.Add(frm);
+            frm.ShowDialog();
+            forms.Remove(frm);
         }
     }
 }

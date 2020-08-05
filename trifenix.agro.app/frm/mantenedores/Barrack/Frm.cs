@@ -21,12 +21,14 @@ namespace trifenix.agro.app.frm.mantenedores.barrack
         BackgroundWorker bworker;
 
         private string entityName;
+        private readonly Specie currentSpecie;
+        private readonly Season currentSeason;
 
         public CurrentFormState State { get; set; }
 
         public bool Loading { get; set; } = false;
 
-        public Frm()
+        public Frm(Specie currentSpecie, Season currentSeason)
         {
             InitializeComponent();
             entityName = GetEntityName();
@@ -37,8 +39,8 @@ namespace trifenix.agro.app.frm.mantenedores.barrack
             bworker.WorkerReportsProgress = true;
 
             lblDescripcion.Text = Description();
-
-
+            this.currentSpecie = currentSpecie;
+            this.currentSeason = currentSeason;
         }
         private async void SectorFrm_Load_1(object sender, EventArgs e)
         {
@@ -51,7 +53,7 @@ namespace trifenix.agro.app.frm.mantenedores.barrack
         public void SetElements()
         {
             pb.Visible = true;
-            lblProgress.Text = "40%";
+            lblProgress.Text ="40";
             pb.Value = 40;
             bsMain.DataSource = GetList();
             if (bsMain.Count != 0)
@@ -69,17 +71,25 @@ namespace trifenix.agro.app.frm.mantenedores.barrack
                 btnDeleteSector.Enabled = false;
             }
             pb.Value = 100;
-            lblProgress.Text = "100%";
+            lblProgress.Text ="100";
             pb.Visible = false;
             lblProgress.Visible = false;
             Loading = false;
 
             // bindingSources
-            var varieties = Cloud.GetElements<Variety>(EntityRelated.VARIETY);
-            var pollinatores = new List<Variety>() { new Variety { Id = "", Name = "Seleccione Polinizador" } };
+            var varieties = Cloud.GetElements<Variety>($"index eq {(int)EntityRelated.VARIETY} and rel/any(element:element/id eq '{currentSpecie.Id}' and element/index eq {(int)EntityRelated.SPECIE })");
+            var pollinatores = new List<Variety>() { new Variety { Id ="", Name ="Seleccione Polinizador" } };
+            var rootStocks = new List<Rootstock>() { new Rootstock { Id ="", Name ="Seleccione Porta-injerto" } };
+
             pollinatores.AddRange(varieties);
-            var plotlands = Cloud.GetElements<PlotLand>(EntityRelated.PLOTLAND);
+            rootStocks.AddRange(Cloud.GetElements<Rootstock>(EntityRelated.ROOTSTOCK));
+            
             var sectors = Cloud.GetElements<Sector>(EntityRelated.SECTOR);
+            
+            bsPolinator.DataSource = pollinatores;
+            bsVariety.DataSource = varieties;
+            bsSectors.DataSource = sectors;
+            bsRootStock.DataSource = rootStocks;
 
 
         }
@@ -92,7 +102,7 @@ namespace trifenix.agro.app.frm.mantenedores.barrack
             gbxItem.Visible = true;
             gbxItem.Enabled = true;
             gbxItem.Text = $"Nuevo {FriendlyName()}";
-            tbxName.Text = "";
+            tbxName.Text ="";
             State = CurrentFormState.NEW;
             pnlButtons.Enabled = false;
         }
@@ -125,7 +135,7 @@ namespace trifenix.agro.app.frm.mantenedores.barrack
         private void tbxName_Validated(object sender, EventArgs e)
         {
             var tbx = ((TextBox)sender);
-            ValidationForm.SetError(tbx, String.IsNullOrWhiteSpace(tbx.Text) ? "campo obligatorio" : null);
+            ValidationForm.SetError(tbx, string.IsNullOrWhiteSpace(tbx.Text) ?"campo obligatorio" : null);
         }
 
         
@@ -137,7 +147,7 @@ namespace trifenix.agro.app.frm.mantenedores.barrack
         {
             if (!Valida())
             {
-                ValidationForm.SetError(tbxName, "Descripción es obligatorio");
+                ValidationForm.SetError(tbxName,"Descripción es obligatoria");
                 return;
             }
             LoadProgress(DoWork);
@@ -165,7 +175,7 @@ namespace trifenix.agro.app.frm.mantenedores.barrack
         private void Bworker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             pb.Value = 100;
-            lblProgress.Text = "";
+            lblProgress.Text ="";
             lblProgress.Visible = false;
             pb.Visible = false;
 
@@ -204,7 +214,7 @@ namespace trifenix.agro.app.frm.mantenedores.barrack
         {
             gbxItem.Visible = true;
             gbxItem.Enabled = false;
-            gbxItem.Text = "";
+            gbxItem.Text ="";
             State = CurrentFormState.READONLY;
             pnlButtons.Enabled = true;
         }
@@ -218,7 +228,7 @@ namespace trifenix.agro.app.frm.mantenedores.barrack
             pnlButtons.Enabled = e.ProgressPercentage == 100;
             pb.Visible = e.ProgressPercentage != 100;
             lblProgress.Visible = true;
-            lblProgress.Text = $"{e.ProgressPercentage}%";
+            lblProgress.Text = $"{e.ProgressPercentage}";
             pb.Value = e.ProgressPercentage;
         }
 
@@ -264,28 +274,91 @@ namespace trifenix.agro.app.frm.mantenedores.barrack
         {
             if (string.IsNullOrWhiteSpace(tbxName.Text))
             {
-                ValidationForm.SetError(tbxName, "El nombre es obligatorio");
+                ValidationForm.SetError(tbxName,"El nombre es obligatorio");
                 return false;
             };
+            if (bsSectors.Current == null)
+            {
+                ValidationForm.SetError(cbSector,"el sector es obligatorio");
+                return false;
+            }
+            if (bsPlotland.Current == null)
+            {
+                ValidationForm.SetError(cbPlotland,"la parcela es obligatoria");
+                return false;
+            }
+            if (bsVariety.Current == null)
+            {
+                ValidationForm.SetError(cbVariety,"Debe seleccionar una variedad");
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(tbxAnioPlant.Text))
+            {
+                ValidationForm.SetError(tbxAnioPlant,"Indique el año de plantación");
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(tbxHectares.Text))
+            {
+                ValidationForm.SetError(tbxAnioPlant, "Indique las hectareas del cuartel");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(tbxNroPlants.Text))
+            {
+                ValidationForm.SetError(tbxNroPlants, "Indique el número de plantas");
+                return false;
+            }
+            var anioPlant = int.Parse(tbxAnioPlant.Text);
+            var currentYear = DateTime.Now.Year;
+
+            if (anioPlant<1950 || anioPlant>currentYear)
+            {
+                ValidationForm.SetError(tbxAnioPlant, "el año debe estar entre 1950 y el año actual");
+                return false;
+            }
+
+
             return true;
         }
         public string GetEntityName() => Cloud.GetCosmosEntityName<Barrack>();
 
-        public string FriendlyName() => "Sector";
+        public string FriendlyName() =>"Cuartel";
 
         
 
         public void Edit(object obj)
         {
-            var current = (Sector)obj;            
-            Cloud.PushElement(new SectorInput { Name = tbxName.Text, Id = current.Id }, entityName).Wait();
+            var current = (Barrack)obj;
             
+            var currentVariety = (Variety)bsVariety.Current;
+            var currentPollinator = (Variety)bsPolinator.Current;
+            var currentRootstock = (Rootstock)bsRootStock.Current;
+            var currentPlotland = (PlotLand)bsPlotland.Current;
+
+            var plants = int.Parse(tbxNroPlants.Text);
+            var anio = int.Parse(tbxAnioPlant.Text);
+            var hectares = double.Parse(tbxHectares.Text);
+
+
+            Cloud.PushElement(new BarrackInput { Name = tbxName.Text, Id = current.Id, Hectares = hectares, IdPlotLand = currentPlotland.Id, IdPollinator = currentPollinator.Id, IdRootstock = currentRootstock.Id, IdVariety = currentVariety.Id, NumberOfPlants = plants, SeasonId = currentSeason.Id, PlantingYear = anio }, entityName).Wait();
+
         }
 
         public void New()
         {
-            Cloud.PushElement(new SectorInput { Name = tbxName.Text }, entityName).Wait();
          
+            var currentVariety = (Variety)bsVariety.Current;
+            var currentPollinator = (Variety)bsPolinator.Current;
+            var currentRootstock = (Rootstock)bsRootStock.Current;
+            var currentPlotland = (PlotLand)bsPlotland.Current;
+
+            var plants = int.Parse(tbxNroPlants.Text);
+            var anio = int.Parse(tbxAnioPlant.Text);
+            var hectares = double.Parse(tbxHectares.Text);
+
+
+            Cloud.PushElement(new BarrackInput { Name = tbxName.Text, Hectares = hectares, IdPlotLand = currentPlotland.Id, IdPollinator = currentPollinator.Id, IdRootstock = currentRootstock.Id, IdVariety = currentVariety.Id, NumberOfPlants = plants, SeasonId = currentSeason.Id, PlantingYear = anio }, entityName).Wait();
+
         }
 
         public void ChangedList(object obj) {
@@ -295,6 +368,23 @@ namespace trifenix.agro.app.frm.mantenedores.barrack
                 tbxCorrelativo.Text = current.ClientId.ToString();
                 tbxName.Text = current.Name;
                 gbxItem.Text = $"{FriendlyName()} {tbxName.Text}";
+
+                bsPolinator.SelectItem(current.IdPollinator);
+
+                var plotland = Cloud.GetElement<PlotLand>(EntityRelated.PLOTLAND, current.IdPlotLand);
+
+                bsSectors.SelectItem(plotland.IdSector);
+                bsPlotland.SelectItem(current.IdPlotLand);
+                bsVariety.SelectItem(current.IdVariety);
+                bsRootStock.SelectItem(current.IdRootstock);
+                tbxAnioPlant.Text = current.PlantingYear.ToString();
+                tbxHectares.Text = current.Hectares.ToString();
+                tbxNroPlants.Text = current.NumberOfPlants.ToString();
+
+
+                
+                
+                
             }
         }
 
@@ -321,5 +411,19 @@ namespace trifenix.agro.app.frm.mantenedores.barrack
         {
             Validaciones.ValidaEnteroParaKeyPress(e.KeyChar);
         }
+
+        private void bsSectors_CurrentChanged_1(object sender, EventArgs e)
+        {
+            var currentSector = (Sector)bsSectors.Current;
+            if (currentSector!=null)
+            {
+                var plotlands = Cloud.GetElements<PlotLand>($"index eq {(int)EntityRelated.PLOTLAND} and rel/any(element:element/index eq {(int)EntityRelated.SECTOR} and element/id eq '{currentSector.Id}')");
+                bsPlotland.DataSource = plotlands;
+                bsPlotland.ResetBindings(true);
+            }
+            
+        }
+
+        
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace trifenix.agro.app.frm.mantenedores.season
+﻿namespace trifenix.agro.app.frm.mantenedores.plotland
 {
     partial class Frm
     {
@@ -30,16 +30,16 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Frm));
+            this.tbxCorrelativo = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.tbxName = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.lblDescripcion = new System.Windows.Forms.Label();
             this.gbxItem = new System.Windows.Forms.GroupBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.dtEndSeason = new System.Windows.Forms.DateTimePicker();
-            this.label2 = new System.Windows.Forms.Label();
-            this.dtStartSeason = new System.Windows.Forms.DateTimePicker();
-            this.cbCostCenter = new System.Windows.Forms.ComboBox();
-            this.bsCostCenter = new System.Windows.Forms.BindingSource(this.components);
-            this.label1 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.cbSpecie = new System.Windows.Forms.ComboBox();
+            this.bsSectors = new System.Windows.Forms.BindingSource(this.components);
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
             this.lbxItems = new System.Windows.Forms.ListBox();
@@ -53,11 +53,50 @@
             this.lblProgress = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.gbxItem.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.bsCostCenter)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bsSectors)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bsMain)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ValidationForm)).BeginInit();
             this.pnlButtons.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // tbxCorrelativo
+            // 
+            this.tbxCorrelativo.Enabled = false;
+            this.tbxCorrelativo.Location = new System.Drawing.Point(26, 66);
+            this.tbxCorrelativo.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.tbxCorrelativo.Name = "tbxCorrelativo";
+            this.tbxCorrelativo.Size = new System.Drawing.Size(82, 26);
+            this.tbxCorrelativo.TabIndex = 0;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(26, 38);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(84, 20);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Correlativo";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(129, 38);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(73, 20);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "Nombre :";
+            // 
+            // tbxName
+            // 
+            this.tbxName.Location = new System.Drawing.Point(134, 66);
+            this.tbxName.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.tbxName.MaxLength = 200;
+            this.tbxName.Name = "tbxName";
+            this.tbxName.Size = new System.Drawing.Size(498, 26);
+            this.tbxName.TabIndex = 3;
+            this.tbxName.Validated += new System.EventHandler(this.tbxName_Validated);
             // 
             // panel1
             // 
@@ -81,92 +120,56 @@
             // 
             // gbxItem
             // 
-            this.gbxItem.Controls.Add(this.label3);
-            this.gbxItem.Controls.Add(this.dtEndSeason);
-            this.gbxItem.Controls.Add(this.label2);
-            this.gbxItem.Controls.Add(this.dtStartSeason);
-            this.gbxItem.Controls.Add(this.cbCostCenter);
-            this.gbxItem.Controls.Add(this.label1);
+            this.gbxItem.Controls.Add(this.label4);
+            this.gbxItem.Controls.Add(this.cbSpecie);
+            this.gbxItem.Controls.Add(this.tbxName);
+            this.gbxItem.Controls.Add(this.tbxCorrelativo);
             this.gbxItem.Controls.Add(this.btnCancel);
+            this.gbxItem.Controls.Add(this.label1);
+            this.gbxItem.Controls.Add(this.label2);
             this.gbxItem.Controls.Add(this.btnSave);
             this.gbxItem.Enabled = false;
-            this.gbxItem.Location = new System.Drawing.Point(480, 89);
+            this.gbxItem.Location = new System.Drawing.Point(320, 89);
             this.gbxItem.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.gbxItem.Name = "gbxItem";
             this.gbxItem.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.gbxItem.Size = new System.Drawing.Size(496, 520);
+            this.gbxItem.Size = new System.Drawing.Size(656, 520);
             this.gbxItem.TabIndex = 5;
             this.gbxItem.TabStop = false;
             this.gbxItem.Text = "{0}";
             this.gbxItem.Visible = false;
+            this.gbxItem.Enter += new System.EventHandler(this.gbxItem_Enter);
             // 
-            // label3
+            // label4
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(8, 183);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(153, 20);
-            this.label3.TabIndex = 14;
-            this.label3.Text = "fin del año agricola : ";
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(26, 123);
+            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(64, 20);
+            this.label4.TabIndex = 16;
+            this.label4.Text = "Sector :";
             // 
-            // dtEndSeason
+            // cbSpecie
             // 
-            this.dtEndSeason.CustomFormat = "dd-MM-yyyy";
-            this.dtEndSeason.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtEndSeason.Location = new System.Drawing.Point(11, 206);
-            this.dtEndSeason.MinDate = new System.DateTime(2020, 1, 1, 0, 0, 0, 0);
-            this.dtEndSeason.Name = "dtEndSeason";
-            this.dtEndSeason.Size = new System.Drawing.Size(454, 26);
-            this.dtEndSeason.TabIndex = 13;
+            this.cbSpecie.DataSource = this.bsSectors;
+            this.cbSpecie.DisplayMember = "Name";
+            this.cbSpecie.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbSpecie.FormattingEnabled = true;
+            this.cbSpecie.Location = new System.Drawing.Point(30, 147);
+            this.cbSpecie.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.cbSpecie.Name = "cbSpecie";
+            this.cbSpecie.Size = new System.Drawing.Size(473, 28);
+            this.cbSpecie.TabIndex = 15;
+            this.cbSpecie.ValueMember = "Id";
             // 
-            // label2
+            // bsSectors
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(8, 117);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(173, 20);
-            this.label2.TabIndex = 12;
-            this.label2.Text = "Inicio del año agricola : ";
-            // 
-            // dtStartSeason
-            // 
-            this.dtStartSeason.CustomFormat = "dd-MM-yyyy";
-            this.dtStartSeason.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtStartSeason.Location = new System.Drawing.Point(11, 140);
-            this.dtStartSeason.MinDate = new System.DateTime(2020, 1, 1, 0, 0, 0, 0);
-            this.dtStartSeason.Name = "dtStartSeason";
-            this.dtStartSeason.Size = new System.Drawing.Size(454, 26);
-            this.dtStartSeason.TabIndex = 11;
-            // 
-            // cbCostCenter
-            // 
-            this.cbCostCenter.DataSource = this.bsCostCenter;
-            this.cbCostCenter.DisplayMember = "Name";
-            this.cbCostCenter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbCostCenter.FormattingEnabled = true;
-            this.cbCostCenter.Location = new System.Drawing.Point(11, 66);
-            this.cbCostCenter.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.cbCostCenter.Name = "cbCostCenter";
-            this.cbCostCenter.Size = new System.Drawing.Size(454, 28);
-            this.cbCostCenter.TabIndex = 10;
-            this.cbCostCenter.ValueMember = "Id";
-            // 
-            // bsCostCenter
-            // 
-            this.bsCostCenter.DataSource = typeof(trifenix.connect.agro_model.CostCenter);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(8, 40);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(145, 20);
-            this.label1.TabIndex = 9;
-            this.label1.Text = "Centro de Costos : ";
+            this.bsSectors.DataSource = typeof(trifenix.connect.agro_model.Sector);
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(233, 460);
+            this.btnCancel.Location = new System.Drawing.Point(407, 479);
             this.btnCancel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(112, 35);
@@ -178,7 +181,7 @@
             // btnSave
             // 
             this.btnSave.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnSave.Location = new System.Drawing.Point(354, 460);
+            this.btnSave.Location = new System.Drawing.Point(528, 479);
             this.btnSave.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(111, 35);
@@ -190,19 +193,19 @@
             // lbxItems
             // 
             this.lbxItems.DataSource = this.bsMain;
-            this.lbxItems.DisplayMember = "CostCenterName";
+            this.lbxItems.DisplayMember = "Name";
             this.lbxItems.FormattingEnabled = true;
             this.lbxItems.ItemHeight = 20;
             this.lbxItems.Location = new System.Drawing.Point(20, 105);
             this.lbxItems.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.lbxItems.Name = "lbxItems";
-            this.lbxItems.Size = new System.Drawing.Size(452, 464);
+            this.lbxItems.Size = new System.Drawing.Size(289, 464);
             this.lbxItems.TabIndex = 9;
             this.lbxItems.ValueMember = "Id";
             // 
             // bsMain
             // 
-            this.bsMain.DataSource = typeof(trifenix.agro.app.model_extend.SeasonExtend);
+            this.bsMain.DataSource = typeof(trifenix.connect.agro_model.PlotLand);
             this.bsMain.CurrentChanged += new System.EventHandler(this.bsSectors_CurrentChanged);
             // 
             // ValidationForm
@@ -250,7 +253,7 @@
             this.pnlButtons.Controls.Add(this.btnDeleteSector);
             this.pnlButtons.Controls.Add(this.btnAddSector);
             this.pnlButtons.Enabled = false;
-            this.pnlButtons.Location = new System.Drawing.Point(260, 576);
+            this.pnlButtons.Location = new System.Drawing.Point(109, 578);
             this.pnlButtons.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pnlButtons.Name = "pnlButtons";
             this.pnlButtons.Size = new System.Drawing.Size(200, 38);
@@ -258,7 +261,7 @@
             // 
             // pb
             // 
-            this.pb.Location = new System.Drawing.Point(869, 612);
+            this.pb.Location = new System.Drawing.Point(876, 611);
             this.pb.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pb.Name = "pb";
             this.pb.Size = new System.Drawing.Size(100, 22);
@@ -268,7 +271,7 @@
             // lblProgress
             // 
             this.lblProgress.AutoSize = true;
-            this.lblProgress.Location = new System.Drawing.Point(812, 615);
+            this.lblProgress.Location = new System.Drawing.Point(819, 614);
             this.lblProgress.Name = "lblProgress";
             this.lblProgress.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.lblProgress.Size = new System.Drawing.Size(51, 20);
@@ -280,7 +283,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(994, 645);
+            this.ClientSize = new System.Drawing.Size(993, 645);
             this.Controls.Add(this.lblProgress);
             this.Controls.Add(this.pb);
             this.Controls.Add(this.pnlButtons);
@@ -294,13 +297,13 @@
             this.MinimizeBox = false;
             this.Name = "Frm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Temporada";
+            this.Text = "Parcela";
             this.Load += new System.EventHandler(this.SectorFrm_Load_1);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.gbxItem.ResumeLayout(false);
             this.gbxItem.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.bsCostCenter)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bsSectors)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bsMain)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ValidationForm)).EndInit();
             this.pnlButtons.ResumeLayout(false);
@@ -310,6 +313,11 @@
         }
 
         #endregion
+
+        private System.Windows.Forms.TextBox tbxCorrelativo;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox tbxName;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label lblDescripcion;
         private System.Windows.Forms.GroupBox gbxItem;
@@ -324,12 +332,8 @@
         private System.Windows.Forms.Panel pnlButtons;
         private System.Windows.Forms.ProgressBar pb;
         private System.Windows.Forms.Label lblProgress;
-        private System.Windows.Forms.ComboBox cbCostCenter;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.BindingSource bsCostCenter;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.DateTimePicker dtEndSeason;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.DateTimePicker dtStartSeason;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.ComboBox cbSpecie;
+        private System.Windows.Forms.BindingSource bsSectors;
     }
 }

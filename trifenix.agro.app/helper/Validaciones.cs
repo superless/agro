@@ -4,6 +4,8 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using trifenix.agro.db;
 
 namespace trifenix.agro.app.helper
 {
@@ -78,5 +80,19 @@ namespace trifenix.agro.app.helper
         }
 
 
+    }
+
+    public static class BusinessSourceExtension {
+        public static void SelectItem(this BindingSource bs,  string id)  {
+
+            var items = (IEnumerable<object>)bs.DataSource;
+
+            if (items.Any())
+            {
+                var item = items.FirstOrDefault(s => s.GetType().GetProperty("Id").GetValue(s).ToString().Equals(id));
+                var index = bs.IndexOf(item);
+                bs.Position = index;
+            }
+        }
     }
 }
