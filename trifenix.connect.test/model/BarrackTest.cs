@@ -21,7 +21,7 @@ namespace trifenix.connect.test.model
         /// campo autonumérico que identifica el barrack.
         /// </summary>
         [AutoNumericDependant(Index = (int)StringRelated.GENERIC_CORRELATIVE)]
-        public long ClientId { get; set; }
+        public string ClientId { get; set; }
 
 
         /// <summary>

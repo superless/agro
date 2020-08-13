@@ -30,7 +30,7 @@ namespace trifenix.connect.test
             // assign
             var objs = new BarrackTest()
             {
-                ClientId = 1,
+                ClientId = "1",
                 GeographicalPoints = new GeoPointTs[] { new GeoPointTs { latitude = 1.3, longitude = 1.45 } },
                 Hectares = 3.4,
                 Id = Guid.NewGuid().ToString("N"),
@@ -49,7 +49,7 @@ namespace trifenix.connect.test
 
             // assert
             // test simple para verificar que es el mismo nombre.
-            Assert.Equal(entities.First().str.First().value, objs.Name);
+            Assert.Equal(entities.First().str.First(s=>s.index == 1).value, objs.Name);
         }
 
         [Fact]

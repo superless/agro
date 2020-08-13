@@ -414,13 +414,14 @@ namespace trifenix.agro.app.frm.mantenedores.barrack
         public string Description() => new MdmDocs().GetInfoFromEntity((int)EntityRelated.BARRACK).Description;
 
         private void tbxHectares_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            Validaciones.ValidaDecimalParaKeyPress(((TextBox)sender).Text, e.KeyChar, 4, 2);
+        { 
+            
+            e.Handled = Validaciones.ValidaDecimalParaKeyPress(((TextBox)sender).Text, e.KeyChar, 4, 2);
         }
 
         private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
         {
-            Validaciones.ValidaEnteroParaKeyPress(e.KeyChar);
+            e.Handled = Validaciones.ValidaEnteroParaKeyPress(e.KeyChar);
         }
 
         private void tbxNroPlants_KeyPress(object sender, KeyPressEventArgs e)

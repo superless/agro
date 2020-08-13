@@ -68,6 +68,11 @@ namespace trifenix.connect.agro_model_input
         [JsonIgnore]
         public bool Default { get; set; }
 
+
+        [JsonIgnore]
+        public string ClientId { get; set; }
+
+
     }
 
     

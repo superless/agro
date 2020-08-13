@@ -316,6 +316,12 @@
     <Compile Include="frm\mantenedores\BusinessName\Frm.Designer.cs">
       <DependentUpon>Frm.cs</DependentUpon>
     </Compile>
+    <Compile Include="frm\mantenedores\Doses\Frm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm\mantenedores\Doses\Frm.Designer.cs">
+      <DependentUpon>Frm.cs</DependentUpon>
+    </Compile>
     <Compile Include="frm\mantenedores\Ingredient\Frm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -397,6 +403,7 @@
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
     <Compile Include="model-extend\SeasonExtend.cs" />
+    <Compile Include="model-extend\VarieryExtend.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="frm\mantenedores\Barrack\Frm.resx">
@@ -409,6 +416,9 @@
       <DependentUpon>Frm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frm\mantenedores\BusinessName\Frm.resx">
+      <DependentUpon>Frm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm\mantenedores\Doses\Frm.resx">
       <DependentUpon>Frm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frm\mantenedores\Ingredient\Frm.resx">
@@ -461,6 +471,8 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\trifenix.agro.app.model_extend.VarieryExtend.datasource" />
+    <None Include="Properties\DataSources\trifenix.agro.app.model_extend.WaitingHarvestExtend.datasource" />
     <None Include="Properties\DataSources\trifenix.connect.agro_model.ApplicationTarget.datasource" />
     <None Include="Properties\DataSources\trifenix.connect.agro_model.Barrack.datasource" />
     <None Include="Properties\DataSources\trifenix.connect.agro_model.BusinessName.datasource" />
@@ -471,8 +483,12 @@
     <None Include="Properties\DataSources\trifenix.connect.agro_model.IngredientCategory.datasource" />
     <None Include="Properties\DataSources\trifenix.connect.agro_model.Job.datasource" />
     <None Include="Properties\DataSources\trifenix.connect.agro_model.PlotLand.datasource" />
+    <None Include="Properties\DataSources\trifenix.connect.agro_model.Product.datasource" />
     <None Include="Properties\DataSources\trifenix.connect.agro_model.Sector.datasource" />
     <None Include="Properties\DataSources\trifenix.connect.agro_model.Specie.datasource" />
+    <None Include="Properties\DataSources\trifenix.connect.agro_model.Variety1.datasource" />
+    <None Include="Properties\DataSources\trifenix.connect.agro_model_input.DosesInput.datasource" />
+    <None Include="Properties\DataSources\trifenix.connect.agro_model_input.ProductInput.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -492,7 +508,7 @@
       <Name>trifenix.agro.db</Name>
     </ProjectReference>
     <ProjectReference Include="..\trifenix.connect.agro\trifenix.connect.agro.csproj">
-      <Project>{70445617-9ba5-4def-8380-24a359bfe323}</Project>
+      <Project>{70445617-9BA5-4DEF-8380-24A359BFE323}</Project>
       <Name>trifenix.connect.agro</Name>
     </ProjectReference>
     <ProjectReference Include="..\trifenix.connect.app.cloud\trifenix.connect.app.cloud.csproj">

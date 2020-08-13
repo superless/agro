@@ -35,7 +35,7 @@ namespace trifenix.agro.app
             InitializeComponent();
             connection = new HubConnectionBuilder()
                 
-                .WithUrl("http://192.168.0.8:7071/api",c=> { c.AccessTokenProvider = () => Task.FromResult("cloud-app"); ;  })
+                .WithUrl("http://192.168.0.10:7071/api",c=> { c.AccessTokenProvider = () => Task.FromResult("cloud-app"); ;  })
                 .WithAutomaticReconnect()
                 .Build();
             connection.ServerTimeout = TimeSpan.FromSeconds(120);
@@ -225,6 +225,14 @@ namespace trifenix.agro.app
         private void ingredienteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var frm = new mantenedores.ingredient.Frm();
+            forms.Add(frm);
+            frm.ShowDialog();
+            forms.Remove(frm);
+        }
+
+        private void productosToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            var frm = new mantenedores.product.Frm();
             forms.Add(frm);
             frm.ShowDialog();
             forms.Remove(frm);

@@ -71,8 +71,7 @@
             this.tsCbSpecie});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Padding = new System.Windows.Forms.Padding(5, 2, 0, 2);
-            this.menuStrip1.Size = new System.Drawing.Size(1485, 32);
+            this.menuStrip1.Size = new System.Drawing.Size(1348, 32);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -185,21 +184,21 @@
             // especieToolStripMenuItem
             // 
             this.especieToolStripMenuItem.Name = "especieToolStripMenuItem";
-            this.especieToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.especieToolStripMenuItem.Size = new System.Drawing.Size(173, 26);
             this.especieToolStripMenuItem.Text = "Especie";
             this.especieToolStripMenuItem.Click += new System.EventHandler(this.especieToolStripMenuItem_Click);
             // 
             // variedadToolStripMenuItem
             // 
             this.variedadToolStripMenuItem.Name = "variedadToolStripMenuItem";
-            this.variedadToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.variedadToolStripMenuItem.Size = new System.Drawing.Size(173, 26);
             this.variedadToolStripMenuItem.Text = "Variedad";
             this.variedadToolStripMenuItem.Click += new System.EventHandler(this.variedadToolStripMenuItem_Click);
             // 
             // portaInjertoToolStripMenuItem
             // 
             this.portaInjertoToolStripMenuItem.Name = "portaInjertoToolStripMenuItem";
-            this.portaInjertoToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.portaInjertoToolStripMenuItem.Size = new System.Drawing.Size(173, 26);
             this.portaInjertoToolStripMenuItem.Text = "Porta Injerto";
             this.portaInjertoToolStripMenuItem.Click += new System.EventHandler(this.portaInjertoToolStripMenuItem_Click);
             // 
@@ -232,6 +231,7 @@
             this.productosToolStripMenuItem1.Name = "productosToolStripMenuItem1";
             this.productosToolStripMenuItem1.Size = new System.Drawing.Size(258, 26);
             this.productosToolStripMenuItem1.Text = "Productos";
+            this.productosToolStripMenuItem1.Click += new System.EventHandler(this.productosToolStripMenuItem1_Click);
             // 
             // configuraciónToolStripMenuItem
             // 
@@ -268,29 +268,29 @@
             // 
             this.tsCbCentroCostos.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.tsCbCentroCostos.Name = "tsCbCentroCostos";
-            this.tsCbCentroCostos.Size = new System.Drawing.Size(121, 28);
+            this.tsCbCentroCostos.Size = new System.Drawing.Size(136, 28);
             // 
             // tsCbSpecie
             // 
             this.tsCbSpecie.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.tsCbSpecie.Name = "tsCbSpecie";
-            this.tsCbSpecie.Size = new System.Drawing.Size(121, 28);
+            this.tsCbSpecie.Size = new System.Drawing.Size(136, 28);
             // 
             // lbxEvents
             // 
             this.lbxEvents.FormattingEnabled = true;
-            this.lbxEvents.ItemHeight = 16;
-            this.lbxEvents.Location = new System.Drawing.Point(11, 39);
+            this.lbxEvents.ItemHeight = 20;
+            this.lbxEvents.Location = new System.Drawing.Point(12, 49);
             this.lbxEvents.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.lbxEvents.Name = "lbxEvents";
-            this.lbxEvents.Size = new System.Drawing.Size(1440, 692);
+            this.lbxEvents.Size = new System.Drawing.Size(1334, 864);
             this.lbxEvents.TabIndex = 1;
             // 
             // Main
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1485, 762);
+            this.ClientSize = new System.Drawing.Size(1348, 952);
             this.Controls.Add(this.lbxEvents);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

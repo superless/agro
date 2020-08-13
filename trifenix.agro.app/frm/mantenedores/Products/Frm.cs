@@ -1,11 +1,17 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using trifenix.agro.app.helper;
 using trifenix.agro.app.interfaces;
+using trifenix.agro.db;
+using trifenix.connect.agro.index_model.enums;
 using trifenix.connect.agro.index_model.props;
+using trifenix.connect.agro.model_input;
 using trifenix.connect.agro.resources;
 using trifenix.connect.agro_model;
 using trifenix.connect.agro_model_input;
@@ -15,6 +21,10 @@ namespace trifenix.agro.app.frm.mantenedores.product
 {
     public partial class Frm : Form, IFenixForm
     {
+        MapperConfiguration config = new MapperConfiguration(cfg => {
+            cfg.CreateMap<Product, ProductInput>();
+        });
+
         BackgroundWorker bworker;
 
         private string entityName;
@@ -23,6 +33,7 @@ namespace trifenix.agro.app.frm.mantenedores.product
 
         public bool Loading { get; set; } = false;
 
+        private bool _addinNew = false;
         public Frm()
         {
             InitializeComponent();
@@ -40,8 +51,7 @@ namespace trifenix.agro.app.frm.mantenedores.product
         private async void SectorFrm_Load_1(object sender, EventArgs e)
         {
             
-            var bnames = Cloud.GetElements<BusinessName>(EntityRelated.BUSINESSNAME);
-            bsIngredient.DataSource = bnames;
+            
             
             
 
@@ -55,7 +65,17 @@ namespace trifenix.agro.app.frm.mantenedores.product
             pb.Visible = true;
             lblProgress.Text = "40%";
             pb.Value = 40;
-            bsMain.DataSource = GetList();
+            var lst = new List<ProductInput>();
+            lst.AddRange(GetList() as IEnumerable<ProductInput>);
+            var bl = new BindingList<ProductInput>(lst);
+            bl.AllowNew = true;
+            bl.AllowEdit = true;
+            bl.AllowRemove = true;
+            
+
+            bsMain.DataSource = bl;
+
+            
             if (bsMain.Count != 0)
             {
                 gbxItem.Visible = true;
@@ -70,11 +90,28 @@ namespace trifenix.agro.app.frm.mantenedores.product
                 btnEditSector.Enabled = false;
                 btnDeleteSector.Enabled = false;
             }
+
+            var bnames = Cloud.GetElements<Ingredient>(EntityRelated.INGREDIENT);
+            bsIngredient.DataSource = bnames;
+
             pb.Value = 100;
             lblProgress.Text = "100%";
             pb.Visible = false;
             lblProgress.Visible = false;
             Loading = false;
+            cbKindMeasure.DataSource = Enum.GetNames(typeof(MeasureType)).
+                Select(o => new { Text = o, Value = (MeasureType)(Enum.Parse(typeof(MeasureType), o)) }).ToList();
+            cbKindMeasure.DisplayMember = "Text";
+            cbKindMeasure.ValueMember = "Value";
+
+            cbKindContainer.DataSource = Enum.GetNames(typeof(KindOfProductContainer)).
+                Select(o => new { Text = o, Value = (KindOfProductContainer)(Enum.Parse(typeof(KindOfProductContainer), o)) }).ToList();
+            cbKindContainer.DisplayMember = "Text";
+            cbKindContainer.ValueMember = "Value";
+
+
+
+
 
         }
 
@@ -86,9 +123,16 @@ namespace trifenix.agro.app.frm.mantenedores.product
             gbxItem.Visible = true;
             gbxItem.Enabled = true;
             gbxItem.Text = $"Nuevo {FriendlyName()}";
-            tbxName.Text = "";
+            
             State = CurrentFormState.NEW;
             pnlButtons.Enabled = false;
+            pnlDoses.Enabled = true;
+            bsMain.AddNew();
+            var input = (ProductInput)bsMain.Current;
+            input.Doses = Array.Empty<DosesInput>();
+            
+
+            
         }
 
         private void OnEdit()
@@ -98,6 +142,7 @@ namespace trifenix.agro.app.frm.mantenedores.product
             gbxItem.Text = $"Nuevo {FriendlyName()}";
             State = CurrentFormState.EDIT;
             pnlButtons.Enabled = false;
+
         }
 
         private void OnCurrentChange() {
@@ -118,8 +163,7 @@ namespace trifenix.agro.app.frm.mantenedores.product
 
         private void tbxName_Validated(object sender, EventArgs e)
         {
-            var tbx = ((TextBox)sender);
-            ValidationForm.SetError(tbx, String.IsNullOrWhiteSpace(tbx.Text) ? "campo obligatorio" : null);
+            
         }
 
         
@@ -131,7 +175,7 @@ namespace trifenix.agro.app.frm.mantenedores.product
         {
             if (!Valida())
             {
-                ValidationForm.SetError(tbxName, "Descripción es obligatorio");
+               
                 return;
             }
             LoadProgress(DoWork);
@@ -204,6 +248,7 @@ namespace trifenix.agro.app.frm.mantenedores.product
             gbxItem.Text = "";
             State = CurrentFormState.READONLY;
             pnlButtons.Enabled = true;
+            bsMain.CancelEdit();
         }
 
         
@@ -222,8 +267,11 @@ namespace trifenix.agro.app.frm.mantenedores.product
 
         private void bsSectors_CurrentChanged(object sender, EventArgs e)
         {
-            ChangedList(bsMain.Current);
-            OnCurrentChange();
+            if (!_addinNew)
+            {
+                OnCurrentChange();
+            }
+            _addinNew = false;
         }
 
         public void DoWork()
@@ -257,55 +305,109 @@ namespace trifenix.agro.app.frm.mantenedores.product
         }
 
 
-        public bool Valida()
-        {
-            if (string.IsNullOrWhiteSpace(tbxName.Text))
-            {
-                ValidationForm.SetError(tbxName, "El nombre es obligatorio");
-                return false;
-            };
-            return true;
-        }
-        public string GetEntityName() => Cloud.GetCosmosEntityName<CostCenter>();
+       
+        public string GetEntityName() => Cloud.GetCosmosEntityName<Product>();
 
-        public string FriendlyName() => "Centro de Costo";
+        public string FriendlyName() => "Producto";
 
         
 
         public void Edit(object obj)
         {
-            var current = (CostCenter)obj;
-            var currentBusinessName = (BusinessName)bsIngredient.Current;
+            var current = (ProductInput)obj;
 
-            Cloud.PushElement(new CostCenterInput { Name = tbxName.Text, Id = current.Id, IdBusinessName = currentBusinessName.Id }, entityName).Wait();
-            
+            current.Doses = ((IEnumerable<DosesInput>)dosesBindingSource.DataSource).ToArray();
+            Cloud.PushElement(current, entityName).Wait();
+
         }
 
         public void New()
         {
-            var currentBusinessName = (BusinessName)bsIngredient.Current;
-            Cloud.PushElement(new CostCenterInput { Name = tbxName.Text, IdBusinessName = currentBusinessName.Id  }, entityName).Wait();
+            
+            var current = (ProductInput)bsMain.Current;
+            current.Doses = ((IEnumerable<DosesInput>)dosesBindingSource.DataSource).ToArray();
+
+
+            Cloud.PushElement(current, entityName).Wait();
          
         }
 
-        public void ChangedList(object obj) {
-            if (obj!=null)
-            {
-                var current = (CostCenter)obj;
-                tbxCorrelativo.Text = current.ClientId.ToString();
-                tbxName.Text = current.Name;
-                gbxItem.Text = $"Centro de costos {tbxName.Text}";
-                //business names
-                bsIngredient.SelectItem(current.IdBusinessName);
-                
-            }
-        }
 
-        public object GetList() => Cloud.GetElements<CostCenter>(EntityRelated.COSTCENTER);
-        public string Description() => new MdmDocs().GetInfoFromEntity((int)EntityRelated.COSTCENTER).Description;
+
+        public object GetList() {
+            var products = Cloud.GetElements<Product>(EntityRelated.PRODUCT);
+            var mapper = config.CreateMapper();
+            return products.Select(mapper.Map<ProductInput>);
+        }
+        public string Description() => new MdmDocs().GetInfoFromEntity((int)EntityRelated.PRODUCT).Description;
         private void gbxItem_Enter(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnAddDoses_Click(object sender, EventArgs e)
+        {
+            var frm = new mantenedores.doses.Frm(null);
+            if (frm.ShowDialog() == DialogResult.OK)
+            {
+                var lst = CurrentProduct.Doses.ToList();
+                lst.Add(frm.DosesInput);
+                CurrentProduct.Doses = lst.ToArray();
+            }
+            dosesBindingSource.DataSource = CurrentProduct.Doses;
+            
+           
+        }
+
+        private void gbxItem_Validating(object sender, CancelEventArgs e)
+        {
+            
+        }
+
+        public void ChangedList(object obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Valida()
+        {
+            var current = (BaseModel)bsMain.Current as BaseModel;
+            if (!string.IsNullOrWhiteSpace(current.Error))
+            {   
+                MessageBox.Show($"existen los siguientes errores : {current.Error}");
+                return false;
+            }
+            return true;
+        }
+
+        private ProductInput CurrentProduct => (ProductInput)bsMain.Current;
+
+        private DosesInput CurrentDoses => (DosesInput)dosesBindingSource.Current;
+
+        private void bsMain_AddingNew(object sender, AddingNewEventArgs e)
+        {
+            _addinNew = true;
+        }
+
+        private void tbxSizeContainer_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = Validaciones.ValidaDecimalParaKeyPress(((TextBox)sender).Text, e.KeyChar, 10, 2);
+        }
+
+        private void btnEditDoses_Click(object sender, EventArgs e)
+        {
+            if (CurrentDoses !=null)
+            {
+                var frm = new mantenedores.doses.Frm(CurrentDoses);
+                if (frm.ShowDialog() == DialogResult.OK)
+                {
+                    var lst = CurrentProduct.Doses.ToList();
+                    lst.Remove(CurrentDoses);
+                    lst.Add(frm.DosesInput);
+                    CurrentProduct.Doses = lst.ToArray();
+                }
+                dosesBindingSource.DataSource = CurrentProduct.Doses;
+            }
         }
     }
 }

@@ -1,5 +1,9 @@
 ﻿using Cosmonaut;
 using Cosmonaut.Attributes;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using trifenix.agro.db;
 using trifenix.connect.agro.index_model.enums;
 using trifenix.connect.agro.index_model.props;
@@ -13,7 +17,8 @@ namespace trifenix.connect.agro_model {
     /// </summary>
     [SharedCosmosCollection("agro", "Product")]
     [ReferenceSearchHeader(EntityRelated.PRODUCT, Kind = EntityKind.CUSTOM_ENTITY, PathName = "products")]
-    public class Product : DocumentBaseName, ISharedCosmosEntity {
+    public class Product : DocumentBaseName, ISharedCosmosEntity
+    {
 
 
         /// <summary>
@@ -26,6 +31,8 @@ namespace trifenix.connect.agro_model {
         /// Nombre del producto.
         /// </summary>
         [SuggestSearch(StringRelated.GENERIC_NAME)]
+        
+       
         public override string Name { get; set; }
 
         /// <summary>
@@ -44,6 +51,7 @@ namespace trifenix.connect.agro_model {
         /// Marca.
         /// </summary>
         [StringSearch(StringRelated.GENERIC_BRAND)]
+        [Required(ErrorMessage ="Marca obligatoria")]        
         public string Brand { get; set; }
 
         /// <summary>
@@ -56,6 +64,7 @@ namespace trifenix.connect.agro_model {
         /// Cantidad del producto por envase..
         /// </summary>
         [DoubleSearch(DoubleRelated.QUANTITY_CONTAINER)]
+        [Required]
         public double Quantity { get; set; }
 
         /// <summary>
@@ -66,7 +75,7 @@ namespace trifenix.connect.agro_model {
 
 
 
-
+        
     }
 
 }
