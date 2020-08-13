@@ -37,6 +37,7 @@ namespace trifenix.agro.search.operations {
         // consultas 
         private readonly ISearchQueries _queries;
 
+        private MapperConfiguration mapper = new MapperConfiguration(cfg => cfg.CreateMap<EntitySearch, EntityBaseSearch<GeoPointType>>());
         
 
         /// <summary>
@@ -183,8 +184,10 @@ namespace trifenix.agro.search.operations {
         /// <returns></returns>
         public IEntitySearch<GeoPointType>[] GetElementsWithRelatedElement(EntityRelated elementToGet, EntityRelated relatedElement, string idRelatedElement) {
             var indexClient = _search.Indexes.GetClient(_entityIndex);
-            var entities = indexClient.Documents.Search<IEntitySearch<GeoPointType>>(null, new SearchParameters { Filter = string.Format(Queries(SearchQuery.ENTITIES_WITH_ENTITYID), (int)elementToGet, (int)relatedElement, idRelatedElement) }).Results.Select(s=>s.Document);
-            return entities.ToArray();
+            var entities = indexClient.Documents.Search<EntitySearch>(null, new SearchParameters { Filter = string.Format(Queries(SearchQuery.ENTITIES_WITH_ENTITYID), (int)elementToGet, (int)relatedElement, idRelatedElement) }).Results.Select(s=>s.Document);
+            var mapperLocal = mapper.CreateMapper();
+            return entities.Select(mapperLocal.Map<EntityBaseSearch<GeoPointType>>).ToArray();
+
         }
 
 
@@ -198,9 +201,16 @@ namespace trifenix.agro.search.operations {
             // cliente
             var indexClient = _search.Indexes.GetClient(_entityIndex);
 
+
+            var query = string.Format(Queries(SearchQuery.GET_ELEMENT), (int)entityRelated, id);
             // consulta al search
-            return indexClient.Documents.Search<IEntitySearch<GeoPointType>>(null, new SearchParameters { Filter = string.Format(Queries(SearchQuery.GET_ELEMENT), (int)entityRelated, id) }).Results.FirstOrDefault()?.Document;
-            
+
+            var result = indexClient.Documents.Search<EntitySearch>(null, new SearchParameters { Filter = query }).Results.FirstOrDefault()?.Document;
+            var mapperLocal = mapper.CreateMapper();
+
+
+            return mapperLocal.Map<EntityBaseSearch<GeoPointType>>(result);
+
         }
 
 
@@ -264,11 +274,13 @@ namespace trifenix.agro.search.operations {
         /// <param name="model">objeto a convertir</param>
         /// <returns>Colección de entity Search</returns>
         public IEntitySearch<GeoPointType>[] GetEntitySearch<T2>(T2 model) where T2 : DocumentBase {
-            return (IEntitySearch<GeoPointType>[])Mdm.GetEntitySearch(new Implements(), model, typeof(EntitySearch)).Cast<EntitySearch>().ToArray();
+            var mapperLocal = mapper.CreateMapper();
+            return (IEntitySearch<GeoPointType>[])Mdm.GetEntitySearch(new Implements(), model, typeof(EntitySearch)).Select(mapperLocal.Map<EntityBaseSearch<GeoPointType>>).ToArray();
         }
 
         public IEntitySearch<GeoPointType>[] GetEntitySearchByInput<T2>(T2 model) where T2: InputBase {
-            return (IEntitySearch<GeoPointType>[])Mdm.GetEntitySearch(new Implements(), model, typeof(EntitySearch)).Cast<EntitySearch>().ToArray();
+            var mapperLocal = mapper.CreateMapper();
+            return (IEntitySearch<GeoPointType>[])Mdm.GetEntitySearch(new Implements(), model, typeof(EntitySearch)).Select(mapperLocal.Map<EntityBaseSearch<GeoPointType>>).ToArray();
         }
 
         /// <summary>

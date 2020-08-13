@@ -30,15 +30,35 @@ namespace trifenix.agro.db.applicationsReference
         private async Task<T> SetClientId(T entity, PropertyInfo prop_ClientId) {
             dynamic castedEntity = entity;
             var autoNumericSearchAttribute = Mdm.Reflection.Attributes.GetAttribute<AutoNumericSearchAttribute>(prop_ClientId);
-            bool numerateByDependence = autoNumericSearchAttribute.Dependant.HasValue;
-            if (numerateByDependence) {
+            bool numerateByDependence = false;
+            if (numerateByDependence)
+            {
                 var prop_referenceToIndependent = entity.GetType().GetProperties().FirstOrDefault(prop => Attribute.IsDefined(prop, typeof(ReferenceSearchAttribute)) && Mdm.Reflection.Attributes.GetAttribute<AutoNumericSearchAttribute>(prop).Index == autoNumericSearchAttribute.Dependant);
                 var idIndependent = (string)prop_referenceToIndependent?.GetValue(entity);
                 var query = $"SELECT * FROM c WHERE c.{prop_referenceToIndependent.Name} = '{idIndependent}'";
                 var dependentElements = await Store.QueryMultipleAsync<DocumentBase>(query);
-                castedEntity.ClientId = dependentElements.Max(element => int.TryParse(element.ClientId, out int value)? value : 1).ToString();
-            } else
-                castedEntity.ClientId = (await GetEntities().ToListAsync<DocumentBase>()).Max(element => int.TryParse(element.ClientId, out int value) ? value : 1).ToString();
+                castedEntity.ClientId = dependentElements.Max(element => int.TryParse(element.ClientId, out int value) ? value : 1).ToString();
+            }
+            else {
+
+                
+                var entities = GetEntities();
+                var entObj = await entities.ToListAsync();
+                if (!entObj.Any()) {
+                    entity.ClientId = "1";
+                    return entity;
+                };
+
+
+                
+
+               var elementCast = entObj as IEnumerable<DocumentBase>;
+
+
+                castedEntity.ClientId = elementCast.Max(element => int.TryParse(element.ClientId, out int value) ? value : 1).ToString();
+            }
+                
+
             return castedEntity;
         }
 

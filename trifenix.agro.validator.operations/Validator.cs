@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using trifenix.agro.db.exceptions;
@@ -37,7 +38,7 @@ namespace trifenix.agro.validator.operations {
                 if (!Validators.TryGetValue(validatorName, out IValidate validator))
                     throw new NotImplementedException($"No existe la implementacion de la interface IValidate con este nombre '{validatorName}'. ");
 
-                var properties = obj.GetType().GetProperties();
+                var properties = obj.GetType().GetProperties().Where(prop => !Attribute.IsDefined(prop, typeof(BrowsableAttribute)));
                 var properties_Attr = properties.Where(prop => Attribute.IsDefined(prop, typeof(T_Attr))).ToList();
                 foreach (var prop in properties_Attr) {
                     var values = CreateDynamicList(prop.GetValue(obj));
@@ -57,18 +58,46 @@ namespace trifenix.agro.validator.operations {
                 if (errorCount > 0)
                     errors.Insert(0, $"\n{obj.GetType().Name}:");
                 else {
-                    var deepProperties = properties.Where(prop => !IsNonRecursive(prop.GetValue(obj))).Select(prop => prop.GetValue(obj)).ToList();
-                    deepProperties.ForEach(propValue => {
-                        var values = CreateDynamicList(propValue);
-                        values.ForEach(value => {
-                            try { 
-                                ValidateRecursively<T_Attr>(value);
+                    try
+                    {
+                        var lst = properties.Where(prop => {
+
+                            try
+                            {
+                                var value = prop.GetValue(obj, null);
+
+                                var isNonRecursive = !IsNonRecursive(value);
+                                return isNonRecursive;
                             }
-                            catch (Validation_Exception v_ex) {
-                                errors.AddRange(v_ex.ErrorMessages);
+                            catch (Exception)
+                            {
+
+                                throw;
                             }
                         });
-                    });
+                        var deepProperties = lst.Select(prop => prop.GetValue(obj, null)).ToList();
+
+                        deepProperties.ForEach(propValue =>
+                        {
+                            var values = CreateDynamicList(propValue);
+                            values.ForEach(value =>
+                            {
+                                try
+                                {
+                                    ValidateRecursively<T_Attr>(value);
+                                }
+                                catch (Validation_Exception v_ex)
+                                {
+                                    errors.AddRange(v_ex.ErrorMessages);
+                                }
+                            });
+                        });
+                    }
+                    catch (Exception e)
+                    {
+
+                        throw;
+                    }
                 }
             }
             if (errors.Count > 0)
