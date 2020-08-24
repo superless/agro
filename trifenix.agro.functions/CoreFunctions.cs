@@ -124,10 +124,8 @@ namespace trifenix.agro.functions
         [SignalR(HubName = "agro")]IAsyncCollector<SignalRMessage> signalRMessages,
         ILogger log) {
             var opInstance = ServiceBus.Deserialize(message.Body);
-            var ObjectIdAAD = opInstance.Value<string>("ObjectIdAAD");
-            
-            var queries = new CommonQueries(ConfigManager.GetDbArguments);
-            
+            var ObjectIdAAD = opInstance.Value<string>("ObjectIdAAD");            
+            var queries = new CommonQueries(ConfigManager.GetDbArguments);            
             var EntityName = opInstance.Value<string>("EntityName");
             var agro = await ContainerMethods.AgroManager(ObjectIdAAD, false);
             var entityType = opInstance["EntityType"].ToObject<Type>();
