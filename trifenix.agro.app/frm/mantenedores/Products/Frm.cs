@@ -149,6 +149,8 @@ namespace trifenix.agro.app.frm.mantenedores.product
             gbxItem.Visible = true;
             gbxItem.Enabled = false;
             pnlButtons.Enabled = !Loading;
+            dosesBindingSource.DataSource = CurrentProduct.Doses;
+
         }
 
         
@@ -337,7 +339,56 @@ namespace trifenix.agro.app.frm.mantenedores.product
         public object GetList() {
             var products = Cloud.GetElements<Product>(EntityRelated.PRODUCT);
             var mapper = config.CreateMapper();
-            return products.Select(mapper.Map<ProductInput>);
+
+            var doses = Cloud.GetElements<Dose>(EntityRelated.DOSES);
+
+
+
+
+            return products.Select(s=>
+            {
+                var product = mapper.Map<ProductInput>(s);
+                if (doses.Any())
+                {
+                    var dosesLocal = doses.Where(a => a.IdProduct.Equals(product.Id) && !a.Default);
+                    if (dosesLocal.Any())
+                    {
+                        product.Doses = dosesLocal.Select(p => new DosesInput
+                        {
+                            DosesQuantityMax = p.DosesQuantityMax,
+                            Active = p.Active,
+                            ApplicationDaysInterval = p.ApplicationDaysInterval,
+                            ClientId = p.ClientId,
+                            Default = p.Default,
+                            DosesApplicatedTo = p.DosesApplicatedTo,
+                            DosesQuantityMin = p.DosesQuantityMin,
+                            HoursToReEntryToBarrack = p.HoursToReEntryToBarrack,
+                            IdProduct = p.IdProduct,
+                            Id = p.Id,
+                            IdsApplicationTarget = p.IdsApplicationTarget,
+                            IdSpecies = p.IdSpecies,
+                            IdVarieties = p.IdVarieties,
+                            NumberOfSequentialApplication = p.NumberOfSequentialApplication,
+                            WaitingDaysLabel = p.WaitingDaysLabel,
+                            WaitingToHarvest = p.WaitingToHarvest.Select(u => new WaitingHarvestInput
+                            {
+                                IdCertifiedEntity = u.IdCertifiedEntity,
+                                Ppm = u.Ppm,
+                                WaitingDays = u.WaitingDays
+                            }).ToArray(),
+                            WettingRecommendedByHectares = p.WettingRecommendedByHectares
+
+
+
+                        }).ToArray();
+                    }
+
+
+
+                }
+                return product;
+            }
+            );
         }
         public string Description() => new MdmDocs().GetInfoFromEntity((int)EntityRelated.PRODUCT).Description;
         private void gbxItem_Enter(object sender, EventArgs e)
