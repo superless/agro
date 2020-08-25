@@ -16,6 +16,15 @@ namespace trifenix.connect.agro_model_input
         public string Name { get; set; }
     }
 
-   
-    
+
+    [ReferenceSearchHeader(EntityRelated.BRAND)]
+    public class BrandInput : InputBase
+    {
+        [Required, Unique]
+        [StringSearch(StringRelated.GENERIC_NAME)]
+        public string Name { get; set; }
+    }
+
+
+
 }

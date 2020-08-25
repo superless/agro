@@ -35,11 +35,13 @@ namespace trifenix.agro.app
             InitializeComponent();
             connection = new HubConnectionBuilder()
                 
-                .WithUrl("http://192.168.0.10:7071/api",c=> { c.AccessTokenProvider = () => Task.FromResult("cloud-app"); ;  })
+                .WithUrl("http://192.168.0.11:7071/api",c=> { c.AccessTokenProvider = () => Task.FromResult("cloud-app"); ;  })
                 .WithAutomaticReconnect()
                 .Build();
+
             connection.ServerTimeout = TimeSpan.FromSeconds(120);
             connection.HandshakeTimeout = TimeSpan.FromSeconds(120);
+
             connection.Closed += async (error) =>
             {
                 await Task.Delay(new Random().Next(0, 5) * 1000);

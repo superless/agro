@@ -104,10 +104,7 @@ namespace trifenix.agro.app.frm.mantenedores.product
             cbKindMeasure.DisplayMember = "Text";
             cbKindMeasure.ValueMember = "Value";
 
-            cbKindContainer.DataSource = Enum.GetNames(typeof(KindOfProductContainer)).
-                Select(o => new { Text = o, Value = (KindOfProductContainer)(Enum.Parse(typeof(KindOfProductContainer), o)) }).ToList();
-            cbKindContainer.DisplayMember = "Text";
-            cbKindContainer.ValueMember = "Value";
+           
 
 
 
@@ -130,6 +127,8 @@ namespace trifenix.agro.app.frm.mantenedores.product
             bsMain.AddNew();
             var input = (ProductInput)bsMain.Current;
             input.Doses = Array.Empty<DosesInput>();
+            dosesBindingSource.DataSource = input.Doses;
+
             
 
             

@@ -35,14 +35,6 @@ namespace trifenix.connect.agro_model_input
         [EnumSearch(EnumRelated.GENERIC_MEASURE_TYPE)]
         public MeasureType MeasureType { get; set; }
 
-        [Required]
-        [RangeNumber("La cantidad debe ser mayor a cero")]
-        [DoubleSearch(DoubleRelated.QUANTITY_CONTAINER)]
-        public double Quantity { get; set; }
-
-        [Required]
-        [EnumSearch(EnumRelated.GENERIC_KIND_CONTAINER)]
-        public KindOfProductContainer KindOfBottle { get; set; }
 
         
         [ReferenceSearch(EntityRelated.DOSES)]

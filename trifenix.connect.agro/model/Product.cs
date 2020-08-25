@@ -60,22 +60,8 @@ namespace trifenix.connect.agro_model {
         [EnumSearch(EnumRelated.GENERIC_MEASURE_TYPE)]
         public MeasureType MeasureType { get; set; }
 
-        /// <summary>
-        /// Cantidad del producto por envase..
-        /// </summary>
-        [DoubleSearch(DoubleRelated.QUANTITY_CONTAINER)]
-        [Required]
-        public double Quantity { get; set; }
-
-        /// <summary>
-        /// tipo de envase.
-        /// </summary>
-        [EnumSearch(EnumRelated.GENERIC_KIND_CONTAINER)]
-        public KindOfProductContainer KindOfBottle { get; set; }
-
-
-
-        
     }
+
+
 
 }
