@@ -28,7 +28,6 @@
     <ProjectReference Include="..\trifenix.agro.search\trifenix.agro.search.operations.csproj" />
     <ProjectReference Include="..\trifenix.agro.servicebus.operations\trifenix.agro.servicebus.operations.csproj" />
     <ProjectReference Include="..\trifenix.agro.storage.operations\trifenix.agro.storage.operations.csproj" />
-    <ProjectReference Include="..\trifenix.agro.swagger.model\trifenix.agro.swagger.model.csproj" />
     <ProjectReference Include="..\trifenix.agro.weather.operations\trifenix.agro.weather.operations.csproj" />
   </ItemGroup>
   <ItemGroup>
