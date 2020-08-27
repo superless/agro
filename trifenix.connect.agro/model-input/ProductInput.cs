@@ -24,9 +24,9 @@ namespace trifenix.connect.agro_model_input
         [ReferenceSearch(EntityRelated.INGREDIENT)]
         public string IdActiveIngredient { get; set; }
 
-        [Required(ErrorMessage = "Marca es requerido")]
-        [StringSearch(StringRelated.GENERIC_BRAND)]
-        public string Brand { get; set; }
+        
+        [ReferenceSearch(EntityRelated.BRAND)]
+        public string IdBrand { get; set; }
 
         public string ClientId { get; set; }
 

@@ -50,9 +50,8 @@ namespace trifenix.connect.agro_model {
         /// <summary>
         /// Marca.
         /// </summary>
-        [StringSearch(StringRelated.GENERIC_BRAND)]
-        [Required(ErrorMessage ="Marca obligatoria")]        
-        public string Brand { get; set; }
+        [ReferenceSearch(EntityRelated.BRAND)]
+        public string IdBrand { get; set; }
 
         /// <summary>
         /// Tipo de medida

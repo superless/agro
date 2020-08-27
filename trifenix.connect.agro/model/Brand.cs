@@ -36,6 +36,4 @@ namespace trifenix.connect.agro_model
 
 
     }
-
-
 }

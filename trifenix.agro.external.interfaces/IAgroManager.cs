@@ -36,6 +36,9 @@ namespace trifenix.agro.external.interfaces {
         IGenericOperation<Role, RoleInput> Role { get; }
         IGenericOperation<Rootstock, RootstockInput> Rootstock { get; }
         IGenericOperation<Season, SeasonInput> Season { get; }
+
+        IGenericOperation<Brand, BrandInput> Brand { get; }
+
         IGenericOperation<Sector, SectorInput> Sector { get; }
         IGenericOperation<Specie, SpecieInput> Specie { get; }
         IGenericOperation<Tractor, TractorInput> Tractor { get; }

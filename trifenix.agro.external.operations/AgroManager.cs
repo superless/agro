@@ -71,7 +71,9 @@ namespace trifenix.agro.external.operations {
         public IGenericOperation<UserActivity, UserActivityInput> UserActivity => new UserActivityOperations(GetMainDb<UserActivity>(), ExistsElements, Search, GetCommonDbOp<UserActivity>(), UserId, Validators);
 
         public IGenericOperation<Sector, SectorInput> Sector => new SectorOperations(GetMainDb<Sector>(), ExistsElements, Search, GetCommonDbOp<Sector>(), Validators);
-        
+
+        public IGenericOperation<Brand, BrandInput> Brand => new BrandOperations(GetMainDb<Brand>(), ExistsElements, Search, GetCommonDbOp<Brand>(), Validators);
+
         public IGenericOperation<PlotLand, PlotLandInput> PlotLand => new PlotLandOperations(GetMainDb<PlotLand>(), ExistsElements, Search, GetCommonDbOp<PlotLand>(), Validators);
 
         public IGenericOperation<Specie, SpecieInput> Specie => new SpecieOperations(GetMainDb<Specie>(), ExistsElements, Search, GetCommonDbOp<Specie>(), Validators);

@@ -70,12 +70,12 @@ namespace trifenix.agro.external.operations.entities.ext
             var id = !string.IsNullOrWhiteSpace(productInput.Id) ? productInput.Id : Guid.NewGuid().ToString("N");
             var product = new Product {
                 Id = id,
-                Brand = productInput.Brand,
+                IdBrand = productInput.IdBrand,
                 Name = productInput.Name,
                 IdActiveIngredient = productInput.IdActiveIngredient,
-                KindOfBottle = productInput.KindOfBottle,
+                
                 MeasureType = productInput.MeasureType,
-                Quantity = productInput.Quantity
+                
             };
             var doses = productInput.Doses.Select(dose => {
                 dose.IdProduct = id;

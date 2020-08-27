@@ -6,12 +6,10 @@ using trifenix.connect.mdm_attributes;
 
 namespace trifenix.connect.agro_model_input
 {
-
-    [ReferenceSearchHeader(EntityRelated.SECTOR)]
-    public class SectorInput : InputBase {
+    [ReferenceSearchHeader(EntityRelated.BRAND)]
+    public class BrandInput : InputBase
+    {
         [Required, Unique]
-
-
         [StringSearch(StringRelated.GENERIC_NAME)]
         public string Name { get; set; }
     }
