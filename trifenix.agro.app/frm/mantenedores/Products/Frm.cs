@@ -348,7 +348,7 @@ namespace trifenix.agro.app.frm.mantenedores.product
             var products = Cloud.GetElements<Product>(EntityRelated.PRODUCT);
             var mapper = config.CreateMapper();
 
-            var doses = Cloud.GetElements<Dose>(EntityRelated.DOSES);
+            var doses = Cloud.GetElements<Dose>($"index eq {(int)EntityRelated.DOSES} and bl/any(el: el/index eq {(int)BoolRelated.GENERIC_ACTIVE} and el/value eq true)");
 
 
 

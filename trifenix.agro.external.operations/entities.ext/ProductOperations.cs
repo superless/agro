@@ -28,7 +28,9 @@ namespace trifenix.agro.external.operations.entities.ext
             this.queries = queries;
         }
         
-        public async Task Remove(string id) { }
+        public async Task Remove(string id) {
+            await repo.DeleteEntity(id);
+        }
 
         private async Task<string> CreateDefaultDoses(string idProduct) {
             var dosesInput = new DosesInput {
@@ -46,6 +48,7 @@ namespace trifenix.agro.external.operations.entities.ext
                 var defaultDoses = await queries.GetDefaultDosesId(product.Id);
                 if (string.IsNullOrWhiteSpace(defaultDoses))
                     defaultDoses = await CreateDefaultDoses(product.Id);
+
                 // elimina todas las dosis que no sean por defecto relacionadas con el producto
                 search.DeleteElementsWithRelatedElementExceptId(EntityRelated.DOSES, EntityRelated.PRODUCT, product.Id, defaultDoses);
                 // obtiene todas las dosis que no sean por defecto
