@@ -73,7 +73,7 @@ namespace trifenix.agro.external.operations.entities.ext
                 IdBrand = productInput.IdBrand,
                 Name = productInput.Name,
                 IdActiveIngredient = productInput.IdActiveIngredient,
-                
+                SagCode = productInput.SagCode,
                 MeasureType = productInput.MeasureType,
                 
             };
