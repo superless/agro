@@ -1,7 +1,7 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing.Text;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -17,8 +17,13 @@ namespace trifenix.agro.app.frm.mantenedores.brand
     public partial class Frm : Form, IFenixForm
     {
         BackgroundWorker bworker;
-
+        private bool _addinNew = false;
         private string entityName;
+
+        MapperConfiguration config = new MapperConfiguration(cfg => {
+            cfg.CreateMap<Brand, BrandInput>();
+        });
+
 
         public CurrentFormState State { get; set; }
 
@@ -30,22 +35,19 @@ namespace trifenix.agro.app.frm.mantenedores.brand
             entityName = GetEntityName();
             pb.Maximum = 100;
             pb.Step = 1;
-            bworker = new BackgroundWorker();
-
-            bworker.WorkerReportsProgress = true;
+            bworker = new BackgroundWorker
+            {
+                WorkerReportsProgress = true
+            };
 
             lblDescripcion.Text = Description();
-
-
         }
+
         private async void SectorFrm_Load_1(object sender, EventArgs e)
-        {
-            
+        {            
             SetElements();
-
-            
-            
         }
+
         public void SetElements()
         {
             pb.Visible = true;
@@ -57,8 +59,14 @@ namespace trifenix.agro.app.frm.mantenedores.brand
             pb.Visible = false;
             lblProgress.Visible = false;
             Loading = false;
-            
-            bsMain.DataSource = GetList();
+            var lst = new List<Brand>();
+            lst.AddRange(GetList() as IEnumerable<Brand>);
+            var bl = new BindingList<Brand>(lst);
+            bl.AllowNew = true;
+            bl.AllowEdit = true;
+            bl.AllowRemove = true;
+
+            bsMain.DataSource = bl;
 
 
             if (bsMain.Count != 0)
@@ -89,6 +97,8 @@ namespace trifenix.agro.app.frm.mantenedores.brand
             tbxName.Text = "";
             State = CurrentFormState.NEW;
             pnlButtons.Enabled = false;
+            bsMain.AddNew();
+
         }
 
         private void OnEdit()
@@ -116,11 +126,7 @@ namespace trifenix.agro.app.frm.mantenedores.brand
 
 
 
-        private void tbxName_Validated(object sender, EventArgs e)
-        {
-            var tbx = ((TextBox)sender);
-            ValidationForm.SetError(tbx, String.IsNullOrWhiteSpace(tbx.Text) ? "campo obligatorio" : null);
-        }
+       
 
         
 
@@ -204,6 +210,7 @@ namespace trifenix.agro.app.frm.mantenedores.brand
             gbxItem.Text = "";
             State = CurrentFormState.READONLY;
             pnlButtons.Enabled = true;
+            bsMain.CancelEdit();
         }
 
         
@@ -222,8 +229,13 @@ namespace trifenix.agro.app.frm.mantenedores.brand
 
         private void bsSectors_CurrentChanged(object sender, EventArgs e)
         {
-            ChangedList(bsMain.Current);
-            OnCurrentChange();
+
+            if (!_addinNew)
+            {
+                OnCurrentChange();
+            }
+            _addinNew = false;
+
         }
 
         public void DoWork()
@@ -266,22 +278,31 @@ namespace trifenix.agro.app.frm.mantenedores.brand
             };
             return true;
         }
-        public string GetEntityName() => Cloud.GetCosmosEntityName<Sector>();
+        public string GetEntityName() => Cloud.GetCosmosEntityName<Brand>();
 
-        public string FriendlyName() => "Sector";
+        public string FriendlyName() => "Marca";
 
         
 
         public void Edit(object obj)
         {
-            var current = (Sector)obj;            
-            Cloud.PushElement(new SectorInput { Name = tbxName.Text, Id = current.Id }, entityName).Wait();
+            var current = (Brand)obj;
+            var mapper = config.CreateMapper();
+
+            var input = mapper.Map<BrandInput>(current);
+
+            Cloud.PushElement(input, entityName).Wait();
             
         }
 
         public void New()
         {
-            Cloud.PushElement(new SectorInput { Name = tbxName.Text }, entityName).Wait();
+            var current = (Brand)bsMain.Current;
+
+            var mapper = config.CreateMapper();
+            var input = mapper.Map<BrandInput>(current);
+
+            Cloud.PushElement(input, entityName).Wait();
          
         }
 
@@ -291,19 +312,22 @@ namespace trifenix.agro.app.frm.mantenedores.brand
                 var current = (Sector)obj;
                 tbxCorrelativo.Text = current.ClientId.ToString();
                 tbxName.Text = current.Name;
-                gbxItem.Text = $"Sector {tbxName.Text}";
+                gbxItem.Text = $"Marca {tbxName.Text}";
             }
         }
 
-        public object GetList() => Cloud.GetElements<Sector>(EntityRelated.SECTOR);
+        public object GetList() => Cloud.GetElements<Brand>(EntityRelated.BRAND);
 
-        public string Description() => new MdmDocs().GetInfoFromEntity((int)EntityRelated.SECTOR).Description;
+        public string Description() => new MdmDocs().GetInfoFromEntity((int)EntityRelated.BRAND).Description;
 
         private void gbxItem_Enter(object sender, EventArgs e)
         {
 
         }
 
-        
+        private void bsMain_AddingNew(object sender, AddingNewEventArgs e)
+        {
+            _addinNew = true;
+        }
     }
 }

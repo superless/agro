@@ -41,23 +41,29 @@ namespace trifenix.agro.app.frm.mantenedores.product
             this.panel1 = new System.Windows.Forms.Panel();
             this.lblDescripcion = new System.Windows.Forms.Label();
             this.gbxItem = new System.Windows.Forms.GroupBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.cbBrand = new System.Windows.Forms.ComboBox();
+            this.bsBrand = new System.Windows.Forms.BindingSource(this.components);
             this.pnlDoses = new System.Windows.Forms.Panel();
             this.btnEditDoses = new System.Windows.Forms.Button();
             this.btnRemoveDoses = new System.Windows.Forms.Button();
             this.btnAddDoses = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.speciesList = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.varietyList = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.targetLists = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dosesQuantityMinDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dosesQuantityMaxDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.hoursToReEntryToBarrackDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.applicationDaysIntervalDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.numberOfSequentialApplicationDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.wettingRecommendedByHectaresDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dosesQuantityMinDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dosesQuantityMaxDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.waitingDaysLabelDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dosesApplicatedToDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dosesBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.label5 = new System.Windows.Forms.Label();
             this.cbKindMeasure = new System.Windows.Forms.ComboBox();
-            this.tbxBrand = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.cbActiveIngredient = new System.Windows.Forms.ComboBox();
@@ -76,6 +82,7 @@ namespace trifenix.agro.app.frm.mantenedores.product
             ((System.ComponentModel.ISupportInitialize)(this.bsMain)).BeginInit();
             this.panel1.SuspendLayout();
             this.gbxItem.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bsBrand)).BeginInit();
             this.pnlDoses.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dosesBindingSource)).BeginInit();
@@ -99,7 +106,7 @@ namespace trifenix.agro.app.frm.mantenedores.product
             this.tbxCorrelativo.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsMain, "ClientId", true));
             this.tbxCorrelativo.Enabled = false;
             this.tbxCorrelativo.Location = new System.Drawing.Point(23, 53);
-            this.tbxCorrelativo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tbxCorrelativo.Margin = new System.Windows.Forms.Padding(4);
             this.tbxCorrelativo.Name = "tbxCorrelativo";
             this.tbxCorrelativo.Size = new System.Drawing.Size(73, 22);
             this.tbxCorrelativo.TabIndex = 0;
@@ -128,7 +135,7 @@ namespace trifenix.agro.app.frm.mantenedores.product
             // 
             this.tbxName.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsMain, "Name", true));
             this.tbxName.Location = new System.Drawing.Point(119, 53);
-            this.tbxName.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tbxName.Margin = new System.Windows.Forms.Padding(4);
             this.tbxName.MaxLength = 200;
             this.tbxName.Name = "tbxName";
             this.tbxName.Size = new System.Drawing.Size(443, 22);
@@ -140,7 +147,7 @@ namespace trifenix.agro.app.frm.mantenedores.product
             this.panel1.BackColor = System.Drawing.Color.White;
             this.panel1.Controls.Add(this.lblDescripcion);
             this.panel1.Location = new System.Drawing.Point(0, -2);
-            this.panel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel1.Margin = new System.Windows.Forms.Padding(4);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1263, 66);
             this.panel1.TabIndex = 4;
@@ -157,11 +164,13 @@ namespace trifenix.agro.app.frm.mantenedores.product
             // 
             // gbxItem
             // 
+            this.gbxItem.Controls.Add(this.label6);
+            this.gbxItem.Controls.Add(this.textBox1);
+            this.gbxItem.Controls.Add(this.cbBrand);
             this.gbxItem.Controls.Add(this.pnlDoses);
             this.gbxItem.Controls.Add(this.dataGridView1);
             this.gbxItem.Controls.Add(this.label5);
             this.gbxItem.Controls.Add(this.cbKindMeasure);
-            this.gbxItem.Controls.Add(this.tbxBrand);
             this.gbxItem.Controls.Add(this.label4);
             this.gbxItem.Controls.Add(this.label3);
             this.gbxItem.Controls.Add(this.cbActiveIngredient);
@@ -173,9 +182,9 @@ namespace trifenix.agro.app.frm.mantenedores.product
             this.gbxItem.Controls.Add(this.btnSave);
             this.gbxItem.Enabled = false;
             this.gbxItem.Location = new System.Drawing.Point(284, 71);
-            this.gbxItem.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.gbxItem.Margin = new System.Windows.Forms.Padding(4);
             this.gbxItem.Name = "gbxItem";
-            this.gbxItem.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.gbxItem.Padding = new System.Windows.Forms.Padding(4);
             this.gbxItem.Size = new System.Drawing.Size(962, 610);
             this.gbxItem.TabIndex = 5;
             this.gbxItem.TabStop = false;
@@ -183,6 +192,44 @@ namespace trifenix.agro.app.frm.mantenedores.product
             this.gbxItem.Visible = false;
             this.gbxItem.Enter += new System.EventHandler(this.gbxItem_Enter);
             this.gbxItem.Validating += new System.ComponentModel.CancelEventHandler(this.gbxItem_Validating);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(586, 82);
+            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(93, 17);
+            this.label6.TabIndex = 37;
+            this.label6.Text = "Código SAG :";
+            // 
+            // textBox1
+            // 
+            this.textBox1.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsMain, "SagCode", true));
+            this.textBox1.Location = new System.Drawing.Point(589, 103);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(4);
+            this.textBox1.MaxLength = 200;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(348, 22);
+            this.textBox1.TabIndex = 36;
+            // 
+            // cbBrand
+            // 
+            this.cbBrand.DataBindings.Add(new System.Windows.Forms.Binding("SelectedValue", this.bsMain, "IdBrand", true));
+            this.cbBrand.DataSource = this.bsBrand;
+            this.cbBrand.DisplayMember = "Name";
+            this.cbBrand.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbBrand.FormattingEnabled = true;
+            this.cbBrand.Location = new System.Drawing.Point(589, 53);
+            this.cbBrand.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.cbBrand.Name = "cbBrand";
+            this.cbBrand.Size = new System.Drawing.Size(347, 24);
+            this.cbBrand.TabIndex = 35;
+            this.cbBrand.ValueMember = "Id";
+            // 
+            // bsBrand
+            // 
+            this.bsBrand.DataSource = typeof(trifenix.connect.agro_model.Brand);
             // 
             // pnlDoses
             // 
@@ -235,12 +282,15 @@ namespace trifenix.agro.app.frm.mantenedores.product
             this.dataGridView1.AutoGenerateColumns = false;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.speciesList,
+            this.varietyList,
+            this.targetLists,
+            this.dosesQuantityMinDataGridViewTextBoxColumn,
+            this.dosesQuantityMaxDataGridViewTextBoxColumn,
             this.hoursToReEntryToBarrackDataGridViewTextBoxColumn,
             this.applicationDaysIntervalDataGridViewTextBoxColumn,
             this.numberOfSequentialApplicationDataGridViewTextBoxColumn,
             this.wettingRecommendedByHectaresDataGridViewTextBoxColumn,
-            this.dosesQuantityMinDataGridViewTextBoxColumn,
-            this.dosesQuantityMaxDataGridViewTextBoxColumn,
             this.waitingDaysLabelDataGridViewTextBoxColumn,
             this.dosesApplicatedToDataGridViewTextBoxColumn});
             this.dataGridView1.DataSource = this.dosesBindingSource;
@@ -252,6 +302,49 @@ namespace trifenix.agro.app.frm.mantenedores.product
             this.dataGridView1.RowTemplate.Height = 28;
             this.dataGridView1.Size = new System.Drawing.Size(910, 387);
             this.dataGridView1.TabIndex = 19;
+            this.dataGridView1.RowStateChanged += new System.Windows.Forms.DataGridViewRowStateChangedEventHandler(this.dataGridView1_RowStateChanged);
+            // 
+            // speciesList
+            // 
+            this.speciesList.HeaderText = "Especies";
+            this.speciesList.MinimumWidth = 6;
+            this.speciesList.Name = "speciesList";
+            this.speciesList.ReadOnly = true;
+            this.speciesList.Width = 125;
+            // 
+            // varietyList
+            // 
+            this.varietyList.HeaderText = "Variedades";
+            this.varietyList.MinimumWidth = 6;
+            this.varietyList.Name = "varietyList";
+            this.varietyList.ReadOnly = true;
+            this.varietyList.Width = 125;
+            // 
+            // targetLists
+            // 
+            this.targetLists.HeaderText = "Objetivos de aplicación";
+            this.targetLists.MinimumWidth = 6;
+            this.targetLists.Name = "targetLists";
+            this.targetLists.ReadOnly = true;
+            this.targetLists.Width = 125;
+            // 
+            // dosesQuantityMinDataGridViewTextBoxColumn
+            // 
+            this.dosesQuantityMinDataGridViewTextBoxColumn.DataPropertyName = "DosesQuantityMin";
+            this.dosesQuantityMinDataGridViewTextBoxColumn.HeaderText = "Dosis Mínima";
+            this.dosesQuantityMinDataGridViewTextBoxColumn.MinimumWidth = 8;
+            this.dosesQuantityMinDataGridViewTextBoxColumn.Name = "dosesQuantityMinDataGridViewTextBoxColumn";
+            this.dosesQuantityMinDataGridViewTextBoxColumn.ReadOnly = true;
+            this.dosesQuantityMinDataGridViewTextBoxColumn.Width = 150;
+            // 
+            // dosesQuantityMaxDataGridViewTextBoxColumn
+            // 
+            this.dosesQuantityMaxDataGridViewTextBoxColumn.DataPropertyName = "DosesQuantityMax";
+            this.dosesQuantityMaxDataGridViewTextBoxColumn.HeaderText = "Dosis Máxima";
+            this.dosesQuantityMaxDataGridViewTextBoxColumn.MinimumWidth = 8;
+            this.dosesQuantityMaxDataGridViewTextBoxColumn.Name = "dosesQuantityMaxDataGridViewTextBoxColumn";
+            this.dosesQuantityMaxDataGridViewTextBoxColumn.ReadOnly = true;
+            this.dosesQuantityMaxDataGridViewTextBoxColumn.Width = 150;
             // 
             // hoursToReEntryToBarrackDataGridViewTextBoxColumn
             // 
@@ -288,24 +381,6 @@ namespace trifenix.agro.app.frm.mantenedores.product
             this.wettingRecommendedByHectaresDataGridViewTextBoxColumn.Name = "wettingRecommendedByHectaresDataGridViewTextBoxColumn";
             this.wettingRecommendedByHectaresDataGridViewTextBoxColumn.ReadOnly = true;
             this.wettingRecommendedByHectaresDataGridViewTextBoxColumn.Width = 150;
-            // 
-            // dosesQuantityMinDataGridViewTextBoxColumn
-            // 
-            this.dosesQuantityMinDataGridViewTextBoxColumn.DataPropertyName = "DosesQuantityMin";
-            this.dosesQuantityMinDataGridViewTextBoxColumn.HeaderText = "Dosis Mínima";
-            this.dosesQuantityMinDataGridViewTextBoxColumn.MinimumWidth = 8;
-            this.dosesQuantityMinDataGridViewTextBoxColumn.Name = "dosesQuantityMinDataGridViewTextBoxColumn";
-            this.dosesQuantityMinDataGridViewTextBoxColumn.ReadOnly = true;
-            this.dosesQuantityMinDataGridViewTextBoxColumn.Width = 150;
-            // 
-            // dosesQuantityMaxDataGridViewTextBoxColumn
-            // 
-            this.dosesQuantityMaxDataGridViewTextBoxColumn.DataPropertyName = "DosesQuantityMax";
-            this.dosesQuantityMaxDataGridViewTextBoxColumn.HeaderText = "Dosis Máxima";
-            this.dosesQuantityMaxDataGridViewTextBoxColumn.MinimumWidth = 8;
-            this.dosesQuantityMaxDataGridViewTextBoxColumn.Name = "dosesQuantityMaxDataGridViewTextBoxColumn";
-            this.dosesQuantityMaxDataGridViewTextBoxColumn.ReadOnly = true;
-            this.dosesQuantityMaxDataGridViewTextBoxColumn.Width = 150;
             // 
             // waitingDaysLabelDataGridViewTextBoxColumn
             // 
@@ -351,18 +426,8 @@ namespace trifenix.agro.app.frm.mantenedores.product
             this.cbKindMeasure.Location = new System.Drawing.Point(311, 103);
             this.cbKindMeasure.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cbKindMeasure.Name = "cbKindMeasure";
-            this.cbKindMeasure.Size = new System.Drawing.Size(199, 24);
+            this.cbKindMeasure.Size = new System.Drawing.Size(251, 24);
             this.cbKindMeasure.TabIndex = 13;
-            // 
-            // tbxBrand
-            // 
-            this.tbxBrand.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsMain, "Brand", true));
-            this.tbxBrand.Location = new System.Drawing.Point(589, 53);
-            this.tbxBrand.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.tbxBrand.MaxLength = 200;
-            this.tbxBrand.Name = "tbxBrand";
-            this.tbxBrand.Size = new System.Drawing.Size(348, 22);
-            this.tbxBrand.TabIndex = 12;
             // 
             // label4
             // 
@@ -405,7 +470,7 @@ namespace trifenix.agro.app.frm.mantenedores.product
             // btnCancel
             // 
             this.btnCancel.Location = new System.Drawing.Point(731, 574);
-            this.btnCancel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(4);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(100, 28);
             this.btnCancel.TabIndex = 8;
@@ -417,7 +482,7 @@ namespace trifenix.agro.app.frm.mantenedores.product
             // 
             this.btnSave.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnSave.Location = new System.Drawing.Point(838, 574);
-            this.btnSave.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnSave.Margin = new System.Windows.Forms.Padding(4);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(99, 28);
             this.btnSave.TabIndex = 6;
@@ -432,7 +497,7 @@ namespace trifenix.agro.app.frm.mantenedores.product
             this.lbxItems.FormattingEnabled = true;
             this.lbxItems.ItemHeight = 16;
             this.lbxItems.Location = new System.Drawing.Point(18, 84);
-            this.lbxItems.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.lbxItems.Margin = new System.Windows.Forms.Padding(4);
             this.lbxItems.Name = "lbxItems";
             this.lbxItems.Size = new System.Drawing.Size(257, 564);
             this.lbxItems.TabIndex = 9;
@@ -515,7 +580,7 @@ namespace trifenix.agro.app.frm.mantenedores.product
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Frm";
@@ -528,6 +593,7 @@ namespace trifenix.agro.app.frm.mantenedores.product
             this.panel1.PerformLayout();
             this.gbxItem.ResumeLayout(false);
             this.gbxItem.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bsBrand)).EndInit();
             this.pnlDoses.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dosesBindingSource)).EndInit();
@@ -562,21 +628,27 @@ namespace trifenix.agro.app.frm.mantenedores.product
         private System.Windows.Forms.BindingSource bsIngredient;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ComboBox cbKindMeasure;
-        private System.Windows.Forms.TextBox tbxBrand;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Panel pnlDoses;
         private System.Windows.Forms.Button btnEditDoses;
         private System.Windows.Forms.Button btnRemoveDoses;
         private System.Windows.Forms.Button btnAddDoses;
         private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.BindingSource dosesBindingSource;
+        private System.Windows.Forms.BindingSource bsBrand;
+        private System.Windows.Forms.ComboBox cbBrand;
+        private System.Windows.Forms.DataGridViewTextBoxColumn speciesList;
+        private System.Windows.Forms.DataGridViewTextBoxColumn varietyList;
+        private System.Windows.Forms.DataGridViewTextBoxColumn targetLists;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dosesQuantityMinDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dosesQuantityMaxDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn hoursToReEntryToBarrackDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn applicationDaysIntervalDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn numberOfSequentialApplicationDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn wettingRecommendedByHectaresDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dosesQuantityMinDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dosesQuantityMaxDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn waitingDaysLabelDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn dosesApplicatedToDataGridViewTextBoxColumn;
-        private System.Windows.Forms.BindingSource dosesBindingSource;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }

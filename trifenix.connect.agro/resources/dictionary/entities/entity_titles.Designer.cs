@@ -79,6 +79,15 @@ namespace trifenix.connect.agro.resources.dictionary.entities {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Marca.
+        /// </summary>
+        public static string BRAND {
+            get {
+                return ResourceManager.GetString("BRAND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unidad de Negocios.
         /// </summary>
         public static string BUSINESSNAME {

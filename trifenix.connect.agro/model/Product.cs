@@ -31,8 +31,6 @@ namespace trifenix.connect.agro_model {
         /// Nombre del producto.
         /// </summary>
         [SuggestSearch(StringRelated.GENERIC_NAME)]
-        
-       
         public override string Name { get; set; }
 
         /// <summary>
@@ -59,6 +57,8 @@ namespace trifenix.connect.agro_model {
         [EnumSearch(EnumRelated.GENERIC_MEASURE_TYPE)]
         public MeasureType MeasureType { get; set; }
 
+        [StringSearch(StringRelated.SAG_CODE)]
+        public string SagCode { get; set; }
     }
 
 

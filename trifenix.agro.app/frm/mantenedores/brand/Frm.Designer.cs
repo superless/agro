@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Frm));
             this.tbxCorrelativo = new System.Windows.Forms.TextBox();
+            this.bsMain = new System.Windows.Forms.BindingSource(this.components);
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.tbxName = new System.Windows.Forms.TextBox();
@@ -40,7 +41,6 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
             this.lbxItems = new System.Windows.Forms.ListBox();
-            this.bsMain = new System.Windows.Forms.BindingSource(this.components);
             this.ValidationForm = new System.Windows.Forms.ErrorProvider(this.components);
             this.btnDeleteSector = new System.Windows.Forms.Button();
             this.btnEditSector = new System.Windows.Forms.Button();
@@ -48,21 +48,28 @@
             this.pnlButtons = new System.Windows.Forms.Panel();
             this.pb = new System.Windows.Forms.ProgressBar();
             this.lblProgress = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.bsMain)).BeginInit();
             this.panel1.SuspendLayout();
             this.gbxItem.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.bsMain)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ValidationForm)).BeginInit();
             this.pnlButtons.SuspendLayout();
             this.SuspendLayout();
             // 
             // tbxCorrelativo
             // 
+            this.tbxCorrelativo.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsMain, "ClientId", true));
             this.tbxCorrelativo.Enabled = false;
             this.tbxCorrelativo.Location = new System.Drawing.Point(23, 53);
-            this.tbxCorrelativo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tbxCorrelativo.Margin = new System.Windows.Forms.Padding(4);
             this.tbxCorrelativo.Name = "tbxCorrelativo";
             this.tbxCorrelativo.Size = new System.Drawing.Size(73, 22);
             this.tbxCorrelativo.TabIndex = 0;
+            // 
+            // bsMain
+            // 
+            this.bsMain.DataSource = typeof(trifenix.connect.agro_model.Sector);
+            this.bsMain.AddingNew += new System.ComponentModel.AddingNewEventHandler(this.bsMain_AddingNew);
+            this.bsMain.CurrentChanged += new System.EventHandler(this.bsSectors_CurrentChanged);
             // 
             // label1
             // 
@@ -86,20 +93,20 @@
             // 
             // tbxName
             // 
+            this.tbxName.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsMain, "Name", true));
             this.tbxName.Location = new System.Drawing.Point(119, 53);
-            this.tbxName.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tbxName.Margin = new System.Windows.Forms.Padding(4);
             this.tbxName.MaxLength = 200;
             this.tbxName.Name = "tbxName";
             this.tbxName.Size = new System.Drawing.Size(443, 22);
             this.tbxName.TabIndex = 3;
-            this.tbxName.Validated += new System.EventHandler(this.tbxName_Validated);
             // 
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.White;
             this.panel1.Controls.Add(this.lblDescripcion);
             this.panel1.Location = new System.Drawing.Point(0, -2);
-            this.panel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel1.Margin = new System.Windows.Forms.Padding(4);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(883, 66);
             this.panel1.TabIndex = 4;
@@ -124,9 +131,9 @@
             this.gbxItem.Controls.Add(this.btnSave);
             this.gbxItem.Enabled = false;
             this.gbxItem.Location = new System.Drawing.Point(284, 71);
-            this.gbxItem.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.gbxItem.Margin = new System.Windows.Forms.Padding(4);
             this.gbxItem.Name = "gbxItem";
-            this.gbxItem.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.gbxItem.Padding = new System.Windows.Forms.Padding(4);
             this.gbxItem.Size = new System.Drawing.Size(583, 416);
             this.gbxItem.TabIndex = 5;
             this.gbxItem.TabStop = false;
@@ -137,7 +144,7 @@
             // btnCancel
             // 
             this.btnCancel.Location = new System.Drawing.Point(362, 383);
-            this.btnCancel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(4);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(100, 28);
             this.btnCancel.TabIndex = 8;
@@ -149,7 +156,7 @@
             // 
             this.btnSave.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnSave.Location = new System.Drawing.Point(469, 383);
-            this.btnSave.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnSave.Margin = new System.Windows.Forms.Padding(4);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(99, 28);
             this.btnSave.TabIndex = 6;
@@ -164,16 +171,11 @@
             this.lbxItems.FormattingEnabled = true;
             this.lbxItems.ItemHeight = 16;
             this.lbxItems.Location = new System.Drawing.Point(18, 84);
-            this.lbxItems.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.lbxItems.Margin = new System.Windows.Forms.Padding(4);
             this.lbxItems.Name = "lbxItems";
             this.lbxItems.Size = new System.Drawing.Size(257, 372);
             this.lbxItems.TabIndex = 9;
             this.lbxItems.ValueMember = "Id";
-            // 
-            // bsMain
-            // 
-            this.bsMain.DataSource = typeof(trifenix.connect.agro_model.Sector);
-            this.bsMain.CurrentChanged += new System.EventHandler(this.bsSectors_CurrentChanged);
             // 
             // ValidationForm
             // 
@@ -256,18 +258,18 @@
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Frm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Marca";
             this.Load += new System.EventHandler(this.SectorFrm_Load_1);
+            ((System.ComponentModel.ISupportInitialize)(this.bsMain)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.gbxItem.ResumeLayout(false);
             this.gbxItem.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.bsMain)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ValidationForm)).EndInit();
             this.pnlButtons.ResumeLayout(false);
             this.ResumeLayout(false);

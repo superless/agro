@@ -123,6 +123,9 @@
   <data name="BARRACK_EVENT" xml:space="preserve">
     <value>Barrack</value>
   </data>
+  <data name="BRAND" xml:space="preserve">
+    <value>Marca</value>
+  </data>
   <data name="BUSINESSNAME" xml:space="preserve">
     <value>Unidad de Negocios</value>
   </data>

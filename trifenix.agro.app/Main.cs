@@ -239,5 +239,13 @@ namespace trifenix.agro.app
             frm.ShowDialog();
             forms.Remove(frm);
         }
+
+        private void marcaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var frm = new mantenedores.brand.Frm();
+            forms.Add(frm);
+            frm.ShowDialog();
+            forms.Remove(frm);
+        }
     }
 }

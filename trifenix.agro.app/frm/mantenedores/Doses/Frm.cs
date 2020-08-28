@@ -40,9 +40,21 @@ namespace trifenix.agro.app.frm.mantenedores.doses
 
         public bool Loading { get; set; } = false;
 
-        public Frm(DosesInput dosesInput)
+        private Specie[] _species = null;
+        private VarieryExtend[] _variesties = null;
+        private Variety[] _vrts = null;
+        private ApplicationTarget[] _targets = null;
+        private CertifiedEntity[] _certifieds = null;
+
+
+        public Frm(DosesInput dosesInput, Specie[] sps, Variety[] vrts, ApplicationTarget[] targets, CertifiedEntity[] certs)
         {
             InitializeComponent();
+            _vrts = vrts;
+            _species = sps;
+            _targets = targets;
+            _certifieds = certs;
+
             if (dosesInput == null)
             {
                 OnAdd();
@@ -52,8 +64,13 @@ namespace trifenix.agro.app.frm.mantenedores.doses
                 OnEdit(dosesInput);
             }
             
-            
-            
+
+
+
+
+
+
+
             lblDescripcion.Text = Description();
             
         }
@@ -209,17 +226,11 @@ namespace trifenix.agro.app.frm.mantenedores.doses
         }
 
 
-        private Specie[] species = null;
-        private VarieryExtend[] variesties = null;
-        private ApplicationTarget[] targets = null;
-        private CertifiedEntity[] certifieds = null;
+        
         private Specie[] GetSpecies() {
 
-            if (species == null)
-            {
-                species = Cloud.GetElements<Specie>(EntityRelated.SPECIE);
-            }
-            return species;
+            
+            return _species;
 
 
         }
@@ -231,19 +242,19 @@ namespace trifenix.agro.app.frm.mantenedores.doses
         }
 
         private VarieryExtend[] GetVarieties() {
-            if (variesties == null)
+            if (_variesties == null)
             {
                 var mapper = config.CreateMapper();
 
-                variesties = Cloud.GetElements<Variety>(EntityRelated.VARIETY).Select(s =>
+                _variesties = _vrts.Select(s =>
                 {
                     var mp = mapper.Map<VarieryExtend>(s);
-                    var specie = species.First(a => a.Id.Equals(mp.IdSpecie));
+                    var specie = _species.First(a => a.Id.Equals(mp.IdSpecie));
                     mp.FullName = $"{specie.Name} - {mp.Name}";
                     return mp;
                 }).ToArray();
             }
-            return variesties;
+            return _variesties;
         }
 
         private VarieryExtend[] GetFilteredVarieties() { 
@@ -256,18 +267,12 @@ namespace trifenix.agro.app.frm.mantenedores.doses
 
         private ApplicationTarget[] GetTargets() {
 
-            if (targets == null)
-            {
-                targets = Cloud.GetElements<ApplicationTarget>(EntityRelated.TARGET);
-            }
-            return targets;
+          
+            return _targets;
         }
         private CertifiedEntity[] GetCertifiedEntities() {
-            if (certifieds == null)
-            {
-                certifieds = Cloud.GetElements<CertifiedEntity>(EntityRelated.CERTIFIED_ENTITY);
-            }
-            return certifieds;
+
+            return _certifieds;
         }
 
 

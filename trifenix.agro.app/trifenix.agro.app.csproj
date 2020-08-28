@@ -484,6 +484,7 @@
     <None Include="Properties\DataSources\trifenix.agro.app.model_extend.WaitingHarvestExtend.datasource" />
     <None Include="Properties\DataSources\trifenix.connect.agro_model.ApplicationTarget.datasource" />
     <None Include="Properties\DataSources\trifenix.connect.agro_model.Barrack.datasource" />
+    <None Include="Properties\DataSources\trifenix.connect.agro_model.Brand.datasource" />
     <None Include="Properties\DataSources\trifenix.connect.agro_model.BusinessName.datasource" />
     <None Include="Properties\DataSources\trifenix.connect.agro_model.CertifiedEntity.datasource" />
     <None Include="Properties\DataSources\trifenix.connect.agro_model.CostCenter.datasource" />

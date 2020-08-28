@@ -153,4 +153,7 @@
   <data name="PICTURE_PATH_EVENT" xml:space="preserve">
     <value>Imagen de Evento</value>
   </data>
+  <data name="SAG_CODE" xml:space="preserve">
+    <value>Código Producto SAG </value>
+  </data>
 </root>

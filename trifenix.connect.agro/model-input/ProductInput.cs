@@ -36,7 +36,13 @@ namespace trifenix.connect.agro_model_input
         public MeasureType MeasureType { get; set; }
 
 
-        
+        [Unique]
+        [SuggestSearch(StringRelated.SAG_CODE)]
+        public string SagCode { get; set; }
+
+
+
+
         [ReferenceSearch(EntityRelated.DOSES)]
         public DosesInput[] Doses { get; set; }
 

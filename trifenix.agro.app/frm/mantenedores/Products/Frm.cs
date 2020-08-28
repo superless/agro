@@ -34,6 +34,12 @@ namespace trifenix.agro.app.frm.mantenedores.product
         public bool Loading { get; set; } = false;
 
         private bool _addinNew = false;
+
+        private Specie[] _species = null;
+        private Variety[] _vrts = null;
+        private ApplicationTarget[] _targets = null;
+        private CertifiedEntity[] _certifieds = null;
+
         public Frm()
         {
             InitializeComponent();
@@ -93,6 +99,9 @@ namespace trifenix.agro.app.frm.mantenedores.product
 
             var bnames = Cloud.GetElements<Ingredient>(EntityRelated.INGREDIENT);
             bsIngredient.DataSource = bnames;
+
+            var brands = Cloud.GetElements<Brand>(EntityRelated.BRAND);
+            bsBrand.DataSource = brands;
 
             pb.Value = 100;
             lblProgress.Text = "100%";
@@ -397,7 +406,7 @@ namespace trifenix.agro.app.frm.mantenedores.product
 
         private void btnAddDoses_Click(object sender, EventArgs e)
         {
-            var frm = new mantenedores.doses.Frm(null);
+            var frm = new mantenedores.doses.Frm(null, GetSpecies(), GetVarieties(), GetTargets(), GetCerts());
             if (frm.ShowDialog() == DialogResult.OK)
             {
                 var lst = CurrentProduct.Doses.ToList();
@@ -448,7 +457,8 @@ namespace trifenix.agro.app.frm.mantenedores.product
         {
             if (CurrentDoses !=null)
             {
-                var frm = new mantenedores.doses.Frm(CurrentDoses);
+                var frm = new mantenedores.doses.Frm(CurrentDoses, GetSpecies(), GetVarieties(), GetTargets(), GetCerts());
+
                 if (frm.ShowDialog() == DialogResult.OK)
                 {
                     var lst = CurrentProduct.Doses.ToList();
@@ -457,6 +467,64 @@ namespace trifenix.agro.app.frm.mantenedores.product
                     CurrentProduct.Doses = lst.ToArray();
                 }
                 dosesBindingSource.DataSource = CurrentProduct.Doses;
+            }
+        }
+
+      
+
+        public Variety[] GetVarieties() {
+
+            if (_vrts == null)
+            {
+                _vrts = Cloud.GetElements<Variety>(EntityRelated.VARIETY);
+            }
+            return _vrts;
+
+        }
+
+        public Specie[] GetSpecies() {
+
+            if (_species == null)
+            {
+                _species = Cloud.GetElements<Specie>(EntityRelated.SPECIE);
+            }
+
+            return _species;
+        }
+
+        public CertifiedEntity[] GetCerts() {
+            if (_certifieds == null)
+            {
+                _certifieds = Cloud.GetElements<CertifiedEntity>(EntityRelated.CERTIFIED_ENTITY);
+            }
+            return _certifieds;
+        }
+
+        public ApplicationTarget[] GetTargets() {
+            if (_targets == null)
+            {
+                _targets = Cloud.GetElements<ApplicationTarget>(EntityRelated.TARGET);
+            }
+            return _targets;
+        }
+
+       
+
+        private void dataGridView1_RowStateChanged(object sender, DataGridViewRowStateChangedEventArgs e)
+        {
+            var dg = (DataGridView)sender;
+
+            var row = e.Row;
+
+            var element = (DosesInput)row.DataBoundItem;
+
+            if (row.Index != -1)
+            {
+                row.Cells[0].Value = string.Join(",", element.IdSpecies.Select(isp => GetSpecies().FirstOrDefault(s => s.Id.Equals(isp)).Name));
+                row.Cells[1].Value = string.Join(",", element.IdVarieties.Select(isp => GetVarieties().FirstOrDefault(s => s.Id.Equals(isp)).Name));
+                row.Cells[2].Value = string.Join(",", element.IdsApplicationTarget.Select(isp => GetTargets().FirstOrDefault(s => s.Id.Equals(isp)).Name));
+
+                dg.Refresh();
             }
         }
     }

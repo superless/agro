@@ -167,5 +167,14 @@ namespace trifenix.connect.agro.resources.dictionary.strings {
                 return ResourceManager.GetString("PICTURE_PATH_EVENT", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Código Producto SAG .
+        /// </summary>
+        public static string SAG_CODE {
+            get {
+                return ResourceManager.GetString("SAG_CODE", resourceCulture);
+            }
+        }
     }
 }
