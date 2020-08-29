@@ -347,8 +347,9 @@ namespace trifenix.agro.app.frm.mantenedores.product
         public object GetList() {
             var products = Cloud.GetElements<Product>(EntityRelated.PRODUCT);
             var mapper = config.CreateMapper();
+            var query = $"index eq {(int)EntityRelated.DOSES} and bl/any(el: el/index eq {(int)BoolRelated.GENERIC_ACTIVE} and el/value eq true) and bl/any(el: el/index eq {(int)BoolRelated.GENERIC_DEFAULT} and el/value eq false)";
 
-            var doses = Cloud.GetElements<Dose>($"index eq {(int)EntityRelated.DOSES} and bl/any(el: el/index eq {(int)BoolRelated.GENERIC_ACTIVE} and el/value eq true)");
+            var doses = Cloud.GetElements<Dose>(query);
 
 
 
@@ -385,6 +386,7 @@ namespace trifenix.agro.app.frm.mantenedores.product
                                 WaitingDays = u.WaitingDays
                             }).ToArray(),
                             WettingRecommendedByHectares = p.WettingRecommendedByHectares
+                            
 
 
 
@@ -409,7 +411,7 @@ namespace trifenix.agro.app.frm.mantenedores.product
             var frm = new mantenedores.doses.Frm(null, GetSpecies(), GetVarieties(), GetTargets(), GetCerts());
             if (frm.ShowDialog() == DialogResult.OK)
             {
-                var lst = CurrentProduct.Doses.ToList();
+                var lst = CurrentProduct.Doses?.ToList()??Array.Empty<DosesInput>().ToList();
                 lst.Add(frm.DosesInput);
                 CurrentProduct.Doses = lst.ToArray();
             }

@@ -62,14 +62,14 @@ namespace trifenix.connect.agro_model_input
         [EnumSearch(EnumRelated.DOSES_APPLICATED_TO)]
         public DosesApplicatedTo DosesApplicatedTo { get; set; }
 
-        [JsonIgnore]
+        
         public bool Active { get; set; }
 
-        [JsonIgnore]
+        
         public bool Default { get; set; }
 
 
-        [JsonIgnore]
+        
         public string ClientId { get; set; }
 
 

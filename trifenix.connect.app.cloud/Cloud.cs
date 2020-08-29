@@ -36,7 +36,7 @@ namespace trifenix.connect.app.cloud
         {
 
             var bus = new ServiceBus(connectionString, "agroqueue");
-            var opInstance = new OperationInstance<T>(element, element.Id, entityName, "POST", string.Empty);
+            var opInstance = new OperationInstance<T>(element, element.Id, entityName, string.IsNullOrWhiteSpace(element.Id)?"POST":"PUT", string.Empty);
 
             await bus.PushElement(opInstance
             , entityName);

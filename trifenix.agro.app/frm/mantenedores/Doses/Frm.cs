@@ -107,7 +107,9 @@ namespace trifenix.agro.app.frm.mantenedores.doses
                 IdVarieties = Array.Empty<string>(),
                 IdSpecies= Array.Empty<string>(),
                 IdsApplicationTarget = Array.Empty<string>(),
-                WaitingToHarvest = Array.Empty<WaitingHarvestInput>()
+                WaitingToHarvest = Array.Empty<WaitingHarvestInput>(),
+                Default = false,
+                Active = true
             } };
             var bl = new BindingList<DosesInput>(lst);
             bsDoses.DataSource = bl;
