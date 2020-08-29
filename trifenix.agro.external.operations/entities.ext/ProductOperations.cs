@@ -54,9 +54,10 @@ namespace trifenix.agro.external.operations.entities.ext
                 // obtiene todas las dosis que no sean por defecto
                 var dosesPrevIds = await queries.GetActiveDosesIdsFromProductId(product.Id);
                 if (dosesPrevIds.Any())
-                    foreach (var idDoses in dosesPrevIds)
+                    foreach (var idDoses in dosesPrevIds) { 
                         // elimina cada dosis, internamente elimina si no hay dependencias, si existen dependencias la desactiva y la deja en el search.
                         await dosesOperation.Remove(idDoses);
+                    }
                 return new RelatedId { index = (int)EntityRelated.DOSES, id = defaultDoses };
             }
             else {
