@@ -529,5 +529,11 @@ namespace trifenix.agro.app.frm.mantenedores.product
                 dg.Refresh();
             }
         }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+                    
+        
+        }
     }
 }
