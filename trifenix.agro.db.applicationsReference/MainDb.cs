@@ -116,7 +116,9 @@ namespace trifenix.agro.db.applicationsReference
 
         public async Task DeleteEntity(string id) {
             
-            await Store.RemoveByIdAsync(id);
+            await Store.RemoveByIdAsync(id, new Microsoft.Azure.Documents.Client.RequestOptions { 
+                PartitionKey = new Microsoft.Azure.Documents.PartitionKey("CosmosEntityName")
+            });
         } 
 
         public IQueryable<T> GetEntities() => Store.Query();

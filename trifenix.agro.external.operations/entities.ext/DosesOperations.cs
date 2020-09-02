@@ -35,7 +35,7 @@ namespace trifenix.agro.external.operations.entities.ext
             var existsInExecution = await existElement.ExistsDosesExecutionOrder(id);
             if (!existsInExecution && !existsInOrder) {
                 await repo.DeleteEntity(id);
-                var query = $"EntityIndex eq {(int)EntityRelated.DOSES} and EntityId eq '{id}')";
+                var query = $"index eq {(int)EntityRelated.DOSES} and id eq '{id}'";
                 search.DeleteElements(query);
                 return;
             }
