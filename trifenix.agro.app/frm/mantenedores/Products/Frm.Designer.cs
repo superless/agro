@@ -105,40 +105,36 @@ namespace trifenix.agro.app.frm.mantenedores.product
             // 
             this.tbxCorrelativo.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsMain, "ClientId", true));
             this.tbxCorrelativo.Enabled = false;
-            this.tbxCorrelativo.Location = new System.Drawing.Point(23, 53);
-            this.tbxCorrelativo.Margin = new System.Windows.Forms.Padding(4);
+            this.tbxCorrelativo.Location = new System.Drawing.Point(17, 43);
             this.tbxCorrelativo.Name = "tbxCorrelativo";
-            this.tbxCorrelativo.Size = new System.Drawing.Size(73, 22);
+            this.tbxCorrelativo.Size = new System.Drawing.Size(56, 20);
             this.tbxCorrelativo.TabIndex = 0;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(23, 30);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Location = new System.Drawing.Point(17, 24);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(76, 17);
+            this.label1.Size = new System.Drawing.Size(57, 13);
             this.label1.TabIndex = 1;
             this.label1.Text = "Correlativo";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(115, 30);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Location = new System.Drawing.Point(86, 24);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(66, 17);
+            this.label2.Size = new System.Drawing.Size(50, 13);
             this.label2.TabIndex = 2;
             this.label2.Text = "Nombre :";
             // 
             // tbxName
             // 
             this.tbxName.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsMain, "Name", true));
-            this.tbxName.Location = new System.Drawing.Point(119, 53);
-            this.tbxName.Margin = new System.Windows.Forms.Padding(4);
+            this.tbxName.Location = new System.Drawing.Point(89, 43);
             this.tbxName.MaxLength = 200;
             this.tbxName.Name = "tbxName";
-            this.tbxName.Size = new System.Drawing.Size(443, 22);
+            this.tbxName.Size = new System.Drawing.Size(333, 20);
             this.tbxName.TabIndex = 3;
             this.tbxName.Validated += new System.EventHandler(this.tbxName_Validated);
             // 
@@ -147,18 +143,16 @@ namespace trifenix.agro.app.frm.mantenedores.product
             this.panel1.BackColor = System.Drawing.Color.White;
             this.panel1.Controls.Add(this.lblDescripcion);
             this.panel1.Location = new System.Drawing.Point(0, -2);
-            this.panel1.Margin = new System.Windows.Forms.Padding(4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1263, 66);
+            this.panel1.Size = new System.Drawing.Size(947, 54);
             this.panel1.TabIndex = 4;
             // 
             // lblDescripcion
             // 
             this.lblDescripcion.AutoSize = true;
-            this.lblDescripcion.Location = new System.Drawing.Point(16, 12);
-            this.lblDescripcion.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblDescripcion.Location = new System.Drawing.Point(12, 10);
             this.lblDescripcion.Name = "lblDescripcion";
-            this.lblDescripcion.Size = new System.Drawing.Size(82, 17);
+            this.lblDescripcion.Size = new System.Drawing.Size(63, 13);
             this.lblDescripcion.TabIndex = 5;
             this.lblDescripcion.Text = "Descripción";
             // 
@@ -181,11 +175,9 @@ namespace trifenix.agro.app.frm.mantenedores.product
             this.gbxItem.Controls.Add(this.label2);
             this.gbxItem.Controls.Add(this.btnSave);
             this.gbxItem.Enabled = false;
-            this.gbxItem.Location = new System.Drawing.Point(284, 71);
-            this.gbxItem.Margin = new System.Windows.Forms.Padding(4);
+            this.gbxItem.Location = new System.Drawing.Point(213, 58);
             this.gbxItem.Name = "gbxItem";
-            this.gbxItem.Padding = new System.Windows.Forms.Padding(4);
-            this.gbxItem.Size = new System.Drawing.Size(962, 610);
+            this.gbxItem.Size = new System.Drawing.Size(722, 496);
             this.gbxItem.TabIndex = 5;
             this.gbxItem.TabStop = false;
             this.gbxItem.Text = "{0}";
@@ -196,21 +188,19 @@ namespace trifenix.agro.app.frm.mantenedores.product
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(586, 82);
-            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label6.Location = new System.Drawing.Point(440, 67);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(93, 17);
+            this.label6.Size = new System.Drawing.Size(71, 13);
             this.label6.TabIndex = 37;
             this.label6.Text = "Código SAG :";
             // 
             // textBox1
             // 
             this.textBox1.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsMain, "SagCode", true));
-            this.textBox1.Location = new System.Drawing.Point(589, 103);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(4);
+            this.textBox1.Location = new System.Drawing.Point(442, 84);
             this.textBox1.MaxLength = 200;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(348, 22);
+            this.textBox1.Size = new System.Drawing.Size(262, 20);
             this.textBox1.TabIndex = 36;
             // 
             // cbBrand
@@ -220,10 +210,10 @@ namespace trifenix.agro.app.frm.mantenedores.product
             this.cbBrand.DisplayMember = "Name";
             this.cbBrand.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbBrand.FormattingEnabled = true;
-            this.cbBrand.Location = new System.Drawing.Point(589, 53);
-            this.cbBrand.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.cbBrand.Location = new System.Drawing.Point(442, 43);
+            this.cbBrand.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.cbBrand.Name = "cbBrand";
-            this.cbBrand.Size = new System.Drawing.Size(347, 24);
+            this.cbBrand.Size = new System.Drawing.Size(261, 21);
             this.cbBrand.TabIndex = 35;
             this.cbBrand.ValueMember = "Id";
             // 
@@ -236,19 +226,20 @@ namespace trifenix.agro.app.frm.mantenedores.product
             this.pnlDoses.Controls.Add(this.btnEditDoses);
             this.pnlDoses.Controls.Add(this.btnRemoveDoses);
             this.pnlDoses.Controls.Add(this.btnAddDoses);
-            this.pnlDoses.Location = new System.Drawing.Point(758, 546);
-            this.pnlDoses.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.pnlDoses.Location = new System.Drawing.Point(568, 432);
+            this.pnlDoses.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pnlDoses.Name = "pnlDoses";
-            this.pnlDoses.Size = new System.Drawing.Size(178, 30);
+            this.pnlDoses.Size = new System.Drawing.Size(134, 24);
             this.pnlDoses.TabIndex = 34;
             // 
             // btnEditDoses
             // 
             this.btnEditDoses.BackgroundImage = global::trifenix.agro.app.Properties.Resources.edit_icon;
             this.btnEditDoses.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnEditDoses.Location = new System.Drawing.Point(99, 3);
+            this.btnEditDoses.Location = new System.Drawing.Point(74, 2);
+            this.btnEditDoses.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnEditDoses.Name = "btnEditDoses";
-            this.btnEditDoses.Size = new System.Drawing.Size(30, 23);
+            this.btnEditDoses.Size = new System.Drawing.Size(22, 19);
             this.btnEditDoses.TabIndex = 32;
             this.btnEditDoses.UseVisualStyleBackColor = true;
             this.btnEditDoses.Click += new System.EventHandler(this.btnEditDoses_Click);
@@ -257,9 +248,10 @@ namespace trifenix.agro.app.frm.mantenedores.product
             // 
             this.btnRemoveDoses.BackgroundImage = global::trifenix.agro.app.Properties.Resources.deleteIcon;
             this.btnRemoveDoses.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnRemoveDoses.Location = new System.Drawing.Point(134, 2);
+            this.btnRemoveDoses.Location = new System.Drawing.Point(100, 2);
+            this.btnRemoveDoses.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnRemoveDoses.Name = "btnRemoveDoses";
-            this.btnRemoveDoses.Size = new System.Drawing.Size(30, 23);
+            this.btnRemoveDoses.Size = new System.Drawing.Size(22, 19);
             this.btnRemoveDoses.TabIndex = 33;
             this.btnRemoveDoses.UseVisualStyleBackColor = true;
             // 
@@ -267,9 +259,10 @@ namespace trifenix.agro.app.frm.mantenedores.product
             // 
             this.btnAddDoses.BackgroundImage = global::trifenix.agro.app.Properties.Resources.add_icon;
             this.btnAddDoses.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnAddDoses.Location = new System.Drawing.Point(62, 2);
+            this.btnAddDoses.Location = new System.Drawing.Point(46, 2);
+            this.btnAddDoses.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnAddDoses.Name = "btnAddDoses";
-            this.btnAddDoses.Size = new System.Drawing.Size(30, 23);
+            this.btnAddDoses.Size = new System.Drawing.Size(22, 19);
             this.btnAddDoses.TabIndex = 31;
             this.btnAddDoses.UseVisualStyleBackColor = true;
             this.btnAddDoses.Click += new System.EventHandler(this.btnAddDoses_Click);
@@ -294,13 +287,13 @@ namespace trifenix.agro.app.frm.mantenedores.product
             this.waitingDaysLabelDataGridViewTextBoxColumn,
             this.dosesApplicatedToDataGridViewTextBoxColumn});
             this.dataGridView1.DataSource = this.dosesBindingSource;
-            this.dataGridView1.Location = new System.Drawing.Point(27, 154);
-            this.dataGridView1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.dataGridView1.Location = new System.Drawing.Point(20, 125);
+            this.dataGridView1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersWidth = 62;
             this.dataGridView1.RowTemplate.Height = 28;
-            this.dataGridView1.Size = new System.Drawing.Size(910, 387);
+            this.dataGridView1.Size = new System.Drawing.Size(682, 303);
             this.dataGridView1.TabIndex = 19;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             this.dataGridView1.RowStateChanged += new System.Windows.Forms.DataGridViewRowStateChangedEventHandler(this.dataGridView1_RowStateChanged);
@@ -409,10 +402,9 @@ namespace trifenix.agro.app.frm.mantenedores.product
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(308, 81);
-            this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label5.Location = new System.Drawing.Point(231, 66);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(90, 17);
+            this.label5.Size = new System.Drawing.Size(69, 13);
             this.label5.TabIndex = 14;
             this.label5.Text = "Tipo Medida:";
             // 
@@ -424,29 +416,27 @@ namespace trifenix.agro.app.frm.mantenedores.product
             this.cbKindMeasure.Items.AddRange(new object[] {
             "KL (Kilo)",
             "LT (Litros)"});
-            this.cbKindMeasure.Location = new System.Drawing.Point(311, 103);
-            this.cbKindMeasure.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.cbKindMeasure.Location = new System.Drawing.Point(233, 84);
+            this.cbKindMeasure.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.cbKindMeasure.Name = "cbKindMeasure";
-            this.cbKindMeasure.Size = new System.Drawing.Size(251, 24);
+            this.cbKindMeasure.Size = new System.Drawing.Size(189, 21);
             this.cbKindMeasure.TabIndex = 13;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(586, 30);
-            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label4.Location = new System.Drawing.Point(440, 24);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(55, 17);
+            this.label4.Size = new System.Drawing.Size(43, 13);
             this.label4.TabIndex = 11;
             this.label4.Text = "Marca :";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(23, 81);
-            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label3.Location = new System.Drawing.Point(17, 66);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(125, 17);
+            this.label3.Size = new System.Drawing.Size(96, 13);
             this.label3.TabIndex = 10;
             this.label3.Text = "Ingrediente Activo:";
             // 
@@ -457,10 +447,10 @@ namespace trifenix.agro.app.frm.mantenedores.product
             this.cbActiveIngredient.DisplayMember = "Name";
             this.cbActiveIngredient.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbActiveIngredient.FormattingEnabled = true;
-            this.cbActiveIngredient.Location = new System.Drawing.Point(27, 107);
-            this.cbActiveIngredient.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.cbActiveIngredient.Location = new System.Drawing.Point(20, 87);
+            this.cbActiveIngredient.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.cbActiveIngredient.Name = "cbActiveIngredient";
-            this.cbActiveIngredient.Size = new System.Drawing.Size(260, 24);
+            this.cbActiveIngredient.Size = new System.Drawing.Size(196, 21);
             this.cbActiveIngredient.TabIndex = 9;
             this.cbActiveIngredient.ValueMember = "Id";
             // 
@@ -470,10 +460,9 @@ namespace trifenix.agro.app.frm.mantenedores.product
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(731, 574);
-            this.btnCancel.Margin = new System.Windows.Forms.Padding(4);
+            this.btnCancel.Location = new System.Drawing.Point(548, 466);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(100, 28);
+            this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 8;
             this.btnCancel.Text = "Cancelar";
             this.btnCancel.UseVisualStyleBackColor = true;
@@ -482,10 +471,9 @@ namespace trifenix.agro.app.frm.mantenedores.product
             // btnSave
             // 
             this.btnSave.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnSave.Location = new System.Drawing.Point(838, 574);
-            this.btnSave.Margin = new System.Windows.Forms.Padding(4);
+            this.btnSave.Location = new System.Drawing.Point(628, 466);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(99, 28);
+            this.btnSave.Size = new System.Drawing.Size(74, 23);
             this.btnSave.TabIndex = 6;
             this.btnSave.Text = "Guardar";
             this.btnSave.UseVisualStyleBackColor = true;
@@ -496,11 +484,9 @@ namespace trifenix.agro.app.frm.mantenedores.product
             this.lbxItems.DataSource = this.bsMain;
             this.lbxItems.DisplayMember = "Name";
             this.lbxItems.FormattingEnabled = true;
-            this.lbxItems.ItemHeight = 16;
-            this.lbxItems.Location = new System.Drawing.Point(18, 84);
-            this.lbxItems.Margin = new System.Windows.Forms.Padding(4);
+            this.lbxItems.Location = new System.Drawing.Point(14, 68);
             this.lbxItems.Name = "lbxItems";
-            this.lbxItems.Size = new System.Drawing.Size(257, 564);
+            this.lbxItems.Size = new System.Drawing.Size(194, 459);
             this.lbxItems.TabIndex = 9;
             this.lbxItems.ValueMember = "Id";
             // 
@@ -508,9 +494,10 @@ namespace trifenix.agro.app.frm.mantenedores.product
             // 
             this.btnDeleteSector.BackgroundImage = global::trifenix.agro.app.Properties.Resources.deleteIcon;
             this.btnDeleteSector.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnDeleteSector.Location = new System.Drawing.Point(134, 2);
+            this.btnDeleteSector.Location = new System.Drawing.Point(100, 2);
+            this.btnDeleteSector.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnDeleteSector.Name = "btnDeleteSector";
-            this.btnDeleteSector.Size = new System.Drawing.Size(30, 23);
+            this.btnDeleteSector.Size = new System.Drawing.Size(22, 19);
             this.btnDeleteSector.TabIndex = 33;
             this.btnDeleteSector.UseVisualStyleBackColor = true;
             // 
@@ -518,9 +505,10 @@ namespace trifenix.agro.app.frm.mantenedores.product
             // 
             this.btnEditSector.BackgroundImage = global::trifenix.agro.app.Properties.Resources.edit_icon;
             this.btnEditSector.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnEditSector.Location = new System.Drawing.Point(99, 3);
+            this.btnEditSector.Location = new System.Drawing.Point(74, 2);
+            this.btnEditSector.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnEditSector.Name = "btnEditSector";
-            this.btnEditSector.Size = new System.Drawing.Size(30, 23);
+            this.btnEditSector.Size = new System.Drawing.Size(22, 19);
             this.btnEditSector.TabIndex = 32;
             this.btnEditSector.UseVisualStyleBackColor = true;
             this.btnEditSector.Click += new System.EventHandler(this.btnEditSector_Click);
@@ -529,9 +517,10 @@ namespace trifenix.agro.app.frm.mantenedores.product
             // 
             this.btnAddSector.BackgroundImage = global::trifenix.agro.app.Properties.Resources.add_icon;
             this.btnAddSector.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnAddSector.Location = new System.Drawing.Point(62, 2);
+            this.btnAddSector.Location = new System.Drawing.Point(46, 2);
+            this.btnAddSector.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnAddSector.Name = "btnAddSector";
-            this.btnAddSector.Size = new System.Drawing.Size(30, 23);
+            this.btnAddSector.Size = new System.Drawing.Size(22, 19);
             this.btnAddSector.TabIndex = 31;
             this.btnAddSector.UseVisualStyleBackColor = true;
             this.btnAddSector.Click += new System.EventHandler(this.btnAddSector_Click);
@@ -542,37 +531,38 @@ namespace trifenix.agro.app.frm.mantenedores.product
             this.pnlButtons.Controls.Add(this.btnDeleteSector);
             this.pnlButtons.Controls.Add(this.btnAddSector);
             this.pnlButtons.Enabled = false;
-            this.pnlButtons.Location = new System.Drawing.Point(100, 651);
-            this.pnlButtons.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.pnlButtons.Location = new System.Drawing.Point(75, 529);
+            this.pnlButtons.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pnlButtons.Name = "pnlButtons";
-            this.pnlButtons.Size = new System.Drawing.Size(178, 30);
+            this.pnlButtons.Size = new System.Drawing.Size(134, 24);
             this.pnlButtons.TabIndex = 4;
             // 
             // pb
             // 
-            this.pb.Location = new System.Drawing.Point(1140, 688);
-            this.pb.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.pb.Location = new System.Drawing.Point(855, 559);
+            this.pb.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pb.Name = "pb";
-            this.pb.Size = new System.Drawing.Size(89, 18);
+            this.pb.Size = new System.Drawing.Size(67, 15);
             this.pb.TabIndex = 9;
             this.pb.Visible = false;
             // 
             // lblProgress
             // 
             this.lblProgress.AutoSize = true;
-            this.lblProgress.Location = new System.Drawing.Point(1081, 688);
+            this.lblProgress.Location = new System.Drawing.Point(811, 559);
+            this.lblProgress.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblProgress.Name = "lblProgress";
             this.lblProgress.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.lblProgress.Size = new System.Drawing.Size(46, 17);
+            this.lblProgress.Size = new System.Drawing.Size(35, 13);
             this.lblProgress.TabIndex = 10;
             this.lblProgress.Text = "label3";
             this.lblProgress.Visible = false;
             // 
             // Frm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1258, 709);
+            this.ClientSize = new System.Drawing.Size(944, 576);
             this.Controls.Add(this.lblProgress);
             this.Controls.Add(this.pb);
             this.Controls.Add(this.pnlButtons);
@@ -581,7 +571,6 @@ namespace trifenix.agro.app.frm.mantenedores.product
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Frm";

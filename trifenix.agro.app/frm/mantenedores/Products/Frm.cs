@@ -16,6 +16,7 @@ using trifenix.connect.agro.resources;
 using trifenix.connect.agro_model;
 using trifenix.connect.agro_model_input;
 using trifenix.connect.app.cloud;
+using trifenix.connect.util;
 
 namespace trifenix.agro.app.frm.mantenedores.product
 {
@@ -108,8 +109,8 @@ namespace trifenix.agro.app.frm.mantenedores.product
             pb.Visible = false;
             lblProgress.Visible = false;
             Loading = false;
-            cbKindMeasure.DataSource = Enum.GetNames(typeof(MeasureType)).
-                Select(o => new { Text = o, Value = (MeasureType)(Enum.Parse(typeof(MeasureType), o)) }).ToList();
+            cbKindMeasure.DataSource = Enum.GetValues(typeof(MeasureType)).Cast<MeasureType>().
+                Select(o => new { Text = o.Description(), Value = o }).ToList();
             cbKindMeasure.DisplayMember = "Text";
             cbKindMeasure.ValueMember = "Value";
 

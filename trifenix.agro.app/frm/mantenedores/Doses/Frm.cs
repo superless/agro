@@ -72,7 +72,9 @@ namespace trifenix.agro.app.frm.mantenedores.doses
 
 
             lblDescripcion.Text = Description();
-            
+            SetHelpers();
+
+
         }
         private void SectorFrm_Load_1(object sender, EventArgs e)
         {
@@ -493,5 +495,35 @@ namespace trifenix.agro.app.frm.mantenedores.doses
                 UpdateCertified();
             }
         }
+
+        private HelpProvider hlpProvider;
+
+
+        private void SetHelpers() {
+
+            hlpProvider = new System.Windows.Forms.HelpProvider();
+
+            hlpProvider.SetShowHelp(cbSizeContainer, true);
+
+            hlpProvider.SetHelpString(cbSizeContainer, "Enter a valid text here.");
+
+
+
+            hlpProvider.SetShowHelp(btnHelpSize, true);
+
+            hlpProvider.SetHelpString(btnHelpSize, "Click this button.");
+
+
+
+            // Help file
+
+            hlpProvider.HelpNamespace = "helpFile.chm";
+
+
+
+            hlpProvider.SetHelpNavigator(cbSizeContainer, HelpNavigator.TableOfContents);
+        }
+
+       
     }
 }

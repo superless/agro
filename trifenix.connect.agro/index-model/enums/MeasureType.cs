@@ -7,9 +7,9 @@ namespace trifenix.connect.agro.index_model.enums
     /// </summary>
     public enum MeasureType
     {
-        [Description("Kilo")]
+        [Description("gr.")]
         KL = 0,
-        [Description("Litro")]
+        [Description("cc.")]
         LT = 1
     }
 }

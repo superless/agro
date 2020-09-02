@@ -525,6 +525,10 @@
       <Project>{FF9ED374-6CB2-42A5-A30E-F00140834DBE}</Project>
       <Name>trifenix.connect.app.cloud</Name>
     </ProjectReference>
+    <ProjectReference Include="..\trifenix.connect\trifenix.connect.csproj">
+      <Project>{75ff7996-b064-40c7-a099-8029dc07262a}</Project>
+      <Name>trifenix.connect</Name>
+    </ProjectReference>
     <ProjectReference Include="..\yofenix\trifenix.connect.mdm.csproj">
       <Project>{E6A09456-0499-4124-9170-C46A70344131}</Project>
       <Name>trifenix.connect.mdm</Name>
@@ -560,7 +564,12 @@
   <ItemGroup>
     <None Include="Resources\09b24e31234507.564a1d23c07b4.gif" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\images.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\help.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
