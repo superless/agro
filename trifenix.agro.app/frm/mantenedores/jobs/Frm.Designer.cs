@@ -58,39 +58,35 @@
             // tbxCorrelativo
             // 
             this.tbxCorrelativo.Enabled = false;
-            this.tbxCorrelativo.Location = new System.Drawing.Point(26, 66);
-            this.tbxCorrelativo.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.tbxCorrelativo.Location = new System.Drawing.Point(17, 43);
             this.tbxCorrelativo.Name = "tbxCorrelativo";
-            this.tbxCorrelativo.Size = new System.Drawing.Size(82, 26);
+            this.tbxCorrelativo.Size = new System.Drawing.Size(56, 20);
             this.tbxCorrelativo.TabIndex = 0;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(26, 37);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Location = new System.Drawing.Point(17, 24);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(84, 20);
+            this.label1.Size = new System.Drawing.Size(57, 13);
             this.label1.TabIndex = 1;
             this.label1.Text = "Correlativo";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(129, 37);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Location = new System.Drawing.Point(86, 24);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(73, 20);
+            this.label2.Size = new System.Drawing.Size(50, 13);
             this.label2.TabIndex = 2;
             this.label2.Text = "Nombre :";
             // 
             // tbxName
             // 
-            this.tbxName.Location = new System.Drawing.Point(134, 66);
-            this.tbxName.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.tbxName.Location = new System.Drawing.Point(89, 43);
             this.tbxName.MaxLength = 200;
             this.tbxName.Name = "tbxName";
-            this.tbxName.Size = new System.Drawing.Size(498, 26);
+            this.tbxName.Size = new System.Drawing.Size(333, 20);
             this.tbxName.TabIndex = 3;
             this.tbxName.Validated += new System.EventHandler(this.tbxName_Validated);
             // 
@@ -98,19 +94,17 @@
             // 
             this.panel1.BackColor = System.Drawing.Color.White;
             this.panel1.Controls.Add(this.lblDescripcion);
-            this.panel1.Location = new System.Drawing.Point(0, -2);
-            this.panel1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.panel1.Location = new System.Drawing.Point(0, -1);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(993, 82);
+            this.panel1.Size = new System.Drawing.Size(662, 53);
             this.panel1.TabIndex = 4;
             // 
             // lblDescripcion
             // 
             this.lblDescripcion.AutoSize = true;
-            this.lblDescripcion.Location = new System.Drawing.Point(18, 15);
-            this.lblDescripcion.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblDescripcion.Location = new System.Drawing.Point(12, 10);
             this.lblDescripcion.Name = "lblDescripcion";
-            this.lblDescripcion.Size = new System.Drawing.Size(92, 20);
+            this.lblDescripcion.Size = new System.Drawing.Size(63, 13);
             this.lblDescripcion.TabIndex = 5;
             this.lblDescripcion.Text = "Descripción";
             // 
@@ -123,11 +117,9 @@
             this.gbxItem.Controls.Add(this.label2);
             this.gbxItem.Controls.Add(this.btnSave);
             this.gbxItem.Enabled = false;
-            this.gbxItem.Location = new System.Drawing.Point(320, 89);
-            this.gbxItem.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.gbxItem.Location = new System.Drawing.Point(213, 58);
             this.gbxItem.Name = "gbxItem";
-            this.gbxItem.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.gbxItem.Size = new System.Drawing.Size(656, 520);
+            this.gbxItem.Size = new System.Drawing.Size(437, 338);
             this.gbxItem.TabIndex = 5;
             this.gbxItem.TabStop = false;
             this.gbxItem.Text = "{0}";
@@ -136,10 +128,9 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(407, 479);
-            this.btnCancel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnCancel.Location = new System.Drawing.Point(271, 311);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(112, 35);
+            this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 8;
             this.btnCancel.Text = "Cancelar";
             this.btnCancel.UseVisualStyleBackColor = true;
@@ -148,10 +139,9 @@
             // btnSave
             // 
             this.btnSave.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnSave.Location = new System.Drawing.Point(528, 479);
-            this.btnSave.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnSave.Location = new System.Drawing.Point(352, 311);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(111, 35);
+            this.btnSave.Size = new System.Drawing.Size(74, 23);
             this.btnSave.TabIndex = 6;
             this.btnSave.Text = "Guardar";
             this.btnSave.UseVisualStyleBackColor = true;
@@ -162,11 +152,9 @@
             this.lbxItems.DataSource = this.bsMain;
             this.lbxItems.DisplayMember = "Name";
             this.lbxItems.FormattingEnabled = true;
-            this.lbxItems.ItemHeight = 20;
-            this.lbxItems.Location = new System.Drawing.Point(20, 105);
-            this.lbxItems.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.lbxItems.Location = new System.Drawing.Point(13, 68);
             this.lbxItems.Name = "lbxItems";
-            this.lbxItems.Size = new System.Drawing.Size(289, 464);
+            this.lbxItems.Size = new System.Drawing.Size(194, 303);
             this.lbxItems.TabIndex = 9;
             this.lbxItems.ValueMember = "Id";
             // 
@@ -183,10 +171,10 @@
             // 
             this.btnDeleteSector.BackgroundImage = global::trifenix.agro.app.Properties.Resources.deleteIcon;
             this.btnDeleteSector.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnDeleteSector.Location = new System.Drawing.Point(151, 3);
-            this.btnDeleteSector.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnDeleteSector.Location = new System.Drawing.Point(101, 2);
+            this.btnDeleteSector.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnDeleteSector.Name = "btnDeleteSector";
-            this.btnDeleteSector.Size = new System.Drawing.Size(34, 29);
+            this.btnDeleteSector.Size = new System.Drawing.Size(23, 19);
             this.btnDeleteSector.TabIndex = 33;
             this.btnDeleteSector.UseVisualStyleBackColor = true;
             // 
@@ -194,10 +182,10 @@
             // 
             this.btnEditSector.BackgroundImage = global::trifenix.agro.app.Properties.Resources.edit_icon;
             this.btnEditSector.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnEditSector.Location = new System.Drawing.Point(111, 4);
-            this.btnEditSector.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnEditSector.Location = new System.Drawing.Point(74, 3);
+            this.btnEditSector.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnEditSector.Name = "btnEditSector";
-            this.btnEditSector.Size = new System.Drawing.Size(34, 29);
+            this.btnEditSector.Size = new System.Drawing.Size(23, 19);
             this.btnEditSector.TabIndex = 32;
             this.btnEditSector.UseVisualStyleBackColor = true;
             this.btnEditSector.Click += new System.EventHandler(this.btnEditSector_Click);
@@ -206,10 +194,10 @@
             // 
             this.btnAddSector.BackgroundImage = global::trifenix.agro.app.Properties.Resources.add_icon;
             this.btnAddSector.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnAddSector.Location = new System.Drawing.Point(70, 3);
-            this.btnAddSector.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnAddSector.Location = new System.Drawing.Point(47, 2);
+            this.btnAddSector.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnAddSector.Name = "btnAddSector";
-            this.btnAddSector.Size = new System.Drawing.Size(34, 29);
+            this.btnAddSector.Size = new System.Drawing.Size(23, 19);
             this.btnAddSector.TabIndex = 31;
             this.btnAddSector.UseVisualStyleBackColor = true;
             this.btnAddSector.Click += new System.EventHandler(this.btnAddSector_Click);
@@ -220,35 +208,38 @@
             this.pnlButtons.Controls.Add(this.btnDeleteSector);
             this.pnlButtons.Controls.Add(this.btnAddSector);
             this.pnlButtons.Enabled = false;
-            this.pnlButtons.Location = new System.Drawing.Point(109, 577);
+            this.pnlButtons.Location = new System.Drawing.Point(73, 375);
+            this.pnlButtons.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pnlButtons.Name = "pnlButtons";
-            this.pnlButtons.Size = new System.Drawing.Size(200, 38);
+            this.pnlButtons.Size = new System.Drawing.Size(133, 25);
             this.pnlButtons.TabIndex = 4;
             // 
             // pb
             // 
-            this.pb.Location = new System.Drawing.Point(876, 611);
+            this.pb.Location = new System.Drawing.Point(584, 397);
+            this.pb.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pb.Name = "pb";
-            this.pb.Size = new System.Drawing.Size(100, 23);
+            this.pb.Size = new System.Drawing.Size(67, 15);
             this.pb.TabIndex = 9;
             this.pb.Visible = false;
             // 
             // lblProgress
             // 
             this.lblProgress.AutoSize = true;
-            this.lblProgress.Location = new System.Drawing.Point(819, 614);
+            this.lblProgress.Location = new System.Drawing.Point(546, 399);
+            this.lblProgress.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblProgress.Name = "lblProgress";
             this.lblProgress.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.lblProgress.Size = new System.Drawing.Size(51, 20);
+            this.lblProgress.Size = new System.Drawing.Size(35, 13);
             this.lblProgress.TabIndex = 10;
             this.lblProgress.Text = "label3";
             this.lblProgress.Visible = false;
             // 
             // Frm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(993, 645);
+            this.ClientSize = new System.Drawing.Size(662, 419);
             this.Controls.Add(this.lblProgress);
             this.Controls.Add(this.pb);
             this.Controls.Add(this.pnlButtons);
@@ -257,12 +248,11 @@
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Frm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Cargo";
+            this.Text = "Marca";
             this.Load += new System.EventHandler(this.SectorFrm_Load_1);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

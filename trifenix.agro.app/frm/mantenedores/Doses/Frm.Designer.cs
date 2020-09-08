@@ -93,6 +93,7 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
             this.ValidationForm = new System.Windows.Forms.ErrorProvider(this.components);
+            this.ttHelp = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.bsDoses)).BeginInit();
             this.panel1.SuspendLayout();
             this.gbxItem.SuspendLayout();
@@ -200,6 +201,7 @@
             this.btnHelpSize.Name = "btnHelpSize";
             this.btnHelpSize.Size = new System.Drawing.Size(22, 19);
             this.btnHelpSize.TabIndex = 38;
+            this.ttHelp.SetToolTip(this.btnHelpSize, " Determina a cuantos litros se le debe asignar la dosis.");
             this.btnHelpSize.UseVisualStyleBackColor = true;
             // 
             // label16
@@ -745,6 +747,11 @@
             // 
             this.ValidationForm.ContainerControl = this;
             // 
+            // ttHelp
+            // 
+            this.ttHelp.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.ttHelp.ToolTipTitle = "Ayuda";
+            // 
             // Frm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -854,5 +861,6 @@
         private System.Windows.Forms.ComboBox cbSizeContainer;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Button btnHelpSize;
+        private System.Windows.Forms.ToolTip ttHelp;
     }
 }
