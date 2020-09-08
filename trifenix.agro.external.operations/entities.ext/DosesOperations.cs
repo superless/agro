@@ -68,8 +68,7 @@ namespace trifenix.agro.external.operations.entities.ext
 
             
             var dose = new Dose {
-                Id = id,
-                
+                Id = id,                
                 LastModified = DateTime.Now,
                 ApplicationDaysInterval = dosesInput.ApplicationDaysInterval,
                 HoursToReEntryToBarrack = dosesInput.HoursToReEntryToBarrack,
@@ -91,9 +90,15 @@ namespace trifenix.agro.external.operations.entities.ext
                 }).ToList(),
                 WettingRecommendedByHectares = dosesInput.WettingRecommendedByHectares
             };
+
+
             if (!isBatch)
                 return await Save(dose);
+
+
             await repo.CreateEntityContainer(dose);
+
+
             return new ExtPostContainer<string> {
                 IdRelated = id,
                 MessageResult = ExtMessageResult.Ok
