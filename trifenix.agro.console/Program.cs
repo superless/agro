@@ -10,6 +10,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using trifenix.agro.db;
 using trifenix.agro.db.applicationsReference;
+using trifenix.agro.db.applicationsReference.agro.Common;
+using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.external.operations;
 using trifenix.agro.search.operations;
 using trifenix.connect.agro.index_model.enums;
@@ -35,7 +37,10 @@ namespace trifenix.agro.console {
 
             var agroDbArguments = new AgroDbArguments { EndPointUrl = "https://agrodb.documents.azure.com:443/", NameDb = "agrodb", PrimaryKey = "tsbucd6u03LZ7QR5QJKKdUdGRSmcVT4U9iSvWUbOm4kx5omw0xqyv2wRDdxciVpG27uBxnX9wx5cjfvPSmIrSw==" };
             var search = new AgroSearch<GeographyPoint>("agrocloud", "6D2BA6AF3373D17A341F7A099BA8FA6A", new CorsOptions(Environment.GetEnvironmentVariable("Search_allowedOrigins", EnvironmentVariableTarget.Process).Split(";")));
-            var agro = new AgroManager(agroDbArguments, null, null, null, search, null, false);
+
+            
+
+            var agro = new AgroManager(new DbConnect(agroDbArguments), null, null, null, search, null, false);
 
             //var assm = typeof(BusinessName).Assembly;
             //var types = assm.GetTypes().Where(type => type.GetProperty("CosmosEntityName") != null && !(new[] { typeof(EntityContainer), typeof(User), typeof(UserActivity), typeof(Comment) }).Contains(type)).ToList();

@@ -20,6 +20,7 @@ using trifenix.agro.external.operations.entities.ext;
 using trifenix.agro.external.operations.entities.fields;
 using trifenix.agro.external.operations.entities.main;
 using trifenix.agro.external.operations.entities.orders;
+using trifenix.agro.microsoftgraph.interfaces;
 using trifenix.agro.microsoftgraph.operations;
 using trifenix.agro.model.external.Input;
 using trifenix.agro.search.interfaces;
@@ -31,17 +32,60 @@ using trifenix.connect.agro_model;
 using trifenix.connect.agro_model_input;
 
 namespace trifenix.agro.external.operations {
+
+
+    /// <summary>
+    /// Enlaces a base de datos, para las distintas operaicones
+    /// </summary>
+    public class DbConnect : IDbConnect
+    {
+        public DbConnect(AgroDbArguments arguments)
+        {
+            Arguments = arguments;
+        }
+
+        // argumentos de base de datos
+        public AgroDbArguments Arguments { get; }
+
+
+        // batchstore usado para realizar operaciones en batch en la base de datos.
+        public ICosmosStore<EntityContainer> BatchStore =>   new CosmosStore<EntityContainer>(new CosmosStoreSettings(Arguments.NameDb, Arguments.EndPointUrl, Arguments.PrimaryKey));
+
+        // consultas comunes.
+        public ICommonQueries CommonQueries => new CommonQueries(Arguments);
+
+
+        // Elementos en existencia.
+        public IExistElement ExistsElements(bool isBatch) => isBatch? (IExistElement) new BatchExistsElements(Arguments) : new CosmosExistElement(Arguments);
+
+
+        // Operaciones comunes en la base de datgos
+        public ICommonDbOperations<T> GetCommonDbOp<T>() where T : DocumentBase => new CommonDbOperations<T>();
+
+
+        // Operaciones comunes en la base de datos (CRUD).
+        public IMainGenericDb<T> GetMainDb<T>() where T : DocumentBase
+        {
+            return new MainGenericDb<T>(Arguments);
+        }
+
+        // 
+        public IGraphApi GraphApi => new GraphApi(Arguments);
+    }
+
+
+
     public class AgroManager : IAgroManager<GeographyPoint> {
 
-        private readonly AgroDbArguments Arguments;
+        private readonly IDbConnect dbConnect;
         private readonly IEmail _email;
         private readonly IUploadImage _uploadImage;
         private readonly IWeatherApi _weatherApi;
         private readonly string UserId;
         private readonly bool isBatch;
 
-        public AgroManager(AgroDbArguments arguments, IEmail email, IUploadImage uploadImage, IWeatherApi weatherApi, IAgroSearch<GeographyPoint> searchServiceInstance, string ObjectIdAAD, bool _isBatch) {
-            Arguments = arguments;
+        public AgroManager(IDbConnect dbConnect, IEmail email, IUploadImage uploadImage, IWeatherApi weatherApi, IAgroSearch<GeographyPoint> searchServiceInstance, string ObjectIdAAD, bool _isBatch) {
+            this.dbConnect = dbConnect;
             _email = email;
             _uploadImage = uploadImage;
             _weatherApi = weatherApi;
@@ -54,17 +98,19 @@ namespace trifenix.agro.external.operations {
             isBatch = _isBatch;
         }
 
-        private IMainGenericDb<T> GetMainDb<T>() where T : DocumentBase => new MainGenericDb<T>(Arguments);
+        private IMainGenericDb<T> GetMainDb<T>() where T : DocumentBase => dbConnect.GetMainDb<T>();
 
-        private ICommonDbOperations<T> GetCommonDbOp<T>() where T : DocumentBase => new CommonDbOperations<T>();
+        private ICommonDbOperations<T> GetCommonDbOp<T>() where T : DocumentBase => dbConnect.GetCommonDbOp<T>();
 
-        public ICosmosStore<EntityContainer> BatchStore => new CosmosStore<EntityContainer>(new CosmosStoreSettings(Arguments.NameDb, Arguments.EndPointUrl, Arguments.PrimaryKey));
+        public ICosmosStore<EntityContainer> BatchStore => dbConnect.BatchStore;
+
+        public IExistElement ExistsElements => dbConnect.ExistsElements(isBatch);
+
+        private ICommonQueries CommonQueries => dbConnect.CommonQueries;
 
         public IAgroSearch<GeographyPoint> Search { get; }
 
-        public IExistElement ExistsElements => isBatch ? (IExistElement)new BatchExistsElements(Arguments) : new CosmosExistElement(Arguments);
-
-        private ICommonQueries CommonQueries => new CommonQueries(Arguments);
+       
 
         private IValidator Validators => new Validator(new Dictionary<string, IValidate> { { "ReferenceAttribute", new ReferenceValidation(ExistsElements) }, { "RequiredAttribute", new RequiredValidation() }, { "UniqueAttribute", new UniqueValidation(ExistsElements) } });
 
@@ -98,7 +144,7 @@ namespace trifenix.agro.external.operations {
 
         public IGenericOperation<Job, JobInput> Job => new JobOperations(GetMainDb<Job>(), ExistsElements, Search, GetCommonDbOp<Job>(), Validators);
 
-        public IGenericOperation<UserApplicator, UserApplicatorInput> UserApplicator => new UserOperations(GetMainDb<UserApplicator>(), ExistsElements, Search, new GraphApi(Arguments), GetCommonDbOp<UserApplicator>(), Validators);
+        public IGenericOperation<UserApplicator, UserApplicatorInput> UserApplicator => new UserOperations(GetMainDb<UserApplicator>(), ExistsElements, Search, dbConnect.GraphApi , GetCommonDbOp<UserApplicator>(), Validators);
 
         public IGenericOperation<Nebulizer, NebulizerInput> Nebulizer => new NebulizerOperations(GetMainDb<Nebulizer>(), ExistsElements, Search, GetCommonDbOp<Nebulizer>(), Validators);
         

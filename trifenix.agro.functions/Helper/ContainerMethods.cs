@@ -21,7 +21,7 @@ namespace trifenix.agro.functions.Helper
             var uploadImage = new UploadImage(Environment.GetEnvironmentVariable("StorageConnectionStrings", EnvironmentVariableTarget.Process));
             var weatherApi = new WeatherApi(Environment.GetEnvironmentVariable("KeyWeatherApi", EnvironmentVariableTarget.Process));
             var searchServiceInstance = new AgroSearch<GeographyPoint>(Environment.GetEnvironmentVariable("SearchServiceName", EnvironmentVariableTarget.Process), Environment.GetEnvironmentVariable("SearchServiceKey", EnvironmentVariableTarget.Process), new CorsOptions(Environment.GetEnvironmentVariable("Search_allowedOrigins", EnvironmentVariableTarget.Process).Split(";")));
-            return new AgroManager(ConfigManager.GetDbArguments, email, uploadImage, weatherApi, searchServiceInstance, ObjectIdAAD, isBatch);
+            return new AgroManager(new DbConnect(ConfigManager.GetDbArguments), email, uploadImage, weatherApi, searchServiceInstance, ObjectIdAAD, isBatch);
         }
 
         public static JsonResult GetJsonPostContainer<T>(ExtPostContainer<T> containerResponse, ILogger log){

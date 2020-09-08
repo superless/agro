@@ -6,7 +6,9 @@ using trifenix.agro.model.external.Input;
 using trifenix.connect.agro_model;
 using trifenix.connect.agro_model_input;
 
-namespace trifenix.agro.external.interfaces {
+namespace trifenix.agro.external.interfaces
+{
+
     public interface IAgroManager<T> {
 
         ICosmosStore<EntityContainer> BatchStore { get; }
