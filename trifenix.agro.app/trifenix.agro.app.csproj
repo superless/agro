@@ -346,6 +346,12 @@
     <Compile Include="frm\mantenedores\jobs\Frm.Designer.cs">
       <DependentUpon>Frm.cs</DependentUpon>
     </Compile>
+    <Compile Include="frm\mantenedores\PhenologicalEvent\Frm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm\mantenedores\PhenologicalEvent\Frm.Designer.cs">
+      <DependentUpon>Frm.cs</DependentUpon>
+    </Compile>
     <Compile Include="frm\mantenedores\PlotLand\Frm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -437,6 +443,9 @@
       <DependentUpon>Frm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frm\mantenedores\jobs\Frm.resx">
+      <DependentUpon>Frm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm\mantenedores\PhenologicalEvent\Frm.resx">
       <DependentUpon>Frm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frm\mantenedores\PlotLand\Frm.resx">

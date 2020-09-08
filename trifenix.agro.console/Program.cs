@@ -40,7 +40,7 @@ namespace trifenix.agro.console {
 
             
 
-            var agro = new AgroManager(new DbConnect(agroDbArguments), null, null, null, search, null, false);
+            var agro = new AgroManager<GeographyPoint>(new DbConnect(agroDbArguments), null, null, null, search, null, false);
 
             //var assm = typeof(BusinessName).Assembly;
             //var types = assm.GetTypes().Where(type => type.GetProperty("CosmosEntityName") != null && !(new[] { typeof(EntityContainer), typeof(User), typeof(UserActivity), typeof(Comment) }).Contains(type)).ToList();
