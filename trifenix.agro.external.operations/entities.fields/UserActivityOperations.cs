@@ -17,11 +17,11 @@ using trifenix.connect.mdm.enums;
 
 namespace trifenix.agro.external.operations.entities.fields {
 
-    public class UserActivityOperations : MainOperation<UserActivity, UserActivityInput>, IGenericOperation<UserActivity, UserActivityInput> {
+    public class UserActivityOperations<T> : MainOperation<UserActivity, UserActivityInput>, IGenericOperation<UserActivity, UserActivityInput> {
 
         private readonly string UserId;
 
-        public UserActivityOperations(IMainGenericDb<UserActivity> repo, IExistElement existElement, IAgroSearch<GeographyPoint> search, ICommonDbOperations<UserActivity> commonDb, string userId, IValidator validator) : base(repo, existElement, search, commonDb, validator) {
+        public UserActivityOperations(IMainGenericDb<UserActivity> repo, IExistElement existElement, IAgroSearch<T> search, ICommonDbOperations<UserActivity> commonDb, string userId, IValidator validator) : base(repo, existElement, search, commonDb, validator) {
             UserId = userId;
         }
 
