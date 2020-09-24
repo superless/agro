@@ -16,11 +16,11 @@ using trifenix.connect.mdm.enums;
 namespace trifenix.agro.external.operations.entities.main
 {
 
-    public class UserOperations : MainOperation<UserApplicator, UserApplicatorInput>, IGenericOperation<UserApplicator, UserApplicatorInput> {
+    public class UserOperations<T> : MainOperation<UserApplicator, UserApplicatorInput,T>, IGenericOperation<UserApplicator, UserApplicatorInput> {
 
         private readonly IGraphApi graphApi;
 
-        public UserOperations(IMainGenericDb<UserApplicator> repo, IExistElement existElement, IAgroSearch<GeographyPoint> search, IGraphApi graphApi, ICommonDbOperations<UserApplicator> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
+        public UserOperations(IMainGenericDb<UserApplicator> repo, IExistElement existElement, IAgroSearch<T> search, IGraphApi graphApi, ICommonDbOperations<UserApplicator> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
             this.graphApi = graphApi;
         }
 

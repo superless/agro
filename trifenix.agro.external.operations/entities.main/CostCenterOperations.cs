@@ -14,8 +14,8 @@ using trifenix.connect.mdm.enums;
 
 namespace trifenix.agro.external.operations.entities.main
 {
-    public class CostCenterOperations : MainOperation<CostCenter, CostCenterInput>, IGenericOperation<CostCenter, CostCenterInput> {
-        public CostCenterOperations(IMainGenericDb<CostCenter> repo, IExistElement existElement, IAgroSearch<GeographyPoint> search, ICommonDbOperations<CostCenter> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
+    public class CostCenterOperations<T> : MainOperation<CostCenter, CostCenterInput,T>, IGenericOperation<CostCenter, CostCenterInput> {
+        public CostCenterOperations(IMainGenericDb<CostCenter> repo, IExistElement existElement, IAgroSearch<T> search, ICommonDbOperations<CostCenter> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
 
         public Task Remove(string id) {
             throw new NotImplementedException();

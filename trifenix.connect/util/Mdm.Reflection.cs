@@ -178,6 +178,8 @@ namespace trifenix.connect.util
             /// <param name="nms">namespace donde se encuentra la clase que corresponde a la entidad</param>
             /// <returns>la clase que tiene el atributo BaseIndexAttribute y el índice indicado</returns>
             public static Type GetEntityType(int index, Type typeOfAssembly, string nms) => GetEntityType(index, Assembly.GetAssembly(typeOfAssembly), nms);
+
+
             /// <summary>
             /// obtiene el tipo de la clase de acuerdo al índice
             /// el índice identifica un entitySearch.

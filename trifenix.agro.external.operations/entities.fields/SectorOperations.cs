@@ -15,7 +15,7 @@ using trifenix.connect.mdm.enums;
 namespace trifenix.agro.external.operations.entities.fields
 {
 
-    public class SectorOperations<T> : MainOperation<Sector, SectorInput>, IGenericOperation<Sector, SectorInput> {
+    public class SectorOperations<T> : MainOperation<Sector, SectorInput,T>, IGenericOperation<Sector, SectorInput> {
         public SectorOperations(IMainGenericDb<Sector> repo, IExistElement existElement, IAgroSearch<T> search, ICommonDbOperations<Sector> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
 
         public Task Remove(string id) {

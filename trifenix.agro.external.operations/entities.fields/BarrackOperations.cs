@@ -18,11 +18,11 @@ using trifenix.connect.mdm.enums;
 namespace trifenix.agro.external.operations.entities.fields
 {
 
-    public class BarrackOperations : MainOperation<Barrack,BarrackInput>, IGenericOperation<Barrack, BarrackInput> {
+    public class BarrackOperations<T> : MainOperation<Barrack,BarrackInput,T>, IGenericOperation<Barrack, BarrackInput> {
 
         private readonly ICommonQueries commonQueries;
 
-        public BarrackOperations(IMainGenericDb<Barrack> repo, IExistElement existElement, IAgroSearch<GeographyPoint> search, ICommonQueries commonQueries, ICommonDbOperations<Barrack> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
+        public BarrackOperations(IMainGenericDb<Barrack> repo, IExistElement existElement, IAgroSearch<T> search, ICommonQueries commonQueries, ICommonDbOperations<Barrack> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
             this.commonQueries = commonQueries;
         }
 

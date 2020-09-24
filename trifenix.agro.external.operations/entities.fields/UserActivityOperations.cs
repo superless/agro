@@ -17,7 +17,7 @@ using trifenix.connect.mdm.enums;
 
 namespace trifenix.agro.external.operations.entities.fields {
 
-    public class UserActivityOperations<T> : MainOperation<UserActivity, UserActivityInput>, IGenericOperation<UserActivity, UserActivityInput> {
+    public class UserActivityOperations<T> : MainOperation<UserActivity, UserActivityInput, T>, IGenericOperation<UserActivity, UserActivityInput> {
 
         private readonly string UserId;
 

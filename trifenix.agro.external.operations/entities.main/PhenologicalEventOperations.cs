@@ -16,8 +16,8 @@ using trifenix.connect.mdm.enums;
 
 namespace trifenix.agro.external.operations.entities.main
 {
-    public class PhenologicalEventOperations : MainOperation<PhenologicalEvent, PhenologicalEventInput>, IGenericOperation<PhenologicalEvent, PhenologicalEventInput> {
-        public PhenologicalEventOperations(IMainGenericDb<PhenologicalEvent> repo, IExistElement existElement, IAgroSearch<GeographyPoint> search, ICommonDbOperations<PhenologicalEvent> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
+    public class PhenologicalEventOperations<T> : MainOperation<PhenologicalEvent, PhenologicalEventInput,T>, IGenericOperation<PhenologicalEvent, PhenologicalEventInput> {
+        public PhenologicalEventOperations(IMainGenericDb<PhenologicalEvent> repo, IExistElement existElement, IAgroSearch<T> search, ICommonDbOperations<PhenologicalEvent> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
 
         public override async Task Validate(PhenologicalEventInput phenologicalEventInput) {
             await base.Validate(phenologicalEventInput);

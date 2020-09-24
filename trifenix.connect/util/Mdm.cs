@@ -349,11 +349,7 @@ namespace trifenix.connect.util
         public static IRelatedId[] GetReferences(Dictionary<BaseIndexAttribute, object> elements, Type typeToCast) {
 
             try
-            {
-                /*
-                 * var array = elements.Where(s => !s.Key.IsEntity && s.Key.KindIndex == (int)related).SelectMany(s => GetArrayOfElements<T>(s, typeof(T2_Cast), castGeoToSearch)).ToList();
-                    return !array.Any() ? Array.Empty<T2_Cast>() : (IEnumerable<T2_Cast>)array.Cast<T2_Cast>();
-                 */
+            {   
                 var array = elements.Where(s => s.Key.IsEntity && s.Key.KindIndex == (int)KindEntityProperty.REFERENCE);
 
                 var refes = array.SelectMany(s => GetEntityProperty(s.Key.Index, s.Value, typeToCast)).ToArray();

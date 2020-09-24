@@ -14,8 +14,8 @@ using trifenix.connect.mdm.enums;
 
 namespace trifenix.agro.external.operations.entities.ext
 {
-    public class CertifiedEntityOperations : MainOperation<CertifiedEntity, CertifiedEntityInput>, IGenericOperation<CertifiedEntity, CertifiedEntityInput> {
-        public CertifiedEntityOperations(IMainGenericDb<CertifiedEntity> repo, IExistElement existElement, IAgroSearch<GeographyPoint> search, ICommonDbOperations<CertifiedEntity> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
+    public class CertifiedEntityOperations<T> : MainOperation<CertifiedEntity, CertifiedEntityInput,T>, IGenericOperation<CertifiedEntity, CertifiedEntityInput> {
+        public CertifiedEntityOperations(IMainGenericDb<CertifiedEntity> repo, IExistElement existElement, IAgroSearch<T> search, ICommonDbOperations<CertifiedEntity> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
 
         public Task Remove(string id) {
             throw new NotImplementedException();

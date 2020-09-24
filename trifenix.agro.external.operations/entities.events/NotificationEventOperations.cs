@@ -23,41 +23,26 @@ namespace trifenix.agro.external.operations.entities.events
     /// <summary>
     /// Todos las funciones necesarias para interactuar con eventos registrados en el monitoreo.
     /// </summary>
-    public class NotificationEventOperations : MainOperation<NotificationEvent, NotificationEventInput>, IGenericOperation<NotificationEvent, NotificationEventInput> {
+    public class NotificationEventOperations<T> : MainOperation<NotificationEvent, NotificationEventInput,T>, IGenericOperation<NotificationEvent, NotificationEventInput> {
         
         private readonly ICommonQueries commonQueries;
         private readonly IEmail email;
         private readonly IUploadImage uploadImage;
         private readonly IWeatherApi weather;
 
-        public NotificationEventOperations(IMainGenericDb<NotificationEvent> repo, IExistElement existElement, IAgroSearch<GeographyPoint> search, ICommonQueries commonQueries, IEmail email, IUploadImage uploadImage, IWeatherApi weather, ICommonDbOperations<NotificationEvent> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
+        public NotificationEventOperations(IMainGenericDb<NotificationEvent> repo, IExistElement existElement, IAgroSearch<T> search, ICommonQueries commonQueries, IEmail email, IUploadImage uploadImage, IWeatherApi weather, ICommonDbOperations<NotificationEvent> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
             this.commonQueries = commonQueries;
             this.email = email;
             this.uploadImage = uploadImage;
             this.weather = weather;
         }
 
+        //TODO: remove
         public Task Remove(string id) {
             throw new NotImplementedException();
         }
 
-        //public async Task<string> Validate(NotificationEventInput input) {
-        //    string errors = string.Empty;
-        //    if (!string.IsNullOrWhiteSpace(input.Id)) {  //PUT
-        //        var existsId = await existElement.ExistsById<NotificationEvent>(input.Id, false);
-        //        if (!existsId)
-        //            errors += $"No existe notificación con id {input.Id}.";
-        //    }
-        //    var existsBarrack = await existElement.ExistsById<Barrack>(input.IdBarrack, false);
-        //    if (!existsBarrack)
-        //        errors += $"No existe cuartel con id {input.IdBarrack}.";
-        //    if (input.NotificationType == NotificationType.Phenological) {
-        //        var existsPhenologicalEvent = await existElement.ExistsById<PhenologicalEvent>(input.IdPhenologicalEvent, false);
-        //        if (!existsPhenologicalEvent)
-        //            errors += $"No existe evento fenológico con id {input.IdPhenologicalEvent}.";
-        //    }
-        //    return errors.Replace(".",".\r\n");  
-        //}
+     
 
         public async Task<ExtPostContainer<string>> Save(NotificationEvent notificationEvent) {
             //TODO: Revisar

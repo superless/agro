@@ -14,10 +14,10 @@ using trifenix.connect.mdm.enums;
 
 namespace trifenix.agro.external.operations.entities.orders
 {
-    public class PreOrdersOperations : MainOperation<PreOrder, PreOrderInput>, IGenericOperation<PreOrder, PreOrderInput> {
+    public class PreOrdersOperations<T> : MainOperation<PreOrder, PreOrderInput,T>, IGenericOperation<PreOrder, PreOrderInput> {
         private readonly ICommonQueries commonQueries;
 
-        public PreOrdersOperations(IMainGenericDb<PreOrder> repo, IExistElement existElement, IAgroSearch<GeographyPoint> search, ICommonQueries commonQueries, ICommonDbOperations<PreOrder> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
+        public PreOrdersOperations(IMainGenericDb<PreOrder> repo, IExistElement existElement, IAgroSearch<T> search, ICommonQueries commonQueries, ICommonDbOperations<PreOrder> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
             this.commonQueries = commonQueries;
         }
 

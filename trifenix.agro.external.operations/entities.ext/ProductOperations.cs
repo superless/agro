@@ -18,12 +18,12 @@ using trifenix.connect.mdm.enums;
 namespace trifenix.agro.external.operations.entities.ext
 {
 
-    public class ProductOperations : MainOperation<Product, ProductInput>, IGenericOperation<Product, ProductInput> {
+    public class ProductOperations<T> : MainOperation<Product, ProductInput, T>, IGenericOperation<Product, ProductInput> {
 
         private readonly IGenericOperation<Dose, DosesInput> dosesOperation;
         private readonly ICommonQueries queries;
 
-        public ProductOperations(IMainGenericDb<Product> repo, IExistElement existElement, IAgroSearch<GeographyPoint> search, IGenericOperation<Dose, DosesInput> dosesOperation, ICommonDbOperations<Product> commonDb, ICommonQueries queries, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
+        public ProductOperations(IMainGenericDb<Product> repo, IExistElement existElement, IAgroSearch<T> search, IGenericOperation<Dose, DosesInput> dosesOperation, ICommonDbOperations<Product> commonDb, ICommonQueries queries, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
             this.dosesOperation = dosesOperation;
             this.queries = queries;
         }
@@ -70,8 +70,13 @@ namespace trifenix.agro.external.operations.entities.ext
         }
 
         public async Task<ExtPostContainer<string>> SaveInput(ProductInput productInput, bool isBatch) {
+
             await Validate(productInput);
+
+
             var id = !string.IsNullOrWhiteSpace(productInput.Id) ? productInput.Id : Guid.NewGuid().ToString("N");
+
+
             var product = new Product {
                 Id = id,
                 IdBrand = productInput.IdBrand,

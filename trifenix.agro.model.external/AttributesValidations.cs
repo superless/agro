@@ -67,43 +67,35 @@ namespace trifenix.agro.model.external.Input {
     public class RequiredValidation : IValidate {
 
         public async Task Validate(object Obj, params object[] args) {
+
             if (Obj == null)
                 throw new Validation_Exception { ErrorMessages = new List<string> { "Atributo requerido!" } };
+
             bool hasValue = true;
-            if (Obj is IList) {
+
+            if (Obj is IList)
+            {
                 if (Obj is Array)
                     hasValue = ((Array)Obj).Cast<dynamic>().Any();
                 else
                     hasValue = ((IEnumerable<dynamic>)Obj).Any();
             }
             else if (Obj is string)
+            {
                 hasValue = !string.IsNullOrWhiteSpace((string)Obj) && !string.IsNullOrEmpty((string)Obj);
-            else if (Obj is DateTime)
+            }
+            else if (Obj is DateTime) { 
                 hasValue = !((DateTime)Obj).Equals(DateTime.MinValue);
+            }
             //else if (IsNumeric(Obj))
             //    hasValue = Convert.ToInt64(Obj) != 0;
-            if(!hasValue)
+            if (!hasValue)
                 throw new Validation_Exception { ErrorMessages = new List<string> { "Atributo requerido!" } };
+
+
         }
 
-        //private bool IsNumeric(object Obj) {
-        //    switch (Type.GetTypeCode(Obj.GetType())) {
-        //        case TypeCode.SByte:
-        //        case TypeCode.Byte:
-        //        case TypeCode.Int16:
-        //        case TypeCode.UInt16:
-        //        case TypeCode.Int32:
-        //        case TypeCode.UInt32:
-        //        case TypeCode.Int64:
-        //        case TypeCode.UInt64:
-        //        case TypeCode.Single:
-        //        case TypeCode.Double:
-        //        case TypeCode.Decimal:
-        //            return true;
-        //        default:
-        //            return false;
-        //    }
-        //}
+        
 
     }
 

@@ -14,8 +14,8 @@ using Microsoft.Spatial;
 
 namespace trifenix.agro.external.operations.entities.main
 {
-    public class SeasonOperations : MainOperation<Season, SeasonInput>, IGenericOperation<Season, SeasonInput> {
-        public SeasonOperations(IMainGenericDb<Season> repo, IExistElement existElement, IAgroSearch<GeographyPoint> search, ICommonDbOperations<Season> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
+    public class SeasonOperations<T> : MainOperation<Season, SeasonInput,T>, IGenericOperation<Season, SeasonInput> {
+        public SeasonOperations(IMainGenericDb<Season> repo, IExistElement existElement, IAgroSearch<T> search, ICommonDbOperations<Season> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
 
         public override async Task Validate(SeasonInput executionOrderStatusInput) {
             await base.Validate(executionOrderStatusInput);

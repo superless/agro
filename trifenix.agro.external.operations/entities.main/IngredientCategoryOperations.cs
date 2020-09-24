@@ -14,9 +14,11 @@ using trifenix.connect.mdm.enums;
 
 namespace trifenix.agro.external.operations.entities.main
 {
-    public class IngredientCategoryOperations : MainOperation<IngredientCategory, IngredientCategoryInput>, IGenericOperation<IngredientCategory, IngredientCategoryInput> {
-        public IngredientCategoryOperations(IMainGenericDb<IngredientCategory> repo, IExistElement existElement, IAgroSearch<GeographyPoint> search, ICommonDbOperations<IngredientCategory> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
+    public class IngredientCategoryOperations<T> : MainOperation<IngredientCategory, IngredientCategoryInput, T>, IGenericOperation<IngredientCategory, IngredientCategoryInput> {
+        public IngredientCategoryOperations(IMainGenericDb<IngredientCategory> repo, IExistElement existElement, IAgroSearch<T> search, ICommonDbOperations<IngredientCategory> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
 
+
+        //TODO : remover ingrediente.
         public Task Remove(string id) {
             throw new NotImplementedException();
         }

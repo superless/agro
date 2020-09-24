@@ -19,12 +19,12 @@ using trifenix.connect.util;
 
 namespace trifenix.agro.external.operations.entities.ext
 {
-    public class DosesOperations : MainOperation<Dose, DosesInput>, IGenericOperation<Dose, DosesInput> {
+    public class DosesOperations<T> : MainOperation<Dose, DosesInput,T>, IGenericOperation<Dose, DosesInput> {
     
         
         private readonly ICommonQueries Queries;
 
-        public DosesOperations(IMainGenericDb<Dose> repo, IExistElement existElement, IAgroSearch<GeographyPoint> search, ICommonDbOperations<Dose> commonDb, ICommonQueries queries, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
+        public DosesOperations(IMainGenericDb<Dose> repo, IExistElement existElement, IAgroSearch<T> search, ICommonDbOperations<Dose> commonDb, ICommonQueries queries, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
             
             Queries = queries;
         }

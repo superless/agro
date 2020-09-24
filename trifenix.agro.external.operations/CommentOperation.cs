@@ -15,9 +15,9 @@ using trifenix.connect.mdm.enums;
 namespace trifenix.agro.external.operations.entities
 {
 
-    public class CommentOperation : MainOperation<Comment, CommentInput>, IGenericOperation<Comment, CommentInput> {
+    public class CommentOperation<T> : MainOperation<Comment, CommentInput, T>, IGenericOperation<Comment, CommentInput> {
 
-        public CommentOperation(IMainGenericDb<Comment> repo, IExistElement existElement, IAgroSearch<GeographyPoint> search, ICommonDbOperations<Comment> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
+        public CommentOperation(IMainGenericDb<Comment> repo, IExistElement existElement, IAgroSearch<T> search, ICommonDbOperations<Comment> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
 
         public async Task<ExtPostContainer<string>> Save(Comment comment) {
             await repo.CreateUpdate(comment);

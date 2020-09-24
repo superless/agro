@@ -9,7 +9,13 @@ using trifenix.agro.model.external.Input;
 using trifenix.agro.validator.interfaces;
 using trifenix.connect.mdm_attributes;
 
+
+
 namespace trifenix.agro.validator.operations {
+
+    /// <summary>
+    /// Valida campos con atributos definidos
+    /// </summary>
     public class Validator : IValidator {
 
         private Dictionary<string, IValidate> Validators { get; }
@@ -27,6 +33,7 @@ namespace trifenix.agro.validator.operations {
             return type.IsPrimitive || Nullable.GetUnderlyingType(type) != null || type.Equals(typeof(string)) || type.Equals(typeof(DateTime));
         }
 
+
         public async Task ValidateRecursively<T_Attr>(object obj) where T_Attr : Attribute {
             var errors = new List<string>();
             object[] args = null;
@@ -35,8 +42,10 @@ namespace trifenix.agro.validator.operations {
             else {
                 int errorCount = 0;
                 var validatorName = typeof(T_Attr).Name;
+
                 if (!Validators.TryGetValue(validatorName, out IValidate validator))
                     throw new NotImplementedException($"No existe la implementacion de la interface IValidate con este nombre '{validatorName}'. ");
+
 
                 var properties = obj.GetType().GetProperties().Where(prop => !Attribute.IsDefined(prop, typeof(BrowsableAttribute)));
                 var properties_Attr = properties.Where(prop => Attribute.IsDefined(prop, typeof(T_Attr))).ToList();

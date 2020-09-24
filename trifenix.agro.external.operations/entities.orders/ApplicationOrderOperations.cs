@@ -21,11 +21,11 @@ using trifenix.connect.mdm.enums;
 namespace trifenix.agro.external.operations.entities.orders
 {
 
-    public class ApplicationOrderOperations : MainOperation<ApplicationOrder, ApplicationOrderInput>, IGenericOperation<ApplicationOrder, ApplicationOrderInput> {
+    public class ApplicationOrderOperations<T> : MainOperation<ApplicationOrder, ApplicationOrderInput,T>, IGenericOperation<ApplicationOrder, ApplicationOrderInput> {
 
         private readonly ICommonQueries commonQueries;
 
-        public ApplicationOrderOperations(IMainGenericDb<ApplicationOrder> repo, IExistElement existElement, IAgroSearch<GeographyPoint> search, ICommonQueries commonQueries, ICommonDbOperations<ApplicationOrder> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
+        public ApplicationOrderOperations(IMainGenericDb<ApplicationOrder> repo, IExistElement existElement, IAgroSearch<T> search, ICommonQueries commonQueries, ICommonDbOperations<ApplicationOrder> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
             this.commonQueries = commonQueries;
         }
 

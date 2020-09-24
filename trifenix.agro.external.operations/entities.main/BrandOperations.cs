@@ -14,7 +14,7 @@ using trifenix.connect.mdm.enums;
 
 namespace trifenix.agro.external.operations.entities.main
 {
-    public class BrandOperations<T> : MainOperation<Brand, BrandInput>, IGenericOperation<Brand, BrandInput>
+    public class BrandOperations<T> : MainOperation<Brand, BrandInput, T>, IGenericOperation<Brand, BrandInput>
     {
         public BrandOperations(IMainGenericDb<Brand> repo, IExistElement existElement, IAgroSearch<T> search, ICommonDbOperations<Brand> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
 

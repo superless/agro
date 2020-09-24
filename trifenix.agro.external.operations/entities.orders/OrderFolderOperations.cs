@@ -14,10 +14,10 @@ using trifenix.connect.mdm.enums;
 
 namespace trifenix.agro.external.operations.entities.orders
 {
-    public class OrderFolderOperations : MainOperation<OrderFolder, OrderFolderInput>, IGenericOperation<OrderFolder, OrderFolderInput> {
+    public class OrderFolderOperations<T> : MainOperation<OrderFolder, OrderFolderInput,T>, IGenericOperation<OrderFolder, OrderFolderInput> {
         private readonly ICommonQueries commonQueries;
 
-        public OrderFolderOperations(IMainGenericDb<OrderFolder> repo, IExistElement existElement, IAgroSearch<GeographyPoint> search, ICommonQueries commonQueries, ICommonDbOperations<OrderFolder> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
+        public OrderFolderOperations(IMainGenericDb<OrderFolder> repo, IExistElement existElement, IAgroSearch<T> search, ICommonQueries commonQueries, ICommonDbOperations<OrderFolder> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
             this.commonQueries = commonQueries;
         }
 

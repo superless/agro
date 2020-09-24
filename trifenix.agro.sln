@@ -99,7 +99,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "forms", "forms", "{23C37ED3
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.connect.app.cloud", "trifenix.connect.app.cloud\trifenix.connect.app.cloud.csproj", "{FF9ED374-6CB2-42A5-A30E-F00140834DBE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "trifenix.agro.external.operations.tests", "trifenix.agro.external.operations.tests\trifenix.agro.external.operations.tests.csproj", "{527EAE4D-1486-4948-BC00-EA8380DB190E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.external.operations.tests", "trifenix.agro.external.operations.tests\trifenix.agro.external.operations.tests.csproj", "{527EAE4D-1486-4948-BC00-EA8380DB190E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
