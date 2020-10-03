@@ -15,7 +15,7 @@ using trifenix.connect.mdm.enums;
 namespace trifenix.agro.external.operations.entities.main
 {
     public class NebulizerOperations<T> : MainOperation<Nebulizer, NebulizerInput,T>, IGenericOperation<Nebulizer, NebulizerInput> {
-        public NebulizerOperations(IMainGenericDb<Nebulizer> repo, IExistElement existElement, IAgroSearch<T> search, ICommonDbOperations<Nebulizer> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
+        public NebulizerOperations(IMainGenericDb<Nebulizer> repo, IAgroSearch<T> search, ICommonDbOperations<Nebulizer> commonDb, IValidatorAttributes<NebulizerInput, Nebulizer> validator) : base(repo, search, commonDb, validator) { }
 
         public Task Remove(string id) {
             throw new NotImplementedException();

@@ -15,7 +15,7 @@ using trifenix.connect.mdm.enums;
 namespace trifenix.agro.external.operations.entities.main
 {
     public class VarietyOperations<T> : MainOperation<Variety, VarietyInput,T>, IGenericOperation<Variety, VarietyInput> {
-        public VarietyOperations(IMainGenericDb<Variety> repo, IExistElement existElement, IAgroSearch<T> search, ICommonDbOperations<Variety> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
+        public VarietyOperations(IMainGenericDb<Variety> repo, IAgroSearch<T> search, ICommonDbOperations<Variety> commonDb, IValidatorAttributes<VarietyInput, Variety> validator) : base(repo, search, commonDb, validator) { }
 
         public Task Remove(string id) {
             throw new NotImplementedException();

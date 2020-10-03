@@ -15,7 +15,7 @@ using trifenix.connect.mdm.enums;
 namespace trifenix.agro.external.operations.entities.fields
 {
     public class PlotLandOperations<T> : MainOperation<PlotLand, PlotLandInput,T>, IGenericOperation<PlotLand, PlotLandInput> {
-        public PlotLandOperations(IMainGenericDb<PlotLand> repo, IExistElement existElement, IAgroSearch<T> search, ICommonDbOperations<PlotLand> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
+        public PlotLandOperations(IMainGenericDb<PlotLand> repo, IAgroSearch<T> search, ICommonDbOperations<PlotLand> commonDb, IValidatorAttributes<PlotLandInput, PlotLand> validator) : base(repo, search, commonDb, validator) { }
 
         public Task Remove(string id) {
             throw new NotImplementedException();

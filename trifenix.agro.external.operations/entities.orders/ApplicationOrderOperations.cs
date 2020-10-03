@@ -25,7 +25,7 @@ namespace trifenix.agro.external.operations.entities.orders
 
         private readonly ICommonQueries commonQueries;
 
-        public ApplicationOrderOperations(IMainGenericDb<ApplicationOrder> repo, IExistElement existElement, IAgroSearch<T> search, ICommonQueries commonQueries, ICommonDbOperations<ApplicationOrder> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
+        public ApplicationOrderOperations(IMainGenericDb<ApplicationOrder> repo,  IAgroSearch<T> search, ICommonQueries commonQueries, ICommonDbOperations<ApplicationOrder> commonDb, IValidatorAttributes<ApplicationOrderInput, ApplicationOrder> validator) : base(repo,  search, commonDb, validator) {
             this.commonQueries = commonQueries;
         }
 

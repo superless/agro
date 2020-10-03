@@ -130,5 +130,16 @@ namespace trifenix.agro.external.operations.tests
 
             return mock.Object;
         }
+
+        public IValidatorAttributes<T_INPUT, T_DB> GetValidator<T_INPUT, T_DB>(bool isBatch)
+            where T_INPUT : InputBase
+            where T_DB : DocumentBase
+        {
+            var mock = new Mock<IValidatorAttributes<T_INPUT, T_DB>>();
+            // definición de métodos.
+
+
+            return mock.Object;
+        }
     }
 }

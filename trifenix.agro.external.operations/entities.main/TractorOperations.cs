@@ -17,7 +17,7 @@ namespace trifenix.agro.external.operations.entities.main
 
     public class TractorOperations<T> : MainOperation<Tractor, TractorInput,T>, IGenericOperation<Tractor, TractorInput> {
 
-        public TractorOperations(IMainGenericDb<Tractor> repo, IExistElement existElement, IAgroSearch<T> search, ICommonDbOperations<Tractor> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
+        public TractorOperations(IMainGenericDb<Tractor> repo,  IAgroSearch<T> search, ICommonDbOperations<Tractor> commonDb, IValidatorAttributes<TractorInput, Tractor> validator) : base(repo, search, commonDb, validator) { }
 
         public Task Remove(string id) {
             throw new NotImplementedException();

@@ -24,7 +24,7 @@ namespace trifenix.agro.external.operations.entities.ext
         
         private readonly ICommonQueries Queries;
 
-        public DosesOperations(IMainGenericDb<Dose> repo, IExistElement existElement, IAgroSearch<T> search, ICommonDbOperations<Dose> commonDb, ICommonQueries queries, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
+        public DosesOperations(IMainGenericDb<Dose> repo,  IAgroSearch<T> search, ICommonDbOperations<Dose> commonDb, ICommonQueries queries, IValidatorAttributes<DosesInput, Dose> validator) : base(repo, search, commonDb, validator) {
             
             Queries = queries;
         }

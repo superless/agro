@@ -1,12 +1,9 @@
-﻿using Microsoft.Spatial;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces;
-using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.interfaces.common;
 using trifenix.agro.external.interfaces;
 using trifenix.agro.search.interfaces;
-using trifenix.agro.validator.interfaces;
 using trifenix.connect.agro_model;
 using trifenix.connect.agro_model_input;
 using trifenix.connect.mdm.containers;
@@ -16,7 +13,7 @@ namespace trifenix.agro.external.operations.entities.main
 {
     public class BusinessNameOperations<T> : MainOperation<BusinessName, BusinessNameInput,T>, IGenericOperation<BusinessName, BusinessNameInput> {
 
-        public BusinessNameOperations(IMainGenericDb<BusinessName> repo, IExistElement existElement, IAgroSearch<T> search, ICommonDbOperations<BusinessName> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
+        public BusinessNameOperations(IMainGenericDb<BusinessName> repo, IAgroSearch<T> search, ICommonDbOperations<BusinessName> commonDb, IValidatorAttributes<BusinessNameInput, BusinessName> validator) : base(repo, search, commonDb, validator) { }
 
         public Task Remove(string id) {
             throw new NotImplementedException();

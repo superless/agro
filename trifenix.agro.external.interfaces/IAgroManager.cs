@@ -12,7 +12,7 @@ namespace trifenix.agro.external.interfaces
     public interface IAgroManager<T> {
 
         ICosmosStore<EntityContainer> BatchStore { get; }
-        IExistElement ExistsElements { get; }
+        
         
         IGenericOperation<UserActivity, UserActivityInput> UserActivity { get; }
         IGenericOperation<ApplicationOrder, ApplicationOrderInput> ApplicationOrder { get; }

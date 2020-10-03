@@ -17,7 +17,7 @@ namespace trifenix.agro.external.operations.entities.orders
     public class OrderFolderOperations<T> : MainOperation<OrderFolder, OrderFolderInput,T>, IGenericOperation<OrderFolder, OrderFolderInput> {
         private readonly ICommonQueries commonQueries;
 
-        public OrderFolderOperations(IMainGenericDb<OrderFolder> repo, IExistElement existElement, IAgroSearch<T> search, ICommonQueries commonQueries, ICommonDbOperations<OrderFolder> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
+        public OrderFolderOperations(IMainGenericDb<OrderFolder> repo, IAgroSearch<T> search, ICommonQueries commonQueries, ICommonDbOperations<OrderFolder> commonDb, IValidatorAttributes<OrderFolderInput, OrderFolder> validator) : base(repo, search, commonDb, validator) {
             this.commonQueries = commonQueries;
         }
 

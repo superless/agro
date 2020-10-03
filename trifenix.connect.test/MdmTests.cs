@@ -27,7 +27,7 @@ namespace trifenix.connect.test
 
         [Fact]
         public void ConvertObjectoToEntity() {
-            // assign
+            
             var objs = new BarrackTest()
             {
                 ClientId = "1",
@@ -89,6 +89,8 @@ namespace trifenix.connect.test
 
 
         }
+
+
     }
 
     public class SearchElement : ISearchEntity<GeoPointTs>

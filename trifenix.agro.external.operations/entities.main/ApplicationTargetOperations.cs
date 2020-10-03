@@ -16,7 +16,7 @@ namespace trifenix.agro.external.operations.entities.main
 {
 
     public class ApplicationTargetOperations<T> : MainOperation<ApplicationTarget, ApplicationTargetInput,T>, IGenericOperation<ApplicationTarget, ApplicationTargetInput> {
-        public ApplicationTargetOperations(IMainGenericDb<ApplicationTarget> repo, IExistElement existElement, IAgroSearch<T> search, ICommonDbOperations<ApplicationTarget> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
+        public ApplicationTargetOperations(IMainGenericDb<ApplicationTarget> repo, IAgroSearch<T> search, ICommonDbOperations<ApplicationTarget> commonDb, IValidatorAttributes<ApplicationTargetInput, ApplicationTarget> validator) : base(repo, search, commonDb, validator) { }
 
         public Task Remove(string id) {
             throw new NotImplementedException();

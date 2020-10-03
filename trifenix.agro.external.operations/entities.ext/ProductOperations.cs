@@ -23,7 +23,7 @@ namespace trifenix.agro.external.operations.entities.ext
         private readonly IGenericOperation<Dose, DosesInput> dosesOperation;
         private readonly ICommonQueries queries;
 
-        public ProductOperations(IMainGenericDb<Product> repo, IExistElement existElement, IAgroSearch<T> search, IGenericOperation<Dose, DosesInput> dosesOperation, ICommonDbOperations<Product> commonDb, ICommonQueries queries, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
+        public ProductOperations(IMainGenericDb<Product> repo, IAgroSearch<T> search, IGenericOperation<Dose, DosesInput> dosesOperation, ICommonDbOperations<Product> commonDb, ICommonQueries queries, IValidatorAttributes<ProductInput, Product> validator) : base(repo, search, commonDb, validator) {
             this.dosesOperation = dosesOperation;
             this.queries = queries;
         }

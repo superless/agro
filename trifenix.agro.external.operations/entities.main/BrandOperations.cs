@@ -16,7 +16,7 @@ namespace trifenix.agro.external.operations.entities.main
 {
     public class BrandOperations<T> : MainOperation<Brand, BrandInput, T>, IGenericOperation<Brand, BrandInput>
     {
-        public BrandOperations(IMainGenericDb<Brand> repo, IExistElement existElement, IAgroSearch<T> search, ICommonDbOperations<Brand> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
+        public BrandOperations(IMainGenericDb<Brand> repo, IAgroSearch<T> search, ICommonDbOperations<Brand> commonDb, IValidatorAttributes<BrandInput, Brand> validator) : base(repo, search, commonDb, validator) { }
 
         public Task Remove(string id)
         {

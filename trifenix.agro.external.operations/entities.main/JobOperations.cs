@@ -15,7 +15,7 @@ using trifenix.connect.mdm.enums;
 namespace trifenix.agro.external.operations.entities.main
 {
     public class JobOperations<T> : MainOperation<Job, JobInput,T>, IGenericOperation<Job, JobInput> {
-        public JobOperations(IMainGenericDb<Job> repo, IExistElement existElement, IAgroSearch<T> search, ICommonDbOperations<Job> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
+        public JobOperations(IMainGenericDb<Job> repo, IAgroSearch<T> search, ICommonDbOperations<Job> commonDb, IValidatorAttributes<JobInput, Job> validator) : base(repo, search, commonDb, validator) { }
 
         public Task Remove(string id) {
             throw new NotImplementedException();

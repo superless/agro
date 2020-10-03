@@ -17,7 +17,7 @@ namespace trifenix.agro.external.operations.entities.orders
     public class PreOrdersOperations<T> : MainOperation<PreOrder, PreOrderInput,T>, IGenericOperation<PreOrder, PreOrderInput> {
         private readonly ICommonQueries commonQueries;
 
-        public PreOrdersOperations(IMainGenericDb<PreOrder> repo, IExistElement existElement, IAgroSearch<T> search, ICommonQueries commonQueries, ICommonDbOperations<PreOrder> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
+        public PreOrdersOperations(IMainGenericDb<PreOrder> repo,  IAgroSearch<T> search, ICommonQueries commonQueries, ICommonDbOperations<PreOrder> commonDb, IValidatorAttributes<PreOrderInput, PreOrder> validator) : base(repo, search, commonDb, validator) {
             this.commonQueries = commonQueries;
         }
 

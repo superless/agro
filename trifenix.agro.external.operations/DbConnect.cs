@@ -10,6 +10,7 @@ using trifenix.agro.external.interfaces;
 using trifenix.agro.microsoftgraph.interfaces;
 using trifenix.agro.microsoftgraph.operations;
 using trifenix.connect.agro_model;
+using trifenix.connect.agro_model_input;
 
 namespace trifenix.agro.external.operations
 {
@@ -47,6 +48,15 @@ namespace trifenix.agro.external.operations
         {
             return new MainGenericDb<T>(Arguments);
         }
+
+        public IValidatorAttributes<T_INPUT, T_DB> GetValidator<T_INPUT, T_DB>(bool isBatch)
+            where T_INPUT : InputBase
+            where T_DB : DocumentBase
+        {
+            return new MainValidator<T_DB, T_INPUT>(ExistsElements(isBatch));
+        }
+
+
 
         // 
         public IGraphApi GraphApi => new GraphApi(Arguments);

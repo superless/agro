@@ -17,7 +17,7 @@ namespace trifenix.agro.external.operations.entities
 
     public class CommentOperation<T> : MainOperation<Comment, CommentInput, T>, IGenericOperation<Comment, CommentInput> {
 
-        public CommentOperation(IMainGenericDb<Comment> repo, IExistElement existElement, IAgroSearch<T> search, ICommonDbOperations<Comment> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
+        public CommentOperation(IMainGenericDb<Comment> repo, IAgroSearch<T> search, ICommonDbOperations<Comment> commonDb, IValidatorAttributes<CommentInput, Comment> validators) : base(repo, search, commonDb, validators) { }
 
         public async Task<ExtPostContainer<string>> Save(Comment comment) {
             await repo.CreateUpdate(comment);

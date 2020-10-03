@@ -20,7 +20,7 @@ namespace trifenix.agro.external.operations.entities.main
 
         private readonly IGraphApi graphApi;
 
-        public UserOperations(IMainGenericDb<UserApplicator> repo, IExistElement existElement, IAgroSearch<T> search, IGraphApi graphApi, ICommonDbOperations<UserApplicator> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
+        public UserOperations(IMainGenericDb<UserApplicator> repo, IAgroSearch<T> search, IGraphApi graphApi, ICommonDbOperations<UserApplicator> commonDb, IValidatorAttributes<UserApplicatorInput, UserApplicator> validator) : base(repo, search, commonDb, validator) {
             this.graphApi = graphApi;
         }
 

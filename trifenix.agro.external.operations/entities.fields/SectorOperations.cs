@@ -16,7 +16,7 @@ namespace trifenix.agro.external.operations.entities.fields
 {
 
     public class SectorOperations<T> : MainOperation<Sector, SectorInput,T>, IGenericOperation<Sector, SectorInput> {
-        public SectorOperations(IMainGenericDb<Sector> repo, IExistElement existElement, IAgroSearch<T> search, ICommonDbOperations<Sector> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
+        public SectorOperations(IMainGenericDb<Sector> repo, IAgroSearch<T> search, ICommonDbOperations<Sector> commonDb, IValidatorAttributes<SectorInput, Sector> validator) : base(repo, search, commonDb, validator) { }
 
         public Task Remove(string id) {
             throw new NotImplementedException();

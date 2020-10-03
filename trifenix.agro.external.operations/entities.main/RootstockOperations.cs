@@ -1,12 +1,9 @@
-﻿using Microsoft.Spatial;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using trifenix.agro.db.interfaces;
-using trifenix.agro.db.interfaces.agro.common;
 using trifenix.agro.db.interfaces.common;
 using trifenix.agro.external.interfaces;
 using trifenix.agro.search.interfaces;
-using trifenix.agro.validator.interfaces;
 using trifenix.connect.agro_model;
 using trifenix.connect.agro_model_input;
 using trifenix.connect.mdm.containers;
@@ -15,7 +12,7 @@ using trifenix.connect.mdm.enums;
 namespace trifenix.agro.external.operations.entities.main
 {
     public class RootstockOperations<T> : MainOperation<Rootstock, RootstockInput,T>, IGenericOperation<Rootstock, RootstockInput> {
-        public RootstockOperations(IMainGenericDb<Rootstock> repo, IExistElement existElement, IAgroSearch<T> search, ICommonDbOperations<Rootstock> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) { }
+        public RootstockOperations(IMainGenericDb<Rootstock> repo, IAgroSearch<T> search, ICommonDbOperations<Rootstock> commonDb, IValidatorAttributes<RootstockInput, Rootstock> validator) : base(repo, search, commonDb, validator) { }
 
         public Task Remove(string id) {
             throw new NotImplementedException();

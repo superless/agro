@@ -21,7 +21,7 @@ namespace trifenix.agro.external.operations.entities.fields {
 
         private readonly string UserId;
 
-        public UserActivityOperations(IMainGenericDb<UserActivity> repo, IExistElement existElement, IAgroSearch<T> search, ICommonDbOperations<UserActivity> commonDb, string userId, IValidator validator) : base(repo, existElement, search, commonDb, validator) {
+        public UserActivityOperations(IMainGenericDb<UserActivity> repo, IAgroSearch<T> search, ICommonDbOperations<UserActivity> commonDb, string userId, IValidatorAttributes<UserActivityInput, UserActivity> validator) : base(repo, search, commonDb, validator) {
             UserId = userId;
         }
 

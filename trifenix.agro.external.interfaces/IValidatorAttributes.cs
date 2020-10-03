@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using trifenix.agro.db;
+using trifenix.agro.db.interfaces.agro.common;
 using trifenix.connect.agro_model_input;
 
 namespace trifenix.agro.external.interfaces
@@ -19,6 +20,8 @@ namespace trifenix.agro.external.interfaces
         /// <param name="elemento">Elemento a validar</param>
         /// <returns>True si validacion es correcta y una colección de mensajes en caso de no ser válido</returns>
         Task<ResultValidate> Valida(T elemento);
+
+        IExistElement GetExistElement();
 
     }
 

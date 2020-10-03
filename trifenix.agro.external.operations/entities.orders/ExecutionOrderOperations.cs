@@ -20,7 +20,7 @@ namespace trifenix.agro.external.operations.entities.orders
     public class ExecutionOrderOperations<T> : MainOperation<ExecutionOrder, ExecutionOrderInput,T>, IGenericOperation<ExecutionOrder, ExecutionOrderInput> {
         private readonly ICommonQueries commonQueries;
 
-        public ExecutionOrderOperations(IMainGenericDb<ExecutionOrder> repo, IExistElement existElement, IAgroSearch<T> search, ICommonQueries commonQueries, ICommonDbOperations<ExecutionOrder> commonDb, IValidator validators) : base(repo, existElement, search, commonDb, validators) {
+        public ExecutionOrderOperations(IMainGenericDb<ExecutionOrder> repo, IAgroSearch<T> search, ICommonQueries commonQueries, ICommonDbOperations<ExecutionOrder> commonDb, IValidatorAttributes<ExecutionOrderInput, ExecutionOrder> validator) : base(repo, search, commonDb, validator) {
             this.commonQueries = commonQueries;
         }
 
