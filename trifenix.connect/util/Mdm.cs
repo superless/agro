@@ -516,6 +516,14 @@ namespace trifenix.connect.util
             return entitySearch;
         }
 
+
+        /// <summary>
+        /// Obtiene un entitySearch desde un objeto, asignando las propiedades que corresponden, si el objeto no implementa las propiedades de IEntitySearch lanzará error, 
+        /// 
+        /// </summary>
+        /// <typeparam name="T">Tipo de dato Geo, dependerá de la implementación</typeparam>
+        /// <param name="entity">objeto a convertir</param>
+        /// <returns></returns>
         public static EntityBaseSearch<T> GetEntityBaseSearch<T>(object entity) {
             var entitySearch = new EntityBaseSearch<T>();
 
@@ -535,14 +543,14 @@ namespace trifenix.connect.util
 
 
         /// <summary>
-        /// Obtiene 
+        /// Obtiene una colección de EntitySearch desde un objeto
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="implements"></param>
-        /// <param name="obj"></param>
-        /// <param name="typeToCast"></param>
-        /// <param name="collection"></param>
-        /// <param name="parent"></param>
+        /// <typeparam name="T">Tipo del dato geo que tiene la entidad</typeparam>
+        /// <param name="implements">retorna los tipos de datos para los elementos de un entity</param>
+        /// <param name="obj">objeto a convertir</param>
+        /// <param name="typeToCast">Tipo a convertir, debe cumplir con las mismas propiedades de IEntitySearch<T></param>
+        /// <param name="collection">usado como recursivo, para obtener los entitySearch internos </param>
+        /// <param name="parent">EntitySearch padre, usado para la recursividad</param>
         /// <returns></returns>
         public static IEntitySearch<T>[] GetEntitySearch<T>(Implements<T> implements, object obj, Type typeToCast, List<IEntitySearch<T>> collection = null, IEntitySearch<T> parent = null)
         {
