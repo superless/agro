@@ -2,8 +2,9 @@
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using trifenix.agro.authentication.interfaces;
+
 using trifenix.agro.authentication.operations;
+using trifenix.connect.interfaces.auth;
 
 namespace trifenix.agro.functions {
     public static class Auth {

@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\trifenix.agro.storage.interfaces\trifenix.agro.storage.interfaces.csproj" />
+    <ProjectReference Include="..\trifenix.connect.interfaces\trifenix.connect.interfaces.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mail;
-using trifenix.agro.email.interfaces;
+using trifenix.connect.interfaces;
 
-namespace trifenix.agro.email.operations {
+namespace trifenix.agro.email.operations
+{
     public class Email : IEmail {
 
         private MailMessage Mail;

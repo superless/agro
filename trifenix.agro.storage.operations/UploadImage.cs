@@ -3,7 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
-using trifenix.agro.storage.interfaces;
+using trifenix.connect.interfaces.upload;
 
 namespace trifenix.agro.storage.operations
 {

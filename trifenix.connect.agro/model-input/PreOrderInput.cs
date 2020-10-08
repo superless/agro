@@ -4,9 +4,11 @@ using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
 using trifenix.connect.agro_model;
 using trifenix.connect.agro_model_input;
+using trifenix.connect.mdm.Validations;
 using trifenix.connect.mdm_attributes;
 
-namespace trifenix.agro.model.external.Input {
+namespace trifenix.connect.agro_model_input
+{
 
     [ReferenceSearchHeader(EntityRelated.PREORDER)]
     public class PreOrderInput : InputBase {

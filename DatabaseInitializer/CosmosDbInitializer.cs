@@ -9,17 +9,15 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using trifenix.agro.cosmosdbinitializer.interfaces;
-using trifenix.agro.db;
-using trifenix.agro.db.exceptions;
-using trifenix.agro.external.interfaces;
-using trifenix.agro.model.external.Input;
 using trifenix.connect.agro_model;
 using trifenix.connect.agro_model_input;
+using trifenix.connect.entities.cosmos;
+using trifenix.connect.interfaces.web;
 using trifenix.connect.mdm.containers;
 using trifenix.connect.mdm.enums;
+using trifenix.connect.mdm.Validations;
 
-namespace trifenix.agro.authentication.operations
+namespace trifenix.connect.agro.external
 {
     public class CosmosDbInitializer : ICosmosDbInitializer {
 

@@ -4,14 +4,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
-using trifenix.agro.db.exceptions;
-using trifenix.agro.model.external.Input;
-using trifenix.agro.validator.interfaces;
 using trifenix.connect.mdm_attributes;
 
 
 
-namespace trifenix.agro.validator.operations {
+namespace trifenix.agro.validator.operations
+{
 
     /// <summary>
     /// Valida campos con atributos definidos

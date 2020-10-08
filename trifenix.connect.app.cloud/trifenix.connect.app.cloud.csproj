@@ -10,7 +10,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\trifenix.agro.search\trifenix.agro.search.operations.csproj" />
     <ProjectReference Include="..\trifenix.agro.servicebus.operations\trifenix.agro.servicebus.operations.csproj" />
   </ItemGroup>
 

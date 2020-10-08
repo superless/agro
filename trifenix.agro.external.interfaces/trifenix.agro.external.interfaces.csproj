@@ -9,9 +9,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\trifenix.agro.db.applicationsReference\trifenix.agro.db.applicationsReference.csproj" />
     <ProjectReference Include="..\trifenix.agro.microsoftgraph.interfaces\trifenix.agro.microsoftgraph.interfaces.csproj" />
     <ProjectReference Include="..\trifenix.agro.model.external\trifenix.agro.model.external.csproj" />
+    <ProjectReference Include="..\trifenix.connect.agro\trifenix.connect.agro.csproj" />
+    <ProjectReference Include="..\trifenix.connect.entities.cosmos\trifenix.connect.entities.cosmos.csproj" />
+    <ProjectReference Include="..\yofenix\trifenix.connect.mdm.csproj" />
   </ItemGroup>
 
 </Project>

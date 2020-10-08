@@ -522,10 +522,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\trifenix.agro.db\trifenix.agro.db.csproj">
-      <Project>{20102C52-DADD-458A-8771-6313919A807F}</Project>
-      <Name>trifenix.agro.db</Name>
-    </ProjectReference>
     <ProjectReference Include="..\trifenix.connect.agro\trifenix.connect.agro.csproj">
       <Project>{70445617-9BA5-4DEF-8380-24A359BFE323}</Project>
       <Name>trifenix.connect.agro</Name>

@@ -6,11 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\trifenix.agro.external.operations\trifenix.agro.external.operations.csproj" />
-    <ProjectReference Include="..\trifenix.agro.search\trifenix.agro.search.operations.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Update="temp.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

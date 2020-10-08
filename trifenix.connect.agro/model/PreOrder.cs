@@ -1,9 +1,9 @@
 ﻿using Cosmonaut;
 using Cosmonaut.Attributes;
-using trifenix.agro.db;
 using trifenix.connect.agro.index_model.enums;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
+using trifenix.connect.entities.cosmos;
 using trifenix.connect.mdm.enums;
 
 namespace trifenix.connect.agro_model

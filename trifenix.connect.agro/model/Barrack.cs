@@ -2,9 +2,9 @@
 using Cosmonaut.Attributes;
 using Microsoft.Azure.Documents.Spatial;
 using System.ComponentModel.DataAnnotations;
-using trifenix.agro.db;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
+using trifenix.connect.entities.cosmos;
 using trifenix.connect.mdm.enums;
 using trifenix.connect.mdm_attributes;
 

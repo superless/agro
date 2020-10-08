@@ -12,12 +12,4 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\trifenix.agro.db.applicationsReference\trifenix.agro.db.applicationsReference.csproj" />
-    <ProjectReference Include="..\trifenix.agro.db.interfaces\trifenix.agro.db.interfaces.csproj" />
-    <ProjectReference Include="..\trifenix.agro.external.interfaces\trifenix.agro.external.interfaces.csproj" />
-    <ProjectReference Include="..\trifenix.agro.microsoftgraph.interfaces\trifenix.agro.microsoftgraph.interfaces.csproj" />
-    <ProjectReference Include="..\trifenix.agro.model.external\trifenix.agro.model.external.csproj" />
-  </ItemGroup>
-
 </Project>

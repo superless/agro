@@ -9,8 +9,4 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\trifenix.agro.translator.interfaces\trifenix.agro.translator.interfaces.csproj" />
-  </ItemGroup>
-
 </Project>

@@ -5,7 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="input\" />
+    <Compile Remove="input\**" />
+    <EmbeddedResource Remove="input\**" />
+    <None Remove="input\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="search\" />
   </ItemGroup>
 
 </Project>

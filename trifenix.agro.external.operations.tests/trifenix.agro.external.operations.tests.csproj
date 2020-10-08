@@ -20,9 +20,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\trifenix.agro.external.interfaces\trifenix.agro.external.interfaces.csproj" />
-    <ProjectReference Include="..\trifenix.agro.external.operations\trifenix.agro.external.operations.csproj" />
-  </ItemGroup>
-
 </Project>

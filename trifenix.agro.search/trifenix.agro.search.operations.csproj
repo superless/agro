@@ -16,27 +16,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\trifenix.agro.agrosearch.interfaces\trifenix.agro.search.interfaces.csproj" />
-    <ProjectReference Include="..\trifenix.agro.db\trifenix.agro.db.csproj" />
-    <ProjectReference Include="..\trifenix.agro.enums\trifenix.agro.enums.csproj" />
-    <ProjectReference Include="..\trifenix.agro.external.interfaces\trifenix.agro.external.interfaces.csproj" />
-    <ProjectReference Include="..\trifenix.connect.mdm.az-search\trifenix.connect.mdm.az-search.csproj" />
+    <ProjectReference Include="..\trifenix.connect.agro.interfaces.external\trifenix.connect.agro.interfaces.external.csproj" />
+    <ProjectReference Include="..\trifenix.connect.agro.queries\trifenix.connect.agro.queries.csproj" />
+    <ProjectReference Include="..\trifenix.connect.mdm.search.model\trifenix.connect.mdm.search.model.csproj" />
+    <ProjectReference Include="..\trifenix.connect.search\trifenix.connect.search.csproj" />
     <ProjectReference Include="..\trifenix.connect\trifenix.connect.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="SearchQueryRes.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>SearchQueryRes.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="SearchQueryRes.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>SearchQueryRes.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

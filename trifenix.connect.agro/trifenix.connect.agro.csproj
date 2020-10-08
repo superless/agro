@@ -5,14 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Cosmonaut" Version="2.11.3" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\trifenix.agro.model.external\trifenix.agro.model.external.csproj" />
-    <ProjectReference Include="..\trifenix.agro.validator.interfaces\trifenix.agro.validator.interfaces.csproj" />
-    <ProjectReference Include="..\trifenix.agro.weather.model\trifenix.agro.weather.model.csproj" />
+    <ProjectReference Include="..\trifenix.connect.entities.cosmos\trifenix.connect.entities.cosmos.csproj" />
+    <ProjectReference Include="..\trifenix.connect.interfaces.db.cosmos\trifenix.connect.interfaces.db.cosmos.csproj" />
     <ProjectReference Include="..\yofenix\trifenix.connect.mdm.csproj" />
   </ItemGroup>
 

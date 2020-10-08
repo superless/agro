@@ -3,22 +3,12 @@ using Cosmonaut.Response;
 using Microsoft.Azure.Search.Models;
 using Microsoft.Spatial;
 using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
-using trifenix.agro.db;
-using trifenix.agro.db.applicationsReference;
-using trifenix.agro.db.applicationsReference.agro.Common;
-using trifenix.agro.db.interfaces.agro.common;
-using trifenix.agro.external.operations;
 using trifenix.agro.search.operations;
-using trifenix.connect.agro.index_model.enums;
-using trifenix.connect.agro_model;
-using static trifenix.connect.util.Mdm.Reflection;
 
-namespace trifenix.agro.console {
+namespace trifenix.agro.console
+{
 
     class Program {
 
