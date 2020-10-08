@@ -1,9 +1,10 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Net.Http;
-using trifenix.agro.translator.interfaces;
+using trifenix.connect.interfaces.upload.translate;
 
-namespace trifenix.agro.translator.operations {
+namespace trifenix.connect.translate
+{
 
     public class GoogleTranslator : IGoogleTranslator {
         public string TranslateText(string textToTranslate) {

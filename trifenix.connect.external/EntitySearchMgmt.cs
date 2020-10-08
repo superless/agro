@@ -3,6 +3,7 @@ using Microsoft.Azure.Search.Models;
 using System.Linq;
 using trifenix.connect.agro_model_input;
 using trifenix.connect.entities.cosmos;
+using trifenix.connect.input;
 using trifenix.connect.interfaces.external;
 using trifenix.connect.interfaces.search;
 using trifenix.connect.mdm.entity_model;

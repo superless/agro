@@ -6,11 +6,12 @@ using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using trifenix.agro.db;
-using trifenix.agro.external.interfaces;
 using trifenix.agro.functions.Helper;
-using trifenix.agro.servicebus.operations;
-using trifenix.connect.agro_model_input;
+using trifenix.connect.agro.bus;
+using trifenix.connect.agro.interfaces.external;
+using trifenix.connect.entities.cosmos;
+using trifenix.connect.input;
+using trifenix.connect.interfaces.external;
 using trifenix.connect.mdm.containers;
 using trifenix.connect.mdm.enums;
 

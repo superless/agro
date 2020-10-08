@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\trifenix.connect.entities.cosmos\trifenix.connect.entities.cosmos.csproj" />
     <ProjectReference Include="..\trifenix.connect.interfaces.db.cosmos\trifenix.connect.interfaces.db.cosmos.csproj" />
+    <ProjectReference Include="..\trifenix.connect\trifenix.connect.csproj" />
     <ProjectReference Include="..\yofenix\trifenix.connect.mdm.csproj" />
   </ItemGroup>
 
@@ -299,6 +300,10 @@
       <LastGenOutput>string_titles.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="weather\" />
   </ItemGroup>
 
 </Project>

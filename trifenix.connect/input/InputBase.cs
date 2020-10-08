@@ -1,8 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿
 
 
 
-namespace trifenix.connect.agro_model_input
+namespace trifenix.connect.input
 {
     public abstract class InputBase {
 

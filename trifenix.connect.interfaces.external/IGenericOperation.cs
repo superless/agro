@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using trifenix.connect.agro_model_input;
 using trifenix.connect.entities.cosmos;
+using trifenix.connect.input;
 using trifenix.connect.mdm.containers;
 
 namespace trifenix.connect.interfaces.external

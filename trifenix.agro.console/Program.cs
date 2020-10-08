@@ -1,11 +1,6 @@
-﻿using Cosmonaut;
-using Cosmonaut.Response;
-using Microsoft.Azure.Search.Models;
-using Microsoft.Spatial;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using trifenix.agro.search.operations;
 
 namespace trifenix.agro.console
 {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using trifenix.connect.agro.index_model.enums;
+using trifenix.connect.input;
 
 namespace trifenix.connect.agro_model_input
 {

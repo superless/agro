@@ -6,11 +6,11 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using trifenix.connect.agro.queries;
-using trifenix.connect.agro_model_input;
 using trifenix.connect.entities.cosmos;
+using trifenix.connect.input;
 using trifenix.connect.interfaces.db.cosmos;
 using trifenix.connect.interfaces.external;
-using trifenix.connect.mdm.Validations;
+using trifenix.connect.mdm.validation_attributes;
 using trifenix.connect.mdm_attributes;
 using trifenix.connect.util;
 

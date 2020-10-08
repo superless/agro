@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using trifenix.agro.db;
-using trifenix.connect.agro_model_input;
-
-namespace trifenix.agro.app.interfaces
+﻿namespace trifenix.agro.app.interfaces
 {
     interface IFenixForm
     {

@@ -1,23 +1,10 @@
-using Cosmonaut;
 using Moq;
 using System;
-using trifenix.agro.db;
-using trifenix.agro.db.interfaces;
-using trifenix.agro.db.interfaces.agro.common;
-using trifenix.agro.db.interfaces.common;
-using trifenix.agro.external.interfaces;
-using trifenix.agro.microsoftgraph.interfaces;
-using trifenix.connect.agro_model;
-using trifenix.connect.mdm.ts_model;
 using Xunit;
-using trifenix.agro.external.operations;
-using trifenix.agro.email.interfaces;
-using trifenix.agro.weather.interfaces;
-using trifenix.agro.search.interfaces;
-using trifenix.agro.storage.interfaces;
-using trifenix.connect.agro_model_input;
 using trifenix.agro.external.operations.tests.data;
 using System.Linq;
+using trifenix.connect.mdm.ts_model;
+using trifenix.connect.agro.interfaces.external;
 
 namespace trifenix.agro.external.operations.tests
 {

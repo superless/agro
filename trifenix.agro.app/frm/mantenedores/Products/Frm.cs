@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using trifenix.agro.app.helper;
 using trifenix.agro.app.interfaces;
-using trifenix.agro.db;
 using trifenix.connect.agro.index_model.enums;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.model_input;

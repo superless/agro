@@ -1,5 +1,5 @@
-﻿using trifenix.connect.agro_model_input;
-using trifenix.connect.entities.cosmos;
+﻿using trifenix.connect.entities.cosmos;
+using trifenix.connect.input;
 using trifenix.connect.mdm.entity_model;
 
 namespace trifenix.connect.interfaces.external
@@ -32,7 +32,11 @@ namespace trifenix.connect.interfaces.external
         IEntitySearch<T>[] GetEntitySearchByInput<T2>(T2 model) where T2 : InputBase;
 
 
-
+        /// <summary>
+        /// Añade un elemento de la base de datos 
+        /// </summary>
+        /// <typeparam name="T2"></typeparam>
+        /// <param name="document"></param>
         void AddDocument<T2>(T2 document) where T2 : DocumentBase;
 
         

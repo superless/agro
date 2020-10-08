@@ -3,7 +3,7 @@ using System.Linq;
 using System.Net.Mail;
 using trifenix.connect.interfaces;
 
-namespace trifenix.agro.email.operations
+namespace trifenix.connect.email
 {
     public class Email : IEmail {
 

@@ -11,6 +11,7 @@ using trifenix.connect.agro.interfaces.external;
 using trifenix.connect.agro_model;
 using trifenix.connect.agro_model_input;
 using trifenix.connect.entities.cosmos;
+using trifenix.connect.input;
 using trifenix.connect.interfaces;
 using trifenix.connect.interfaces.db.cosmos;
 using trifenix.connect.interfaces.external;

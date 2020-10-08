@@ -4,13 +4,14 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Spatial;
 using System;
 using System.Threading.Tasks;
-using trifenix.agro.email.operations;
-using trifenix.agro.external.interfaces;
 using trifenix.agro.external.operations;
 using trifenix.agro.functions.settings;
-using trifenix.agro.search.operations;
 using trifenix.agro.storage.operations;
 using trifenix.agro.weather.operations;
+using trifenix.connect.agro.external;
+using trifenix.connect.agro.external.helper;
+using trifenix.connect.agro.interfaces.external;
+using trifenix.connect.email;
 using trifenix.connect.mdm.containers;
 
 namespace trifenix.agro.functions.Helper

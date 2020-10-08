@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
-using trifenix.connect.agro_model_input;
 using trifenix.connect.entities.cosmos;
+using trifenix.connect.input;
 using trifenix.connect.interfaces.db.cosmos;
 
 namespace trifenix.connect.interfaces.external

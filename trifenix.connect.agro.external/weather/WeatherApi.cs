@@ -1,11 +1,12 @@
 ﻿using Newtonsoft.Json;
 using System.Net.Http;
 using System.Threading.Tasks;
-using trifenix.agro.translator.operations;
-using trifenix.agro.weather.interfaces;
-using trifenix.agro.weather.model;
+using trifenix.connect.agro.interfaces;
+using trifenix.connect.agro_model;
+using trifenix.connect.translate;
 
-namespace trifenix.agro.weather.operations {
+namespace trifenix.agro.weather.operations
+{
     public class WeatherApi : IWeatherApi {
 
         private readonly string _appId;
@@ -16,7 +17,7 @@ namespace trifenix.agro.weather.operations {
 
         public async Task<Weather> GetWeather(float lat, float lon) {
             HttpClient client = new HttpClient();
-            GoogleTranslator translator = new GoogleTranslator();
+            var translator = new GoogleTranslator();
             var requestMessage = new HttpRequestMessage(HttpMethod.Get, "https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&appid=" + _appId);
             var response = await client.SendAsync(requestMessage);
             client.Dispose();

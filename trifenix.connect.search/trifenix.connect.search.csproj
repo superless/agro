@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\trifenix.connect.interfaces.search\trifenix.connect.interfaces.search.csproj" />
+    <ProjectReference Include="..\trifenix.connect.interfaces\trifenix.connect.interfaces.csproj" />
     <ProjectReference Include="..\trifenix.connect.mdm.search.model\trifenix.connect.mdm.search.model.csproj" />
   </ItemGroup>
 

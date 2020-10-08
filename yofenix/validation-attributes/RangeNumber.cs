@@ -1,18 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
 
-namespace trifenix.connect.mdm.Validations
+namespace trifenix.connect.mdm.validation_attributes
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
-    public class RangeNumber : ValidationAttribute
+    public class RangeNumber : Attribute
     {
+
+        public string ErrorMessage { private get; set; }
+
         public RangeNumber(string message)
         {
             ErrorMessage = message;
         }
-        public override bool IsValid(object value)
+        public bool IsValid(object value)
         {
             if (value == null) return false;
 

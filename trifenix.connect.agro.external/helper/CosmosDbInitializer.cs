@@ -9,21 +9,29 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using trifenix.connect.agro.interfaces.external;
 using trifenix.connect.agro_model;
 using trifenix.connect.agro_model_input;
+using trifenix.connect.db.cosmos.exceptions;
 using trifenix.connect.entities.cosmos;
+using trifenix.connect.input;
+using trifenix.connect.interfaces.external;
 using trifenix.connect.interfaces.web;
 using trifenix.connect.mdm.containers;
 using trifenix.connect.mdm.enums;
-using trifenix.connect.mdm.Validations;
+using trifenix.connect.mdm.validation_attributes;
 
-namespace trifenix.connect.agro.external
+namespace trifenix.connect.agro.external.helper
 {
+
+
     public class CosmosDbInitializer : ICosmosDbInitializer {
 
         private readonly Assembly Assembly_Inputs;
         private readonly Assembly Assembly_Entities;
         private readonly IAgroManager<GeographyPoint> Manager;
+
+
 
         public CosmosDbInitializer(IAgroManager<GeographyPoint> manager, string assembly_Inputs, string assembly_Entities) {
             Manager = manager;

@@ -5,9 +5,9 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Text;
 using System.Threading.Tasks;
-using trifenix.connect.agro_model_input;
+using trifenix.connect.input;
 
-namespace trifenix.agro.servicebus.operations
+namespace trifenix.connect.agro.bus
 {
     public class ServiceBus {
 

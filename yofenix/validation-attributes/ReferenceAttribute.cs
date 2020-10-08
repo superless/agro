@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace trifenix.connect.mdm.Validations
+namespace trifenix.connect.mdm.validation_attributes
 {
 
     

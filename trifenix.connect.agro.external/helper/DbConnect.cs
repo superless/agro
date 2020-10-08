@@ -1,11 +1,11 @@
 ﻿using Cosmonaut;
 using trifenix.connect.agro.interfaces.cosmos;
 using trifenix.connect.agro.queries;
-using trifenix.connect.agro_model_input;
 using trifenix.connect.db;
 using trifenix.connect.db.cosmos;
 using trifenix.connect.entities.cosmos;
 using trifenix.connect.graph;
+using trifenix.connect.input;
 using trifenix.connect.interfaces.db.cosmos;
 using trifenix.connect.interfaces.external;
 using trifenix.connect.interfaces.graph;

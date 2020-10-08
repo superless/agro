@@ -1,6 +1,6 @@
 ﻿using Cosmonaut;
-using trifenix.connect.agro_model_input;
 using trifenix.connect.entities.cosmos;
+using trifenix.connect.input;
 using trifenix.connect.interfaces.db.cosmos;
 using trifenix.connect.interfaces.graph;
 
