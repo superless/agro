@@ -14,6 +14,12 @@ namespace trifenix.connect.interfaces.search
     public interface IBaseEntitySearch<T>
     {
 
+        string ServiceName { get;  }
+
+        string ServiceKey { get;  }
+
+
+        string Index { get;  }
         /// <summary>
         /// Añade una colección de EntitySearch a azure search
         /// </summary>

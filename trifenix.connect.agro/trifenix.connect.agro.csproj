@@ -302,8 +302,4 @@
     </EmbeddedResource>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="weather\" />
-  </ItemGroup>
-
 </Project>

@@ -54,7 +54,7 @@ namespace trifenix.connect.agro_model
         [EnumSearch(EnumRelated.GENERIC_MEASURE_TYPE)]
         public MeasureType MeasureType { get; set; }
 
-        [StringSearch(StringRelated.SAG_CODE)]
+        [SuggestSearch(StringRelated.SAG_CODE)]
         public string SagCode { get; set; }
     }
 

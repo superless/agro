@@ -29,14 +29,19 @@ namespace trifenix.connect.agro.external
 
         public override async Task Validate(ApplicationOrderInput applicationOrderInput) {
             await base.Validate(applicationOrderInput);
+
             List<string> errors = new List<string>();
             if (applicationOrderInput.OrderType == OrderType.PHENOLOGICAL && !applicationOrderInput.IdsPreOrder.Any())
                     errors.Add("Si la orden es fenológica, deben existir preordenes fenologicas asociadas.");
+
+
             foreach (var doses in applicationOrderInput.DosesOrder) {
                 bool exists = await existElement.ExistsById<Dose>(doses.IdDoses);
                 if (!exists)
                     errors.Add($"No existe dosis con id '{doses.IdDoses}'.");
             }
+
+
             foreach (var barrack in applicationOrderInput.Barracks) {
                 bool exists = await existElement.ExistsById<Barrack>(barrack.IdBarrack);
                 if (!exists)
@@ -49,6 +54,8 @@ namespace trifenix.connect.agro.external
                     }
                 }
             }
+
+
             if (applicationOrderInput.StartDate > applicationOrderInput.EndDate)
                 errors.Add("La fecha inicial no puede ser mayor a la final.");
             if (errors.Count > 0)

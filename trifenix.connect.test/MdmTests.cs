@@ -26,6 +26,29 @@ namespace trifenix.connect.test
         }
 
         [Fact]
+        public void ConvertObjectToCollection() {
+            // assign
+            var str = new string[] { "string" };
+
+            var str2 = "string";
+
+            var result = Mdm.CreateDynamicList(str);
+
+            var typeSingleResult = str2.GetType();
+            var typeResult = result.GetType();
+
+
+
+            // action
+
+
+            // assert
+            Assert.True(true);
+        
+        }
+
+
+        [Fact]
         public void ConvertObjectoToEntity() {
             
             var objs = new BarrackTest()

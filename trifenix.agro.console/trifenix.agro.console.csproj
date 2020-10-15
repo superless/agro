@@ -6,6 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\trifenix.connect.agro.external\trifenix.connect.agro.external.csproj" />
+    <ProjectReference Include="..\trifenix.connect.db\trifenix.connect.db.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="temp.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

@@ -46,6 +46,75 @@ namespace trifenix.connect.util
             typeof(double),
             typeof(decimal),
             typeof(DateTime),
+            typeof(bool),
+            typeof(byte?),
+            typeof(sbyte?),
+            typeof(ushort?),
+            typeof(short?),
+            typeof(uint?),
+            typeof(int?),
+            typeof(ulong?),
+            typeof(long?),
+            typeof(float?),
+            typeof(double?),
+            typeof(decimal?),
+            typeof(DateTime?),
+            typeof(bool?),
+        }.Contains(t);
+        }
+
+        public static bool IsPrimitiveAndCollection(Type t)
+        {
+            if (IsPrimitive(t)) return true;
+            return IsPrimitiveCollection(t);
+        }
+
+        public static bool IsPrimitiveCollection(Type t)
+        {  
+            return new[] {
+            typeof(string[]),
+            typeof(bool[]),
+            typeof(char[]),
+            typeof(byte[]),
+            typeof(sbyte[]),
+            typeof(ushort[]),
+            typeof(short[]),
+            typeof(uint[]),
+            typeof(int[]),
+            typeof(ulong[]),
+            typeof(long[]),
+            typeof(float[]),
+            typeof(double[]),
+            typeof(decimal[]),
+            typeof(DateTime[]),
+            typeof(IEnumerable<string>),
+            typeof(IEnumerable<char>),
+            typeof(IEnumerable<byte>),
+            typeof(IEnumerable<sbyte>),
+            typeof(IEnumerable<ushort>),
+            typeof(IEnumerable<short>),
+            typeof(IEnumerable<uint>),
+            typeof(IEnumerable<int>),
+            typeof(IEnumerable<ulong>),
+            typeof(IEnumerable<long>),
+            typeof(IEnumerable<float>),
+            typeof(IEnumerable<double>),
+            typeof(IEnumerable<decimal>),
+            typeof(IEnumerable<DateTime>),
+            typeof(List<string>),
+            typeof(List<char>),
+            typeof(List<byte>),
+            typeof(List<sbyte>),
+            typeof(List<ushort>),
+            typeof(List<short>),
+            typeof(List<uint>),
+            typeof(List<int>),
+            typeof(List<ulong>),
+            typeof(List<long>),
+            typeof(List<float>),
+            typeof(List<double>),
+            typeof(List<decimal>),
+            typeof(List<DateTime>),
         }.Contains(t);
         }
     }

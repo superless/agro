@@ -44,10 +44,7 @@ namespace trifenix.connect.agro.external.helper
             // consultas genéricas de azure search.
             _queries = new SearchQueries();
 
-            _entityIndex = entityIndex;
-
-            // cliente de azure search.
-            _search = new SearchServiceClient(SearchServiceName, new SearchCredentials(SearchServiceKey));
+            
 
 
 
@@ -58,6 +55,9 @@ namespace trifenix.connect.agro.external.helper
         {
             this.baseMainSearch = baseMainSearch;
 
+            _search = new SearchServiceClient(baseMainSearch.ServiceName, new SearchCredentials(baseMainSearch.ServiceKey));
+
+            _entityIndex = baseMainSearch.Index;
 
             // crea índice de entidades si no existe.
             if (!_search.Indexes.Exists(_entityIndex))

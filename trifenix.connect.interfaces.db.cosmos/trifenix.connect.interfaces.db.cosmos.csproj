@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\trifenix.connect.entities.cosmos\trifenix.connect.entities.cosmos.csproj" />
+    <ProjectReference Include="..\trifenix.connect\trifenix.connect.csproj" />
   </ItemGroup>
 
 </Project>

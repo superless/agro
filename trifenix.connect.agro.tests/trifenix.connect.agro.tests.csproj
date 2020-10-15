@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\trifenix.connect.agro.external\trifenix.connect.agro.external.csproj" />
     <ProjectReference Include="..\trifenix.connect.agro.interfaces.external\trifenix.connect.agro.interfaces.external.csproj" />
     <ProjectReference Include="..\yofenix\trifenix.connect.mdm.csproj" />
   </ItemGroup>

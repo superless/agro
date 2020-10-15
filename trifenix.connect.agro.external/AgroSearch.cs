@@ -21,9 +21,14 @@ namespace trifenix.connect.agro.external
     /// </summary>
     public class AgroSearch<GeoPointType> : IAgroSearch<GeoPointType> 
     {
-    
 
-        
+
+        public string ServiceName { get; private set; }
+
+        public string ServiceKey { get; private set; }
+
+
+        public string Index { get; private set; }
 
         // índice para las entidades, nombre del indice en azure
         private readonly string _entityIndex = "entitiesv2";
@@ -43,19 +48,22 @@ namespace trifenix.connect.agro.external
         /// <param name="SearchServiceName">nombre del servicio</param>
         /// <param name="SearchServiceKey">clave del servicio</param>
         /// <param name="corsOptions">opciones de cors</param>
-        public AgroSearch(string SearchServiceName, string SearchServiceKey, CorsOptions corsOptions)
+        public AgroSearch(string SearchServiceName, string SearchServiceKey, CorsOptions corsOptions, string entityId = "entitiesv2") 
+            : this(new SearchQueryOperations<GeoPointType>(new MainSearch<GeoPointType>(SearchServiceName, SearchServiceKey, entityId, corsOptions)),
+                  new MainSearch<GeoPointType>(SearchServiceName, SearchServiceKey, entityId, corsOptions),
+                  new EntitySearchMgmt<GeoPointType>(new MainSearch<GeoPointType>(SearchServiceName, SearchServiceKey, entityId, corsOptions))
+                  )
         {
-            mainSearch = new MainSearch<GeoPointType>(SearchServiceName, SearchServiceKey, _entityIndex, corsOptions);
-
-            relatedSearch = new SearchQueryOperations<GeoPointType>(mainSearch);
-
-            operEntitySearch = new EntitySearchMgmt<GeoPointType>(mainSearch);
+           
         }
 
 
         public AgroSearch(IRelatedSearch<GeoPointType> relatedSearch, IBaseEntitySearch<GeoPointType> mainSearch, IEntitySearchOper<GeoPointType> operEntitySearch)
         {
             this.mainSearch = mainSearch;
+            this.ServiceKey = mainSearch.ServiceKey;
+            this.ServiceName = mainSearch.ServiceName;
+            _entityIndex = mainSearch.Index;
 
             this.relatedSearch = relatedSearch;
 

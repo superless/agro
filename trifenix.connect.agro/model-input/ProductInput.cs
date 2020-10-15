@@ -25,6 +25,7 @@ namespace trifenix.connect.agro_model_input
 
         
         [ReferenceSearch(EntityRelated.BRAND)]
+        [Required, Reference(typeof(Brand))]
         public string IdBrand { get; set; }
 
         public string ClientId { get; set; }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -18,7 +17,7 @@ namespace trifenix.connect.agro.external.helper
 {
     public class MainValidator<T, T_INPUT> : IValidatorAttributes<T_INPUT, T> where T : DocumentBase where T_INPUT : InputBase
     {
-        private static List<object> CreateDynamicList(object Obj) => Obj is IList ? (Obj is Array ? ((Array)Obj).Cast<object>().ToList() : new List<object>((IEnumerable<object>)Obj)) : new List<object> { Obj };
+        
 
 
 
@@ -44,8 +43,6 @@ namespace trifenix.connect.agro.external.helper
         /// <returns>resultado que integra si es valido y los mensajes de error</returns>
         private async Task<ResultValidate> ValidaReference(object elemento, string className, string propName, Attribute[] attributes)
         {
-
-
             // si es nulo es válido, no válida nulos
             if (elemento == null)
             {
@@ -55,9 +52,10 @@ namespace trifenix.connect.agro.external.helper
                 };
             }
 
+            // se crea colección desde el objeto
+            var castedCollectionElement = Mdm.CreateDynamicList(elemento);
 
-            var castedCollectionElement = CreateDynamicList(elemento);
-
+            // si es vacia, no valida, requerido valida.
             if (!castedCollectionElement.Any())
             {
                 return new ResultValidate
@@ -66,10 +64,8 @@ namespace trifenix.connect.agro.external.helper
                 };
             }
 
-
-
             // si no es string, no es válido
-            if (elemento.GetType() != typeof(string))
+            if (elemento.GetType() != typeof(string) && elemento.GetType() != typeof(List<string>) && elemento.GetType() != typeof(string[]))
             {
                 return new ResultValidate
                 {
@@ -84,27 +80,49 @@ namespace trifenix.connect.agro.external.helper
             var attributeLink = (ReferenceAttribute)attributes.FirstOrDefault(s => s.GetType() == typeof(ReferenceAttribute));
 
             // método que permite saber si un elemento existe
-            var mtd = typeof(CosmosExistElement).GetMethod(nameof(IExistElement.ExistsById), BindingFlags.Public);
+            var mtd = typeof(IExistElement).GetMethod(nameof(IExistElement.ExistsById));
 
             // asigna el elemento generics desde el tipo que mantiene ReferenceAttribute
             var genericMtd = mtd.MakeGenericMethod(attributeLink.entityOfReference);
 
 
-            // ejecuta el método de busqueda por id, usando el valor de la propiedad.
-            var task = (Task<bool>)genericMtd.Invoke(existElement, new[] { elemento.ToString() });
 
-            // ejecuta asíncrono
-            await task.ConfigureAwait(false);
+            bool valid = true;
 
-            // obtiene la propiedad result
-            var resultProperty = task.GetType().GetProperty("Result");
+            var lst = new List<string>();
 
-            // obtiene el valor booleano, true si existe.
-            var valid = (bool)resultProperty.GetValue(task);
+            foreach (var item in castedCollectionElement)
+            {
+
+                var strElement = (string)item;
+
+                // si es vacio no se valida
+                if (string.IsNullOrWhiteSpace(strElement)) break;
+
+                // ejecuta el método de busqueda por id, usando el valor de la propiedad.
+                var task = (Task<bool>)genericMtd.Invoke(existElement, new[] { item.ToString() });
+
+                // ejecuta asíncrono
+                await task.ConfigureAwait(false);
+
+                // obtiene la propiedad result
+                var resultProperty = task.GetType().GetProperty("Result");
+
+                // obtiene el valor booleano, true si existe.
+                var localValid = (bool)resultProperty.GetValue(task);
+
+                if (!localValid)
+                {
+                    valid = localValid;
+                    lst.Add($"No existe {attributeLink.entityOfReference.Name} con id {item}");
+                }
+            }
+
+            
 
 
 
-            return new ResultValidate { Valid = valid, Messages = !valid ? new string[] { $"No existe {attributeLink.entityOfReference.Name} con id {elemento}" } : Array.Empty<string>() };
+            return new ResultValidate { Valid = valid, Messages = !valid ? lst.ToArray() : Array.Empty<string>() };
 
         }
 
@@ -133,14 +151,26 @@ namespace trifenix.connect.agro.external.helper
                 };
             }
 
+            // se crea colección desde el objeto
+            var castedCollectionElement = Mdm.CreateDynamicList(elemento);
+
+            if (!castedCollectionElement.Any())
+            {
+                return new ResultValidate
+                {
+                    Valid = true
+                };
+            }
+
+
             // si no es string, no debería ser validado.
-            if (elemento.GetType() != typeof(string))
+            if (elemento.GetType() != typeof(string) && elemento.GetType()!= typeof(List<string>) && elemento.GetType() != typeof(string[]))
             {
                 return new ResultValidate
                 {
                     Valid = false,
                     Messages = new string[] {
-                            $"La propiedad del input {propName} debe ser string, el atributo unique es solo para strings"
+                            $"La propiedad del input {className}.{propName} debe ser string, el atributo unique es solo para strings"
                         }
                 };
             }
@@ -153,7 +183,7 @@ namespace trifenix.connect.agro.external.helper
 
 
             // atributo que vincula un clase input con una clase de base de datos
-            var attributeLink = (BaseIndexAttribute)attributes.FirstOrDefault(s => s.GetType() == typeof(BaseIndexAttribute));
+            var attributeLink = (BaseIndexAttribute)attributes.FirstOrDefault(s => s.GetType().IsSubclassOf(typeof(BaseIndexAttribute)));
 
             // si es nulo, se buscará una propiedad con el mismo nombre en la clase de la base de datos (T).
             if (attributeLink == null)
@@ -168,7 +198,7 @@ namespace trifenix.connect.agro.external.helper
                     {
                         Valid = false,
                         Messages = new string[] {
-                            $"La propiedad del input {propName} que tiene que ser validada, no existe en el elemento de la base de datos"
+                            $"La propiedad del input {className}.{propName} que tiene que ser validada, no existe en el elemento de la base de datos"
                         }
                     };
                 }
@@ -195,34 +225,38 @@ namespace trifenix.connect.agro.external.helper
                 {
                     Valid = false,
                     Messages = new string[] {
-                            $"La propiedad del input {propName} que tiene que ser validada, no existe en el elemento de la base de datos (BaseEntitySearch)"
+                            $"La propiedad del input {className}.{propName} que tiene que ser validada, no existe en el elemento de la base de datos (BaseEntitySearch)"
                         }
                 };
             }
 
             // asigna el nombre de la propidad que tiene la propiedad de la clase de la base de datos.
-            propNameDb = propNameDb ?? dbPropInfo.Name;
+            propNameDb = !string.IsNullOrWhiteSpace(propNameDb)? propNameDb : dbPropInfo.Name;
 
 
-            // realiza la busqueda en la base de datos
-            var exists = await existElement.ExistsWithPropertyValue<T>(propNameDb, elemento.ToString(), id);
+            bool valid = true;
 
+            var lst = new List<string>();
 
-            // si no existe, significa que esta ok.
-            if (!exists)
+            foreach (var item in castedCollectionElement)
             {
-                return new ResultValidate
+                // realiza la busqueda en la base de datos
+                var localExists = await existElement.ExistsWithPropertyValue<T>(propNameDb, elemento.ToString(), id);
+
+                if (localExists)
                 {
-                    Valid = true
-                };
+                    valid = !localExists;
+                    lst.Add($"La propiedad del input {className}.{propName} con valor {elemento} existe previamente en la base de datos");
+
+                    
+                }
+
             }
 
             return new ResultValidate
             {
-                Valid = false,
-                Messages = new string[] {
-                            $"La propiedad del input {propName} con valor {elemento} existe previamente en la base de datos"
-                        }
+                Valid = valid,
+                Messages = lst.ToArray()
 
             };
 
@@ -242,21 +276,91 @@ namespace trifenix.connect.agro.external.helper
         /// <param name="propName">la propiedad que pertenece el objeto</param>
         /// <param name="attributes">atributos encontrados en la propiedad</param>
         /// <returns>resultado que integra si es valido y los mensajes de error</returns>
-        private Task<ResultValidate> ValidaRequired(object element, string className, string propName, Attribute[] attributes)
+        private async Task<ResultValidate> ValidaRequired(object element, string className, string propName, Attribute[] attributes)
         {
-
-            if (element == null || string.IsNullOrWhiteSpace(element.ToString()))
+            // si es nulo no es válido
+            if (element == null)
             {
-                return Task.FromResult(new ResultValidate
+                return new ResultValidate
                 {
                     Valid = false,
-                    Messages = new string[] { $"{className}.{propName} es obligatorio" }
-                });
+                    Messages = new string[] {
+                            $"La propiedad del input {className}.{propName} es obligatorio" }
+                };
             }
-            return Task.FromResult(new ResultValidate
+
+            // se crea colección desde el objeto
+            var castedCollectionElement = Mdm.CreateDynamicList(element);
+
+            // si la lista es vacia, es inválido.
+            if (!castedCollectionElement.Any())
             {
-                Valid = true
-            });
+                return new ResultValidate
+                {
+                    Valid = false,
+                    Messages = new string[] {
+                            $"La propiedad del input {className}.{propName} es obligatorio, tampoco puede ser una lista vacia" }
+                };
+            }
+
+            
+
+            
+           
+
+            //obtiene el atributo desde el listado de atributos que sean requerido.
+            var attributeLink = (RequiredAttribute)attributes.FirstOrDefault(s => s.GetType() == typeof(RequiredAttribute));
+
+            var valid = true;
+            var lst = new List<string>();
+
+            foreach (var item in castedCollectionElement)
+            {
+
+                // obtiene el tipo, según el tipo validará.
+                var type = item.GetType();
+                if (type == typeof(int) || type == typeof(int?) || type == typeof(double) || type == typeof(double?) || type == typeof(decimal) || type == typeof(decimal?))
+                {
+                    if (item==null)
+                    {
+                        lst.Add($"{className}.{propName} es obligatorio");
+                        valid = false;
+                    } else
+                    {
+                        if (int.TryParse(item.ToString(), out var intResult))
+                        {
+                            if (intResult == 0)
+                            {
+                                lst.Add($"{className}.{propName} es obligatorio, ni puede cer cero");
+                                valid = false;
+                            }
+                        }
+                        
+                    }
+                }
+
+                if (type == typeof(bool?) || type == typeof(DateTime?))
+                {
+
+                    if (item == null)
+                    {
+                        lst.Add($"{className}.{propName} es obligatorio");
+                        valid = false;
+                    }
+                    
+                }
+
+                
+
+
+                if (item == null || string.IsNullOrWhiteSpace(item.ToString()))
+                {
+                    lst.Add($"{className}.{propName} es obligatorio");
+                    valid = false;
+                }
+            }
+
+            return new ResultValidate { Valid = valid, Messages = lst.ToArray() };
 
         }
 
@@ -281,6 +385,7 @@ namespace trifenix.connect.agro.external.helper
             foreach (var item in propsInfo)
             {
                 var validation = await extraValidation(item.GetValue(element), element.GetType().Name, item.Name, item.GetCustomAttributes<Attribute>().ToArray());
+
                 if (!validation.Valid)
                 {
                     valida = false;
@@ -288,8 +393,9 @@ namespace trifenix.connect.agro.external.helper
                 }
             }
 
+            
             // propiedades no primitivas
-            var nonPrimitiveProps = propsInfo.Where(s => !EnumerationExtension.IsPrimitive(s.PropertyType));
+            var nonPrimitiveProps = element.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public ).Where(s => !EnumerationExtension.IsPrimitiveAndCollection(s.PropertyType) && !s.PropertyType.IsEnum);
 
             if (nonPrimitiveProps.Any() && recursive)
             {
@@ -297,12 +403,18 @@ namespace trifenix.connect.agro.external.helper
                 {
                     if (propinfo.GetValue(element) != null)
                     {
-                        var res = await ValidaProperties<A>(propinfo.GetValue(element), extraValidation, true);
-                        if (!res.Valid)
+                        var castedCollectionElement = Mdm.CreateDynamicList(propinfo.GetValue(element));
+                        foreach (var item in castedCollectionElement)
                         {
-                            messages.AddRange(res.Messages);
-                            valida = false;
+                            var res = await ValidaProperties<A>(item, extraValidation, true);
+                            if (!res.Valid)
+                            {
+                                messages.AddRange(res.Messages);
+                                valida = false;
+                            }
                         }
+
+                        
                     }
 
                 }
@@ -322,19 +434,32 @@ namespace trifenix.connect.agro.external.helper
 
 
 
+
+
         public async Task<ResultValidate> Valida(T_INPUT elemento)
         {
 
-            // valida propiedades requeridas
+            // si tiene un id, se debe comprobar que existe
+            if (!string.IsNullOrWhiteSpace(elemento.Id))
+            {
+                var result = await ValidaReference(elemento.Id, typeof(T_INPUT).Name, "id", new Attribute[] { new ReferenceAttribute(typeof(T)) });
+                if (!result.Valid)
+                {
+                    result.Valid = false;
+                    result.Messages = new string[] { $"El {typeof(T_INPUT).Name} con id: {elemento.Id} no existe en la base de datos" };
+                    return result;
+                }
+            }
+            // valida propiedades requeridas, buscando de igual manera dentro de los elementos.
             var requireds = await ValidaProperties<RequiredAttribute>(elemento, ValidaRequired, true);
 
-            // valida propiedades que sus valores deben ser únicos
+            // valida propiedades que sus valores deben ser únicos, no aplica a las clases internas.
             var uniques = await ValidaProperties<UniqueAttribute>(
                 elemento,
                 async (o, className, propName, atributes) =>
-                    await ValidaUnique((T_INPUT)o, className, propName, atributes, string.IsNullOrWhiteSpace(elemento.Id) ? null : elemento.Id), false);
+                    await ValidaUnique(o, className, propName, atributes, string.IsNullOrWhiteSpace(elemento.Id) ? null : elemento.Id), false);
 
-            // valida que las referencias existan en la base de datos.
+            // valida que las referencias existan en la base de datos. verifica clases internas
             var references = await ValidaProperties<ReferenceAttribute>(elemento, ValidaReference, true);
 
 

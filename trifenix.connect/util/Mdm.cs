@@ -22,6 +22,15 @@ namespace trifenix.connect.util
     {
 
         /// <summary>
+        /// Convierte un objeto individual o colección, en una colección
+        /// </summary>
+        /// <param name="Obj">bjeto a convertir</param>
+        /// <returns>si el objeto es una colección deveulve una colección, si no una colección con un solo valor</returns>
+        public static List<object> CreateDynamicList(object Obj) => Obj is IList ? (Obj is Array ? ((Array)Obj).Cast<object>().ToList() : new List<object>((IEnumerable<object>)Obj)) : new List<object> { Obj };
+
+
+
+        /// <summary>
         /// Retorna un objeto desde un entitySearch, el tipo del objeto de retorno será del tipo que utilice el atributo EntityIndexAttribute .
         /// para esto buscará todas las clases que tnengan el atributo EntityIndexAttribute que vincula la clase con el índice
         /// del entitySearch, una vez encontrada hará lo mismo con los atributos de cada propiedad para finalmente crear un objeto tipado con todos los valores del entitySearch.

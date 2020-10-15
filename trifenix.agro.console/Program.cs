@@ -1,6 +1,14 @@
-﻿using System;
+﻿using Cosmonaut;
+using Cosmonaut.Response;
+using Microsoft.Azure.Search.Models;
+using Microsoft.Spatial;
+using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using trifenix.agro.external.operations;
+using trifenix.connect.agro.external;
+using trifenix.connect.agro.external.helper;
+using trifenix.connect.db;
 
 namespace trifenix.agro.console
 {
@@ -20,7 +28,7 @@ namespace trifenix.agro.console
             Environment.SetEnvironmentVariable("tenantID", "13f71027-8389-436e-bdaf-7bd34382fbff");
             Environment.SetEnvironmentVariable("Search_allowedOrigins", "https://aresa.trifenix.io;https://dev-aresa.trifenix.io;https://agro.trifenix.io;https://agro-dev.trifenix.io;http://localhost:3000;http://localhost:4000;https://aresa2-dev.trifenix.io;https://aresa2.trifenix.io;http://localhost:9009;https://portal.azure.com");
 
-            var agroDbArguments = new AgroDbArguments { EndPointUrl = "https://agrodb.documents.azure.com:443/", NameDb = "agrodb", PrimaryKey = "tsbucd6u03LZ7QR5QJKKdUdGRSmcVT4U9iSvWUbOm4kx5omw0xqyv2wRDdxciVpG27uBxnX9wx5cjfvPSmIrSw==" };
+            var agroDbArguments = new CosmosDbArguments { EndPointUrl = "https://agrodb.documents.azure.com:443/", NameDb = "agrodb", PrimaryKey = "tsbucd6u03LZ7QR5QJKKdUdGRSmcVT4U9iSvWUbOm4kx5omw0xqyv2wRDdxciVpG27uBxnX9wx5cjfvPSmIrSw==" };
             var search = new AgroSearch<GeographyPoint>("agrocloud", "6D2BA6AF3373D17A341F7A099BA8FA6A", new CorsOptions(Environment.GetEnvironmentVariable("Search_allowedOrigins", EnvironmentVariableTarget.Process).Split(";")));
 
             
@@ -31,7 +39,7 @@ namespace trifenix.agro.console
             //var types = assm.GetTypes().Where(type => type.GetProperty("CosmosEntityName") != null && !(new[] { typeof(EntityContainer), typeof(User), typeof(UserActivity), typeof(Comment) }).Contains(type)).ToList();
             //foreach (var type in types)
             //    await agro.GetOperationByDbType(type).RenewClientIds();
-            await search.RegenerateIndex(agro);
+            //await search.RegenerateIndex(agro);
 
             #region Vaciar Search y/o CosmosDb
             //Aquí defino si se vaciará CosmosDb, Index Search, ambos o ninguno

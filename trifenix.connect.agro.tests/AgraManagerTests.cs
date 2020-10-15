@@ -1,10 +1,19 @@
 using Moq;
-using System;
 using Xunit;
 using trifenix.agro.external.operations.tests.data;
 using System.Linq;
 using trifenix.connect.mdm.ts_model;
 using trifenix.connect.agro.interfaces.external;
+using trifenix.connect.interfaces.external;
+using Cosmonaut;
+using trifenix.connect.entities.cosmos;
+using trifenix.connect.interfaces.db.cosmos;
+using trifenix.connect.interfaces.graph;
+using trifenix.connect.input;
+using trifenix.connect.interfaces;
+using trifenix.connect.agro.interfaces;
+using trifenix.connect.interfaces.upload;
+using trifenix.connect.agro.interfaces.cosmos;
 
 namespace trifenix.agro.external.operations.tests
 {
@@ -56,7 +65,7 @@ namespace trifenix.agro.external.operations.tests
 
 
 
-    public class MockConnect : IDbConnect
+    public class MockConnect : IDbAgroConnect
     {
 
         // no se usa en la mayoría de las operaciones
@@ -91,6 +100,8 @@ namespace trifenix.agro.external.operations.tests
                 return mock.Object;
             }
         }
+
+        public IDbExistsElements GetDbExistsElements => throw new System.NotImplementedException();
 
         public IExistElement ExistsElements(bool isBatch)
         {

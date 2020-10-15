@@ -17,12 +17,26 @@ namespace trifenix.connect.search
         private readonly string entityIndex;
         private readonly CorsOptions corsOptions;
 
+        public string ServiceName { get; private set; }
+
+        public string ServiceKey { get; private set; }
+
+
+        public string Index { get; private set; }
+
+
         public MainSearch(string SearchServiceName, string SearchServiceKey, string entityIndex, CorsOptions corsOptions)
         {
             _search = new SearchServiceClient(SearchServiceName, new SearchCredentials(SearchServiceKey));
             this.entityIndex = entityIndex;
             this.corsOptions = corsOptions;
+            this.Index = entityIndex;
+            this.ServiceName = SearchServiceName;
+            this.ServiceKey = SearchServiceKey;
+            
         }
+
+
         /// <summary>
         /// Añade o elimina items dentro de azure search.
         /// </summary>
