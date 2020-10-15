@@ -11,29 +11,48 @@ using trifenix.connect.mdm.search.model;
 
 namespace trifenix.connect.search
 {
+
+    /// <summary>
+    /// Encargada de hacer operaciones CRUD sobre azure search.
+    /// Esta clase no debiera ser testeada
+    /// </summary>
+    /// <typeparam name="GeoPointType">Tipo de dato para geolocalización</typeparam>
     public class MainSearch<GeoPointType> : IBaseEntitySearch<GeoPointType>
     {
+        // cliente azure search
         private readonly SearchServiceClient _search;
-        private readonly string entityIndex;
+
+        // índice donde operará el objeto.
+        
+
+        // opciones cors
         private readonly CorsOptions corsOptions;
 
+        // nombre del servicio en azure
         public string ServiceName { get; private set; }
 
+
+        // clave del servicio en azure
         public string ServiceKey { get; private set; }
 
 
+        // índice donde operará el objeto.
         public string Index { get; private set; }
 
 
         public MainSearch(string SearchServiceName, string SearchServiceKey, string entityIndex, CorsOptions corsOptions)
         {
+            // cliente azure
             _search = new SearchServiceClient(SearchServiceName, new SearchCredentials(SearchServiceKey));
-            this.entityIndex = entityIndex;
+            
             this.corsOptions = corsOptions;
             this.Index = entityIndex;
             this.ServiceName = SearchServiceName;
             this.ServiceKey = SearchServiceKey;
-            
+
+            if (!_search.Indexes.Exists(Index))
+                CreateOrUpdateIndex();
+
         }
 
 
@@ -47,7 +66,7 @@ namespace trifenix.connect.search
         {
 
             // validar que sea un elemento de tipo search.
-            var indexName = entityIndex;
+            var indexName = Index;
 
             // obtiene el client azure search de acuerdo al índice.
             var indexClient = _search.Indexes.GetClient(indexName);
@@ -98,7 +117,7 @@ namespace trifenix.connect.search
         /// <returns>Entidades encontradas</returns>
         public List<IEntitySearch<GeoPointType>> FilterElements(string filter)
         {
-            var indexName = entityIndex;
+            var indexName = Index;
             var indexClient = _search.Indexes.GetClient(indexName);
             var result = indexClient.Documents.Search<EntitySearch>(null, new SearchParameters { Filter = filter });
 
@@ -129,7 +148,7 @@ namespace trifenix.connect.search
         /// </summary>
         public void EmptyIndex()
         {
-            var indexName = entityIndex;
+            var indexName = Index;
             _search.Indexes.Delete(indexName);
             CreateOrUpdateIndex();
         }
@@ -138,7 +157,7 @@ namespace trifenix.connect.search
         /// </summary>
         public void CreateOrUpdateIndex()
         {
-            var indexName = entityIndex;
+            var indexName = Index;
             // creación del índice.
             _search.Indexes.CreateOrUpdate(new Index { Name = indexName, Fields = FieldBuilder.BuildForType<EntitySearch>(), CorsOptions = corsOptions });
         }

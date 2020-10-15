@@ -17,6 +17,7 @@ namespace trifenix.connect.agro.tests
 
         }
 
+        #region Validate Products
         /// <summary>
         /// Se ingresa un producto nuevo sin marca, debería analizar su atributo y alertar de que es obligatorio.        
         /// </summary>
@@ -38,7 +39,8 @@ namespace trifenix.connect.agro.tests
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task ValidationAutomatedProductToEditWithIdInvalid() {
+        public async Task ValidationAutomatedProductToEditWithIdInvalid()
+        {
             //assign
             var mainValidator = new MainValidator<Product, ProductInput>(MockHelper.GetExistElement());
 
@@ -52,7 +54,7 @@ namespace trifenix.connect.agro.tests
 
         }
 
-       
+
         /// <summary>
         /// Validacion Correcta de un producto con dosis y con todos los campos correctos
         /// </summary>
@@ -86,7 +88,7 @@ namespace trifenix.connect.agro.tests
             //action
             var result = await mainValidator.Valida(AgroData.ProductWithDosesWithoutWett);
 
-            
+
 
             //assert
             Assert.True(result.Messages.Count() == 1 && result.Messages.First().Contains("DosesInput.WettingRecommendedByHectares es obligatorio"));
@@ -101,13 +103,14 @@ namespace trifenix.connect.agro.tests
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task ValidationProductWithInvalidCertifiedEntityInsideWettingHarvest() {
+        public async Task ValidationProductWithInvalidCertifiedEntityInsideWettingHarvest()
+        {
 
             var mainValidator = new MainValidator<Product, ProductInput>(MockHelper.GetExistElement());
 
             var prd = AgroData.Product1;
 
-            
+
 
             var nguid = Guid.NewGuid().ToString("N");
 
@@ -199,8 +202,29 @@ namespace trifenix.connect.agro.tests
             //assert
             Assert.True(result.Messages.Count() == 1 && result.Messages.First().Contains("La propiedad del input ProductInput.Name con valor Producto 1 existe previamente en la base de datos"));
         }
+        #endregion
 
- 
+        #region Validate Barracks
+
+
+        /// <summary>
+        /// Valida un barrak que tiene los datos correctamente
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task ValidaOkBarrack() {
+            // assign
+            var mainValidator = new MainValidator<Barrack, BarrackInput>(MockHelper.GetExistElement());
+            // action
+            var result = await mainValidator.Valida(AgroData.Barrack1);
+
+            Assert.True(result.Valid);
+            // assert
+        } 
+
+        #endregion
+
+
 
     }
 }

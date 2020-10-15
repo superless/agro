@@ -3,7 +3,10 @@ using trifenix.connect.entities.cosmos;
 
 namespace trifenix.connect.interfaces.db.cosmos
 {
-
+    /// <summary>
+    /// Interface para mantener todas las consultas a una base de datos o colección que determinen 
+    /// la existencia de un elemento.
+    /// </summary>
     public interface IExistElement {
 
 

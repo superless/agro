@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text;
 using trifenix.connect.agro.index_model.enums;
 using trifenix.connect.agro_model;
@@ -173,7 +174,7 @@ namespace trifenix.agro.external.operations.tests.data
         public static ProductInput ProductNewWithoutBrand => new ProductInput
         {
             IdBrand = string.Empty,
-            
+
             IdActiveIngredient = ConstantGuids.Value[1],
             Name = "Producto 3",
             MeasureType = MeasureType.LT,
@@ -314,7 +315,7 @@ namespace trifenix.agro.external.operations.tests.data
         public static ApplicationTargetInput ApplicationTarget1 = new ApplicationTargetInput
         {
             Abbreviation = "ENF1",
-            Name = "Enfermedad 1",            
+            Name = "Enfermedad 1",
             Id = ConstantGuids.Value[0]
         };
 
@@ -325,7 +326,7 @@ namespace trifenix.agro.external.operations.tests.data
             Id = ConstantGuids.Value[1]
         };
 
-        public static ApplicationTargetInput[] ApplicationTargets => new ApplicationTargetInput[] { ApplicationTarget1, ApplicationTarget2};
+        public static ApplicationTargetInput[] ApplicationTargets => new ApplicationTargetInput[] { ApplicationTarget1, ApplicationTarget2 };
 
         #endregion
 
@@ -349,7 +350,193 @@ namespace trifenix.agro.external.operations.tests.data
         #endregion
 
 
+        #region Barrack
+        public static BarrackInput Barrack1 => new BarrackInput {
+            Id = ConstantGuids.Value[0],
+            Hectares = 1.1,
+            IdPlotLand = ConstantGuids.Value[0],
+            IdPollinator = ConstantGuids.Value[0],
+            NumberOfPlants = 444,
+            IdVariety = ConstantGuids.Value[0],
+            Name = "Barrack 1",
+            SeasonId = ConstantGuids.Value[0],
+            IdRootstock = ConstantGuids.Value[0],
+            PlantingYear = 1980,
 
+        };
+
+        public static BarrackInput Barrack2 => new BarrackInput
+        {
+            Id = ConstantGuids.Value[1],
+            Hectares = 1.1,
+            IdPlotLand = ConstantGuids.Value[1],
+            IdPollinator = ConstantGuids.Value[1],
+            NumberOfPlants = 444,
+            IdVariety = ConstantGuids.Value[1],
+            Name = "Barrack 2",
+            SeasonId = ConstantGuids.Value[0],
+            IdRootstock = ConstantGuids.Value[1],
+            PlantingYear = 1980,
+        };
+
+
+        public static BarrackInput[] Barracks => new BarrackInput[] { Barrack1, Barrack2 };
+        #endregion
+
+        #region Plotland
+        public static PlotLandInput Plotland1 => new PlotLandInput
+        {
+
+            Id = ConstantGuids.Value[0],
+            IdSector = ConstantGuids.Value[0],
+            Name = "Parcela 1"
+
+        };
+
+        public static PlotLandInput Plotland2 => new PlotLandInput
+        {
+
+            Id = ConstantGuids.Value[1],
+            IdSector = ConstantGuids.Value[0],
+            Name = "Parcela 2"
+        };
+
+        public static PlotLandInput Plotland3 => new PlotLandInput
+        {
+            Id = ConstantGuids.Value[2],
+            IdSector = ConstantGuids.Value[1],
+            Name = "Parcela 3"
+        };
+
+        public static PlotLandInput Plotland4 => new PlotLandInput
+        {
+            Id = ConstantGuids.Value[3],
+            IdSector = ConstantGuids.Value[1],
+            Name = "Parcela 4"
+        };
+
+
+        public static PlotLandInput[] PlotLands => new PlotLandInput[] { Plotland1, Plotland2, Plotland3, Plotland4 };
+
+        #endregion
+
+        #region Sector
+        public static SectorInput Sector1 => new SectorInput {
+            Id = ConstantGuids.Value[0],
+            Name = "Sector 1"
+        };
+
+        public static SectorInput Sector2 => new SectorInput
+        {
+            Id = ConstantGuids.Value[1],
+            Name = "Sector 2"
+        };
+
+        public static SectorInput[] Sectors => new SectorInput[] { Sector1, Sector2 };
+
+
+
+        #endregion
+
+
+        #region Season
+        public static SeasonInput Season1 => new SeasonInput {
+            Id = ConstantGuids.Value[0],
+            Current = true,
+            StartDate = new DateTime(2021, 3, 1),
+            EndDate = new DateTime(2022, 3, 1),
+            IdCostCenter = ConstantGuids.Value[0]
+        };
+
+        public static SeasonInput Season2 => new SeasonInput
+        {
+            Id = ConstantGuids.Value[1],
+            Current = false,
+            StartDate = new DateTime(2020, 3, 1),
+            EndDate = new DateTime(2022, 3, 1),
+            IdCostCenter = ConstantGuids.Value[1]
+        };
+
+        public static SeasonInput[] Seasons => new SeasonInput[] { Season1, Season2 };
+
+
+
+        #endregion
+
+        #region Rootstock
+        public static RootstockInput Rootstock1 => new RootstockInput { 
+            Id = ConstantGuids.Value[0],
+            Name = "Rootstock 1",
+            Abbreviation = "RT1"
+        };
+
+        public static RootstockInput Rootstock2 => new RootstockInput
+        {
+            Id = ConstantGuids.Value[1],
+            Name = "Rootstock 2",
+            Abbreviation="RT2"
+        };
+
+        public static RootstockInput[] Rootstocks => new RootstockInput[] { 
+          Rootstock1,
+          Rootstock2
+        };
+
+        #endregion
+
+        #region CostCenter
+
+        public static CostCenterInput CostCenter1 => new CostCenterInput { 
+            Id = ConstantGuids.Value[0],
+            IdBusinessName = ConstantGuids.Value[0],
+            Name = "CostCenter 1"
+        };
+
+        public static CostCenterInput CostCenter2 => new CostCenterInput
+        {
+            Id = ConstantGuids.Value[1],
+            IdBusinessName = ConstantGuids.Value[1],
+            Name = "CostCenter 2"
+        };
+
+        public static CostCenterInput[] CostCenters => new CostCenterInput[] { 
+            CostCenter1, 
+            CostCenter2
+        };
+
+
+        #endregion
+
+
+        #region BusinessName
+        public static BusinessNameInput BusinessNameInput1 => new BusinessNameInput { 
+            Email="hola@trifenix.com",
+            Giro="Tecnología",
+            Id = ConstantGuids.Value[0],
+            Name = "Trifenix",
+            Phone = "999999999",
+            Rut = "76965261-2",
+            WebPage = "www.trifenix.io"
+        };
+
+        public static BusinessNameInput BusinessNameInput2 => new BusinessNameInput
+        {
+            Email = "hola@tricomar.cl",
+            Giro = "e-commerce",
+            Id = ConstantGuids.Value[1],
+            Name = "Tricomar",
+            Phone = "8888888",
+            Rut = "5760300-3",
+            WebPage = "www.tricomar.cl"
+        };
+
+        public static BusinessNameInput[] BusinessNames => new BusinessNameInput[] { BusinessNameInput1, BusinessNameInput2 };
+
+
+
+
+
+        #endregion
     }
 
 

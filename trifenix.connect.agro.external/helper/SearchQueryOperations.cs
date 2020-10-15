@@ -13,20 +13,18 @@ using trifenix.connect.search;
 
 namespace trifenix.connect.agro.external.helper
 {
+    /// <summary>
+    /// Especialización de IBaseEntitySearch
+    /// donde usa los índices propios del proyecto agro.
+    /// </summary>
+    /// <typeparam name="GeoPointType"></typeparam>
     public class SearchQueryOperations<GeoPointType> : IRelatedSearch<GeoPointType>
     {
-
-
-
-        private readonly SearchServiceClient _search;
-
-        // índice para las entidades, nombre del indice en azure
-        private readonly string _entityIndex;
 
         // consultas 
         private readonly ISearchQueries _queries;
 
-        private MapperConfiguration mapper = new MapperConfiguration(cfg => cfg.CreateMap<EntitySearch, EntityBaseSearch<GeoPointType>>());
+        
 
         private IBaseEntitySearch<GeoPointType> baseMainSearch;
 
@@ -38,34 +36,26 @@ namespace trifenix.connect.agro.external.helper
         /// <param name="SearchServiceName">nombre del servicio</param>
         /// <param name="SearchServiceKey">clave del servicio</param>
         /// <param name="corsOptions">opciones de cors</param>
-        public SearchQueryOperations(string SearchServiceName, string SearchServiceKey, string entityIndex, CorsOptions corsOptions) : this(new MainSearch<GeoPointType>(SearchServiceName, SearchServiceKey, entityIndex, corsOptions))
+        public SearchQueryOperations(string SearchServiceName, string SearchServiceKey, string entityIndex, CorsOptions corsOptions) : this(new MainSearch<GeoPointType>(SearchServiceName, SearchServiceKey, entityIndex, corsOptions), new SearchQueries())
         {
-
-            // consultas genéricas de azure search.
-            _queries = new SearchQueries();
-
-            
-
-
-
-
         }
 
-        public SearchQueryOperations(IBaseEntitySearch<GeoPointType> baseMainSearch)
+
+        /// <summary>
+        /// IBaseEntitySearch que mantiene las operaciones hacia azure search, pero puede cambiar hacía otro motor.
+        /// SearchQuery retorna consultas desde un diccionario
+        /// </summary>
+        /// <param name="baseMainSearch">IBaseEntitySearch con operaciones CRUD a un motor de base de datos o colección</param>
+        /// <param name="searchQueries">Diccionario de consultas, dependiente del proyecto agro</param>
+        public SearchQueryOperations(IBaseEntitySearch<GeoPointType> baseMainSearch, ISearchQueries searchQueries)
         {
             this.baseMainSearch = baseMainSearch;
 
-            _search = new SearchServiceClient(baseMainSearch.ServiceName, new SearchCredentials(baseMainSearch.ServiceKey));
-
-            _entityIndex = baseMainSearch.Index;
-
-            // crea índice de entidades si no existe.
-            if (!_search.Indexes.Exists(_entityIndex))
-                baseMainSearch.CreateOrUpdateIndex();
+            _queries = searchQueries;
         }
 
         /// <summary>
-        /// Obtiene las consultas de Azure Search definidasd
+        /// Obtiene las consultas de Azure Search definidas
         /// </summary>
         /// <param name="query">Tipo de consulta</param>
         /// <returns>consulta</returns>
@@ -82,11 +72,9 @@ namespace trifenix.connect.agro.external.helper
         /// <returns></returns>
         public IEntitySearch<GeoPointType>[] GetElementsWithRelatedElement(EntityRelated elementToGet, EntityRelated relatedElement, string idRelatedElement)
         {
-            var indexClient = _search.Indexes.GetClient(_entityIndex);
-            var entities = indexClient.Documents.Search<EntitySearch>(null, new SearchParameters { Filter = string.Format(Queries(SearchQuery.ENTITIES_WITH_ENTITYID), (int)elementToGet, (int)relatedElement, idRelatedElement) }).Results.Select(s => s.Document);
-            var mapperLocal = mapper.CreateMapper();
-            return entities.Select(mapperLocal.Map<EntityBaseSearch<GeoPointType>>).ToArray();
+            var filter = string.Format(Queries(SearchQuery.ENTITIES_WITH_ENTITYID), (int)elementToGet, (int)relatedElement, idRelatedElement);
 
+            return baseMainSearch.FilterElements(filter).ToArray();
         }
 
 
@@ -98,18 +86,10 @@ namespace trifenix.connect.agro.external.helper
         /// <returns></returns>
         public IEntitySearch<GeoPointType> GetEntity(EntityRelated entityRelated, string id)
         {
-            // cliente
-            var indexClient = _search.Indexes.GetClient(_entityIndex);
-
-
             var query = string.Format(Queries(SearchQuery.GET_ELEMENT), (int)entityRelated, id);
             // consulta al search
 
-            var result = indexClient.Documents.Search<EntitySearch>(null, new SearchParameters { Filter = query }).Results.FirstOrDefault()?.Document;
-            var mapperLocal = mapper.CreateMapper();
-
-
-            return mapperLocal.Map<EntityBaseSearch<GeoPointType>>(result);
+            return baseMainSearch.FilterElements(query)?.FirstOrDefault();
 
         }
 
@@ -128,14 +108,15 @@ namespace trifenix.connect.agro.external.helper
 
 
         /// <summary>
-        /// Elimina elementos que tengan una entidad asociada, por ejemplo, borraría todos los alumnos de ingeniería informática.
+        /// Elimina elementos que tengan una entidad asociada, por ejemplo, borraría todos los alumnos de ingeniería informática, pero no los de arquitectura.
         /// a diferencia de DeleteElementsWithRelatedElement
         /// púede existir un elemento que no se borrará indicandolo con el campo elementExceptId.
+        /// borraría todos los alumnos de informática menos el id del alumno ingresado
         /// </summary>
-        /// <param name="elementToDelete">Entidad que será elimina</param>
-        /// <param name="relatedElement">el elemento que debe estar presente para la consulta de elementos a eliminar</param>
-        /// <param name="idRelatedElement">identificador de elemento relacionado que debe estar presenta para la consulta de elementos a eliminar</param>
-        /// <param name="elementExceptId"></param>
+        /// <param name="elementToDelete">Entidad que será eliminada, por ejemplo alumnos</param>
+        /// <param name="relatedElement">Entidad que contiene la agrupación, por ejemplo carrera</param>
+        /// <param name="idRelatedElement">identificador de la entidad que contiene la colección, por ejemplo carrera = informatica</param>
+        /// <param name="elementExceptId">identificador de elemento que no debe ser eliminado dentro del grupo, por ejemplo, el alumno juan garcia</param>
         public void DeleteElementsWithRelatedElementExceptId(EntityRelated elementToDelete, EntityRelated relatedElement, string idRelatedElement, string elementExceptId)
         {
             // consulta para eliminar 

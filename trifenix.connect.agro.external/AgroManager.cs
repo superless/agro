@@ -17,7 +17,7 @@ using trifenix.connect.interfaces.db.cosmos;
 using trifenix.connect.interfaces.external;
 using trifenix.connect.interfaces.upload;
 
-namespace trifenix.agro.external.operations
+namespace trifenix.agro.external
 {
 
 
