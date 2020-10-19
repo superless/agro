@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
     <PackageReference Include="Moq" Version="4.14.5" />
     <PackageReference Include="xunit" Version="2.4.1" />
@@ -24,6 +25,21 @@
     <ProjectReference Include="..\trifenix.connect.agro.external\trifenix.connect.agro.external.csproj" />
     <ProjectReference Include="..\trifenix.connect.agro.interfaces.external\trifenix.connect.agro.interfaces.external.csproj" />
     <ProjectReference Include="..\yofenix\trifenix.connect.mdm.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="data\EntitySearchMgmtResults.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>EntitySearchMgmtResults.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="data\EntitySearchMgmtResults.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>EntitySearchMgmtResults.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

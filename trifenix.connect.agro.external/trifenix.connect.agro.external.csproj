@@ -17,7 +17,6 @@
     <ProjectReference Include="..\trifenix.connect.agro.interfaces\trifenix.connect.agro.interfaces.csproj" />
     <ProjectReference Include="..\trifenix.connect.agro.queries\trifenix.connect.agro.queries.csproj" />
     <ProjectReference Include="..\trifenix.connect.agro\trifenix.connect.agro.csproj" />
-    <ProjectReference Include="..\trifenix.connect.external\trifenix.connect.external.csproj" />
     <ProjectReference Include="..\trifenix.connect.interfaces.db.cosmos\trifenix.connect.interfaces.db.cosmos.csproj" />
     <ProjectReference Include="..\trifenix.connect.interfaces.external\trifenix.connect.interfaces.external.csproj" />
     <ProjectReference Include="..\trifenix.connect.interfaces.web\trifenix.connect.interfaces.web.csproj" />

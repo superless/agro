@@ -9,8 +9,7 @@ namespace trifenix.connect.agro_model_input
     [ReferenceSearchHeader(EntityRelated.WAITINGHARVEST, true, Kind = EntityKind.CUSTOM_ENTITY)]
     public class WaitingHarvestInput {
 
-        [DoubleSearch(DoubleRelated.PPM)]
-        
+        [DoubleSearch(DoubleRelated.PPM)]        
         public double Ppm { get; set; }
 
         /// <summary>

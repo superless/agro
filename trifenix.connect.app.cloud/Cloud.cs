@@ -2,12 +2,13 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using trifenix.connect.agro.bus;
 using trifenix.connect.agro.external;
 using trifenix.connect.agro.index_model.props;
+using trifenix.connect.bus;
 using trifenix.connect.entities.cosmos;
 using trifenix.connect.input;
 using trifenix.connect.mdm.entity_model;
+using trifenix.connect.mdm.search.model;
 using trifenix.connect.search_mdl;
 using trifenix.connect.util;
 
@@ -18,7 +19,7 @@ namespace trifenix.connect.app.cloud
         private static string connectionString = "Endpoint=sb://agrobus.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=28iKIG/njebR7TMqZh5e9KDdI0Jhv3D6gjUUI198Gog=";
 
 
-        public static AgroSearch<GeographyPoint> search = new AgroSearch<GeographyPoint>("agrocloud", "6D2BA6AF3373D17A341F7A099BA8FA6A", null);
+        public static AgroSearch<GeographyPoint> search = new AgroSearch<GeographyPoint>("agrocloud", "6D2BA6AF3373D17A341F7A099BA8FA6A", null, new ImplementsSearch());
 
       
 

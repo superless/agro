@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Spatial;
 using System;
 using System.Threading.Tasks;
-using trifenix.agro.external.operations;
+using trifenix.agro.external;
 using trifenix.agro.functions.settings;
 using trifenix.agro.storage.operations;
 using trifenix.agro.weather.operations;
@@ -13,6 +13,7 @@ using trifenix.connect.agro.external.helper;
 using trifenix.connect.agro.interfaces.external;
 using trifenix.connect.email;
 using trifenix.connect.mdm.containers;
+using trifenix.connect.mdm.search.model;
 
 namespace trifenix.agro.functions.Helper
 {
@@ -21,7 +22,7 @@ namespace trifenix.agro.functions.Helper
             var email = new Email("aresa.notificaciones@gmail.com", "Aresa2019");
             var uploadImage = new UploadImage(Environment.GetEnvironmentVariable("StorageConnectionStrings", EnvironmentVariableTarget.Process));
             var weatherApi = new WeatherApi(Environment.GetEnvironmentVariable("KeyWeatherApi", EnvironmentVariableTarget.Process));
-            var searchServiceInstance = new AgroSearch<GeographyPoint>(Environment.GetEnvironmentVariable("SearchServiceName", EnvironmentVariableTarget.Process), Environment.GetEnvironmentVariable("SearchServiceKey", EnvironmentVariableTarget.Process), new CorsOptions(Environment.GetEnvironmentVariable("Search_allowedOrigins", EnvironmentVariableTarget.Process).Split(";")));
+            var searchServiceInstance = new AgroSearch<GeographyPoint>(Environment.GetEnvironmentVariable("SearchServiceName", EnvironmentVariableTarget.Process), Environment.GetEnvironmentVariable("SearchServiceKey", EnvironmentVariableTarget.Process), new CorsOptions(Environment.GetEnvironmentVariable("Search_allowedOrigins", EnvironmentVariableTarget.Process).Split(";")), new ImplementsSearch());
             return new AgroManager<GeographyPoint>(new DbConnect(ConfigManager.GetDbArguments), email, uploadImage, weatherApi, searchServiceInstance, ObjectIdAAD, isBatch);
         }
 

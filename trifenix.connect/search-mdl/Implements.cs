@@ -14,8 +14,21 @@ namespace trifenix.connect.search_mdl
     /// Dado que debemos generar un objeto de tipo IEntitySearch desde un objeto de una clase
     /// es obligatorio conocer el tipo al que se convertirá cada una de las propiedades.
     /// </summary>
-    public interface Implements<T> {
+    public interface Implements<T> : Implements {
 
+       
+
+
+        /// <summary>
+        /// Transforma o Castea el objeto geo que tendría un objeto de una clase 
+        /// al objeto geo que usa el modelo entitySearch.
+        /// el objeto geo es el único no primitivo (bool, date, string, dbl, etc).
+        /// </summary>
+        Func<object, T> GeoObjetoToGeoSearch { get;  }
+
+    }
+
+    public interface Implements {
         /// <summary>
         /// Tipo de una Clase que implemente INum32Property
         /// </summary>
@@ -24,19 +37,19 @@ namespace trifenix.connect.search_mdl
         /// <summary>
         /// Tipo de una Clase que implemente IDblProperty
         /// </summary>
-        Type dbl { get;  }
+        Type dbl { get; }
 
 
         /// <summary>
         /// Tipo de una Clase que implemente IBoolProperty
         /// </summary>
-        Type bl { get;  }
+        Type bl { get; }
 
 
         /// <summary>
         /// Tipo de una Clase que implemente INum64Property
         /// </summary>
-        Type num64 { get;  }
+        Type num64 { get; }
 
         /// <summary>
         /// Tipo de una Clase que implemente IDtProperty
@@ -51,7 +64,7 @@ namespace trifenix.connect.search_mdl
         /// <summary>
         /// Tipo de una Clase que implemente IRelatedProperty
         /// </summary>
-        Type rel { get;  }
+        Type rel { get; }
 
         /// <summary>
         /// Tipo de una Clase que implemente IStrProperty
@@ -67,15 +80,6 @@ namespace trifenix.connect.search_mdl
         /// Tipo de una Clase que implemente IProperty<T>
         /// donde T sea el tipo de dato de localización geográfica.
         /// </summary>
-        Type geo { get;  }
-
-
-        /// <summary>
-        /// Transforma o Castea el objeto geo que tendría un objeto de una clase 
-        /// al objeto geo que usa el modelo entitySearch.
-        /// el objeto geo es el único no primitivo (bool, date, string, dbl, etc).
-        /// </summary>
-        Func<object, T> GeoObjetoToGeoSearch { get;  }
-
+        Type geo { get; }
     }
 }

@@ -4,13 +4,14 @@ using trifenix.connect.agro.external.helper;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.interfaces.external;
 using trifenix.connect.agro.interfaces.search;
+using trifenix.connect.agro.queries;
 using trifenix.connect.entities.cosmos;
-using trifenix.connect.external;
 using trifenix.connect.input;
 using trifenix.connect.interfaces.external;
 using trifenix.connect.interfaces.search;
 using trifenix.connect.mdm.entity_model;
 using trifenix.connect.search;
+using trifenix.connect.search_mdl;
 
 namespace trifenix.connect.agro.external
 {
@@ -23,6 +24,7 @@ namespace trifenix.connect.agro.external
     {
 
 
+
         public string ServiceName { get; private set; }
 
         public string ServiceKey { get; private set; }
@@ -30,6 +32,7 @@ namespace trifenix.connect.agro.external
 
         public string Index { get; private set; }
 
+        public Dictionary<string, List<string>> Queried { get; set; } = new Dictionary<string, List<string>>();
         // índice para las entidades, nombre del indice en azure
         private readonly string _entityIndex = "entitiesv2";
 
@@ -48,10 +51,10 @@ namespace trifenix.connect.agro.external
         /// <param name="SearchServiceName">nombre del servicio</param>
         /// <param name="SearchServiceKey">clave del servicio</param>
         /// <param name="corsOptions">opciones de cors</param>
-        public AgroSearch(string SearchServiceName, string SearchServiceKey, CorsOptions corsOptions, string entityId = "entitiesv2") 
-            : this(new SearchQueryOperations<GeoPointType>(new MainSearch<GeoPointType>(SearchServiceName, SearchServiceKey, entityId, corsOptions)),
+        public AgroSearch(string SearchServiceName, string SearchServiceKey, CorsOptions corsOptions, Implements<GeoPointType> implements, string entityId = "entitiesv2") 
+            : this(new SearchQueryOperations<GeoPointType>(new MainSearch<GeoPointType>(SearchServiceName, SearchServiceKey, entityId, corsOptions), new SearchQueries()),
                   new MainSearch<GeoPointType>(SearchServiceName, SearchServiceKey, entityId, corsOptions),
-                  new EntitySearchMgmt<GeoPointType>(new MainSearch<GeoPointType>(SearchServiceName, SearchServiceKey, entityId, corsOptions))
+                  new EntitySearchMgmt<GeoPointType>(new MainSearch<GeoPointType>(SearchServiceName, SearchServiceKey, entityId, corsOptions), implements)
                   )
         {
            

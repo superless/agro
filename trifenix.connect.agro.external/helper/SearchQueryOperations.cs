@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.Azure.Search;
 using Microsoft.Azure.Search.Models;
+using System.Collections.Generic;
 using System.Linq;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.interfaces.search;
@@ -29,6 +30,7 @@ namespace trifenix.connect.agro.external.helper
         private IBaseEntitySearch<GeoPointType> baseMainSearch;
 
 
+        public Dictionary<string, List<string>> Queried { get; set; } = new Dictionary<string, List<string>> {  };
 
         /// <summary>
         /// Consultas y mutación en Azure search.
@@ -74,7 +76,19 @@ namespace trifenix.connect.agro.external.helper
         {
             var filter = string.Format(Queries(SearchQuery.ENTITIES_WITH_ENTITYID), (int)elementToGet, (int)relatedElement, idRelatedElement);
 
+            AddToQueried(nameof(SearchQueryOperations<GeoPointType>.GetElementsWithRelatedElement), filter);
+
             return baseMainSearch.FilterElements(filter).ToArray();
+        }
+
+        private void AddToQueried(string methodName, string query) {
+            if (!Queried.ContainsKey(methodName))
+            {
+                Queried.Add(methodName, new List<string> { query });
+            }
+            else {
+                Queried[methodName].Add(query);
+            }
         }
 
 
@@ -88,7 +102,7 @@ namespace trifenix.connect.agro.external.helper
         {
             var query = string.Format(Queries(SearchQuery.GET_ELEMENT), (int)entityRelated, id);
             // consulta al search
-
+            AddToQueried(nameof(SearchQueryOperations<GeoPointType>.GetEntity), query);
             return baseMainSearch.FilterElements(query)?.FirstOrDefault();
 
         }
@@ -103,6 +117,7 @@ namespace trifenix.connect.agro.external.helper
         public void DeleteElementsWithRelatedElement(EntityRelated elementToDelete, EntityRelated relatedElement, string idRelatedElement)
         {
             var query = string.Format(Queries(SearchQuery.ENTITIES_WITH_ENTITYID), (int)elementToDelete, (int)relatedElement, idRelatedElement);
+            AddToQueried(nameof(SearchQueryOperations<GeoPointType>.DeleteElementsWithRelatedElement), query);
             baseMainSearch.DeleteElements(query);
         }
 
@@ -121,7 +136,7 @@ namespace trifenix.connect.agro.external.helper
         {
             // consulta para eliminar 
             var query = string.Format(Queries(SearchQuery.ENTITIES_WITH_ENTITYID_EXCEPTID), (int)elementToDelete, (int)relatedElement, idRelatedElement, elementExceptId);
-
+            AddToQueried(nameof(SearchQueryOperations<GeoPointType>.DeleteElementsWithRelatedElementExceptId), query);
             // eliminación.
             baseMainSearch.DeleteElements(query);
         }
@@ -135,6 +150,7 @@ namespace trifenix.connect.agro.external.helper
         public void DeleteEntity(EntityRelated entityRelated, string id)
         {
             var query = string.Format(Queries(SearchQuery.GET_ELEMENT), (int)entityRelated, id);
+            AddToQueried(nameof(SearchQueryOperations<GeoPointType>.DeleteEntity), query);
             baseMainSearch.DeleteElements(query);
         }
     }

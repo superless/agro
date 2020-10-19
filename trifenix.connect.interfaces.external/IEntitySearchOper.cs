@@ -1,5 +1,6 @@
 ﻿using trifenix.connect.entities.cosmos;
 using trifenix.connect.input;
+using trifenix.connect.interfaces.log;
 using trifenix.connect.mdm.entity_model;
 
 namespace trifenix.connect.interfaces.external
@@ -10,7 +11,7 @@ namespace trifenix.connect.interfaces.external
     /// 
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface IEntitySearchOper<T> {
+    public interface IEntitySearchOper<T> : ILogSimpleQuery {
 
 
         /// <summary>

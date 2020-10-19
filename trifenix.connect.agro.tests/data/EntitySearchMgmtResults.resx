@@ -117,25 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ELEMENTS_WITHSTRINDEX_AND_IDS" xml:space="preserve">
-    <value>str/any(element: element/index eq {0}) and (id eq '{1}')</value>
-  </data>
-  <data name="ENTITIES_BYINDEX" xml:space="preserve">
-    <value>index eq {0}</value>
-  </data>
-  <data name="ENTITIES_WITH_ENTITYID" xml:space="preserve">
-    <value>index eq {0}  and rel/any(elementId: elementId/index eq {1} and elementId/id eq '{2}')</value>
-    <comment>Obtiene todos los elementos de una colección que estén asociado a un elemento y su identificador.</comment>
-  </data>
-  <data name="ENTITIES_WITH_ENTITYID_EXCEPTID" xml:space="preserve">
-    <value>index eq {0} and  id ne '{3}' and rel/any(elementId: elementId/index eq {1} and elementId/id eq '{2}')</value>
-    <comment>sirve para comprobar si un elemento existe, sin consultar por si mismo, por ejemplo, quiero saber si existe mi nombre en la base, pero no me incluya a mi.</comment>
-  </data>
-  <data name="GET_ELEMENT" xml:space="preserve">
-    <value>index eq {0} and id eq '{1}'</value>
-    <comment>Consulta para obtener un elemento</comment>
-  </data>
-  <data name="IDS_JOIN" xml:space="preserve">
-    <value>' or id eq '</value>
+  <data name="AddDocument" xml:space="preserve">
+    <value>[{"id":"9aebaf15-eb85-49d7-acca-643329d4078b","created":"2020-10-19T17:40:09.8572148-03:00","index":12,"bl":[],"dbl":[],"dt":[],"enm":[{"facet":"0,0","index":0,"value":0}],"num32":[],"num64":[],"rel":[{"index":7,"id":"9aebaf15-eb85-49d7-acca-643329d4078b","facet":"7,9aebaf15-eb85-49d7-acca-643329d4078b"},{"index":32,"id":"9aebaf15-eb85-49d7-acca-643329d4078b","facet":"32,9aebaf15-eb85-49d7-acca-643329d4078b"}],"str":[],"sug":[{"value":"Producto 1","index":1},{"value":"12234","index":14}],"geo":[]}]</value>
   </data>
 </root>

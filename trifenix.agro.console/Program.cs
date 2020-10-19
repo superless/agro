@@ -29,11 +29,11 @@ namespace trifenix.agro.console
             Environment.SetEnvironmentVariable("Search_allowedOrigins", "https://aresa.trifenix.io;https://dev-aresa.trifenix.io;https://agro.trifenix.io;https://agro-dev.trifenix.io;http://localhost:3000;http://localhost:4000;https://aresa2-dev.trifenix.io;https://aresa2.trifenix.io;http://localhost:9009;https://portal.azure.com");
 
             var agroDbArguments = new CosmosDbArguments { EndPointUrl = "https://agrodb.documents.azure.com:443/", NameDb = "agrodb", PrimaryKey = "tsbucd6u03LZ7QR5QJKKdUdGRSmcVT4U9iSvWUbOm4kx5omw0xqyv2wRDdxciVpG27uBxnX9wx5cjfvPSmIrSw==" };
-            var search = new AgroSearch<GeographyPoint>("agrocloud", "6D2BA6AF3373D17A341F7A099BA8FA6A", new CorsOptions(Environment.GetEnvironmentVariable("Search_allowedOrigins", EnvironmentVariableTarget.Process).Split(";")));
+            //var search = new AgroSearch<GeographyPoint>("agrocloud", "6D2BA6AF3373D17A341F7A099BA8FA6A", new CorsOptions(Environment.GetEnvironmentVariable("Search_allowedOrigins", EnvironmentVariableTarget.Process).Split(";")));
 
             
 
-            var agro = new AgroManager<GeographyPoint>(new DbConnect(agroDbArguments), null, null, null, search, null, false);
+            //var agro = new AgroManager<GeographyPoint>(new DbConnect(agroDbArguments), null, null, null, search, null, false);
 
             //var assm = typeof(BusinessName).Assembly;
             //var types = assm.GetTypes().Where(type => type.GetProperty("CosmosEntityName") != null && !(new[] { typeof(EntityContainer), typeof(User), typeof(UserActivity), typeof(Comment) }).Contains(type)).ToList();

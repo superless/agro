@@ -5,7 +5,7 @@ using trifenix.connect.search_mdl;
 
 namespace trifenix.connect.mdm.search.model
 {
-    public class Implements : Implements<GeographyPoint>
+    public class ImplementsSearch : Implements<GeographyPoint>
     {
         public Type num32 => typeof(Num32Property);
 
@@ -32,4 +32,5 @@ namespace trifenix.connect.mdm.search.model
         public Func<object, GeographyPoint> GeoObjetoToGeoSearch => (ob)=>GeographyPoint.Create(0,0);
     }
 
+    
 }

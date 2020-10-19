@@ -359,7 +359,7 @@ namespace trifenix.connect.util
 
             try
             {   
-                var array = elements.Where(s => s.Key.IsEntity && s.Key.KindIndex == (int)KindEntityProperty.REFERENCE);
+                var array = elements.Where(s => s.Key.IsEntity && EnumerationExtension.IsPrimitiveAndCollection(s.Value.GetType()) && !s.Value.GetType().IsEnum);
 
                 var refes = array.SelectMany(s => GetEntityProperty(s.Key.Index, s.Value, typeToCast)).ToArray();
                 return !refes.Any() ? Array.Empty<IRelatedId>() : refes;
@@ -486,7 +486,8 @@ namespace trifenix.connect.util
         public static IEntitySearch<T> GetSimpleEntity<T>(Implements<T> implements, object obj, Type typeToCast, int index) {
 
             // obtiene la metadata y los datos del objeto
-            var mdl = Reflection.Attributes.GetPropertiesByAttributeWithValue(obj);
+            var mdl = Reflection.Attributes.GetPropertiesByAttributeWithValue(obj).Where(s=> EnumerationExtension.IsPrimitiveAndCollection(s.Value.GetType()) || s.Value.GetType().IsEnum).ToDictionary(s=>s.Key, s=>s.Value);
+
 
             // asigna las propiedades.
             var entitySearch = FillProps(implements, mdl, typeToCast);
@@ -584,18 +585,20 @@ namespace trifenix.connect.util
             // obtiene todas las propiedades sin metadata.
             // filtra por aquellas propiedades que sean de tipo clase.
             // las propiedades sin metadata se usan para  comprobar  si son una entidad local, es decir tienen el atributo mdm que lo identifica como entidad.
-            var valuesWithoutProperty = Reflection.Attributes.GetPropertiesWithoutAttributeWithValues(obj).Where(s=>s.GetType().IsClass);
+            var valuesWithoutProperty = Reflection.Attributes.GetPropertiesWithoutAttributeWithValues(obj).Where(s=>!EnumerationExtension.IsPrimitiveAndCollection(s.GetType()) && !s.GetType().IsEnum);
 
 
-
+            
             // obtiene las propiedades del objeto, sin incorporar las entidades referenciales locales.
             var entitySearch = GetSimpleEntity(implements, obj, typeToCast,  entityAttr.First().Index);
 
 
-           
-            // si la entidad es la inicial, es decir es de referencia (no local), obtendrá el id desde el mismo elemento.
-            // si no es el primero será una referencia de tipo local y deberá generarse una nueva entidad con un nuevo id.
-            entitySearch.id = parent == null ? obj.GetType().GetProperty("Id").GetValue(obj).ToString() : Guid.NewGuid().ToString("N");
+            // identifica si el elemento tiene la propiedad id y si la tiene, si tiene un valor.
+            var definedId = obj.GetType().GetProperty("Id")?.GetValue(obj)?.ToString();
+
+            // si el elemento no tiene id, se asigna uno.
+            entitySearch.id = !string.IsNullOrWhiteSpace(definedId) ? definedId : Guid.NewGuid().ToString("N");
+
 
 
 
@@ -619,7 +622,7 @@ namespace trifenix.connect.util
             // toma todos los valores de propiedad que sean de tipo local reference o no tengan atributos de metadata y que los valores deben ser clases y no valores primitivos, para poder identificar entidades locales.
             // el método recorrerá el objeto y verificará que tenga el atributo que lo identifique como entidad, sino lo tiene no será reconocido como entidad, no importa si la propiedad tiene el atributo de entidad local.
             // el atributo de la clase es el que vale (EntityIndexAttribute).
-            var posibleLocals = valuesWithoutProperty.Union(values.Where(s => s.Key.IsEntity && s.Key.KindIndex == (int)KindEntityProperty.LOCAL_REFERENCE).Select(s => s.Value)).ToList();
+            var posibleLocals = valuesWithoutProperty.Union(values.Where(s => !EnumerationExtension.IsPrimitiveAndCollection(s.Value.GetType()) && !s.Value.GetType().IsEnum).Select(s => s.Value)).ToList();
 
            
 

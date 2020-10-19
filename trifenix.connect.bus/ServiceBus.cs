@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using trifenix.connect.input;
 
-namespace trifenix.connect.agro.bus
+namespace trifenix.connect.bus
 {
     public class ServiceBus {
 

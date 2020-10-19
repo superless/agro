@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using trifenix.connect.interfaces.log;
 using trifenix.connect.mdm.entity_model;
+using trifenix.connect.mdm.ts_model;
 
 namespace trifenix.connect.interfaces.search
 {
@@ -11,7 +13,7 @@ namespace trifenix.connect.interfaces.search
     /// Operaciones básicas de busqueda, para cualquier proyecto.
     /// </summary>
     /// <typeparam name="T">Tipo de dato, que representa un tipo de dato Geo</typeparam>
-    public interface IBaseEntitySearch<T>
+    public interface IBaseEntitySearch<T> 
     {
 
         string ServiceName { get;  }
@@ -68,4 +70,5 @@ namespace trifenix.connect.interfaces.search
         /// </summary>
         void CreateOrUpdateIndex();
     }
+
 }

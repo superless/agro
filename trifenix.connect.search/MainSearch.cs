@@ -1,9 +1,11 @@
 ﻿using Microsoft.Azure.Search;
 using Microsoft.Azure.Search.Models;
 using Microsoft.Spatial;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using trifenix.connect.interfaces.log;
 using trifenix.connect.interfaces.search;
 using trifenix.connect.mdm.entity_model;
 using trifenix.connect.mdm.enums;
@@ -22,8 +24,8 @@ namespace trifenix.connect.search
         // cliente azure search
         private readonly SearchServiceClient _search;
 
-        // índice donde operará el objeto.
         
+
 
         // opciones cors
         private readonly CorsOptions corsOptions;
@@ -79,6 +81,9 @@ namespace trifenix.connect.search
 
             // ejecución.
             indexClient.Documents.Index(batch);
+
+            
+
         }
 
         /// <summary>
@@ -89,6 +94,7 @@ namespace trifenix.connect.search
         public void AddElements(List<IEntitySearch<GeoPointType>> elements)
         {
             OperationElements(elements, SearchOperation.Add);
+            
         }
 
         /// <summary>
@@ -99,6 +105,7 @@ namespace trifenix.connect.search
         public void AddElement(IEntitySearch<GeoPointType> element)
         {
             OperationElements(new List<IEntitySearch<GeoPointType>> { element }, SearchOperation.Add);
+            
         }
 
         /// <summary>
@@ -108,6 +115,7 @@ namespace trifenix.connect.search
         public void DeleteElements(List<IEntitySearch<GeoPointType>> elements)
         {
             OperationElements(elements, SearchOperation.Delete);
+            
         }
 
         /// <summary>
@@ -121,10 +129,7 @@ namespace trifenix.connect.search
             var indexClient = _search.Indexes.GetClient(indexName);
             var result = indexClient.Documents.Search<EntitySearch>(null, new SearchParameters { Filter = filter });
 
-
-
-
-            return result.Results.Select(v => (IEntitySearch<GeoPointType>)new EntityBaseSearch<GeographyPoint>
+            var filterResult = result.Results.Select(v => (IEntitySearch<GeoPointType>)new EntityBaseSearch<GeographyPoint>
             {
                 bl = v.Document.bl,
                 created = v.Document.created,
@@ -142,6 +147,8 @@ namespace trifenix.connect.search
 
 
             }).ToList();
+
+            return filterResult;
         }
         /// <summary>
         /// Vacía el índice.
@@ -173,5 +180,7 @@ namespace trifenix.connect.search
             if (elements.Any())
                 DeleteElements(elements);
         }
+
+      
     }
 }

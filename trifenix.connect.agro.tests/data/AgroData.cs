@@ -74,6 +74,69 @@ namespace trifenix.agro.external.operations.tests.data
 
         };
 
+        public static DosesInput Doses3 => new DosesInput
+        {
+            Active = true,
+            ApplicationDaysInterval = 10,
+            DosesApplicatedTo = DosesApplicatedTo.L100,
+            Default = false,
+            DosesQuantityMax = 2,
+            DosesQuantityMin = 1.1,
+            HoursToReEntryToBarrack = 22,
+            IdsApplicationTarget = new string[]{
+                                ConstantGuids.Value[0],
+                                ConstantGuids.Value[1],
+                            },
+            WaitingDaysLabel = 10,
+            WettingRecommendedByHectares = 2000,
+            NumberOfSequentialApplication = 1,
+            IdProduct = ConstantGuids.Value[1],
+            // Id = ConstantGuids.Value[1],  // las dosis no deberían tener ids.
+            WaitingToHarvest = new WaitingHarvestInput[] { WaitingHarvest1, WaitingHarvest2 },
+            IdSpecies = new string[]{
+                                ConstantGuids.Value[0],
+                                ConstantGuids.Value[1]
+                            },
+            IdVarieties = new string[]{
+                                ConstantGuids.Value[0],
+                                ConstantGuids.Value[1]
+                            },
+
+        };
+
+        public static DosesInput Doses4 => new DosesInput
+        {
+            Active = true,
+            ApplicationDaysInterval = 10,
+            DosesApplicatedTo = DosesApplicatedTo.L1000,
+            Default = false,
+            DosesQuantityMax = 2,
+            DosesQuantityMin = 1.1,
+            HoursToReEntryToBarrack = 22,
+            IdsApplicationTarget = new string[]{
+                                ConstantGuids.Value[0],
+                                ConstantGuids.Value[1],
+                            },
+            WaitingDaysLabel = 10,
+            WettingRecommendedByHectares = 2000,
+            NumberOfSequentialApplication = 1,
+            IdProduct = ConstantGuids.Value[1],
+            // Id = ConstantGuids.Value[1],  // las dosis no deberían tener ids.
+            WaitingToHarvest = new WaitingHarvestInput[]{WaitingHarvest1, WaitingHarvest2,
+                            },
+            IdSpecies = new string[]{
+                                ConstantGuids.Value[0],
+                                ConstantGuids.Value[1]
+                            },
+            IdVarieties = new string[]{
+                                ConstantGuids.Value[0],
+                                ConstantGuids.Value[0]
+                            },
+
+        };
+
+        public static DosesInput[] Doses => new DosesInput[] { Doses1, Doses2, Doses3, Doses4 };
+
 
         public static DosesInput DosesWithoutWettingRecommended => new DosesInput
         {
