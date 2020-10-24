@@ -496,7 +496,7 @@ namespace trifenix.agro.app.frm.mantenedores.doses
             }
         }
 
-        private HelpProvider hlpProvider;
+        
 
 
         

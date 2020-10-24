@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using trifenix.connect.agro.external.main;
 using trifenix.connect.agro.index_model.props;
+using trifenix.connect.agro.interfaces;
 using trifenix.connect.agro.interfaces.cosmos;
 using trifenix.connect.agro.interfaces.external;
 using trifenix.connect.agro_model;
@@ -17,50 +18,80 @@ using trifenix.connect.util;
 
 namespace trifenix.agro.external.operations.entities.ext
 {
+
+
     public class DosesOperations<T> : MainOperation<Dose, DosesInput,T>, IGenericOperation<Dose, DosesInput> {
         private readonly IDbExistsElements existsElement;
-        private readonly ICommonQueries Queries;
+        private readonly ICommonAgroQueries Queries;
 
-        public DosesOperations(IDbExistsElements existsElement, IMainGenericDb<Dose> repo,  IAgroSearch<T> search, ICommonDbOperations<Dose> commonDb, ICommonQueries queries, IValidatorAttributes<DosesInput, Dose> validator) : base(repo, search, commonDb, validator) {
+        public DosesOperations(IDbExistsElements existsElement, IMainGenericDb<Dose> repo,  IAgroSearch<T> search, ICommonDbOperations<Dose> commonDb, ICommonAgroQueries queries, IValidatorAttributes<DosesInput> validator) : base(repo, search, commonDb, validator) {
             this.existsElement = existsElement;
             Queries = queries;
         }
 
-        public async Task Remove(string id) {
-            //Ambas consultas son identicas. Duplicado!
-            var existsInOrder = await existsElement.ExistsDosesFromOrder(id);
-            var existsInExecution = await existsElement.ExistsDosesExecutionOrder(id);
-            if (!existsInExecution && !existsInOrder) {
-                await repo.DeleteEntity(id);
+        public override async Task Remove(string id) {
+
+            var existDoses = await existElement.ExistsById<Dose>(id);
+
+            if (existDoses)
+            {
+                var existsInOrder = await existsElement.ExistsDosesFromOrder(id);
+                var existsInExecution = await existsElement.ExistsDosesExecutionOrder(id);
+
+                // elimina desde el search la dosis
                 var query = $"index eq {(int)EntityRelated.DOSES} and id eq '{id}'";
                 search.DeleteElements(query);
-                return;
+
+
+
+                if (!existsInExecution && !existsInOrder)
+                {
+                    // si no existe en alguna operación puede ser eliminada
+                    await repo.DeleteEntity(id);
+                    
+                    return;
+                }
+                var dose = (await Get(id)).Result;
+                dose.Active = false;
+                await SaveDb(dose);
+                await SaveSearch(dose);
             }
-            var dose = (await Get(id)).Result;
-            dose.Active = false;
-            await repo.CreateUpdate(dose);
-            search.AddElements(search.GetEntitySearch(dose).ToList());
+            
         }
 
-        public async Task<ExtPostContainer<string>> Save(Dose dose) {
-            await repo.CreateUpdate(dose);
-            var productSearch = search.GetEntity(EntityRelated.PRODUCT, dose.IdProduct);
+        
 
-            if (!productSearch.rel.Any(relatedId => relatedId.index == (int)EntityRelated.DOSES && relatedId.id == dose.Id)) {
-                productSearch.rel = productSearch.rel.Add(new RelatedId { id = dose.Id, index = (int)EntityRelated.DOSES });
-                search.AddElement(productSearch);
-            }
-            search.AddDocument(dose);
-
-            return new ExtPostContainer<string> {
-                IdRelated = dose.Id,
-                MessageResult = ExtMessageResult.Ok
-            };
-        }
-
-        public async Task<ExtPostContainer<string>> SaveInput(DosesInput dosesInput, bool isBatch) {
-            //await Validate(dosesInput);
+        public override async Task<ExtPostContainer<string>> SaveInput(DosesInput dosesInput) {
             var id = !string.IsNullOrWhiteSpace(dosesInput.Id) ? dosesInput.Id : Guid.NewGuid().ToString("N");
+            if (dosesInput.Default)
+            {
+                if (string.IsNullOrWhiteSpace(dosesInput.IdProduct))
+                {
+                    return new ExtPostErrorContainer<string>()
+                    {
+                        InternalException = new Exception("se ha ingresado una dosis por defecto sin identificador de producto"),
+                        MessageResult = ExtMessageResult.Error
+                    };
+                }
+
+                var doseLocal = new Dose
+                {
+                    Id = id,
+                    IdProduct = dosesInput.IdProduct,
+                    Active = dosesInput.Active,
+                    Default = dosesInput.Default
+                };
+
+                var resultDb = await SaveDb(doseLocal);
+                if (resultDb.MessageResult == ExtMessageResult.Ok)
+                {
+                    return await SaveSearch(doseLocal);
+                }
+                return resultDb;
+            }
+            await Validate(dosesInput);
+
+            
 
 
             
@@ -82,26 +113,26 @@ namespace trifenix.agro.external.operations.entities.ext
                 WaitingDaysLabel = dosesInput.WaitingDaysLabel,
                 WaitingToHarvest = dosesInput.WaitingToHarvest == null || !dosesInput.WaitingToHarvest.Any() ? new List<WaitingHarvest>() : dosesInput.WaitingToHarvest.Select(WH_Input => new WaitingHarvest {
                     IdCertifiedEntity = WH_Input.IdCertifiedEntity,
-                    WaitingDays = WH_Input.WaitingDays,
+                    WaitingDays = WH_Input.WaitingDays, 
                     Ppm = WH_Input.Ppm
                 }).ToList(),
                 WettingRecommendedByHectares = dosesInput.WettingRecommendedByHectares
             };
 
 
-            if (!isBatch)
-                return await Save(dose);
+            var productSearch = search.GetEntity(EntityRelated.PRODUCT, dose.IdProduct);
 
+            if (!productSearch.rel.Any(relatedId => relatedId.index == (int)EntityRelated.DOSES && relatedId.id == dose.Id))
+            {
+                productSearch.rel = productSearch.rel.Add(new RelatedId { id = dose.Id, index = (int)EntityRelated.DOSES });
+                search.AddElement(productSearch);
+            }
 
-            await repo.CreateEntityContainer(dose);
-
-
-            return new ExtPostContainer<string> {
-                IdRelated = id,
-                MessageResult = ExtMessageResult.Ok
-            };
+            await SaveDb(dose);
+            return await SaveSearch(dose);
         }
 
+      
     }
 
 }

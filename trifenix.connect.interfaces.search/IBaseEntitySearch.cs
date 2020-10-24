@@ -71,4 +71,6 @@ namespace trifenix.connect.interfaces.search
         void CreateOrUpdateIndex();
     }
 
+    
+
 }

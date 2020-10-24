@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using trifenix.connect.agro.interfaces;
 using trifenix.connect.agro.model_queries;
 using trifenix.connect.agro_model;
 using trifenix.connect.db;
@@ -11,29 +12,12 @@ using trifenix.connect.interfaces.db.cosmos;
 namespace trifenix.connect.agro.queries
 {
 
-    public class CommonQueries : BaseQueries, ICommonQueries {
+    public class CommonQueries : BaseQueries, ICommonAgroQueries {
 
         public CommonQueries(CosmosDbArguments dbArguments) : base(dbArguments) { }
 
 
         public string Queries(DbQuery query) => new Queries().Get(query);
-
-        public async Task<string> GetSpecieAbbreviation(string idSpecie) => await SingleQuery<Specie, string>(Queries(DbQuery.SPECIEABBREVIATION_FROM_SPECIEID), idSpecie);
-
-        public async Task<string> GetSpecieAbbreviationFromVariety(string idVariety) {
-            var idSpecie = await SingleQuery<Variety, string>(Queries(DbQuery.SPECIEID_FROM_VARIETYID), idVariety);
-            return await GetSpecieAbbreviation(idSpecie);
-        }
-
-        public async Task<string> GetSpecieAbbreviationFromBarrack(string idBarrack) {
-            var result = await SingleQuery<Barrack, string>(Queries(DbQuery.VARIETYID_FROM_BARRACKID), idBarrack);
-            return await GetSpecieAbbreviationFromVariety(result);
-        }
-
-        public async Task<string> GetSpecieAbbreviationFromOrder(string idOrder) {
-            var result = await SingleQuery<ApplicationOrder, string>(Queries(DbQuery.IDBARRACK_FROM_ORDERID), idOrder);
-            return await GetSpecieAbbreviationFromBarrack(result);
-        }
 
         public async Task<List<string>> GetUsersMailsFromRoles(List<string> idsRoles) {
             var result = await MultipleQuery<User, string>(Queries(DbQuery.MAILUSERS_FROM_ROLES),  string.Join(",", idsRoles.Select(idRole => $"'{idRole}'").ToArray()));
@@ -49,7 +33,7 @@ namespace trifenix.connect.agro.queries
 
         public async Task<IEnumerable<string>> GetActiveDosesIdsFromProductId(string idProduct) => await MultipleQuery<Dose, string>(Queries(DbQuery.ACTIVEDOSESIDS_FROM_PRODUCTID), idProduct);
 
-        public async Task<string> GetEntityName<T>(string id) where T : DocumentBaseName => await SingleQuery<T, string>(Queries(DbQuery.NAME_BY_ID), id);
+        
 
     }
 

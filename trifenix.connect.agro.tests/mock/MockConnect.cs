@@ -2,7 +2,9 @@ using Cosmonaut;
 using Moq;
 using System.Linq;
 using trifenix.connect.agro.external.helper;
+using trifenix.connect.agro.interfaces;
 using trifenix.connect.agro.interfaces.cosmos;
+using trifenix.connect.agro.interfaces.external;
 using trifenix.connect.entities.cosmos;
 using trifenix.connect.input;
 using trifenix.connect.interfaces.db.cosmos;
@@ -11,33 +13,54 @@ using trifenix.connect.interfaces.graph;
 
 namespace trifenix.connect.agro.tests.mock
 {
+
+    public enum ConnectCondition { 
+        Default = 0,
+        INSERT_PRODUCT =1
+    }
+
     public class MockConnect : IDbAgroConnect
     {
 
-        // no se usa en la mayoría de las operaciones
-        public ICosmosStore<EntityContainer> BatchStore
-        {
-            get
-            {
 
-                return null;
-            }
+        readonly ConnectCondition connectCondition;
+        public MockConnect(ConnectCondition connectCondition = ConnectCondition.Default)
+        {
+            this.connectCondition = connectCondition;
         }
+        
 
-
-        public ICommonQueries CommonQueries
+        /// <summary>
+        /// Mock de consultas agricolas a la base de datos.
+        /// </summary>
+        public ICommonAgroQueries CommonQueries
         {
             get
             {
-                var mock = new Mock<ICommonQueries>();
+                var mock = new Mock<ICommonAgroQueries>();
                 // definición de métodos.
-
+                if (connectCondition != ConnectCondition.Default)
+                {
+                    switch (connectCondition)
+                    {
+                        case ConnectCondition.Default:
+                            break;
+                        case ConnectCondition.INSERT_PRODUCT:
+                            mock.Setup(s => s.GetActiveDosesIdsFromProductId(It.IsAny<string>()));
+                            break;
+                        default:
+                            break;
+                    }
+                }
 
 
                 return mock.Object;
             }
         }
 
+        /// <summary>
+        /// Mock a la api de microsoft para gestión de identidades.
+        /// </summary>
         public IGraphApi GraphApi
         {
             get
@@ -51,16 +74,20 @@ namespace trifenix.connect.agro.tests.mock
             }
         }
 
+        /// <summary>
+        /// Mock de operaciones de base de datos, donde residen consultas de existencia.
+        /// </summary>
         public IDbExistsElements GetDbExistsElements => MockHelper.GetExistElement();
 
-        public IExistElement ExistsElements(bool isBatch)
-        {
-            var mock = new Mock<IExistElement>();
-            // definición de métodos.
-            return mock.Object;
-        }
 
+        
 
+        /// <summary>
+        /// Mock de conversiones de base de datos, cosmos usa un método estático para convertir un IQueriable a lista,
+        /// para testear se debe mockear.
+        /// </summary>
+        /// <typeparam name="T">Tipo de base de datos de persistencia</typeparam>
+        /// <returns></returns>
         public ICommonDbOperations<T> GetCommonDbOp<T>() where T : DocumentBase
         {
             var mock = new Mock<ICommonDbOperations<T>>();
@@ -70,16 +97,30 @@ namespace trifenix.connect.agro.tests.mock
             return mock.Object;
         }
 
+        
+        /// <summary>
+        /// Mock del objeto principal de base de datos
+        /// </summary>
+        /// <typeparam name="T">Tipo de base de datos de persistencia</typeparam>
+        /// <returns>MainGenericDb</returns>
         public IMainGenericDb<T> GetMainDb<T>() where T : DocumentBase
         {
             var mock = new Mock<IMainGenericDb<T>>();
             // definición de métodos.
-
+            
 
             return mock.Object;
         }
 
-        public IValidatorAttributes<T_INPUT, T_DB> GetValidator<T_INPUT, T_DB>(bool isBatch)
+
+        /// <summary>
+        /// Validaciones de elementos input
+        /// </summary>
+        /// <typeparam name="T_INPUT"></typeparam>
+        /// <typeparam name="T_DB"></typeparam>
+        /// <param name="isBatch"></param>
+        /// <returns></returns>
+        public IValidatorAttributes<T_INPUT> GetValidator<T_INPUT, T_DB>()
             where T_INPUT : InputBase
             where T_DB : DocumentBase
         {

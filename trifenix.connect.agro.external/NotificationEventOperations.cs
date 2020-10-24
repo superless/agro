@@ -22,33 +22,39 @@ namespace trifenix.connect.agro.external
     /// </summary>
     public class NotificationEventOperations<T> : MainOperation<NotificationEvent, NotificationEventInput,T>, IGenericOperation<NotificationEvent, NotificationEventInput> {
         
-        private readonly ICommonQueries commonQueries;
+        private readonly ICommonAgroQueries commonQueries;
         private readonly IEmail email;
         private readonly IUploadImage uploadImage;
         private readonly IWeatherApi weather;
 
-        public NotificationEventOperations(IMainGenericDb<NotificationEvent> repo, IAgroSearch<T> search, ICommonQueries commonQueries, IEmail email, IUploadImage uploadImage, IWeatherApi weather, ICommonDbOperations<NotificationEvent> commonDb, IValidatorAttributes<NotificationEventInput, NotificationEvent> validator) : base(repo, search, commonDb, validator) {
+        public NotificationEventOperations(IMainGenericDb<NotificationEvent> repo, IAgroSearch<T> search, ICommonAgroQueries commonQueries, IEmail email, IUploadImage uploadImage, IWeatherApi weather, ICommonDbOperations<NotificationEvent> commonDb, IValidatorAttributes<NotificationEventInput> validator) : base(repo, search, commonDb, validator) {
             this.commonQueries = commonQueries;
             this.email = email;
             this.uploadImage = uploadImage;
             this.weather = weather;
         }
 
-        //TODO: remove
-        public Task Remove(string id) {
-            throw new NotImplementedException();
-        }
+        public override async Task<ExtPostContainer<string>> SaveInput(NotificationEventInput input) {
+            await Validate(input);
+            var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
+            var picturePath = await uploadImage.UploadImageBase64(input.Base64);
+            
 
-     
-
-        public async Task<ExtPostContainer<string>> Save(NotificationEvent notificationEvent) {
-            //TODO: Revisar
-            var picturePath = await uploadImage.UploadImageBase64(notificationEvent.PicturePath);
-            notificationEvent.PicturePath = picturePath;
-            await repo.CreateUpdate(notificationEvent);
-            search.AddDocument(notificationEvent);
-
-            //TODO: Definir el origen de la lista de idsRoles
+            NotificationEvent notification = new NotificationEvent {
+                Id = id,
+                Created = DateTime.Now,
+                IdBarrack = input.IdBarrack,
+                IdPhenologicalEvent = input.IdPhenologicalEvent,
+                NotificationType = input.NotificationType,
+                PicturePath = picturePath,
+                Description = input.Description,
+                
+            };
+            if (input.Location != null) {
+                notification.Location = new Point(input.Location.Longitude, input.Location.Latitude);
+                notification.Weather = await weather.GetWeather((float)input.Location.Latitude, (float)input.Location.Longitude);
+            }
+            await SaveDb(notification);
             var usersEmails = await commonQueries.GetUsersMailsFromRoles(new List<string> { "24beac75d4bb4f8d8fae8373426af780" });
             email.SendEmail(usersEmails, "Notificacion",
                 $@"<html>
@@ -59,37 +65,11 @@ namespace trifenix.connect.agro.external
                         <p> Atentamente,<br> -Aresa </br></p>
                     </body>
                 </html>");
-            return new ExtPostContainer<string> {
-                IdRelated = notificationEvent.Id,
-                MessageResult = ExtMessageResult.Ok
-            };
+
+            return await SaveSearch(notification);
         }
 
-        public async Task<ExtPostContainer<string>> SaveInput(NotificationEventInput input, bool isBatch) {
-            await Validate(input);
-            var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
-            NotificationEvent notification = new NotificationEvent {
-                Id = id,
-                Created = DateTime.Now,
-                IdBarrack = input.IdBarrack,
-                IdPhenologicalEvent = input.IdPhenologicalEvent,
-                NotificationType = input.NotificationType,
-                PicturePath = input.Base64,
-                Description = input.Description,
-            };
-            if (input.Location != null) {
-                notification.Location = new Point(input.Location.Longitude, input.Location.Latitude);
-                notification.Weather = await weather.GetWeather((float)input.Location.Latitude, (float)input.Location.Longitude);
-            }
-            if (!isBatch)
-                return await Save(notification);
-            await repo.CreateEntityContainer(notification);
-            return new ExtPostContainer<string> {
-                IdRelated = id,
-                MessageResult = ExtMessageResult.Ok
-            };
-        }
-
+        
     }
 
 }

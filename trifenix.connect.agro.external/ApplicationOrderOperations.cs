@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using trifenix.connect.agro.external.main;
 using trifenix.connect.agro.index_model.enums;
 using trifenix.connect.agro.index_model.props;
+using trifenix.connect.agro.interfaces;
 using trifenix.connect.agro.interfaces.external;
 using trifenix.connect.agro_model;
 using trifenix.connect.agro_model_input;
@@ -21,11 +22,11 @@ namespace trifenix.connect.agro.external
 
         
 
-        public ApplicationOrderOperations(IMainGenericDb<ApplicationOrder> repo,  IAgroSearch<T> search, ICommonQueries commonQueries, ICommonDbOperations<ApplicationOrder> commonDb, IValidatorAttributes<ApplicationOrderInput, ApplicationOrder> validator) : base(repo,  search, commonDb, validator) {
+        public ApplicationOrderOperations(IMainGenericDb<ApplicationOrder> repo,  IAgroSearch<T> search, ICommonAgroQueries commonQueries, ICommonDbOperations<ApplicationOrder> commonDb, IValidatorAttributes<ApplicationOrderInput> validator) : base(repo,  search, commonDb, validator) {
 
         }
 
-        public async Task Remove(string id) { }
+        
 
         public override async Task Validate(ApplicationOrderInput applicationOrderInput) {
             await base.Validate(applicationOrderInput);
@@ -63,20 +64,8 @@ namespace trifenix.connect.agro.external
         }
 
 
-        public async Task<ExtPostContainer<string>> Save(ApplicationOrder applicationOrder) {
-            await repo.CreateUpdate(applicationOrder);
-            
-            
-            search.DeleteElementsWithRelatedElement(EntityRelated.BARRACK_EVENT, EntityRelated.ORDER, applicationOrder.Id);
-            search.DeleteElementsWithRelatedElement(EntityRelated.DOSES_ORDER, EntityRelated.ORDER, applicationOrder.Id);
-            search.AddDocument(applicationOrder);
-            return new ExtPostContainer<string> {
-                IdRelated = applicationOrder.Id,
-                MessageResult = ExtMessageResult.Ok
-            };
-        }
 
-        public async Task<ExtPostContainer<string>> SaveInput(ApplicationOrderInput input, bool isBatch) {
+        public async override Task<ExtPostContainer<string>> SaveInput(ApplicationOrderInput input) {
             await Validate(input);
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
             var order = new ApplicationOrder {
@@ -90,13 +79,12 @@ namespace trifenix.connect.agro.external
                 OrderType = input.OrderType,
                 Wetting = input.Wetting
             };
-            if (!isBatch)
-                return await Save(order);
-            await repo.CreateEntityContainer(order);
-            return new ExtPostContainer<string> {
-                IdRelated = id,
-                MessageResult = ExtMessageResult.Ok
-            };
+            search.DeleteElementsWithRelatedElement(EntityRelated.BARRACK_EVENT, EntityRelated.ORDER, id);
+            search.DeleteElementsWithRelatedElement(EntityRelated.DOSES_ORDER, EntityRelated.ORDER, id);
+            await SaveDb(order);
+            return await SaveSearch(order);
+
+
         }
 
     }

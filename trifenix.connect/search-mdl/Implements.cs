@@ -26,9 +26,27 @@ namespace trifenix.connect.search_mdl
         /// </summary>
         Func<object, T> GeoObjetoToGeoSearch { get;  }
 
+        /// <summary>
+        /// Obtiene implementación de un IEntitySearch<T>. 
+        /// Para convertir una entidad o elemento de base de datos de persistencia.
+        /// trifenix connect crea un entitySearch, la diferencia de cada entitySearch está 
+        /// planteada por el tipo de dato Geo, dependiente de la base de datos que se utilice.
+        /// trifenix connect crea un nuevo EntitySearch, para crearlo debe tener el tipo al que se convertirá.
+        /// 
+        /// </summary>
+        Type GetEntitySearchImplementedType { get; }
+
     }
 
+
+    /// <summary>
+    /// Trifenix connect genera nuevos objetos a partir de un modelo de base de datos, 
+    /// como Product. Para poder generar un entitySearch con todas sus propiedades se deben asignar los tipos de conversión.
+    /// el tener los tipos de cada uno, permitirá generar un objeto desde cero, sin que sea necesario instanciar o crear un nuevo objeto.
+    /// Para esto se debe definir los tipos de propiedades y clases que serán utilizadas para generar el entitySearch.
+    /// </summary>
     public interface Implements {
+
         /// <summary>
         /// Tipo de una Clase que implemente INum32Property
         /// </summary>

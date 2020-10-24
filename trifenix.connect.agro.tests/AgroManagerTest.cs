@@ -15,10 +15,12 @@ namespace trifenix.connect.agro.tests
         [Fact]
         public async Task InsertProduct() {
             //assign
-            var agroManager = new AgroManager<GeoPointTs>(MockHelper.Connect, MockHelper.Email(), MockHelper.UploadImage(), MockHelper.WeatherApi(), MockHelper.AgroSearch(), string.Empty, false);
+            var agroManager = new AgroManager<GeoPointTs>(MockHelper.Connect, MockHelper.Email(), MockHelper.UploadImage(), MockHelper.WeatherApi(), MockHelper.AgroSearch(MockHelper.BaseSearchNewProductInput()), string.Empty);
             //action
-            var productResult = await agroManager.Product.SaveInput(AgroData.Product1, false);
+            var productResult = await agroManager.Product.SaveInput(AgroInputData.Product1);
+
             //assert
+
 
         }
     }

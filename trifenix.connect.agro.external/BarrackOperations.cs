@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using trifenix.connect.agro.external.main;
 using trifenix.connect.agro.index_model.props;
+using trifenix.connect.agro.interfaces;
 using trifenix.connect.agro.interfaces.external;
 using trifenix.connect.agro_model;
 using trifenix.connect.agro_model_input;
@@ -17,27 +18,17 @@ namespace trifenix.connect.agro.external
 
     public class BarrackOperations<T> : MainOperation<Barrack,BarrackInput,T>, IGenericOperation<Barrack, BarrackInput> {
 
-        private readonly ICommonQueries commonQueries;
+        private readonly ICommonAgroQueries commonQueries;
 
-        public BarrackOperations(IMainGenericDb<Barrack> repo,  IAgroSearch<T> search, ICommonQueries commonQueries, ICommonDbOperations<Barrack> commonDb, IValidatorAttributes<BarrackInput, Barrack> validator) : base(repo, search, commonDb, validator) {
+        public BarrackOperations(IMainGenericDb<Barrack> repo,  IAgroSearch<T> search, ICommonAgroQueries commonQueries, ICommonDbOperations<Barrack> commonDb, IValidatorAttributes<BarrackInput> validator) : base(repo, search, commonDb, validator) {
             this.commonQueries = commonQueries;
         }
 
-        public Task Remove(string id) {
-            throw new NotImplementedException();
-        }
+        
 
-        public async Task<ExtPostContainer<string>> Save(Barrack barrack) {
-            await repo.CreateUpdate(barrack);
-            search.DeleteElementsWithRelatedElement(EntityRelated.GEOPOINT, EntityRelated.BARRACK, barrack.Id);
-            search.AddDocument(barrack);
-            return new ExtPostContainer<string> {
-                IdRelated = barrack.Id,
-                MessageResult = ExtMessageResult.Ok
-            };
-        }
+       
 
-        public async Task<ExtPostContainer<string>> SaveInput(BarrackInput input, bool isBatch) {
+        public override async Task<ExtPostContainer<string>> SaveInput(BarrackInput input) {
             await Validate(input);
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
             var barrack = new Barrack {
@@ -54,15 +45,15 @@ namespace trifenix.connect.agro.external
             };
             if (input.GeographicalPoints != null && input.GeographicalPoints.Any())
                 barrack.GeographicalPoints = input.GeographicalPoints.Select(geoPoint => new Point(geoPoint.Longitude, geoPoint.Latitude)).ToArray();
-            if (!isBatch)
-                return await Save(barrack);
-            await repo.CreateEntityContainer(barrack);
-            return new ExtPostContainer<string> {
-                IdRelated = id,
-                MessageResult = ExtMessageResult.Ok
-            };
+            
+            search.DeleteElementsWithRelatedElement(EntityRelated.GEOPOINT, EntityRelated.BARRACK, barrack.Id);
+
+
+            await SaveDb(barrack);
+            return await SaveSearch(barrack);
         }
 
+       
     }
 
 }

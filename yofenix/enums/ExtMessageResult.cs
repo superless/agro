@@ -10,6 +10,7 @@
         Warning,
         ElementAlreadyExists,
         ChildRequiredDoesNotExists,
-        ElementToEditDoesNotExists
+        ElementToEditDoesNotExists,
+        BadInput
     }
 }

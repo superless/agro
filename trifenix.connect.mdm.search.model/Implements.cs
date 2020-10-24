@@ -1,6 +1,8 @@
-﻿using Microsoft.Spatial;
+﻿using Microsoft.Azure.Search;
+using Microsoft.Spatial;
+using Newtonsoft.Json;
 using System;
-
+using System.ComponentModel.DataAnnotations;
 using trifenix.connect.search_mdl;
 
 namespace trifenix.connect.mdm.search.model
@@ -30,7 +32,12 @@ namespace trifenix.connect.mdm.search.model
 
         // refactorizar.
         public Func<object, GeographyPoint> GeoObjetoToGeoSearch => (ob)=>GeographyPoint.Create(0,0);
+
+        public Type GetEntitySearchImplementedType => typeof(EntitySearch);
     }
 
-    
+
+
+
+
 }

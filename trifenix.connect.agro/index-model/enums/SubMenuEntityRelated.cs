@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace trifenix.connect.agro.index_model.props
+namespace trifenix.connect.agro.index_model.enums
 {
     public enum SubMenuEntityRelated
     {

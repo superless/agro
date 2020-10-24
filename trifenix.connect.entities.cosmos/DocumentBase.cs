@@ -1,10 +1,10 @@
 ﻿using Cosmonaut.Attributes;
+using trifenix.connect.model;
+
 namespace trifenix.connect.entities.cosmos
 {
-    public abstract class DocumentBase  {
+    public abstract class DocumentBase : DocumentDb {
 
-        public abstract string Id { get; set; }
-        public abstract string ClientId { get; set; }
 
         [CosmosPartitionKey]
         public string CosmosEntityName { get; set; }

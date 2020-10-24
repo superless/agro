@@ -2,6 +2,7 @@
 using trifenix.connect.entities.cosmos;
 using trifenix.connect.input;
 using trifenix.connect.interfaces.db.cosmos;
+using trifenix.connect.mdm.entity_model;
 
 namespace trifenix.connect.interfaces.external
 {
@@ -9,7 +10,7 @@ namespace trifenix.connect.interfaces.external
     /// Interface para validar elementos genéricos,
     /// generalmente dependiendo de los atributos que tenga
     /// </summary>
-    public interface IValidatorAttributes<T, T2> where T : InputBase where T2 : DocumentBase
+    public interface IValidatorAttributes<T> where T : InputBase 
     {
 
         /// <summary>
@@ -24,7 +25,6 @@ namespace trifenix.connect.interfaces.external
         IExistElement GetExistElement();
 
     }
-
     public class ResultValidate {
         public string[] Messages { get; set; }
 

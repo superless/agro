@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\trifenix.connect.agro.interfaces\trifenix.connect.agro.interfaces.csproj" />
     <ProjectReference Include="..\trifenix.connect.agro\trifenix.connect.agro.csproj" />
     <ProjectReference Include="..\trifenix.connect.interfaces.search\trifenix.connect.interfaces.search.csproj" />
     <ProjectReference Include="..\trifenix.connect.interfaces\trifenix.connect.interfaces.csproj" />

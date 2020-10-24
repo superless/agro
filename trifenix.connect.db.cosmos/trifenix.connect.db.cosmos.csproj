@@ -14,8 +14,4 @@
     <ProjectReference Include="..\trifenix.connect\trifenix.connect.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="agro\Common\" />
-  </ItemGroup>
-
 </Project>

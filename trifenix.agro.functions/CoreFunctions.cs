@@ -129,7 +129,7 @@ namespace trifenix.agro.functions
             var ObjectIdAAD = opInstance.Value<string>("ObjectIdAAD");            
             var queries = new CommonQueries(ConfigManager.GetDbArguments);            
             var EntityName = opInstance.Value<string>("EntityName");
-            var agro = await ContainerMethods.AgroManager(ObjectIdAAD, false);
+            var agro = await ContainerMethods.AgroManager(ObjectIdAAD);
             var entityType = opInstance["EntityType"].ToObject<Type>();
             var repo = agro.GetOperationByInputType(entityType);
             dynamic element = opInstance["Element"].ToObject(entityType);
@@ -147,7 +147,7 @@ namespace trifenix.agro.functions
                         Date = DateTime.Now,
                         EntityName = EntityName,
                         EntityId = saveReturn.IdRelated
-                    }, false); 
+                    }); 
                 }
                 
                 await signalRMessages.AddAsync(new SignalRMessage { Target = "Success", UserId = userId??"cloud-app", Arguments = new object[] { EntityName } });
@@ -1038,19 +1038,7 @@ namespace trifenix.agro.functions
             return result.JsonResult;
         }
 
-        [FunctionName("Initialize")]
-        public static async Task<IActionResult> Initialize([HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequest req, ILogger log) {
-            var claims = await Auth.Validate(req);
-            if (claims == null)
-                return new UnauthorizedResult();
-            string ObjectIdAAD = claims.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
-            var manager = await ContainerMethods.AgroManager(ObjectIdAAD, true);
-            string json = await req.ReadAsStringAsync();
-            JObject jsonObject = JObject.Parse(json);
-            var dbInitializer = new CosmosDbInitializer(manager, jsonObject.Value<string>("Assembly_Inputs"), jsonObject.Value<string>("Assembly_Entities"));
-            var result = await dbInitializer.MapJsonToDB(jsonObject.Value<JObject>("Entities"));
-            return result;
-        }
+        
 
     }
 

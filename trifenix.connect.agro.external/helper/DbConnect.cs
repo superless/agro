@@ -1,5 +1,7 @@
 ﻿using Cosmonaut;
+using trifenix.connect.agro.interfaces;
 using trifenix.connect.agro.interfaces.cosmos;
+using trifenix.connect.agro.interfaces.external;
 using trifenix.connect.agro.queries;
 using trifenix.connect.db;
 using trifenix.connect.db.cosmos;
@@ -13,24 +15,28 @@ using trifenix.connect.interfaces.graph;
 namespace trifenix.connect.agro.external.helper
 {
     /// <summary>
-    /// Enlaces a base de datos, para las distintas operaicones
+    /// Enlaces a base de datos, para las distintas operaciones
     /// </summary>
     public class DbConnect : IDbAgroConnect
     {
+        /// <summary>
+        /// argumentos para cosmosdb
+        /// </summary>
+        /// <param name="arguments">argumentos de cosmosdb</param>
         public DbConnect(CosmosDbArguments arguments)
         {
             Arguments = arguments;
         }
 
-        // argumentos de base de datos
+        /// <summary>
+        /// Argumentos de la base de datos.
+        /// </summary>
         public CosmosDbArguments Arguments { get; }
 
 
-        // batchstore usado para realizar operaciones en batch en la base de datos.
-        public ICosmosStore<EntityContainer> BatchStore =>   new CosmosStore<EntityContainer>(new CosmosStoreSettings(Arguments.NameDb, Arguments.EndPointUrl, Arguments.PrimaryKey));
-
+        
         // consultas comunes.
-        public ICommonQueries CommonQueries => new CommonQueries(Arguments);
+        public ICommonAgroQueries CommonQueries => new CommonQueries(Arguments);
 
 
         // Elementos en existencia.
@@ -47,11 +53,11 @@ namespace trifenix.connect.agro.external.helper
             return new MainGenericDb<T>(Arguments);
         }
 
-        public IValidatorAttributes<T_INPUT, T_DB> GetValidator<T_INPUT, T_DB>(bool isBatch)
+        public IValidatorAttributes<T_INPUT> GetValidator<T_INPUT, T_DB>()
             where T_INPUT : InputBase
             where T_DB : DocumentBase
         {
-            return new MainValidator<T_DB, T_INPUT>(ExistsElements(isBatch));
+            return new MainValidator<T_DB, T_INPUT>(GetDbExistsElements);
         }
 
 

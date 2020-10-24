@@ -27,7 +27,7 @@ namespace trifenix.connect.agro.tests
             //assign
             var mainValidator = new MainValidator<Product, ProductInput>(MockHelper.GetExistElement());
             //action
-            var result = await mainValidator.Valida(AgroData.ProductNewWithoutBrand);
+            var result = await mainValidator.Valida(AgroInputData.ProductNewWithoutBrand);
             //assert
             Assert.True(result.Messages.Count() == 1 && result.Messages.First().Equals("ProductInput.IdBrand es obligatorio"));
         }
@@ -45,7 +45,7 @@ namespace trifenix.connect.agro.tests
             var mainValidator = new MainValidator<Product, ProductInput>(MockHelper.GetExistElement());
 
             //action
-            var result = await mainValidator.Valida(AgroData.ProductWithInvalidIdToEdit);
+            var result = await mainValidator.Valida(AgroInputData.ProductWithInvalidIdToEdit);
 
 
             //assert
@@ -66,7 +66,7 @@ namespace trifenix.connect.agro.tests
             var mainValidator = new MainValidator<Product, ProductInput>(MockHelper.GetExistElement());
 
             //action
-            var result = await mainValidator.Valida(AgroData.Product1);
+            var result = await mainValidator.Valida(AgroInputData.Product1);
 
 
             //assert
@@ -86,7 +86,7 @@ namespace trifenix.connect.agro.tests
             var mainValidator = new MainValidator<Product, ProductInput>(MockHelper.GetExistElement());
 
             //action
-            var result = await mainValidator.Valida(AgroData.ProductWithDosesWithoutWett);
+            var result = await mainValidator.Valida(AgroInputData.ProductWithDosesWithoutWett);
 
 
 
@@ -108,7 +108,7 @@ namespace trifenix.connect.agro.tests
 
             var mainValidator = new MainValidator<Product, ProductInput>(MockHelper.GetExistElement());
 
-            var prd = AgroData.Product1;
+            var prd = AgroInputData.Product1;
 
 
 
@@ -137,7 +137,7 @@ namespace trifenix.connect.agro.tests
 
             var mainValidator = new MainValidator<Product, ProductInput>(MockHelper.GetExistElement());
 
-            var prd = AgroData.Product1;
+            var prd = AgroInputData.Product1;
 
             prd.SagCode = "43322"; // usa código SAG de product2
 
@@ -162,7 +162,7 @@ namespace trifenix.connect.agro.tests
 
             var mainValidator = new MainValidator<Product, ProductInput>(MockHelper.GetExistElement());
 
-            var prd = AgroData.Product1;
+            var prd = AgroInputData.Product1;
             prd.Id = string.Empty;
 
             prd.SagCode = "43322"; // usa código SAG de product2
@@ -188,7 +188,7 @@ namespace trifenix.connect.agro.tests
 
             var mainValidator = new MainValidator<Product, ProductInput>(MockHelper.GetExistElement());
 
-            var prd = AgroData.Product1;
+            var prd = AgroInputData.Product1;
             prd.Id = string.Empty;
 
             prd.SagCode = "433221"; // usa código SAG de product2
@@ -216,7 +216,7 @@ namespace trifenix.connect.agro.tests
             // assign
             var mainValidator = new MainValidator<Barrack, BarrackInput>(MockHelper.GetExistElement());
             // action
-            var result = await mainValidator.Valida(AgroData.Barrack1);
+            var result = await mainValidator.Valida(AgroInputData.Barrack1);
 
             Assert.True(result.Valid);
             // assert

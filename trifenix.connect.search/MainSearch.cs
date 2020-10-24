@@ -127,9 +127,9 @@ namespace trifenix.connect.search
         {
             var indexName = Index;
             var indexClient = _search.Indexes.GetClient(indexName);
-            var result = indexClient.Documents.Search<EntitySearch>(null, new SearchParameters { Filter = filter });
+            var result = indexClient.Documents.Search<IEntitySearch<GeoPointType>>(null, new SearchParameters { Filter = filter });
 
-            var filterResult = result.Results.Select(v => (IEntitySearch<GeoPointType>)new EntityBaseSearch<GeographyPoint>
+            var filterResult = result.Results.Select(v => (IEntitySearch<GeoPointType>)new EntityBaseSearch<GeoPointType>
             {
                 bl = v.Document.bl,
                 created = v.Document.created,

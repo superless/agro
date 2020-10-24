@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using trifenix.connect.agro.external.main;
+using trifenix.connect.agro.interfaces;
 using trifenix.connect.agro.interfaces.external;
 using trifenix.connect.agro_model;
 using trifenix.connect.agro_model_input;
@@ -15,9 +16,9 @@ using trifenix.connect.mdm.enums;
 namespace trifenix.agro.external.operations.entities.orders
 {
     public class ExecutionOrderOperations<T> : MainOperation<ExecutionOrder, ExecutionOrderInput,T>, IGenericOperation<ExecutionOrder, ExecutionOrderInput> {
-        private readonly ICommonQueries commonQueries;
+        private readonly ICommonAgroQueries commonQueries;
 
-        public ExecutionOrderOperations(IMainGenericDb<ExecutionOrder> repo, IAgroSearch<T> search, ICommonQueries commonQueries, ICommonDbOperations<ExecutionOrder> commonDb, IValidatorAttributes<ExecutionOrderInput, ExecutionOrder> validator) : base(repo, search, commonDb, validator) {
+        public ExecutionOrderOperations(IMainGenericDb<ExecutionOrder> repo, IAgroSearch<T> search, ICommonAgroQueries commonQueries, ICommonDbOperations<ExecutionOrder> commonDb, IValidatorAttributes<ExecutionOrderInput> validator) : base(repo, search, commonDb, validator) {
             this.commonQueries = commonQueries;
         }
 
@@ -32,20 +33,13 @@ namespace trifenix.agro.external.operations.entities.orders
                 throw new Validation_Exception { ErrorMessages = errors };
         }
 
-        public async Task<ExtPostContainer<string>> Save(ExecutionOrder executionOrder) {
-            await repo.CreateUpdate(executionOrder);
-            search.AddDocument(executionOrder);
-            return new ExtPostContainer<string> {
-                IdRelated = executionOrder.Id,
-                MessageResult = ExtMessageResult.Ok
-            };
-        }
+        
 
-        public async Task<ExtPostContainer<string>> SaveInput(ExecutionOrderInput input, bool isBatch) {
+        public override async Task<ExtPostContainer<string>> SaveInput(ExecutionOrderInput input) {
             await Validate(input);
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
             var execution = new ExecutionOrder {
-                Id= input.Id,
+                Id= id,
                 IdUserApplicator = input.IdUserApplicator,
                 IdNebulizer = input.IdNebulizer,
                 IdOrder = input.IdOrder,
@@ -54,17 +48,9 @@ namespace trifenix.agro.external.operations.entities.orders
                 EndDate = input.EndDate,
                 DosesOrder = input.DosesOrder
             };
-            if (!isBatch)
-                return await Save(execution);
-            await repo.CreateEntityContainer(execution);
-            return new ExtPostContainer<string> {
-                IdRelated = id,
-                MessageResult = ExtMessageResult.Ok
-            };
-        }
+            await SaveDb(execution);
+            return await SaveSearch(execution);
 
-        public Task Remove(string id) {
-            throw new NotImplementedException();
         }
 
     }

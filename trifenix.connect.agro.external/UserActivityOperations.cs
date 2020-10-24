@@ -16,23 +16,15 @@ namespace trifenix.connect.agro.external
 
         private readonly string UserId;
 
-        public UserActivityOperations(IMainGenericDb<UserActivity> repo, IAgroSearch<T> search, ICommonDbOperations<UserActivity> commonDb, string userId, IValidatorAttributes<UserActivityInput, UserActivity> validator) : base(repo, search, commonDb, validator) {
+        public UserActivityOperations(IMainGenericDb<UserActivity> repo, IAgroSearch<T> search, ICommonDbOperations<UserActivity> commonDb, string userId, IValidatorAttributes<UserActivityInput> validator) : base(repo, search, commonDb, validator) {
             UserId = userId;
         }
 
-        public Task Remove(string id) {
-            throw new NotImplementedException();
-        }
+        
 
-        public async Task<ExtPostContainer<string>> Save(UserActivity userActivity) {
-            await repo.CreateUpdate(userActivity);
-            return new ExtPostContainer<string> {
-                IdRelated = userActivity.Id,
-                MessageResult = ExtMessageResult.Ok
-            };
-        }
+       
 
-        public async Task<ExtPostContainer<string>> SaveInput(UserActivityInput input, bool isBatch) {
+        public override async Task<ExtPostContainer<string>> SaveInput(UserActivityInput input) {
             await Validate(input);
             var id = Guid.NewGuid().ToString("N");
             var UserActivity = new UserActivity {
@@ -43,9 +35,11 @@ namespace trifenix.connect.agro.external
                 EntityName = input.EntityName,
                 EntityId = input.EntityId,
             };
-            return await Save(UserActivity);
+            await SaveDb(UserActivity);
+            return await SaveSearch(UserActivity);
         }
 
+        
     }
 
 }

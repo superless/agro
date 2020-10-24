@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using trifenix.connect.mdm.entity_model;
 using trifenix.connect.mdm.ts_model;
 using trifenix.connect.search_mdl;
 
-namespace trifenix.connect.test.model
+namespace trifenix.connect.tests.mock
 {
-    public class Implementation : Implements<GeoPointTs>
+    public class ImplementMock : Implements<GeoPointTs>
     {
         public Type num32 => typeof(Num32BaseProperty);
 
@@ -27,9 +25,12 @@ namespace trifenix.connect.test.model
 
         public Type sug => typeof(StrBaseProperty);
 
-        public Type geo => typeof(GeographyProperty);
+        public Type geo => typeof(GeoPropertyMock);
 
-        public Func<object, GeoPointTs> GeoObjetoToGeoSearch => (elem)=>(GeoPointTs)elem;
 
+        // refactorizar.
+        public Func<object, GeoPointTs> GeoObjetoToGeoSearch => (ob) => new GeoPointTs { latitude =0, longitude = 0 };
+
+        public Type GetEntitySearchImplementedType => typeof(EntityMockSearch);
     }
 }

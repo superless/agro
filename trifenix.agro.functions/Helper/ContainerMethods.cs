@@ -9,6 +9,7 @@ using trifenix.agro.functions.settings;
 using trifenix.agro.storage.operations;
 using trifenix.agro.weather.operations;
 using trifenix.connect.agro.external;
+using trifenix.connect.agro.external.hash;
 using trifenix.connect.agro.external.helper;
 using trifenix.connect.agro.interfaces.external;
 using trifenix.connect.email;
@@ -18,12 +19,12 @@ using trifenix.connect.mdm.search.model;
 namespace trifenix.agro.functions.Helper
 {
     public static class ContainerMethods {
-        public static async Task<IAgroManager<GeographyPoint>> AgroManager(string ObjectIdAAD, bool isBatch){
+        public static async Task<IAgroManager<GeographyPoint>> AgroManager(string ObjectIdAAD){
             var email = new Email("aresa.notificaciones@gmail.com", "Aresa2019");
             var uploadImage = new UploadImage(Environment.GetEnvironmentVariable("StorageConnectionStrings", EnvironmentVariableTarget.Process));
             var weatherApi = new WeatherApi(Environment.GetEnvironmentVariable("KeyWeatherApi", EnvironmentVariableTarget.Process));
-            var searchServiceInstance = new AgroSearch<GeographyPoint>(Environment.GetEnvironmentVariable("SearchServiceName", EnvironmentVariableTarget.Process), Environment.GetEnvironmentVariable("SearchServiceKey", EnvironmentVariableTarget.Process), new CorsOptions(Environment.GetEnvironmentVariable("Search_allowedOrigins", EnvironmentVariableTarget.Process).Split(";")), new ImplementsSearch());
-            return new AgroManager<GeographyPoint>(new DbConnect(ConfigManager.GetDbArguments), email, uploadImage, weatherApi, searchServiceInstance, ObjectIdAAD, isBatch);
+            var searchServiceInstance = new AgroSearch<GeographyPoint>(Environment.GetEnvironmentVariable("SearchServiceName", EnvironmentVariableTarget.Process), Environment.GetEnvironmentVariable("SearchServiceKey", EnvironmentVariableTarget.Process), new CorsOptions(Environment.GetEnvironmentVariable("Search_allowedOrigins", EnvironmentVariableTarget.Process).Split(";")), new ImplementsSearch(), new HashEntityAgroSearch());
+            return new AgroManager<GeographyPoint>(new DbConnect(ConfigManager.GetDbArguments), email, uploadImage, weatherApi, searchServiceInstance, ObjectIdAAD);
         }
 
         public static JsonResult GetJsonPostContainer<T>(ExtPostContainer<T> containerResponse, ILogger log){

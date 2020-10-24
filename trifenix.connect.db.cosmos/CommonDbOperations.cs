@@ -4,11 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using trifenix.connect.entities.cosmos;
 using trifenix.connect.interfaces.db.cosmos;
 
 namespace trifenix.connect.db.cosmos
 {
-    public class CommonDbOperations<T> : ICommonDbOperations<T> {
+    public class CommonDbOperations<T> : ICommonDbOperations<T> where T : DocumentBase
+    {
 
         public async Task<T> FirstOrDefaultAsync(IQueryable<T> list, Expression<Func<T, bool>> predicate) {
             if (list == null) return (T)(object)null;

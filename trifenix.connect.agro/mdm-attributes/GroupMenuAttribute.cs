@@ -1,4 +1,5 @@
-﻿using trifenix.connect.agro.index_model.props;
+﻿using trifenix.connect.agro.index_model.enums;
+using trifenix.connect.agro.index_model.props;
 using trifenix.connect.mdm.enums;
 using trifenix.connect.mdm_attributes;
 

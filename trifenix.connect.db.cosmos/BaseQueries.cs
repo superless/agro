@@ -15,17 +15,18 @@ namespace trifenix.connect.db.cosmos
             
         }
 
-        public ICosmosStore<T> Client<T>() where T:DocumentBase => new MainGenericDb<T>(DbArguments).Store;
+        
 
         public async Task<T> SingleQuery<TDOCUMENT,T>(string query, params object[] args) where TDOCUMENT : DocumentBase {
-            var store = Client<TDOCUMENT>();
-            var result = await store.QuerySingleAsync<T>(string.Format(query, args));
+
+            var result = await new MainGenericDb<TDOCUMENT>(DbArguments).SingleQuery<T>(query, args);
             return result;
         }
 
         public async Task<IEnumerable<T>> MultipleQuery<TDOCUMENT, T>(string query, params object[] args) where TDOCUMENT : DocumentBase {
-            var store = Client<TDOCUMENT>();
-            var result = await store.QueryMultipleAsync<T>(string.Format(query, args));
+            
+            
+            var result = await new MainGenericDb<TDOCUMENT>(DbArguments).MultipleQuery<T>(string.Format(query, args));
             return result;
         }
 

@@ -81,6 +81,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.connect.agro.tests
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.connect.bus", "trifenix.connect.bus\trifenix.connect.bus.csproj", "{95872EE3-F7E3-4E90-B6DA-B65E86E1BFE8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "trifenix.connect.test.mock", "trifenix.connect.test.mock\trifenix.connect.test.mock.csproj", "{3234A82F-BF95-47BF-BAC6-1236279E2914}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -215,6 +217,10 @@ Global
 		{95872EE3-F7E3-4E90-B6DA-B65E86E1BFE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95872EE3-F7E3-4E90-B6DA-B65E86E1BFE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95872EE3-F7E3-4E90-B6DA-B65E86E1BFE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3234A82F-BF95-47BF-BAC6-1236279E2914}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3234A82F-BF95-47BF-BAC6-1236279E2914}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3234A82F-BF95-47BF-BAC6-1236279E2914}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3234A82F-BF95-47BF-BAC6-1236279E2914}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -256,6 +262,7 @@ Global
 		{E8F583F3-65D0-495F-89E3-C0B69B6B91B6} = {2E96535C-6B12-4899-A5E6-38AEA352400C}
 		{F7D67897-0BA1-47B6-800E-453C50655542} = {D568A6B9-749D-447F-BDD2-C4CD25790C66}
 		{95872EE3-F7E3-4E90-B6DA-B65E86E1BFE8} = {2E96535C-6B12-4899-A5E6-38AEA352400C}
+		{3234A82F-BF95-47BF-BAC6-1236279E2914} = {2E96535C-6B12-4899-A5E6-38AEA352400C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2C0C9D82-464E-4741-8541-CDC460278FEC}

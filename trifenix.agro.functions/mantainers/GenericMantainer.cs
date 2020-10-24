@@ -62,7 +62,7 @@ namespace trifenix.agro.functions.mantainers
             switch (method) {
                 case "get":
                     if (!string.IsNullOrWhiteSpace(element.Id)) {
-                        var manager = await ContainerMethods.AgroManager(ObjectIdAAD, false);
+                        var manager = await ContainerMethods.AgroManager(ObjectIdAAD);
                         var elementDb = await repo(manager).Get(element.Id);
                         return new ActionResultWithId {
                             Id = element.Id,

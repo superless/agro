@@ -136,5 +136,10 @@ namespace trifenix.connect.mdm.search.model
         [JsonProperty("bl")]
         public BoolProperty[] bl { get; set; }
 
+
+        public string hh { get; set; }
+
+        public string hm { get; set; }
+
     }
 }

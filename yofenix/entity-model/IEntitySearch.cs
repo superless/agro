@@ -85,6 +85,18 @@ namespace trifenix.connect.mdm.entity_model
 
 
         IProperty<T>[] geo { get; set; }
+
+
+        /// <summary>
+        /// hash de la base de datos que representa el modelo.
+        /// </summary>
+        string hm { get; set; }
+
+
+        /// <summary>
+        /// hash de la cabecera.
+        /// </summary>
+        string hh { get; set; }
     }
 
 

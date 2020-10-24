@@ -6,7 +6,7 @@ using trifenix.connect.interfaces.search;
 namespace trifenix.connect.agro.interfaces.external
 {
 
-    public interface IAgroSearch<T> : IRelatedSearch<T>, IEntitySearchOper<T>, IBaseEntitySearch<T> { 
+    public interface IAgroSearch<T> : IRelatedAgroSearch<T>, IBaseEntitySearch<T> { 
 
     }
 

@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using trifenix.connect.agro.queries;
 using trifenix.connect.entities.cosmos;
 using trifenix.connect.input;
 using trifenix.connect.interfaces.db.cosmos;
@@ -15,12 +14,16 @@ using trifenix.connect.util;
 
 namespace trifenix.connect.agro.external.helper
 {
-    public class MainValidator<T, T_INPUT> : IValidatorAttributes<T_INPUT, T> where T : DocumentBase where T_INPUT : InputBase
+
+    /// <summary>
+    /// Clase principal de validación de input en base a atributos
+    /// donde según los atributos de validación que tengan las propiedades de la clase input
+    /// se validará acordemente.
+    /// </summary>
+    /// <typeparam name="T">Elemento de la base de datos al que correspoende</typeparam>
+    /// <typeparam name="T_INPUT"></typeparam>
+    public class MainValidator<T, T_INPUT> : IValidatorAttributes<T_INPUT> where T : DocumentBase where T_INPUT : InputBase
     {
-        
-
-
-
         private readonly IExistElement existElement;
 
         public MainValidator(IExistElement existElement)
@@ -151,9 +154,10 @@ namespace trifenix.connect.agro.external.helper
                 };
             }
 
-            // se crea colección desde el objeto
+            // se crea colección desde el objeto, con el fin de validar colecciones
             var castedCollectionElement = Mdm.CreateDynamicList(elemento);
 
+            // si la colección esta vacia no validará.
             if (!castedCollectionElement.Any())
             {
                 return new ResultValidate
@@ -166,6 +170,7 @@ namespace trifenix.connect.agro.external.helper
             // si no es string, no debería ser validado.
             if (elemento.GetType() != typeof(string) && elemento.GetType()!= typeof(List<string>) && elemento.GetType() != typeof(string[]))
             {
+
                 return new ResultValidate
                 {
                     Valid = false,
@@ -435,7 +440,11 @@ namespace trifenix.connect.agro.external.helper
 
 
 
-
+        /// <summary>
+        /// Valida un input de usuario
+        /// </summary>
+        /// <param name="elemento">input de usuario</param>
+        /// <returns>elemento contenedor con el resultado y los mensajes de error</returns>
         public async Task<ResultValidate> Valida(T_INPUT elemento)
         {
 

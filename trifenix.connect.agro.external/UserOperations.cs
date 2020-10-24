@@ -17,24 +17,12 @@ namespace trifenix.connect.agro.external
 
         private readonly IGraphApi graphApi;
 
-        public UserOperations(IMainGenericDb<UserApplicator> repo, IAgroSearch<T> search, IGraphApi graphApi, ICommonDbOperations<UserApplicator> commonDb, IValidatorAttributes<UserApplicatorInput, UserApplicator> validator) : base(repo, search, commonDb, validator) {
+        public UserOperations(IMainGenericDb<UserApplicator> repo, IAgroSearch<T> search, IGraphApi graphApi, ICommonDbOperations<UserApplicator> commonDb, IValidatorAttributes<UserApplicatorInput> validator) : base(repo, search, commonDb, validator) {
             this.graphApi = graphApi;
         }
 
-        public async Task Remove(string id) { }
-
-        
-
-        public async Task<ExtPostContainer<string>> Save(UserApplicator userApp) {
-            await repo.CreateUpdate(userApp);
-            search.AddDocument(userApp);
-            return new ExtPostContainer<string> {
-                IdRelated = userApp.Id,
-                MessageResult = ExtMessageResult.Ok
-            };
-        }
-
-        public async Task<ExtPostContainer<string>> SaveInput(UserApplicatorInput input, bool isBatch) {
+      
+        public override async Task<ExtPostContainer<string>> SaveInput(UserApplicatorInput input) {
             await Validate(input);
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
             var user = new UserApplicator {
@@ -51,15 +39,11 @@ namespace trifenix.connect.agro.external
                 user.ObjectIdAAD = await graphApi.CreateUserIntoActiveDirectory(input.Name, input.Email);
             else
                 user.ObjectIdAAD = (await Get(id)).Result.ObjectIdAAD;
-            if (!isBatch)
-                return await Save(user);
-            await repo.CreateEntityContainer(user);
-            return new ExtPostContainer<string> {
-                IdRelated = id,
-                MessageResult = ExtMessageResult.Ok
-            };
+            await SaveDb(user);
+            return await SaveSearch(user);
         }
 
+        
     }
 
 }
