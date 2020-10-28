@@ -53,7 +53,9 @@ namespace trifenix.connect.util
             // crea una nueva instancia del tipo determinado por la entidad
             // por ejemplo, si el indice de entidad correspondiera a 1 que es Persona, esta sería la clase persona.
             var entity = Reflection.Collections.CreateEntityInstance(type);
-            
+
+
+            if (type.GetProperty("Id") == null) throw new Exception("un elemento a convertir en EntitySearch debe llevar id");
 
             // asigna el id del objeto convertido
             // todas los elementos de la base de datos tienn la propiedad id.
@@ -85,7 +87,7 @@ namespace trifenix.connect.util
             var hashModel = hash.HashModel(entity);
             var hashHeader = hash.HashHeader(type);
 
-            var jsn = JsonConvert.SerializeObject(entitySearch);
+            
             if (entitySearch.hh.Equals(hashHeader) && entitySearch.hm.Equals(hashModel))
             {
                 // retorna un objeto tipado desde un entitySearch.
@@ -97,33 +99,6 @@ namespace trifenix.connect.util
         }
 
 
-        /// <summary>
-        /// Obtiene la propiedad o contenedor con el índice de una entidad y su identificador (index = 1, id = [guid]), donde el 1 representa una entidad.
-        /// el método genera una nueva propiedad del tipo que se le asigne en el atributo typeToCast.
-        /// este tipo debe implementar IRelatedId.
-        /// retorna solo aquellas que tienen su propio documento en la base de datos.
-        /// </summary>
-        /// <param name="attribute">atributo con la metadata de la propiedad</param>
-        /// <param name="typeToCast">tipo de dato a convertir, debe implementar IRelatedId</param>
-        /// <returns>nueva propiedad de tipo entidad desde un objeto.</returns>
-        public static IRelatedId[] GetRelatedId(KeyValuePair<BaseIndexAttribute, object> attribute, Type typeToCast)
-        {
-            // lanza error si no implementa IRelatedId
-            if (!CheckImplementsIRelatedId(typeToCast))
-            {
-                throw new Exception("Debe implementar IRelatedId");
-            }
-
-            // retorna la propiedad de tipo IRelatedId si el atributo es de tip entidad y de tipo referencia (clase con su propio documento en db documental).
-            if (attribute.Key.IsEntity && attribute.Key.KindIndex == (int)KindEntityProperty.REFERENCE)
-            {
-                // retorna una propiedad de tipo entidad de referencia
-                return GetEntityProperty(attribute.Key.Index, (string)attribute.Value, typeToCast);
-            }
-
-            // retorna nulo si no encuentra.
-            return null;
-        }
 
 
         /// <summary>
@@ -375,7 +350,11 @@ namespace trifenix.connect.util
         public static IRelatedId[] GetReferences(Dictionary<BaseIndexAttribute, object> elements, Type typeToCast) {
 
             try
-            {   
+            {    // lanza error si no implementa IRelatedId
+                if (!CheckImplementsIRelatedId(typeToCast))
+                {
+                    throw new Exception("Debe implementar IRelatedId");
+                }
                 var array = elements.Where(s => s.Key.IsEntity && EnumerationExtension.IsPrimitiveAndCollection(s.Value.GetType()) && !s.Value.GetType().IsEnum);
 
                 var refes = array.SelectMany(s => GetEntityProperty(s.Key.Index, s.Value, typeToCast)).ToArray();
@@ -389,7 +368,9 @@ namespace trifenix.connect.util
             }
         
         }
-            
+
+
+
 
 
         /// <summary>
@@ -574,6 +555,10 @@ namespace trifenix.connect.util
 
             return entitySearch;
         }
+
+
+        public static int? GetIndex(Type type)  => Reflection.Attributes.GetAttributes<EntityIndexAttribute>(type).FirstOrDefault()?.Index;
+
 
 
         /// <summary>

@@ -67,6 +67,7 @@ namespace trifenix.connect.agro.external.main
             this.search = search;
             this.commonDb = commonDb;
             this.valida = validator;
+            this.existElement = validator.GetExistElement();
         }
 
         /// <summary>

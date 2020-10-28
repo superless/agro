@@ -81,27 +81,32 @@ namespace trifenix.connect.agro.external
 
         public void AddElement(IEntitySearch<GeoPointType> element)
         {
+            AddToQueried(nameof(AgroSearch<GeoPointType>.AddElement), JsonConvert.SerializeObject(element));
             baseMainSearch.AddElement(element);
         }
 
         public void AddElements(List<IEntitySearch<GeoPointType>> elements)
         {
+            AddToQueried(nameof(AgroSearch<GeoPointType>.AddElements), JsonConvert.SerializeObject(elements));
             baseMainSearch.AddElements(elements);
         }
 
 
         public void CreateOrUpdateIndex()
         {
+            AddToQueried(nameof(AgroSearch<GeoPointType>.CreateOrUpdateIndex), "OK");
             baseMainSearch.CreateOrUpdateIndex();
         }
 
         public void DeleteElements(List<IEntitySearch<GeoPointType>> elements)
         {
+            AddToQueried(nameof(AgroSearch<GeoPointType>.DeleteElements), JsonConvert.SerializeObject(elements));
             baseMainSearch.DeleteElements(elements);
         }
 
         public void DeleteElements(string query)
         {
+            AddToQueried(nameof(AgroSearch<GeoPointType>.DeleteElements), query);
             baseMainSearch.DeleteElements(query);
         }
 
@@ -109,11 +114,13 @@ namespace trifenix.connect.agro.external
 
         public void EmptyIndex()
         {
+            AddToQueried(nameof(AgroSearch<GeoPointType>.EmptyIndex), "OK");
             baseMainSearch.EmptyIndex();
         }
 
         public List<IEntitySearch<GeoPointType>> FilterElements(string filter)
         {
+            AddToQueried(nameof(AgroSearch<GeoPointType>.FilterElements), filter);
             return baseMainSearch.FilterElements(filter);
         }
 

@@ -114,6 +114,7 @@ namespace trifenix.connect.search
         /// <param name="elements">entidades a eliminar</param>
         public void DeleteElements(List<IEntitySearch<GeoPointType>> elements)
         {
+           
             OperationElements(elements, SearchOperation.Delete);
             
         }

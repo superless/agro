@@ -44,7 +44,7 @@ namespace trifenix.connect.app.cloud
 
             var entities = search.FilterElements($"index eq {(int)entity}");
 
-            var sectors = entities.Select(s => (T)Mdm.GetEntityFromSearch(s, typeof(T), "trifenix.connect.agro_model", a => a, new SearchElement()));
+            var sectors = entities.Select(s => (T)Mdm.GetEntityFromSearch(s, typeof(T), "trifenix.connect.agro_model", a => a, new SearchElement(), new HashEntityAgroSearch()));
 
             return sectors.ToArray();
         }
@@ -54,7 +54,7 @@ namespace trifenix.connect.app.cloud
 
             var entities = search.FilterElements(filter);
 
-            var sectors = entities.Select(s => (T)Mdm.GetEntityFromSearch(s, typeof(T), "trifenix.connect.agro_model", a => a, new SearchElement()));
+            var sectors = entities.Select(s => (T)Mdm.GetEntityFromSearch(s, typeof(T), "trifenix.connect.agro_model", a => a, new SearchElement(), new HashEntityAgroSearch()));
 
             return sectors.ToArray();
         }
@@ -66,7 +66,7 @@ namespace trifenix.connect.app.cloud
 
 
 
-            return (T)Mdm.GetEntityFromSearch(entities.FirstOrDefault(), typeof(T), "trifenix.connect.agro_model", a => a, new SearchElement());
+            return (T)Mdm.GetEntityFromSearch(entities.FirstOrDefault(), typeof(T), "trifenix.connect.agro_model", a => a, new SearchElement(), new HashEntityAgroSearch());
         }
 
 

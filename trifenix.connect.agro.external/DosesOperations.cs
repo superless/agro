@@ -59,40 +59,28 @@ namespace trifenix.agro.external.operations.entities.ext
             
         }
 
-        
+        public async override Task Validate(DosesInput input)
+        {
+            if (input.Default)
+            {
+                if (string.IsNullOrWhiteSpace(input.IdProduct))
+                {
+                    throw new Exception("se ha ingresado una dosis por defecto sin identificador de producto");
+                }
+
+                return;
+            }
+            else {
+                await base.Validate(input);
+            }
+
+            
+        }
 
         public override async Task<ExtPostContainer<string>> SaveInput(DosesInput dosesInput) {
             var id = !string.IsNullOrWhiteSpace(dosesInput.Id) ? dosesInput.Id : Guid.NewGuid().ToString("N");
-            if (dosesInput.Default)
-            {
-                if (string.IsNullOrWhiteSpace(dosesInput.IdProduct))
-                {
-                    return new ExtPostErrorContainer<string>()
-                    {
-                        InternalException = new Exception("se ha ingresado una dosis por defecto sin identificador de producto"),
-                        MessageResult = ExtMessageResult.Error
-                    };
-                }
 
-                var doseLocal = new Dose
-                {
-                    Id = id,
-                    IdProduct = dosesInput.IdProduct,
-                    Active = dosesInput.Active,
-                    Default = dosesInput.Default
-                };
-
-                var resultDb = await SaveDb(doseLocal);
-                if (resultDb.MessageResult == ExtMessageResult.Ok)
-                {
-                    return await SaveSearch(doseLocal);
-                }
-                return resultDb;
-            }
             await Validate(dosesInput);
-
-            
-
 
             
             var dose = new Dose {
@@ -121,6 +109,7 @@ namespace trifenix.agro.external.operations.entities.ext
 
 
             var productSearch = search.GetEntity(EntityRelated.PRODUCT, dose.IdProduct);
+
 
             if (!productSearch.rel.Any(relatedId => relatedId.index == (int)EntityRelated.DOSES && relatedId.id == dose.Id))
             {

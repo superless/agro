@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using trifenix.connect.mdm.entity_model;
+using trifenix.connect.model;
 
 namespace trifenix.connect.util
 {
@@ -90,6 +92,100 @@ public static partial class Reflection {
                             return CastToGenericList(propType.GetGenericArguments()[0], values);
                     }
                 }
+
+                /// <summary>
+                /// Elimina un elemento de una colección
+                /// si este no existe lanzará excepción.
+                /// si existe lo eliminará
+                /// retornará la lista con el resultado
+                /// </summary>
+                /// <typeparam name="T">elemento de una base de datos</typeparam>
+                /// <param name="itemId">id del elemento a eliminar</param>
+                /// <param name="prev">lista donde se hará la operación</param>
+                /// <returns>lista con el elemento eliminado</returns>
+                public static T[] DeleteElementInCollection<T>(string itemId, T[] prev) {
+                    
+                    if (!prev.Any(s=>GetId(s).Equals(itemId)))
+                    {
+                        throw new Exception($"el id {itemId} no existe en la colección");
+                    }
+                    
+                    var list = prev.ToList();
+                    var itemLocal = list.FirstOrDefault(s => GetId(s).Equals(itemId));
+                    list.Remove(itemLocal);
+                    return list.ToArray();
+
+                }
+
+
+              
+
+                /// <summary>
+                /// Añade un elemento a una colección si el elemento no existe,
+                /// elimina y añade un elemento a una colección, si el elemento ya existe
+                /// esto determinado por DocumentDb y su id.
+                /// </summary>
+                /// <typeparam name="T">Elemento de base de datos</typeparam>
+                /// <param name="item">item a actualizar o añadir</param>
+                /// <param name="prev">lista donde realizará la operación</param>
+                /// <returns>lista de nuevos elementos para reemplazar a prev</returns>
+                public static T[] UpsertToCollection<T>(T item, T[] prev) 
+                {
+                    
+                    var list = prev.ToList();
+                    var itemLocal = list.FirstOrDefault(s => GetId(s).Equals(GetId(item)));
+                    if (itemLocal != null)
+                    {
+                        list.Remove(itemLocal);
+                    }
+                    list.Add(item);
+
+                    return list.ToArray();
+                }
+
+                /// <summary>
+                /// obtiene el valor de la propiedad id
+                /// </summary>
+                /// <param name="elementWithId"></param>
+                /// <returns></returns>
+                public static string GetId(object elementWithId) {
+                    if (elementWithId.GetType().GetProperty("id") ==null && elementWithId.GetType().GetProperty("Id") == null)
+                    {
+                        throw new Exception("solo elementos con id o Id");
+                    }
+
+                    var propInfo = elementWithId.GetType().GetProperty("id")?? elementWithId.GetType().GetProperty("Id");
+
+                    return propInfo.GetValue(elementWithId).ToString();
+                }
+
+                /// <summary>
+                /// obtiene el valor de la propiedad de acuerdo al nombre de la propiedad indicado en el argumento.
+                /// </summary>
+                /// <param name="elementWithId"></param>
+                /// <returns></returns>
+                public static string GetProp(object element, string propName)
+                {
+                    if (element.GetType().GetProperty(propName) == null)
+                    {
+                        throw new Exception($"el elemento no tiene la propiedad {propName}");
+                    }
+                    
+
+                    var propInfo = element.GetType().GetProperty(propName);
+                    if (propInfo.PropertyType != typeof(string))
+                    {
+                        throw new Exception($"la propiedad {propName} no es string, el método solo funciona con strings");
+                    }
+
+                    return propInfo.GetValue(element).ToString();
+                }
+
+                
+                
+
+
+
 
             }
         }

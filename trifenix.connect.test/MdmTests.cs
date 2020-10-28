@@ -152,6 +152,12 @@ namespace trifenix.connect.test
 
     public class HashEntityMockSearch : IHashSearchHelper
     {
+        /// <summary>
+        /// obtiene un hash desde el diccionario generado a partir de un elemento de base de datos. 
+        /// 
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public string HashHeader(Type type)
         {
             // obtenemos los diccionarios desde las enumeraciones.
@@ -199,7 +205,11 @@ namespace trifenix.connect.test
             return Mdm.Reflection.Cripto.ComputeSha256Hash(jsonDict);
         }
 
-
+        /// <summary>
+        /// Obtiene un hash desde un objeto
+        /// </summary>
+        /// <param name="model">elemento de base de datos a validar</param>
+        /// <returns>hash único del elemento</returns>
         public string HashModel(object model)
         {
             return Mdm.Reflection.Cripto.ComputeSha256Hash(JsonConvert.SerializeObject(model));

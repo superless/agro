@@ -107,8 +107,17 @@ namespace trifenix.connect.agro.external
             }
         }
 
+        public async override Task Validate(ProductInput input)
+        {
+            if (input.Doses.Any() && string.IsNullOrWhiteSpace(input.Id) && input.Doses.Any(s=>!string.IsNullOrWhiteSpace(s.IdProduct)))
+            {
+                throw new Exception($"si el producto {input.Name} es nuevo, sus dosis no deben llevar id");
+            }
+            await base.Validate(input);
+        }
 
-        
+
+
         /// <summary>
         /// Guarda un producto en una base de dato de busqueda y luego una de persistencia.
         /// </summary>
@@ -116,9 +125,21 @@ namespace trifenix.connect.agro.external
         /// <returns>Exito si logró realizar correctamente el guardado</returns>
         public override async Task<ExtPostContainer<string>> SaveInput(ProductInput productInput) {
             
+            // valida product input
             await Validate(productInput);
 
+            // valida cada dosis
+            foreach (var item in productInput.Doses)
+            {
+                await dosesOperation.Validate(item);
+            }
+
+
+            // asigna un nuevo id, si es un nuevo elemento.
             var id = !string.IsNullOrWhiteSpace(productInput.Id) ? productInput.Id : Guid.NewGuid().ToString("N");
+
+
+            // las dosis no deben tener id.
             if (productInput.Doses.Any(s=>!string.IsNullOrWhiteSpace(s.Id)))
             {
                 return new ExtPostContainer<string>()
@@ -129,6 +150,7 @@ namespace trifenix.connect.agro.external
                 };
             }
 
+            // creamos el producto
             var product = new Product {
                 Id = id,
                 IdBrand = productInput.IdBrand,
@@ -139,8 +161,13 @@ namespace trifenix.connect.agro.external
                 
             };
 
-            // 1. guardar producto en base de datos.
+            // 1. guardar producto en base de datos.            
             var postResult = await SaveDb(product);
+
+            // guardamos el producto en el search.
+            var result = await SaveSearch(product);
+
+
 
             // 2. remueve dosis según corresponda
             await RemoveDoses(product);
@@ -151,7 +178,10 @@ namespace trifenix.connect.agro.external
                 return dose;
             });
 
-            //4. guarda cada operación
+            
+
+
+            //4. guarda cada dosis
             foreach (var dose in doses) {
                 var saveDoses =  await dosesOperation.SaveInput(dose);
                 if (saveDoses.MessageResult != ExtMessageResult.Ok)
@@ -160,9 +190,8 @@ namespace trifenix.connect.agro.external
                 }
             }
 
-            // guarda en producto
-            return await SaveSearch(product);
-
+            return result;
+            
         }
 
         
