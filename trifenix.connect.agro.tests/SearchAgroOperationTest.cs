@@ -82,8 +82,7 @@ namespace trifenix.connect.agro.tests
             {
                 Active = doseInput.Active,
                 ApplicationDaysInterval = doseInput.ApplicationDaysInterval,
-                Default = doseInput.Default,
-                DosesApplicatedTo = doseInput.DosesApplicatedTo,
+                Default = doseInput.Default,                
                 DosesQuantityMax = doseInput.DosesQuantityMax,
                 IdSpecies = doseInput.IdSpecies,
                 DosesQuantityMin = doseInput.DosesQuantityMin,

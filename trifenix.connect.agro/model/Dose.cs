@@ -112,11 +112,7 @@ namespace trifenix.connect.agro_model
         public int? WaitingDaysLabel { get; set; }
 
 
-        /// <summary>
-        /// Determina a cuantos litros se le debe asignar la dosis.
-        /// </summary>
-        [EnumSearch(EnumRelated.DOSES_APPLICATED_TO)]
-        public DosesApplicatedTo DosesApplicatedTo { get; set; }
+
 
 
         private List<WaitingHarvest> _waitingToHarvest;

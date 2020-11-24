@@ -31,6 +31,11 @@ namespace trifenix.connect.agro_model
         [ReferenceSearch(EntityRelated.CERTIFIED_ENTITY)]
         public string IdCertifiedEntity { get; set; }
 
+
+        [ReferenceSearch(EntityRelated.DOSES)]
+        public string IdDoses { get; set; }
+
+
     }
 
 }

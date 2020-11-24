@@ -170,6 +170,7 @@ namespace trifenix.connect.agro.tests.mock
                 case EntityRelated.PREORDER:
                     break;
                 case EntityRelated.TARGET:
+                    AgroData.ApplicationTargets = Mdm.Reflection.Collections.UpsertToCollection((ApplicationTarget)(object)element, AgroData.ApplicationTargets);
                     break;
                 case EntityRelated.TRACTOR:
                     break;
@@ -267,7 +268,7 @@ namespace trifenix.connect.agro.tests.mock
                 case EntityRelated.PREORDER:
                     break;
                 case EntityRelated.TARGET:
-                    break;
+                    return (T)(object)AgroData.ApplicationTargets.First(s => s.Id.Equals(id));
                 case EntityRelated.TRACTOR:
                     break;
                 case EntityRelated.USER:

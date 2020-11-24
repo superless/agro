@@ -26,6 +26,7 @@ namespace trifenix.connect.agro_model_input
         public string[] IdSpecies { get; set; }
 
         [Reference(typeof(ApplicationTarget))]
+        [ReferenceSearch(EntityRelated.TARGET)]
         public string[] IdsApplicationTarget { get; set; }
 
         [Required]
@@ -59,18 +60,24 @@ namespace trifenix.connect.agro_model_input
         [Num32Search(NumRelated.WAITING_DAYS)]
         public int? WaitingDaysLabel { get; set; }
 
+
+        // <summary>
+        /// determina si la dosis es por defecto.
+        /// si un producto no se le asignan dosis, siempre tendrá uno.
+        /// </summary>
         [Required]
-        [EnumSearch(EnumRelated.DOSES_APPLICATED_TO)]
-        public DosesApplicatedTo DosesApplicatedTo { get; set; }
-
-        
-        public bool Active { get; set; }
-
-        
+        [BoolSearch(BoolRelated.GENERIC_DEFAULT)]
         public bool Default { get; set; }
 
+        /// <summary>
+        /// una dosis puede ser desactivada, si se requiere eliminar de un producto y esta está asociada con una orden.
+        /// </summary>
+        [Required]
+        [BoolSearch(BoolRelated.GENERIC_ACTIVE)]
+        public bool Active { get; set; }
 
-        
+
+
         public string ClientId { get; set; }
 
 

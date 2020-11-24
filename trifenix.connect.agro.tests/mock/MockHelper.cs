@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using trifenix.agro.external;
 using trifenix.agro.external.operations.tests.data;
 using trifenix.connect.agro.external;
 using trifenix.connect.agro.external.hash;
@@ -45,6 +46,11 @@ namespace trifenix.connect.agro.tests.mock
         public static IAgroSearch<GeoPointTs> AgroSearch(IBaseEntitySearch<GeoPointTs> baseSearch) => new AgroSearch<GeoPointTs>(baseSearch, new SearchQueries(), new ImplementMock(), new HashEntityAgroSearch());
 
 
+
+        /// <summary>
+        /// Retorna el agromanager por defecto para los tests.
+        /// </summary>
+        public static AgroManager<GeoPointTs> AgroManager =>  new AgroManager<GeoPointTs>(Connect(), Email(), UploadImage(), WeatherApi(), AgroSearch(BaseSearch()), string.Empty);
 
 
 
@@ -434,6 +440,14 @@ namespace trifenix.connect.agro.tests.mock
                 {
 
                     return AgroData.Ingredients.Any(s => s.Id.Equals(id));
+                });
+
+            mockExistElement
+                .Setup(s => s.ExistsById<IngredientCategory>(It.IsAny<string>()))
+                .ReturnsAsync((string id) =>
+                {
+
+                    return AgroData.IngredientCategories.Any(s => s.Id.Equals(id));
                 });
 
 

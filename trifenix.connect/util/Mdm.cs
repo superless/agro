@@ -556,7 +556,11 @@ namespace trifenix.connect.util
             return entitySearch;
         }
 
-
+        /// <summary>
+        /// obitene el índice de un tipo.
+        /// </summary>
+        /// <param name="type">tipo de una propiedad</param>
+        /// <returns></returns>
         public static int? GetIndex(Type type)  => Reflection.Attributes.GetAttributes<EntityIndexAttribute>(type).FirstOrDefault()?.Index;
 
 
@@ -567,11 +571,10 @@ namespace trifenix.connect.util
         /// <typeparam name="T">Tipo del dato geo que tiene la entidad</typeparam>
         /// <param name="implements">retorna los tipos de datos para los elementos de un entity</param>
         /// <param name="obj">objeto a convertir</param>
-        /// <param name="hash"></param>
-
+        /// <param name="hash">clase que permite convertir un objeto en un hash y también convertir la cabecera de un entitySearch</param>
         /// <param name="collection">usado como recursivo, para obtener los entitySearch internos </param>
         /// <param name="parent">EntitySearch padre, usado para la recursividad</param>
-        /// <returns></returns>
+        /// <returns>Colección de entitySearch que representan un model</returns>
         public static IEntitySearch<T>[] GetEntitySearch<T>(Implements<T> implements, object obj, IHashSearchHelper hash, List<IEntitySearch<T>> collection = null, IEntitySearch<T> parent = null)
         {
             // lista con las entidades

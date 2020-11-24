@@ -83,8 +83,7 @@ namespace trifenix.connect.agro.tests.data
         {
             Id = ConstantGuids.Value[0],
             Active = true,
-            ApplicationDaysInterval = 10,
-            DosesApplicatedTo = DosesApplicatedTo.L100,
+            ApplicationDaysInterval = 10,            
             Default = false,
             DosesQuantityMax = 2,
             DosesQuantityMin = 1.1,
@@ -121,7 +120,6 @@ namespace trifenix.connect.agro.tests.data
             Id = ConstantGuids.Value[1],
             Active = true,
             ApplicationDaysInterval = 10,
-            DosesApplicatedTo = DosesApplicatedTo.L1000,
             Default = false,
             DosesQuantityMax = 2,
             DosesQuantityMin = 1.1,
@@ -154,8 +152,7 @@ namespace trifenix.connect.agro.tests.data
         {
             Id = ConstantGuids.Value[2],
             Active = true,
-            ApplicationDaysInterval = 10,
-            DosesApplicatedTo = DosesApplicatedTo.L1000,
+            ApplicationDaysInterval = 10,            
             Default = false,
             DosesQuantityMax = 2,
             DosesQuantityMin = 1.1,
@@ -189,8 +186,7 @@ namespace trifenix.connect.agro.tests.data
         {
             Id = ConstantGuids.Value[3],
             Active = true,
-            ApplicationDaysInterval = 10,
-            DosesApplicatedTo = DosesApplicatedTo.L1000,
+            ApplicationDaysInterval = 10,            
             Default = false,
             DosesQuantityMax = 2,
             DosesQuantityMin = 1.1,
@@ -437,7 +433,7 @@ namespace trifenix.connect.agro.tests.data
             Id = ConstantGuids.Value[1]
         };
 
-        public static ApplicationTarget[] ApplicationTargets => new ApplicationTarget[] { ApplicationTarget1, ApplicationTarget2 };
+        public static ApplicationTarget[] ApplicationTargets { get; set; } = new ApplicationTarget[] { ApplicationTarget1, ApplicationTarget2 };
 
 
         public static IEntitySearch<GeoPointTs>[] ApplicationTargetsSearch { get; set; } = ApplicationTargets.SelectMany(s => Mdm.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();

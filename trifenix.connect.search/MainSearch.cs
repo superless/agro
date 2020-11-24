@@ -167,7 +167,7 @@ namespace trifenix.connect.search
         {
             var indexName = Index;
             // creación del índice.
-            _search.Indexes.CreateOrUpdate(new Index { Name = indexName, Fields = FieldBuilder.BuildForType<EntitySearch>(), CorsOptions = corsOptions });
+            _search.Indexes.CreateOrUpdate(new Index { Name = indexName, Fields = FieldBuilder.BuildForType<EntitySearch>(), CorsOptions = corsOptions, Suggesters = new List<Suggester> { new Suggester { Name="sug", SourceFields=new List<string> { "sug/value" } } } });
         }
 
 

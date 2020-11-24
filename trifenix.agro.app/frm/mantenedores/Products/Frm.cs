@@ -369,7 +369,6 @@ namespace trifenix.agro.app.frm.mantenedores.product
                             ApplicationDaysInterval = p.ApplicationDaysInterval,
                             ClientId = p.ClientId,
                             Default = p.Default,
-                            DosesApplicatedTo = p.DosesApplicatedTo,
                             DosesQuantityMin = p.DosesQuantityMin,
                             HoursToReEntryToBarrack = p.HoursToReEntryToBarrack,
                             IdProduct = p.IdProduct,

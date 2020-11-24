@@ -17,7 +17,7 @@ namespace trifenix.agro.external.operations.tests.data
         {
             Active = true,
             ApplicationDaysInterval = 10,
-            DosesApplicatedTo = DosesApplicatedTo.L100,
+            
             Default = false,
             DosesQuantityMax = 2,
             DosesQuantityMin = 1.1,
@@ -47,7 +47,7 @@ namespace trifenix.agro.external.operations.tests.data
         {
             Active = true,
             ApplicationDaysInterval = 10,
-            DosesApplicatedTo = DosesApplicatedTo.L1000,
+            
             Default = false,
             DosesQuantityMax = 2,
             DosesQuantityMin = 1.1,
@@ -77,8 +77,7 @@ namespace trifenix.agro.external.operations.tests.data
         public static DosesInput Doses3 => new DosesInput
         {
             Active = true,
-            ApplicationDaysInterval = 10,
-            DosesApplicatedTo = DosesApplicatedTo.L100,
+            ApplicationDaysInterval = 10,            
             Default = false,
             DosesQuantityMax = 2,
             DosesQuantityMin = 1.1,
@@ -107,8 +106,7 @@ namespace trifenix.agro.external.operations.tests.data
         public static DosesInput Doses4 => new DosesInput
         {
             Active = true,
-            ApplicationDaysInterval = 10,
-            DosesApplicatedTo = DosesApplicatedTo.L1000,
+            ApplicationDaysInterval = 10,            
             Default = false,
             DosesQuantityMax = 2,
             DosesQuantityMin = 1.1,
@@ -142,7 +140,6 @@ namespace trifenix.agro.external.operations.tests.data
         {
             Active = true,
             ApplicationDaysInterval = 10,
-            DosesApplicatedTo = DosesApplicatedTo.L1000,
             Default = false,
             DosesQuantityMax = 2,
             DosesQuantityMin = 1.1,

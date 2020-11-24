@@ -8,6 +8,12 @@ namespace trifenix.connect.util
     // https://stackoverflow.com/questions/37305985/enum-description-attribute-in-dotnet-core
     public static class EnumerationExtension
     {
+
+        /// <summary>
+        /// Obtiene la descripción desde una enumeración.
+        /// </summary>
+        /// <param name="value">valor de la enumeración</param>
+        /// <returns></returns>
         public static string Description(this Enum value)
         {
             // get attributes  
@@ -27,6 +33,12 @@ namespace trifenix.connect.util
             return displayAttribute?.Description ?? "Description Not Found";
         }
 
+
+        /// <summary>
+        /// Determina si un tipo es primitivo.
+        /// </summary>
+        /// <param name="t">Tipo a evaluar</param>
+        /// <returns>true si es primitivo</returns>
         public static bool IsPrimitive(Type t)
         {
             // TODO: put any type here that you consider as primitive as I didn't
@@ -60,15 +72,27 @@ namespace trifenix.connect.util
             typeof(decimal?),
             typeof(DateTime?),
             typeof(bool?),
-        }.Contains(t);
+            }.Contains(t);
         }
 
+
+        /// <summary>
+        /// Determina si el tipo es primitivo o es una colección de prmitivos.
+        /// </summary>
+        /// <param name="t">tipo a evaluar</param>
+        /// <returns>true, si es un tipo primitivo o una colección de primitivos</returns>
         public static bool IsPrimitiveAndCollection(Type t)
         {
             if (IsPrimitive(t)) return true;
             return IsPrimitiveCollection(t);
         }
 
+
+        /// <summary>
+        /// Determina si un tipo es una colección primitiva
+        /// </summary>
+        /// <param name="t">tipo a evaluar</param>
+        /// <returns>true, si es una colección primitiva</returns>
         public static bool IsPrimitiveCollection(Type t)
         {  
             return new[] {

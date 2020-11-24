@@ -140,7 +140,7 @@ namespace trifenix.agro.app.frm.mantenedores.doses
             UpdateVarieties();
             UpdateCertified();
             UpdateTargets();
-            cbCertifiedEntity.SelectedValue = input.DosesApplicatedTo;
+            
 
 
 

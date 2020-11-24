@@ -52,6 +52,8 @@ namespace trifenix.agro.external.operations.entities.ext
                     return;
                 }
                 var dose = (await Get(id)).Result;
+
+                // si existe en una orden, lo desactitvará.
                 dose.Active = false;
                 await SaveDb(dose);
                 await SaveSearch(dose);
@@ -88,7 +90,6 @@ namespace trifenix.agro.external.operations.entities.ext
                 LastModified = DateTime.Now,
                 ApplicationDaysInterval = dosesInput.ApplicationDaysInterval,
                 HoursToReEntryToBarrack = dosesInput.HoursToReEntryToBarrack,
-                DosesApplicatedTo = dosesInput.DosesApplicatedTo,
                 DosesQuantityMax = dosesInput.DosesQuantityMax,
                 DosesQuantityMin = dosesInput.DosesQuantityMin,
                 IdsApplicationTarget = dosesInput.IdsApplicationTarget,
@@ -102,6 +103,7 @@ namespace trifenix.agro.external.operations.entities.ext
                 WaitingToHarvest = dosesInput.WaitingToHarvest == null || !dosesInput.WaitingToHarvest.Any() ? new List<WaitingHarvest>() : dosesInput.WaitingToHarvest.Select(WH_Input => new WaitingHarvest {
                     IdCertifiedEntity = WH_Input.IdCertifiedEntity,
                     WaitingDays = WH_Input.WaitingDays, 
+                    IdDoses = id,
                     Ppm = WH_Input.Ppm
                 }).ToList(),
                 WettingRecommendedByHectares = dosesInput.WettingRecommendedByHectares
