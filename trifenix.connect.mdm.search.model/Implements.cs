@@ -1,4 +1,4 @@
-﻿using Microsoft.Azure.Search;
+﻿
 using Microsoft.Spatial;
 using Newtonsoft.Json;
 using System;

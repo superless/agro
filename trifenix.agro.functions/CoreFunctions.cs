@@ -137,7 +137,7 @@ namespace trifenix.agro.functions
             string userId = null;
 
             try {
-                var saveReturn = await repo.SaveInput(element, false);
+                var saveReturn = await repo.SaveInput(element);
                 if (!string.IsNullOrWhiteSpace(ObjectIdAAD))
                 {
                     userId = await queries.GetUserIdFromAAD(ObjectIdAAD);

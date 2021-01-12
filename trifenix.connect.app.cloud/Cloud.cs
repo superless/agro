@@ -19,8 +19,8 @@ namespace trifenix.connect.app.cloud
     {
         private static string connectionString = "Endpoint=sb://agrobus.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=28iKIG/njebR7TMqZh5e9KDdI0Jhv3D6gjUUI198Gog=";
 
-
-        public static AgroSearch<GeographyPoint> search = new AgroSearch<GeographyPoint>("agrocloud", "6D2BA6AF3373D17A341F7A099BA8FA6A", null, new ImplementsSearch(), new HashEntityAgroSearch());
+        //new MainSearch<GeographyPoint>("https://agrocloud.search.windows.net", "6D2BA6AF3373D17A341F7A099BA8FA6A", "entities-agro")
+        public static AgroSearch<GeographyPoint> search = new AgroSearch<GeographyPoint>(@"https://agrocloud.search.windows.net", "6D2BA6AF3373D17A341F7A099BA8FA6A", null, new ImplementsSearch(), new HashEntityAgroSearch());
 
       
 

@@ -297,7 +297,7 @@ namespace trifenix.agro.app.frm.mantenedores.variety
             if (obj!=null)
             {
                 var current = (Variety)obj;
-                tbxCorrelativo.Text = current.ClientId.ToString();
+                tbxCorrelativo.Text = current.ClientId?.ToString()??"";
                 tbxName.Text = current.Name;
                 gbxItem.Text = $"Cargo {tbxName.Text}";
                 tbxAbbreviation.Text = current.Abbreviation;

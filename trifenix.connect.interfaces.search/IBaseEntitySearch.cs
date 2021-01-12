@@ -16,7 +16,7 @@ namespace trifenix.connect.interfaces.search
     public interface IBaseEntitySearch<T> 
     {
 
-        string ServiceName { get;  }
+        string UriService { get;  }
 
         string ServiceKey { get;  }
 

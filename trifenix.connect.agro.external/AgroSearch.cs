@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using Microsoft.Azure.Search.Models;
+using Azure.Search.Documents.Indexes.Models;
+using Microsoft.Spatial;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,9 +27,7 @@ namespace trifenix.connect.agro.external
     public class AgroSearch<GeoPointType> : IAgroSearch<GeoPointType> 
     {
 
-
-
-        public string ServiceName { get; private set; }
+        public string UriService { get; private set; }
 
         public string ServiceKey { get; private set; }
         public string Index { get; private set; }
@@ -49,13 +48,13 @@ namespace trifenix.connect.agro.external
         /// /// <param name="implements">Implement de search, para la generación de entitySearch</param>
         /// <param name="entityId">índice del search</param>}
         /// <param name="hashOper">Convertidor de hasg</param>
-        public AgroSearch(string SearchServiceName, string SearchServiceKey, CorsOptions corsOptions, Implements<GeoPointType> implements, IHashSearchHelper hashOper, string entityId = "entitiesv2") 
+        public AgroSearch(string SearchServiceName, string SearchServiceKey, CorsOptions corsOptions, Implements<GeoPointType> implements, IHashSearchHelper hashOper, string entityId = "entities-agro") 
             : this(
-                  new MainSearch<GeoPointType>(SearchServiceName, SearchServiceKey, entityId, corsOptions),
+                  (IBaseEntitySearch<GeoPointType>)new MainSearch(SearchServiceName, SearchServiceKey, entityId),
                   new SearchQueries(),
                   implements,
                   hashOper
-                  )
+        )
         {
            
         }
@@ -66,7 +65,7 @@ namespace trifenix.connect.agro.external
             this.hashOper = hashOper;
             this.baseMainSearch = mainSearch;
             this.ServiceKey = mainSearch.ServiceKey;
-            this.ServiceName = mainSearch.ServiceName;
+            this.UriService = mainSearch.UriService;
             Index = mainSearch.Index;
             this.implements = implements;
             _queries = queries;

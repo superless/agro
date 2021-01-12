@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="GENERIC_ABBREVIATION" xml:space="preserve">
-    <value>Abreviación</value>
+    <value>Abr</value>
   </data>
   <data name="GENERIC_BRAND" xml:space="preserve">
     <value>Marca</value>

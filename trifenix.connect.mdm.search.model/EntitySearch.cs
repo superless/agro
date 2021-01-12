@@ -1,5 +1,4 @@
-﻿using Microsoft.Azure.Search;
-using Microsoft.Spatial;
+﻿using Azure.Search.Documents.Indexes;
 using Newtonsoft.Json;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -34,7 +33,7 @@ namespace trifenix.connect.mdm.search.model
         /// aquí asignarémos por regla general un guid que identifique a la entidad
         /// </summary>
         [Key]
-        [IsFilterable]
+        [SimpleField(IsKey = true, IsFilterable = true)]
         [JsonProperty("id")]
         public string id { get; set; }
 
@@ -44,7 +43,7 @@ namespace trifenix.connect.mdm.search.model
         /// por ejemplo, 
         /// si un elemento es una persona, el índice será igual a 1, que es el índice que el diccionario tiene para persona.
         /// </summary>
-        [IsFilterable, IsFacetable]
+        [SimpleField(IsKey = false, IsFilterable = true, IsFacetable = true)]
         [JsonProperty("index")]
         public int index { get; set; }
 
@@ -54,7 +53,7 @@ namespace trifenix.connect.mdm.search.model
         /// se tiene la idea de usarlo como ttl, pero hay que investigar acerca de la 
         /// metadata propia de azure, la cual podría tener un timestamp para hacer operaciones de este tipo.
         /// </summary>
-        [IsSortable]
+        [SimpleField(IsKey = false, IsSortable = true)]
         [JsonProperty("created")]
         public DateTime created { get; set; }
 

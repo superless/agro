@@ -176,6 +176,10 @@ namespace trifenix.agro.app.frm.mantenedores.season
 
         private void bsSectors_CurrentChanged(object sender, EventArgs e)
         {
+            if (trifenix.connect.util.Mdm.Reflection.IsEnumerable(bsMain.Current) && !((IEnumerable<Object>)bsMain.Current).Any())
+            {
+                return;
+            }
             ChangedList(bsMain.Current);
             OnCurrentChange();
         }
@@ -365,7 +369,7 @@ namespace trifenix.agro.app.frm.mantenedores.season
             var currentCostCenter = (CostCenter)bsCostCenter.Current;
 
 
-            Cloud.PushElement(new SeasonInput { Current = true, StartDate = dtStartSeason.Value, EndDate = dtEndSeason.Value, IdCostCenter = currentCostCenter.Id }, entityName).Wait();
+            Cloud.PushElement(new SeasonInput { Current = true, StartDate = dtStartSeason.Value.ToUniversalTime(), EndDate = dtEndSeason.Value.ToUniversalTime(), IdCostCenter = currentCostCenter.Id }, entityName).Wait();
 
         }
 

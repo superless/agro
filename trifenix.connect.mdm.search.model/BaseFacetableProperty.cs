@@ -1,4 +1,4 @@
-﻿using Microsoft.Azure.Search;
+﻿using Azure.Search.Documents.Indexes;
 using Newtonsoft.Json;
 using trifenix.connect.mdm.entity_model;
 
@@ -16,7 +16,7 @@ namespace trifenix.connect.mdm.search.model
         /// <summary>
         /// facet, ver interface para más documentación
         /// </summary>
-        [IsFacetable]
+        [SimpleField(IsKey = false, IsFacetable = true)]
         [JsonProperty("facet")]
         public string facet { get => $"{index},{value}"; }
     }

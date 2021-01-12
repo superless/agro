@@ -35,7 +35,7 @@ namespace trifenix.agro.app
             InitializeComponent();
             connection = new HubConnectionBuilder()
                 
-                .WithUrl("http://192.168.0.10:7071/api",c=> { c.AccessTokenProvider = () => Task.FromResult("cloud-app"); ;  })
+                .WithUrl("http://localhost:7071/api",c=> { c.AccessTokenProvider = () => Task.FromResult("cloud-app"); ;  })
                 .WithAutomaticReconnect()
                 .Build();
 

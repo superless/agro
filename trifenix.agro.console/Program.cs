@@ -1,16 +1,8 @@
-﻿using Cosmonaut;
-using Cosmonaut.Response;
-using Microsoft.Azure.Search.Models;
+﻿using Azure.Search.Documents.Indexes.Models;
 using Microsoft.Spatial;
-using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading.Tasks;
-using trifenix.agro.external.operations;
-using trifenix.connect.agro.external;
-using trifenix.connect.agro.external.helper;
-using trifenix.connect.db;
+using trifenix.connect.search;
 
 namespace trifenix.agro.console
 {
@@ -21,9 +13,11 @@ namespace trifenix.agro.console
 
         static async Task Main(string[] args) {
 
-            var dict = new Dictionary<int, string> { { 1, "hello" }, { 2, "hello" } };
+            var ms = new MainSearch("https://agrocloud.search.windows.net", "6D2BA6AF3373D17A341F7A099BA8FA6A", "entities-agro");
 
-            Console.WriteLine(JsonConvert.SerializeObject(dict));
+            
+
+
         }
 
     }

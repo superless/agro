@@ -292,7 +292,7 @@ namespace trifenix.agro.app.frm.mantenedores.costcenter
             if (obj!=null)
             {
                 var current = (CostCenter)obj;
-                tbxCorrelativo.Text = current.ClientId.ToString();
+                tbxCorrelativo.Text = current.ClientId?.ToString()??"";
                 tbxName.Text = current.Name;
                 gbxItem.Text = $"Centro de costos {tbxName.Text}";
                 //business names

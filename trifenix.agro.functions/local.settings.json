@@ -14,7 +14,7 @@
     "scope": "https://dev-aresa.trifenix.io/App.access",
     "Search_allowedOrigins": "https://aresa.trifenix.io;https://dev-aresa.trifenix.io;https://agro.trifenix.io;https://agro-dev.trifenix.io;http://localhost:3000;http://localhost:4000;https://aresa2-dev.trifenix.io;https://aresa2.trifenix.io;http://localhost:9009;https://portal.azure.com",
     "SearchServiceKey": "6D2BA6AF3373D17A341F7A099BA8FA6A",
-    "SearchServiceName": "agrocloud",
+    "SearchServiceName": "https://agrocloud.search.windows.net",
     "ServiceBusConnectionString": "Endpoint=sb://agrobus.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=28iKIG/njebR7TMqZh5e9KDdI0Jhv3D6gjUUI198Gog=",
     "StorageConnectionStrings": "DefaultEndpointsProtocol=https;AccountName=cloudagrostorage;AccountKey=Hp+mHIx+2mFogv2TXTqVZUvQPCNtF90v93vWTwdG6tZG4EGPLKjhsa3e+U9ydJitJ0PLc3w0CimfsDHEmtscDg==;EndpointSuffix=core.windows.net",
     "tenant": "jhmdev.onmicrosoft.com",

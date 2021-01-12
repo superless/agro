@@ -61,7 +61,7 @@ namespace trifenix.connect.agro.resources.dictionary.strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Abreviación.
+        ///   Looks up a localized string similar to Abr.
         /// </summary>
         public static string GENERIC_ABBREVIATION {
             get {

@@ -1,4 +1,4 @@
-﻿using Microsoft.Azure.Search;
+﻿using Azure.Search.Documents.Indexes;
 using Newtonsoft.Json;
 using trifenix.connect.mdm.entity_model;
 
@@ -14,7 +14,7 @@ namespace trifenix.connect.mdm.search.model
         /// <summary>
         /// índice de una entidad
         /// </summary>
-        [IsFilterable]
+        [SimpleField(IsKey = false, IsFilterable = true)]
         [JsonProperty("index")]
         public int index { get; set; }
 
@@ -22,7 +22,7 @@ namespace trifenix.connect.mdm.search.model
         /// <summary>
         /// identificador de una entidad
         /// </summary>
-        [IsFilterable]
+        [SimpleField(IsKey = false, IsFilterable = true)]
         [JsonProperty("id")]
         public string id { get; set; }
 
@@ -31,7 +31,7 @@ namespace trifenix.connect.mdm.search.model
         /// facet que incluye el identificador de la entidad y la id para busquedas agrupadas
         /// en azure search.
         /// </summary>
-        [IsFacetable]
+        [SimpleField(IsKey = false, IsFacetable = true)]
         [JsonProperty("facet")]
         public string facet { get => $"{index},{id}"; }
     }

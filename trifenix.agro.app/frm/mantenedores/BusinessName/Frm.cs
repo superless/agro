@@ -327,7 +327,7 @@ namespace trifenix.agro.app.frm.mantenedores.businessname
 
         public void ChangedList(object obj) {
             var current = (BusinessName)obj;
-            tbxCorrelativo.Text = current.ClientId.ToString();
+            tbxCorrelativo.Text = current.ClientId?.ToString()??"";
             tbxName.Text = current.Name;
             tbxWebPage.Text = current.WebPage;
             tbxRut.Text = current.Rut;

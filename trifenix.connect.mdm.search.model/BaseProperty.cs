@@ -1,4 +1,4 @@
-﻿using Microsoft.Azure.Search;
+﻿using Azure.Search.Documents.Indexes;
 using Newtonsoft.Json;
 using trifenix.connect.mdm.entity_model;
 
@@ -16,7 +16,7 @@ namespace trifenix.connect.mdm.search.model
         /// <summary>
         /// índice de una propiedad, junto con el diccionario podrá identificar la propiedad. 
         /// </summary>
-        [IsFilterable]
+        [SimpleField(IsKey = false, IsFilterable = true)]
         [JsonProperty("index")]
         public int index { get; set; }
 
@@ -26,7 +26,7 @@ namespace trifenix.connect.mdm.search.model
         /// el elemento T determina el tipo de valor,
         /// estos pueden ser bool, int, long, datetime, double, geo, etc.
         /// </summary>
-        [IsFilterable]
+        [SimpleField(IsKey = false, IsFilterable = true)]
         [JsonProperty("value")]
         public virtual T value { get; set; }
     }
