@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace trifenix.agro.external.operations.res {
+namespace trifenix.connect.agro.external.res {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace trifenix.agro.external.operations.res {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("trifenix.agro.external.operations.res.ErrorMessages", typeof(ErrorMessages).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("trifenix.connect.agro.external.res.ErrorMessages", typeof(ErrorMessages).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,15 +57,6 @@ namespace trifenix.agro.external.operations.res {
             }
             set {
                 resourceCulture = value;
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to La fecha inicial es mayor a la fecha final.
-        /// </summary>
-        internal static string StartDateisOlderThenEndDate {
-            get {
-                return ResourceManager.GetString("StartDateisOlderThenEndDate", resourceCulture);
             }
         }
         
@@ -93,6 +84,15 @@ namespace trifenix.agro.external.operations.res {
         internal static string NotValidId {
             get {
                 return ResourceManager.GetString("NotValidId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to La fecha inicial es mayor a la fecha final.
+        /// </summary>
+        internal static string StartDateisOlderThenEndDate {
+            get {
+                return ResourceManager.GetString("StartDateisOlderThenEndDate", resourceCulture);
             }
         }
     }
