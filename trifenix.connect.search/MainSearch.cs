@@ -28,15 +28,6 @@ namespace trifenix.connect.search
 
         private readonly SearchIndexClient _searchIndex;
         private readonly SearchClient _search;
-        
-
-
-
-
-
-
-
-
 
         // nombre del servicio en azure
         public string UriService { get; private set; }
