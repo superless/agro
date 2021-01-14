@@ -17,7 +17,13 @@
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.ServiceBus" Version="4.2.0" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.SignalRService" Version="1.2.2" />
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.11" />
+    <PackageReference Include="Microsoft.Spatial" Version="7.8.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="trifenix.connect.db.cosmos" Version="0.8.47" />
+    <PackageReference Include="trifenix.connect.interfaces.db.cosmos" Version="0.8.48" />
+    <PackageReference Include="trifenix.connect.interfaces.external" Version="0.8.45" />
+    <PackageReference Include="trifenix.connect.interfaces.search" Version="0.8.47" />
+    <PackageReference Include="trifenix.connect.search" Version="0.8.47" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\trifenix.connect.agro.external\trifenix.connect.agro.external.csproj" />
