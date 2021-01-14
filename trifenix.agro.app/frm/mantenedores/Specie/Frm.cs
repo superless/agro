@@ -35,8 +35,6 @@ namespace trifenix.agro.app.frm.mantenedores.specie
             bworker.WorkerReportsProgress = true;
 
             lblDescripcion.Text = Description();
-
-
         }
         private async void SectorFrm_Load_1(object sender, EventArgs e)
         {   
