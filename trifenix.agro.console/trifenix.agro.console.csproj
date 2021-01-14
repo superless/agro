@@ -7,7 +7,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\trifenix.connect.agro.external\trifenix.connect.agro.external.csproj" />
-    <ProjectReference Include="..\trifenix.connect.db\trifenix.connect.db.csproj" />
   </ItemGroup>
 
   <ItemGroup>

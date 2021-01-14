@@ -22,11 +22,6 @@
   <ItemGroup>
     <ProjectReference Include="..\trifenix.connect.agro.external\trifenix.connect.agro.external.csproj" />
     <ProjectReference Include="..\trifenix.connect.agro\trifenix.connect.agro.csproj" />
-    <ProjectReference Include="..\trifenix.connect.auth\trifenix.connect.auth.csproj" />
-    <ProjectReference Include="..\trifenix.connect.bus\trifenix.connect.bus.csproj" />
-    <ProjectReference Include="..\trifenix.connect.email\trifenix.connect.email.csproj" />
-    <ProjectReference Include="..\trifenix.connect.storage.azure\trifenix.connect.storage.azure.csproj" />
-    <ProjectReference Include="..\yofenix\trifenix.connect.mdm.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">

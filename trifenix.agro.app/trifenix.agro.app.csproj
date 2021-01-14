@@ -537,18 +537,6 @@
       <Project>{FF9ED374-6CB2-42A5-A30E-F00140834DBE}</Project>
       <Name>trifenix.connect.app.cloud</Name>
     </ProjectReference>
-    <ProjectReference Include="..\trifenix.connect.entities.cosmos\trifenix.connect.entities.cosmos.csproj">
-      <Project>{2493D12A-A4FD-4A2C-BAB7-7A5683D44F5F}</Project>
-      <Name>trifenix.connect.entities.cosmos</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\trifenix.connect\trifenix.connect.csproj">
-      <Project>{75ff7996-b064-40c7-a099-8029dc07262a}</Project>
-      <Name>trifenix.connect</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\yofenix\trifenix.connect.mdm.csproj">
-      <Project>{E6A09456-0499-4124-9170-C46A70344131}</Project>
-      <Name>trifenix.connect.mdm</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\add-icon.png" />

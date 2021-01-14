@@ -1,17 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using trifenix.agro.external;
-using trifenix.agro.external.operations.tests.data;
 using trifenix.connect.agro.index_model.enums;
 using trifenix.connect.agro.tests.data;
 using trifenix.connect.agro.tests.mock;
-using trifenix.connect.agro_model;
 using trifenix.connect.agro_model_input;
-using trifenix.connect.mdm.entity_model;
-using trifenix.connect.mdm.ts_model;
 using trifenix.connect.util;
 using Xunit;
 
@@ -21,7 +15,8 @@ namespace trifenix.connect.agro.tests
     {
 
 
-        public class SaveInputProductMethod {
+        public class SaveInputProductMethod
+        {
             /// <summary>
             /// Haremos todo el proceso de ingreso de un producto, incluyendo todos las entidades relacionadas.
             /// </summary>
@@ -39,7 +34,7 @@ namespace trifenix.connect.agro.tests
 
                 var categoryIngredientResult = await agroManager.IngredientCategory.SaveInput(new IngredientCategoryInput
                 {
-                      Name = "Fertilizantes"
+                    Name = "Fertilizantes"
                 });
 
                 var categoryIngredient = await agroManager.IngredientCategory.Get(categoryIngredientResult.IdRelated);
@@ -52,7 +47,7 @@ namespace trifenix.connect.agro.tests
                 // marca.
                 var brandInput = await agroManager.Brand.SaveInput(new BrandInput
                 {
-                    Name="Anasac"
+                    Name = "Anasac"
                 });
 
 
@@ -63,7 +58,7 @@ namespace trifenix.connect.agro.tests
 
                 var idIngredientCategory = categoryIngredient.Result.Id;
 
-                
+
                 var ingredientInput = await agroManager.Ingredient.SaveInput(new IngredientInput
                 {
                     idCategory = idIngredientCategory,
@@ -111,7 +106,7 @@ namespace trifenix.connect.agro.tests
 
                 });
 
-                
+
                 var target = await agroManager.ApplicationTarget.Get(targetInput.IdRelated);
 
 
@@ -168,7 +163,7 @@ namespace trifenix.connect.agro.tests
                 // cuando se inserta una dosis directamente en  su repositorio, el id de producto es obligatorio.
                 // cuando es insertado a través de la inserción de productos, es este el que se encarga de asignare su propia id en la dosis de producto.
                 // lo mismo pasa con active y default
-               
+
 
                 var dosesInput = new DosesInput
                 {
@@ -180,8 +175,8 @@ namespace trifenix.connect.agro.tests
                     ApplicationDaysInterval = 10,
                     NumberOfSequentialApplication = 3,
                     WaitingDaysLabel = 5,
-                     WettingRecommendedByHectares = 2000,
-                     WaitingToHarvest = new WaitingHarvestInput[] { 
+                    WettingRecommendedByHectares = 2000,
+                    WaitingToHarvest = new WaitingHarvestInput[] {
                         waitingHarvestInput1, waitingHarvestInput2
                      }
                 };
@@ -205,7 +200,7 @@ namespace trifenix.connect.agro.tests
                 var product = await agroManager.Product.Get(productInputTest.IdRelated);
 
 
-                
+
 
                 Assert.Equal(productInput.Name, product.Result.Name);
 
@@ -258,6 +253,6 @@ namespace trifenix.connect.agro.tests
         }
 
 
-        
+
     }
 }
