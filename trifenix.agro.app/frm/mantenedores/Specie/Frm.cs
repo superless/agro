@@ -293,7 +293,7 @@ namespace trifenix.agro.app.frm.mantenedores.specie
             if (obj!=null)
             {
                 var current = (Specie)obj;
-                tbxCorrelativo.Text = current.ClientId.ToString();
+                tbxCorrelativo.Text = current.ClientId?.ToString()??"";
                 tbxName.Text = current.Name;
                 gbxItem.Text = $"Especie {tbxName.Text}";
                 tbxAbbreviation.Text = current.Abbreviation;

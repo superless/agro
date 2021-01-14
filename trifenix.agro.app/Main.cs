@@ -59,12 +59,6 @@ namespace trifenix.agro.app
 
             SetSpecies();
             SetSeason();
-            
-
-
-
-
-
 
         }
 
