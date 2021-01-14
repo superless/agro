@@ -13,7 +13,7 @@ namespace trifenix.agro.console
 
         static async Task Main(string[] args) {
 
-            var ms = new MainSearch("https://agrocloud.search.windows.net", "6D2BA6AF3373D17A341F7A099BA8FA6A", "entities-agro");
+            var ms = new MainSearch("https://trifenix-agrodb.search.windows.net", "97605234A15EE49670972CF3736F89AC", "entities-agro");
 
             
 
