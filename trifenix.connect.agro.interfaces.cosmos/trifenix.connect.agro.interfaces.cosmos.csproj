@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\trifenix.connect.agro\trifenix.connect.agro.csproj" />
-    <ProjectReference Include="..\trifenix.connect.interfaces.db.cosmos\trifenix.connect.interfaces.db.cosmos.csproj" />
   </ItemGroup>
 
 </Project>
