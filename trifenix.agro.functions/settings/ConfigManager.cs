@@ -1,6 +1,5 @@
 ﻿using System;
-
-using trifenix.connect.db;
+using trifenix.connect.arguments;
 
 namespace trifenix.agro.functions.settings
 {

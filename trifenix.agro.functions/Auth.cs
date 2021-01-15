@@ -2,7 +2,7 @@
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using trifenix.connect.auth;
+using trifenix.connect.aad.auth;
 using trifenix.connect.interfaces.auth;
 
 namespace trifenix.agro.functions
