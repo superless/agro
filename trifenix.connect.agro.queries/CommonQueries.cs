@@ -4,10 +4,8 @@ using System.Threading.Tasks;
 using trifenix.connect.agro.interfaces;
 using trifenix.connect.agro.model_queries;
 using trifenix.connect.agro_model;
-using trifenix.connect.db;
+using trifenix.connect.arguments;
 using trifenix.connect.db.cosmos;
-using trifenix.connect.entities.cosmos;
-using trifenix.connect.interfaces.db.cosmos;
 
 namespace trifenix.connect.agro.queries
 {

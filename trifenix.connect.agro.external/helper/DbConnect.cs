@@ -3,6 +3,7 @@ using trifenix.connect.agro.interfaces;
 using trifenix.connect.agro.interfaces.cosmos;
 using trifenix.connect.agro.interfaces.external;
 using trifenix.connect.agro.queries;
+using trifenix.connect.arguments;
 using trifenix.connect.db;
 using trifenix.connect.db.cosmos;
 using trifenix.connect.entities.cosmos;
@@ -40,7 +41,7 @@ namespace trifenix.connect.agro.external.helper
 
 
         // Elementos en existencia.
-        public IExistElement ExistsElements(bool isBatch) => isBatch? (IExistElement) new BatchExistsElements(Arguments) : new CosmosExistElement(Arguments);
+        public IExistElement ExistsElements(bool isBatch=false) => (IExistElement)new CosmosExistElement(Arguments);
 
 
         // Operaciones comunes en la base de datgos
