@@ -312,11 +312,14 @@
     <Reference Include="trifenix.connect.arguments, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\trifenix.connect.arguments.0.8.46\lib\netstandard2.0\trifenix.connect.arguments.dll</HintPath>
     </Reference>
+    <Reference Include="trifenix.connect.bus, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\trifenix.connect.bus.0.8.45\lib\netstandard2.0\trifenix.connect.bus.dll</HintPath>
+    </Reference>
     <Reference Include="trifenix.connect.db.cosmos, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\trifenix.connect.db.cosmos.0.8.47\lib\netstandard2.0\trifenix.connect.db.cosmos.dll</HintPath>
     </Reference>
     <Reference Include="trifenix.connect.entities.cosmos, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\trifenix.connect.entities.cosmos.0.8.57\lib\netstandard2.0\trifenix.connect.entities.cosmos.dll</HintPath>
+      <HintPath>..\packages\trifenix.connect.entities.cosmos.0.8.58\lib\netstandard2.0\trifenix.connect.entities.cosmos.dll</HintPath>
     </Reference>
     <Reference Include="trifenix.connect.graph, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\trifenix.connect.graph.0.8.46\lib\netstandard2.0\trifenix.connect.graph.dll</HintPath>
@@ -341,6 +344,12 @@
     </Reference>
     <Reference Include="trifenix.connect.search, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\trifenix.connect.search.0.8.47\lib\netstandard2.0\trifenix.connect.search.dll</HintPath>
+    </Reference>
+    <Reference Include="trifenix.connect.test.mock, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\trifenix.connect.test.mock.0.8.45\lib\netstandard2.0\trifenix.connect.test.mock.dll</HintPath>
+    </Reference>
+    <Reference Include="trifenix.connect.translate, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\trifenix.connect.translate.0.8.50\lib\netstandard2.0\trifenix.connect.translate.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
