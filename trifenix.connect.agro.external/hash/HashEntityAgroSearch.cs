@@ -63,7 +63,11 @@ namespace trifenix.connect.agro.external.hash
         
         public string HashModel(object model) 
         {
-            return Mdm.Reflection.Cripto.ComputeSha256Hash(JsonConvert.SerializeObject(model));
+            var serialize = JsonConvert.SerializeObject(model, new JavaScriptDateTimeConverter());
+
+
+
+            return Mdm.Reflection.Cripto.ComputeSha256Hash(serialize);
         }
 
 
