@@ -92,6 +92,7 @@ namespace trifenix.agro.functions
 
                     return new OkObjectResult(conn);
                 }
+
                 log.LogInformation("with binding " + token);
                 IAuthentication auth = new Authentication(
                     Environment.GetEnvironmentVariable("clientID", EnvironmentVariableTarget.Process),

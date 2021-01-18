@@ -24,13 +24,14 @@ namespace trifenix.agro.functions.mantainers
         private static readonly ServiceBus ServiceBus = new ServiceBus(Environment.GetEnvironmentVariable("ServiceBusConnectionString", EnvironmentVariableTarget.Process), Environment.GetEnvironmentVariable("QueueName", EnvironmentVariableTarget.Process));
 
         public static async Task<ActionResultWithId> SendInternalHttp<DbElement, InputElement>(HttpRequest req, ILogger log, Func<IAgroManager<GeographyPoint>, IGenericOperation<DbElement, InputElement>> repo, string id = null) where DbElement : DocumentBase where InputElement : InputBase {
-            var claims = await Auth.Validate(req);
-            if (claims == null)
-                return new ActionResultWithId {
-                    Id = null,
-                    JsonResult = new UnauthorizedResult()
-                };
-            string ObjectIdAAD = claims.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
+            //var claims = await Auth.Validate(req);
+            //if (claims == null)
+            //    return new ActionResultWithId {
+            //        Id = null,
+            //        JsonResult = new UnauthorizedResult()
+            //    };
+            //string ObjectIdAAD = claims.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
+            string ObjectIdAAD = string.Empty;
             return await HttpProcessing(req, log, ObjectIdAAD, repo, id);
         }
 
