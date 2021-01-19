@@ -16,7 +16,7 @@ namespace trifenix.connect.agro_model
     [SharedCosmosCollection("agro", "PhenologicalEvent")]
     [ReferenceSearchHeader(EntityRelated.PHENOLOGICAL_EVENT, Kind = EntityKind.ENTITY, PathName = "phenological_events")]
     [GroupMenu(MenuEntityRelated.MANTENEDORES, PhisicalDevice.ALL, SubMenuEntityRelated.ORDEN_APLICACION)]
-    public class PhenologicalEvent : DocumentBaseName, ISharedCosmosEntity {
+    public class PhenologicalEvent : DocumentLocal {
 
         public override string Id { get; set; }
 
@@ -31,7 +31,7 @@ namespace trifenix.connect.agro_model
         /// nombre del evento fenológico.
         /// </summary>
         [StringSearch(StringRelated.GENERIC_NAME)]
-        public override string Name { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// fecha de inicio

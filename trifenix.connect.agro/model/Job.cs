@@ -1,9 +1,7 @@
-﻿using Cosmonaut;
-using Cosmonaut.Attributes;
+﻿using Cosmonaut.Attributes;
 using trifenix.connect.agro.index_model.enums;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
-using trifenix.connect.entities.cosmos;
 using trifenix.connect.mdm.enums;
 
 namespace trifenix.connect.agro_model
@@ -12,7 +10,7 @@ namespace trifenix.connect.agro_model
     [SharedCosmosCollection("agro", "Job")]
     [ReferenceSearchHeader(EntityRelated.JOB, PathName = "jobs", Kind = EntityKind.ENTITY)]
     [GroupMenu(MenuEntityRelated.MANTENEDORES, PhisicalDevice.ALL, SubMenuEntityRelated.USUARIOS)]
-    public class Job : DocumentBaseName, ISharedCosmosEntity {
+    public class Job : DocumentLocal {
 
         /// <summary>
         /// Identificador visual de cargo
@@ -29,7 +27,7 @@ namespace trifenix.connect.agro_model
         /// nombre del cargo.
         /// </summary>
         [StringSearch(StringRelated.GENERIC_NAME)]
-        public override string Name { get; set; }
+        public string Name { get; set; }
 
     }
 }

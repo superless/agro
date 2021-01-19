@@ -1,9 +1,7 @@
-﻿using Cosmonaut;
-using Cosmonaut.Attributes;
+﻿using Cosmonaut.Attributes;
 using System;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
-using trifenix.connect.entities.cosmos;
 using trifenix.connect.mdm.enums;
 
 namespace trifenix.connect.agro_model
@@ -14,7 +12,7 @@ namespace trifenix.connect.agro_model
     /// </summary>
     [SharedCosmosCollection("agro", "Season")]
     [ReferenceSearchHeader(EntityRelated.SEASON, PathName = "seasons", Kind = EntityKind.CUSTOM_ENTITY)]
-    public class Season : DocumentBase, ISharedCosmosEntity {
+    public class Season : DocumentLocal {
 
         /// <summary>
         /// identificador.

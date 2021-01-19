@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using trifenix.agro.model.external.Input;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
 using trifenix.connect.agro_model;
@@ -43,7 +42,7 @@ namespace trifenix.connect.agro_model_input
         public int NumberOfPlants { get; set; }
 
         [GeoSearch(GeoRelated.LOCATION_BARRACK)]
-        public GeographicalPointInput[] GeographicalPoints { get; set; }
+        public GeoItem[] GeographicalPoints { get; set; }
 
         [ReferenceSearch(EntityRelated.POLLINATOR,EntityRelated.POLLINATOR)]
         [Reference(typeof(Variety))]

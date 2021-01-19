@@ -1,10 +1,8 @@
-﻿using Cosmonaut;
-using Cosmonaut.Attributes;
+﻿using Cosmonaut.Attributes;
 using System.ComponentModel.DataAnnotations;
 using trifenix.connect.agro.index_model.enums;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
-using trifenix.connect.entities.cosmos;
 using trifenix.connect.mdm.enums;
 using trifenix.connect.mdm_attributes;
 
@@ -17,7 +15,7 @@ namespace trifenix.connect.agro_model
     [SharedCosmosCollection("agro", "BusinessName")]
     [ReferenceSearchHeader(EntityRelated.BUSINESSNAME, PathName = "business_names", Kind =EntityKind.ENTITY)]
     [GroupMenu(MenuEntityRelated.MANTENEDORES, PhisicalDevice.ALL, SubMenuEntityRelated.GESTION)]
-    public class BusinessName : DocumentBaseName, ISharedCosmosEntity {
+    public class BusinessName : DocumentLocal {
         
 
         /// <summary>
@@ -40,7 +38,7 @@ namespace trifenix.connect.agro_model
         [StringSearch(StringRelated.GENERIC_NAME)]
         [Group(0,PhisicalDevice.WEB, 6)]
         [Required]
-        public override string Name { get; set; }
+        public string Name { get; set; }
 
 
         /// <summary>

@@ -12,7 +12,7 @@ namespace trifenix.connect.agro_model
     [SharedCosmosCollection("agro", "PlotLand")]
     [ReferenceSearchHeader(EntityRelated.PLOTLAND, PathName = "plotlands",Kind = EntityKind.ENTITY)]
     [GroupMenu(MenuEntityRelated.MANTENEDORES, PhisicalDevice.ALL, SubMenuEntityRelated.TERRENO)]
-    public class PlotLand : DocumentBaseName, ISharedCosmosEntity
+    public class PlotLand : DocumentLocal
     {
         /// <summary>
         /// identificador
@@ -29,7 +29,7 @@ namespace trifenix.connect.agro_model
         /// Nombre de la parcela.
         /// </summary>
         [StringSearch(StringRelated.GENERIC_NAME)]
-        public override string Name { get; set; }
+        public string Name { get; set; }
 
 
         /// <summary>

@@ -1,8 +1,8 @@
 ﻿using System;
-using trifenix.agro.model.external.Input;
 using trifenix.connect.agro.index_model.enums;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
+using trifenix.connect.agro_model;
 using trifenix.connect.input;
 
 namespace trifenix.connect.agro_model_input
@@ -38,7 +38,7 @@ namespace trifenix.connect.agro_model_input
         public string Base64 { get; set; }
 
         [GeoSearch(GeoRelated.LOCATION_EVENT)]
-        public GeographicalPointInput Location { get; set; }
+        public GeoItem Location { get; set; }
 
     }
 

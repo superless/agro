@@ -1,9 +1,7 @@
-﻿using Cosmonaut;
-using Cosmonaut.Attributes;
+﻿using Cosmonaut.Attributes;
 using System;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
-using trifenix.connect.entities.cosmos;
 using trifenix.connect.mdm.enums;
 
 namespace trifenix.connect.agro_model
@@ -15,7 +13,7 @@ namespace trifenix.connect.agro_model
     /// </summary>
     [SharedCosmosCollection("agro", "ExecutionOrder")]
     [ReferenceSearchHeader(EntityRelated.EXECUTION_ORDER, Kind = EntityKind.PROCESS, PathName = "execution_orders")]
-    public class ExecutionOrder : DocumentBase, ISharedCosmosEntity {
+    public class ExecutionOrder : DocumentLocal {
 
 
         /// <summary>
