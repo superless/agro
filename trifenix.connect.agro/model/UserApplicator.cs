@@ -10,7 +10,9 @@ namespace trifenix.connect.agro_model
     {
         public UserApplicator() : base()
         {
-            CosmosEntityName = "User";
+            #if !DEBUG
+               CosmosEntityName = "User"; 
+            #endif
         }
 
         /// <summary>
