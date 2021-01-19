@@ -1,10 +1,7 @@
-﻿
-using Cosmonaut;
-using Cosmonaut.Attributes;
+﻿using Cosmonaut.Attributes;
 using System.Collections.Generic;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
-using trifenix.connect.entities.cosmos;
 using trifenix.connect.mdm.enums;
 
 namespace trifenix.connect.agro_model
@@ -15,7 +12,7 @@ namespace trifenix.connect.agro_model
     /// </summary>
     [SharedCosmosCollection("agro", "User")]
     [ReferenceSearchHeader(EntityRelated.USER, PathName = "users", Kind = EntityKind.ENTITY)]
-    public class User : DocumentBaseName, ISharedCosmosEntity
+    public class User : DocumentLocal
     {
 
 
@@ -33,7 +30,7 @@ namespace trifenix.connect.agro_model
         public string ObjectIdAAD { get; set; }
 
         [StringSearch(StringRelated.GENERIC_NAME)]
-        public override string Name { get; set; }
+        public string Name { get; set; }
 
 
         [StringSearch(StringRelated.GENERIC_RUT)]

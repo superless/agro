@@ -12,7 +12,7 @@ namespace trifenix.connect.agro_model
     [SharedCosmosCollection("agro", "Tractor")]
     [ReferenceSearchHeader(EntityRelated.TRACTOR, Kind = EntityKind.ENTITY, PathName = "tractors")]
     [GroupMenu(MenuEntityRelated.MANTENEDORES, PhisicalDevice.ALL, SubMenuEntityRelated.MAQUINARIA)]
-    public class Tractor : DocumentBase, ISharedCosmosEntity
+    public class Tractor : DocumentLocal
     {
 
         /// <summary>

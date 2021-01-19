@@ -1,11 +1,8 @@
-﻿using Cosmonaut;
-using Cosmonaut.Attributes;
-using Microsoft.Azure.Documents.Spatial;
+﻿using Cosmonaut.Attributes;
 using System.ComponentModel.DataAnnotations;
 using trifenix.connect.agro.index_model.enums;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
-using trifenix.connect.entities.cosmos;
 using trifenix.connect.mdm.enums;
 using trifenix.connect.mdm_attributes;
 
@@ -19,7 +16,7 @@ namespace trifenix.connect.agro_model
     [SharedCosmosCollection("agro", "Barrack")]
     [ReferenceSearchHeader(EntityRelated.BARRACK, Kind =EntityKind.ENTITY, PathName ="barracks")]
     [GroupMenu(MenuEntityRelated.MANTENEDORES, PhisicalDevice.ALL, SubMenuEntityRelated.TERRENO)]
-    public class Barrack : DocumentBaseName, ISharedCosmosEntity {
+    public class Barrack : DocumentLocal {
 
         /// <summary>
         /// identificador del barrack
@@ -41,7 +38,7 @@ namespace trifenix.connect.agro_model
         [StringSearch(StringRelated.GENERIC_NAME)]
         [Unique]
         [Required]
-        public override string Name { get; set; }
+        public string Name { get; set; }
 
 
         /// <summary>
@@ -115,7 +112,7 @@ namespace trifenix.connect.agro_model
         /// ubicación geográfica del cuartel
         /// </summary>
         [GeoSearch(GeoRelated.LOCATION_BARRACK, Visible = false)]
-        public Point[] GeographicalPoints { get; set; }
+        public GeoItem[] GeographicalPoints { get; set; }
 
     }
 

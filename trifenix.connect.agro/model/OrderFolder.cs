@@ -1,8 +1,6 @@
-﻿using Cosmonaut;
-using Cosmonaut.Attributes;
+﻿using Cosmonaut.Attributes;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
-using trifenix.connect.entities.cosmos;
 using trifenix.connect.mdm.enums;
 
 namespace trifenix.connect.agro_model
@@ -12,7 +10,7 @@ namespace trifenix.connect.agro_model
     /// </summary>
     [SharedCosmosCollection("agro", "OrderFolder")]
     [ReferenceSearchHeader(EntityRelated.ORDER_FOLDER, PathName = "order_folders", Kind = EntityKind.ENTITY)]
-    public class OrderFolder : DocumentBase, ISharedCosmosEntity
+    public class OrderFolder : DocumentLocal
     {
 
         /// <summary>
