@@ -7,7 +7,7 @@ using System.Text;
 namespace trifenix.connect.agro_model
 {
 
-#if DEBUG
+#if CONNECT
      using trifenix.connect.model;
     public abstract class DocumentLocal : DocumentDb
     {

@@ -3,6 +3,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <AzureFunctionsVersion>v3</AzureFunctionsVersion>
     <DisableFunctionExtensionVersionUpdate>true</DisableFunctionExtensionVersionUpdate>
+    <Configurations>Debug;Release;CONNECT</Configurations>
   </PropertyGroup>
   <PropertyGroup>
     <Product>AgroFenix</Product>
