@@ -298,7 +298,7 @@ namespace trifenix.agro.app.frm.mantenedores.ingredient
             if (obj!=null)
             {
                 var current = (Ingredient)obj;
-                tbxCorrelativo.Text = current.ClientId.ToString();
+                tbxCorrelativo.Text = current.ClientId?.ToString()??"";
                 tbxName.Text = current.Name;
                 gbxItem.Text = $"{FriendlyName()} {tbxName.Text}";
                 //business names

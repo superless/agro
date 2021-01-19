@@ -1,9 +1,7 @@
-﻿using Cosmonaut;
-using Cosmonaut.Attributes;
+﻿using Cosmonaut.Attributes;
 using trifenix.connect.agro.index_model.enums;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
-using trifenix.connect.entities.cosmos;
 using trifenix.connect.mdm.enums;
 
 namespace trifenix.connect.agro_model
@@ -14,7 +12,7 @@ namespace trifenix.connect.agro_model
     /// </summary>
     [SharedCosmosCollection("agro", "Product")]
     [ReferenceSearchHeader(EntityRelated.PRODUCT, Kind = EntityKind.CUSTOM_ENTITY, PathName = "products")]
-    public class Product : DocumentBaseName, ISharedCosmosEntity
+    public class Product : DocumentLocal
     {
 
 
@@ -31,7 +29,7 @@ namespace trifenix.connect.agro_model
         /// Nombre del producto.
         /// </summary>
         [SuggestSearch(StringRelated.GENERIC_NAME)]
-        public override string Name { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// Identificador visual de producto

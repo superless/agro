@@ -1,13 +1,9 @@
-﻿using Cosmonaut;
-using Cosmonaut.Attributes;
+﻿using Cosmonaut.Attributes;
 using Microsoft.Azure.Documents.Spatial;
 using System;
-
-
 using trifenix.connect.agro.index_model.enums;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
-using trifenix.connect.entities.cosmos;
 using trifenix.connect.mdm.enums;
 
 namespace trifenix.connect.agro_model
@@ -19,7 +15,7 @@ namespace trifenix.connect.agro_model
     /// </summary>
     [SharedCosmosCollection("agro", "NotificationEvent")]
     [ReferenceSearchHeader(EntityRelated.NOTIFICATION_EVENT, PathName = "notification_events", Kind = EntityKind.CUSTOM_ENTITY)]
-    public class NotificationEvent : DocumentBase, ISharedCosmosEntity
+    public class NotificationEvent : DocumentLocal
     {
         /// <summary>
         /// Identificador de la Notificación
@@ -81,7 +77,7 @@ namespace trifenix.connect.agro_model
         /// Ubicación desde donde se generó el evento.
         /// </summary>
         [GeoSearch(GeoRelated.LOCATION_EVENT)]
-        public Point Location { get; set; }
+        public GeoItem Location { get; set; }
 
     }
 }
