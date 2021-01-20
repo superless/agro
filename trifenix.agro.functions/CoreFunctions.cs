@@ -1,5 +1,5 @@
 
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.ServiceBus;
 using Microsoft.Azure.WebJobs;
@@ -35,7 +35,8 @@ namespace trifenix.agro.functions
     /// <summary>
     /// Funciones 
     /// </summary>
-    public static class CoreFunctions {
+    public static class CoreFunctions
+    {
 
         /// <summary>
         /// Login, donde usa usuario y contraseña para obtener el token.
@@ -43,9 +44,10 @@ namespace trifenix.agro.functions
         /// <param name="req">cabecera que debe incluir el modelo de entrada </param>
         /// <param name="log"></param>
         /// <returns></returns>
-        [FunctionName("Login")]        
+        [FunctionName("Login")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
-        public static async Task<IActionResult> Login([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequest req, ILogger log) {
+        public static async Task<IActionResult> Login([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequest req, ILogger log)
+        {
             var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic credenciales = JsonConvert.DeserializeObject(requestBody);
             string clientId = Environment.GetEnvironmentVariable("clientID", EnvironmentVariableTarget.Process);
@@ -79,7 +81,8 @@ namespace trifenix.agro.functions
         public static async Task<IActionResult> NegotiatBindingAsync(
         [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "negotiate")] HttpRequest req,
         IBinder binder,
-        ILogger log) {
+        ILogger log)
+        {
 
             string AUTH_HEADER_NAME = "Authorization";
             string BEARER_PREFIX = "Bearer ";
@@ -112,7 +115,8 @@ namespace trifenix.agro.functions
                 // connectionInfo contains an access key token with a name identifier claim set to the authenticated user
                 return new OkObjectResult(connectionInfo);
             }
-            else {
+            else
+            {
                 // temporal, para conectar winform sin autenticación
                 return new UnauthorizedResult();
 
@@ -120,16 +124,17 @@ namespace trifenix.agro.functions
 
         }
 
-        
+
 
         [FunctionName("ServiceBus")]
         public static async Task Handler(
-        [ServiceBusTrigger("trifenix-agrobus", Connection = "ServiceBusConnectionString", IsSessionsEnabled = true)]Message message,
-        [SignalR(HubName = "agro")]IAsyncCollector<SignalRMessage> signalRMessages,
-        ILogger log) {
+        [ServiceBusTrigger("trifenix-agrobus1", Connection = "ServiceBusConnectionString", IsSessionsEnabled = true)] Message message,
+        [SignalR(HubName = "agro")] IAsyncCollector<SignalRMessage> signalRMessages,
+        ILogger log)
+        {
             var opInstance = ServiceBus.Deserialize(message.Body);
-            var ObjectIdAAD = opInstance.Value<string>("ObjectIdAAD");            
-            var queries = new CommonQueries(ConfigManager.GetDbArguments);            
+            var ObjectIdAAD = opInstance.Value<string>("ObjectIdAAD");
+            var queries = new CommonQueries(ConfigManager.GetDbArguments);
             var EntityName = opInstance.Value<string>("EntityName");
             var agro = await ContainerMethods.AgroManager(ObjectIdAAD);
             var entityType = opInstance["EntityType"].ToObject<Type>();
@@ -138,7 +143,8 @@ namespace trifenix.agro.functions
             element.Id = opInstance.Value<string>("Id");
             string userId = null;
 
-            try {
+            try
+            {
                 var saveReturn = await repo.SaveInput(element);
                 if (!string.IsNullOrWhiteSpace(ObjectIdAAD))
                 {
@@ -149,18 +155,19 @@ namespace trifenix.agro.functions
                         Date = DateTime.Now,
                         EntityName = EntityName,
                         EntityId = saveReturn.IdRelated
-                    }); 
+                    });
                 }
-                
-                await signalRMessages.AddAsync(new SignalRMessage { Target = "Success", UserId = userId??"cloud-app", Arguments = new object[] { EntityName } });
+
+                await signalRMessages.AddAsync(new SignalRMessage { Target = "Success", UserId = userId ?? "cloud-app", Arguments = new object[] { EntityName } });
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 log.LogError(ex, ex.Message);
                 await signalRMessages.AddAsync(new SignalRMessage { Target = "Error", UserId = userId ?? "cloud-app", Arguments = new object[] { ex is Validation_Exception ? ((Validation_Exception)ex).ErrorMessages : (object)new string[] { $"{ex.Message}" }, ex.StackTrace } });
             }
         }
 
-        
+
 
         /// <summary>
         /// Creación de Sector
@@ -1040,7 +1047,7 @@ namespace trifenix.agro.functions
             return result.JsonResult;
         }
 
-        
+
 
     }
 
