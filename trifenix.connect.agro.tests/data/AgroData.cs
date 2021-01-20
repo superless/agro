@@ -466,8 +466,8 @@ namespace trifenix.connect.agro.tests.data
         #region Barrack
         public static Barrack Barrack1 => new Barrack
         {
-            Id = ConstantGuids.Value[0],
-            Hectares = 1.1,
+             Id = ConstantGuids.Value[0],
+           Hectares = 1.1,
             IdPlotLand = ConstantGuids.Value[0],
             IdPollinator = ConstantGuids.Value[0],
             NumberOfPlants = 444,

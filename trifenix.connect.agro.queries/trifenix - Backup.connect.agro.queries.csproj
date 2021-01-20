@@ -1,0 +1,52 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Configurations>Debug;Release;CONNECT</Configurations>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="trifenix.connect.arguments" Version="0.8.46" />
+    <PackageReference Include="trifenix.connect.bus" Version="0.8.45" />
+	  
+    <PackageReference Include="trifenix.connect.db.cosmos" Version="0.8.47" />
+    <PackageReference Include="trifenix.connect.interfaces.db.cosmos" Version="0.8.48" />
+    <PackageReference Include="trifenix.connect.interfaces.external" Version="0.8.45" />
+    <PackageReference Include="trifenix.connect.interfaces.search" Version="0.8.47" />
+    <PackageReference Include="trifenix.connect.search" Version="0.8.47" />
+    <PackageReference Include="trifenix.connect.test.mock" Version="0.8.45" />
+    <PackageReference Include="trifenix.connect.translate" Version="0.8.50" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\trifenix.connect.agro.interfaces.cosmos\trifenix.connect.agro.interfaces.cosmos.csproj" />
+    <ProjectReference Include="..\trifenix.connect.agro.interfaces.external\trifenix.connect.agro.interfaces.external.csproj" />
+    <ProjectReference Include="..\trifenix.connect.agro.interfaces.search\trifenix.connect.agro.interfaces.search.csproj" />
+    <ProjectReference Include="..\trifenix.connect.agro\trifenix.connect.agro.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="QueryRes.Designer.cs">
+      <DependentUpon>QueryRes.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="SearchQueryRes.Designer.cs">
+      <DependentUpon>SearchQueryRes.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="QueryRes.resx">
+      <LastGenOutput>QueryRes.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="SearchQueryRes.resx">
+      <LastGenOutput>SearchQueryRes.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

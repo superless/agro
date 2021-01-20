@@ -294,7 +294,7 @@ namespace trifenix.agro.app.frm.mantenedores.plotland
             if (obj!=null)
             {
                 var current = (PlotLand)obj;
-                tbxCorrelativo.Text = current.ClientId.ToString();
+                tbxCorrelativo.Text = current.ClientId?.ToString()??"";
                 tbxName.Text = current.Name;
                 gbxItem.Text = $"Cargo {tbxName.Text}";
 

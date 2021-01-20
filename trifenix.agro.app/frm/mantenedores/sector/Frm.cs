@@ -289,7 +289,7 @@ namespace trifenix.agro.app.frm.mantenedores.sector
             if (obj!=null)
             {
                 var current = (Sector)obj;
-                tbxCorrelativo.Text = current.ClientId.ToString();
+                tbxCorrelativo.Text = current.ClientId?.ToString()??"";
                 tbxName.Text = current.Name;
                 gbxItem.Text = $"Sector {tbxName.Text}";
             }
