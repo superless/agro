@@ -43,9 +43,10 @@ namespace trifenix.connect.agro.external
                 PlantingYear = input.PlantingYear,
                 SeasonId = input.SeasonId
             };
-            if (input.GeographicalPoints != null && input.GeographicalPoints.Any())
-                barrack.GeographicalPoints = input.GeographicalPoints.Select(geoPoint => new Point(geoPoint.Longitude, geoPoint.Latitude)).ToArray();
-            
+            //GeoBarracks, dependencia de geospacial
+            /*if (input.GeographicalPoints != null && input.GeographicalPoints.Any())
+                barrack.GeographicalPoints = input.GeographicalPoints.Select(geoPoint => new Point(geoPoint.Lng, geoPoint.Lat)).ToArray();
+            */
             search.DeleteElementsWithRelatedElement(EntityRelated.GEOPOINT, EntityRelated.BARRACK, barrack.Id);
 
 
