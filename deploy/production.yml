@@ -22,11 +22,7 @@ steps:
   inputs:
     restoreSolution: '$(solution)'
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'test'
-    projects: '*.tests.csproj'
-    testRunTitle: 'Test Aplicación'
+
 
 - task: VSBuild@1
   inputs:
@@ -35,14 +31,21 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-- task: VSTest@2
-  inputs:
-    testSelector: 'testAssemblies'
-    testAssemblyVer2: '**\*tests*'
-    searchFolder: '$(System.DefaultWorkingDirectory)'
-    uiTests: true
-    vsTestVersion: '16.0'
-    diagnosticsEnabled: true
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'test'
+      projects: '*.connect.agro.tests.csproj'
+      arguments: '--configuration $(buildConfiguration) --logger trx --results-directory $(Agent.TempDirectory)'
+      publishTestResults: false
+      testRunTitle: 'testing agro-fenix'
+  
+  - task: PublishTestResults@2    
+    inputs:
+      testResultsFormat: 'VSTest'
+      searchFolder: '$(Agent.TempDirectory)'
+      testResultsFiles: '**/*.trx'
+      testRunTitle: 'Mostrando resultados de test'
+    displayName: 'Publicando resultados de test unitarios'
 
 - task : DotNetCoreCLI@0
   inputs:
