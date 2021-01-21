@@ -2,10 +2,11 @@
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using trifenix.agro.authentication.interfaces;
-using trifenix.agro.authentication.operations;
+using trifenix.connect.aad.auth;
+using trifenix.connect.interfaces.auth;
 
-namespace trifenix.agro.functions {
+namespace trifenix.agro.functions
+{
     public static class Auth {
         
         
@@ -18,7 +19,8 @@ namespace trifenix.agro.functions {
             IAuthentication auth = new Authentication(
                 Environment.GetEnvironmentVariable("clientID", EnvironmentVariableTarget.Process),
                 Environment.GetEnvironmentVariable("tenant", EnvironmentVariableTarget.Process),
-                Environment.GetEnvironmentVariable("tenantID", EnvironmentVariableTarget.Process)
+                Environment.GetEnvironmentVariable("tenantID", EnvironmentVariableTarget.Process),
+                Environment.GetEnvironmentVariable("validAudiences", EnvironmentVariableTarget.Process).Split(";")
             );
             //Console.WriteLine("El Token que recibo:");
             //Console.WriteLine(GetAccessToken(request));

@@ -1,3 +1,4 @@
+
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.ServiceBus;
@@ -13,20 +14,23 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using trifenix.agro.authentication.interfaces;
-using trifenix.agro.authentication.operations;
-using trifenix.agro.db.applicationsReference.agro.Common;
-using trifenix.agro.db.exceptions;
-using trifenix.agro.enums.model;
 using trifenix.agro.external.operations.helper;
 using trifenix.agro.functions.Helper;
 using trifenix.agro.functions.mantainers;
 using trifenix.agro.functions.settings;
-using trifenix.agro.model.external;
-using trifenix.agro.model.external.Input;
-using trifenix.agro.servicebus.operations;
 
-namespace trifenix.agro.functions {
+using trifenix.connect.agro.external.helper;
+using trifenix.connect.agro.index_model.enums;
+using trifenix.connect.agro.queries;
+using trifenix.connect.agro_model_input;
+using trifenix.connect.aad.auth;
+using trifenix.connect.bus;
+using trifenix.connect.db.cosmos.exceptions;
+using trifenix.connect.interfaces.auth;
+using trifenix.connect.mdm.containers;
+
+namespace trifenix.agro.functions
+{
 
     /// <summary>
     /// Funciones 
@@ -76,61 +80,87 @@ namespace trifenix.agro.functions {
         [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "negotiate")] HttpRequest req,
         IBinder binder,
         ILogger log) {
+
             string AUTH_HEADER_NAME = "Authorization";
             string BEARER_PREFIX = "Bearer ";
-            if (req.Headers.ContainsKey(AUTH_HEADER_NAME) && req.Headers[AUTH_HEADER_NAME].ToString().StartsWith(BEARER_PREFIX)) {
+            if (req.Headers.ContainsKey(AUTH_HEADER_NAME) && req.Headers[AUTH_HEADER_NAME].ToString().StartsWith(BEARER_PREFIX))
+            {
                 var token = req.Headers[AUTH_HEADER_NAME].ToString().Substring(BEARER_PREFIX.Length);
+
+                if (token.Equals("cloud-app"))
+                {
+                    var conn = binder.Bind<SignalRConnectionInfo>(new SignalRConnectionInfoAttribute { HubName = "agro", UserId = "cloud-app" });
+
+                    return new OkObjectResult(conn);
+                }
+
                 log.LogInformation("with binding " + token);
                 IAuthentication auth = new Authentication(
                     Environment.GetEnvironmentVariable("clientID", EnvironmentVariableTarget.Process),
                     Environment.GetEnvironmentVariable("tenant", EnvironmentVariableTarget.Process),
-                    Environment.GetEnvironmentVariable("tenantID", EnvironmentVariableTarget.Process)
+                    Environment.GetEnvironmentVariable("tenantID", EnvironmentVariableTarget.Process),
+                    Environment.GetEnvironmentVariable("validAudiences", EnvironmentVariableTarget.Process).Split(";")
                 );
                 var claims = await auth.ValidateAccessToken(token);
                 string ObjectIdAAD = claims.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
                 var queries = new CommonQueries(ConfigManager.GetDbArguments);
                 // extract userId from token
                 var userId = await queries.GetUserIdFromAAD(ObjectIdAAD);
-                var connectionInfo = binder.Bind<SignalRConnectionInfo>(new SignalRConnectionInfoAttribute { HubName = "AsyncConnection", UserId = userId });
+                var connectionInfo = binder.Bind<SignalRConnectionInfo>(new SignalRConnectionInfoAttribute { HubName = "agro", UserId = userId });
                 log.LogInformation("negotiated " + connectionInfo);
                 //https://gist.github.com/ErikAndreas/72c94a0c8a9e6e632f44522c41be8ee7
                 // connectionInfo contains an access key token with a name identifier claim set to the authenticated user
                 return new OkObjectResult(connectionInfo);
             }
-            else
+            else {
+                // temporal, para conectar winform sin autenticación
                 return new UnauthorizedResult();
+
+            }
+
         }
+
+        
 
         [FunctionName("ServiceBus")]
         public static async Task Handler(
-        [ServiceBusTrigger("agroqueue", Connection = "ServiceBusConnectionString", IsSessionsEnabled = true)]Message message,
-        [SignalR(HubName = "AsyncConnection")]IAsyncCollector<SignalRMessage> signalRMessages,
+        [ServiceBusTrigger("agro-bus", Connection = "ServiceBusConnectionString", IsSessionsEnabled = true)]Message message,
+        [SignalR(HubName = "agro")]IAsyncCollector<SignalRMessage> signalRMessages,
         ILogger log) {
             var opInstance = ServiceBus.Deserialize(message.Body);
-            var ObjectIdAAD = opInstance.Value<string>("ObjectIdAAD");
-            var queries = new CommonQueries(ConfigManager.GetDbArguments);
-            var userId = await queries.GetUserIdFromAAD(ObjectIdAAD);
+            var ObjectIdAAD = opInstance.Value<string>("ObjectIdAAD");            
+            var queries = new CommonQueries(ConfigManager.GetDbArguments);            
             var EntityName = opInstance.Value<string>("EntityName");
-            var agro = await ContainerMethods.AgroManager(ObjectIdAAD, false);
+            var agro = await ContainerMethods.AgroManager(ObjectIdAAD);
             var entityType = opInstance["EntityType"].ToObject<Type>();
             var repo = agro.GetOperationByInputType(entityType);
             dynamic element = opInstance["Element"].ToObject(entityType);
             element.Id = opInstance.Value<string>("Id");
+            string userId = null;
+
             try {
-                var saveReturn = await repo.SaveInput(element, false);
-                await agro.UserActivity.SaveInput(new UserActivityInput {
-                    Action = opInstance.Value<string>("HttpMethod").Equals("post") ? UserActivityAction.CREATE : UserActivityAction.MODIFY,
-                    Date = DateTime.Now,
-                    EntityName = EntityName,
-                    EntityId = saveReturn.IdRelated
-                }, false);
-                await signalRMessages.AddAsync(new SignalRMessage { Target = "Success", UserId = userId, Arguments = new object[] { EntityName } });
+                var saveReturn = await repo.SaveInput(element);
+                if (!string.IsNullOrWhiteSpace(ObjectIdAAD))
+                {
+                    userId = await queries.GetUserIdFromAAD(ObjectIdAAD);
+                    await agro.UserActivity.SaveInput(new UserActivityInput
+                    {
+                        Action = opInstance.Value<string>("HttpMethod").Equals("post") ? UserActivityAction.CREATE : UserActivityAction.MODIFY,
+                        Date = DateTime.Now,
+                        EntityName = EntityName,
+                        EntityId = saveReturn.IdRelated
+                    }); 
+                }
+                
+                await signalRMessages.AddAsync(new SignalRMessage { Target = "Success", UserId = userId??"cloud-app", Arguments = new object[] { EntityName } });
             }
             catch (Exception ex) {
                 log.LogError(ex, ex.Message);
-                await signalRMessages.AddAsync(new SignalRMessage { Target = "Error", UserId = userId, Arguments = new object[] { ex is Validation_Exception ? ((Validation_Exception)ex).ErrorMessages : (object)new string[] { $"{ex.Message}" } } });
+                await signalRMessages.AddAsync(new SignalRMessage { Target = "Error", UserId = userId ?? "cloud-app", Arguments = new object[] { ex is Validation_Exception ? ((Validation_Exception)ex).ErrorMessages : (object)new string[] { $"{ex.Message}" }, ex.StackTrace } });
             }
         }
+
+        
 
         /// <summary>
         /// Creación de Sector
@@ -1010,19 +1040,7 @@ namespace trifenix.agro.functions {
             return result.JsonResult;
         }
 
-        [FunctionName("Initialize")]
-        public static async Task<IActionResult> Initialize([HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequest req, ILogger log) {
-            var claims = await Auth.Validate(req);
-            if (claims == null)
-                return new UnauthorizedResult();
-            string ObjectIdAAD = claims.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
-            var manager = await ContainerMethods.AgroManager(ObjectIdAAD, true);
-            string json = await req.ReadAsStringAsync();
-            JObject jsonObject = JObject.Parse(json);
-            var dbInitializer = new CosmosDbInitializer(manager, jsonObject.Value<string>("Assembly_Inputs"), jsonObject.Value<string>("Assembly_Entities"));
-            var result = await dbInitializer.MapJsonToDB(jsonObject.Value<JObject>("Entities"));
-            return result;
-        }
+        
 
     }
 

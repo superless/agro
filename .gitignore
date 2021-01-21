@@ -10,6 +10,7 @@
 *.userosscache
 *.sln.docstates
 *.assets.cache
+_site/
 *.settings.json
 
 # User-specific files (MonoDevelop/Xamarin Studio)
@@ -266,6 +267,8 @@ ServiceFabricBackup/
 *.mdf
 *.ldf
 *.ndf
+
+*.setting.json
 
 # Business Intelligence projects
 *.rdl.data

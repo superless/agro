@@ -1,0 +1,54 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+
+    <Configurations>Debug;Release;CONNECT</Configurations>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
+    <PackageReference Include="Moq" Version="4.14.5" />
+    <PackageReference Include="trifenix.connect.bus" Version="0.8.45" />
+    <PackageReference Include="trifenix.connect.db.cosmos" Version="0.8.47" />
+    <PackageReference Include="trifenix.connect.interfaces.db.cosmos" Version="0.8.48" />
+    <PackageReference Include="trifenix.connect.interfaces.external" Version="0.8.45" />
+    <PackageReference Include="trifenix.connect.interfaces.search" Version="0.8.47" />
+    <PackageReference Include="trifenix.connect.search" Version="0.8.47" />
+    <PackageReference Include="trifenix.connect.test.mock" Version="0.8.45" />
+    <PackageReference Include="trifenix.connect.translate" Version="0.8.50" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.collector" Version="1.3.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\trifenix.connect.agro.external\trifenix.connect.agro.external.csproj" />
+    <ProjectReference Include="..\trifenix.connect.agro.interfaces.external\trifenix.connect.agro.interfaces.external.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="data\EntitySearchMgmtResults.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>EntitySearchMgmtResults.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="data\EntitySearchMgmtResults.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>EntitySearchMgmtResults.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

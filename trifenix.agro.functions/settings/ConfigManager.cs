@@ -1,5 +1,5 @@
 ﻿using System;
-using trifenix.agro.db;
+using trifenix.connect.arguments;
 
 namespace trifenix.agro.functions.settings
 {
@@ -15,7 +15,8 @@ namespace trifenix.agro.functions.settings
 
         };
 
-        public static AgroDbArguments GetDbArguments => new AgroDbArguments {
+        public static CosmosDbArguments GetDbArguments => new CosmosDbArguments
+        {
             EndPointUrl = GetSettings.CosmosDbUri,
             NameDb = GetSettings.CosmosDbName,
             PrimaryKey = GetSettings.CosmosDbPrimaryKey,

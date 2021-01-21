@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Configurations>Debug;Release;CONNECT</Configurations>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Cosmonaut" Version="2.11.3" />
+    <PackageReference Include="trifenix.connect.bus" Version="0.8.45" />
+    <PackageReference Include="trifenix.connect.interfaces.db.cosmos" Version="0.8.48" />
+    <PackageReference Include="trifenix.connect.db.cosmos" Version="0.8.47" />
+    <PackageReference Include="Microsoft.Spatial" Version="7.8.1" />
+    <PackageReference Include="trifenix.connect.interfaces.external" Version="0.8.45" />
+    <PackageReference Include="trifenix.connect.interfaces.search" Version="0.8.47" />
+    <PackageReference Include="trifenix.connect.search" Version="0.8.47" />
+    <PackageReference Include="trifenix.connect.test.mock" Version="0.8.45" />
+    <PackageReference Include="trifenix.connect.translate" Version="0.8.50" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\trifenix.connect.agro.interfaces.cosmos\trifenix.connect.agro.interfaces.cosmos.csproj" />
+    <ProjectReference Include="..\trifenix.connect.agro.interfaces.search\trifenix.connect.agro.interfaces.search.csproj" />
+    <ProjectReference Include="..\trifenix.connect.agro.interfaces\trifenix.connect.agro.interfaces.csproj" />
+    <ProjectReference Include="..\trifenix.connect.agro\trifenix.connect.agro.csproj" />
+  </ItemGroup>
+
+</Project>
