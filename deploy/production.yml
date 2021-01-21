@@ -4,7 +4,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
 
 trigger:
-- develop
+- master
 
 pool:
   vmImage: 'windows-latest'
@@ -25,8 +25,8 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'test'
-    projects: '**/*.operations.tests.csproj'
-    testRunTitle: 'testing'
+    projects: '*.tests.csproj'
+    testRunTitle: 'Test Aplicación'
 
 - task: VSBuild@1
   inputs:
