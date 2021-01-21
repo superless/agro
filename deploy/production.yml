@@ -34,10 +34,11 @@ steps:
   - task: DotNetCoreCLI@2
     inputs:
       command: 'test'
-      projects: '*.connect.agro.tests.csproj'
+      projects: './trifenix.connect.agro.tests/trifenix.connect.agro.tests.csproj'
       arguments: '--configuration $(buildConfiguration) --logger trx --results-directory $(Agent.TempDirectory)'
       publishTestResults: false
       testRunTitle: 'testing agro-fenix'
+    displayName: 'Testeando agro-fenix'
   
   - task: PublishTestResults@2    
     inputs:
