@@ -246,7 +246,6 @@ namespace trifenix.agro.functions
             return result.JsonResult;
         }
 
-
         /// <summary>
         /// Modificar Especie
         /// </summary>
@@ -260,6 +259,39 @@ namespace trifenix.agro.functions
             HttpRequest req, string id, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Specie, id);
+            return result.JsonResult;
+        }
+
+
+        /// <summary>
+        /// Añadir Marca
+        /// </summary>
+        /// <returns>
+        /// Retorna una marca con su id
+        /// </returns>
+        [FunctionName("brand_post")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> BrandPost(
+          [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "brand")]
+            HttpRequest req, ILogger log)
+        {
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Brand, string.Empty);
+            return result.JsonResult;
+        }
+
+        /// <summary>
+        /// Modificar Marca
+        /// </summary>
+        /// <returns>
+        /// Retorna una marca con el id
+        /// </returns>
+        [FunctionName("brand_put")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> BrandPut(
+          [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "brand/{id}")]
+            HttpRequest req, string id, ILogger log)
+        {
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Brand, id);
             return result.JsonResult;
         }
 
@@ -1024,6 +1056,8 @@ namespace trifenix.agro.functions
         }
 
 
+
+
         /// <summary>
         /// Modificación de Estatus Ejecución
         /// </summary>
@@ -1040,7 +1074,8 @@ namespace trifenix.agro.functions
             return result.JsonResult;
         }
 
-        
+      
+
 
     }
 
