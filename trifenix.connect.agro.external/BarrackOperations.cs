@@ -44,9 +44,11 @@ namespace trifenix.connect.agro.external
                 SeasonId = input.SeasonId
             };
             //GeoBarracks, dependencia de geospacial
-            /*if (input.GeographicalPoints != null && input.GeographicalPoints.Any())
+            #if !CONNECT
+            if (input.GeographicalPoints != null && input.GeographicalPoints.Any())
                 barrack.GeographicalPoints = input.GeographicalPoints.Select(geoPoint => new Point(geoPoint.Lng, geoPoint.Lat)).ToArray();
-            */
+            #endif
+
             search.DeleteElementsWithRelatedElement(EntityRelated.GEOPOINT, EntityRelated.BARRACK, barrack.Id);
 
 
