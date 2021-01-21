@@ -124,7 +124,7 @@ namespace trifenix.agro.functions
 
         [FunctionName("ServiceBus")]
         public static async Task Handler(
-        [ServiceBusTrigger("trifenix-agrobus", Connection = "ServiceBusConnectionString", IsSessionsEnabled = true)]Message message,
+        [ServiceBusTrigger("agro-bus", Connection = "ServiceBusConnectionString", IsSessionsEnabled = true)]Message message,
         [SignalR(HubName = "agro")]IAsyncCollector<SignalRMessage> signalRMessages,
         ILogger log) {
             var opInstance = ServiceBus.Deserialize(message.Body);
