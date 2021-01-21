@@ -33,7 +33,7 @@ namespace trifenix.connect.app.cloud
         public async static Task PushElement<T>(T element, string entityName) where T : InputBase
         {
 
-            var bus = new ServiceBus(connectionString, "trifenix-agrobus");
+            var bus = new ServiceBus(connectionString, "agro-bus");
             var opInstance = new OperationInstance<T>(element, element.Id, entityName, string.IsNullOrWhiteSpace(element.Id)?"POST":"PUT", string.Empty);
 
             await bus.PushElement(opInstance
