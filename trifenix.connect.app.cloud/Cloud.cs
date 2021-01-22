@@ -1,5 +1,5 @@
 
-﻿using Microsoft.Spatial;
+using Microsoft.Spatial;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,12 +18,13 @@ namespace trifenix.connect.app.cloud
 {
     public static class Cloud
     {
-        private static string connectionString = "Endpoint=sb://bus-agro-fenix.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=9hiDmETrPHIXGb/ytHdlnWMeqy80xq5jIQCAVO23ks4=";
+        private static string connectionString = "Endpoint=sb://servicebus-trifenix.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=XylTzxpLEfnz3Aq0Rp6amObJC8Kkl98E3bcipBbMPsk=";
 
-        //new MainSearch<GeographyPoint>("https://trifenix-agrodb.search.windows.net", "97605234A15EE49670972CF3736F89AC", "entities-agro")
-        public static AgroSearch<GeographyPoint> search = new AgroSearch<GeographyPoint>(@"https://trifenix-agrodb.search.windows.net", "97605234A15EE49670972CF3736F89AC", null, new ImplementsSearch(), new HashEntityAgroSearch());
 
-      
+        //new MainSearch<GeographyPoint>("https://search-agro.search.windows.net", "7902C1E82BEEDC85AC0E535CF45DFC77", "entities-agro")
+        public static AgroSearch<GeographyPoint> search = new AgroSearch<GeographyPoint>(@"https://search-agro.search.windows.net", "7902C1E82BEEDC85AC0E535CF45DFC77", null, new ImplementsSearch(), new HashEntityAgroSearch());
+
+
 
         public static string GetCosmosEntityName<T>() where T : DocumentBase
         {
@@ -33,14 +34,14 @@ namespace trifenix.connect.app.cloud
         public async static Task PushElement<T>(T element, string entityName) where T : InputBase
         {
 
-            var bus = new ServiceBus(connectionString, "agro-bus");
-            var opInstance = new OperationInstance<T>(element, element.Id, entityName, string.IsNullOrWhiteSpace(element.Id)?"POST":"PUT", string.Empty);
+            var bus = new ServiceBus(connectionString, "colageneration-servicebus");
+            var opInstance = new OperationInstance<T>(element, element.Id, entityName, string.IsNullOrWhiteSpace(element.Id) ? "POST" : "PUT", string.Empty);
 
             await bus.PushElement(opInstance
             , entityName);
         }
 
-        public static T[] GetElements<T>(EntityRelated entity) where T:DocumentBase
+        public static T[] GetElements<T>(EntityRelated entity) where T : DocumentBase
         {
 
             var entities = search.FilterElements($"index eq {(int)entity}");
