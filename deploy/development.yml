@@ -63,6 +63,7 @@ trigger:
         - develop
         - release/*
   
+
 pool:
   vmImage: 'windows-latest'
 
@@ -73,20 +74,20 @@ variables:
 
 steps:
 
-- task: NuGetToolInstaller@1
+  - task: NuGetToolInstaller@1
 
-- task: NuGetCommand@2
-  inputs:
-    restoreSolution: '$(solution)'
+  - task: NuGetCommand@2
+    inputs:
+      restoreSolution: '$(solution)'
 
 
 
-- task: VSBuild@1
-  inputs:
-    solution: '$(solution)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+  - task: VSBuild@1
+    inputs:
+      solution: '$(solution)'
+      msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+      platform: '$(buildPlatform)'
+      configuration: '$(buildConfiguration)'
 
   - task: DotNetCoreCLI@2
     inputs:
@@ -104,6 +105,7 @@ steps:
       testRunTitle: 'Mostrando resultados de test'
     displayName: 'Publicando resultados de test unitarios'
 
+<<<<<<< HEAD
 - task : DotNetCoreCLI@0
   inputs:
     command: 'publish'
@@ -117,3 +119,17 @@ steps:
     ArtifactName: 'artifactAgroDev'
 >>>>>>> master:deploy/development.yml
     publishLocation: 'Container'
+=======
+  - task : DotNetCoreCLI@0
+    inputs:
+      command: 'publish'
+      publishWebProjects: false
+      projects: '**/*trifenix.agro.functions.csproj'    
+      arguments: '--no-restore --configuration Release --output $(Build.ArtifactStagingDirectory)'
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      ArtifactName: 'artifactAgroDev'
+      publishLocation: 'Container'
+>>>>>>> develop
