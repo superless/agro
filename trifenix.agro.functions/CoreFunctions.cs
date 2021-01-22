@@ -128,7 +128,7 @@ namespace trifenix.agro.functions
 
         [FunctionName("ServiceBus")]
         public static async Task Handler(
-        [ServiceBusTrigger("trifenix-agrobus1", Connection = "ServiceBusConnectionString", IsSessionsEnabled = true)] Message message,
+        [ServiceBusTrigger("colageneration-servicebus", Connection = "ServiceBusConnectionString", IsSessionsEnabled = true)] Message message,
         [SignalR(HubName = "agro")] IAsyncCollector<SignalRMessage> signalRMessages,
         ILogger log)
         {

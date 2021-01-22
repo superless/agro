@@ -18,11 +18,11 @@ namespace trifenix.connect.app.cloud
 {
     public static class Cloud
     {
-        private static string connectionString = "Endpoint=sb://trifenix-agro-bus-1.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=qglSMroST/oOUhOIRtsm2H6Nw2oDnyGjWBHvvNuIw4E=";
+        private static string connectionString = "Endpoint=sb://servicebus-trifenix.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=XylTzxpLEfnz3Aq0Rp6amObJC8Kkl98E3bcipBbMPsk=";
 
 
-        //new MainSearch<GeographyPoint>("https://trifenix-agrodb-1.search.windows.net", "E89B3BE14317A11F5ADA6286EFB00F4D", "entities-agro")
-        public static AgroSearch<GeographyPoint> search = new AgroSearch<GeographyPoint>(@"https://trifenix-agrodb-1.search.windows.net", "00BAEC0636B3D53EDD5499F665F7FC8A", null, new ImplementsSearch(), new HashEntityAgroSearch());
+        //new MainSearch<GeographyPoint>("https://search-agro.search.windows.net", "7902C1E82BEEDC85AC0E535CF45DFC77", "entities-agro")
+        public static AgroSearch<GeographyPoint> search = new AgroSearch<GeographyPoint>(@"https://search-agro.search.windows.net", "7902C1E82BEEDC85AC0E535CF45DFC77", null, new ImplementsSearch(), new HashEntityAgroSearch());
 
 
 
@@ -34,7 +34,7 @@ namespace trifenix.connect.app.cloud
         public async static Task PushElement<T>(T element, string entityName) where T : InputBase
         {
 
-            var bus = new ServiceBus(connectionString, "trifenix-agrobus1");
+            var bus = new ServiceBus(connectionString, "colageneration-servicebus");
             var opInstance = new OperationInstance<T>(element, element.Id, entityName, string.IsNullOrWhiteSpace(element.Id) ? "POST" : "PUT", string.Empty);
 
             await bus.PushElement(opInstance
