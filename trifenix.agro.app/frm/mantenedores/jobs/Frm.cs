@@ -285,7 +285,7 @@ namespace trifenix.agro.app.frm.mantenedores.jobs
             if (obj!=null)
             {
                 var current = (Job)obj;
-                tbxCorrelativo.Text = current.ClientId.ToString();
+                tbxCorrelativo.Text = current.ClientId?.ToString()??"";
                 tbxName.Text = current.Name;
                 gbxItem.Text = $"Cargo {tbxName.Text}";
             }
