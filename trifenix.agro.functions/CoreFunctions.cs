@@ -181,8 +181,13 @@ namespace trifenix.agro.functions
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "sectors")]
             HttpRequest req, ILogger log)
         {
+
+            // for testing, mostrando en azure el body de la petición.
+            var body = await new StreamReader(req.Body).ReadToEndAsync();
+            log.LogDebug(body);
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Sector, string.Empty);
             return result.JsonResult;
+            
         }
 
 
