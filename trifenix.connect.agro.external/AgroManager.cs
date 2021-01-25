@@ -71,7 +71,7 @@ namespace trifenix.agro.external
 
 
 
-        public IGenericOperation<Testing, TestInput> Test => new MainOperation<Testing, TestInput, T>(GetMainDb<Testing>(), Search, GetCommonDbOp<Testing>(), GetValidators<TestInput, Testing>());
+        public IGenericOperation<Test, TestInput> Test => new MainOperation<Test, TestInput, T>(GetMainDb<Test>(), Search, GetCommonDbOp<Test>(), GetValidators<TestInput, Test>());
         /// <summary>
         /// Repositorio de marcas
         /// </summary>

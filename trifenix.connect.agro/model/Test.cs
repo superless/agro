@@ -10,7 +10,7 @@ namespace trifenix.connect.agro_model
     [SharedCosmosCollection("agro", "Test")]
     [ReferenceSearchHeader(EntityRelated.TEST, PathName = "test", Kind = EntityKind.ENTITY)]
     [GroupMenu(MenuEntityRelated.MANTENEDORES, PhisicalDevice.ALL, SubMenuEntityRelated.ESPECIES)]
-    public class Testing : DocumentLocal
+    public class Test : DocumentLocal
     {
         public override string Id { get; set; }
 
