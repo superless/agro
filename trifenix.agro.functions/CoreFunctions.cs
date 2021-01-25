@@ -189,7 +189,12 @@ namespace trifenix.agro.functions
             var body = await new StreamReader(req.Body).ReadToEndAsync();
             log.LogInformation(body);
 
+            log.LogInformation($"req body ok, method : {req.Method??"no method"}");
+            log.LogInformation(Environment.GetEnvironmentVariable("ServiceBusConnectionString", EnvironmentVariableTarget.Process));
+
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Sector, string.Empty);
+            log.LogInformation("pasa result");
+
             return result.JsonResult;
             
         }

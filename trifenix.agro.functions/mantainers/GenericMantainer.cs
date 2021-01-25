@@ -36,18 +36,26 @@ namespace trifenix.agro.functions.mantainers
         }
 
         public static async Task<ActionResultWithId> HttpProcessing<DbElement, InputElement>(HttpRequest req, ILogger log, string ObjectIdAAD, Func<IAgroManager<GeographyPoint>, IGenericOperation<DbElement, InputElement>> repo, string id = null) where DbElement : DocumentBase where InputElement : InputBase {
-            Console.WriteLine($"check body");
+            log.LogInformation($"check body");
             var body = await new StreamReader(req.Body).ReadToEndAsync();
-            Console.WriteLine(body??"nobody");
-            Console.WriteLine($"id : {id??"no id"}");
-            Console.WriteLine($"revisando input : {req?.Method?.ToString()??"no method"}");
+            log.LogInformation(body??"nobody");
+            log.LogInformation($"id : {id??"no id"}");
+            log.LogInformation($"revisando input : {req?.Method?.ToString()??"no method"}");
 
             var method = req.Method.ToLower();
-            Console.WriteLine($"revisando input : {body??"no body"}");
+            log.LogInformation($"revisando input : {body??"no body"}");
 
-            var inputElement = ConvertToElement<InputElement>(body, id, method);
-            Console.WriteLine($"input : {body ?? "no body"} \n ok");
-            return await HttpProcessing(req, log, ObjectIdAAD, repo, inputElement);
+            try
+            {
+                var inputElement = ConvertToElement<InputElement>(body, id, method);
+                log.LogInformation($"input : {body ?? "no body"} \n ok");
+                return await HttpProcessing(req, log, ObjectIdAAD, repo, inputElement);
+            }
+            catch (Exception e)
+            {
+                log.LogError($"revisando input : {body ?? "no body"}");
+                throw;
+            }
         }
 
         public static InputElement ConvertToElement<InputElement>(string body, string id, string method) where InputElement : InputBase {
