@@ -38,7 +38,10 @@ namespace trifenix.agro.functions.mantainers
         public static async Task<ActionResultWithId> HttpProcessing<DbElement, InputElement>(HttpRequest req, ILogger log, string ObjectIdAAD, Func<IAgroManager<GeographyPoint>, IGenericOperation<DbElement, InputElement>> repo, string id = null) where DbElement : DocumentBase where InputElement : InputBase {
             var body = await new StreamReader(req.Body).ReadToEndAsync();
             var method = req.Method.ToLower();
+            Console.WriteLine($"revisando input : {body}");
+
             var inputElement = ConvertToElement<InputElement>(body, id, method);
+            Console.WriteLine($"input : {body} \n ok");
             return await HttpProcessing(req, log, ObjectIdAAD, repo, inputElement);
         }
 
@@ -51,7 +54,8 @@ namespace trifenix.agro.functions.mantainers
                 try {
                     element = JsonConvert.DeserializeObject<InputElement>(requestBody);
                 }
-                catch (Exception) {
+                catch (Exception e) {
+                    Console.WriteLine($"error en {e}");
                     throw;
                 }
             element.Id = id;
@@ -76,9 +80,21 @@ namespace trifenix.agro.functions.mantainers
                     };
                 default:
                     //ExtPostContainer<string> saveReturn;
+                    Console.WriteLine("nombre de la entidad");
                     string EntityName = ((DbElement)Activator.CreateInstance(typeof(DbElement))).CosmosEntityName;
+                    Console.WriteLine($"nombre : {EntityName}");
                     var opInstance = new OperationInstance<InputElement>(element, element.Id, EntityName, method, ObjectIdAAD);
-                    await ServiceBus.PushElement(opInstance, EntityName);
+
+
+                    try
+                    {
+                        await ServiceBus.PushElement(opInstance, EntityName);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("error en el service bus");
+                    }
+
                     return new ActionResultWithId {
                         Id = null,
                         JsonResult = new JsonResult("Operacion en cola.")
