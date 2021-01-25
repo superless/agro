@@ -93,9 +93,9 @@ namespace trifenix.agro.functions.mantainers
                     };
                 default:
                     //ExtPostContainer<string> saveReturn;
-                    Console.WriteLine("nombre de la entidad");
+                    log.LogInformation("nombre de la entidad");
                     string EntityName = ((DbElement)Activator.CreateInstance(typeof(DbElement))).CosmosEntityName;
-                    Console.WriteLine($"nombre : {EntityName}");
+                    log.LogInformation($"nombre : {EntityName}");
                     var opInstance = new OperationInstance<InputElement>(element, element.Id, EntityName, method, ObjectIdAAD);
 
 
@@ -105,7 +105,7 @@ namespace trifenix.agro.functions.mantainers
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine("error en el service bus");
+                        log.LogError("error en el service bus");
                     }
 
                     return new ActionResultWithId {
