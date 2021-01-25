@@ -182,18 +182,10 @@ namespace trifenix.agro.functions
             HttpRequest req, ILogger log)
         {
 
-            // for testing, mostrando en azure el body de la petición.
-
-            log.LogInformation("testeando body");
-            log.LogInformation(req?.ToString()??"no hay request");
-            var body = await new StreamReader(req.Body).ReadToEndAsync();
-            log.LogInformation(body);
-
-            log.LogInformation($"req body ok, method : {req.Method??"no method"}");
-            log.LogInformation(Environment.GetEnvironmentVariable("ServiceBusConnectionString", EnvironmentVariableTarget.Process));
+            
 
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Sector, string.Empty);
-            log.LogInformation("pasa result");
+            
 
             return result.JsonResult;
             

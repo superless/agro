@@ -36,19 +36,21 @@ namespace trifenix.agro.functions.mantainers
         }
 
         public static async Task<ActionResultWithId> HttpProcessing<DbElement, InputElement>(HttpRequest req, ILogger log, string ObjectIdAAD, Func<IAgroManager<GeographyPoint>, IGenericOperation<DbElement, InputElement>> repo, string id = null) where DbElement : DocumentBase where InputElement : InputBase {
-            log.LogInformation($"check body");
-            var body = await new StreamReader(req.Body).ReadToEndAsync();
-            log.LogInformation(body??"nobody");
-            log.LogInformation($"id : {id??"no id"}");
-            log.LogInformation($"revisando input : {req?.Method?.ToString()??"no method"}");
 
+            var body = await new StreamReader(req.Body).ReadToEndAsync();
+
+            log.LogInformation("body :" + body);
+
+            
             var method = req.Method.ToLower();
-            log.LogInformation($"revisando input : {body??"no body"}");
+            log.LogInformation("method :" + req.Method);
+
 
             try
             {
+                log.LogInformation($"input : {body?.ToString() ?? "no body"} \n ok");
                 var inputElement = ConvertToElement<InputElement>(body, id, method);
-                log.LogInformation($"input : {body ?? "no body"} \n ok");
+                log.LogInformation($"input : {body?.ToString() ?? "no body"} \n ok");
                 return await HttpProcessing(req, log, ObjectIdAAD, repo, inputElement);
             }
             catch (Exception e)
