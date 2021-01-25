@@ -12,7 +12,7 @@ using trifenix.connect.agro_model;
 using trifenix.connect.agro_model_input;
 using trifenix.connect.app.cloud;
 
-namespace trifenix.agro.app.frm.mantenedores.specie
+namespace trifenix.agro.app.frm.mantenedores.Test
 {
     public partial class Frm : Form, IFenixForm
     {
@@ -35,19 +35,20 @@ namespace trifenix.agro.app.frm.mantenedores.specie
             bworker.WorkerReportsProgress = true;
 
             lblDescripcion.Text = Description();
+
+
         }
         private async void SectorFrm_Load_1(object sender, EventArgs e)
-        {   
+        {
+            ValidationForm.SetError(tbxName, null);
 
             SetElements();
 
-            
-            
         }
         public void SetElements()
         {
             pb.Visible = true;
-            lblProgress.Text = "40%";
+            lblProgress.Text = "60%";
             pb.Value = 40;
             bsMain.DataSource = GetList();
             if (bsMain.Count != 0)
@@ -73,7 +74,7 @@ namespace trifenix.agro.app.frm.mantenedores.specie
         }
 
 
-        
+
 
         private void OnAdd()
         {
@@ -94,35 +95,21 @@ namespace trifenix.agro.app.frm.mantenedores.specie
             pnlButtons.Enabled = false;
         }
 
-        private void OnCurrentChange() {
+        private void OnCurrentChange()
+        {
             gbxItem.Visible = true;
             gbxItem.Enabled = false;
             pnlButtons.Enabled = !Loading;
         }
 
-        
-        
-
-        
-
-
-
-
 
 
         private void tbxName_Validated(object sender, EventArgs e)
         {
-            if (State != CurrentFormState.READONLY)
-            {
-                var tbx = ((TextBox)sender);
-                ValidationForm.SetError(tbx, String.IsNullOrWhiteSpace(tbx.Text) ? "campo obligatorio" : null);
-            }
+            var tbx = ((TextBox)sender);
+            ValidationForm.SetError(tbx, String.IsNullOrWhiteSpace(tbx.Text) ? "campo obligatorio" : null);
         }
 
-        
-
-
-        
 
         private void btnSave_Click(object sender, EventArgs e)
         {
@@ -133,11 +120,10 @@ namespace trifenix.agro.app.frm.mantenedores.specie
             }
             LoadProgress(DoWork);
 
-            
-
         }
 
-        private void LoadProgress(Action action) {
+        private void LoadProgress(Action action)
+        {
             bworker.ProgressChanged += bworker_ProgressChanged;
 
             bworker.DoWork += Bworker_DoWork;
@@ -176,15 +162,9 @@ namespace trifenix.agro.app.frm.mantenedores.specie
             bworker.ReportProgress(100);
         }
 
-        
-
-        
-
         private void btnAddSector_Click(object sender, EventArgs e)
         {
             OnAdd();
-            
-
 
         }
 
@@ -196,14 +176,14 @@ namespace trifenix.agro.app.frm.mantenedores.specie
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            State = CurrentFormState.READONLY;
             gbxItem.Visible = true;
             gbxItem.Enabled = false;
             gbxItem.Text = "";
+            State = CurrentFormState.READONLY;
             pnlButtons.Enabled = true;
         }
 
-        
+
 
         private void bworker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
@@ -239,7 +219,7 @@ namespace trifenix.agro.app.frm.mantenedores.specie
             {
 
                 Edit(bsMain.Current);
-                
+
                 while (Loading)
                 {
                     Thread.Sleep(300);
@@ -256,61 +236,73 @@ namespace trifenix.agro.app.frm.mantenedores.specie
 
         public bool Valida()
         {
+
             if (string.IsNullOrWhiteSpace(tbxName.Text))
             {
                 ValidationForm.SetError(tbxName, "El nombre es obligatorio");
                 return false;
             };
+
+
             if (string.IsNullOrWhiteSpace(tbxAbbreviation.Text))
             {
-                ValidationForm.SetError(tbxAbbreviation, "La abreviación es obligatoria");
+                ValidationForm.SetError(tbxName, "La abreviación es obligatorio");
                 return false;
             };
+
+
+            if (string.IsNullOrWhiteSpace(tbxBrand.Text))
+            {
+                ValidationForm.SetError(tbxBrand, "La marca es obligatoria");
+                return false;
+            };
+
             return true;
         }
-        public string GetEntityName() => Cloud.GetCosmosEntityName<Specie>();
+        public string GetEntityName() => Cloud.GetCosmosEntityName<Testing>();
 
-        public string FriendlyName() => "Especie";
+        public string FriendlyName() => "Objetivo de la aplicación";
 
-        
+
 
         public void Edit(object obj)
         {
-            var current = (Specie)obj;            
-            Cloud.PushElement(new SpecieInput { Name = tbxName.Text, Id = current.Id, Abbreviation = tbxAbbreviation.Text }, entityName).Wait();
-            
+            var current = (Testing)obj;
+
+            Cloud.PushElement(new TestInput { Name = tbxName.Text, Id = current.Id, Abbreviation = tbxAbbreviation.Text, Brand = tbxBrand.Text }, entityName).Wait();
+
         }
 
         public void New()
         {
-            Cloud.PushElement(new SpecieInput { Name = tbxName.Text, Abbreviation = tbxAbbreviation.Text }, entityName).Wait();
-         
+            Cloud.PushElement(new TestInput { Name = tbxName.Text, Abbreviation = tbxAbbreviation.Text, Brand = tbxBrand.Text }, entityName).Wait();
+
         }
 
-        public void ChangedList(object obj) {
-            if (obj!=null)
+        public void ChangedList(object obj)
+        {
+            if (obj != null)
             {
-                var current = (Specie)obj;
-                tbxCorrelativo.Text = current.ClientId?.ToString()??"";
+                var current = (Testing)obj;
+
                 tbxName.Text = current.Name;
-                gbxItem.Text = $"Especie {tbxName.Text}";
                 tbxAbbreviation.Text = current.Abbreviation;
+                tbxBrand.Text = current.Brand;
+                gbxItem.Text = $"Objetivo de aplicación {tbxName.Text}";
             }
+
         }
 
-        public object GetList() => Cloud.GetElements<Specie>(EntityRelated.SPECIE);
-        public string Description() => new MdmDocs().GetInfoFromEntity((int)EntityRelated.SPECIE).Description;
+        public object GetList() => Cloud.GetElements<Testing>(EntityRelated.TARGET);
+
+        public string Description() => new MdmDocs().GetInfoFromEntity((int)EntityRelated.TARGET).Description;
+
         private void gbxItem_Enter(object sender, EventArgs e)
         {
 
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void panel1_Paint_1(object sender, PaintEventArgs e)
         {
 
         }

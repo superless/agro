@@ -466,6 +466,12 @@
     <Compile Include="frm\mantenedores\Specie\Frm.Designer.cs">
       <DependentUpon>Frm.cs</DependentUpon>
     </Compile>
+    <Compile Include="frm\mantenedores\Test\Frm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm\mantenedores\Test\Frm.Designer.cs">
+      <DependentUpon>Frm.cs</DependentUpon>
+    </Compile>
     <Compile Include="frm\mantenedores\Variety\Frm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -539,6 +545,9 @@
       <DependentUpon>Frm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frm\mantenedores\Specie\Frm.resx">
+      <DependentUpon>Frm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm\mantenedores\Test\Frm.resx">
       <DependentUpon>Frm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frm\mantenedores\Variety\Frm.resx">

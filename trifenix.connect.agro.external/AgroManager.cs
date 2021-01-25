@@ -71,6 +71,7 @@ namespace trifenix.agro.external
 
 
 
+        public IGenericOperation<Testing, TestInput> Test => new MainOperation<Testing, TestInput, T>(GetMainDb<Testing>(), Search, GetCommonDbOp<Testing>(), GetValidators<TestInput, Testing>());
         /// <summary>
         /// Repositorio de marcas
         /// </summary>
@@ -115,6 +116,8 @@ namespace trifenix.agro.external
         /// <summary>
         /// Categoría de ingredientes.
         /// </summary>
+        /// 
+
         public IGenericOperation<IngredientCategory, IngredientCategoryInput> IngredientCategory => new MainOperation<IngredientCategory, IngredientCategoryInput,T>(GetMainDb<IngredientCategory>(), Search, GetCommonDbOp<IngredientCategory>(), GetValidators<IngredientCategoryInput, IngredientCategory>());
 
 

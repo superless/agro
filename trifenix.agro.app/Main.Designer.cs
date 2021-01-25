@@ -344,6 +344,7 @@
         private System.Windows.Forms.ToolStripMenuItem portaInjertoToolStripMenuItem;
         private System.Windows.Forms.ToolStripComboBox tsCbCentroCostos;
         private System.Windows.Forms.ToolStripComboBox tsCbSpecie;
+        private System.Windows.Forms.ToolStripMenuItem TestToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem temporadasToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem productosToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem categoríaDeIngredienteToolStripMenuItem;

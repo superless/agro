@@ -1,4 +1,4 @@
-﻿namespace trifenix.agro.app.frm.mantenedores.specie
+﻿namespace trifenix.agro.app.frm.mantenedores.Test
 {
     partial class Frm
     {
@@ -105,7 +105,6 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(883, 66);
             this.panel1.TabIndex = 4;
-            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint_1);
             // 
             // lblDescripcion
             // 
@@ -127,6 +126,8 @@
             this.gbxItem.Controls.Add(this.label1);
             this.gbxItem.Controls.Add(this.label2);
             this.gbxItem.Controls.Add(this.btnSave);
+            this.gbxItem.Controls.Add(this.tbxBrand);
+            this.gbxItem.Controls.Add(this.label4);
             this.gbxItem.Enabled = false;
             this.gbxItem.Location = new System.Drawing.Point(284, 71);
             this.gbxItem.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
@@ -157,6 +158,16 @@
             this.label3.Size = new System.Drawing.Size(90, 17);
             this.label3.TabIndex = 11;
             this.label3.Text = "Abreviación :";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(170, 111);
+            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label4.Name = "label3";
+            this.label4.Size = new System.Drawing.Size(90, 17);
+            this.label4.TabIndex = 11;
+            this.label4.Text = "Marca :";
             // 
             // btnCancel
             // 
@@ -320,6 +331,8 @@
         private System.Windows.Forms.ProgressBar pb;
         private System.Windows.Forms.Label lblProgress;
         private System.Windows.Forms.TextBox tbxAbbreviation;
+        private System.Windows.Forms.TextBox tbxBrand;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
     }
 }

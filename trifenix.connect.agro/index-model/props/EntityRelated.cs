@@ -99,6 +99,11 @@
 
 
         GEOPOINT = 31,
-        BRAND = 32
+        
+        
+        BRAND = 32,
+
+
+        TEST = 33
     }
 }

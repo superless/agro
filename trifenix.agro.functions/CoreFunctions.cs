@@ -585,6 +585,15 @@ namespace trifenix.agro.functions
             return result.JsonResult;
         }
 
+        [FunctionName("Test_post")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> TestPost(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "test")]
+            HttpRequest req, ILogger log)
+        {
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Test, string.Empty);
+            return result.JsonResult;
+        }
 
         /// <summary>
         /// Modificación de Rol

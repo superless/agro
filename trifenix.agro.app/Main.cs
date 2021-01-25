@@ -64,6 +64,7 @@ namespace trifenix.agro.app
 
         private Specie GetSpecie() => (Specie)tsCbSpecie.SelectedItem;
 
+
         private SeasonExtend GetSeason() => (SeasonExtend)tsCbCentroCostos.SelectedItem;
 
         private void SetSpecies() {
@@ -115,6 +116,14 @@ namespace trifenix.agro.app
         private void sectorToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var frm = new mantenedores.sector.Frm();
+            forms.Add(frm);
+            frm.ShowDialog();
+            forms.Remove(frm);
+        }
+
+        private void TestToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var frm = new mantenedores.Test.Frm();
             forms.Add(frm);
             frm.ShowDialog();
             forms.Remove(frm);
