@@ -585,6 +585,7 @@ namespace trifenix.agro.functions
             return result.JsonResult;
         }
 
+
         [FunctionName("Test_post")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
         public static async Task<IActionResult> TestPost(
@@ -595,6 +596,16 @@ namespace trifenix.agro.functions
             return result.JsonResult;
         }
 
+
+        [FunctionName("Test_put")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> TestPut(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "Test/{id}")]
+            HttpRequest req, string id, ILogger log)
+        {
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Test, id);
+            return result.JsonResult;
+        }
         /// <summary>
         /// Modificación de Rol
         /// </summary>

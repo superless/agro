@@ -3,6 +3,7 @@ using trifenix.connect.agro.index_model.enums;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
 using trifenix.connect.mdm.enums;
+using System;
 
 namespace trifenix.connect.agro_model
 {
@@ -35,8 +36,19 @@ namespace trifenix.connect.agro_model
         public string Abbreviation { get; set; }
   
 
-        [StringSearch(StringRelated.GENERIC_BRAND)]
-        public string Brand { get; set; }
+        [ReferenceSearch(EntityRelated.BRAND)]
+        public string IdBrand { get; set; }
+
+
+        [DateSearch(DateRelated.START_DATE_SEASON)]
+        public DateTime StartDate { get; set; }
+
+
+        [DateSearch(DateRelated.END_DATE_SEASON)]
+        public DateTime EndDate { get; set; }
+
+        [BoolSearch(BoolRelated.CURRENT)]
+        public bool? Activo { get;  set; }
     }
 
 }
