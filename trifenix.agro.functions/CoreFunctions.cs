@@ -181,12 +181,7 @@ namespace trifenix.agro.functions
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "sectors")]
             HttpRequest req, ILogger log)
         {
-
-            
-
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Sector, string.Empty);
-            
-
             return result.JsonResult;
             
         }

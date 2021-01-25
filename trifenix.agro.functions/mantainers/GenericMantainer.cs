@@ -36,28 +36,13 @@ namespace trifenix.agro.functions.mantainers
         }
 
         public static async Task<ActionResultWithId> HttpProcessing<DbElement, InputElement>(HttpRequest req, ILogger log, string ObjectIdAAD, Func<IAgroManager<GeographyPoint>, IGenericOperation<DbElement, InputElement>> repo, string id = null) where DbElement : DocumentBase where InputElement : InputBase {
-
             var body = await new StreamReader(req.Body).ReadToEndAsync();
-
-            log.LogInformation("body :" + body);
-
-            
             var method = req.Method.ToLower();
-            log.LogInformation("method :" + req.Method);
+            
 
-
-            try
-            {
-                log.LogInformation($"input : {body?.ToString() ?? "no body"} \n ok");
-                var inputElement = ConvertToElement<InputElement>(body, id, method);
-                log.LogInformation($"input : {body?.ToString() ?? "no body"} \n ok");
-                return await HttpProcessing(req, log, ObjectIdAAD, repo, inputElement);
-            }
-            catch (Exception e)
-            {
-                log.LogError($"revisando input : {body ?? "no body"}");
-                throw;
-            }
+            var inputElement = ConvertToElement<InputElement>(body, id, method);
+            
+            return await HttpProcessing(req, log, ObjectIdAAD, repo, inputElement);
         }
 
         public static InputElement ConvertToElement<InputElement>(string body, string id, string method) where InputElement : InputBase {
@@ -94,10 +79,9 @@ namespace trifenix.agro.functions.mantainers
                         JsonResult = ContainerMethods.GetJsonGetContainer(new ExtGetContainer<string> { ErrorMessage = "Id obligatorio", StatusResult = ExtGetDataResult.Error }, log)
                     };
                 default:
-                    //ExtPostContainer<string> saveReturn;
-                    log.LogInformation("nombre de la entidad");
+                    
                     string EntityName = ((DbElement)Activator.CreateInstance(typeof(DbElement))).CosmosEntityName;
-                    log.LogInformation($"nombre : {EntityName}");
+                    
                     var opInstance = new OperationInstance<InputElement>(element, element.Id, EntityName, method, ObjectIdAAD);
 
 
@@ -107,7 +91,7 @@ namespace trifenix.agro.functions.mantainers
                     }
                     catch (Exception e)
                     {
-                        log.LogError("error en el service bus");
+                        Console.WriteLine("error en el service bus");
                     }
 
                     return new ActionResultWithId {
