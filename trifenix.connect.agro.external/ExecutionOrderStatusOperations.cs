@@ -11,6 +11,11 @@ using trifenix.connect.mdm.enums;
 
 namespace trifenix.agro.external.operations.entities.orders
 {
+    /// <summary>
+    /// Operaciones de los estados de las ordenes ejecutadas,
+    /// se encarga de almacenar los datos ingresados
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class ExecutionOrderStatusOperations<T> : MainOperation<ExecutionOrderStatus, ExecutionOrderStatusInput,T>, IGenericOperation<ExecutionOrderStatus, ExecutionOrderStatusInput> {
         public ExecutionOrderStatusOperations(IMainGenericDb<ExecutionOrderStatus> repo, IAgroSearch<T> search, ICommonDbOperations<ExecutionOrderStatus> commonDb, IValidatorAttributes<ExecutionOrderStatusInput> validator) : base(repo, search, commonDb, validator) { }
 
