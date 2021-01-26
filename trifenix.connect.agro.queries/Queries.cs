@@ -3,6 +3,9 @@ using trifenix.connect.agro.model_queries;
 
 namespace trifenix.connect.agro.queries
 {
+    /// <summary>
+    /// Consultas a la base de datos
+    /// </summary>
     public class Queries : IQueries {
         public string Get(DbQuery query) {
             switch (query) {
