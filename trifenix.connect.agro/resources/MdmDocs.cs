@@ -7,7 +7,9 @@ using trifenix.connect.mdm.ts_model;
 namespace trifenix.connect.agro.resources
 {
 
-
+    /// <summary>
+    /// Clase encargada de documentar por medio de las entidades y sus propiedades
+    /// </summary>
     public class MdmDocs : IMdmDocumentation
     {
         public EntitySearchDisplayInfo GetInfoFromEntity(int index)
@@ -29,7 +31,12 @@ namespace trifenix.connect.agro.resources
         }
 
 
-
+        /// <summary>
+        /// Busqueda en el diccionario
+        /// </summary>
+        /// <param name="property">Propiedades de las entidades</param>
+        /// <param name="index">Index de las entidades</param>
+        /// <returns></returns>
         public EntitySearchDisplayInfo GetInfoFromProperty(KindProperty property, int index)
         {
             var indexName = ResourcesHelper.GetName(property, index);
