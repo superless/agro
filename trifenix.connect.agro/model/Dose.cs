@@ -7,7 +7,9 @@ using trifenix.connect.mdm.enums;
 
 namespace trifenix.connect.agro_model
 {
-
+    /// <summary>
+    /// Representa a una dosis
+    /// </summary>
     [SharedCosmosCollection("agro", "Dose")]
     [ReferenceSearchHeader(EntityRelated.DOSES, Kind = EntityKind.CUSTOM_ENTITY)]
     public class Dose : DocumentLocal {

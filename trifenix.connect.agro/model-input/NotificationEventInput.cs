@@ -7,36 +7,49 @@ using trifenix.connect.input;
 
 namespace trifenix.connect.agro_model_input
 {
+    /// <summary>
+    /// Ingreso de evento de notificación
+    /// </summary>
     [ReferenceSearchHeader(EntityRelated.NOTIFICATION_EVENT)]
     public class NotificationEventInput : InputBase {
+        
         /// <summary>
         /// Cuartel asignado a la notificación
-        /// </summary>
-        /// 
+        /// </summary> 
         [ReferenceSearch(EntityRelated.BARRACK)]
         public string IdBarrack { get; set; }
+        
         /// <summary>
         /// Evento fenológico asignado a la notificación.
         /// </summary>
-        /// [ReferenceSearch(EntityRelated.PHENOLOGICAL_EVENT)]
+        [ReferenceSearch(EntityRelated.PHENOLOGICAL_EVENT)]
         public string IdPhenologicalEvent { get; set; }
 
-
+        /// <summary>
+        /// Tipo de notificación
+        /// </summary>
         [EnumSearch(EnumRelated.NOTIFICATION_TYPE)]
         public NotificationType NotificationType { get; set; }
+        
         /// <summary>
         /// Descripcion del evento
         /// </summary>
-        /// 
         [StringSearch(StringRelated.GENERIC_DESC)]
         public string Description { get; set; }
+
         /// <summary>
         /// Fecha de creación.
         /// </summary>
         public DateTime Created { get; set; }
 
+        /// <summary>
+        /// ?
+        /// </summary>
         public string Base64 { get; set; }
 
+        /// <summary>
+        /// Geolocalización del evento
+        /// </summary>
         [GeoSearch(GeoRelated.LOCATION_EVENT)]
         public GeoItem Location { get; set; }
 
