@@ -5,7 +5,7 @@ using trifenix.connect.mdm_attributes;
 namespace trifenix.connect.agro.mdm_attributes
 {
     /// <summary>
-    /// atributo que identifica una propiedad como string.
+    /// Atributo que identifica una propiedad como string.
     /// </summary>
     public class StringSearchAttribute : PropertyIndexAttribute
     {

@@ -2,6 +2,9 @@
 
 namespace trifenix.connect.agro.index_model.enums
 {
+    /// <summary>
+    /// Determina el menú para ser utilizado como metadata
+    /// </summary>
     public enum SubMenuEntityRelated
     {
         [Description("Gestión")]

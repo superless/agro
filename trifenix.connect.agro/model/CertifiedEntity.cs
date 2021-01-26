@@ -34,7 +34,7 @@ namespace trifenix.connect.agro_model
 
 
         /// <summary>
-        /// Abreviación de la
+        /// Abreviación de la certificación
         /// </summary>
         [StringSearch(StringRelated.GENERIC_ABBREVIATION)]
         public string Abbreviation { get; set; }
