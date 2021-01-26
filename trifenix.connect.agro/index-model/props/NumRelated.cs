@@ -1,8 +1,10 @@
 ﻿namespace trifenix.connect.agro.index_model.props
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public enum NumRelated
     {
-
         WAITING_DAYS = 0,
 
         HOURS_TO_ENTRY = 1,
