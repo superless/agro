@@ -4,6 +4,10 @@ using trifenix.connect.agro.mdm_attributes;
 
 namespace trifenix.connect.agro_model
 {
+    /// <summary>
+    /// Condicional que determina el metodo de geograficar
+    /// del cuartel
+    /// </summary>
     public abstract class ItemLocation : DocumentLocal {
 
         #if CONNECT

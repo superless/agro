@@ -11,7 +11,7 @@ namespace trifenix.connect.agro_model
 {
 
     /// <summary>
-    /// el evento fenológico se debería crear una vez al año o copiarse del año anterior.
+    /// El evento fenológico se debería crear una vez al año o copiarse del año anterior.
     /// </summary>
     [SharedCosmosCollection("agro", "PhenologicalEvent")]
     [ReferenceSearchHeader(EntityRelated.PHENOLOGICAL_EVENT, Kind = EntityKind.ENTITY, PathName = "phenological_events")]
@@ -28,19 +28,19 @@ namespace trifenix.connect.agro_model
         public override string ClientId { get; set; }
 
         /// <summary>
-        /// nombre del evento fenológico.
+        /// Nombre del evento fenológico.
         /// </summary>
         [StringSearch(StringRelated.GENERIC_NAME)]
         public string Name { get; set; }
 
         /// <summary>
-        /// fecha de inicio
+        /// Fecha de inicio
         /// </summary>
         [DateSearch(DateRelated.START_DATE_PHENOLOGICAL_EVENT)]
         public DateTime StartDate { get; set; }
 
         /// <summary>
-        /// fecha fin del evento fenológico.
+        /// Fecha fin del evento fenológico.
         /// </summary>
         [DateSearch(DateRelated.END_DATE_PHENOLOGICAL_EVENT)]
         public DateTime EndDate { get; set; }

@@ -6,7 +6,9 @@ using trifenix.connect.mdm.enums;
 
 namespace trifenix.connect.agro_model
 {
-
+    /// <summary>
+    /// Entidad encargadas de los ingredientes
+    /// </summary>
     [SharedCosmosCollection("agro", "Ingredient")]
     [ReferenceSearchHeader(EntityRelated.INGREDIENT, Kind = EntityKind.ENTITY, PathName = "ingredients")]
     [GroupMenu(MenuEntityRelated.MANTENEDORES, PhisicalDevice.ALL, SubMenuEntityRelated.PRODUCTO)]
@@ -14,24 +16,24 @@ namespace trifenix.connect.agro_model
 
 
         /// <summary>
-        /// id
+        /// Identificador
         /// </summary>
         public override string Id { get; set; }
 
         /// <summary>
-        /// autonumérico
+        /// Autonumérico
         /// </summary>
         [AutoNumericSearch(StringRelated.GENERIC_CORRELATIVE)]
         public override string ClientId { get; set; }
 
         /// <summary>
-        /// nombre del ingrediente.
+        /// Nombre del ingrediente.
         /// </summary>
         [StringSearch(StringRelated.GENERIC_NAME)]
         public string Name { get; set; }
 
         /// <summary>
-        /// categoría del ingrediente.
+        /// Categoría del ingrediente.
         /// </summary>
         [ReferenceSearch(EntityRelated.CATEGORY_INGREDIENT)]
         public string idCategory { get; set; }

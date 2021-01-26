@@ -6,13 +6,16 @@ using trifenix.connect.mdm.enums;
 
 namespace trifenix.connect.agro_model
 {
+    /// <summary>
+    /// Entidad encargada de determinar las varintes de cada especie
+    /// </summary>
     [SharedCosmosCollection("agro", "Variety")]    
     [ReferenceSearchHeader(EntityRelated.VARIETY, Kind = EntityKind.ENTITY, PathName = "varieties")]
     [GroupMenu(MenuEntityRelated.MANTENEDORES, PhisicalDevice.ALL, SubMenuEntityRelated.ESPECIES)]
     public class Variety : DocumentLocal
     {
         /// <summary>
-        /// identificador
+        /// Identificador
         /// </summary>
         public override string Id { get; set; }
 
@@ -23,7 +26,7 @@ namespace trifenix.connect.agro_model
         public string Name { get; set; }
 
         /// <summary>
-        /// abreviación.
+        /// Abreviación.
         /// </summary>
         [StringSearch(StringRelated.GENERIC_ABBREVIATION)]
         public string Abbreviation { get; set; }
@@ -36,7 +39,7 @@ namespace trifenix.connect.agro_model
         public string IdSpecie { get; set; }
 
         /// <summary>
-        /// autonumérico.
+        /// Autonumérico.
         /// </summary>
         [AutoNumericSearch(StringRelated.GENERIC_CORRELATIVE)]
         public override string ClientId { get; set; }

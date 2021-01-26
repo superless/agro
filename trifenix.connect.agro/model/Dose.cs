@@ -8,7 +8,7 @@ using trifenix.connect.mdm.enums;
 namespace trifenix.connect.agro_model
 {
     /// <summary>
-    /// Representa a una dosis
+    /// Entidad encargada de las dosis
     /// </summary>
     [SharedCosmosCollection("agro", "Dose")]
     [ReferenceSearchHeader(EntityRelated.DOSES, Kind = EntityKind.CUSTOM_ENTITY)]
@@ -21,7 +21,7 @@ namespace trifenix.connect.agro_model
 
 
         /// <summary>
-        /// genera un correlativo, pero este depende de producto.
+        /// Genera un correlativo, pero este depende de producto.
         /// por tanto por cada producto volverá la secuencia a 1.
         /// </summary>
         [AutoNumericSearch(StringRelated.GENERIC_CORRELATIVE, EntityRelated.PRODUCT)]
@@ -30,7 +30,7 @@ namespace trifenix.connect.agro_model
 
 
         /// <summary>
-        /// última modificación de la dosis.
+        /// Última modificación de la dosis.
         /// </summary>
         [DateSearch(DateRelated.LAST_MODIFIED)]
         public DateTime LastModified { get; set; }
@@ -42,7 +42,7 @@ namespace trifenix.connect.agro_model
         public string IdProduct { get; set; }
 
         /// <summary>
-        /// variedades asignadas a la dosis.
+        /// Variedades asignadas a la dosis.
         /// una dosis puede aplicar a más de un tipo de variedad.
         /// </summary>
         [ReferenceSearch(EntityRelated.VARIETY)]
@@ -50,7 +50,7 @@ namespace trifenix.connect.agro_model
 
 
         /// <summary>
-        /// especies relacionadas a la dosis
+        /// Especies relacionadas a la dosis
         /// </summary>
         [ReferenceSearch(EntityRelated.SPECIE)]
         public string[] IdSpecies { get; set; }
@@ -63,7 +63,7 @@ namespace trifenix.connect.agro_model
         public string[] IdsApplicationTarget { get; set; }
 
         /// <summary>
-        /// número de horas que se debe esperar para entrar al cuartel.
+        /// Número de horas que se debe esperar para entrar al cuartel.
         /// </summary>
         [Num32Search(NumRelated.HOURS_TO_ENTRY)]
         public int HoursToReEntryToBarrack { get; set; }
@@ -77,7 +77,7 @@ namespace trifenix.connect.agro_model
 
 
         /// <summary>
-        /// número de aplicaciones continuadas.
+        /// Número de aplicaciones continuadas.
         /// </summary>
         [Num32Search(NumRelated.NUMBER_OF_SECQUENTIAL_APPLICATION)]
         public int NumberOfSequentialApplication { get; set; }
@@ -97,14 +97,14 @@ namespace trifenix.connect.agro_model
         public double DosesQuantityMin { get; set; }
 
         /// <summary>
-        /// cantidad máxima determinada por la dosis 
+        /// Cantidad máxima determinada por la dosis 
         /// </summary>
         [DoubleSearch(DoubleRelated.QUANTITY_MAX)]
         public double DosesQuantityMax { get; set; }
 
 
         /// <summary>
-        /// numero  de días de espera antes de la cosecha.
+        /// Número  de días de espera antes de la cosecha.
         /// determinado por la etiqueta del producto.
         /// </summary>
         [Num32Search(NumRelated.WAITING_DAYS)]

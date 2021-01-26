@@ -8,7 +8,10 @@ using trifenix.connect.mdm.enums;
 
 namespace trifenix.connect.agro_model
 {
-
+    /// <summary>
+    /// Entidad encargada de generar los tractores,
+    /// utilizados para las tareas del oficio
+    /// </summary>
     [SharedCosmosCollection("agro", "Tractor")]
     [ReferenceSearchHeader(EntityRelated.TRACTOR, Kind = EntityKind.ENTITY, PathName = "tractors")]
     [GroupMenu(MenuEntityRelated.MANTENEDORES, PhisicalDevice.ALL, SubMenuEntityRelated.MAQUINARIA)]
@@ -16,7 +19,7 @@ namespace trifenix.connect.agro_model
     {
 
         /// <summary>
-        /// identificador
+        /// Identificador
         /// </summary>
         public override string Id { get; set; }
 
@@ -34,7 +37,7 @@ namespace trifenix.connect.agro_model
         public string Brand { get; set; }
 
         /// <summary>
-        /// código del tractor.
+        /// Código del tractor.
         /// </summary>
         [StringSearch(StringRelated.GENERIC_CODE)]
         public string Code { get; set; }
