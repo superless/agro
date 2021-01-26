@@ -20,7 +20,11 @@ namespace trifenix.agro.external
 {
 
 
-
+    /// <summary>
+    /// Contiene a todas las entidades,
+    /// con el fin de asignarles cierta operacion determinada
+    /// </summary>
+    /// <typeparam name="T">Es una entidad determinada</typeparam>
     public class AgroManager<T> : IAgroManager<T> {
 
         private readonly IDbAgroConnect dbConnect;
@@ -142,39 +146,83 @@ namespace trifenix.agro.external
 
 
         /// <summary>
-        /// Puesto de trabajoi
+        /// Puesto de trabajo
         /// </summary>
         public IGenericOperation<Job, JobInput> Job => new MainOperation<Job, JobInput, T>(GetMainDb<Job>(), Search, GetCommonDbOp<Job>(), GetValidators<JobInput, Job>());
 
+        /// <summary>
+        /// Repositorio de usuario aplicador
+        /// </summary>
         public IGenericOperation<UserApplicator, UserApplicatorInput> UserApplicator => new UserOperations<T>(GetMainDb<UserApplicator>(), Search, dbConnect.GraphApi , GetCommonDbOp<UserApplicator>(), GetValidators<UserApplicatorInput, UserApplicator>());
 
+        /// <summary>
+        /// Repositorio de nebulizador
+        /// </summary>
         public IGenericOperation<Nebulizer, NebulizerInput> Nebulizer => new MainOperation<Nebulizer, NebulizerInput,T>(GetMainDb<Nebulizer>(), Search, GetCommonDbOp<Nebulizer>(), GetValidators<NebulizerInput, Nebulizer>());
         
+        /// <summary>
+        /// Repositorio de tractor
+        /// </summary>
         public IGenericOperation<Tractor, TractorInput> Tractor => new MainOperation<Tractor, TractorInput,T>(GetMainDb<Tractor>(), Search, GetCommonDbOp<Tractor>(), GetValidators<TractorInput, Tractor>());
 
+        /// <summary>
+        /// Repositorio de la razon social
+        /// </summary>
         public IGenericOperation<BusinessName, BusinessNameInput> BusinessName => new MainOperation<BusinessName, BusinessNameInput,T>(GetMainDb<BusinessName>(), Search, GetCommonDbOp<BusinessName>(), GetValidators<BusinessNameInput, BusinessName>());
-
+        
+        /// <summary>
+        /// Repositorio de centro de costo 
+        /// </summary>
         public IGenericOperation<CostCenter, CostCenterInput> CostCenter => new MainOperation<CostCenter, CostCenterInput, T>(GetMainDb<CostCenter>(), Search, GetCommonDbOp<CostCenter>(), GetValidators<CostCenterInput, CostCenter>());
 
+        /// <summary>
+        /// Repositorio de la temporada
+        /// </summary>
         public IGenericOperation<Season, SeasonInput> Season => new MainOperation<Season, SeasonInput, T>(GetMainDb<Season>(), Search, GetCommonDbOp<Season>(), GetValidators<SeasonInput, Season>());
 
+        /// <summary>
+        /// Repositorio de la raíz
+        /// </summary>
         public IGenericOperation<Rootstock, RootstockInput> Rootstock => new MainOperation<Rootstock, RootstockInput, T>(GetMainDb<Rootstock>(), Search, GetCommonDbOp<Rootstock>(), GetValidators<RootstockInput, Rootstock>());
 
+        /// <summary>
+        /// Repositorio de carpeta de ordenes
+        /// </summary>
         public IGenericOperation<OrderFolder, OrderFolderInput> OrderFolder => new OrderFolderOperations<T>(GetMainDb<OrderFolder>(), Search, CommonQueries, GetCommonDbOp<OrderFolder>(), GetValidators<OrderFolderInput, OrderFolder>());
 
-
+        /// <summary>
+        /// Repositorio de cuarteles
+        /// </summary>
         public IGenericOperation<Barrack, BarrackInput> Barrack => new BarrackOperations<T>(GetMainDb<Barrack>(), Search, CommonQueries, GetCommonDbOp<Barrack>(), GetValidators<BarrackInput, Barrack>());
 
+        /// <summary>
+        /// Repositorio de notificacion de eventos
+        /// </summary>
         public IGenericOperation<NotificationEvent, NotificationEventInput> NotificationEvent => new NotificationEventOperations<T>(GetMainDb<NotificationEvent>(), Search, CommonQueries, _email, _uploadImage, _weatherApi, GetCommonDbOp<NotificationEvent>(), GetValidators<NotificationEventInput, NotificationEvent>());
 
+        /// <summary>
+        /// Repositorio de pre-orden
+        /// </summary>
         public IGenericOperation<PreOrder, PreOrderInput> PreOrder => new PreOrdersOperations<T>(GetMainDb<PreOrder>(), Search, CommonQueries, GetCommonDbOp<PreOrder>(), GetValidators<PreOrderInput, PreOrder>());
 
+        /// <summary>
+        /// Repositorio de la orden de aplicación
+        /// </summary>
         public IGenericOperation<ApplicationOrder, ApplicationOrderInput> ApplicationOrder => new ApplicationOrderOperations<T>(GetMainDb<ApplicationOrder>(), Search, CommonQueries, GetCommonDbOp<ApplicationOrder>(), GetValidators<ApplicationOrderInput, ApplicationOrder>());
 
+        /// <summary>
+        /// Repositorio de la orden de ejecución
+        /// </summary>
         public IGenericOperation<ExecutionOrder, ExecutionOrderInput> ExecutionOrder => new ExecutionOrderOperations<T>(GetMainDb<ExecutionOrder>(), Search, CommonQueries, GetCommonDbOp<ExecutionOrder>(), GetValidators<ExecutionOrderInput, ExecutionOrder>());
 
+        /// <summary>
+        /// Repositorio del estado de la orden de ejecución
+        /// </summary>
         public IGenericOperation<ExecutionOrderStatus, ExecutionOrderStatusInput> ExecutionOrderStatus => new ExecutionOrderStatusOperations<T>(GetMainDb<ExecutionOrderStatus>(), Search, GetCommonDbOp<ExecutionOrderStatus>(), GetValidators<ExecutionOrderStatusInput, ExecutionOrderStatus>());
         
+        /// <summary>
+        /// Repositorio de los comentarios
+        /// </summary>
         public IGenericOperation<Comment, CommentInput> Comments => new MainOperation<Comment, CommentInput,T>(GetMainDb<Comment>(), Search, GetCommonDbOp<Comment>(), GetValidators<CommentInput, Comment>());
 
         public dynamic GetOperationByInputType(Type InputType) {

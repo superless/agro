@@ -7,7 +7,9 @@ using trifenix.connect.mdm.enums;
 
 namespace trifenix.connect.agro_model
 {
-
+    /// <summary>
+    /// Entidad encargada de la orden de aplicación
+    /// </summary>
     [SharedCosmosCollection("agro", "ApplicationOrder")]
     [ReferenceSearchHeader(EntityRelated.ORDER, Kind = EntityKind.PROCESS, PathName = "orders")]
     public class ApplicationOrder : DocumentLocal {
