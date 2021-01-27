@@ -18,7 +18,7 @@ namespace trifenix.connect.app.cloud
 {
     public static class Cloud
     {
-        private static string connectionString = "Endpoint=sb://servicebus-trifenix.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=XylTzxpLEfnz3Aq0Rp6amObJC8Kkl98E3bcipBbMPsk=";
+        private static string connectionString = "Endpoint=sb://servicebus-trifenix.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=B9B4zfRV+b4T94f10tdHXxZsku2ARb3cd7BW1J5ZmyM=";
 
 
         //new MainSearch<GeographyPoint>("https://search-agro.search.windows.net", "7902C1E82BEEDC85AC0E535CF45DFC77", "entities-agro")
