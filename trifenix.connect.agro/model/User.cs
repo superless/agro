@@ -17,7 +17,7 @@ namespace trifenix.connect.agro_model
 
 
         /// <summary>
-        /// identificador
+        /// Identificador
         /// </summary>
         public override string Id { get; set; }
 
@@ -29,6 +29,9 @@ namespace trifenix.connect.agro_model
         
         public string ObjectIdAAD { get; set; }
 
+        /// <summary>
+        /// Nombre
+        /// </summary>
         [StringSearch(StringRelated.GENERIC_NAME)]
         public string Name { get; set; }
 

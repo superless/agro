@@ -15,7 +15,7 @@ namespace trifenix.connect.agro_model
     public class PreOrder : DocumentLocal
     {
         /// <summary>
-        /// identificador
+        /// Identificador
         /// </summary>
         public override string Id { get; set; }
 
@@ -26,32 +26,33 @@ namespace trifenix.connect.agro_model
         public override string ClientId { get; set; }
 
         /// <summary>
-        /// nombre de la pre-orden.
+        /// Nombre de la pre-orden.
         /// </summary>
         [SuggestSearch(StringRelated.GENERIC_NAME)]
         public string Name { get; set; }
 
 
         /// <summary>
-        /// identificador del ingrediente.
+        /// Identificador del ingrediente.
         /// </summary>
         [ReferenceSearch(EntityRelated.INGREDIENT)]
         public string IdIngredient { get; set; }    //Este esta en la OrderFolder. Eliminar(?), esto puede aplicar cuando no sea una preorden fenologica, en cuyo caso, no existirá una Carpeta.
 
         /// <summary>
-        /// carpeta a la que pertenece, esto solo aplicará si la pre-orden es de tipo fenológica, las que no son fenológica no tienen carpeta.
+        /// Carpeta a la que pertenece, esto solo aplicará si la pre-orden es de tipo fenológica, 
+        /// las que no son fenológica no tienen carpeta.
         /// </summary>
         [ReferenceSearch(EntityRelated.ORDER_FOLDER)]
         public string OrderFolderId { get; set; }
 
         /// <summary>
-        /// tipo de pre-orden
+        /// Tipo de pre-orden
         /// </summary>
         [EnumSearch(EnumRelated.PRE_ORDER_TYPE)]
         public PreOrderType PreOrderType { get; set; }
 
         /// <summary>
-        /// identificador del cuartel.
+        /// Identificador del cuartel.
         /// </summary>
         [ReferenceSearch(EntityRelated.BARRACK)]
         public string[] BarracksId { get; set; }

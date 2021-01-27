@@ -3,7 +3,7 @@
 namespace trifenix.connect.agro.index_model.enums
 {
     /// <summary>
-    /// determina las distintas etapas de la ejecución de una orden.
+    /// Determina las distintas etapas de la ejecución de una orden.
     /// </summary>
     public enum ExecutionStatus
     {

@@ -6,14 +6,16 @@ using trifenix.connect.mdm.enums;
 
 namespace trifenix.connect.agro_model
 {
-
+    /// <summary>
+    /// Entidad encargada de generar los roles
+    /// </summary>
     [SharedCosmosCollection("agro", "Role")]
     [ReferenceSearchHeader(EntityRelated.ROLE, Kind = EntityKind.ENTITY, PathName = "roles")]
     [GroupMenu(MenuEntityRelated.MANTENEDORES, PhisicalDevice.ALL, SubMenuEntityRelated.USUARIOS)]
     public class Role : DocumentLocal
     {
         /// <summary>
-        /// identificador del rol
+        /// Identificador del rol
         /// </summary>
         public override string Id { get; set; }
 

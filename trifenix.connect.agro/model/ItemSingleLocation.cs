@@ -4,6 +4,10 @@ using trifenix.connect.agro.mdm_attributes;
 
 namespace trifenix.connect.agro_model
 {
+    /// <summary>
+    /// Condicional que determina el metodo de generar
+    /// la ubicación del evento
+    /// </summary>
     public abstract class ItemSinglesLocation : DocumentLocal
     {
 

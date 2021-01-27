@@ -15,7 +15,11 @@ using trifenix.connect.mdm.enums;
 
 namespace trifenix.connect.agro.external
 {
-
+    /// <summary>
+    /// Operaciones de los cuarteles, dentro valida y almacena 
+    /// los datos ingresados
+    /// </summary>
+    /// <typeparam name="T">Las operaciones a ejecutar</typeparam>
     public class BarrackOperations<T> : MainOperation<Barrack,BarrackInput,T>, IGenericOperation<Barrack, BarrackInput> {
 
         private readonly ICommonAgroQueries commonQueries;

@@ -3,7 +3,7 @@
 namespace trifenix.connect.agro.index_model.enums
 {
     /// <summary>
-    /// determina el cierre de una ejecución de una orden por parte del administrador.
+    /// Determina el cierre de una ejecución de una orden por parte del administrador.
     /// </summary>
     public enum FinishStatus
     {

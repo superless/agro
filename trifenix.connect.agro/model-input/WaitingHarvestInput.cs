@@ -6,9 +6,15 @@ using trifenix.connect.mdm.validation_attributes;
 
 namespace trifenix.connect.agro_model_input
 {
+    /// <summary>
+    /// Ingreso de espera de cosecha
+    /// </summary>
     [ReferenceSearchHeader(EntityRelated.WAITINGHARVEST, true, Kind = EntityKind.CUSTOM_ENTITY)]
     public class WaitingHarvestInput {
 
+        /// <summary>
+        /// ???
+        /// </summary>
         [DoubleSearch(DoubleRelated.PPM)]        
         public double Ppm { get; set; }
 
@@ -24,10 +30,6 @@ namespace trifenix.connect.agro_model_input
         [ReferenceSearch(EntityRelated.CERTIFIED_ENTITY)]
         [Reference(typeof(CertifiedEntity))]
         public string IdCertifiedEntity { get; set; }
-
-        
-
-
     }
 
     
