@@ -25,7 +25,6 @@ namespace trifenix.connect.app.cloud
         public static AgroSearch<GeographyPoint> search = new AgroSearch<GeographyPoint>(@"https://search-agro.search.windows.net", "7902C1E82BEEDC85AC0E535CF45DFC77", null, new ImplementsSearch(), new HashEntityAgroSearch());
 
 
-
         public static string GetCosmosEntityName<T>() where T : DocumentBase
         {
             return ((T)Activator.CreateInstance(typeof(T))).CosmosEntityName;

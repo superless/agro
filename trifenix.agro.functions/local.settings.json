@@ -24,7 +24,7 @@
     //"SearchServiceKey": "6D2BA6AF3373D17A341F7A099BA8FA6A",
     "SearchServiceName": "https://search-agro.search.windows.net",
     //"SearchServiceName": "https://agrocloud.search.windows.net",
-    "ServiceBusConnectionString": "Endpoint=sb://servicebus-trifenix.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=XylTzxpLEfnz3Aq0Rp6amObJC8Kkl98E3bcipBbMPsk=",
+    "ServiceBusConnectionString": "Endpoint=sb://servicebus-trifenix.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=B9B4zfRV+b4T94f10tdHXxZsku2ARb3cd7BW1J5ZmyM=",
     //"ServiceBusConnectionString": "Endpoint=sb://agrobus.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=28iKIG/njebR7TMqZh5e9KDdI0Jhv3D6gjUUI198Gog=",
     "StorageConnectionStrings": "DefaultEndpointsProtocol=https;AccountName=storageacountagro1;AccountKey=2qgkAqePo+pjBct70PEQuA1aGds4asj78G0VvtdjlTiG9058/hwYs+wywdJdyzpU0virjFfzJ4fFQQ5QKGNoOw==;EndpointSuffix=core.windows.net",
     //"StorageConnectionStrings": "DefaultEndpointsProtocol=https;AccountName=cloudagrostorage;AccountKey=Hp+mHIx+2mFogv2TXTqVZUvQPCNtF90v93vWTwdG6tZG4EGPLKjhsa3e+U9ydJitJ0PLc3w0CimfsDHEmtscDg==;EndpointSuffix=core.windows.net",
