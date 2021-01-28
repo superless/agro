@@ -6,14 +6,16 @@ using trifenix.connect.mdm.enums;
 
 namespace trifenix.connect.agro_model
 {
-
+    /// <summary>
+    /// Entidad encargada de las categorias de los ingredientes
+    /// </summary>
     [SharedCosmosCollection("agro", "IngredientCategory")]
     [ReferenceSearchHeader(EntityRelated.CATEGORY_INGREDIENT, PathName = "ingredient_categories", Kind = EntityKind.ENTITY)]
     [GroupMenu(MenuEntityRelated.MANTENEDORES, PhisicalDevice.ALL, SubMenuEntityRelated.PRODUCTO)]
     public class IngredientCategory : DocumentLocal
     {
         /// <summary>
-        /// id
+        /// Identificador
         /// </summary>
         public override string Id { get; set; }
 

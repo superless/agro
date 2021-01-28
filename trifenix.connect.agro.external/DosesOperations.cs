@@ -19,7 +19,12 @@ using trifenix.connect.util;
 namespace trifenix.agro.external.operations.entities.ext
 {
 
-
+    /// <summary>
+    /// Opreaciones de las dosis,
+    /// dentro de esta se pueden ejecutar las operaciones de remover,
+    /// validar y actualizar datos
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class DosesOperations<T> : MainOperation<Dose, DosesInput,T>, IGenericOperation<Dose, DosesInput> {
         private readonly IDbExistsElements existsElement;
         private readonly ICommonAgroQueries Queries;

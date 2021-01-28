@@ -16,12 +16,12 @@ namespace trifenix.connect.agro_model
     public class Sector : DocumentLocal
     {
         /// <summary>
-        /// identificador
+        /// Identificador
         /// </summary>
         public override string Id { get; set; }
 
         /// <summary>
-        /// nombre
+        /// Nombre
         /// </summary>
         [StringSearch(StringRelated.GENERIC_NAME)]
         [Unique]

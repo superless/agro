@@ -12,7 +12,11 @@ using trifenix.connect.mdm.enums;
 
 namespace trifenix.connect.agro.external
 {
-
+    /// <summary>
+    /// Operaciones realizadas por el usuario,
+    /// dentro de esta se puede almacenar nuevos usuarios
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class UserOperations<T> : MainOperation<UserApplicator, UserApplicatorInput,T>, IGenericOperation<UserApplicator, UserApplicatorInput> {
 
         private readonly IGraphApi graphApi;

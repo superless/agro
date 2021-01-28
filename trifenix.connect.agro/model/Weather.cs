@@ -1,5 +1,8 @@
 ﻿namespace trifenix.connect.agro_model
 {
+    /// <summary>
+    /// Clase encargada del tiempo
+    /// </summary>
     public class Weather {
 
         public Coordinates Coordinates { get; set; }
@@ -16,13 +19,17 @@
 
         
     }
-
+    /// <summary>
+    /// Clase encargada de las coordenadas
+    /// </summary>
     public class Coordinates {
         public string CityName;
         public float Latitude;
         public float Longitude;
     }
-
+    /// <summary>
+    /// Clase encargada del viento
+    /// </summary>
     public class Wind {
         public float Speed;
         public int Degree;

@@ -7,19 +7,19 @@ using trifenix.connect.mdm_attributes;
 namespace trifenix.connect.agro_model
 {
     /// <summary>
-    /// Sector de una parcela.
+    /// Marca de los productos.
     /// </summary>
     [SharedCosmosCollection("agro", "Brand")]
     [ReferenceSearchHeader(EntityRelated.BRAND, PathName = "brands", Kind = EntityKind.ENTITY)]    
     public class Brand : DocumentLocal
     {
         /// <summary>
-        /// identificador
+        /// Identificador
         /// </summary>
         public override string Id { get; set; }
 
         /// <summary>
-        /// nombre
+        /// Nombre
         /// </summary>
         [StringSearch(StringRelated.GENERIC_NAME)]
         [Unique]

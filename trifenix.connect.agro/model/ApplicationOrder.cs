@@ -7,7 +7,9 @@ using trifenix.connect.mdm.enums;
 
 namespace trifenix.connect.agro_model
 {
-
+    /// <summary>
+    /// Entidad encargada de la orden de aplicación
+    /// </summary>
     [SharedCosmosCollection("agro", "ApplicationOrder")]
     [ReferenceSearchHeader(EntityRelated.ORDER, Kind = EntityKind.PROCESS, PathName = "orders")]
     public class ApplicationOrder : DocumentLocal {
@@ -32,7 +34,7 @@ namespace trifenix.connect.agro_model
 
 
         /// <summary>
-        /// nombre de la orden
+        /// Nombre de la orden
         /// </summary>
         [StringSearch(StringRelated.GENERIC_NAME)]
         public string Name { get; set; }
@@ -46,21 +48,21 @@ namespace trifenix.connect.agro_model
 
 
         /// <summary>
-        /// fecha fin de la orden
+        /// Fecha fin de la orden
         /// </summary>
         [DateSearch(DateRelated.END_DATE_ORDER)]
         public DateTime EndDate { get; set; }
 
 
         /// <summary>
-        /// mojamiento asignado a la orden
+        /// Mojamiento asignado a la orden
         /// </summary>
         [DoubleSearch(DoubleRelated.WETTING)]
         public double Wetting { get; set; }
 
 
         /// <summary>
-        /// dosis aplicados (producto).
+        /// Dosis aplicadas (producto).
         /// </summary>
         [ReferenceSearch(EntityRelated.DOSES_ORDER, true)]
         public DosesOrder[] DosesOrder { get; set; }
@@ -82,7 +84,7 @@ namespace trifenix.connect.agro_model
     }
 
     /// <summary>
-    /// asocia cuarteles a una orden y las notificaciones desde 
+    /// Asocia cuarteles a una orden y las notificaciones desde 
     /// monitoreo.
     /// </summary>
     [ReferenceSearchHeader(EntityRelated.BARRACK_EVENT, true)]
@@ -106,7 +108,7 @@ namespace trifenix.connect.agro_model
 
 
     /// <summary>
-    /// asocia las dosis a la orden, 
+    /// Asocia las dosis a la orden, 
     /// la dosis viene asociada con el producto.
     /// </summary>
     [ReferenceSearchHeader(EntityRelated.DOSES_ORDER, true)]

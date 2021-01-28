@@ -12,7 +12,7 @@ namespace trifenix.connect.agro_model
 
 
     /// <summary>
-    /// representa un cuartel.
+    /// Representa un cuartel.
     /// </summary>
     [SharedCosmosCollection("agro", "Barrack")]
     [ReferenceSearchHeader(EntityRelated.BARRACK, Kind =EntityKind.ENTITY, PathName ="barracks")]
@@ -20,7 +20,7 @@ namespace trifenix.connect.agro_model
     public class Barrack : ItemLocation {
 
         /// <summary>
-        /// identificador del barrack
+        /// Identificador del barrack
         /// </summary>
         public override string Id { get; set; }
 
@@ -59,7 +59,7 @@ namespace trifenix.connect.agro_model
 
 
         /// <summary>
-        /// año de plantación.
+        /// Año de plantación.
         /// </summary>
         [Group(1, PhisicalDevice.WEB, 3)]
         [Num32Search(NumRelated.PLANTING_YEAR)]
@@ -82,9 +82,9 @@ namespace trifenix.connect.agro_model
         public string IdVariety { get; set; }
 
 
-        /// <summary>
-        /// Polinizador, 
-        /// la variedad y el polinizador son el misma entidad,
+        /// <summary> 
+        /// Identificador de polinizador.
+        /// La variedad y el polinizador son el misma entidad,
         /// para asignar la segunda se usa una referencia local.
         /// importante! 
         /// </summary>

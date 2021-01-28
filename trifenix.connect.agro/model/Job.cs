@@ -6,7 +6,9 @@ using trifenix.connect.mdm.enums;
 
 namespace trifenix.connect.agro_model
 {
-
+    /// <summary>
+    /// Entidad encargada de generar los cargos de los usuarios
+    /// </summary>
     [SharedCosmosCollection("agro", "Job")]
     [ReferenceSearchHeader(EntityRelated.JOB, PathName = "jobs", Kind = EntityKind.ENTITY)]
     [GroupMenu(MenuEntityRelated.MANTENEDORES, PhisicalDevice.ALL, SubMenuEntityRelated.USUARIOS)]
@@ -19,12 +21,12 @@ namespace trifenix.connect.agro_model
         public override string ClientId { get; set; }
 
         /// <summary>
-        /// identificador
+        /// Identificador
         /// </summary>
         public override string Id { get; set; }
 
         /// <summary>
-        /// nombre del cargo.
+        /// Nombre del cargo.
         /// </summary>
         [StringSearch(StringRelated.GENERIC_NAME)]
         public string Name { get; set; }

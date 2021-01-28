@@ -3,7 +3,7 @@
 namespace trifenix.connect.agro.index_model.enums
 {
     /// <summary>
-    /// determina el tipo de orden.
+    /// Determina el tipo de orden.
     /// </summary>
     public enum OrderType
     {

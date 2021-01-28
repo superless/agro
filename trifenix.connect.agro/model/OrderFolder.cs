@@ -14,7 +14,7 @@ namespace trifenix.connect.agro_model
     {
 
         /// <summary>
-        /// identificador de la carpeta
+        /// Identificador de la carpeta
         /// </summary>
         public override string Id { get; set; }
 
@@ -32,27 +32,27 @@ namespace trifenix.connect.agro_model
         public string IdPhenologicalEvent { get; set; }
 
         /// <summary>
-        /// id del objetivo de aplicación.
+        /// Id del objetivo de aplicación.
         /// </summary>
         [ReferenceSearch(EntityRelated.TARGET)]
         public string IdApplicationTarget { get; set; }
 
 
         /// <summary>
-        /// identificador de la especie
+        /// Identificador de la especie
         /// </summary>
         [ReferenceSearch(EntityRelated.SPECIE)]
         public string IdSpecie { get; set; }
 
         /// <summary>
-        /// identificador del ingrediente a asignar
+        /// Identificador del ingrediente a asignar
         /// </summary>
         [ReferenceSearch(EntityRelated.INGREDIENT)]
         public string  IdIngredient { get; set; }
 
 
         /// <summary>
-        /// categoria de la categoria del ingrediente.
+        /// Categoría de la categoría del ingrediente.
         /// </summary>
         [ReferenceSearch(EntityRelated.CATEGORY_INGREDIENT)]
         public string IdIngredientCategory { get; set; }

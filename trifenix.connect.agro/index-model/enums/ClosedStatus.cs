@@ -3,7 +3,7 @@
 namespace trifenix.connect.agro.index_model.enums
 {
     /// <summary>
-    /// determina el tipo de cierre de una ejecución de una orden.
+    /// Determina el tipo de cierre de una ejecución de una orden.
     /// </summary>
     public enum ClosedStatus
     {

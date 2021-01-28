@@ -1,4 +1,5 @@
-﻿using Cosmonaut.Attributes;
+﻿
+using Cosmonaut.Attributes;
 using System;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
@@ -36,7 +37,7 @@ namespace trifenix.connect.agro_model
 
 
         /// <summary>
-        /// dosis asociadas, 
+        /// Dosis asociadas, 
         /// esto se cambia solo si el resultado final es incompleto.
         /// </summary>
         [ReferenceSearch(EntityRelated.DOSES_ORDER, true)]

@@ -3,7 +3,7 @@
 namespace trifenix.connect.agro.index_model.enums
 {
     /// <summary>
-    /// determina el tipo de pre orden
+    /// Determina el tipo de pre orden
     /// </summary>
     public enum PreOrderType
     {

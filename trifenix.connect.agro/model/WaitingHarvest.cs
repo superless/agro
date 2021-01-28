@@ -13,25 +13,29 @@ namespace trifenix.connect.agro_model
     public class WaitingHarvest {
 
         /// <summary>
-        /// partes por millón, esto se incorporó después.
+        /// Partes por millón, esto se incorporó después.
         /// </summary>
         [DoubleSearch(DoubleRelated.PPM)]
         public double Ppm { get; set; }
 
         /// <summary>
-        /// días de espera antes de la cosecha
+        /// Días de espera antes de la cosecha
         /// </summary>
         [Num32Search(NumRelated.WAITING_DAYS)]
         public int WaitingDays { get; set; }
 
 
         /// <summary>
-        /// Entidad certificadora (opcional), si es indicado en la etiqueta, probablemente no sea de una entidad certificadora.
+        /// Entidad certificadora (opcional), 
+        /// si es indicado en la etiqueta, 
+        /// probablemente no sea de una entidad certificadora.
         /// </summary>
         [ReferenceSearch(EntityRelated.CERTIFIED_ENTITY)]
         public string IdCertifiedEntity { get; set; }
 
-
+        /// <summary>
+        /// Id de las dosis
+        /// </summary>
         [ReferenceSearch(EntityRelated.DOSES)]
         public string IdDoses { get; set; }
 

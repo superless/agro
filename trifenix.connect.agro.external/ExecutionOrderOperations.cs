@@ -15,6 +15,11 @@ using trifenix.connect.mdm.enums;
 
 namespace trifenix.agro.external.operations.entities.orders
 {
+    /// <summary>
+    /// Clase encargada de las operaciones de las ordenes ejecutadas,
+    /// se encarga de la validacion y actualizacion de los parametros
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class ExecutionOrderOperations<T> : MainOperation<ExecutionOrder, ExecutionOrderInput,T>, IGenericOperation<ExecutionOrder, ExecutionOrderInput> {
         private readonly ICommonAgroQueries commonQueries;
 

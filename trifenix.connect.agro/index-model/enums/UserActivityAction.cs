@@ -7,7 +7,7 @@ namespace trifenix.connect.agro.index_model.enums
 {
 
     /// <summary>
-    /// actividad que realiza un usuario sobre una entidad
+    /// Actividad que realiza un usuario sobre una entidad
     /// </summary>
     public enum UserActivityAction
     {

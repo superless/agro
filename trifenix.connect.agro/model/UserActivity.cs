@@ -8,14 +8,14 @@ namespace trifenix.connect.agro_model
 {
 
     /// <summary>
-    /// log de acciones de usuario
+    /// Log de acciones de usuario
     /// esta propiedad solo se guarda en cosmos.
     /// </summary>
     [SharedCosmosCollection("agro", "UserActivity")]
     public class UserActivity : DocumentLocal {
 
         /// <summary>
-        /// identificador
+        /// Identificador
         /// </summary>
         public override string Id { get; set; }
 
@@ -32,13 +32,13 @@ namespace trifenix.connect.agro_model
         public string UserId { get; set; }
 
         /// <summary>
-        /// acción ejecutada.
+        /// Acción ejecutada.
         /// </summary>
         public UserActivityAction Action { get; set; }
 
         
         /// <summary>
-        /// fecha de la ejecución.
+        /// Fecha de la ejecución.
         /// </summary>
         public DateTime Date { get; set; }
 
