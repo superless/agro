@@ -42,11 +42,11 @@ namespace trifenix.connect.agro.external
         /// <summary>
         /// Consultas y mutación en Azure search.
         /// </summary>
-        /// <param name="SearchServiceName">nombre del servicio</param>
-        /// <param name="SearchServiceKey">clave del servicio</param>
-        /// <param name="corsOptions">opciones de cors</param>
+        /// <param name="SearchServiceName">Nombre del servicio</param>
+        /// <param name="SearchServiceKey">Clave del servicio</param>
+        /// <param name="corsOptions">Opciones de cors</param>
         /// /// <param name="implements">Implement de search, para la generación de entitySearch</param>
-        /// <param name="entityId">índice del search</param>}
+        /// <param name="entityId">Índice del search</param>}
         /// <param name="hashOper">Convertidor de hasg</param>
         public AgroSearch(string SearchServiceName, string SearchServiceKey, CorsOptions corsOptions, Implements<GeoPointType> implements, IHashSearchHelper hashOper, string entityId = "entities-agro") 
             : this(
@@ -73,10 +73,6 @@ namespace trifenix.connect.agro.external
 
         }
 
-
-
-
-        
 
         public void AddElement(IEntitySearch<GeoPointType> element)
         {

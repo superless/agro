@@ -11,8 +11,7 @@ namespace trifenix.connect.agro_model
 
 
     /// <summary>
-    /// Objetivo de la aplicación, 
-    /// Cual es el objetivo de la aplicación de una órden.
+    /// Determina cual es el objetivo de la aplicación de una órden.
     /// </summary>
     [SharedCosmosCollection("agro", "ApplicationTarget")]
     [ReferenceSearchHeader(EntityRelated.TARGET, PathName = "targets", Kind = EntityKind.ENTITY)]
@@ -27,7 +26,7 @@ namespace trifenix.connect.agro_model
 
 
         /// <summary>
-        /// El identificador de cliente el que será mostrado en el formulario y la vista.
+        /// El identificador de cliente que será mostrado en el formulario y la vista.
         /// </summary>
         [AutoNumericSearch(StringRelated.GENERIC_CORRELATIVE)]
         public override string ClientId { get; set; }

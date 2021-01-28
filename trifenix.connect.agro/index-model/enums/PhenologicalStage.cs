@@ -3,7 +3,7 @@
 namespace trifenix.connect.agro.index_model.enums
 {
     /// <summary>
-    /// enumeración que determina el estado de un evento fenológico de acuerdo al tiempo próximo en el que este ocurra    
+    /// Enumeración que determina el estado de un evento fenológico de acuerdo al tiempo próximo en el que este ocurra    
     /// </summary>
     public enum PhenologicalStage
     {

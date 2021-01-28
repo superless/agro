@@ -29,9 +29,19 @@ namespace trifenix.connect.agro.queries
             return result != 0;
         }
 
+        /// <summary>
+        /// Comprueba si existe una dosis en una orden de aplicacion
+        /// </summary>
+        /// <param name="idDoses"></param>
+        /// <returns></returns>
         public async Task<bool> ExistsDosesFromOrder(string idDoses) =>
             await ExistsCustom<ApplicationOrder>(Queries(DbQuery.COUNT_EXECUTION_OR_ORDERS_BY_DOSESID), idDoses);
 
+        /// <summary>
+        /// Comprueba si existe una dosis en una orden de ejecución
+        /// </summary>
+        /// <param name="idDoses"></param>
+        /// <returns></returns>
         public async Task<bool> ExistsDosesExecutionOrder(string idDoses) =>
             await ExistsCustom<ExecutionOrder>(Queries(DbQuery.COUNT_EXECUTION_OR_ORDERS_BY_DOSESID), idDoses);
 

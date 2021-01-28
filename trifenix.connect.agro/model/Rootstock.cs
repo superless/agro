@@ -7,7 +7,7 @@ namespace trifenix.connect.agro_model
 {
 
     /// <summary>
-    /// raíz de una planta.
+    /// Raíz de una planta.
     /// </summary>
     [SharedCosmosCollection("agro", "Rootstock")]
     [ReferenceSearchHeader(EntityRelated.ROOTSTOCK, PathName = "rootstock", Kind = EntityKind.ENTITY)]
@@ -15,12 +15,12 @@ namespace trifenix.connect.agro_model
 
 
         /// <summary>
-        /// identificador
+        /// Identificador
         /// </summary>
         public override string Id { get; set; }
 
         /// <summary>
-        /// nombre del rootstock
+        /// Nombre del rootstock
         /// </summary>
         [StringSearch(StringRelated.GENERIC_NAME)]
         public string Name { get; set; }
@@ -33,7 +33,7 @@ namespace trifenix.connect.agro_model
         public override string ClientId { get; set; }
 
         /// <summary>
-        /// abreviación.
+        /// Abreviación.
         /// </summary>
         [StringSearch(StringRelated.GENERIC_ABBREVIATION)]
         public string Abbreviation { get; set; }

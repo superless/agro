@@ -8,14 +8,14 @@ namespace trifenix.connect.agro_model
 {
 
     /// <summary>
-    /// identifica un año agricola.
+    /// Identifica un año agricola.
     /// </summary>
     [SharedCosmosCollection("agro", "Season")]
     [ReferenceSearchHeader(EntityRelated.SEASON, PathName = "seasons", Kind = EntityKind.CUSTOM_ENTITY)]
     public class Season : DocumentLocal {
 
         /// <summary>
-        /// identificador.
+        /// Identificador.
         /// </summary>
         public override string Id { get; set; }
 
@@ -27,14 +27,14 @@ namespace trifenix.connect.agro_model
 
 
         /// <summary>
-        /// fecha de inicio
+        /// Fecha de inicio
         /// </summary>
         [DateSearch(DateRelated.START_DATE_SEASON)]
         public DateTime StartDate { get; set; }
 
 
         /// <summary>
-        /// fecha fin
+        /// Fecha fin
         /// </summary>
         [DateSearch(DateRelated.END_DATE_SEASON)]
         public DateTime EndDate { get; set; }
@@ -46,7 +46,7 @@ namespace trifenix.connect.agro_model
         public bool Current { get; set; }
 
         /// <summary>
-        /// identificador del costcenter.
+        /// Identificador del costcenter.
         /// </summary>
         [ReferenceSearch(EntityRelated.COSTCENTER)]
         public string IdCostCenter { get; set; }

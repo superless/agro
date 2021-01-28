@@ -11,7 +11,10 @@ using trifenix.connect.mdm.enums;
 
 namespace trifenix.connect.agro.external
 {
-
+    /// <summary>
+    /// Operaciones de la actividad de los usuarios
+    /// </summary>
+    /// <typeparam name="T">Tipo de operacion a realizar</typeparam>
     public class UserActivityOperations<T> : MainOperation<UserActivity, UserActivityInput, T>, IGenericOperation<UserActivity, UserActivityInput> {
 
         private readonly string UserId;

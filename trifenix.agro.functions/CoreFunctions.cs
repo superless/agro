@@ -183,6 +183,7 @@ namespace trifenix.agro.functions
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Sector, string.Empty);
             return result.JsonResult;
+            
         }
 
 

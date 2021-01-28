@@ -17,7 +17,12 @@ using trifenix.connect.mdm.enums;
 
 namespace trifenix.connect.agro.external
 {
-
+    /// <summary>
+    /// Operaciones de la orden de aplicacion.
+    /// Dentro contiene la validacion de los parametros ingresados y 
+    /// el guardado de estas entradas
+    /// </summary>
+    /// <typeparam name="T">La operacion que se ejecuta</typeparam>
     public class ApplicationOrderOperations<T> : MainOperation<ApplicationOrder, ApplicationOrderInput,T>, IGenericOperation<ApplicationOrder, ApplicationOrderInput> {
 
         

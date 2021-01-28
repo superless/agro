@@ -14,7 +14,7 @@ namespace trifenix.connect.agro_model
 
 
         /// <summary>
-        /// identificador de la ejecución.
+        /// Identificador de la ejecución.
         /// </summary>
         public override string Id { get; set; }
 
@@ -57,7 +57,7 @@ namespace trifenix.connect.agro_model
         public string Comment { get; set; }
 
         /// <summary>
-        /// id de la orden de ejecucíón asociada.
+        /// Id de la orden de ejecucíón asociada.
         /// </summary>
         [ReferenceSearch(EntityRelated.EXECUTION_ORDER)]
         public string IdExecutionOrder { get; set; }

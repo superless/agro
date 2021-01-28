@@ -5,7 +5,7 @@ using trifenix.connect.mdm_attributes;
 namespace trifenix.connect.agro.mdm_attributes
 {
     /// <summary>
-    /// indica si la propiedad de una clase es numérica.
+    /// Indica si la propiedad de una clase es numérica.
     /// </summary>
     public class Num32SearchAttribute : PropertyIndexAttribute
     {
