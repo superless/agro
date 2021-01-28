@@ -23,7 +23,45 @@ namespace trifenix.agro.functions.mantainers
 
         private static readonly ServiceBus ServiceBus = new ServiceBus(Environment.GetEnvironmentVariable("ServiceBusConnectionString", EnvironmentVariableTarget.Process), Environment.GetEnvironmentVariable("QueueName", EnvironmentVariableTarget.Process));
 
+        private static bool ValidaEnvironmentVariables() {
+            var serviceBus = Environment.GetEnvironmentVariable("ServiceBusConnectionString", EnvironmentVariableTarget.Process);
+            var queuName = Environment.GetEnvironmentVariable("QueueName", EnvironmentVariableTarget.Process);
+            var storage = Environment.GetEnvironmentVariable("StorageConnectionStrings", EnvironmentVariableTarget.Process);
+            var weatherApi = Environment.GetEnvironmentVariable("KeyWeatherApi", EnvironmentVariableTarget.Process);
+            var searchServiceUrl = Environment.GetEnvironmentVariable("SearchServiceName", EnvironmentVariableTarget.Process);
+            var serviceKey = Environment.GetEnvironmentVariable("SearchServiceKey", EnvironmentVariableTarget.Process);
+            var cosmosDbName = Environment.GetEnvironmentVariable("CosmosDbName", EnvironmentVariableTarget.Process);
+            var cosmosDbPrimaryKey = Environment.GetEnvironmentVariable("CosmosDbPrimaryKey", EnvironmentVariableTarget.Process);
+            var cosmosDbUri = Environment.GetEnvironmentVariable("CosmosDbUri", EnvironmentVariableTarget.Process);
+            var azureSearchKey = Environment.GetEnvironmentVariable("AzureSearchKey", EnvironmentVariableTarget.Process);
+            var AzureSearchName = Environment.GetEnvironmentVariable("AzureSearchName", EnvironmentVariableTarget.Process);
+
+            if (string.IsNullOrWhiteSpace(serviceBus) 
+                || string.IsNullOrWhiteSpace(queuName) 
+                || string.IsNullOrWhiteSpace(storage) 
+                || string.IsNullOrWhiteSpace(weatherApi) 
+                || string.IsNullOrWhiteSpace(searchServiceUrl)
+                || string.IsNullOrWhiteSpace(serviceKey)
+                || string.IsNullOrWhiteSpace(cosmosDbName)
+                || string.IsNullOrWhiteSpace(cosmosDbPrimaryKey)
+                || string.IsNullOrWhiteSpace(cosmosDbUri)
+                || string.IsNullOrWhiteSpace(azureSearchKey)
+                || string.IsNullOrWhiteSpace(AzureSearchName)
+                )
+            {
+                return false;
+            }
+
+            return true;
+           
+            
+
+        }
+
         public static async Task<ActionResultWithId> SendInternalHttp<DbElement, InputElement>(HttpRequest req, ILogger log, Func<IAgroManager<GeographyPoint>, IGenericOperation<DbElement, InputElement>> repo, string id = null) where DbElement : DocumentBase where InputElement : InputBase {
+
+            if (!ValidaEnvironmentVariables()) throw new Exception("existen variables de ambiente nulas, por favor revise las variables");
+            
             //var claims = await Auth.Validate(req);
             //if (claims == null)
             //    return new ActionResultWithId {
