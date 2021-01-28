@@ -43,7 +43,6 @@ namespace trifenix.connect.agro.interfaces.external
         IGenericOperation<Sector, SectorInput> Sector { get; }
         IGenericOperation<Specie, SpecieInput> Specie { get; }
         IGenericOperation<Tractor, TractorInput> Tractor { get; }
-        IGenericOperation<Test, TestInput> Test { get; }
         IGenericOperation<UserApplicator, UserApplicatorInput> UserApplicator { get; }
         IGenericOperation<Variety, VarietyInput> Variety { get; }
 

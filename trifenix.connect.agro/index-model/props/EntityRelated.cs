@@ -1,5 +1,5 @@
-<<<<<<< HEAD
-﻿namespace trifenix.connect.agro.index_model.props
+
+namespace trifenix.connect.agro.index_model.props
 {
     public enum EntityRelated
     {
@@ -108,9 +108,6 @@
         TEST = 33
     }
 }
-=======
-﻿namespace trifenix.connect.agro.index_model.props
-{
     /// <summary>
     /// Indice de cada mantenedor(entidad)
     /// </summary>
@@ -180,7 +177,8 @@
 
         GEOPOINT = 31,
         
-        BRAND = 32
+        BRAND = 32,
+
+        TEST = 33
     }
-}
->>>>>>> master
+

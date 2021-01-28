@@ -18,6 +18,8 @@ using trifenix.agro.external.operations.helper;
 using trifenix.agro.functions.Helper;
 using trifenix.agro.functions.mantainers;
 using trifenix.agro.functions.settings;
+using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 
 using trifenix.connect.agro.external.helper;
 using trifenix.connect.agro.index_model.enums;
@@ -28,6 +30,7 @@ using trifenix.connect.bus;
 using trifenix.connect.db.cosmos.exceptions;
 using trifenix.connect.interfaces.auth;
 using trifenix.connect.mdm.containers;
+
 
 namespace trifenix.agro.functions
 {
@@ -124,8 +127,6 @@ namespace trifenix.agro.functions
 
         }
 
-
-
         [FunctionName("ServiceBus")]
         public static async Task Handler(
         [ServiceBusTrigger("colageneration-servicebus", Connection = "ServiceBusConnectionString", IsSessionsEnabled = true)] Message message,
@@ -166,8 +167,6 @@ namespace trifenix.agro.functions
                 await signalRMessages.AddAsync(new SignalRMessage { Target = "Error", UserId = userId ?? "cloud-app", Arguments = new object[] { ex is Validation_Exception ? ((Validation_Exception)ex).ErrorMessages : (object)new string[] { $"{ex.Message}" }, ex.StackTrace } });
             }
         }
-
-
 
         /// <summary>
         /// Creación de Sector
@@ -587,26 +586,7 @@ namespace trifenix.agro.functions
         }
 
 
-        [FunctionName("Test_post")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
-        public static async Task<IActionResult> TestPost(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "test")]
-            HttpRequest req, ILogger log)
-        {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Test, string.Empty);
-            return result.JsonResult;
-        }
 
-
-        [FunctionName("Test_put")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
-        public static async Task<IActionResult> TestPut(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "Test/{id}")]
-            HttpRequest req, string id, ILogger log)
-        {
-            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Test, id);
-            return result.JsonResult;
-        }
         /// <summary>
         /// Modificación de Rol
         /// </summary>
