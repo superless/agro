@@ -23,7 +23,7 @@ namespace trifenix.agro.functions.mantainers
 
         private static readonly ServiceBus ServiceBus = new ServiceBus(Environment.GetEnvironmentVariable("ServiceBusConnectionString", EnvironmentVariableTarget.Process), Environment.GetEnvironmentVariable("QueueName", EnvironmentVariableTarget.Process));
 
-        private static bool ValidaEnvironmentVariables() {
+        private static void ValidaEnvironmentVariables() {
             var serviceBus = Environment.GetEnvironmentVariable("ServiceBusConnectionString", EnvironmentVariableTarget.Process);
             var queuName = Environment.GetEnvironmentVariable("QueueName", EnvironmentVariableTarget.Process);
             var storage = Environment.GetEnvironmentVariable("StorageConnectionStrings", EnvironmentVariableTarget.Process);
@@ -36,31 +36,56 @@ namespace trifenix.agro.functions.mantainers
             var azureSearchKey = Environment.GetEnvironmentVariable("AzureSearchKey", EnvironmentVariableTarget.Process);
             var AzureSearchName = Environment.GetEnvironmentVariable("AzureSearchName", EnvironmentVariableTarget.Process);
 
-            if (string.IsNullOrWhiteSpace(serviceBus) 
-                || string.IsNullOrWhiteSpace(queuName) 
-                || string.IsNullOrWhiteSpace(storage) 
-                || string.IsNullOrWhiteSpace(weatherApi) 
-                || string.IsNullOrWhiteSpace(searchServiceUrl)
-                || string.IsNullOrWhiteSpace(serviceKey)
-                || string.IsNullOrWhiteSpace(cosmosDbName)
-                || string.IsNullOrWhiteSpace(cosmosDbPrimaryKey)
-                || string.IsNullOrWhiteSpace(cosmosDbUri)
-                || string.IsNullOrWhiteSpace(azureSearchKey)
-                || string.IsNullOrWhiteSpace(AzureSearchName)
-                )
+            if (string.IsNullOrWhiteSpace(serviceBus))
             {
-                return false;
+                throw new Exception("Falta el bus aweonao");
             }
-
-            return true;
-           
+            if (string.IsNullOrWhiteSpace(queuName))
+            {
+                throw new Exception("Falta el queuename aweonao");
+            }
+            if (string.IsNullOrWhiteSpace(storage))
+            {
+                throw new Exception("Falta el storage aweonao");
+            }
+            if (string.IsNullOrWhiteSpace(weatherApi))
+            {
+                throw new Exception("Falta la weatherApi aweonao");
+            }
+            if (string.IsNullOrWhiteSpace(searchServiceUrl))
+            {
+                throw new Exception("Falta el searchServiceUrl aweonao");
+            }
+            if (string.IsNullOrWhiteSpace(serviceKey))
+            {
+                throw new Exception("Falta el serviceKey aweonao");
+            }
+            if (string.IsNullOrWhiteSpace(cosmosDbName))
+            {
+                throw new Exception("Falta el cosmoDbName aweonao");
+            }
+            if (string.IsNullOrWhiteSpace(cosmosDbPrimaryKey))
+            {
+                throw new Exception("Falta el cosmoDbPrimaryKey aweonao");
+            }
+            if (string.IsNullOrWhiteSpace(cosmosDbUri))
+            {
+                throw new Exception("Falta el CosmoDbUri aweonao");
+            }
+            if (string.IsNullOrWhiteSpace(azureSearchKey))
+            {
+                throw new Exception("Falta el azureSearchKey aweonao");
+            }
+            if (string.IsNullOrWhiteSpace(AzureSearchName))
+            {
+                throw new Exception("Falta el AzureSearchName aweonao");
+            }
             
-
         }
 
         public static async Task<ActionResultWithId> SendInternalHttp<DbElement, InputElement>(HttpRequest req, ILogger log, Func<IAgroManager<GeographyPoint>, IGenericOperation<DbElement, InputElement>> repo, string id = null) where DbElement : DocumentBase where InputElement : InputBase {
 
-            if (!ValidaEnvironmentVariables()) throw new Exception("existen variables de ambiente nulas, por favor revise las variables");
+            //if (!ValidaEnvironmentVariables()) throw new Exception("existen variables de ambiente nulas, por favor revise las variables");
             
             //var claims = await Auth.Validate(req);
             //if (claims == null)
