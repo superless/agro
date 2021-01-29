@@ -7,6 +7,9 @@ using AzureFunctions.Extensions.Swashbuckle;
 using AzureFunctions.Extensions.Swashbuckle.Attribute;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using Microsoft.AspNetCore.Mvc;
 
 namespace trifenix.agro.functions
 {
@@ -14,18 +17,25 @@ namespace trifenix.agro.functions
     {
         [SwaggerIgnore]
         [FunctionName("Swagger")]
-        public static Task<HttpResponseMessage> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "swagger/json")]
+        public static async Task<IActionResult> Run(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "swagger/json")]
             HttpRequestMessage req,
             [SwashBuckleClient] ISwashBuckleClient swashBuckleClient)
         {
-            return Task.FromResult(swashBuckleClient.CreateSwaggerDocumentResponse(req));
+            var result = swashBuckleClient.CreateSwaggerDocumentResponse(req);
+            var getResult = Task.FromResult(result);
+            var js = await getResult.Result.Content.ReadAsStringAsync();
+            var swaggerElement = JObject.Parse(js);
+            swaggerElement["info"]["version"] = "v1";
+            swaggerElement["info"]["title"] = "AgroFenix";
+            swaggerElement["info"]["description"] = "API Oficial de AgroFenix";
+            return new JsonResult(swaggerElement);
         }
 
         [SwaggerIgnore]
         [FunctionName("SwaggerUi")]
         public static Task<HttpResponseMessage> Run2(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "swagger/ui")]
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "swagger/ui")]
             HttpRequestMessage req,
             [SwashBuckleClient] ISwashBuckleClient swashBuckleClient)
         {

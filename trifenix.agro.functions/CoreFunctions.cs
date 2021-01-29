@@ -175,7 +175,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("sector_post")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(SectorInput))]
         public static async Task<IActionResult> SectorPost(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "sectors")]
             HttpRequest req, ILogger log)
@@ -244,7 +244,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("specie_post")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(SpecieInput))]
         public static async Task<IActionResult> SpeciesPost(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "species")]
             HttpRequest req, ILogger log)
@@ -260,7 +260,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("specie_put")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(SpecieInput))]
         public static async Task<IActionResult> SpeciesPut(
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "species/{id}")]
             HttpRequest req, string id, ILogger log)
