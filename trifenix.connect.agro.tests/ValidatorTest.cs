@@ -220,8 +220,19 @@ namespace trifenix.connect.agro.tests
 
             Assert.True(result.Valid);
             // assert
-        } 
+        }
+        #endregion
 
+        #region Validete Specie
+
+        public async Task ValidadaEspecie() { 
+            //assign
+            var mainValidator = new MainValidator<Specie, SpecieInput>(MockHelper.GetExistElement());
+            //action
+            var result = await mainValidator.Valida(AgroInputData.Specie1);
+            //assert
+            Assert.True(result.Valid);
+        }
         #endregion
 
 
