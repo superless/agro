@@ -1,0 +1,13 @@
+{
+  "profiles": {
+    "trifenix.agro.functions": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+      "httpPort": 32582,
+      "useSSL": false
+    }
+  }
+}
