@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="5.6.3" />
     <PackageReference Include="trifenix.connect.arguments" Version="0.8.46" />
     <PackageReference Include="trifenix.connect.bus" Version="0.8.45" />
 	  

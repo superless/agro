@@ -15,6 +15,8 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Azure.Search.Documents" Version="11.1.1" />
+    <PackageReference Include="AzureExtensions.Swashbuckle" Version="3.1.6" />
+    <PackageReference Include="AzureFunctions.Extensions.Swashbuckle" Version="1.4.4" />
     <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
     <PackageReference Include="Microsoft.Azure.WebJobs" Version="3.0.23" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.ServiceBus" Version="4.2.0" />
@@ -23,6 +25,9 @@
     <PackageReference Include="Microsoft.Spatial" Version="7.8.1" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="5.6.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="5.6.3" />
     <PackageReference Include="trifenix.connect.aad.auth" Version="0.8.18" />
     <PackageReference Include="trifenix.connect.bus" Version="0.8.45" />
     <PackageReference Include="trifenix.connect.db.cosmos" Version="0.8.47" />

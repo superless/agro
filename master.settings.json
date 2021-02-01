@@ -1,0 +1,28 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    
+    "AzureSignalRConnectionString": "Endpoint=https://signalr-agro.service.signalr.net;AccessKey=zXoEeEufkNBrur0WAG0j65YDn5r/jPlHq7S6i3Vt2SA=;Version=1.0;",
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "clientID": "34d9266f-43f9-4fb2-8cdd-ae21be551342",
+    "clientSecret": "B._H_uAwEdg7K1FzVboS3S/oF4IKNbtf",
+    "CosmosDbName": "agro-cosmodb",
+    "CosmosDbPrimaryKey": "kaPYpzhFCcG1bk3aC69aX1T2amavVi8TfHmrIMNJuhpYXtIz67PMhwBKctunNzclFBcxypZvcjPUW846YZuvjA==",
+    "CosmosDbUri": "https://agro-cosmodb.documents.azure.com:443/",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+    "KeyWeatherApi": "7eb9d18077256697f3e1bea03605bdd2",
+    "QueueName": "colageneration-servicebus",
+    "scope": "https://dev-aresa.trifenix.io/App.access",
+    "Search_allowedOrigins": "https://aresa.trifenix.io;https://dev-aresa.trifenix.io;https://agro.trifenix.io;https://agro-dev.trifenix.io;http://localhost:3000;http://localhost:4000;https://aresa2-dev.trifenix.io;https://aresa2.trifenix.io;http://localhost:9009;https://portal.azure.com",
+    "SearchServiceKey": "7902C1E82BEEDC85AC0E535CF45DFC77",
+    "SearchServiceName": "https://search-agro.search.windows.net",
+    "ServiceBusConnectionString": "Endpoint=sb://servicebus-trifenix.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=XylTzxpLEfnz3Aq0Rp6amObJC8Kkl98E3bcipBbMPsk=",
+    "StorageConnectionStrings": "DefaultEndpointsProtocol=https;AccountName=storageacountagro1;AccountKey=2qgkAqePo+pjBct70PEQuA1aGds4asj78G0VvtdjlTiG9058/hwYs+wywdJdyzpU0virjFfzJ4fFQQ5QKGNoOw==;EndpointSuffix=core.windows.net",
+    "tenant": "jhmdev.onmicrosoft.com",
+    "tenantID": "13f71027-8389-436e-bdaf-7bd34382fbff"
+  },
+  "Host": {
+    "CORS": "",
+    "CORSCredentials": true
+  }
+}

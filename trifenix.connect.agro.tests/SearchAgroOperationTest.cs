@@ -30,11 +30,6 @@ namespace trifenix.connect.agro.tests
         }
         
 
-        
-
-
-
-
         /// <summary>
         /// Obtiene un producto entitySearch desde un elemento de la base de datos (DocumentBase)
         /// </summary>
