@@ -7,7 +7,6 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Extensions.SignalRService;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,8 +17,6 @@ using trifenix.agro.external.operations.helper;
 using trifenix.agro.functions.Helper;
 using trifenix.agro.functions.mantainers;
 using trifenix.agro.functions.settings;
-
-using trifenix.connect.agro.external.helper;
 using trifenix.connect.agro.index_model.enums;
 using trifenix.connect.agro.queries;
 using trifenix.connect.agro_model_input;
