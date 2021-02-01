@@ -19,7 +19,7 @@ namespace trifenix.agro.functions
 
         private static void Configure(IFunctionsHostBuilder builder)
         {
-            // register other services here
+
         }
     }
 
@@ -29,6 +29,7 @@ namespace trifenix.agro.functions
         {
             var serviceCollection = services;
             Services = serviceCollection ?? throw new ArgumentNullException(nameof(services));
+
         }
 
         public IServiceCollection Services { get; }

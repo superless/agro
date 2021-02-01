@@ -30,7 +30,7 @@ using trifenix.connect.bus;
 using trifenix.connect.db.cosmos.exceptions;
 using trifenix.connect.interfaces.auth;
 using trifenix.connect.mdm.containers;
-
+using AzureFunctions.Extensions.Swashbuckle.Attribute;
 
 namespace trifenix.agro.functions
 {
@@ -182,7 +182,7 @@ namespace trifenix.agro.functions
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Sector, string.Empty);
             return result.JsonResult;
-            
+
         }
 
 
@@ -210,7 +210,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("plotland_post")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PlotLandInput))]
         public static async Task<IActionResult> PlotLandsPost(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "plotlands")]
             HttpRequest req, ILogger log)
@@ -227,7 +227,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("plotland_put")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PlotLandInput))]
         public static async Task<IActionResult> PlotLandsPut(
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "plotlands/{id}")]
             HttpRequest req, string id, ILogger log)
@@ -276,10 +276,12 @@ namespace trifenix.agro.functions
         /// <returns>
         /// Retorna una marca con su id
         /// </returns>
+        [HttpPost]
         [FunctionName("brand_post")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(BrandInput))]
         public static async Task<IActionResult> BrandPost(
           [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "brand")]
+          [RequestBodyType(typeof(BrandInput), "Brand")]
             HttpRequest req, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Brand, string.Empty);
@@ -293,7 +295,7 @@ namespace trifenix.agro.functions
         /// Retorna una marca con el id
         /// </returns>
         [FunctionName("brand_put")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(BrandInput))]
         public static async Task<IActionResult> BrandPut(
           [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "brand/{id}")]
             HttpRequest req, string id, ILogger log)
@@ -309,7 +311,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("notification_event_post")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(NotificationEventInput))]
         public static async Task<IActionResult> NotificationsPost(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "notification")]
             HttpRequest req, ILogger log)
@@ -325,7 +327,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("notification_put")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(NotificationEventInput))]
         public static async Task<IActionResult> NotificationPut(
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "notification/{id}")]
             HttpRequest req, string id, ILogger log)
@@ -342,7 +344,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("variety_post")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(VarietyInput))]
         public static async Task<IActionResult> VarietyPost(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "varieties")]
             HttpRequest req, ILogger log)
@@ -358,7 +360,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("variety_put")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(VarietyInput))]
         public static async Task<IActionResult> VarietyPut(
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "varieties/{id}")]
             HttpRequest req, string id, ILogger log)
@@ -374,7 +376,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("target_post")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ApplicationTargetInput))]
         public static async Task<IActionResult> TargetPost(
 
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "targets")]
@@ -391,7 +393,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("target_put")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ApplicationTargetInput))]
         public static async Task<IActionResult> TargetPut(
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "targets/{id}")]
             HttpRequest req, string id, ILogger log)
@@ -407,7 +409,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("phenological_event_post")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PhenologicalEventInput))]
         public static async Task<IActionResult> PhenologicalEventPost(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "phenological_events")]
             HttpRequest req, ILogger log)
@@ -424,7 +426,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("phenological_event_put")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PhenologicalEventInput))]
         public static async Task<IActionResult> PhenologicalEventPut(
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "phenological_events/{id}")]
             HttpRequest req, string id, ILogger log)
@@ -441,7 +443,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("certified_entities_post")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CertifiedEntityInput))]
         public static async Task<IActionResult> CertifiedEntityPost(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "certified_entities")]
             HttpRequest req, ILogger log)
@@ -457,7 +459,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("certified_entities_put")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CertifiedEntityInput))]
         public static async Task<IActionResult> CertifiedEntityPut(
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "certified_entities/{id}")]
             HttpRequest req, string id, ILogger log)
@@ -474,7 +476,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("ingredient_categories_post")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(IngredientCategoryInput))]
         public static async Task<IActionResult> CategoryIngredientPost(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "ingredient_categories")]
             HttpRequest req, ILogger log)
@@ -490,7 +492,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("ingredient_categories_put")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(IngredientCategoryInput))]
         public static async Task<IActionResult> CategoryIngredientPut(
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "ingredient_categories/{id}")]
             HttpRequest req, string id, ILogger log)
@@ -507,7 +509,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("ingredients_post")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(IngredientInput))]
         public static async Task<IActionResult> IngredientsPost(
 
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "ingredients")]
@@ -525,7 +527,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("ingredients_put")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(IngredientInput))]
         public static async Task<IActionResult> IngredientPut(
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "ingredients/{id}")]
             HttpRequest req, string id, ILogger log)
@@ -542,7 +544,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("products_post")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ProductInput))]
         public async static Task<IActionResult> ProductsPost(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "products")]
             HttpRequest req, ILogger log)
@@ -559,7 +561,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("products_put")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ProductInput))]
         public static async Task<IActionResult> ProductPut(
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "products/{id}")]
             HttpRequest req, string id, ILogger log)
@@ -576,7 +578,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("roles_post")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(RoleInput))]
         public static async Task<IActionResult> RolePost(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "roles")]
             HttpRequest req, ILogger log)
@@ -594,7 +596,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("roles_put")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(RoleInput))]
         public static async Task<IActionResult> RolePut(
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "roles/{id}")]
             HttpRequest req, string id, ILogger log)
@@ -612,7 +614,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("jobs_post")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(JobInput))]
         public static async Task<IActionResult> JobPost(
 
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "jobs")]
@@ -630,7 +632,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("jobs_put")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(JobInput))]
         public static async Task<IActionResult> JobPut(
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "jobs/{id}")]
             HttpRequest req, string id, ILogger log)
@@ -681,7 +683,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("nebulizers_post")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(NebulizerInput))]
         public static async Task<IActionResult> NebulizersPost(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "nebulizers")]
             HttpRequest req, ILogger log)
@@ -698,7 +700,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("nebulizer_put")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(NebulizerInput))]
         public static async Task<IActionResult> NebulizerPut(
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "nebulizers/{id}")]
             HttpRequest req, string id, ILogger log)
@@ -714,7 +716,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("tractors_post")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(TractorInput))]
         public static async Task<IActionResult> TractorPost(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "tractors")]
             HttpRequest req, ILogger log)
@@ -731,7 +733,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("tractors_put")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(TractorInput))]
         public static async Task<IActionResult> TractorPut(
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "tractors/{id}")]
             HttpRequest req, string id, ILogger log)
@@ -749,8 +751,9 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("business_names_post")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(BusinessNameInput))]
         public static async Task<IActionResult> BusinessNamePost(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "business_names")]
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "business_name")]
             HttpRequest req, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.BusinessName, string.Empty);
@@ -765,7 +768,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("business_names_put")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(BusinessNameInput))]
         public static async Task<IActionResult> BusinessNamePut(
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "business_names/{id}")]
             HttpRequest req, string id, ILogger log)
@@ -783,7 +786,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("cost_centers_post")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CostCenterInput))]
         public static async Task<IActionResult> CostCenterPost(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "cost_centers")]
             HttpRequest req, ILogger log)
@@ -800,7 +803,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("cost_centers_put")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CostCenterInput))]
         public static async Task<IActionResult> CostCenterPut(
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "cost_centers/{id}")]
             HttpRequest req, string id, ILogger log)
@@ -817,7 +820,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("seasons_post")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(SeasonInput))]
         public static async Task<IActionResult> SeasonPost(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "seasons")]
             HttpRequest req, ILogger log)
@@ -834,7 +837,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("seasons_put")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(SeasonInput))]
         public static async Task<IActionResult> SeasonPut(
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "seasons/{id}")]
             HttpRequest req, string id, ILogger log)
@@ -850,7 +853,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("rootstock_post")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(RootstockInput))]
         public static async Task<IActionResult> RootStockPost(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "rootstock")]
             HttpRequest req, ILogger log)
@@ -867,7 +870,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("rootstock_put")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(RootstockInput))]
         public static async Task<IActionResult> RootStockPut(
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "rootstock/{id}")]
             HttpRequest req, string id, ILogger log)
@@ -884,7 +887,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("order_folders_post")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(OrderFolderInput))]
         public static async Task<IActionResult> OrderFolderPost(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "order_folders")]
             HttpRequest req, ILogger log)
@@ -901,7 +904,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("order_folders_put")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(OrderFolderInput))]
         public static async Task<IActionResult> OrderFolderPut(
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "order_folders/{id}")]
             HttpRequest req, string id, ILogger log)
@@ -918,7 +921,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("barracks_post")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(BarrackInput))]
         public static async Task<IActionResult> BarracksPost(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "barracks")]
             HttpRequest req, ILogger log)
@@ -935,7 +938,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("barracks_put")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(BarrackInput))]
         public static async Task<IActionResult> BarrackPut(
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "barracks/{id}")]
             HttpRequest req, string id, ILogger log)
@@ -952,7 +955,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("orders_post")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ApplicationOrderInput))]
         public static async Task<IActionResult> OrderPost(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "orders")]
             HttpRequest req, ILogger log)
@@ -969,7 +972,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("orders_put")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ApplicationOrderInput))]
         public static async Task<IActionResult> OrderPut(
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "orders/{id}")]
             HttpRequest req, string id, ILogger log)
@@ -986,7 +989,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("pre_orders_post")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PreOrderInput))]
         public static async Task<IActionResult> PreOrderPost(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "pre_orders")]
             HttpRequest req, ILogger log)
@@ -1003,7 +1006,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("pre_orders_put")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PreOrderInput))]
         public static async Task<IActionResult> PreOrderPut(
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "pre_orders/{id}")]
             HttpRequest req, string id, ILogger log)
@@ -1020,7 +1023,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("executions_post")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExecutionOrderInput))]
         public static async Task<IActionResult> ExecutionsPost(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "executions")]
             HttpRequest req, ILogger log)
@@ -1037,7 +1040,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("executions_put")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExecutionOrderInput))]
         public static async Task<IActionResult> ExecutionsPut(
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "executions/{id}")]
             HttpRequest req, string id, ILogger log)
@@ -1054,7 +1057,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("executions_status_post")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExecutionOrderStatusInput))]
         public static async Task<IActionResult> ExecutionsStatusPost(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "executions_status")]
             HttpRequest req, ILogger log)
@@ -1073,7 +1076,7 @@ namespace trifenix.agro.functions
         /// Retorna un contenedor con el id
         /// </return>
         [FunctionName("executions_status_put")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExecutionOrderStatusInput))]
         public static async Task<IActionResult> ExecutionsStatusPut(
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "executions_status/{id}")]
             HttpRequest req, string id, ILogger log)

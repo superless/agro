@@ -12,6 +12,7 @@
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
     <PackageReference Include="Moq" Version="4.14.5" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="5.6.3" />
     <PackageReference Include="trifenix.connect.bus" Version="0.8.45" />
     <PackageReference Include="trifenix.connect.db.cosmos" Version="0.8.47" />
     <PackageReference Include="trifenix.connect.interfaces.db.cosmos" Version="0.8.48" />
