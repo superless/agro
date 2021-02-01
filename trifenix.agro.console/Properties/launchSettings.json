@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "trifenix.agro.console": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}
