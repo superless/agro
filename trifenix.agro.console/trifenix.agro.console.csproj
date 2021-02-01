@@ -4,11 +4,9 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <Configurations>Debug;Release;CONNECT</Configurations>
-    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
     <PackageReference Include="trifenix.connect.bus" Version="0.8.45" />
     <PackageReference Include="trifenix.connect.db.cosmos" Version="0.8.47" />
     <PackageReference Include="trifenix.connect.interfaces.db.cosmos" Version="0.8.48" />
