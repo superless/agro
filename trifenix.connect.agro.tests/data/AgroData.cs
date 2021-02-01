@@ -83,7 +83,7 @@ namespace trifenix.connect.agro.tests.data
         {
             Id = ConstantGuids.Value[0],
             Active = true,
-            ApplicationDaysInterval = 10,            
+            ApplicationDaysInterval = 10,
             Default = false,
             DosesQuantityMax = 2,
             DosesQuantityMin = 1.1,
@@ -152,7 +152,7 @@ namespace trifenix.connect.agro.tests.data
         {
             Id = ConstantGuids.Value[2],
             Active = true,
-            ApplicationDaysInterval = 10,            
+            ApplicationDaysInterval = 10,
             Default = false,
             DosesQuantityMax = 2,
             DosesQuantityMin = 1.1,
@@ -186,7 +186,7 @@ namespace trifenix.connect.agro.tests.data
         {
             Id = ConstantGuids.Value[3],
             Active = true,
-            ApplicationDaysInterval = 10,            
+            ApplicationDaysInterval = 10,
             Default = false,
             DosesQuantityMax = 2,
             DosesQuantityMin = 1.1,
@@ -466,8 +466,8 @@ namespace trifenix.connect.agro.tests.data
         #region Barrack
         public static Barrack Barrack1 => new Barrack
         {
-             Id = ConstantGuids.Value[0],
-           Hectares = 1.1,
+            Id = ConstantGuids.Value[0],
+            Hectares = 1.1,
             IdPlotLand = ConstantGuids.Value[0],
             IdPollinator = ConstantGuids.Value[0],
             NumberOfPlants = 444,
@@ -664,14 +664,86 @@ namespace trifenix.connect.agro.tests.data
 
         public static IEntitySearch<GeoPointTs>[] BusinessNamesSearch { get; set; } = BusinessNames.SelectMany(s => Mdm.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
 
-
-
-
-
         #endregion
 
+        #region Job
+        public static Job JobInput1 => new Job
+        {
+            Name = "Trabajo1",
+            Id = ConstantGuids.Value[0]
+        };
 
+        public static Job JobInput2 => new Job
+        {
+            Name = "Trabajo2",
+            Id = ConstantGuids.Value[1]
+        };
 
+        public static Job[] Jobs { get; set; } = new Job[] { JobInput1, JobInput2 };
 
+        public static IEntitySearch<GeoPointTs>[] JobsSearch { get; set; } = Jobs.SelectMany(s => Mdm.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
+        #endregion
+
+        #region Nebulizer
+
+        public static Nebulizer NebulizerInput1 => new Nebulizer
+        {
+            Brand = "Marca1",
+            Id = ConstantGuids.Value[0],
+            Code = "Codigo1"
+        };
+        public static Nebulizer NebulizerInput2 => new Nebulizer
+        {
+            Brand = "Marca2",
+            Id = ConstantGuids.Value[1],
+            Code = "Codigo2"
+        };
+
+        public static Nebulizer[] Nebulizers { get; set; } = new Nebulizer[] { NebulizerInput1, NebulizerInput2};
+
+        public static IEntitySearch<GeoPointTs>[] NebulizersSearch { get; set; } = Nebulizers.SelectMany(s => Mdm.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
+        #endregion
+
+        #region PhenologicalEvent
+
+        public static PhenologicalEvent PhenologicalEventInput1 => new PhenologicalEvent
+        {
+            Name = "Evento fenologico 1",
+            Id = ConstantGuids.Value[0],
+            StartDate = new DateTime(2021, 3, 1),
+            EndDate = new DateTime(2022, 3, 1)
+        };
+        public static PhenologicalEvent PhenologicalEventInput2 => new PhenologicalEvent
+        {
+            Name = "Evento fenologico 2",
+            Id = ConstantGuids.Value[1],
+            StartDate = new DateTime(2021, 3, 1),
+            EndDate = new DateTime(2022, 3, 1)
+        };
+
+        public static PhenologicalEvent[] PhenologicalEvents { get; set; } = new PhenologicalEvent[] { PhenologicalEventInput1, PhenologicalEventInput2 };
+
+        public static IEntitySearch<GeoPointTs>[] PhenologicalEventsSearch { get; set; } = PhenologicalEvents.SelectMany(s => Mdm.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
+        #endregion
+
+        #region Role
+
+        public static Role RoleInput1 => new Role
+        {
+            Name = "Rol 1",
+            Id = ConstantGuids.Value[0],
+
+        };
+        public static Role RoleInput2 => new Role
+        {
+            Name = "Rol 2",
+            Id = ConstantGuids.Value[1],
+
+        };
+
+        public static Role[] Roles { get; set; } = new Role[] { RoleInput1, RoleInput2 };
+
+        public static IEntitySearch<GeoPointTs>[] RolesSearch { get; set; } = Roles.SelectMany(s => Mdm.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
+        #endregion
     }
 }

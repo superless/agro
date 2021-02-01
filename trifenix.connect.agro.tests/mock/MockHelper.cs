@@ -78,17 +78,17 @@ namespace trifenix.connect.agro.tests.mock
                 case EntityRelated.INGREDIENT:
                     return AgroData.IngredientsSearch.Where(s => Mdm.Reflection.Collections.GetId(s).Equals(id)).ToArray();                    
                 case EntityRelated.JOB:
-                    break;
+                    return AgroData.JobsSearch.Where(s => Mdm.Reflection.Collections.GetId(s).Equals(id)).ToArray();
                 case EntityRelated.NEBULIZER:
-                    break;
+                    return AgroData.NebulizersSearch.Where(s => Mdm.Reflection.Collections.GetId(s).Equals(id)).ToArray();
                 case EntityRelated.PHENOLOGICAL_EVENT:
-                    break;
+                    return AgroData.PhenologicalEventsSearch.Where(s => Mdm.Reflection.Collections.GetId(s).Equals(id)).ToArray();
                 case EntityRelated.PLOTLAND:
                     return AgroData.PlotLandsSearch.Where(s => Mdm.Reflection.Collections.GetId(s).Equals(id)).ToArray();                    
                 case EntityRelated.PRODUCT:
                     return AgroData.ProductSearchs.Where(s => Mdm.Reflection.Collections.GetId(s).Equals(id)).ToArray();                    
                 case EntityRelated.ROLE:
-                    break;
+                    return AgroData.RolesSearch.Where(s => Mdm.Reflection.Collections.GetId(s).Equals(id)).ToArray();
                 case EntityRelated.ROOTSTOCK:
                     return AgroData.RootstocksSearch.Where(s => Mdm.Reflection.Collections.GetId(s).Equals(id)).ToArray();
                 case EntityRelated.SEASON:
@@ -254,10 +254,13 @@ namespace trifenix.connect.agro.tests.mock
                     AgroData.IngredientsSearch = Mdm.Reflection.Collections.UpsertToCollection(input, AgroData.IngredientsSearch);
                     break;
                 case EntityRelated.JOB:
+                    AgroData.JobsSearch = Mdm.Reflection.Collections.UpsertToCollection(input, AgroData.JobsSearch);
                     break;
                 case EntityRelated.NEBULIZER:
+                    AgroData.NebulizersSearch = Mdm.Reflection.Collections.UpsertToCollection(input, AgroData.NebulizersSearch);
                     break;
                 case EntityRelated.PHENOLOGICAL_EVENT:
+                    AgroData.PhenologicalEventsSearch = Mdm.Reflection.Collections.UpsertToCollection(input, AgroData.PhenologicalEventsSearch);
                     break;
                 case EntityRelated.PLOTLAND:
                     AgroData.PlotLandsSearch = Mdm.Reflection.Collections.UpsertToCollection(input, AgroData.PlotLandsSearch);
@@ -266,6 +269,7 @@ namespace trifenix.connect.agro.tests.mock
                     AgroData.ProductSearchs = Mdm.Reflection.Collections.UpsertToCollection(input, AgroData.ProductSearchs);
                     break;
                 case EntityRelated.ROLE:
+                    AgroData.RolesSearch = Mdm.Reflection.Collections.UpsertToCollection(input, AgroData.RolesSearch);
                     break;
                 case EntityRelated.ROOTSTOCK:
                     AgroData.RootstocksSearch = Mdm.Reflection.Collections.UpsertToCollection(input, AgroData.RootstocksSearch);

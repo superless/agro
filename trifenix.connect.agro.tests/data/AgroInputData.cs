@@ -592,11 +592,84 @@ namespace trifenix.agro.external.operations.tests.data
 
         public static BusinessNameInput[] BusinessNames => new BusinessNameInput[] { BusinessNameInput1, BusinessNameInput2 };
 
+        #endregion
 
+        #region Job
 
+        public static JobInput JobInput1 => new JobInput 
+        {
+            Name = "Trabajo1",
+            Id = ConstantGuids.Value[0]
+        };
 
+        public static JobInput JobInput2 => new JobInput
+        {
+            Name = "Trabajo2",
+            Id = ConstantGuids.Value[1]
+        };
+        public static JobInput[] Jobs { get; set; } = new JobInput[] { JobInput1, JobInput2 };
 
         #endregion
+
+        #region Nebulizer
+
+        public static NebulizerInput NebulizerInput1 => new NebulizerInput
+        {
+            Brand = "Marca1",
+            Id = ConstantGuids.Value[0],
+            Code = "Codigo1"
+        };
+        public static NebulizerInput NebulizerInput2 => new NebulizerInput
+        {
+            Brand = "Marca2",
+            Id = ConstantGuids.Value[1],
+            Code = "Codigo2"
+        };
+
+        public static NebulizerInput[] Nebulizers { get; set; } = new NebulizerInput[] { NebulizerInput1, NebulizerInput2 };
+
+        #endregion
+
+        #region PhenologicalEvent
+
+        public static PhenologicalEventInput PhenologicalEventInput1 => new PhenologicalEventInput
+        {
+            Name = "Evento fenologico 1",
+            Id = ConstantGuids.Value[0],
+            StartDate = new DateTime(2021, 3, 1),
+            EndDate = new DateTime(2021, 3, 1)
+        };
+        public static PhenologicalEventInput PhenologicalEventInput2 => new PhenologicalEventInput
+        {
+            Name = "Evento fenologico 2",
+            Id = ConstantGuids.Value[1],
+            StartDate = new DateTime(2021, 3, 1),
+            EndDate = new DateTime(2021, 3, 1)
+        };
+
+        public static PhenologicalEventInput[] PhenologicalEvents { get; set; } = new PhenologicalEventInput[] { PhenologicalEventInput1, PhenologicalEventInput2 };
+
+        #endregion
+
+        #region Role
+
+        public static RoleInput RoleInput1 => new RoleInput
+        {
+            Name = "Rol 1",
+            Id = ConstantGuids.Value[0],
+
+        };
+        public static RoleInput RoleInput2 => new RoleInput
+        {
+            Name = "Rol 2",
+            Id = ConstantGuids.Value[1],
+
+        };
+
+        public static RoleInput[] Roles { get; set; } = new RoleInput[] { RoleInput1, RoleInput2 };
+
+        #endregion
+
     }
 
 
