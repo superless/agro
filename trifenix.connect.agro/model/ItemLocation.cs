@@ -10,16 +10,18 @@ namespace trifenix.connect.agro_model
     /// </summary>
     public abstract class ItemLocation : DocumentLocal {
 
-        #if CONNECT
-            /// <summary>
-            /// ubicación geográfica del cuartel
-            /// </summary>
-            [GeoSearch(GeoRelated.LOCATION_BARRACK, Visible = false)]
-                public  GeoItem[] GeographicalPoints { get; set; }
-        #endif
-
+#if CONNECT
+        /// <summary>
+        /// ubicación geográfica del cuartel
+        /// </summary>
+        [GeoSearch(GeoRelated.LOCATION_BARRACK, Visible = false)]
+        public  GeoItem[] GeographicalPoints { get; set; }
+#else
         [GeoSearch(GeoRelated.LOCATION_BARRACK, Visible = false)]
         public Point[] GeographicalPoints { get; set; } 
-            
+#endif
+
+
+
     }
 }
