@@ -33,8 +33,7 @@ namespace trifenix.agro.functions.mantainers
             var cosmosDbName = Environment.GetEnvironmentVariable("CosmosDbName", EnvironmentVariableTarget.Process);
             var cosmosDbPrimaryKey = Environment.GetEnvironmentVariable("CosmosDbPrimaryKey", EnvironmentVariableTarget.Process);
             var cosmosDbUri = Environment.GetEnvironmentVariable("CosmosDbUri", EnvironmentVariableTarget.Process);
-            var azureSearchKey = Environment.GetEnvironmentVariable("AzureSearchKey", EnvironmentVariableTarget.Process);
-            var AzureSearchName = Environment.GetEnvironmentVariable("AzureSearchName", EnvironmentVariableTarget.Process);
+            var SearchServiceName = Environment.GetEnvironmentVariable("SearchServiceName", EnvironmentVariableTarget.Process);
 
             if (string.IsNullOrWhiteSpace(serviceBus))
             {
@@ -71,14 +70,6 @@ namespace trifenix.agro.functions.mantainers
             if (string.IsNullOrWhiteSpace(cosmosDbUri))
             {
                 throw new Exception("Falta el CosmoDbUri aweonao");
-            }
-            if (string.IsNullOrWhiteSpace(azureSearchKey))
-            {
-                throw new Exception("Falta el azureSearchKey aweonao");
-            }
-            if (string.IsNullOrWhiteSpace(AzureSearchName))
-            {
-                throw new Exception("Falta el AzureSearchName aweonao");
             }
             
         }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using trifenix.agro.external.operations.helper;
+using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.interfaces.external;
 using trifenix.connect.agro.mdm_attributes;
 using trifenix.connect.entities.cosmos;
