@@ -35,6 +35,7 @@
     <PackageReference Include="trifenix.connect.interfaces.db.cosmos" Version="0.8.48" />
     <PackageReference Include="trifenix.connect.interfaces.external" Version="0.8.45" />
     <PackageReference Include="trifenix.connect.interfaces.search" Version="0.8.47" />
+    <PackageReference Include="trifenix.connect.mdm" Version="0.8.108" />
     <PackageReference Include="trifenix.connect.search" Version="0.8.47" />
     <PackageReference Include="trifenix.connect.storage.azure" Version="0.8.45" />
     <PackageReference Include="trifenix.connect.test.mock" Version="0.8.45" />
