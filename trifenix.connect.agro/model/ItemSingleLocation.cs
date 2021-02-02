@@ -17,11 +17,13 @@ namespace trifenix.connect.agro_model
         /// </summary>
         [GeoSearch(GeoRelated.LOCATION_EVENT)]
         public GeoItem Location { get; set; }
+#else
+        [GeoSearch(GeoRelated.LOCATION_EVENT)]
+        public Point Location { get; set; }
 
 #endif
 
-        [GeoSearch(GeoRelated.LOCATION_EVENT)]
-        public Point Location { get; set; }
+
     }
 
 }

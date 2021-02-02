@@ -1,5 +1,4 @@
-﻿using Azure.Search.Documents.Indexes.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Spatial;
 using System;

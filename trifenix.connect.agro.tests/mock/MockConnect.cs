@@ -29,10 +29,7 @@ namespace trifenix.connect.agro.tests.mock
     /// </summary>
     public class MockConnect : IDbAgroConnect
     {
-        
-        
-        
-
+   
         /// <summary>
         /// Mock de consultas agricolas a la base de datos.
         /// </summary>
@@ -145,10 +142,13 @@ namespace trifenix.connect.agro.tests.mock
                     AgroData.Ingredients = Mdm.Reflection.Collections.UpsertToCollection((Ingredient)(object)element, AgroData.Ingredients);
                     break;
                 case EntityRelated.JOB:
+                    AgroData.Jobs = Mdm.Reflection.Collections.UpsertToCollection((Job)(object)element, AgroData.Jobs);
                     break;
                 case EntityRelated.NEBULIZER:
+                    AgroData.Nebulizers = Mdm.Reflection.Collections.UpsertToCollection((Nebulizer)(object)element, AgroData.Nebulizers);
                     break;
                 case EntityRelated.PHENOLOGICAL_EVENT:
+                    AgroData.PhenologicalEvents = Mdm.Reflection.Collections.UpsertToCollection((PhenologicalEvent)(object)element, AgroData.PhenologicalEvents);
                     break;
                 case EntityRelated.PLOTLAND:
                     AgroData.PlotLands = Mdm.Reflection.Collections.UpsertToCollection((PlotLand)(object)element, AgroData.PlotLands);
@@ -157,6 +157,7 @@ namespace trifenix.connect.agro.tests.mock
                     AgroData.Products = Mdm.Reflection.Collections.UpsertToCollection((Product)(object)element, AgroData.Products);
                     break;
                 case EntityRelated.ROLE:
+                    AgroData.Roles = Mdm.Reflection.Collections.UpsertToCollection((Role)(object)element, AgroData.Roles);
                     break;
                 case EntityRelated.ROOTSTOCK:
                     AgroData.Rootstocks = Mdm.Reflection.Collections.UpsertToCollection((Rootstock)(object)element, AgroData.Rootstocks);
@@ -248,17 +249,17 @@ namespace trifenix.connect.agro.tests.mock
                 case EntityRelated.INGREDIENT:
                     return (T)(object)AgroData.Ingredients.First(s => s.Id.Equals(id));
                 case EntityRelated.JOB:
-                    break;
+                    return (T)(object)AgroData.Jobs.First(s => s.Id.Equals(id));
                 case EntityRelated.NEBULIZER:
-                    break;
+                    return (T)(object)AgroData.Nebulizers.First(s => s.Id.Equals(id));
                 case EntityRelated.PHENOLOGICAL_EVENT:
-                    break;
+                    return (T)(object)AgroData.PhenologicalEvents.First(s => s.Id.Equals(id));
                 case EntityRelated.PLOTLAND:
-                    break;
+                    return (T)(object)AgroData.PlotLands.First(s => s.Id.Equals(id));
                 case EntityRelated.PRODUCT:
                     return (T)(object)AgroData.Products.First(s => s.Id.Equals(id));
                 case EntityRelated.ROLE:
-                    break;
+                    return (T)(object)AgroData.Roles.First(s => s.Id.Equals(id));
                 case EntityRelated.ROOTSTOCK:
                     return (T)(object)AgroData.Rootstocks.First(s => s.Id.Equals(id));
                 case EntityRelated.SEASON:

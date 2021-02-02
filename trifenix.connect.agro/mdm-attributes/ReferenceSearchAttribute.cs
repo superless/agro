@@ -30,7 +30,7 @@ namespace trifenix.connect.agro.mdm_attributes
             KindIndex = (int)KindEntityProperty.REFERENCE;
             Index = (int)index;
             Visible = visible;
-            Bypass = (int)bypass;
+            RealIndex = (int)bypass;
             IsEntity = true;
         }
 
