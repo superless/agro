@@ -745,5 +745,168 @@ namespace trifenix.connect.agro.tests.data
 
         public static IEntitySearch<GeoPointTs>[] RolesSearch { get; set; } = Roles.SelectMany(s => Mdm.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
         #endregion
+
+        #region PreOrden
+
+        public static PreOrder PreOrdenInput1 => new PreOrder
+        {
+            Name = "Pre orden 1",
+            Id = ConstantGuids.Value[0],
+            IdIngredient = ConstantGuids.Value[0],
+            OrderFolderId = ConstantGuids.Value[0],
+            PreOrderType = PreOrderType.DEFAULT,
+            BarracksId = ConstantGuids.Value 
+        };
+        public static PreOrder PreOrdenInput2 => new PreOrder
+        {
+            Name = "Pre orden 2",
+            Id = ConstantGuids.Value[1],
+            IdIngredient = ConstantGuids.Value[1],
+            OrderFolderId = ConstantGuids.Value[1],
+            PreOrderType = PreOrderType.PHENOLOGICAL,
+            BarracksId = ConstantGuids.Value
+
+        };
+
+        public static PreOrder[] PreOrders { get; set; } = new PreOrder[] { PreOrdenInput1, PreOrdenInput2 };
+
+        public static IEntitySearch<GeoPointTs>[] PreOrdersSearch { get; set; } = PreOrders.SelectMany(s => Mdm.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
+        #endregion
+
+        #region Tractor
+
+        public static Tractor TractorInput1 => new Tractor
+        {
+            Id = ConstantGuids.Value[0],
+            Brand = ConstantGuids.Value[0],
+            Code = ConstantGuids.Value[0]
+            
+        };
+        public static Tractor TractorInput2 => new Tractor
+        {
+            Id = ConstantGuids.Value[1],
+            Brand = ConstantGuids.Value[1],
+            Code = ConstantGuids.Value[1]
+
+        };
+
+        public static Tractor[] Tractors { get; set; } = new Tractor[] { TractorInput1, TractorInput2 };
+
+        public static IEntitySearch<GeoPointTs>[] TractorsSearch { get; set; } = Tractors.SelectMany(s => Mdm.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
+        #endregion
+        
+        #region User
+
+        public static User UserInput1 => new User
+        {
+            Id = ConstantGuids.Value[0],
+            ObjectIdAAD = ConstantGuids.Value[0],
+            Name = "Trifenix",
+            Email = "Trifenix@trifenix.io",
+            Rut = "20200200-5",
+            IdJob = ConstantGuids.Value[0],
+            IdsRoles = new List<string> { RoleInput1.Id, RoleInput2.Id }
+        };
+        public static User UserInput2 => new User
+        {
+            Id = ConstantGuids.Value[1],
+            ObjectIdAAD = ConstantGuids.Value[1],
+            Name = "Trifenix2",
+            Email = "Trifenix2@trifenix.io",
+            Rut = "20100100-9",
+            IdJob = ConstantGuids.Value[1],
+            IdsRoles = new List<string> { RoleInput1.Id, RoleInput2.Id }
+        };
+
+        public static User[] Users { get; set; } = new User[] { UserInput1, UserInput2 };
+
+        public static IEntitySearch<GeoPointTs>[] UsersSearch { get; set; } = Users.SelectMany(s => Mdm.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
+        #endregion
+        
+
+        #region NotificationEvent
+
+        public static NotificationEvent NotificationEventInput1 => new NotificationEvent
+        {
+            Id = ConstantGuids.Value[0],
+            IdBarrack = ConstantGuids.Value[0],
+            IdPhenologicalEvent = ConstantGuids.Value[0],
+            NotificationType = NotificationType.Default,
+            PicturePath = ConstantGuids.Value[0],
+            Description = ConstantGuids.Value[0],
+            Created = new DateTime(2021, 3, 1),
+            Weather = new Weather()
+        };
+        public static NotificationEvent NotificationEventInput2 => new NotificationEvent
+        {
+            Id = ConstantGuids.Value[1],
+            IdBarrack = ConstantGuids.Value[1],
+            IdPhenologicalEvent = ConstantGuids.Value[1],
+            NotificationType = NotificationType.Phenological,
+            PicturePath = ConstantGuids.Value[1],
+            Description = ConstantGuids.Value[1],
+            Created = new DateTime(2021, 3, 1),
+            Weather = new Weather()
+        };
+
+        public static NotificationEvent[] NotificationEvents { get; set; } = new NotificationEvent[] { NotificationEventInput1, NotificationEventInput2 };
+
+        public static IEntitySearch<GeoPointTs>[] NotificationEventsSearch { get; set; } = NotificationEvents.SelectMany(s => Mdm.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
+        #endregion
+
+        #region OrderFolder
+
+        public static OrderFolder OrdenFolderInput1 => new OrderFolder
+        {
+            Id = ConstantGuids.Value[0],
+            IdPhenologicalEvent = ConstantGuids.Value[0],
+            IdApplicationTarget = ConstantGuids.Value[0],
+            IdSpecie = ConstantGuids.Value[0],
+            IdIngredient = ConstantGuids.Value[0],
+            IdIngredientCategory = ConstantGuids.Value[0]
+        };
+        public static OrderFolder OrdenFolderInput2 => new OrderFolder
+        {
+            Id = ConstantGuids.Value[0],
+            IdPhenologicalEvent = ConstantGuids.Value[0],
+            IdApplicationTarget = ConstantGuids.Value[0],
+            IdSpecie = ConstantGuids.Value[0],
+            IdIngredient = ConstantGuids.Value[0],
+            IdIngredientCategory = ConstantGuids.Value[0]
+        };
+
+        public static OrderFolder[] OrderFolders { get; set; } = new OrderFolder[] { OrdenFolderInput1, OrdenFolderInput2 };
+
+        public static IEntitySearch<GeoPointTs>[] OrderFoldersSearch { get; set; } = OrderFolders.SelectMany(s => Mdm.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
+        #endregion
+
+        #region ExecutionOrder
+        //terminar
+        public static ExecutionOrder ExecutionOrderInput1 => new ExecutionOrder
+        {
+            Id = ConstantGuids.Value[0],
+            IdOrder = ConstantGuids.Value[0],
+            StartDate = new DateTime(2021, 3, 1),
+            EndDate = new DateTime(2022, 3, 1),
+            IdUserApplicator = ConstantGuids.Value[0],
+            IdNebulizer = ConstantGuids.Value[0],
+            IdTractor = ConstantGuids.Value[0],
+            //DosesOrder
+        };
+        public static ExecutionOrder ExecutionOrderInput2 => new ExecutionOrder
+        {
+            Id = ConstantGuids.Value[1],
+            IdOrder = ConstantGuids.Value[1],
+            StartDate = new DateTime(2021, 3, 1),
+            EndDate = new DateTime(2022, 3, 1),
+            IdUserApplicator = ConstantGuids.Value[0],
+            IdNebulizer = ConstantGuids.Value[0],
+            IdTractor = ConstantGuids.Value[0],
+        };
+
+        public static ExecutionOrder[] ExecutionOrders { get; set; } = new ExecutionOrder[] { ExecutionOrderInput1, ExecutionOrderInput2 };
+
+        public static IEntitySearch<GeoPointTs>[] ExecutionOrdersSearch { get; set; } = ExecutionOrders.SelectMany(s => Mdm.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
+        #endregion
     }
 }

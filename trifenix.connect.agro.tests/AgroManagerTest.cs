@@ -348,6 +348,78 @@ namespace trifenix.connect.agro.tests
                 var rootstock = await agroManager.Rootstock.Get(rootstockInput.IdRelated);
 
                 Assert.True(rootstock.Result.Name.Equals("Royal"));
+
+                //temporada
+                var seasonInput = await agroManager.Season.SaveInput(new SeasonInput
+                {
+                    Current = false,
+                    StartDate = new DateTime(2020, 3, 1),
+                    EndDate = new DateTime(2022, 3, 1),
+                    IdCostCenter = costCenter.Result.Id
+                });
+
+                var season = await agroManager.Season.Get(seasonInput.IdRelated);
+
+                Assert.True(season.Result.Current.Equals(false));
+
+                /*  //Pre orden
+                  var preOrdenInput = await agroManager.PreOrder.SaveInput(new PreOrderInput
+                  {
+                      Name = "Pre orden 1",
+                      IdIngredient = ingredient.Result.Id,
+                      OrderFolderId = ,
+                      PreOrderType = PreOrderType.DEFAULT,
+                      BarracksId = 
+                  });
+
+                  var preOrden = await agroManager.PreOrden.Get(preOrdenInput.IdRelated);
+
+                  Assert.True(preOrden.Result.Name.Equals("Pre orden 1"));*/
+
+                //Tractor
+                var tractorInput = await agroManager.Tractor.SaveInput(new TractorInput
+                {
+                    Brand = "Kubota",
+                    Code = "B2320"
+                });
+
+                var tractor = await agroManager.Tractor.Get(tractorInput.IdRelated);
+
+                Assert.True(tractor.Result.Brand.Equals("Kubota"));
+                /*
+                //Older Folder
+                var orderFolderInput = await agroManager.OrderFolder.SaveInput(new OrderFolderInput
+                {
+                    IdPhenologicalEvent = phenologicalEvent.Result.Id,
+                    IdApplicationTarget = target.Result.Id,
+                    IdSpecie = specie.Result.Id,
+                    IdIngredient = ingredient.Result.Id,
+                    IdIngredientCategory = categoryIngredient.Result.Id
+                
+                });
+
+                var orderFolder = await agroManager.OrderFolder.Get(orderFolderInput.IdRelated);
+
+                Assert.True(orderFolder.Result.Id.Equals();*/
+                
+                //barack
+                var barrackInput = await agroManager.Barrack.SaveInput(new BarrackInput
+                {
+                    Hectares = 1.1,
+                    IdPlotLand = plotLand.Result.Id,
+                    IdPollinator = variety.Result.Id,
+                    NumberOfPlants = 444,
+                    IdVariety = variety.Result.Id,
+                    Name = "Barrack 3",
+                    SeasonId = season.Result.Id,
+                    IdRootstock = rootstock.Result.Id,
+                    PlantingYear = 1980,
+
+                });
+
+                var barrack = await agroManager.Barrack.Get(barrackInput.IdRelated);
+
+                Assert.True(barrack.Result.Name.Equals("Barrack 3"));
             }
 
         }

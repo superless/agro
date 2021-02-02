@@ -670,6 +670,104 @@ namespace trifenix.agro.external.operations.tests.data
 
         #endregion
 
+        #region PreOrden
+
+        public static PreOrderInput PreOrdenInput1 => new PreOrderInput
+        {
+            Name = "Pre orden 1",
+            Id = ConstantGuids.Value[0],
+            IdIngredient = ConstantGuids.Value[0],
+            OrderFolderId = ConstantGuids.Value[0],
+            PreOrderType = PreOrderType.DEFAULT,
+            BarracksId = ConstantGuids.Value
+        };
+        public static PreOrderInput PreOrdenInput2 => new PreOrderInput
+        {
+            Name = "Pre orden 2",
+            Id = ConstantGuids.Value[1],
+            IdIngredient = ConstantGuids.Value[1],
+            OrderFolderId = ConstantGuids.Value[1],
+            PreOrderType = PreOrderType.PHENOLOGICAL,
+            BarracksId = ConstantGuids.Value
+
+        };
+
+        public static PreOrderInput[] PreOrders { get; set; } = new PreOrderInput[] { PreOrdenInput1, PreOrdenInput2 };
+
+        #endregion
+
+        #region Tractor
+
+        public static TractorInput TractorInput1 => new TractorInput
+        {
+            Id = ConstantGuids.Value[0],
+            Brand = ConstantGuids.Value[0],
+            Code = ConstantGuids.Value[0]
+
+        };
+        public static TractorInput TractorInput2 => new TractorInput
+        {
+            Id = ConstantGuids.Value[1],
+            Brand = ConstantGuids.Value[1],
+            Code = ConstantGuids.Value[1]
+
+        };
+
+        public static TractorInput[] Tractors { get; set; } = new TractorInput[] { TractorInput1, TractorInput2 };
+
+        #endregion
+        /*
+                #region User
+
+                public static UserInput UserInput1 => new UserInput
+                {
+                    Id = ConstantGuids.Value[0],
+                    ObjectIdAAD = ConstantGuids.Value[0],
+                    Name = "Trifenix",
+                    Email = "Trifenix@trifenix.io",
+                    Rut = "20200200-5",
+                    IdJob = ConstantGuids.Value[0],
+                    IdsRoles = new List<string> { RoleInput1.Id, RoleInput2.Id }
+                };
+                public static UserInput UserInput2 => new UserInput
+                {
+                    Id = ConstantGuids.Value[1],
+                    ObjectIdAAD = ConstantGuids.Value[1],
+                    Name = "Trifenix2",
+                    Email = "Trifenix2@trifenix.io",
+                    Rut = "20100100-9",
+                    IdJob = ConstantGuids.Value[1],
+                    IdsRoles = new List<string> { RoleInput1.Id, RoleInput2.Id }
+                };
+
+                public static UserInput[] Users { get; set; } = new UserInput[] { UserInput1, UserInput2 };
+
+                #endregion*/
+
+        #region OrderFolder
+
+        public static OrderFolderInput OrdenFolderInput1 => new OrderFolderInput
+        {
+            Id = ConstantGuids.Value[0],
+            IdPhenologicalEvent = ConstantGuids.Value[0],
+            IdApplicationTarget = ConstantGuids.Value[0],
+            IdSpecie = ConstantGuids.Value[0],
+            IdIngredient = ConstantGuids.Value[0],
+            IdIngredientCategory = ConstantGuids.Value[0]
+        };
+        public static OrderFolderInput OrdenFolderInput2 => new OrderFolderInput
+        {
+            Id = ConstantGuids.Value[0],
+            IdPhenologicalEvent = ConstantGuids.Value[0],
+            IdApplicationTarget = ConstantGuids.Value[0],
+            IdSpecie = ConstantGuids.Value[0],
+            IdIngredient = ConstantGuids.Value[0],
+            IdIngredientCategory = ConstantGuids.Value[0]
+        };
+
+        public static OrderFolderInput[] OrderFolders { get; set; } = new OrderFolderInput[] { OrdenFolderInput1, OrdenFolderInput2 };
+
+        #endregion
     }
 
 

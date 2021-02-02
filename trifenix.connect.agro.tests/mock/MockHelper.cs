@@ -96,11 +96,11 @@ namespace trifenix.connect.agro.tests.mock
                 case EntityRelated.SECTOR:
                     return AgroData.SectorsSearch.Where(s => Mdm.Reflection.Collections.GetId(s).Equals(id)).ToArray();                    
                 case EntityRelated.PREORDER:
-                    break;
+                    return AgroData.PreOrdersSearch.Where(s => Mdm.Reflection.Collections.GetId(s).Equals(id)).ToArray();
                 case EntityRelated.TARGET:
-                    break;
+                    return AgroData.ApplicationTargetsSearch.Where(s => Mdm.Reflection.Collections.GetId(s).Equals(id)).ToArray();
                 case EntityRelated.TRACTOR:
-                    break;
+                    return AgroData.TractorsSearch.Where(s => Mdm.Reflection.Collections.GetId(s).Equals(id)).ToArray();
                 case EntityRelated.USER:
                     break;
                 case EntityRelated.VARIETY:
@@ -281,10 +281,13 @@ namespace trifenix.connect.agro.tests.mock
                     AgroData.SectorsSearch = Mdm.Reflection.Collections.UpsertToCollection(input, AgroData.SectorsSearch);
                     break;
                 case EntityRelated.PREORDER:
+                    AgroData.PreOrdersSearch = Mdm.Reflection.Collections.UpsertToCollection(input, AgroData.PreOrdersSearch);
                     break;
                 case EntityRelated.TARGET:
+                    AgroData.ApplicationTargetsSearch = Mdm.Reflection.Collections.UpsertToCollection(input, AgroData.ApplicationTargetsSearch);
                     break;
                 case EntityRelated.TRACTOR:
+                    AgroData.TractorsSearch = Mdm.Reflection.Collections.UpsertToCollection(input, AgroData.TractorsSearch);
                     break;
                 case EntityRelated.USER:
                     break;
@@ -296,6 +299,7 @@ namespace trifenix.connect.agro.tests.mock
                 case EntityRelated.POLLINATOR:
                     break;
                 case EntityRelated.ORDER_FOLDER:
+                    AgroData.OrderFoldersSearch = Mdm.Reflection.Collections.UpsertToCollection(input, AgroData.OrderFoldersSearch);
                     break;
                 case EntityRelated.EXECUTION_ORDER:
                     break;
