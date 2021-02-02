@@ -15,7 +15,7 @@ namespace trifenix.agro.functions
 {
     public static class SwaggerFunctions
     {
-        [FunctionName("Swagger")]
+        [FunctionName("swagger")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "swagger/json")]
             HttpRequestMessage req,
@@ -31,7 +31,8 @@ namespace trifenix.agro.functions
             return new JsonResult(swaggerElement);
         }
 
-        [FunctionName("SwaggerUi")]
+        [SwaggerIgnore]
+        [FunctionName("swaggerUi")]
         public static Task<HttpResponseMessage> Run2(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "swagger/ui")]
             HttpRequestMessage req,
