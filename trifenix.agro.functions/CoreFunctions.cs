@@ -30,6 +30,7 @@ using trifenix.connect.db.cosmos.exceptions;
 using trifenix.connect.interfaces.auth;
 using trifenix.connect.mdm.containers;
 using AzureFunctions.Extensions.Swashbuckle.Attribute;
+using trifenix.connect.agro.model_input;
 
 namespace trifenix.agro.functions
 {
@@ -414,6 +415,78 @@ namespace trifenix.agro.functions
             HttpRequest req, string id, ILogger log)
         {
             var result = await GenericMantainer.SendInternalHttp(req, log, s => s.ApplicationTarget, id);
+            return result.JsonResult;
+        }
+
+        /// <summary>
+        /// Añadir bodega
+        /// </summary>
+        /// <param name="req"></param>
+        /// <param name="log"></param>
+        /// <returns></returns>
+        [FunctionName("warehouse_post")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(WarehouseInput))]
+        public static async Task<IActionResult> CellarPost(
+
+           [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "warehouse")]
+            [RequestBodyType(typeof(WarehouseInput), "Warehouse")]
+            HttpRequest req, ILogger log)
+        {
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Warehouse, string.Empty);
+            return result.JsonResult;
+        }
+        
+        /// <summary>
+        /// Modificar bodega
+        /// </summary>
+        /// <param name="req"></param>
+        /// <param name="id"></param>
+        /// <param name="log"></param>
+        /// <returns></returns>
+        [FunctionName("warehouse_put")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(WarehouseInput))]
+        public static async Task<IActionResult> CellarPut(
+       [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "warehouse/{id}")]
+            [RequestBodyType(typeof(WarehouseInput), "Warehouse")]
+            HttpRequest req, string id, ILogger log)
+        {
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Warehouse, id);
+            return result.JsonResult;
+        }
+
+        /// <summary>
+        /// Añadir documento bodega
+        /// </summary>
+        /// <param name="req"></param>
+        /// <param name="log"></param>
+        /// <returns></returns>
+        [FunctionName("warehousedocument_post")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(WarehouseDocumentInput))]
+        public static async Task<IActionResult> WarehouseDocumentPost(
+
+           [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "warehousedocument")]
+            [RequestBodyType(typeof(WarehouseDocumentInput), "WarehouseDocument")]
+            HttpRequest req, ILogger log)
+        {
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.WarehouseDocument, string.Empty);
+            return result.JsonResult;
+        }
+
+        /// <summary>
+        /// Modificar bodega
+        /// </summary>
+        /// <param name="req"></param>
+        /// <param name="id"></param>
+        /// <param name="log"></param>
+        /// <returns></returns>
+        [FunctionName("warehousedocument_put")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(WarehouseDocumentInput))]
+        public static async Task<IActionResult> WareHouseDocumentPut(
+       [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "warehousedocument/{id}")]
+            [RequestBodyType(typeof(WarehouseDocumentInput), "WarehouseDocument")]
+            HttpRequest req, string id, ILogger log)
+        {
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.WarehouseDocument, id);
             return result.JsonResult;
         }
 

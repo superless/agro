@@ -32,5 +32,7 @@
         GENERIC_CORRELATIVE = 13,
 
         SAG_CODE = 14,
+
+        PAYMENT_TYPE = 15,
     }
 }

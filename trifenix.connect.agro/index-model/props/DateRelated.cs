@@ -23,5 +23,6 @@
 
         END_DATE_SEASON = 8,
 
+        EMISSION_DATE = 9,
     }
 }
