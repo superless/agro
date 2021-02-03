@@ -22,18 +22,10 @@ namespace trifenix.connect.agro.tests
     public class SearchAgroOperationTest
     {
 
-
-
         public SearchAgroOperationTest()
         {
 
         }
-        
-
-        
-
-
-
 
         /// <summary>
         /// Obtiene un producto entitySearch desde un elemento de la base de datos (DocumentBase)
@@ -62,7 +54,7 @@ namespace trifenix.connect.agro.tests
 
 
         /// <summary>
-        /// Verifica que las ids creadas de manera automática en waiting harvest, se hayan asignado a cada waiting harvest 
+        /// Verifica que las ids creadas de manera automï¿½tica en waiting harvest, se hayan asignado a cada waiting harvest 
         /// y que existan en las elementos de relaciones de un entitySearch de tipo dosis.
         /// </summary>
         [Fact]
@@ -108,7 +100,7 @@ namespace trifenix.connect.agro.tests
         }
 
         /// <summary>
-        /// Añade un producto al search, confirma los hash de cabecera y modelo.
+        /// Aï¿½ade un producto al search, confirma los hash de cabecera y modelo.
         /// </summary>
         [Fact]
         public void AddProductToSearch()
@@ -172,7 +164,7 @@ namespace trifenix.connect.agro.tests
 
 
         /// <summary>
-        /// Verifica que la consulta utilizada para borrar un entitySearch coincida correctamente con la operación.
+        /// Verifica que la consulta utilizada para borrar un entitySearch coincida correctamente con la operaciï¿½n.
         /// </summary>
         [Fact]
         public void VerificandoConsultaAzureSearchDeleteEntity()
@@ -192,7 +184,7 @@ namespace trifenix.connect.agro.tests
 
 
         /// <summary>
-        /// Elimina todas las dosis de un producto identificado, se verifica consulta de eliminación.
+        /// Elimina todas las dosis de un producto identificado, se verifica consulta de eliminaciï¿½n.
         /// </summary>
         [Fact]
         public void VerificandoConsultaAzureSearchDeleteEntityWithRelatedElement()

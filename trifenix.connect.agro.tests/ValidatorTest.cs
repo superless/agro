@@ -220,11 +220,100 @@ namespace trifenix.connect.agro.tests
 
             Assert.True(result.Valid);
             // assert
-        } 
+        }
 
         #endregion
 
+        #region Validete Specie
+        [Fact]
+        public async Task ValidadaEspecie()
+        {
+            //assign
+            var mainValidator = new MainValidator<Specie, SpecieInput>(MockHelper.GetExistElement());
+            //action
+            var result = await mainValidator.Valida(AgroInputData.Specie1);
+            //assert
+            Assert.True(result.Valid);
+        }
+        #endregion
 
+        #region Validete Specie
+        [Fact]
+        public async Task ValidadaVariety()
+        {
+            //assign
+            var mainValidator = new MainValidator<Variety, VarietyInput>(MockHelper.GetExistElement());
+            //action
+            var result = await mainValidator.Valida(AgroInputData.Variety1);
+            //assert
+            Assert.True(result.Valid);
+        }
+        #endregion
+
+        #region Validete Plotland
+        [Fact]
+        public async Task ValidadaPlotland()
+        {
+            //assign
+            var mainValidator = new MainValidator<PlotLand, PlotLandInput>(MockHelper.GetExistElement());
+            //action
+            var result = await mainValidator.Valida(AgroInputData.Plotland1);
+            //assert
+            Assert.True(result.Valid);
+        }
+        #endregion
+
+        #region Validete Rootstock
+        [Fact]
+        public async Task ValidadaRootstock()
+        {
+            //assign
+            var mainValidator = new MainValidator<Rootstock, RootstockInput>(MockHelper.GetExistElement());
+            //action
+            var result = await mainValidator.Valida(AgroInputData.Rootstock1);
+            //assert
+            Assert.True(result.Valid);
+        }
+
+        #endregion
+        #region Validete Sector
+        [Fact]
+        public async Task ValidadaSector()
+        {
+            //assign
+            var mainValidator = new MainValidator<Sector, SectorInput>(MockHelper.GetExistElement());
+            //action
+            var result = await mainValidator.Valida(AgroInputData.Sector1);
+            //assert
+            Assert.True(result.Valid);
+        }
+        #endregion
+
+        #region Validete Season
+        [Fact]
+        public async Task ValidadaSeason()
+        {
+            //assign
+            var mainValidator = new MainValidator<Season, SeasonInput>(MockHelper.GetExistElement());
+            //action
+            var result = await mainValidator.Valida(AgroInputData.Season1);
+            //assert
+            Assert.True(result.Valid);
+        }
+        #endregion
+
+        #region Validete Season
+        [Fact]
+        public async Task ValidadaSeasons()
+        {
+            //assign
+            var mainValidator = new MainValidator<Season, SeasonInput>(MockHelper.GetExistElement());
+            //action
+            var result = await mainValidator.Valida(AgroInputData.Season1);
+            //assert
+            Assert.True(result.Valid);
+        }
+        #endregion
 
     }
 }

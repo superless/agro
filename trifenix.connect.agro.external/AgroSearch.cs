@@ -48,7 +48,7 @@ namespace trifenix.connect.agro.external
         /// /// <param name="implements">Implement de search, para la generación de entitySearch</param>
         /// <param name="entityId">Índice del search</param>}
         /// <param name="hashOper">Convertidor de hasg</param>
-        public AgroSearch(string SearchServiceName, string SearchServiceKey, CorsOptions corsOptions, Implements<GeoPointType> implements, IHashSearchHelper hashOper, string entityId = "entities-agro") 
+        public AgroSearch(string SearchServiceName, string SearchServiceKey, Implements<GeoPointType> implements, IHashSearchHelper hashOper, string entityId = "entities-agro") 
             : this(
                   (IBaseEntitySearch<GeoPointType>)new MainSearch(SearchServiceName, SearchServiceKey, entityId),
                   new SearchQueries(),

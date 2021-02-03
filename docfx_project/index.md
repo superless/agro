@@ -1,5 +1,5 @@
 # TRIFENIX CONNECT
-Trifenix connect son los cimientos tanto en arquitectura como metodológicos para la construcción de programas en la [nube nativa](https://en.wikipedia.org/wiki/Cloud_native_computing), con una base [devops](https://es.wikipedia.org/wiki/DevOps) y [scrum](https://es.wikipedia.org/wiki/Scrum_(desarrollo_de_software)), con el fin de ofrecer aplicaciones de escalabilidad ilimitada e instantaniedad en la experiencia de usuario.
+Trifenix connect son los cimientos tanto en arquitectura como metodológicos para la construcción de programas en la [nube nativa](https://en.wikipedia.org/wiki/Cloud_native_computing), con una base [devops](https://es.wikipedia.org/wiki/DevOps) y [scrum](https://es.wikipedia.org/wiki/Scrum_(desarrollo_de_software)), con el fin de ofrecer aplicaciones de escalabilidad ilimitada e instantaneidad en la experiencia de usuario.
 
 ![genkidama](images/genkidama.gif)
 
@@ -9,7 +9,7 @@ Trifenix connect son los cimientos tanto en arquitectura como metodológicos par
 # Principios de la Arquitectura
 
 # Asincronía de datos
-Que las operaciones se envíen desde las aplicaciones de manera asincrónica y tengan un panel de notificaciones de exito de la operación, esto permitirá que no se dependa de la velocidad de la base de datos al insertar, eliminar u actualizar una entidad. 
+Que las operaciones se envíen desde las aplicaciones de manera asincrónica y tengan un panel de notificaciones de éxito de la operación, esto permitirá que no se dependa de la velocidad de la base de datos al insertar, eliminar u actualizar una entidad. 
 ![asincrono](images/asincrono.gif)
 
 
@@ -62,7 +62,7 @@ El lenguaje de consultas utilizado por la base de datos depende bastante de la b
 
 # 1 aplicación una base de datos
 
-Nuestra primera experiencia con bases de datos documentales fué con [Azure CosmosDb](https://azure.microsoft.com/es-es/services/cosmos-db/), como programadores ratas, buscabamos lo más barato posible y el [año gratis de cosmosdb](https://azure.microsoft.com/en-us/free/) nos venia muy bien. 
+Nuestra primera experiencia con bases de datos documentales fue con [Azure CosmosDb](https://azure.microsoft.com/es-es/services/cosmos-db/), como programadores ratas, buscábamos lo más barato posible y el [año gratis de cosmosdb](https://azure.microsoft.com/en-us/free/) nos venia muy bien. 
 
 Lo bueno de las bases de datos documentales es que son exactas, en el plan gratis me brindaban 400 RU por segundo, donde 1 RU equivale a una lectura de 1kb, 5 ru equivale a una escritura de un 1 kb. entonces 400 ru se vé bastante bueno, en teoría.
 
@@ -70,9 +70,9 @@ Bueno, la verdad no tanto, aunque no medimos en detalle la lectura de los datos,
 
 Mientras veíamos frustradamente la velocidad de lectura de nuestro ultimo nivel de velocidad de cosmosdb, veíamos como los 50mb gratis de azure search era realmente instantaneo y su lenguaje de consultas funcionaba maravillosamente bien. 
 
-Para entender que es azure search, hay que partir primero por decir, que es una base de datos documental, tal como lo es cosmosdb, pero de velocidad instantanea, este tipo de base de datos se puede reconocer en cualquier buscador de alguna aplicación de redes sociales o delivery. La lectura de los datos siempre será más rápida, cuando exista mayor indexación, la indexación confía de una estructura definida con anticipación. 
+Para entender que es azure search, hay que partir primero por decir, que es una base de datos documental, tal como lo es cosmosdb, pero de velocidad instantánea, este tipo de base de datos se puede reconocer en cualquier buscador de alguna aplicación de redes sociales o delivery. La lectura de los datos siempre será más rápida, cuando exista mayor indexación, la indexación confía de una estructura definida con anticipación. 
 
-Hablando de indexación, un indice es una estructura definida previamente, donde cada elemento insertado debe obedecer a esa estructura.
+Hablando de indexación, un índice es una estructura definida previamente, donde cada elemento insertado debe obedecer a esa estructura.
 
 Por ejemplo
 ![estructura](images/estructura.png)
@@ -103,10 +103,9 @@ Esto ya había pasado antes con cosmos db, tuve que ocupar cosmonaut para crear 
 
 Pero Azure search es diferente, debo pagar si pongo más de tres entidades, entonces debo elegir sabiamente como ocupar estos tres indices, no es algo muy comodo, siempre tendré que estar creando objetos para lecturas particulares, esto no es muy automatizable. 
 
-
 Nuestro principio siempre ha sido que la excelencia técnica debe permitir obtener el menor costo posible y veíamos con buenos ojos, poder replicar nuestra base de datos de cosmosdb en Azure Search, de tal manera que las inserciones no fueran nuestra preocupación, porque son asíncronas  (se notificará cuando termine) y si se desea que sea más rápido, solo debe subir la palanquita de los RU, por otro lado si el modelo estaba replicado en el azure search, nuestras consultas volarían a un precio fijo.
 
-Era un gran desafío que nos apremiaba, porque nuestras lecturas eran lentas y no queríamos cargar la mano en el precio, si sabíamos que había una manera mejor, mas costosa en terminos de tiempo pero mejor. 
+Era un gran desafío que nos apremiaba, porque nuestras lecturas eran lentas y no queríamos cargar la mano en el precio, si sabíamos que había una manera mejor, mas costosa en términos de tiempo pero mejor. 
 
 Como somos porfiados seguimos con la manera de lograr realizar el modelo perfecto, inserción de base de datos para históricos y lectura en base de datos de alta velocidad, si es posible, sin pagar :D. 
 
@@ -145,7 +144,7 @@ public class SeasonInput : InputBase {
 
 2. Model
 
-El modelo refiere a la entidad que será guardada en una base de datos, un input puede originar uno o mas entidades de base de datos. A continuación se puede ver la misma temporada, pero en este caso tiene un campo ClientId, que es un autonumérico, por tanto no se requiere en la entrada.
+El modelo refiere a la entidad que será guardada en una base de datos, un input puede originar uno o mas entidades de base de datos. A continuación se puede ver la misma temporada, pero en este caso tiene un campo ClientId, que es un auto numérico, por tanto no se requiere en la entrada.
 
 También se puede notar como algunos metadatos vinculan los mismos campos que el input, a diferencia del input, esta clase usa un atributo de Cosmonaut, que lo identifica como entidad de una base de datos.
 

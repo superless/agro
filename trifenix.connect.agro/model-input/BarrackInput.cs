@@ -12,7 +12,8 @@ namespace trifenix.connect.agro_model_input
     /// Ingreso de cuarteles
     /// </summary>
     [ReferenceSearchHeader(EntityRelated.BARRACK)]
-    public class BarrackInput : InputBase {
+    public class BarrackInput : InputBase
+    {
 
         /// <summary>
         /// Nombre del cuartel
@@ -52,7 +53,7 @@ namespace trifenix.connect.agro_model_input
         /// <summary>
         /// Búsqueda por referencia de una variedad
         /// </summary>
-        [Required,Reference(typeof(Variety))]
+        [Required, Reference(typeof(Variety))]
         [ReferenceSearch(EntityRelated.VARIETY)]
         public string IdVariety { get; set; }
 
@@ -72,7 +73,7 @@ namespace trifenix.connect.agro_model_input
         /// <summary>
         /// Búsqueda por referencia de un polinizador
         /// </summary>
-        [ReferenceSearch(EntityRelated.POLLINATOR,EntityRelated.POLLINATOR)]
+        [ReferenceSearch(EntityRelated.POLLINATOR, EntityRelated.POLLINATOR)]
         [Reference(typeof(Variety))]
         public string IdPollinator { get; set; }
 
@@ -85,6 +86,6 @@ namespace trifenix.connect.agro_model_input
 
     }
 
-   
+
 
 }
