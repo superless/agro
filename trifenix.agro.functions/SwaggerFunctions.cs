@@ -1,14 +1,10 @@
-﻿using System.IO;
-using System.Net;
-using System.Net.Http;
-using System.Text;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
 using AzureFunctions.Extensions.Swashbuckle;
 using AzureFunctions.Extensions.Swashbuckle.Attribute;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
 using Microsoft.AspNetCore.Mvc;
 
 namespace trifenix.agro.functions
