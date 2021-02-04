@@ -32,7 +32,7 @@ namespace trifenix.connect.agro.model
         /// Tipo de documento
         /// </summary>
         [EnumSearch(EnumRelated.DOCUMENT_TYPE)]
-        public DocumentType Type { get; set; }
+        public string Type { get; set; }
 
         /// <summary>
         /// Fecha de emisión del documento
@@ -44,7 +44,7 @@ namespace trifenix.connect.agro.model
         /// Tipo de pago
         /// </summary>
         [StringSearch(StringRelated.PAYMENT_TYPE)]
-        public PaymentType PaymentType { get; set; }
+        public string PaymentType { get; set; }
 
         /// <summary>
         /// Determina si el documento es de entrada o salida de productos
