@@ -794,12 +794,14 @@ namespace trifenix.connect.agro.tests.data
 
         public static IEntitySearch<GeoPointTs>[] TractorsSearch { get; set; } = Tractors.SelectMany(s => Mdm.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
         #endregion
-        
-        #region User
 
-        public static User UserInput1 => new User
+        #region UserApplicator
+
+        public static UserApplicator UserApplicatorInput1 => new UserApplicator
         {
             Id = ConstantGuids.Value[0],
+            IdNebulizer = ConstantGuids.Value[0],
+            IdTractor = ConstantGuids.Value[0],
             ObjectIdAAD = ConstantGuids.Value[0],
             Name = "Trifenix",
             Email = "Trifenix@trifenix.io",
@@ -807,9 +809,11 @@ namespace trifenix.connect.agro.tests.data
             IdJob = ConstantGuids.Value[0],
             IdsRoles = new List<string> { RoleInput1.Id, RoleInput2.Id }
         };
-        public static User UserInput2 => new User
+        public static UserApplicator UserApplicatorInput2 => new UserApplicator
         {
             Id = ConstantGuids.Value[1],
+            IdNebulizer = ConstantGuids.Value[1],
+            IdTractor = ConstantGuids.Value[1],
             ObjectIdAAD = ConstantGuids.Value[1],
             Name = "Trifenix2",
             Email = "Trifenix2@trifenix.io",
@@ -818,11 +822,11 @@ namespace trifenix.connect.agro.tests.data
             IdsRoles = new List<string> { RoleInput1.Id, RoleInput2.Id }
         };
 
-        public static User[] Users { get; set; } = new User[] { UserInput1, UserInput2 };
+        public static UserApplicator[] UserApplicators { get; set; } = new UserApplicator[] { UserApplicatorInput1, UserApplicatorInput2 };
 
-        public static IEntitySearch<GeoPointTs>[] UsersSearch { get; set; } = Users.SelectMany(s => Mdm.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
+        public static IEntitySearch<GeoPointTs>[] UserApplicatorsSearch { get; set; } = UserApplicators.SelectMany(s => Mdm.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
         #endregion
-        
+
 
         #region NotificationEvent
 
@@ -867,12 +871,12 @@ namespace trifenix.connect.agro.tests.data
         };
         public static OrderFolder OrdenFolderInput2 => new OrderFolder
         {
-            Id = ConstantGuids.Value[0],
-            IdPhenologicalEvent = ConstantGuids.Value[0],
-            IdApplicationTarget = ConstantGuids.Value[0],
-            IdSpecie = ConstantGuids.Value[0],
-            IdIngredient = ConstantGuids.Value[0],
-            IdIngredientCategory = ConstantGuids.Value[0]
+            Id = ConstantGuids.Value[1],
+            IdPhenologicalEvent = ConstantGuids.Value[1],
+            IdApplicationTarget = ConstantGuids.Value[1],
+            IdSpecie = ConstantGuids.Value[1],
+            IdIngredient = ConstantGuids.Value[1],
+            IdIngredientCategory = ConstantGuids.Value[1]
         };
 
         public static OrderFolder[] OrderFolders { get; set; } = new OrderFolder[] { OrdenFolderInput1, OrdenFolderInput2 };

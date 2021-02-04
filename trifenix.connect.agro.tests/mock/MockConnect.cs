@@ -178,6 +178,7 @@ namespace trifenix.connect.agro.tests.mock
                     AgroData.Tractors = Mdm.Reflection.Collections.UpsertToCollection((Tractor)(object)element, AgroData.Tractors);
                     break;
                 case EntityRelated.USER:
+                    AgroData.UserApplicators = Mdm.Reflection.Collections.UpsertToCollection((UserApplicator)(object)element, AgroData.UserApplicators);
                     break;
                 case EntityRelated.VARIETY:
                     AgroData.Varieties = Mdm.Reflection.Collections.UpsertToCollection((Variety)(object)element, AgroData.Varieties);
@@ -277,7 +278,7 @@ namespace trifenix.connect.agro.tests.mock
                 case EntityRelated.TRACTOR:
                     return (T)(object)AgroData.Tractors.First(s => s.Id.Equals(id));
                 case EntityRelated.USER:
-                    break;
+                    return (T)(object)AgroData.UserApplicators.First(s => s.Id.Equals(id));
                 case EntityRelated.VARIETY:
                     return (T)(object)AgroData.Varieties.First(s => s.Id.Equals(id));
                 case EntityRelated.NOTIFICATION_EVENT:
@@ -358,6 +359,7 @@ namespace trifenix.connect.agro.tests.mock
                 case EntityRelated.NEBULIZER:
                     break;
                 case EntityRelated.PHENOLOGICAL_EVENT:
+                    AgroData.Ingredients = Mdm.Reflection.Collections.DeleteElementInCollection(id, AgroData.Ingredients);
                     break;
                 case EntityRelated.PLOTLAND:
                     break;

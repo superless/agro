@@ -607,7 +607,7 @@ namespace trifenix.agro.external.operations.tests.data
             Name = "Trabajo2",
             Id = ConstantGuids.Value[1]
         };
-        public static JobInput[] Jobs { get; set; } = new JobInput[] { JobInput1, JobInput2 };
+        public static JobInput[] Jobs = new JobInput[] { JobInput1, JobInput2 };
 
         #endregion
 
@@ -626,7 +626,7 @@ namespace trifenix.agro.external.operations.tests.data
             Code = "Codigo2"
         };
 
-        public static NebulizerInput[] Nebulizers { get; set; } = new NebulizerInput[] { NebulizerInput1, NebulizerInput2 };
+        public static NebulizerInput[] Nebulizers = new NebulizerInput[] { NebulizerInput1, NebulizerInput2 };
 
         #endregion
 
@@ -647,7 +647,7 @@ namespace trifenix.agro.external.operations.tests.data
             EndDate = new DateTime(2021, 3, 1)
         };
 
-        public static PhenologicalEventInput[] PhenologicalEvents { get; set; } = new PhenologicalEventInput[] { PhenologicalEventInput1, PhenologicalEventInput2 };
+        public static PhenologicalEventInput[] PhenologicalEvents = new PhenologicalEventInput[] { PhenologicalEventInput1, PhenologicalEventInput2 };
 
         #endregion
 
@@ -666,7 +666,7 @@ namespace trifenix.agro.external.operations.tests.data
 
         };
 
-        public static RoleInput[] Roles { get; set; } = new RoleInput[] { RoleInput1, RoleInput2 };
+        public static RoleInput[] Roles = new RoleInput[] { RoleInput1, RoleInput2 };
 
         #endregion
 
@@ -692,7 +692,7 @@ namespace trifenix.agro.external.operations.tests.data
 
         };
 
-        public static PreOrderInput[] PreOrders { get; set; } = new PreOrderInput[] { PreOrdenInput1, PreOrdenInput2 };
+        public static PreOrderInput[] PreOrders = new PreOrderInput[] { PreOrdenInput1, PreOrdenInput2 };
 
         #endregion
 
@@ -713,36 +713,38 @@ namespace trifenix.agro.external.operations.tests.data
 
         };
 
-        public static TractorInput[] Tractors { get; set; } = new TractorInput[] { TractorInput1, TractorInput2 };
+        public static TractorInput[] Tractors = new TractorInput[] { TractorInput1, TractorInput2 };
 
         #endregion
-        /*
-                #region User
 
-                public static UserInput UserInput1 => new UserInput
-                {
-                    Id = ConstantGuids.Value[0],
-                    ObjectIdAAD = ConstantGuids.Value[0],
-                    Name = "Trifenix",
-                    Email = "Trifenix@trifenix.io",
-                    Rut = "20200200-5",
-                    IdJob = ConstantGuids.Value[0],
-                    IdsRoles = new List<string> { RoleInput1.Id, RoleInput2.Id }
-                };
-                public static UserInput UserInput2 => new UserInput
-                {
-                    Id = ConstantGuids.Value[1],
-                    ObjectIdAAD = ConstantGuids.Value[1],
-                    Name = "Trifenix2",
-                    Email = "Trifenix2@trifenix.io",
-                    Rut = "20100100-9",
-                    IdJob = ConstantGuids.Value[1],
-                    IdsRoles = new List<string> { RoleInput1.Id, RoleInput2.Id }
-                };
+        #region UserApplicator
 
-                public static UserInput[] Users { get; set; } = new UserInput[] { UserInput1, UserInput2 };
+        public static UserApplicatorInput UserApplicatorInput1 => new UserApplicatorInput
+        {
+            Id = ConstantGuids.Value[0],
+            IdNebulizer = ConstantGuids.Value[0],
+            IdTractor = ConstantGuids.Value[0],
+            Name = "Trifenix",
+            Email = "Trifenix@trifenix.io",
+            Rut = "20200200-5",
+            IdJob = ConstantGuids.Value[0],
+            IdsRoles = new List<string> { RoleInput1.Id, RoleInput2.Id }
+        };
+        public static UserApplicatorInput UserApplicatorInput2 => new UserApplicatorInput
+        {
+            Id = ConstantGuids.Value[1],
+            IdNebulizer = ConstantGuids.Value[1],
+            IdTractor = ConstantGuids.Value[1],
+            Name = "Trifenix2",
+            Email = "Trifenix2@trifenix.io",
+            Rut = "20100100-9",
+            IdJob = ConstantGuids.Value[1],
+            IdsRoles = new List<string> { RoleInput1.Id, RoleInput2.Id }
+        };
 
-                #endregion*/
+        public static UserApplicatorInput[] UserApplicators = new UserApplicatorInput[] { UserApplicatorInput1, UserApplicatorInput2 };
+
+        #endregion
 
         #region OrderFolder
 
@@ -757,18 +759,18 @@ namespace trifenix.agro.external.operations.tests.data
         };
         public static OrderFolderInput OrdenFolderInput2 => new OrderFolderInput
         {
-            Id = ConstantGuids.Value[0],
-            IdPhenologicalEvent = ConstantGuids.Value[0],
-            IdApplicationTarget = ConstantGuids.Value[0],
-            IdSpecie = ConstantGuids.Value[0],
-            IdIngredient = ConstantGuids.Value[0],
-            IdIngredientCategory = ConstantGuids.Value[0]
+            Id = ConstantGuids.Value[1],
+            IdPhenologicalEvent = ConstantGuids.Value[1],
+            IdApplicationTarget = ConstantGuids.Value[1],
+            IdSpecie = ConstantGuids.Value[1],
+            IdIngredient = ConstantGuids.Value[1],
+            IdIngredientCategory = ConstantGuids.Value[1]
         };
 
-        public static OrderFolderInput[] OrderFolders { get; set; } = new OrderFolderInput[] { OrdenFolderInput1, OrdenFolderInput2 };
+        public static OrderFolderInput[] OrderFolders = new OrderFolderInput[] { OrdenFolderInput1, OrdenFolderInput2 };
 
         #endregion
-    }
+}
 
 
 

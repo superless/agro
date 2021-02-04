@@ -290,6 +290,7 @@ namespace trifenix.connect.agro.tests.mock
                     AgroData.TractorsSearch = Mdm.Reflection.Collections.UpsertToCollection(input, AgroData.TractorsSearch);
                     break;
                 case EntityRelated.USER:
+                    AgroData.UserApplicatorsSearch = Mdm.Reflection.Collections.UpsertToCollection(input, AgroData.UserApplicatorsSearch);
                     break;
                 case EntityRelated.VARIETY:
                     AgroData.VarietiesSearch = Mdm.Reflection.Collections.UpsertToCollection(input, AgroData.VarietiesSearch);
@@ -436,12 +437,16 @@ namespace trifenix.connect.agro.tests.mock
             mockExistElement
               .Setup(s => s.ExistsById<Dose>(It.IsAny<string>())).ReturnsAsync((string id) => AgroData.Doses.Any(s => s.Id.Equals(id)));
 
+
             // Busqueda en colecciones de AgroInputData
+
+            //Product
             mockExistElement
                 .Setup(s => s.ExistsById<Product>(It.IsAny<string>()))
 
                 .ReturnsAsync((string id) => AgroData.Products.Any(s => s.Id.Equals(id)));
 
+            //Ingredient
             mockExistElement
                 .Setup(s => s.ExistsById<Ingredient>(It.IsAny<string>()))
                 .ReturnsAsync((string id) =>
@@ -450,6 +455,7 @@ namespace trifenix.connect.agro.tests.mock
                     return AgroData.Ingredients.Any(s => s.Id.Equals(id));
                 });
 
+            //IngredientCategory
             mockExistElement
                 .Setup(s => s.ExistsById<IngredientCategory>(It.IsAny<string>()))
                 .ReturnsAsync((string id) =>
@@ -458,80 +464,131 @@ namespace trifenix.connect.agro.tests.mock
                     return AgroData.IngredientCategories.Any(s => s.Id.Equals(id));
                 });
 
-
+            //Brand
             mockExistElement.Setup(s => s.ExistsById<Brand>(It.IsAny<string>()))
                 .ReturnsAsync((string id) =>
                 {
                     return AgroData.Brands.Any(s => s.Id.Equals(id));
                 });
 
+            //Variety
             mockExistElement.Setup(s => s.ExistsById<Variety>(It.IsAny<string>()))
                 .ReturnsAsync((string id) =>
                 {
                     return AgroData.Varieties.Any(s => s.Id.Equals(id));
                 });
 
+            //Specie
             mockExistElement.Setup(s => s.ExistsById<Specie>(It.IsAny<string>()))
                 .ReturnsAsync((string id) =>
                 {
                     return AgroData.Species.Any(s => s.Id.Equals(id));
                 });
 
+            //CertifiedEntity
             mockExistElement.Setup(s => s.ExistsById<CertifiedEntity>(It.IsAny<string>()))
                 .ReturnsAsync((string id) =>
                 {
                     return AgroData.CertifiedEntities.Any(s => s.Id.Equals(id));
                 });
 
+            //AplicationTarget
             mockExistElement.Setup(s => s.ExistsById<ApplicationTarget>(It.IsAny<string>()))
                 .ReturnsAsync((string id) =>
                 {
                     return AgroData.ApplicationTargets.Any(s => s.Id.Equals(id));
                 });
 
+            //Season
             mockExistElement.Setup(s => s.ExistsById<Season>(It.IsAny<string>()))
                 .ReturnsAsync((string id) =>
                 {
                     return AgroData.Seasons.Any(s => s.Id.Equals(id));
                 });
 
+            //Barrack
             mockExistElement.Setup(s => s.ExistsById<Barrack>(It.IsAny<string>()))
                 .ReturnsAsync((string id) =>
                 {
                     return AgroData.Barracks.Any(s => s.Id.Equals(id));
                 });
 
+            //Sector
             mockExistElement.Setup(s => s.ExistsById<Sector>(It.IsAny<string>()))
                 .ReturnsAsync((string id) =>
                 {
                     return AgroData.Sectors.Any(s => s.Id.Equals(id));
                 });
 
+            //PlotLand
             mockExistElement.Setup(s => s.ExistsById<PlotLand>(It.IsAny<string>()))
                 .ReturnsAsync((string id) =>
                 {
                     return AgroData.PlotLands.Any(s => s.Id.Equals(id));
                 });
 
+            //Rootstock
             mockExistElement.Setup(s => s.ExistsById<Rootstock>(It.IsAny<string>()))
                 .ReturnsAsync((string id) =>
                 {
                     return AgroData.Rootstocks.Any(s => s.Id.Equals(id));
                 });
 
+            //CostCenter
             mockExistElement.Setup(s => s.ExistsById<CostCenter>(It.IsAny<string>()))
                .ReturnsAsync((string id) =>
                {
                    return AgroData.CostCenters.Any(s => s.Id.Equals(id));
                });
 
-
+            //BusissName
             mockExistElement.Setup(s => s.ExistsById<BusinessName>(It.IsAny<string>()))
                .ReturnsAsync((string id) =>
                {
                    return AgroData.BusinessNames.Any(s => s.Id.Equals(id));
                });
 
+            //Job
+            mockExistElement.Setup(s => s.ExistsById<Job>(It.IsAny<string>()))
+                .ReturnsAsync((string id) =>
+                {
+                    return AgroData.Jobs.Any(s => s.Id.Equals(id));
+                });
+
+            //Role
+            mockExistElement.Setup(s => s.ExistsById<Role>(It.IsAny<string>()))
+                .ReturnsAsync((string id) =>
+                {
+                    return AgroData.Roles.Any(s => s.Id.Equals(id));
+                });
+
+            //Nebulizer
+            mockExistElement.Setup(s => s.ExistsById<Nebulizer>(It.IsAny<string>()))
+                .ReturnsAsync((string id) =>
+                {
+                    return AgroData.Nebulizers.Any(s => s.Id.Equals(id));
+                });
+
+            //Tractor
+            mockExistElement.Setup(s => s.ExistsById<Tractor>(It.IsAny<string>()))
+                .ReturnsAsync((string id) =>
+                {
+                    return AgroData.Tractors.Any(s => s.Id.Equals(id));
+                });
+
+            //PhenologicalEvent
+            mockExistElement.Setup(s => s.ExistsById<PhenologicalEvent>(It.IsAny<string>()))
+                .ReturnsAsync((string id) =>
+                {
+                    return AgroData.PhenologicalEvents.Any(s => s.Id.Equals(id));
+                });
+
+            //OrderFolder
+            mockExistElement.Setup(s => s.ExistsById<OrderFolder>(It.IsAny<string>()))
+                .ReturnsAsync((string id) =>
+                {
+                    return AgroData.OrderFolders.Any(s => s.Id.Equals(id));
+                });
 
 
             // busqueda en colecciones usando nombre propiedad y valor, y si existe un id, excluyendolo de la busqueda.
