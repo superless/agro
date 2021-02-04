@@ -19,5 +19,9 @@
 
         PLANTING_YEAR = 6,
 
+        QUANTITY = 7,
+
+        PRICE = 8,
+
     }
 }

@@ -10,9 +10,20 @@ namespace trifenix.connect.agro.model
     /// <summary>
     /// Documento de movimiento de productos desde y hacia bodega
     /// </summary>
-    [ReferenceSearchHeader(EntityRelated.PRODUCTDOCUMENT, true, Kind = EntityKind.CUSTOM_ENTITY)]
-    public class ProductDocument 
+    [ReferenceSearchHeader(EntityRelated.PRODUCTSDOCUMENT, true, Kind = EntityKind.CUSTOM_ENTITY)]
+    public class ProductsDocument : DocumentLocal
     {
+
+        /// <summary>
+        /// Identificador
+        /// </summary>
+        public override string Id { get; set; }
+
+        /// <summary>
+        /// Identificador visual de la bodega
+        /// </summary>
+        [AutoNumericSearch(StringRelated.GENERIC_CORRELATIVE)]
+        public override string ClientId { get; set; }
 
         /// <summary>
         /// Búsqueda por referencia del producto asociado al documento
@@ -24,11 +35,13 @@ namespace trifenix.connect.agro.model
         /// <summary>
         /// Cantidad de productos 
         /// </summary>
+        [Num32Search(NumRelated.QUANTITY)]
         public int Quantity { get; set; }
 
         /// <summary>
         /// Precio de los productos
         /// </summary>
+        [Num32Search(NumRelated.PRICE)]
         public int Price { get; set; }
     }
- }
+}

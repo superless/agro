@@ -18,7 +18,7 @@ namespace trifenix.connect.agro_model_input
         /// </summary>
         [Required]
         [EnumSearch(EnumRelated.DOCUMENT_TYPE)]
-        public string Type { get; set; }
+        public DocumentType Type { get; set; }
 
         /// <summary>
         /// Fecha de emisión del documento
@@ -32,7 +32,7 @@ namespace trifenix.connect.agro_model_input
         /// </summary>
         [Required]
         [StringSearch(StringRelated.PAYMENT_TYPE)]
-        public string PaymentType { get; set; }
+        public PaymentType PaymentType { get; set; }
 
         /// <summary>
         /// Define si es un documento de entrada o salida
@@ -44,7 +44,7 @@ namespace trifenix.connect.agro_model_input
         /// Documento de producto sobre el cual realiza el documento de bodega
         /// </summary>
         [Required]
-        [ReferenceSearch(EntityRelated.PRODUCTDOCUMENT, true)]
-        public ProductDocumentInput[] ProductDocumentInput { get; set; }
+        [ReferenceSearch(EntityRelated.PRODUCTSDOCUMENT)]
+        public ProductDocumentsInput[] ProductsDocumentInput { get; set; }
     }
 }

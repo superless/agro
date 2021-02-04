@@ -76,7 +76,7 @@ namespace trifenix.connect.agro.index_model.props
 
         WAREHOUSEDOCUMENT = 34,
 
-        PRODUCTDOCUMENT = 35,
+        PRODUCTSDOCUMENT = 35,
 
     }
 }
