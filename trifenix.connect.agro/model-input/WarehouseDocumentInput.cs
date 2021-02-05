@@ -38,7 +38,7 @@ namespace trifenix.connect.agro_model_input
         /// Tipo de pago del documento
         /// </summary>
         [Required]
-        [StringSearch(StringRelated.PAYMENT_TYPE)]
+        [EnumSearch(EnumRelated.PAYMENT_TYPE)]
         public PaymentType PaymentType { get; set; }
 
         /// <summary>

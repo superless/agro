@@ -1,8 +1,6 @@
 ﻿using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
-using trifenix.connect.agro_model;
 using trifenix.connect.mdm.enums;
-using trifenix.connect.mdm.validation_attributes;
 
 namespace trifenix.connect.agro.model
 {
@@ -10,14 +8,12 @@ namespace trifenix.connect.agro.model
     /// Documento de movimiento de productos desde y hacia bodega
     /// </summary>
     [ReferenceSearchHeader(EntityRelated.PRODUCTSDOCUMENT, true, Kind = EntityKind.CUSTOM_ENTITY)]
-    public class ProductsDocument 
-    {
+    public class ProductsDocument {
 
         /// <summary>
         /// Búsqueda por referencia del producto asociado al documento
         /// </summary>
         [ReferenceSearch(EntityRelated.PRODUCT)]
-        [Reference(typeof(Product))]
         public string IdProduct { get; set; }
 
         /// <summary>

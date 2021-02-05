@@ -42,7 +42,7 @@ namespace trifenix.connect.agro.model
         /// <summary>
         /// Tipo de pago
         /// </summary>
-        [StringSearch(StringRelated.PAYMENT_TYPE)]
+        [EnumSearch(EnumRelated.PAYMENT_TYPE)]
         public string PaymentType { get; set; }
 
         /// <summary>
