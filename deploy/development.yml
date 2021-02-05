@@ -1,61 +1,57 @@
+# ASP.NET
+# Build and test ASP.NET projects.
+# Add steps that publish symbols, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
+
 trigger:
-    branches:
-      include:        
-        - develop
-        - release/*
-  
+- develop
+
 pool:
-  vmImage: "ubuntu-16.04"
+  vmImage: 'windows-latest'
 
-variables: 
-  BuildConfiguration: 'release'
-  # nombre del archivo csproj
-  name-project: "mdm-cli"
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
 
-  
-# github ejecuta este build, para validar y ejecutar,
-# es decir, dos veces
-# esta instrucción asigna que no se ejecute en el pull request (para validar).
-# sino, que solo se ejecute al modificar la rama.
-pr: none
-  
 steps:
 
-  - task: gitversion/setup@0
-    inputs:
-      versionSpec: '5.1'
-      includePrerelease: true
-    displayName : "Configurando gitversion"
+- task: NuGetToolInstaller@1
 
-  - task: gitversion/execute@0
-    inputs:
-      useConfigFile: false      
-    displayName: "generando la nueva versión"
-  
-  # toma todos los proyectos que existan además de quien tiene el nuget.
-  - task: DotNetCoreCLI@2
-    inputs:
-      command: 'restore'
-      projects: '**/*.csproj'
-      feedsToUse: 'select'
-      vstsFeed: '$(draft-feed)'      
-      versioningScheme: byBuildNumber
+- task: NuGetCommand@2
+  inputs:
+    restoreSolution: '$(solution)'
 
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'test'
+    projects: '**/*.operations.tests.csproj'
+    testRunTitle: 'testing'
 
-  # genera paquete usando la versión proporcionada por gitversion
-  - task: DotNetCoreCLI@2
-    displayName: 'dotnet pack' 
-    inputs: 
-      command: pack
-      packagesToPack: '**/$(name-project).csproj'       
-      arguments: '--configuration $(BuildConfiguration) /p:Version=$(SemVer)' 
-      versioningScheme: byEnvVar 
-      versionEnvVar: SemVer
+- task: VSBuild@1
+  inputs:
+    solution: '$(solution)'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
 
-  # publica paquete para publicar.
-  - task: PublishBuildArtifacts@1
-    inputs:
-      pathtoPublish: "$(Build.ArtifactStagingDirectory)"
-      artifactName: drop
-      publishLocation: 'container'
-    displayName: "publish nuget"
+- task: VSTest@2
+  inputs:
+    testSelector: 'testAssemblies'
+    testAssemblyVer2: '**\*tests*'
+    searchFolder: '$(System.DefaultWorkingDirectory)'
+    uiTests: true
+    vsTestVersion: '16.0'
+    diagnosticsEnabled: true
+
+- task : DotNetCoreCLI@0
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    projects: '**/*trifenix.agro.functions.csproj'    
+    arguments: '--no-restore --configuration Release --output $(Build.ArtifactStagingDirectory)'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'artifactAgroDev'
