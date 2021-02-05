@@ -52,6 +52,6 @@ namespace trifenix.connect.agro_model_input
         /// </summary>
         [Required]
         [ReferenceSearch(EntityRelated.PRODUCTSDOCUMENT, true)]
-        public ProductDocumentsInput[] ProductsDocumentInput { get; set; }
+        public ProductDocumentInput[] ProductDocumentInput { get; set; }
     }
 }

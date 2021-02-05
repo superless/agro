@@ -50,17 +50,17 @@ namespace trifenix.connect.agro.model
         /// </summary>
         public bool Output { get; set; }
 
-        private List<ProductsDocument> _productsDocument;
+        private List<ProductDocument> _productsDocument;
 
         /// <summary>
         /// Dias para cosechar por entidad certificadora
         /// </summary>
         [ReferenceSearch(EntityRelated.PRODUCTSDOCUMENT, true)]
-        public List<ProductsDocument> ProductsDocuments
+        public List<ProductDocument> ProductsDocuments
         {
             get
             {
-                _productsDocument = _productsDocument ?? new List<ProductsDocument>();
+                _productsDocument = _productsDocument ?? new List<ProductDocument>();
                 return _productsDocument;
             }
             set { _productsDocument = value; }

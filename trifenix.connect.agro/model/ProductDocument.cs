@@ -27,5 +27,11 @@ namespace trifenix.connect.agro.model
         /// </summary>
         [Num32Search(NumRelated.PRICE)]
         public int Price { get; set; }
+
+        /// <summary>
+        /// Id del documento de bodega asociado
+        /// </summary>
+        [ReferenceSearch(EntityRelated.WAREHOUSEDOCUMENT)]
+        public int IdWarehouseDocument { get; set; }
     }
 }

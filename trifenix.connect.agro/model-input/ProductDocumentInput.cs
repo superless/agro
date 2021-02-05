@@ -2,23 +2,21 @@
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
 using trifenix.connect.agro_model;
-using trifenix.connect.input;
 using trifenix.connect.mdm.validation_attributes;
 
 namespace trifenix.connect.agro_model_input
 {
-
     /// <summary>
     /// Documento que monitorea el traspaso o salida de productos desde o hacia la bodega
     /// </summary>
     [ReferenceSearchHeader(EntityRelated.PRODUCTSDOCUMENT)]
-    public class ProductDocumentsInput {
+    public class ProductsDocumentInput {
 
         /// <summary>
         /// Id del producto relacionado
         /// </summary>
-        [Required, Reference(typeof(Product))]
         [ReferenceSearch(EntityRelated.PRODUCT)]
+        [Required, Reference(typeof(Product))]
         public string IdProduct { get; set; }
 
         /// <summary>
