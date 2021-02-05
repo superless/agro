@@ -51,7 +51,7 @@ namespace trifenix.connect.agro_model_input
         /// Documento de producto sobre el cual realiza el documento de bodega
         /// </summary>
         [Required]
-        [ReferenceSearch(EntityRelated.PRODUCTSDOCUMENT, true)]
-        public ProductDocumentInput[] ProductDocumentInput { get; set; }
+        [ReferenceSearch(EntityRelated.PRODUCTDOCUMENT, true)]
+        public ProductDocumentInput[] ProductDocuments { get; set; }
     }
 }

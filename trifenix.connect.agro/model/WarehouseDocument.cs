@@ -50,13 +50,20 @@ namespace trifenix.connect.agro.model
         /// </summary>
         public bool Output { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        [ReferenceSearch(EntityRelated.WAREHOUSE)]
+        public string idWarehouse { get; set; }
+
+
         private List<ProductDocument> _productsDocument;
 
         /// <summary>
         /// Dias para cosechar por entidad certificadora
         /// </summary>
-        [ReferenceSearch(EntityRelated.PRODUCTSDOCUMENT, true)]
-        public List<ProductDocument> ProductsDocuments
+        [ReferenceSearch(EntityRelated.PRODUCTDOCUMENT, true)]
+        public List<ProductDocument> ProductDocuments
         {
             get
             {
