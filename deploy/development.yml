@@ -1,57 +1,62 @@
+# termine, parte 1.
+
 trigger:
-  branches:
-    include:
-      - develop
-      - release/*
-
+    branches:
+      include:        
+        - develop  
 pool:
-  vmImage: "windows-latest"
+  vmImage: "ubuntu-16.04"
 
-variables:
-  solution: "**/*.sln"
-  buildPlatform: "Any CPU"
-  buildConfiguration: "Release"
+variables: 
+  BuildConfiguration: 'release'
+  # nombre del archivo csproj
+  name-project: "mdm-cli"
 
+  
+# github ejecuta este build, para validar y ejecutar,
+# es decir, dos veces
+# esta instrucción asigna que no se ejecute en el pull request (para validar).
+# sino, que solo se ejecute al modificar la rama.
+pr: none
+  
 steps:
-  - task: NuGetToolInstaller@1
 
-  - task: NuGetCommand@2
+  - task: gitversion/setup@0
     inputs:
-      restoreSolution: "$(solution)"
+      versionSpec: '5.1'
+      includePrerelease: false
+    displayName : "Configurando gitversion"
 
-  - task: VSBuild@1
+  - task: gitversion/execute@0
     inputs:
-      solution: "$(solution)"
-      msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
-      platform: "$(buildPlatform)"
-      configuration: "$(buildConfiguration)"
-
+      useConfigFile: true
+      configFilePath: "deploy/gitConfig.yml" 
+    displayName: "generando la nueva versión"
+  
+  # toma todos los proyectos que existan además de quien tiene el nuget.
   - task: DotNetCoreCLI@2
     inputs:
-      command: "test"
-      projects: "./trifenix.connect.agro.tests/trifenix.connect.agro.tests.csproj"
-      arguments: "--configuration $(buildConfiguration) --logger trx --results-directory $(Agent.TempDirectory)"
-      publishTestResults: false
-      testRunTitle: "testing agro-fenix"
-    displayName: "Testeando agro-fenix"
+      command: 'restore'
+      projects: '**/*.csproj'
+      feedsToUse: 'select'
+      vstsFeed: '$(default-feed)'      
+      versioningScheme: byBuildNumber
 
-  - task: PublishTestResults@2
-    inputs:
-      testResultsFormat: "VSTest"
-      searchFolder: "$(Agent.TempDirectory)"
-      testResultsFiles: "**/*.trx"
-      testRunTitle: "Mostrando resultados de test"
-    displayName: "Publicando resultados de test unitarios"
 
-  - task: DotNetCoreCLI@0
-    inputs:
-      command: "publish"
-      publishWebProjects: false
-      projects: "**/*trifenix.agro.functions.csproj"
-      arguments: "--no-restore --configuration Release --output $(Build.ArtifactStagingDirectory)"
+  # genera paquete usando la versión proporcionada por gitversion
+  - task: DotNetCoreCLI@2
+    displayName: 'dotnet pack' 
+    inputs: 
+      command: pack
+      packagesToPack: '**/$(name-project).csproj'       
+      arguments: '--configuration $(BuildConfiguration) /p:Version=$(SemVer)' 
+      versioningScheme: byEnvVar 
+      versionEnvVar: SemVer
 
+  # publica paquete para publicar.
   - task: PublishBuildArtifacts@1
     inputs:
-      PathtoPublish: "$(Build.ArtifactStagingDirectory)"
-      ArtifactName: "artifactAgroDev"
-      publishLocation: "Container"
+      pathtoPublish: "$(Build.ArtifactStagingDirectory)"
+      artifactName: drop
+      publishLocation: 'container'
+    displayName: "publish nuget"
