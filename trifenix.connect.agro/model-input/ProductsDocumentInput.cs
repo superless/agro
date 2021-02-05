@@ -12,8 +12,7 @@ namespace trifenix.connect.agro_model_input
     /// Documento que monitorea el traspaso o salida de productos desde o hacia la bodega
     /// </summary>
     [ReferenceSearchHeader(EntityRelated.PRODUCTSDOCUMENT)]
-    public class ProductDocumentsInput : InputBase
-    {
+    public class ProductDocumentsInput {
 
         /// <summary>
         /// Id del producto relacionado

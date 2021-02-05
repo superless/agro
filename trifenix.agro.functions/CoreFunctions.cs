@@ -426,7 +426,7 @@ namespace trifenix.agro.functions
         /// <returns></returns>
         [FunctionName("warehouse_post")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(WarehouseInput))]
-        public static async Task<IActionResult> CellarPost(
+        public static async Task<IActionResult> WarehousePost(
 
            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "warehouse")]
             [RequestBodyType(typeof(WarehouseInput), "Warehouse")]
@@ -445,7 +445,7 @@ namespace trifenix.agro.functions
         /// <returns></returns>
         [FunctionName("warehouse_put")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(WarehouseInput))]
-        public static async Task<IActionResult> CellarPut(
+        public static async Task<IActionResult> WarehousePut(
        [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "warehouse/{id}")]
             [RequestBodyType(typeof(WarehouseInput), "Warehouse")]
             HttpRequest req, string id, ILogger log)

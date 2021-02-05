@@ -1,10 +1,9 @@
 ﻿using Cosmonaut.Attributes;
 using System;
-using trifenix.connect.agro.index_model.enums;
+using System.Collections.Generic;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
 using trifenix.connect.agro_model;
-using trifenix.connect.agro_model_input;
 using trifenix.connect.mdm.enums;
 
 namespace trifenix.connect.agro.model
@@ -50,6 +49,22 @@ namespace trifenix.connect.agro.model
         /// Determina si el documento es de entrada o salida de productos
         /// </summary>
         public bool Output { get; set; }
+
+        private List<ProductsDocument> _productsDocument;
+
+        /// <summary>
+        /// Dias para cosechar por entidad certificadora
+        /// </summary>
+        [ReferenceSearch(EntityRelated.PRODUCTSDOCUMENT, true)]
+        public List<ProductsDocument> ProductsDocuments
+        {
+            get
+            {
+                _productsDocument = _productsDocument ?? new List<ProductsDocument>();
+                return _productsDocument;
+            }
+            set { _productsDocument = value; }
+        }
 
     }
 }

@@ -15,7 +15,6 @@ namespace trifenix.connect.agro_model
     public class Product : DocumentLocal
     {
 
-
         /// <summary>
         /// Identificador
         /// </summary>

@@ -14,6 +14,13 @@ namespace trifenix.connect.agro_model_input
     public class WarehouseDocumentInput : InputBase {
 
         /// <summary>
+        /// Búsqueda por referencia de la bodega asociada al documento
+        /// </summary>
+        [Required]
+        [ReferenceSearch(EntityRelated.WAREHOUSE)]
+        public string IdWarehouse { get; set; }
+
+        /// <summary>
         /// Tipo de documento
         /// </summary>
         [Required]
@@ -44,7 +51,7 @@ namespace trifenix.connect.agro_model_input
         /// Documento de producto sobre el cual realiza el documento de bodega
         /// </summary>
         [Required]
-        [ReferenceSearch(EntityRelated.PRODUCTSDOCUMENT)]
+        [ReferenceSearch(EntityRelated.PRODUCTSDOCUMENT, true)]
         public ProductDocumentsInput[] ProductsDocumentInput { get; set; }
     }
 }

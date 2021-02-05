@@ -1,4 +1,5 @@
 ﻿using Cosmonaut.Attributes;
+using trifenix.connect.agro.index_model.enums;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
 using trifenix.connect.agro_model;
@@ -10,7 +11,7 @@ namespace trifenix.connect.agro.model
     /// Bodega encargada del almacenamiento de productos
     /// </summary>
     [SharedCosmosCollection("agro", "Warehouse")]
-    [ReferenceSearchHeader(EntityRelated.WAREHOUSE, Kind = EntityKind.CUSTOM_ENTITY, PathName = "warehouse")]
+    [ReferenceSearchHeader(EntityRelated.WAREHOUSE, PathName = "warehouse", Kind = EntityKind.CUSTOM_ENTITY)]
     public class Warehouse : DocumentLocal
     {
         /// <summary>
