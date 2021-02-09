@@ -31,8 +31,8 @@ namespace trifenix.connect.agro_model_input
         /// <summary>
         /// Búsqueda por referencia de la especie asociada
         /// </summary>
-        [ReferenceSearch(EntityRelated.SPECIE)]
         [Required, Reference(typeof(Specie))]
+        [ReferenceSearch(EntityRelated.SPECIE)] 
         public string IdSpecie { get; set; }
 
     }

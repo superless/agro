@@ -19,15 +19,12 @@ namespace trifenix.connect.agro_model
         /// </summary>
         public override string Id { get; set; }
 
-
         /// <summary>
         /// Genera un correlativo, pero este depende de producto.
         /// por tanto por cada producto volverá la secuencia a 1.
         /// </summary>
         [AutoNumericSearch(StringRelated.GENERIC_CORRELATIVE, EntityRelated.PRODUCT)]
         public override string ClientId { get; set; }
-
-
 
         /// <summary>
         /// Última modificación de la dosis.
@@ -109,9 +106,6 @@ namespace trifenix.connect.agro_model
         /// </summary>
         [Num32Search(NumRelated.WAITING_DAYS)]
         public int? WaitingDaysLabel { get; set; }
-
-
-
 
 
         private List<WaitingHarvest> _waitingToHarvest;

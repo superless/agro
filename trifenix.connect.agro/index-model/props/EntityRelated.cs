@@ -72,6 +72,12 @@ namespace trifenix.connect.agro.index_model.props
 
         BRAND = 32,
 
+        WAREHOUSE = 33,
+
+        WAREHOUSEDOCUMENT = 34,
+
+        PRODUCTDOCUMENT = 35,
+
     }
 }
 
