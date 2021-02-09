@@ -71,16 +71,6 @@ namespace trifenix.agro.functions.mantainers
             {
                 throw new Exception("Falta el CosmoDbUri aweonao");
             }
-            if (string.IsNullOrWhiteSpace(azureSearchKey))
-            {
-                throw new Exception("Falta el azureSearchKey aweonao");
-            }
-            if (string.IsNullOrWhiteSpace(AzureSearchName))
-            {
-                throw new Exception("Falta el AzureSearchName aweonao");
-            }
-
-
         }
 
         public static async Task<ActionResultWithId> SendInternalHttp<DbElement, InputElement>(HttpRequest req, ILogger log, Func<IAgroManager<GeographyPoint>, IGenericOperation<DbElement, InputElement>> repo, string id = null) where DbElement : DocumentBase where InputElement : InputBase {
