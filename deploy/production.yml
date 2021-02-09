@@ -51,7 +51,15 @@ steps:
     projects: '**/*trifenix.agro.functions.csproj'    
     arguments: '--no-restore --configuration Release --output $(Build.ArtifactStagingDirectory)'
 
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'artifactAgroDev'
+  - task : DotNetCoreCLI@0
+    inputs:
+      command: 'publish'
+      publishWebProjects: false
+      projects: '**/*trifenix.agro.functions.csproj'    
+      arguments: '--no-restore --configuration Release --output $(Build.ArtifactStagingDirectory)'
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      ArtifactName: 'artifactAgroDev'
+      publishLocation: 'Container'

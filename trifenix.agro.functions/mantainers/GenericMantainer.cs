@@ -71,13 +71,24 @@ namespace trifenix.agro.functions.mantainers
             {
                 throw new Exception("Falta el CosmoDbUri aweonao");
             }
-            
+            if (string.IsNullOrWhiteSpace(azureSearchKey))
+            {
+                throw new Exception("Falta el azureSearchKey aweonao");
+            }
+            if (string.IsNullOrWhiteSpace(AzureSearchName))
+            {
+                throw new Exception("Falta el AzureSearchName aweonao");
+            }
+
+
         }
 
         public static async Task<ActionResultWithId> SendInternalHttp<DbElement, InputElement>(HttpRequest req, ILogger log, Func<IAgroManager<GeographyPoint>, IGenericOperation<DbElement, InputElement>> repo, string id = null) where DbElement : DocumentBase where InputElement : InputBase {
             ValidaEnvironmentVariables();
             //if (!ValidaEnvironmentVariables()) throw new Exception("existen variables de ambiente nulas, por favor revise las variables");
 
+            //if (!ValidaEnvironmentVariables()) throw new Exception("existen variables de ambiente nulas, por favor revise las variables");
+            
             //var claims = await Auth.Validate(req);
             //if (claims == null)
             //    return new ActionResultWithId {
