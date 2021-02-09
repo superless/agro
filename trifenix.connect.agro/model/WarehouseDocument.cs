@@ -1,6 +1,7 @@
 ﻿using Cosmonaut.Attributes;
 using System;
 using System.Collections.Generic;
+using trifenix.connect.agro.index_model.enums;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
 using trifenix.connect.agro_model;
@@ -31,7 +32,7 @@ namespace trifenix.connect.agro.model
         /// Tipo de documento
         /// </summary>
         [EnumSearch(EnumRelated.DOCUMENT_TYPE)]
-        public string Type { get; set; }
+        public DocumentType Type { get; set; }
 
         /// <summary>
         /// Fecha de emisión del documento
@@ -43,7 +44,7 @@ namespace trifenix.connect.agro.model
         /// Tipo de pago
         /// </summary>
         [EnumSearch(EnumRelated.PAYMENT_TYPE)]
-        public string PaymentType { get; set; }
+        public PaymentType PaymentType { get; set; }
 
         /// <summary>
         /// Determina si el documento es de entrada o salida de productos

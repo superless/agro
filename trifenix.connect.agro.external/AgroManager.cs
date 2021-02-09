@@ -104,7 +104,6 @@ namespace trifenix.agro.external
         public IGenericOperation<Warehouse, WarehouseInput> Warehouse => new MainOperation<Warehouse, WarehouseInput, T>(GetMainDb<Warehouse>(), Search, GetCommonDbOp<Warehouse>(), GetValidators<WarehouseInput, Warehouse>());
 
 
-        public IGenericOperation<WarehouseDocument, WarehouseDocumentInput> WarehouseDocument => new MainOperation<WarehouseDocument, WarehouseDocumentInput, T>(GetMainDb<WarehouseDocument>(), Search, GetCommonDbOp<WarehouseDocument>(), GetValidators<WarehouseDocumentInput, WarehouseDocument>());
         /// <summary>
         /// Repositorio de aplicaciones
         /// </summary>
@@ -146,7 +145,11 @@ namespace trifenix.agro.external
         /// </summary>
         public IGenericOperation<Dose, DosesInput> Dose => new DosesOperations<T>(dbConnect.GetDbExistsElements, GetMainDb<Dose>(), Search, GetCommonDbOp<Dose>(), CommonQueries, GetValidators<DosesInput, Dose>());
 
-
+        /// <summary>
+        /// Documento de bodega
+        /// </summary>
+        public IGenericOperation<WarehouseDocument, WarehouseDocumentInput> WarehouseDocument => new WarehouseDocumentOperations<T>(dbConnect.GetDbExistsElements, GetMainDb<WarehouseDocument>(), Search, GetCommonDbOp<WarehouseDocument>(), CommonQueries, GetValidators<WarehouseDocumentInput, WarehouseDocument>());
+        
         /// <summary>
         /// Roles
         /// </summary>
