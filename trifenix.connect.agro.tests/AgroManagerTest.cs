@@ -192,6 +192,8 @@ namespace trifenix.connect.agro.tests
                     SagCode = "1223H5"
                 };
 
+
+
                 var productInputTest = await agroManager.Product.SaveInput(productInput);
 
 
@@ -240,7 +242,116 @@ namespace trifenix.connect.agro.tests
                 );
 
                 Assert.True(compareModel);
+
+                //sectores y parcelas
+
+                var sectorInput = await agroManager.Sector.SaveInput(new SectorInput
+                {
+                    Name = "Cordillera"
+                });
+
+                var sector = await agroManager.Sector.Get(sectorInput.IdRelated);
+
+                Assert.True(sector.Result.Name.Equals("Cordillera"));
+
+                
+                var plotLandInput = await agroManager.PlotLand.SaveInput(new PlotLandInput
+                {
+                    IdSector = sector.Result.Id,
+                    Name = "Delirio"
+                });
+
+                var plotLand = await agroManager.PlotLand.Get(plotLandInput.IdRelated);
+
+                Assert.True(plotLand.Result.Name.Equals("Delirio"));
+
+
+                //Razon social
+
+                var businessNameInput = await agroManager.BusinessName.SaveInput(new BusinessNameInput
+                {
+                    Name = "TrifenixA",
+                    Email = "trifenix@trifenix.io",
+                    Rut = "76955261-2",
+                    WebPage = "connect.trifenix.io",
+                    Giro = "agro-fenix",
+                    Phone = "99999999"
+                });
+
+                var businnesName = await agroManager.BusinessName.Get(businessNameInput.IdRelated);
+
+                Assert.True(businnesName.Result.Name.Equals("TrifenixA"));
+
+                //Centro de costo
+
+                var costCenterInput = await agroManager.CostCenter.SaveInput(new CostCenterInput
+                {
+                    Name = "Centro de costo",
+                    IdBusinessName = businnesName.Result.Id
+                });
+
+                var costCenter = await agroManager.CostCenter.Get(costCenterInput.IdRelated);
+
+                Assert.True(costCenter.Result.Name.Equals("Centro de costo"));
+
+                //Trabajo
+
+                var jobInput = await agroManager.Job.SaveInput(new JobInput 
+                {
+                    Name = "Agronomo"
+                });
+
+                var job = await agroManager.Job.Get(jobInput.IdRelated);
+
+                Assert.True(job.Result.Name.Equals("Agronomo"));
+
+                //Nebulizadora
+                var nebulizerInput = await agroManager.Nebulizer.SaveInput(new NebulizerInput
+                {
+                    Brand = "AM162",
+                    Code = "927002"
+                });
+
+                var nebulizer = await agroManager.Nebulizer.Get(nebulizerInput.IdRelated);
+
+                Assert.True(nebulizer.Result.Brand.Equals("AM162"));
+
+                //Eventos Fenologicos
+                var phenologicalEventInput = await agroManager.PhenologicalEvent.SaveInput(new PhenologicalEventInput
+                {
+                    Name = "Lluvia",
+                    StartDate = new DateTime(2021, 3, 1),
+                    EndDate = new DateTime(2022, 3, 1)
+                });
+
+                var phenologicalEvent = await agroManager.PhenologicalEvent.Get(phenologicalEventInput.IdRelated);
+
+                Assert.True(phenologicalEvent.Result.Name.Equals("Lluvia"));
+
+                //Rol
+                var roleInput = await agroManager.Role.SaveInput(new RoleInput
+                {
+                    Name = "Recogedor",
+                });
+
+                var role = await agroManager.Role.Get(roleInput.IdRelated);
+
+                Assert.True(role.Result.Name.Equals("Recogedor"));
+
+                //Raiz
+                var rootstockInput = await agroManager.Rootstock.SaveInput(new RootstockInput
+                {
+                    Name = "Royal",
+                    Abbreviation = "Ryl"
+                });
+
+                var rootstock = await agroManager.Rootstock.Get(rootstockInput.IdRelated);
+
+                Assert.True(rootstock.Result.Name.Equals("Royal"));
             }
+
         }
+
+
     }
 }
