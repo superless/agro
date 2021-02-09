@@ -169,22 +169,27 @@ namespace trifenix.connect.agro.tests.mock
                     AgroData.Sectors = Mdm.Reflection.Collections.UpsertToCollection((Sector)(object)element, AgroData.Sectors);
                     break;
                 case EntityRelated.PREORDER:
+                    AgroData.PreOrders = Mdm.Reflection.Collections.UpsertToCollection((PreOrder)(object)element, AgroData.PreOrders);
                     break;
                 case EntityRelated.TARGET:
                     AgroData.ApplicationTargets = Mdm.Reflection.Collections.UpsertToCollection((ApplicationTarget)(object)element, AgroData.ApplicationTargets);
                     break;
                 case EntityRelated.TRACTOR:
+                    AgroData.Tractors = Mdm.Reflection.Collections.UpsertToCollection((Tractor)(object)element, AgroData.Tractors);
                     break;
                 case EntityRelated.USER:
+                    AgroData.UserApplicators = Mdm.Reflection.Collections.UpsertToCollection((UserApplicator)(object)element, AgroData.UserApplicators);
                     break;
                 case EntityRelated.VARIETY:
                     AgroData.Varieties = Mdm.Reflection.Collections.UpsertToCollection((Variety)(object)element, AgroData.Varieties);
                     break;
                 case EntityRelated.NOTIFICATION_EVENT:
+                    AgroData.NotificationEvents = Mdm.Reflection.Collections.UpsertToCollection((NotificationEvent)(object)element, AgroData.NotificationEvents);
                     break;
                 case EntityRelated.POLLINATOR:
                     break;
                 case EntityRelated.ORDER_FOLDER:
+                    AgroData.OrderFolders = Mdm.Reflection.Collections.UpsertToCollection((OrderFolder)(object)element, AgroData.OrderFolders);
                     break;
                 case EntityRelated.EXECUTION_ORDER:
                     break;
@@ -267,22 +272,21 @@ namespace trifenix.connect.agro.tests.mock
                 case EntityRelated.SECTOR:
                     return (T)(object)AgroData.Sectors.First(s => s.Id.Equals(id));
                 case EntityRelated.PREORDER:
-                    break;
+                    return (T)(object)AgroData.PreOrders.First(s => s.Id.Equals(id));
                 case EntityRelated.TARGET:
                     return (T)(object)AgroData.ApplicationTargets.First(s => s.Id.Equals(id));
                 case EntityRelated.TRACTOR:
-                    break;
+                    return (T)(object)AgroData.Tractors.First(s => s.Id.Equals(id));
                 case EntityRelated.USER:
-                    break;
+                    return (T)(object)AgroData.UserApplicators.First(s => s.Id.Equals(id));
                 case EntityRelated.VARIETY:
                     return (T)(object)AgroData.Varieties.First(s => s.Id.Equals(id));
-                    
                 case EntityRelated.NOTIFICATION_EVENT:
                     break;
                 case EntityRelated.POLLINATOR:
                     break;
                 case EntityRelated.ORDER_FOLDER:
-                    break;
+                    return (T)(object)AgroData.OrderFolders.First(s => s.Id.Equals(id));
                 case EntityRelated.EXECUTION_ORDER:
                     break;
                 case EntityRelated.ORDER:
@@ -355,6 +359,7 @@ namespace trifenix.connect.agro.tests.mock
                 case EntityRelated.NEBULIZER:
                     break;
                 case EntityRelated.PHENOLOGICAL_EVENT:
+                    AgroData.Ingredients = Mdm.Reflection.Collections.DeleteElementInCollection(id, AgroData.Ingredients);
                     break;
                 case EntityRelated.PLOTLAND:
                     break;

@@ -607,7 +607,7 @@ namespace trifenix.agro.external.operations.tests.data
             Name = "Trabajo2",
             Id = ConstantGuids.Value[1]
         };
-        public static JobInput[] Jobs { get; set; } = new JobInput[] { JobInput1, JobInput2 };
+        public static JobInput[] Jobs = new JobInput[] { JobInput1, JobInput2 };
 
         #endregion
 
@@ -626,7 +626,7 @@ namespace trifenix.agro.external.operations.tests.data
             Code = "Codigo2"
         };
 
-        public static NebulizerInput[] Nebulizers { get; set; } = new NebulizerInput[] { NebulizerInput1, NebulizerInput2 };
+        public static NebulizerInput[] Nebulizers = new NebulizerInput[] { NebulizerInput1, NebulizerInput2 };
 
         #endregion
 
@@ -647,7 +647,7 @@ namespace trifenix.agro.external.operations.tests.data
             EndDate = new DateTime(2021, 3, 1)
         };
 
-        public static PhenologicalEventInput[] PhenologicalEvents { get; set; } = new PhenologicalEventInput[] { PhenologicalEventInput1, PhenologicalEventInput2 };
+        public static PhenologicalEventInput[] PhenologicalEvents = new PhenologicalEventInput[] { PhenologicalEventInput1, PhenologicalEventInput2 };
 
         #endregion
 
@@ -666,11 +666,111 @@ namespace trifenix.agro.external.operations.tests.data
 
         };
 
-        public static RoleInput[] Roles { get; set; } = new RoleInput[] { RoleInput1, RoleInput2 };
+        public static RoleInput[] Roles = new RoleInput[] { RoleInput1, RoleInput2 };
 
         #endregion
 
-    }
+        #region PreOrden
+
+        public static PreOrderInput PreOrdenInput1 => new PreOrderInput
+        {
+            Name = "Pre orden 1",
+            Id = ConstantGuids.Value[0],
+            IdIngredient = ConstantGuids.Value[0],
+            OrderFolderId = ConstantGuids.Value[0],
+            PreOrderType = PreOrderType.DEFAULT,
+            BarracksId = ConstantGuids.Value
+        };
+        public static PreOrderInput PreOrdenInput2 => new PreOrderInput
+        {
+            Name = "Pre orden 2",
+            Id = ConstantGuids.Value[1],
+            IdIngredient = ConstantGuids.Value[1],
+            OrderFolderId = ConstantGuids.Value[1],
+            PreOrderType = PreOrderType.PHENOLOGICAL,
+            BarracksId = ConstantGuids.Value
+
+        };
+
+        public static PreOrderInput[] PreOrders = new PreOrderInput[] { PreOrdenInput1, PreOrdenInput2 };
+
+        #endregion
+
+        #region Tractor
+
+        public static TractorInput TractorInput1 => new TractorInput
+        {
+            Id = ConstantGuids.Value[0],
+            Brand = ConstantGuids.Value[0],
+            Code = ConstantGuids.Value[0]
+
+        };
+        public static TractorInput TractorInput2 => new TractorInput
+        {
+            Id = ConstantGuids.Value[1],
+            Brand = ConstantGuids.Value[1],
+            Code = ConstantGuids.Value[1]
+
+        };
+
+        public static TractorInput[] Tractors = new TractorInput[] { TractorInput1, TractorInput2 };
+
+        #endregion
+
+        #region UserApplicator
+
+        public static UserApplicatorInput UserApplicatorInput1 => new UserApplicatorInput
+        {
+            Id = ConstantGuids.Value[0],
+            IdNebulizer = ConstantGuids.Value[0],
+            IdTractor = ConstantGuids.Value[0],
+            Name = "Trifenix",
+            Email = "Trifenix@trifenix.io",
+            Rut = "20200200-5",
+            IdJob = ConstantGuids.Value[0],
+            IdsRoles = new List<string> { RoleInput1.Id, RoleInput2.Id }
+        };
+        public static UserApplicatorInput UserApplicatorInput2 => new UserApplicatorInput
+        {
+            Id = ConstantGuids.Value[1],
+            IdNebulizer = ConstantGuids.Value[1],
+            IdTractor = ConstantGuids.Value[1],
+            Name = "Trifenix2",
+            Email = "Trifenix2@trifenix.io",
+            Rut = "20100100-9",
+            IdJob = ConstantGuids.Value[1],
+            IdsRoles = new List<string> { RoleInput1.Id, RoleInput2.Id }
+        };
+
+        public static UserApplicatorInput[] UserApplicators = new UserApplicatorInput[] { UserApplicatorInput1, UserApplicatorInput2 };
+
+        #endregion
+
+        #region OrderFolder
+
+        public static OrderFolderInput OrdenFolderInput1 => new OrderFolderInput
+        {
+            Id = ConstantGuids.Value[0],
+            IdPhenologicalEvent = ConstantGuids.Value[0],
+            IdApplicationTarget = ConstantGuids.Value[0],
+            IdSpecie = ConstantGuids.Value[0],
+            IdIngredient = ConstantGuids.Value[0],
+            IdIngredientCategory = ConstantGuids.Value[0]
+        };
+        public static OrderFolderInput OrdenFolderInput2 => new OrderFolderInput
+        {
+            Id = ConstantGuids.Value[1],
+            IdPhenologicalEvent = ConstantGuids.Value[1],
+            IdApplicationTarget = ConstantGuids.Value[1],
+            IdSpecie = ConstantGuids.Value[1],
+            IdIngredient = ConstantGuids.Value[1],
+            IdIngredientCategory = ConstantGuids.Value[1]
+        };
+
+        public static OrderFolderInput[] OrderFolders = new OrderFolderInput[] { OrdenFolderInput1, OrdenFolderInput2 };
+
+        #endregion
+}
 
 
 
