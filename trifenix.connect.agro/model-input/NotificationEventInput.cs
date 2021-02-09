@@ -45,7 +45,7 @@ namespace trifenix.connect.agro_model_input
         /// <summary>
         /// ?
         /// </summary>
-        public string Base64 { get; set; }
+        //public string Base64 { get; set; }
 
         /// <summary>
         /// Geolocalización del evento

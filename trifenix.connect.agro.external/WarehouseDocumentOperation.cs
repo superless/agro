@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using trifenix.connect.agro.external.main;
+using trifenix.connect.agro.index_model.enums;
 using trifenix.connect.agro.interfaces;
 using trifenix.connect.agro.interfaces.cosmos;
 using trifenix.connect.agro.interfaces.external;
@@ -16,9 +17,7 @@ namespace trifenix.agro.external
 {
 
     /// <summary>
-    /// Opreaciones de las dosis,
-    /// dentro de esta se pueden ejecutar las operaciones de remover,
-    /// validar y actualizar datos
+    /// Operaciones para el ingreso correcto de un documento de bodega
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class WarehouseDocumentOperations<T> : MainOperation<WarehouseDocument, WarehouseDocumentInput, T>, IGenericOperation<WarehouseDocument, WarehouseDocumentInput>
@@ -34,6 +33,12 @@ namespace trifenix.agro.external
 
         public async override Task Validate(WarehouseDocumentInput input)
         {
+            if (!Enum.IsDefined(typeof(DocumentType), input.Type))
+                throw new ArgumentOutOfRangeException();
+
+            if (!Enum.IsDefined(typeof(PaymentType), input.PaymentType))
+                throw new ArgumentOutOfRangeException();
+
             if (string.IsNullOrWhiteSpace(input.IdWarehouse))
             {
                 throw new Exception("Se ha ingresado un documento de bodega sin bodega asociada");
@@ -53,7 +58,7 @@ namespace trifenix.agro.external
             var warehouseDocument = new WarehouseDocument
             {
                 Id = id,
-                idWarehouse = warehouseDocumentInput.IdWarehouse,
+                IdWarehouse = warehouseDocumentInput.IdWarehouse,
                 Type = warehouseDocumentInput.Type,
                 EmissionDate = warehouseDocumentInput.EmissionDate,
                 PaymentType = warehouseDocumentInput.PaymentType,

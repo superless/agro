@@ -55,7 +55,7 @@ namespace trifenix.connect.agro.model
         /// 
         /// </summary>
         [ReferenceSearch(EntityRelated.WAREHOUSE)]
-        public string idWarehouse { get; set; }
+        public string IdWarehouse { get; set; }
 
 
         private List<ProductDocument> _productsDocument;

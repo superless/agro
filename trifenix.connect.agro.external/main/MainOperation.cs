@@ -62,7 +62,6 @@ namespace trifenix.connect.agro.external.main
         /// <param name="validator">Validador de entidades input</param>
         public MainOperation(IMainGenericDb<T> repo, IAgroSearch<T_GEO> search, ICommonDbOperations<T> commonDb, IValidatorAttributes<T_INPUT> validator) {
             this.repo = repo;
-            
             this.search = search;
             this.commonDb = commonDb;
             this.valida = validator;
