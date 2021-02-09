@@ -8,7 +8,6 @@ using trifenix.connect.agro_model_input;
 using trifenix.connect.interfaces.db.cosmos;
 using trifenix.connect.interfaces.external;
 using trifenix.connect.mdm.containers;
-using trifenix.connect.mdm.enums;
 
 namespace trifenix.connect.agro.external
 {
