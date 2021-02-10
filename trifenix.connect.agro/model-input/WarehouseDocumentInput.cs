@@ -25,7 +25,7 @@ namespace trifenix.connect.agro_model_input
         /// </summary>
         [Required]
         [EnumSearch(EnumRelated.DOCUMENT_TYPE)]
-        public DocumentType Type { get; set; }
+        public DocumentType DocumentType { get; set; }
 
         /// <summary>
         /// Fecha de emisión del documento
@@ -45,6 +45,10 @@ namespace trifenix.connect.agro_model_input
         /// Define si es un documento de entrada o salida
         /// </summary>
         [Required]
+        [EnumSearch(EnumRelated.DOCUMENT_STATE)]
+        public DocumentState DocumentState { get; set; }
+
+        [Required]
         public bool Output { get; set; }
 
         /// <summary>
@@ -53,5 +57,11 @@ namespace trifenix.connect.agro_model_input
         [Required]
         [ReferenceSearch(EntityRelated.PRODUCTDOCUMENT, true)]
         public ProductDocumentInput[] ProductDocuments { get; set; }
+
+        /// <summary>
+        /// Centro de costos de destino en caso de ser una transaccion de salida
+        /// </summary>
+        [ReferenceSearch(EntityRelated.BUSINESSNAME)]
+        public string IdBusinessName { get; set; }
     }
 }

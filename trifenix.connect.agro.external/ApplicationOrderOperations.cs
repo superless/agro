@@ -40,6 +40,8 @@ namespace trifenix.connect.agro.external
             if (applicationOrderInput.OrderType == OrderType.PHENOLOGICAL && !applicationOrderInput.IdsPreOrder.Any())
                     errors.Add("Si la orden es fenológica, deben existir preordenes fenologicas asociadas.");
 
+            if (!Enum.IsDefined(typeof(OrderType), applicationOrderInput.OrderType))
+                throw new ArgumentOutOfRangeException();
 
             foreach (var doses in applicationOrderInput.DosesOrder) {
                 bool exists = await existElement.ExistsById<Dose>(doses.IdDoses);

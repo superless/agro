@@ -7,7 +7,6 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using trifenix.agro.functions.Helper;
-
 using trifenix.connect.agro.interfaces.external;
 using trifenix.connect.bus;
 using trifenix.connect.entities.cosmos;

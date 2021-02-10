@@ -28,10 +28,6 @@ namespace trifenix.connect.agro.external
             this.commonQueries = commonQueries;
         }
 
-        
-
-       
-
         public override async Task<ExtPostContainer<string>> SaveInput(BarrackInput input) {
             await Validate(input);
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
