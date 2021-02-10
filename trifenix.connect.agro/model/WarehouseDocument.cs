@@ -32,7 +32,7 @@ namespace trifenix.connect.agro.model
         /// Tipo de documento
         /// </summary>
         [EnumSearch(EnumRelated.DOCUMENT_TYPE)]
-        public DocumentType Type { get; set; }
+        public DocumentType DocumentType { get; set; }
 
         /// <summary>
         /// Fecha de emisión del documento
@@ -47,16 +47,21 @@ namespace trifenix.connect.agro.model
         public PaymentType PaymentType { get; set; }
 
         /// <summary>
-        /// Determina si el documento es de entrada o salida de productos
+        /// Determina el estado del documento 
         /// </summary>
-        public bool Output { get; set; }
+        [EnumSearch(EnumRelated.DOCUMENT_STATE)]
+        public DocumentState DocumentState { get; set; }
 
         /// <summary>
-        /// 
+        /// Búsqueda por referencia de la bodega asociada
         /// </summary>
         [ReferenceSearch(EntityRelated.WAREHOUSE)]
         public string IdWarehouse { get; set; }
 
+        /// <summary>
+        /// Determina si el documento es de entrada o salida
+        /// </summary>
+        public bool Output { get; set; }
 
         private List<ProductDocument> _productsDocument;
 
@@ -74,5 +79,7 @@ namespace trifenix.connect.agro.model
             set { _productsDocument = value; }
         }
 
+        [ReferenceSearch(EntityRelated.BUSINESSNAME)]
+        public string IdBusinessName { get; set; }
     }
 }

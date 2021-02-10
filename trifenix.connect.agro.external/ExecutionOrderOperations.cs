@@ -30,10 +30,13 @@ namespace trifenix.agro.external.operations.entities.orders
         public override async Task Validate(ExecutionOrderInput executionOrderInput) {
             await base.Validate(executionOrderInput);
             List<string> errors = new List<string>();
+
             if (!executionOrderInput.DosesOrder.Any())
                 errors.Add("Debe existir al menos una dosis.");
+
             if (executionOrderInput.StartDate > executionOrderInput.EndDate)
                 errors.Add("La fecha inicial no puede ser mayor a la final.");
+           
             if (errors.Count > 0)
                 throw new Validation_Exception { ErrorMessages = errors };
         }

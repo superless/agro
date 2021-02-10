@@ -33,10 +33,13 @@ namespace trifenix.agro.external
 
         public async override Task Validate(WarehouseDocumentInput input)
         {
-            if (!Enum.IsDefined(typeof(DocumentType), input.Type))
+            if (!Enum.IsDefined(typeof(DocumentType), input.DocumentType))
                 throw new ArgumentOutOfRangeException();
 
             if (!Enum.IsDefined(typeof(PaymentType), input.PaymentType))
+                throw new ArgumentOutOfRangeException();
+
+            if (!Enum.IsDefined(typeof(DocumentState), input.DocumentState))
                 throw new ArgumentOutOfRangeException();
 
             if (string.IsNullOrWhiteSpace(input.IdWarehouse))
@@ -59,9 +62,10 @@ namespace trifenix.agro.external
             {
                 Id = id,
                 IdWarehouse = warehouseDocumentInput.IdWarehouse,
-                Type = warehouseDocumentInput.Type,
+                DocumentType = warehouseDocumentInput.DocumentType,
                 EmissionDate = warehouseDocumentInput.EmissionDate,
                 PaymentType = warehouseDocumentInput.PaymentType,
+                DocumentState = warehouseDocumentInput.DocumentState,
                 Output = warehouseDocumentInput.Output,
                 ProductDocuments = warehouseDocumentInput.ProductDocuments == null || !warehouseDocumentInput.ProductDocuments.Any() ? new List<ProductDocument>() : warehouseDocumentInput.ProductDocuments.Select(PD_Input => new ProductDocument
                 {
@@ -69,6 +73,7 @@ namespace trifenix.agro.external
                     Quantity = PD_Input.Quantity,
                     Price = PD_Input.Price
                 }).ToList(),
+                IdBusinessName = warehouseDocumentInput.IdBusinessName,
             };
             await SaveDb(warehouseDocument);
             return await SaveSearch(warehouseDocument);

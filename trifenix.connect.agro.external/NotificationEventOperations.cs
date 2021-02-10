@@ -37,7 +37,7 @@ namespace trifenix.connect.agro.external
         public override async Task<ExtPostContainer<string>> SaveInput(NotificationEventInput input) {
             await Validate(input);
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
-            //var picturePath = await uploadImage.UploadImageBase64(input.Base64);
+            var picturePath = await uploadImage.UploadImageBase64(input.Base64);
             
 
             NotificationEvent notification = new NotificationEvent {
@@ -46,29 +46,29 @@ namespace trifenix.connect.agro.external
                 IdBarrack = input.IdBarrack,
                 IdPhenologicalEvent = input.IdPhenologicalEvent,
                 NotificationType = input.NotificationType,
-                //PicturePath = picturePath,
+                PicturePath = picturePath,
                 Description = input.Description,
                 
             };
             //TODO: Cambiar tipo de dato a GeoSpacial
-            //#if !CONNECT
-            //if (input.Location != null) {
-            //    notification.Location = new Point(input.Location.Lng, input.Location.Lat);
-            //    notification.Weather = await weather.GetWeather((float)input.Location.Lat, (float)input.Location.Lng);
-            //}
-            //#endif
+            #if !CONNECT
+            if (input.Location != null) {
+                notification.Location = new Point(input.Location.Lng, input.Location.Lat);
+                notification.Weather = await weather.GetWeather((float)input.Location.Lat, (float)input.Location.Lng);
+            }
+            #endif
 
             await SaveDb(notification);
-            //var usersEmails = await commonQueries.GetUsersMailsFromRoles(new List<string> { "24beac75d4bb4f8d8fae8373426af780" });
-            //email.SendEmail(usersEmails, "Notificacion",
-            //    $@"<html>
-            //        <body>
-            //            <p> Estimado(a), </p>
-            //            <p> Llego una notificacion </p>
-            //            <img src='{picturePath}' style='width:50%;height:auto;'>
-            //            <p> Atentamente,<br> -Aresa </br></p>
-            //       </body>
-            //    </html>");
+            var usersEmails = await commonQueries.GetUsersMailsFromRoles(new List<string> { "24beac75d4bb4f8d8fae8373426af780" });
+            email.SendEmail(usersEmails, "Notificacion",
+                $@"<html>
+                    <body>
+                        <p> Estimado(a), </p>
+                        <p> Llego una notificacion </p>
+                        <img src='{picturePath}' style='width:50%;height:auto;'>
+                        <p> Atentamente,<br> -Aresa </br></p>
+                   </body>
+                </html>");
 
             return await SaveSearch(notification);
         }

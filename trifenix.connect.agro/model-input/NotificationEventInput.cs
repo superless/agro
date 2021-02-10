@@ -43,9 +43,9 @@ namespace trifenix.connect.agro_model_input
         public DateTime Created { get; set; }
 
         /// <summary>
-        /// ?
+        /// Imágen de la notificación
         /// </summary>
-        //public string Base64 { get; set; }
+        public string Base64 { get; set; }
 
         /// <summary>
         /// Geolocalización del evento

@@ -26,5 +26,7 @@
         DOCUMENT_TYPE = 9,
 
         PAYMENT_TYPE = 10,
+
+        DOCUMENT_STATE = 11,
     }
 }
