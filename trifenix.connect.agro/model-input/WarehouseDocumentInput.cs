@@ -14,11 +14,10 @@ namespace trifenix.connect.agro_model_input
     public class WarehouseDocumentInput : InputBase {
 
         /// <summary>
-        /// Búsqueda por referencia de la bodega asociada al documento
+        /// Centro de costos de destino en caso de ser una transaccion de salida
         /// </summary>
-        [Required]
-        [ReferenceSearch(EntityRelated.WAREHOUSE)]
-        public string IdWarehouse { get; set; }
+        [ReferenceSearch(EntityRelated.COSTCENTER)]
+        public string CCSource { get; set; }
 
         /// <summary>
         /// Tipo de documento
@@ -59,9 +58,10 @@ namespace trifenix.connect.agro_model_input
         public ProductDocumentInput[] ProductDocuments { get; set; }
 
         /// <summary>
-        /// Centro de costos de destino en caso de ser una transaccion de salida
+        /// Búsqueda por referencia de la bodega asociada al documento
         /// </summary>
-        [ReferenceSearch(EntityRelated.BUSINESSNAME)]
-        public string IdBusinessName { get; set; }
+        [Required]
+        [ReferenceSearch(EntityRelated.WAREHOUSE)]
+        public string WHDestiny { get; set; }
     }
 }

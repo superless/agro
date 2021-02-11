@@ -8,6 +8,7 @@ using trifenix.connect.agro.interfaces;
 using trifenix.connect.agro.interfaces.cosmos;
 using trifenix.connect.agro.interfaces.external;
 using trifenix.connect.agro.model;
+using trifenix.connect.agro_model;
 using trifenix.connect.agro_model_input;
 using trifenix.connect.interfaces.db.cosmos;
 using trifenix.connect.interfaces.external;
@@ -42,9 +43,34 @@ namespace trifenix.agro.external
             if (!Enum.IsDefined(typeof(DocumentState), input.DocumentState))
                 throw new ArgumentOutOfRangeException();
 
-            if (string.IsNullOrWhiteSpace(input.IdWarehouse))
+            if (string.IsNullOrWhiteSpace(input.WHDestiny) || string.IsNullOrWhiteSpace(input.CCSource))
             {
-                throw new Exception("Se ha ingresado un documento de bodega sin bodega asociada");
+                throw new Exception("Se ha ingresado un documento de bodega sin fuente o destino");
+            }
+
+            if (input.Output)
+            {
+                // Si output es true, significa que es un documento de entrada, por lo que se debe validar que el proveedor
+                // no posea un cost center asociado.
+                var proveedores = await Queries.GetBusinessNameIdFromCostCenter(input.CCSource);
+                if (proveedores.Any())
+                {
+                    throw new Exception("El business name posee centro de costos, por lo que no puede ser un proveedor");
+                }
+            }
+            if (!input.Output)
+            {
+                // Si output es false, significa que es un documento de salida, por lo que la bodega asociada pasa a ser el origen 
+                // de la transacción, y el business name, el destino. Se debe validar que el business name que está como destino
+                // posea un centro de costos asociado. 
+                var temp = input.WHDestiny;
+                input.WHDestiny = input.CCSource;
+                input.CCSource = temp;
+                var proveedoresO = await Queries.GetBusinessNameIdFromCostCenter(input.CCSource);
+                if (!proveedoresO.Any())
+                {
+                    throw new Exception("El business name posee no posee centro de costos, por lo que no puede ser realizado el traspaso");
+                }
             }
             else
             {
@@ -61,7 +87,7 @@ namespace trifenix.agro.external
             var warehouseDocument = new WarehouseDocument
             {
                 Id = id,
-                IdWarehouse = warehouseDocumentInput.IdWarehouse,
+                WHDestiny = warehouseDocumentInput.WHDestiny,
                 DocumentType = warehouseDocumentInput.DocumentType,
                 EmissionDate = warehouseDocumentInput.EmissionDate,
                 PaymentType = warehouseDocumentInput.PaymentType,
@@ -73,7 +99,7 @@ namespace trifenix.agro.external
                     Quantity = PD_Input.Quantity,
                     Price = PD_Input.Price
                 }).ToList(),
-                IdBusinessName = warehouseDocumentInput.IdBusinessName,
+                CCSource = warehouseDocumentInput.CCSource
             };
             await SaveDb(warehouseDocument);
             return await SaveSearch(warehouseDocument);

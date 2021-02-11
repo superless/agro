@@ -57,7 +57,12 @@ namespace trifenix.connect.agro.queries
         /// <returns></returns>
         public async Task<IEnumerable<string>> GetActiveDosesIdsFromProductId(string idProduct) => await MultipleQuery<Dose, string>(Queries(DbQuery.ACTIVEDOSESIDS_FROM_PRODUCTID), idProduct);
 
-        
+        /// <summary>
+        /// Obtener business name asociado a un cost center, si es que existe
+        /// </summary>
+        /// <param name="idBusinessName"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<string>> GetBusinessNameIdFromCostCenter(string idBusinessName) => await MultipleQuery<CostCenter, string>(Queries(DbQuery.BUSINESSNAME_FROM_COSTCENTER), idBusinessName);
 
     }
 

@@ -9,7 +9,6 @@ namespace trifenix.connect.agro.interfaces
     public interface ICommonAgroQueries {
 
         
-
         /// <summary>
         /// Obtiene los corroeos desde los roles.
         /// </summary>
@@ -47,10 +46,12 @@ namespace trifenix.connect.agro.interfaces
         /// <returns>identificadores de las dosis activas</returns>
         Task<IEnumerable<string>> GetActiveDosesIdsFromProductId(string idProduct);
 
-        
-
-
-
+        /// <summary>
+        /// Obtiene el business name asociado al idBusinessName de un cost center, si es que existe
+        /// </summary>
+        /// <param name="idBusinessName"></param>
+        /// <returns></returns>
+        Task<IEnumerable<string>> GetBusinessNameIdFromCostCenter(string idBusinessName);
     }
 
 }

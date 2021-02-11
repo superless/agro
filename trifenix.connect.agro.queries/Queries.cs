@@ -111,6 +111,13 @@ namespace trifenix.connect.agro.queries
                 /// </summary>
                 case DbQuery.NAME_BY_ID:
                     return QueryRes.NAME_BY_ID;
+
+                /// <summary>
+                /// Obtener el business name de un cost center, si es que existe
+                /// </summary>
+                case DbQuery.BUSINESSNAME_FROM_COSTCENTER:
+                    return QueryRes.BUSINESSNAME_FROM_COSTCENTER;
+
                 default:
                     return "";
             }
