@@ -53,12 +53,6 @@ namespace trifenix.connect.agro.model
         public DocumentState DocumentState { get; set; }
 
         /// <summary>
-        /// Búsqueda por referencia de la bodega asociada
-        /// </summary>
-        [ReferenceSearch(EntityRelated.WAREHOUSE)]
-        public string IdWarehouse { get; set; }
-
-        /// <summary>
         /// Determina si el documento es de entrada o salida
         /// </summary>
         public bool Output { get; set; }
@@ -79,7 +73,16 @@ namespace trifenix.connect.agro.model
             set { _productsDocument = value; }
         }
 
-        [ReferenceSearch(EntityRelated.BUSINESSNAME)]
-        public string IdBusinessName { get; set; }
+        /// <summary>
+        /// Búsqueda por referencia de la bodega asociada
+        /// </summary>
+        [ReferenceSearch(EntityRelated.WAREHOUSE)]
+        public string WHDestiny { get; set; }
+
+        /// <summary>
+        /// Búsqueda por referencia de la empresa asociada
+        /// </summary>
+        [ReferenceSearch(EntityRelated.COSTCENTER)]
+        public string CCSource { get; set; }
     }
 }

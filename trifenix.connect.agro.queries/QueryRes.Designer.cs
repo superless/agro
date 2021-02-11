@@ -70,6 +70,15 @@ namespace trifenix.connect.agro.queries {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SELECT value c.id FROM c where c.IdBusinessName = &apos;{0}&apos;.
+        /// </summary>
+        public static string BUSINESSNAME_FROM_COSTCENTER {
+            get {
+                return ResourceManager.GetString("BUSINESSNAME_FROM_COSTCENTER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SELECT value c.ClientId FROM c where c.id =&apos;{0}&apos;.
         /// </summary>
         public static string CORRELATIVE_FROM_DOSESID {
