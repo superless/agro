@@ -52,8 +52,8 @@ namespace trifenix.agro.external
             {
                 // Si output es true, significa que es un documento de entrada, por lo que se debe validar que el proveedor
                 // no posea un cost center asociado.
-                var proveedores = await Queries.GetBusinessNameIdFromCostCenter(input.CCSource);
-                if (proveedores.Any())
+                var providers = await Queries.GetBusinessNameIdFromCostCenter(input.CCSource);
+                if (providers.Any())
                 {
                     throw new Exception("El business name posee centro de costos, por lo que no puede ser un proveedor");
                 }
@@ -66,8 +66,8 @@ namespace trifenix.agro.external
                 var temp = input.WHDestiny;
                 input.WHDestiny = input.CCSource;
                 input.CCSource = temp;
-                var proveedoresO = await Queries.GetBusinessNameIdFromCostCenter(input.CCSource);
-                if (!proveedoresO.Any())
+                var providers = await Queries.GetBusinessNameIdFromCostCenter(input.CCSource);
+                if (!providers.Any())
                 {
                     throw new Exception("El business name posee no posee centro de costos, por lo que no puede ser realizado el traspaso");
                 }

@@ -64,16 +64,15 @@ namespace trifenix.connect.agro.external
         /// <param name="idProduct">identificador del producto</param>
         /// <returns></returns>
         private async Task<string> CreateDefaultDoses(string idProduct) {
+
             var dosesInput = new DosesInput {
                 IdProduct = idProduct,
                 Active = true,
                 Default = true
             };
 
-
             // guarda en base de datos de operación.
             var result = await dosesOperation.SaveInput(dosesInput);
-
 
             return result.IdRelated;
         }
@@ -177,9 +176,6 @@ namespace trifenix.connect.agro.external
                 dose.IdProduct = id;
                 return dose;
             });
-
-            
-
 
             //4. guarda cada dosis
             foreach (var dose in doses) {

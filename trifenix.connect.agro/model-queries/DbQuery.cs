@@ -23,7 +23,8 @@ namespace trifenix.connect.agro.model_queries
         DEFAULTDOSESID_BY_PRODUCTID  = 14,
         ACTIVEDOSESIDS_FROM_PRODUCTID = 15,
         NAME_BY_ID = 16,
-        BUSINESSNAME_FROM_COSTCENTER = 17
+        BUSINESSNAME_FROM_COSTCENTER = 17,
+        ORDERFOLDERINGREDIENT_FROM_PREORDER = 18
 
     }
 }

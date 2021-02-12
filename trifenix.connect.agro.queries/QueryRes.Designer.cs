@@ -178,6 +178,24 @@ namespace trifenix.connect.agro.queries {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string ORDERFOLDERINGREDIENT_FROM_PREORDER {
+            get {
+                return ResourceManager.GetString("ORDERFOLDERINGREDIENT_FROM_PREORDER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT value c.Ingredient FROM c where c.CosmosEntityName = &quot;PreOrder&quot; and c.OrderFolderId = {&apos;0&apos;}.
+        /// </summary>
+        public static string PREORDERINGREDIENT_FROM_ORDERFOLDER {
+            get {
+                return ResourceManager.GetString("PREORDERINGREDIENT_FROM_ORDERFOLDER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SELECT value c.SeasonId FROM c where c.id = &apos;{0}&apos;.
         /// </summary>
         public static string SEASONID_FROM_BARRACKID {

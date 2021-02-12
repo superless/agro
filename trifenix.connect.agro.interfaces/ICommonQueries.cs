@@ -52,6 +52,13 @@ namespace trifenix.connect.agro.interfaces
         /// <param name="idBusinessName"></param>
         /// <returns></returns>
         Task<IEnumerable<string>> GetBusinessNameIdFromCostCenter(string idBusinessName);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="idBarrack"></param>
+        /// <returns></returns>
+        //Task<IEnumerable<string>> GetOlderFolderIngredientFromPreOrder(string IngredientId);
     }
 
 }

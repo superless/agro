@@ -118,6 +118,8 @@ namespace trifenix.connect.agro.queries
                 case DbQuery.BUSINESSNAME_FROM_COSTCENTER:
                     return QueryRes.BUSINESSNAME_FROM_COSTCENTER;
 
+                //case DbQuery.PREORDER_FROM_BARRACKID:
+                //    return QueryRes.PREORDER_FROM_BARRACKID;
                 default:
                     return "";
             }

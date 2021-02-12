@@ -64,6 +64,12 @@ namespace trifenix.connect.agro.queries
         /// <returns></returns>
         public async Task<IEnumerable<string>> GetBusinessNameIdFromCostCenter(string idBusinessName) => await MultipleQuery<CostCenter, string>(Queries(DbQuery.BUSINESSNAME_FROM_COSTCENTER), idBusinessName);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="IngredientId"></param>
+        /// <returns></returns>
+        //public async Task<IEnumerable<string>> GetOrderFolderIngredientFromPreOrder(string IngredientId) => await MultipleQuery<OrderFolder, string>(Queries(DbQuery.ORDERFOLDERINGREDIENT_FROM_PREORDER), IngredientId);
     }
 
 }

@@ -20,7 +20,6 @@ namespace trifenix.connect.agro_model
         /// </summary>
         public override string Id { get; set; }
 
-
         /// <summary>
         /// Nombre del producto.
         /// </summary>
