@@ -25,15 +25,9 @@ namespace trifenix.connect.agro_model_input
         /// <summary>
         /// Búsqueda por referencia de la carpeta de ordenes asociada
         /// </summary>
-        [Reference(typeof(OrderFolder))]
+        [Required, Reference(typeof(OrderFolder))]
         [ReferenceSearch(EntityRelated.ORDER_FOLDER)]
         public string OrderFolderId { get; set; }
-
-        /// <summary>
-        /// Búsqueda por referencia de ingrediente
-        /// </summary>
-        [Reference(typeof(Ingredient))]
-        public string IdIngredient { get; set; }
 
         /// <summary>
         /// Tipo de pre orden
@@ -41,16 +35,20 @@ namespace trifenix.connect.agro_model_input
         [Required]
         [EnumSearch(EnumRelated.PRE_ORDER_TYPE)]
         public PreOrderType PreOrderType { get; set; }
+
+        /// <summary>
+        /// Ingrediente especifico de la pre orden
+        /// </summary>
+        [Required, Reference(typeof(Ingredient))]
+        [ReferenceSearch(EntityRelated.INGREDIENT)]
+        public string IngredientId { get; set; }
         
         /// <summary>
         /// Búsqueda por referencia de cuartel asociado
         /// </summary>
-        [Required, Reference(typeof(Barrack))]
+        [Required]
         [ReferenceSearch(EntityRelated.BARRACK)]
-        public string[] BarracksId { get; set; }
+        public string[] BarrackIds { get; set; }
 
     }
-
-    
-
 }

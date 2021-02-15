@@ -118,6 +118,18 @@ namespace trifenix.connect.agro.queries
                 case DbQuery.BUSINESSNAME_FROM_COSTCENTER:
                     return QueryRes.BUSINESSNAME_FROM_COSTCENTER;
 
+                /// <summary>
+                /// Obtiene el ingrediente de la order folder desde el order folder de la pre orden
+                /// </summary>
+                case DbQuery.ORDERFOLDERINGREDIENT_FROM_PREORDER:
+                    return QueryRes.ORDERFOLDERINGREDIENT_FROM_PREORDER;
+
+                /// <summary>
+                /// 
+                /// </Obtiene los ingredientes de todas las pre ordenes de una older folder>
+                case DbQuery.PREORDERINGREDIENT_FROM_ORDERFOLDER:
+                    return QueryRes.PREORDERINGREDIENT_FROM_ORDERFOLDER;
+
                 default:
                     return "";
             }

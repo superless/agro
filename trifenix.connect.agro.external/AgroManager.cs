@@ -149,7 +149,7 @@ namespace trifenix.agro.external
         /// Documento de bodega
         /// </summary>
         public IGenericOperation<WarehouseDocument, WarehouseDocumentInput> WarehouseDocument => new WarehouseDocumentOperations<T>(dbConnect.GetDbExistsElements, GetMainDb<WarehouseDocument>(), Search, GetCommonDbOp<WarehouseDocument>(), CommonQueries, GetValidators<WarehouseDocumentInput, WarehouseDocument>());
-        
+
         /// <summary>
         /// Roles
         /// </summary>
@@ -182,7 +182,8 @@ namespace trifenix.agro.external
 
         public IGenericOperation<NotificationEvent, NotificationEventInput> NotificationEvent => new NotificationEventOperations<T>(GetMainDb<NotificationEvent>(), Search, CommonQueries, _email, _uploadImage, _weatherApi, GetCommonDbOp<NotificationEvent>(), GetValidators<NotificationEventInput, NotificationEvent>());
 
-        public IGenericOperation<PreOrder, PreOrderInput> PreOrder => new PreOrdersOperations<T>(GetMainDb<PreOrder>(), Search, CommonQueries, GetCommonDbOp<PreOrder>(), GetValidators<PreOrderInput, PreOrder>());
+        public IGenericOperation<PreOrder, PreOrderInput> PreOrder => new PreOrdersOperations<T>(dbConnect.GetDbExistsElements, GetMainDb < PreOrder>(), Search, GetCommonDbOp<PreOrder>(), CommonQueries, GetValidators<PreOrderInput, PreOrder>());
+
 
         public IGenericOperation<ApplicationOrder, ApplicationOrderInput> ApplicationOrder => new ApplicationOrderOperations<T>(GetMainDb<ApplicationOrder>(), Search, CommonQueries, GetCommonDbOp<ApplicationOrder>(), GetValidators<ApplicationOrderInput, ApplicationOrder>());
 

@@ -64,6 +64,20 @@ namespace trifenix.connect.agro.queries
         /// <returns></returns>
         public async Task<IEnumerable<string>> GetBusinessNameIdFromCostCenter(string idBusinessName) => await MultipleQuery<CostCenter, string>(Queries(DbQuery.BUSINESSNAME_FROM_COSTCENTER), idBusinessName);
 
+        /// <summary>
+        /// Obtiene el ingrediente de la order folder desde el order folder de la pre orden
+        /// </summary>
+        /// <param name="OrderFolderId"></param>
+        /// <returns></returns>
+        public async Task<string> GetOrderFolderIngredientFromPreOrder(string OrderFolderId) => await SingleQuery<OrderFolder, string>(Queries(DbQuery.ORDERFOLDERINGREDIENT_FROM_PREORDER), OrderFolderId);
+
+        /// <summary>
+        /// Obtiene los ingredientes de todas las pre ordenes de una older folder
+        /// </summary>
+        /// <param name="OrderFolderId"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<string>> GetPreOrderIngredientFromOrderFolder(string OrderFolderId) => await MultipleQuery<PreOrder, string>(Queries(DbQuery.PREORDERINGREDIENT_FROM_ORDERFOLDER), OrderFolderId);
+    
     }
 
 }
