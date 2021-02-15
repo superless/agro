@@ -178,7 +178,7 @@ namespace trifenix.connect.agro.queries {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to SELECT value c.IdIngredient FROM c where c.id = &apos;{0}&apos;.
         /// </summary>
         public static string ORDERFOLDERINGREDIENT_FROM_PREORDER {
             get {
@@ -187,7 +187,7 @@ namespace trifenix.connect.agro.queries {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SELECT value c.Ingredient FROM c where c.CosmosEntityName = &quot;PreOrder&quot; and c.OrderFolderId = {&apos;0&apos;}.
+        ///   Looks up a localized string similar to SELECT value c.Ingredient FROM c where c.OrderFolderId = &apos;{0}&apos;.
         /// </summary>
         public static string PREORDERINGREDIENT_FROM_ORDERFOLDER {
             get {

@@ -54,11 +54,18 @@ namespace trifenix.connect.agro.interfaces
         Task<IEnumerable<string>> GetBusinessNameIdFromCostCenter(string idBusinessName);
 
         /// <summary>
-        /// 
+        /// Obtiene el ingrediente de la order folder desde el order folder de la pre orden
         /// </summary>
-        /// <param name="idBarrack"></param>
+        /// <param name="OrderFolderId"></param>
         /// <returns></returns>
-        //Task<IEnumerable<string>> GetOlderFolderIngredientFromPreOrder(string IngredientId);
+        Task<string> GetOrderFolderIngredientFromPreOrder(string OrderFolderId);
+
+        /// <summary>
+        /// Obtiene los ingredientes de todas las pre ordenes de una older folder
+        /// </summary>
+        /// <param name="OrderFolderId"></param>
+        /// <returns></returns>
+        Task<IEnumerable<string>> GetPreOrderIngredientFromOrderFolder(string OrderFolderId);
     }
 
 }

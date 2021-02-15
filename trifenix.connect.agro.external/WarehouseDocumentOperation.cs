@@ -8,7 +8,6 @@ using trifenix.connect.agro.interfaces;
 using trifenix.connect.agro.interfaces.cosmos;
 using trifenix.connect.agro.interfaces.external;
 using trifenix.connect.agro.model;
-using trifenix.connect.agro_model;
 using trifenix.connect.agro_model_input;
 using trifenix.connect.interfaces.db.cosmos;
 using trifenix.connect.interfaces.external;

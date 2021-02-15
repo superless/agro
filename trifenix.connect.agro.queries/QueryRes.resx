@@ -157,10 +157,10 @@
     <value>SELECT value c.Name FROM c where  c.id = '{0}'</value>
   </data>
   <data name="ORDERFOLDERINGREDIENT_FROM_PREORDER" xml:space="preserve">
-    <value>SELECT value c.Ingredient FROM c where c.CosmosEntityName = "OrderFolder" and c.Id = {'0'}</value>
+    <value>SELECT value c.IdIngredient FROM c where c.id = '{0}'</value>
   </data>
   <data name="PREORDERINGREDIENT_FROM_ORDERFOLDER" xml:space="preserve">
-    <value>SELECT value cIngredient FROM c where c.CosmosEntityName = "PreOrder" and c.Id = {'0'}</value>
+    <value>SELECT value c.Ingredient FROM c where c.OrderFolderId = '{0}'</value>
   </data>
   <data name="SEASONID_FROM_BARRACKID" xml:space="preserve">
     <value>SELECT value c.SeasonId FROM c where c.id = '{0}'</value>

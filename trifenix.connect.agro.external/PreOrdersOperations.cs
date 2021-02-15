@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using trifenix.connect.agro.external.main;
 using trifenix.connect.agro.index_model.enums;
 using trifenix.connect.agro.interfaces;
+using trifenix.connect.agro.interfaces.cosmos;
 using trifenix.connect.agro.interfaces.external;
 using trifenix.connect.agro.queries;
 using trifenix.connect.agro_model;
@@ -18,22 +19,29 @@ namespace trifenix.connect.agro.external
     public class PreOrdersOperations<T> : MainOperation<PreOrder, PreOrderInput,T>, IGenericOperation<PreOrder, PreOrderInput> {
         private readonly ICommonAgroQueries Queries;
 
-        public PreOrdersOperations(IMainGenericDb<PreOrder> repo,  IAgroSearch<T> search, ICommonAgroQueries Queries, ICommonDbOperations<PreOrder> commonDb, IValidatorAttributes<PreOrderInput> validator) : base(repo, search, commonDb, validator) {
-            this.Queries = Queries;
+        public PreOrdersOperations(IDbExistsElements existsElement, IMainGenericDb<PreOrder> repo, IAgroSearch<T> search, ICommonDbOperations<PreOrder> commonDb, ICommonAgroQueries queries, IValidatorAttributes<PreOrderInput> validator) : base(repo, search, commonDb, validator) { 
+            Queries = queries;
         }
     
         public async override Task Validate(PreOrderInput input)
         {
             var OFIngredient = await Queries.GetOrderFolderIngredientFromPreOrder(input.OrderFolderId);
-            
-            if (input.IngredientId = OFIngredient)
+
+            if (input.IngredientId == OFIngredient)
             {
-                var POIngredients = await Queries.GetPreOrderIngredientsFromOrderFolder(input.OrderFolderId);
-                if (input.IngredientId = POIngredients)
+                var POIngredients = await Queries.GetPreOrderIngredientFromOrderFolder(input.OrderFolderId);
+                foreach (var item in POIngredients)
                 {
-                    throw new Exception("El ingrediente de la carpeta de ordenes ya se encuentra en uso");
+                    if (input.IngredientId == item)
+                    {
+                        throw new Exception("El ingrediente de la carpeta de ordenes ya se encuentra en uso");
+                    }
                 }
-                
+            }
+            bool isUnique = input.BarrackIds.Distinct().Count() == input.BarrackIds.Count();
+            if (!isUnique)
+            {
+                throw new Exception("No se pueden ingresar barracks duplicados");
             }
 
             if (!input.BarrackIds.Any())
