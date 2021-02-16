@@ -66,6 +66,17 @@ namespace trifenix.connect.agro.interfaces
         /// <param name="OrderFolderId"></param>
         /// <returns></returns>
         Task<IEnumerable<string>> GetPreOrderIngredientFromOrderFolder(string OrderFolderId);
+
+        /// <summary>
+        /// Comprueb si existen order folders duplicadas
+        /// </summary>
+        /// <param name="ApplicationTargetId"></param>
+        /// <param name="IngredientId"></param>
+        /// <param name="PhenologicalEventId"></param>
+        /// <param name="SpecieId"></param>
+        /// <returns></returns>
+        Task<string> GetDuplicatedOrderFolders(string ApplicationTargetId, string IngredientId, string PhenologicalEventId, string SpecieId);
+    
     }
 
 }

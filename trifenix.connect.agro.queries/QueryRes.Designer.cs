@@ -142,6 +142,15 @@ namespace trifenix.connect.agro.queries {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SELECT value count(c.id) FROM c where c.IdApplicationTarget = &apos;{0}&apos; and c.IdIngredient = &apos;{1}&apos; and c.IdPhenologicalEvent = &apos;{2}&apos; and c.IdSpecie = &apos;{3}&apos;.
+        /// </summary>
+        public static string DUPLICATED_ORDERFOLDERS {
+            get {
+                return ResourceManager.GetString("DUPLICATED_ORDERFOLDERS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SELECT value c.IdBarrack[0] FROM c where  c.id = &apos;{0}&apos;.
         /// </summary>
         public static string IDBARRACK_FROM_ORDERID {

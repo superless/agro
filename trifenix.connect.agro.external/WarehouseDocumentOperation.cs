@@ -22,29 +22,27 @@ namespace trifenix.agro.external
     /// <typeparam name="T"></typeparam>
     public class WarehouseDocumentOperations<T> : MainOperation<WarehouseDocument, WarehouseDocumentInput, T>, IGenericOperation<WarehouseDocument, WarehouseDocumentInput>
     {
-        private readonly IDbExistsElements existsElement;
         private readonly ICommonAgroQueries Queries;
 
         public WarehouseDocumentOperations(IDbExistsElements existsElement, IMainGenericDb<WarehouseDocument> repo, IAgroSearch<T> search, ICommonDbOperations<WarehouseDocument> commonDb, ICommonAgroQueries queries, IValidatorAttributes<WarehouseDocumentInput> validator) : base(repo, search, commonDb, validator)
         {
-            this.existsElement = existsElement;
             Queries = queries;
         }
 
         public async override Task Validate(WarehouseDocumentInput input)
         {
             if (!Enum.IsDefined(typeof(DocumentType), input.DocumentType))
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException("input", "Enum fuera de rango");
 
             if (!Enum.IsDefined(typeof(PaymentType), input.PaymentType))
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException("input", "Enum fuera de rango");
 
             if (!Enum.IsDefined(typeof(DocumentState), input.DocumentState))
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException("input", "Enum fuera de rango");
 
             if (string.IsNullOrWhiteSpace(input.WHDestiny) || string.IsNullOrWhiteSpace(input.CCSource))
             {
-                throw new Exception("Se ha ingresado un documento de bodega sin fuente o destino");
+                throw new ArgumentNullException("input.WHDestiny", "input.CCSource");
             }
 
             if (input.Output)
@@ -68,7 +66,7 @@ namespace trifenix.agro.external
                 var providers = await Queries.GetBusinessNameIdFromCostCenter(input.CCSource);
                 if (!providers.Any())
                 {
-                    throw new Exception("El business name posee no posee centro de costos, por lo que no puede ser realizado el traspaso");
+                    throw new Exception("El business name posee centro de costos, por lo que no puede relizar la transaccion al ser un proveedor");
                 }
             }
             else
@@ -77,28 +75,28 @@ namespace trifenix.agro.external
             }
         }
 
-        public override async Task<ExtPostContainer<string>> SaveInput(WarehouseDocumentInput warehouseDocumentInput)
+        public override async Task<ExtPostContainer<string>> SaveInput(WarehouseDocumentInput input)
         {
-            var id = !string.IsNullOrWhiteSpace(warehouseDocumentInput.Id) ? warehouseDocumentInput.Id : Guid.NewGuid().ToString("N");
+            var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
 
-            await Validate(warehouseDocumentInput);
+            await Validate(input);
 
             var warehouseDocument = new WarehouseDocument
             {
                 Id = id,
-                WHDestiny = warehouseDocumentInput.WHDestiny,
-                DocumentType = warehouseDocumentInput.DocumentType,
-                EmissionDate = warehouseDocumentInput.EmissionDate,
-                PaymentType = warehouseDocumentInput.PaymentType,
-                DocumentState = warehouseDocumentInput.DocumentState,
-                Output = warehouseDocumentInput.Output,
-                ProductDocuments = warehouseDocumentInput.ProductDocuments == null || !warehouseDocumentInput.ProductDocuments.Any() ? new List<ProductDocument>() : warehouseDocumentInput.ProductDocuments.Select(PD_Input => new ProductDocument
+                WHDestiny = input.WHDestiny,
+                DocumentType = input.DocumentType,
+                EmissionDate = input.EmissionDate,
+                PaymentType = input.PaymentType,
+                DocumentState = input.DocumentState,
+                Output = input.Output,
+                ProductDocuments = input.ProductDocuments == null || !input.ProductDocuments.Any() ? new List<ProductDocument>() : input.ProductDocuments.Select(PD_Input => new ProductDocument
                 {
                     IdProduct = PD_Input.IdProduct,
                     Quantity = PD_Input.Quantity,
                     Price = PD_Input.Price
                 }).ToList(),
-                CCSource = warehouseDocumentInput.CCSource
+                CCSource = input.CCSource
             };
             await SaveDb(warehouseDocument);
             return await SaveSearch(warehouseDocument);

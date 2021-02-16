@@ -77,7 +77,12 @@ namespace trifenix.connect.agro.queries
         /// <param name="OrderFolderId"></param>
         /// <returns></returns>
         public async Task<IEnumerable<string>> GetPreOrderIngredientFromOrderFolder(string OrderFolderId) => await MultipleQuery<PreOrder, string>(Queries(DbQuery.PREORDERINGREDIENT_FROM_ORDERFOLDER), OrderFolderId);
-    
+
+        /// <summary>
+        /// Comprueba si existe una order folder duplicada
+        /// </summary>
+        /// <returns></returns>
+        public async Task<string> GetDuplicatedOrderFolders(string ApplicationTargetId, string IngredientId, string PhenologicalEventId, string SpecieId) => await SingleQuery<OrderFolder, string>(Queries(DbQuery.DUPLICATED_ORDERFOLDERS), ApplicationTargetId, IngredientId, PhenologicalEventId, SpecieId);
     }
 
 }

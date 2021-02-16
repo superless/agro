@@ -72,10 +72,8 @@ namespace trifenix.agro.external.operations.entities.ext
             {
                 if (string.IsNullOrWhiteSpace(input.IdProduct))
                 {
-                    throw new Exception("se ha ingresado una dosis por defecto sin identificador de producto");
+                    throw new Exception("Se ha ingresado una dosis por defecto sin identificador de producto");
                 }
-
-                return;
             }
             else {
                 await base.Validate(input);
@@ -84,34 +82,34 @@ namespace trifenix.agro.external.operations.entities.ext
             
         }
 
-        public override async Task<ExtPostContainer<string>> SaveInput(DosesInput dosesInput) {
-            var id = !string.IsNullOrWhiteSpace(dosesInput.Id) ? dosesInput.Id : Guid.NewGuid().ToString("N");
+        public override async Task<ExtPostContainer<string>> SaveInput(DosesInput input) {
+            var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
 
-            await Validate(dosesInput);
+            await Validate(input);
 
             
             var dose = new Dose {
                 Id = id,                
                 LastModified = DateTime.Now,
-                ApplicationDaysInterval = dosesInput.ApplicationDaysInterval,
-                HoursToReEntryToBarrack = dosesInput.HoursToReEntryToBarrack,
-                DosesQuantityMax = dosesInput.DosesQuantityMax,
-                DosesQuantityMin = dosesInput.DosesQuantityMin,
-                IdsApplicationTarget = dosesInput.IdsApplicationTarget,
-                IdSpecies = dosesInput.IdSpecies,
-                IdVarieties = dosesInput.IdVarieties,
-                NumberOfSequentialApplication = dosesInput.NumberOfSequentialApplication,
-                IdProduct = dosesInput.IdProduct,
-                Active = dosesInput.Active,
-                Default = dosesInput.Default,
-                WaitingDaysLabel = dosesInput.WaitingDaysLabel,
-                WaitingToHarvest = dosesInput.WaitingToHarvest == null || !dosesInput.WaitingToHarvest.Any() ? new List<WaitingHarvest>() : dosesInput.WaitingToHarvest.Select(WH_Input => new WaitingHarvest {
+                ApplicationDaysInterval = input.ApplicationDaysInterval,
+                HoursToReEntryToBarrack = input.HoursToReEntryToBarrack,
+                DosesQuantityMax = input.DosesQuantityMax,
+                DosesQuantityMin = input.DosesQuantityMin,
+                IdsApplicationTarget = input.IdsApplicationTarget,
+                IdSpecies = input.IdSpecies,
+                IdVarieties = input.IdVarieties,
+                NumberOfSequentialApplication = input.NumberOfSequentialApplication,
+                IdProduct = input.IdProduct,
+                Active = input.Active,
+                Default = input.Default,
+                WaitingDaysLabel = input.WaitingDaysLabel,
+                WaitingToHarvest = input.WaitingToHarvest == null || !input.WaitingToHarvest.Any() ? new List<WaitingHarvest>() : input.WaitingToHarvest.Select(WH_Input => new WaitingHarvest {
                     IdCertifiedEntity = WH_Input.IdCertifiedEntity,
                     WaitingDays = WH_Input.WaitingDays, 
                     IdDoses = id,
                     Ppm = WH_Input.Ppm
                 }).ToList(),
-                WettingRecommendedByHectares = dosesInput.WettingRecommendedByHectares
+                WettingRecommendedByHectares = input.WettingRecommendedByHectares
             };
 
 

@@ -144,6 +144,9 @@
   <data name="DEFAULTDOSESID_BY_PRODUCTID" xml:space="preserve">
     <value>SELECT DISTINCT value c.id from c where c.IdProduct='{0}' and c.Active=true and c.Default=true</value>
   </data>
+  <data name="DUPLICATED_ORDERFOLDERS" xml:space="preserve">
+    <value>SELECT value count(c.id) FROM c where c.IdApplicationTarget = '{0}' and c.IdIngredient = '{1}' and c.IdPhenologicalEvent = '{2}' and c.IdSpecie = '{3}'</value>
+  </data>
   <data name="IDBARRACK_FROM_ORDERID" xml:space="preserve">
     <value>SELECT value c.IdBarrack[0] FROM c where  c.id = '{0}'</value>
   </data>

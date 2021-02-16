@@ -125,11 +125,16 @@ namespace trifenix.connect.agro.queries
                     return QueryRes.ORDERFOLDERINGREDIENT_FROM_PREORDER;
 
                 /// <summary>
-                /// 
-                /// </Obtiene los ingredientes de todas las pre ordenes de una older folder>
+                /// Obtiene los ingredientes de todas las pre ordenes de una older folder
+                /// </summary>
                 case DbQuery.PREORDERINGREDIENT_FROM_ORDERFOLDER:
                     return QueryRes.PREORDERINGREDIENT_FROM_ORDERFOLDER;
 
+                /// <summary>
+                /// Comprueba si existen order folders duplicadas
+                /// </summary>
+                case DbQuery.DUPLICATED_ORDERFOLDERS:
+                    return QueryRes.DUPLICATED_ORDERFOLDERS;
                 default:
                     return "";
             }

@@ -1,4 +1,3 @@
-
 using Microsoft.Spatial;
 using System;
 using System.Linq;
