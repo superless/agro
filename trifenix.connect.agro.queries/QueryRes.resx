@@ -120,6 +120,9 @@
   <data name="ACTIVEDOSESIDS_FROM_PRODUCTID" xml:space="preserve">
     <value>SELECT DISTINCT value c.id from c where c.IdProduct='{0}' and c.Active=true and c.Default=false</value>
   </data>
+  <data name="ACTIVESEASON" xml:space="preserve">
+    <value>SELECT value c.id From c where c.Current = true</value>
+  </data>
   <data name="BUSINESSNAME_FROM_COSTCENTER" xml:space="preserve">
     <value>SELECT value c.id FROM c where c.IdBusinessName = '{0}'</value>
   </data>
@@ -167,6 +170,9 @@
   </data>
   <data name="SEASONID_FROM_BARRACKID" xml:space="preserve">
     <value>SELECT value c.SeasonId FROM c where c.id = '{0}'</value>
+  </data>
+  <data name="SEASONSTATUS" xml:space="preserve">
+    <value>SELECT count(c.Current) from c where c.id = '{0}'</value>
   </data>
   <data name="SPECIEABBREVIATION_FROM_SPECIEID" xml:space="preserve">
     <value>SELECT value c.Abbreviation FROM c where  c.id = '{0}'</value>

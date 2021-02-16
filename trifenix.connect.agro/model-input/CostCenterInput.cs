@@ -28,8 +28,11 @@ namespace trifenix.connect.agro_model_input
         [ReferenceSearch(EntityRelated.BUSINESSNAME)]
         public string IdBusinessName { get; set; }
 
+        /// <summary>
+        /// Búsqueda por referencia de la temporada
+        /// </summary>
+        [Required, Reference(typeof(Season))]
+        [ReferenceSearch(EntityRelated.SEASON)]
+        public string IdSeason { get; set; }
     }
-
-  
-
 }

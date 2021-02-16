@@ -17,10 +17,7 @@ using trifenix.agro.external.operations.helper;
 using trifenix.agro.functions.Helper;
 using trifenix.agro.functions.mantainers;
 using trifenix.agro.functions.settings;
-using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
-
-using trifenix.connect.agro.external.helper;
 using trifenix.connect.agro.index_model.enums;
 using trifenix.connect.agro.queries;
 using trifenix.connect.agro_model_input;

@@ -27,7 +27,7 @@ namespace trifenix.connect.agro_model_input
         /// </summary>
         [ReferenceSearch(EntityRelated.SEASON)]
         [Required, Reference(typeof(Season))]
-        public string SeasonId { get; set; }
+        public string IdSeason { get; set; }
 
         /// <summary>
         /// Busqueda por referencia de una parcela

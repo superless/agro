@@ -135,6 +135,18 @@ namespace trifenix.connect.agro.queries
                 /// </summary>
                 case DbQuery.DUPLICATED_ORDERFOLDERS:
                     return QueryRes.DUPLICATED_ORDERFOLDERS;
+
+                /// <summary>
+                /// Obtiene la temporada activa si es que existe
+                /// </summary>
+                case DbQuery.ACTIVESEASON:
+                    return QueryRes.ACTIVESEASON;
+
+                /// <summary>
+                /// Obtiene el estado de una temporada
+                /// </summary>
+                case DbQuery.SEASONSTATUS:
+                    return QueryRes.SEASONSTATUS;
                 default:
                     return "";
             }

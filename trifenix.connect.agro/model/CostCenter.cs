@@ -23,27 +23,29 @@ namespace trifenix.connect.agro_model
         /// </summary>
         public override string Id { get; set; }
 
-
         /// <summary>
         /// Autonumérico del centro de costo
         /// </summary>
         [AutoNumericSearch(StringRelated.GENERIC_CORRELATIVE)]
         public override string ClientId { get; set; }
         
-
-
         /// <summary>
         /// Nombre del centro de costo.
         /// </summary>
         [StringSearch(StringRelated.GENERIC_NAME)]
         public string Name { get; set; }
 
-
         /// <summary>
         /// Nombre del negocio.
         /// </summary>
         [ReferenceSearch(EntityRelated.BUSINESSNAME)]
         public string IdBusinessName { get; set; }
+
+        /// <summary>
+        /// Temporada del cost center
+        /// </summary>
+        [ReferenceSearch(EntityRelated.SEASON)]
+        public string IdSeason { get; set; }
 
         
     }

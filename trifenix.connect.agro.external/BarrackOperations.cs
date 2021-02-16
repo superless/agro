@@ -11,7 +11,6 @@ using trifenix.connect.agro_model_input;
 using trifenix.connect.interfaces.db.cosmos;
 using trifenix.connect.interfaces.external;
 using trifenix.connect.mdm.containers;
-using trifenix.connect.mdm.enums;
 
 namespace trifenix.connect.agro.external
 {
@@ -22,10 +21,20 @@ namespace trifenix.connect.agro.external
     /// <typeparam name="T">Las operaciones a ejecutar</typeparam>
     public class BarrackOperations<T> : MainOperation<Barrack,BarrackInput,T>, IGenericOperation<Barrack, BarrackInput> {
 
-        private readonly ICommonAgroQueries commonQueries;
+        private readonly ICommonAgroQueries Queries;
 
-        public BarrackOperations(IMainGenericDb<Barrack> repo,  IAgroSearch<T> search, ICommonAgroQueries commonQueries, ICommonDbOperations<Barrack> commonDb, IValidatorAttributes<BarrackInput> validator) : base(repo, search, commonDb, validator) {
-            this.commonQueries = commonQueries;
+        public BarrackOperations(IMainGenericDb<Barrack> repo,  IAgroSearch<T> search, ICommonAgroQueries Queries, ICommonDbOperations<Barrack> commonDb, IValidatorAttributes<BarrackInput> validator) : base(repo, search, commonDb, validator) {
+            this.Queries = Queries;
+        }
+
+        public override async Task Validate(BarrackInput input)
+        {
+            var season = await Queries.GetSeasonStatus(input.IdSeason);
+            var seasonStatus = bool.Parse(season);
+            if (!seasonStatus)
+            {
+                throw new Exception("La temporada ingresada no se encuentra activa");
+            }
         }
 
         public override async Task<ExtPostContainer<string>> SaveInput(BarrackInput input) {
@@ -41,7 +50,7 @@ namespace trifenix.connect.agro.external
                 IdVariety = input.IdVariety,
                 NumberOfPlants = input.NumberOfPlants,
                 PlantingYear = input.PlantingYear,
-                SeasonId = input.SeasonId
+                IdSeason = input.IdSeason
             };
             //GeoBarracks, dependencia de geospacial
             #if !CONNECT

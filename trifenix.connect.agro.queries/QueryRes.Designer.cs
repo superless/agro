@@ -70,6 +70,15 @@ namespace trifenix.connect.agro.queries {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SELECT value c.id From c where c.Current = true.
+        /// </summary>
+        public static string ACTIVESEASON {
+            get {
+                return ResourceManager.GetString("ACTIVESEASON", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SELECT value c.id FROM c where c.IdBusinessName = &apos;{0}&apos;.
         /// </summary>
         public static string BUSINESSNAME_FROM_COSTCENTER {
@@ -210,6 +219,15 @@ namespace trifenix.connect.agro.queries {
         public static string SEASONID_FROM_BARRACKID {
             get {
                 return ResourceManager.GetString("SEASONID_FROM_BARRACKID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT count(c.Current) from c where c.id = &apos;{0}&apos;.
+        /// </summary>
+        public static string SEASONSTATUS {
+            get {
+                return ResourceManager.GetString("SEASONSTATUS", resourceCulture);
             }
         }
         

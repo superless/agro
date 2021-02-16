@@ -10,7 +10,6 @@ namespace trifenix.agro.functions.mantainers
         public CustomException()
         {
         }
-
         public CustomException(string mensaje) : base(mensaje)
         {
         }

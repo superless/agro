@@ -25,13 +25,11 @@ namespace trifenix.connect.agro_model
         [AutoNumericSearch(StringRelated.GENERIC_CORRELATIVE)]
         public override string ClientId { get; set; }
 
-
         /// <summary>
         /// Fecha de inicio
         /// </summary>
         [DateSearch(DateRelated.START_DATE_SEASON)]
         public DateTime StartDate { get; set; }
-
 
         /// <summary>
         /// Fecha fin
@@ -44,12 +42,6 @@ namespace trifenix.connect.agro_model
         /// </summary>
         [BoolSearch(BoolRelated.CURRENT)]
         public bool Current { get; set; }
-
-        /// <summary>
-        /// Identificador del costcenter.
-        /// </summary>
-        [ReferenceSearch(EntityRelated.COSTCENTER)]
-        public string IdCostCenter { get; set; }
 
     }
 

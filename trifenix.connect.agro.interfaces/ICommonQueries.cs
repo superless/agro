@@ -76,7 +76,19 @@ namespace trifenix.connect.agro.interfaces
         /// <param name="SpecieId"></param>
         /// <returns></returns>
         Task<string> GetDuplicatedOrderFolders(string ApplicationTargetId, string IngredientId, string PhenologicalEventId, string SpecieId);
-    
+
+        /// <summary>
+        /// Obtiene la temporada activa si es que existe
+        /// </summary>
+        /// <returns></returns>
+        Task<IEnumerable<string>> GetActiveSeason();
+        
+        /// <summary>
+        /// Obtiene el estado de una temporada 
+        /// </summary>
+        /// <param name="idSeason"></param>
+        /// <returns></returns>
+        Task<string> GetSeasonStatus(string idSeason);
     }
 
 }

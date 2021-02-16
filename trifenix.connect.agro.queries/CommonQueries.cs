@@ -83,6 +83,20 @@ namespace trifenix.connect.agro.queries
         /// </summary>
         /// <returns></returns>
         public async Task<string> GetDuplicatedOrderFolders(string ApplicationTargetId, string IngredientId, string PhenologicalEventId, string SpecieId) => await SingleQuery<OrderFolder, string>(Queries(DbQuery.DUPLICATED_ORDERFOLDERS), ApplicationTargetId, IngredientId, PhenologicalEventId, SpecieId);
+
+        /// <summary>
+        /// Obtiene la temporada activa si es que existe
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IEnumerable<string>> GetActiveSeason() => await MultipleQuery<Season, string>(Queries(DbQuery.ACTIVESEASON));
+
+        /// <summary>
+        /// Obtiene el estado de una temporada
+        /// </summary>
+        /// <param name="IdSeason"></param>
+        /// <returns></returns>
+        public async Task<string> GetSeasonStatus(string IdSeason) => await SingleQuery<Season, string>(Queries(DbQuery.SEASONSTATUS), IdSeason);
+    
     }
 
 }
