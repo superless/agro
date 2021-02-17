@@ -97,7 +97,7 @@ namespace trifenix.connect.agro.queries {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SELECT value count(c.id) FROM c where c.IdBusinessName = &apos;93fc2277f52b4b699c144a2dbf38b439&apos;.
+        ///   Looks up a localized string similar to SELECT value count(c.id) FROM c where c.IdBusinessName = &apos;{0}&apos;.
         /// </summary>
         public static string COSTCENTER_FROM_BUSINESSNAME {
             get {

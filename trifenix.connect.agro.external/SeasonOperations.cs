@@ -29,6 +29,7 @@ namespace trifenix.agro.external
 
         public async override Task Validate(SeasonInput input)
         {
+            await base.Validate(input);
             if (input.Current)
             {
                 var season = await Queries.GetCostCenterActiveSeason(input.IdCostCenter);
@@ -38,10 +39,17 @@ namespace trifenix.agro.external
                 }
             }
 
-            if (input.StartDate > input.EndDate || input.StartDate == input.EndDate)
+            if (input.StartDate >= input.EndDate)
             {
                 throw new Exception("Fecha invalida");
             }
+        
+            // 6 meses de intervalo minimo
+            if (input.StartDate.AddMonths(6) > input.EndDate)
+            {
+                throw new Exception("Fecha invalida");
+            }
+        
         }
 
         public override async Task<ExtPostContainer<string>> SaveInput(SeasonInput input)
