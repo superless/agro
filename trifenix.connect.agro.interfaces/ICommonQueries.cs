@@ -80,15 +80,24 @@ namespace trifenix.connect.agro.interfaces
         /// <summary>
         /// Obtiene la temporada activa si es que existe
         /// </summary>
+        /// <param name="IdCostCenter"></param>
         /// <returns></returns>
-        Task<IEnumerable<string>> GetActiveSeason();
+        Task<IEnumerable<string>> GetCostCenterActiveSeason(string IdCostCenter);
         
         /// <summary>
         /// Obtiene el estado de una temporada 
         /// </summary>
         /// <param name="idSeason"></param>
         /// <returns></returns>
-        Task<string> GetSeasonStatus(string idSeason);
+        Task<string> GetSeasonStatus(string IdSeason);
+
+        /// <summary>
+        /// Obtiene el cost center de un business name
+        /// </summary>
+        /// <param name="IdBusinessName"></param>
+        /// <returns></returns>
+        Task<string> GetCostCenterFromBusinessName(string IdBusinessName);
+    
     }
 
 }

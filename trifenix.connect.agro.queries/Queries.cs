@@ -139,14 +139,21 @@ namespace trifenix.connect.agro.queries
                 /// <summary>
                 /// Obtiene la temporada activa si es que existe
                 /// </summary>
-                case DbQuery.ACTIVESEASON:
-                    return QueryRes.ACTIVESEASON;
+                case DbQuery.COSTCENTER_ACTIVESEASON:
+                    return QueryRes.COSTCENTER_ACTIVESEASON;
 
                 /// <summary>
                 /// Obtiene el estado de una temporada
                 /// </summary>
                 case DbQuery.SEASONSTATUS:
                     return QueryRes.SEASONSTATUS;
+
+                /// <summary>
+                /// Comprueba si existe un cost center asociado al business name
+                /// </summary>
+                case DbQuery.COSTCENTER_FROM_BUSINESSNAME:
+                    return QueryRes.COSTCENTER_FROM_BUSINESSNAME;
+                
                 default:
                     return "";
             }

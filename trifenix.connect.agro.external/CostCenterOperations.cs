@@ -28,11 +28,11 @@ namespace trifenix.agro.external
 
         public async override Task Validate(CostCenterInput input)
         {
-            var season = await Queries.GetSeasonStatus(input.IdSeason);
-            var seasonStatus = bool.Parse(season);
-            if (!seasonStatus)
+            var bn = await Queries.GetCostCenterFromBusinessName(input.IdBusinessName);
+            var activeBn = int.Parse(bn);
+            if (activeBn != 0)
             {
-                throw new Exception("La temporada no está activa");
+                throw new Exception("Ya existe un cost center asociado a este business name");
             }
         }
 
@@ -45,8 +45,8 @@ namespace trifenix.agro.external
             var costCenter = new CostCenter
             {
                 Id = id,
-                IdBusinessName = input.IdBusinessName,
-                IdSeason = input.IdSeason
+                Name = input.Name,
+                IdBusinessName = input.IdBusinessName
             };
             await SaveDb(costCenter);
             return await SaveSearch(costCenter);

@@ -31,14 +31,15 @@ namespace trifenix.agro.external
 
         public async override Task Validate(WarehouseDocumentInput input)
         {
+
             if (!Enum.IsDefined(typeof(DocumentType), input.DocumentType))
-                throw new ArgumentOutOfRangeException("input", "Enum fuera de rango");
+                throw new ArgumentOutOfRangeException("input.DocumentType", "Enum fuera de rango");
 
             if (!Enum.IsDefined(typeof(PaymentType), input.PaymentType))
-                throw new ArgumentOutOfRangeException("input", "Enum fuera de rango");
+                throw new ArgumentOutOfRangeException("input.PaymentType", "Enum fuera de rango");
 
             if (!Enum.IsDefined(typeof(DocumentState), input.DocumentState))
-                throw new ArgumentOutOfRangeException("input", "Enum fuera de rango");
+                throw new ArgumentOutOfRangeException("input.DocumentState", "Enum fuera de rango");
 
             if (string.IsNullOrWhiteSpace(input.WHDestiny) || string.IsNullOrWhiteSpace(input.CCSource))
             {

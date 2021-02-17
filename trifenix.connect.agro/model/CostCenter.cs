@@ -40,14 +40,6 @@ namespace trifenix.connect.agro_model
         /// </summary>
         [ReferenceSearch(EntityRelated.BUSINESSNAME)]
         public string IdBusinessName { get; set; }
-
-        /// <summary>
-        /// Temporada del cost center
-        /// </summary>
-        [ReferenceSearch(EntityRelated.SEASON)]
-        public string IdSeason { get; set; }
-
-        
     }
 
 }

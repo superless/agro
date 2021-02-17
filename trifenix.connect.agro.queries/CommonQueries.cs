@@ -87,8 +87,9 @@ namespace trifenix.connect.agro.queries
         /// <summary>
         /// Obtiene la temporada activa si es que existe
         /// </summary>
+        /// <param name="IdCostCenter"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<string>> GetActiveSeason() => await MultipleQuery<Season, string>(Queries(DbQuery.ACTIVESEASON));
+        public async Task<IEnumerable<string>> GetCostCenterActiveSeason(string IdCostCenter) => await MultipleQuery<Season, string>(Queries(DbQuery.COSTCENTER_ACTIVESEASON), IdCostCenter);
 
         /// <summary>
         /// Obtiene el estado de una temporada
@@ -96,7 +97,13 @@ namespace trifenix.connect.agro.queries
         /// <param name="IdSeason"></param>
         /// <returns></returns>
         public async Task<string> GetSeasonStatus(string IdSeason) => await SingleQuery<Season, string>(Queries(DbQuery.SEASONSTATUS), IdSeason);
-    
+
+        /// <summary>
+        /// Obtiene el cost center de un business name
+        /// </summary>
+        /// <param name="IdBusinessName"></param>
+        /// <returns></returns>
+        public async Task<string> GetCostCenterFromBusinessName(string IdBusinessName) => await SingleQuery<CostCenter, string>(Queries(DbQuery.COSTCENTER_FROM_BUSINESSNAME), IdBusinessName);
     }
 
 }

@@ -43,6 +43,12 @@ namespace trifenix.connect.agro_model
         [BoolSearch(BoolRelated.CURRENT)]
         public bool Current { get; set; }
 
+        /// <summary>
+        /// Centro de costos que administra la temporada
+        /// </summary>
+        [ReferenceSearch(EntityRelated.COSTCENTER)]
+        public string IdCostCenter { get; set; }
+
     }
 
 }

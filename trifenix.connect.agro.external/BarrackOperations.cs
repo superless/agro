@@ -29,6 +29,7 @@ namespace trifenix.connect.agro.external
 
         public override async Task Validate(BarrackInput input)
         {
+
             var season = await Queries.GetSeasonStatus(input.IdSeason);
             var seasonStatus = bool.Parse(season);
             if (!seasonStatus)
@@ -38,7 +39,9 @@ namespace trifenix.connect.agro.external
         }
 
         public override async Task<ExtPostContainer<string>> SaveInput(BarrackInput input) {
+
             await Validate(input);
+
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
             var barrack = new Barrack {
                 Id = id,

@@ -2,7 +2,9 @@
 using System.ComponentModel.DataAnnotations;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
+using trifenix.connect.agro_model;
 using trifenix.connect.input;
+using trifenix.connect.mdm.validation_attributes;
 
 namespace trifenix.connect.agro_model_input
 {
@@ -33,5 +35,11 @@ namespace trifenix.connect.agro_model_input
         [BoolSearch(BoolRelated.CURRENT)]
         public bool Current { get; set; }
 
+        /// <summary>
+        /// Centro de costos que administra la temporada
+        /// </summary>
+        [Required, Reference(typeof(CostCenter))]
+        [ReferenceSearch(EntityRelated.COSTCENTER)]
+        public string IdCostCenter { get; set; }
     }
 }

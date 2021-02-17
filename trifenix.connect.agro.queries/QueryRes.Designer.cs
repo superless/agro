@@ -70,15 +70,6 @@ namespace trifenix.connect.agro.queries {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SELECT value c.id From c where c.Current = true.
-        /// </summary>
-        public static string ACTIVESEASON {
-            get {
-                return ResourceManager.GetString("ACTIVESEASON", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to SELECT value c.id FROM c where c.IdBusinessName = &apos;{0}&apos;.
         /// </summary>
         public static string BUSINESSNAME_FROM_COSTCENTER {
@@ -93,6 +84,24 @@ namespace trifenix.connect.agro.queries {
         public static string CORRELATIVE_FROM_DOSESID {
             get {
                 return ResourceManager.GetString("CORRELATIVE_FROM_DOSESID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT value c.id FROM c where c.Current = true and c.IdCostCenter = &apos;{0}&apos;.
+        /// </summary>
+        public static string COSTCENTER_ACTIVESEASON {
+            get {
+                return ResourceManager.GetString("COSTCENTER_ACTIVESEASON", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT value count(c.id) FROM c where c.IdBusinessName = &apos;93fc2277f52b4b699c144a2dbf38b439&apos;.
+        /// </summary>
+        public static string COSTCENTER_FROM_BUSINESSNAME {
+            get {
+                return ResourceManager.GetString("COSTCENTER_FROM_BUSINESSNAME", resourceCulture);
             }
         }
         
@@ -223,7 +232,7 @@ namespace trifenix.connect.agro.queries {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SELECT count(c.Current) from c where c.id = &apos;{0}&apos;.
+        ///   Looks up a localized string similar to SELECT value c.Current from c where c.id = &apos;{0}&apos;.
         /// </summary>
         public static string SEASONSTATUS {
             get {

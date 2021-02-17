@@ -29,12 +29,19 @@ namespace trifenix.agro.external
 
         public async override Task Validate(SeasonInput input)
         {
-            var season = await Queries.GetActiveSeason();
-            if(season.Any())
+            if (input.Current)
             {
-                throw new Exception("Ya existe una temporada activa");
+                var season = await Queries.GetCostCenterActiveSeason(input.IdCostCenter);
+                if (season.Any())
+                {
+                    throw new Exception("Ya existe una temporada activa en este centro de costos");
+                }
             }
 
+            if (input.StartDate > input.EndDate || input.StartDate == input.EndDate)
+            {
+                throw new Exception("Fecha invalida");
+            }
         }
 
         public override async Task<ExtPostContainer<string>> SaveInput(SeasonInput input)
@@ -47,7 +54,8 @@ namespace trifenix.agro.external
                 Id = id,
                 StartDate = input.StartDate,
                 EndDate = input.EndDate,
-                Current = input.Current
+                Current = input.Current,
+                IdCostCenter = input.IdCostCenter
             };
             await SaveDb(season);
             return await SaveSearch(season);
