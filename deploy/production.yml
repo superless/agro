@@ -1,3 +1,8 @@
+# ASP.NET
+# Build and test ASP.NET projects.
+# Add steps that publish symbols, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
+
 trigger:
 - master
 
@@ -46,15 +51,8 @@ steps:
     projects: '**/*trifenix.agro.functions.csproj'    
     arguments: '--no-restore --configuration Release --output $(Build.ArtifactStagingDirectory)'
 
-  - task : DotNetCoreCLI@0
-    inputs:
-      command: 'publish'
-      publishWebProjects: false
-      projects: '**/*trifenix.agro.functions.csproj'    
-      arguments: '--no-restore --configuration Release --output $(Build.ArtifactStagingDirectory)'
-
-  - task: PublishBuildArtifacts@1
-    inputs:
-      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-      ArtifactName: 'artifactAgroDev'
-      publishLocation: 'Container'
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'artifactAgroDev'
+    publishLocation: 'Container'
