@@ -41,13 +41,6 @@ namespace trifenix.connect.agro_model_input
         [Reference(typeof(Ingredient))]
         public string IdIngredient { get; set; }
 
-        /// <summary>
-        /// Búsqueda por referencia de la categoría del ingrediente ingresado previamente
-        /// </summary>
-        [ReferenceSearch(EntityRelated.CATEGORY_INGREDIENT)]
-        [Required, Reference(typeof(IngredientCategory))]
-        public string IdIngredientCategory { get; set; }
-
     }
 
    

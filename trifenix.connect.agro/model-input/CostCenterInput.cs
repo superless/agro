@@ -29,7 +29,4 @@ namespace trifenix.connect.agro_model_input
         public string IdBusinessName { get; set; }
 
     }
-
-  
-
 }

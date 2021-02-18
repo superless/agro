@@ -58,11 +58,11 @@ namespace trifenix.connect.agro.queries
         public async Task<IEnumerable<string>> GetActiveDosesIdsFromProductId(string idProduct) => await MultipleQuery<Dose, string>(Queries(DbQuery.ACTIVEDOSESIDS_FROM_PRODUCTID), idProduct);
 
         /// <summary>
-        /// Obtener business name asociado a un cost center, si es que existe
+        /// Comprueba si el business name ingresado posee un cost center asociado
         /// </summary>
         /// <param name="idBusinessName"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<string>> GetBusinessNameIdFromCostCenter(string idBusinessName) => await MultipleQuery<CostCenter, string>(Queries(DbQuery.BUSINESSNAME_FROM_COSTCENTER), idBusinessName);
+        public async Task<IEnumerable<string>> GetCostCenterFromBusinessName(string idBusinessName) => await MultipleQuery<CostCenter, string>(Queries(DbQuery.COSTCENTER_FROM_BUSINESSNAME), idBusinessName);
 
         /// <summary>
         /// Obtiene el ingrediente de la order folder desde el order folder de la pre orden
@@ -77,7 +77,27 @@ namespace trifenix.connect.agro.queries
         /// <param name="OrderFolderId"></param>
         /// <returns></returns>
         public async Task<IEnumerable<string>> GetPreOrderIngredientFromOrderFolder(string OrderFolderId) => await MultipleQuery<PreOrder, string>(Queries(DbQuery.PREORDERINGREDIENT_FROM_ORDERFOLDER), OrderFolderId);
-    
+
+        /// <summary>
+        /// Comprueba si existe una order folder duplicada
+        /// </summary>
+        /// <returns></returns>
+        public async Task<string> GetDuplicatedOrderFolders(string ApplicationTargetId, string IngredientId, string PhenologicalEventId, string SpecieId) => await SingleQuery<OrderFolder, string>(Queries(DbQuery.DUPLICATED_ORDERFOLDERS), ApplicationTargetId, IngredientId, PhenologicalEventId, SpecieId);
+
+        /// <summary>
+        /// Obtiene la temporada activa si es que existe
+        /// </summary>
+        /// <param name="IdCostCenter"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<string>> GetCostCenterActiveSeason(string IdCostCenter) => await MultipleQuery<Season, string>(Queries(DbQuery.COSTCENTER_ACTIVESEASON), IdCostCenter);
+
+        /// <summary>
+        /// Obtiene el estado de una temporada
+        /// </summary>
+        /// <param name="IdSeason"></param>
+        /// <returns></returns>
+        public async Task<string> GetSeasonStatus(string IdSeason) => await SingleQuery<Season, string>(Queries(DbQuery.SEASONSTATUS), IdSeason);
+
     }
 
 }

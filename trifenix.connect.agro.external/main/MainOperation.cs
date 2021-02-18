@@ -15,6 +15,7 @@ using trifenix.connect.interfaces.external;
 using trifenix.connect.mdm.containers;
 using trifenix.connect.mdm.enums;
 using trifenix.connect.util;
+using trifenix.exception;
 
 namespace trifenix.connect.agro.external.main
 {
@@ -78,7 +79,7 @@ namespace trifenix.connect.agro.external.main
 
             if (!result.Valid)
             {
-                throw new Exception(string.Join(",", result.Messages));
+                throw new CustomException(string.Join(",", result.Messages));
             }
             
 

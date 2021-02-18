@@ -106,7 +106,7 @@ namespace trifenix.connect.agro_model
         /// </summary>
         [Group(3, PhisicalDevice.WEB, 6)]
         [ReferenceSearch(EntityRelated.SEASON)]
-        public string SeasonId { get; set; }
+        public string IdSeason { get; set; }
 
 
 

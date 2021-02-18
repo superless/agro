@@ -70,7 +70,7 @@ namespace trifenix.connect.agro.queries {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SELECT value c.id FROM c where c.IdBusinessName = &apos;{0}&apos;.
+        ///   Looks up a localized string similar to .
         /// </summary>
         public static string BUSINESSNAME_FROM_COSTCENTER {
             get {
@@ -84,6 +84,24 @@ namespace trifenix.connect.agro.queries {
         public static string CORRELATIVE_FROM_DOSESID {
             get {
                 return ResourceManager.GetString("CORRELATIVE_FROM_DOSESID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT value c.id FROM c where c.Current = true and c.IdCostCenter = &apos;{0}&apos;.
+        /// </summary>
+        public static string COSTCENTER_ACTIVESEASON {
+            get {
+                return ResourceManager.GetString("COSTCENTER_ACTIVESEASON", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT value c.id FROM c where c.IdBusinessName = &apos;{0}&apos;.
+        /// </summary>
+        public static string COSTCENTER_FROM_BUSINESSNAME {
+            get {
+                return ResourceManager.GetString("COSTCENTER_FROM_BUSINESSNAME", resourceCulture);
             }
         }
         
@@ -138,6 +156,15 @@ namespace trifenix.connect.agro.queries {
         public static string DEFAULTDOSESID_BY_PRODUCTID {
             get {
                 return ResourceManager.GetString("DEFAULTDOSESID_BY_PRODUCTID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT value count(c.id) FROM c where c.IdApplicationTarget = &apos;{0}&apos; and c.IdIngredient = &apos;{1}&apos; and c.IdPhenologicalEvent = &apos;{2}&apos; and c.IdSpecie = &apos;{3}&apos;.
+        /// </summary>
+        public static string DUPLICATED_ORDERFOLDERS {
+            get {
+                return ResourceManager.GetString("DUPLICATED_ORDERFOLDERS", resourceCulture);
             }
         }
         
@@ -201,6 +228,15 @@ namespace trifenix.connect.agro.queries {
         public static string SEASONID_FROM_BARRACKID {
             get {
                 return ResourceManager.GetString("SEASONID_FROM_BARRACKID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT value c.Current from c where c.id = &apos;{0}&apos;.
+        /// </summary>
+        public static string SEASONSTATUS {
+            get {
+                return ResourceManager.GetString("SEASONSTATUS", resourceCulture);
             }
         }
         

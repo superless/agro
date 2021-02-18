@@ -50,11 +50,5 @@ namespace trifenix.connect.agro_model
         [ReferenceSearch(EntityRelated.INGREDIENT)]
         public string  IdIngredient { get; set; }
 
-
-        /// <summary>
-        /// Categoría de la categoría del ingrediente.
-        /// </summary>
-        [ReferenceSearch(EntityRelated.CATEGORY_INGREDIENT)]
-        public string IdIngredientCategory { get; set; }
     }
 }

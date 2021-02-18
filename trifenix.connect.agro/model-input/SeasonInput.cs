@@ -19,7 +19,7 @@ namespace trifenix.connect.agro_model_input
         /// </summary>
         [Required]
         [DateSearch(DateRelated.START_DATE_SEASON)]
-        public DateTime  StartDate { get; set; }
+        public DateTime StartDate { get; set; }
 
         /// <summary>
         /// Fecha de término
@@ -31,17 +31,15 @@ namespace trifenix.connect.agro_model_input
         /// <summary>
         /// Función que se encarga de determinar si la temporada está activa o no
         /// </summary>
+        [Required]
         [BoolSearch(BoolRelated.CURRENT)]
-        public bool? Current { get; set; }
+        public bool Current { get; set; }
 
         /// <summary>
-        /// Búsqueda por referencia del centro de costos
+        /// Centro de costos que administra la temporada
         /// </summary>
         [Required, Reference(typeof(CostCenter))]
         [ReferenceSearch(EntityRelated.COSTCENTER)]
         public string IdCostCenter { get; set; }
-
     }
-
-   
 }

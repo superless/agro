@@ -17,7 +17,6 @@ using trifenix.connect.mdm.enums;
 
 namespace trifenix.agro.functions.mantainers
 {
-
     public static class GenericMantainer {
 
         private static readonly ServiceBus ServiceBus = new ServiceBus(Environment.GetEnvironmentVariable("ServiceBusConnectionString", EnvironmentVariableTarget.Process), Environment.GetEnvironmentVariable("QueueName", EnvironmentVariableTarget.Process));
@@ -36,41 +35,46 @@ namespace trifenix.agro.functions.mantainers
 
             if (string.IsNullOrWhiteSpace(serviceBus))
             {
-                throw new Exception("Falta el bus aweonao");
+                throw new CustomException("Falta el bus aweonao");
             }
             if (string.IsNullOrWhiteSpace(queuName))
             {
-                throw new Exception("Falta el queuename aweonao");
+                throw new CustomException("Falta el queuename aweonao");
             }
             if (string.IsNullOrWhiteSpace(storage))
             {
-                throw new Exception("Falta el storage aweonao");
+                throw new CustomException("Falta el storage aweonao");
             }
             if (string.IsNullOrWhiteSpace(weatherApi))
             {
-                throw new Exception("Falta la weatherApi aweonao");
+                throw new CustomException("Falta la weatherApi aweonao");
             }
             if (string.IsNullOrWhiteSpace(searchServiceUrl))
             {
-                throw new Exception("Falta el searchServiceUrl aweonao");
+                throw new CustomException("Falta el searchServiceUrl aweonao");
             }
             if (string.IsNullOrWhiteSpace(serviceKey))
             {
-                throw new Exception("Falta el serviceKey aweonao");
+                throw new CustomException("Falta el serviceKey aweonao");
             }
             if (string.IsNullOrWhiteSpace(cosmosDbName))
             {
-                throw new Exception("Falta el cosmoDbName aweonao");
+                throw new CustomException("Falta el cosmoDbName aweonao");
             }
             if (string.IsNullOrWhiteSpace(cosmosDbPrimaryKey))
             {
-                throw new Exception("Falta el cosmoDbPrimaryKey aweonao");
+                throw new CustomException("Falta el cosmoDbPrimaryKey aweonao");
             }
             if (string.IsNullOrWhiteSpace(cosmosDbUri))
             {
-                throw new Exception("Falta el CosmoDbUri aweonao");
+                throw new CustomException("Falta el CosmoDbUri aweonao");
+            }
+            if (string.IsNullOrWhiteSpace(SearchServiceName))
+            {
+                throw new CustomException("Falta el SearchServiceName aweonao");
             }
         }
+
 
         public static async Task<ActionResultWithId> SendInternalHttp<DbElement, InputElement>(HttpRequest req, ILogger log, Func<IAgroManager<GeographyPoint>, IGenericOperation<DbElement, InputElement>> repo, string id = null) where DbElement : DocumentBase where InputElement : InputBase {
             ValidaEnvironmentVariables();
@@ -92,12 +96,10 @@ namespace trifenix.agro.functions.mantainers
         public static async Task<ActionResultWithId> HttpProcessing<DbElement, InputElement>(HttpRequest req, ILogger log, string ObjectIdAAD, Func<IAgroManager<GeographyPoint>, IGenericOperation<DbElement, InputElement>> repo, string id = null) where DbElement : DocumentBase where InputElement : InputBase {
             var body = await new StreamReader(req.Body).ReadToEndAsync();
             var method = req.Method.ToLower();
-            
-
             var inputElement = ConvertToElement<InputElement>(body, id, method);
-            
-            return await HttpProcessing(req, log, ObjectIdAAD, repo, inputElement);
-        }
+                return await HttpProcessing(req, log, ObjectIdAAD, repo, inputElement);
+
+            }
 
         public static InputElement ConvertToElement<InputElement>(string body, string id, string method) where InputElement : InputBase {
             var requestBody = body;

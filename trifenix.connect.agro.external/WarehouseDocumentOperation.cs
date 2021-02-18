@@ -12,6 +12,7 @@ using trifenix.connect.agro_model_input;
 using trifenix.connect.interfaces.db.cosmos;
 using trifenix.connect.interfaces.external;
 using trifenix.connect.mdm.containers;
+using trifenix.exception;
 
 namespace trifenix.agro.external
 {
@@ -22,83 +23,96 @@ namespace trifenix.agro.external
     /// <typeparam name="T"></typeparam>
     public class WarehouseDocumentOperations<T> : MainOperation<WarehouseDocument, WarehouseDocumentInput, T>, IGenericOperation<WarehouseDocument, WarehouseDocumentInput>
     {
-        private readonly IDbExistsElements existsElement;
         private readonly ICommonAgroQueries Queries;
 
         public WarehouseDocumentOperations(IDbExistsElements existsElement, IMainGenericDb<WarehouseDocument> repo, IAgroSearch<T> search, ICommonDbOperations<WarehouseDocument> commonDb, ICommonAgroQueries queries, IValidatorAttributes<WarehouseDocumentInput> validator) : base(repo, search, commonDb, validator)
         {
-            this.existsElement = existsElement;
             Queries = queries;
         }
 
         public async override Task Validate(WarehouseDocumentInput input)
         {
-            if (!Enum.IsDefined(typeof(DocumentType), input.DocumentType))
-                throw new ArgumentOutOfRangeException();
-
-            if (!Enum.IsDefined(typeof(PaymentType), input.PaymentType))
-                throw new ArgumentOutOfRangeException();
-
-            if (!Enum.IsDefined(typeof(DocumentState), input.DocumentState))
-                throw new ArgumentOutOfRangeException();
-
-            if (string.IsNullOrWhiteSpace(input.WHDestiny) || string.IsNullOrWhiteSpace(input.CCSource))
+            if (!input.ProductDocuments.Any())
             {
-                throw new Exception("Se ha ingresado un documento de bodega sin fuente o destino");
-            }
-
-            if (input.Output)
-            {
-                // Si output es true, significa que es un documento de entrada, por lo que se debe validar que el proveedor
-                // no posea un cost center asociado.
-                var providers = await Queries.GetBusinessNameIdFromCostCenter(input.CCSource);
-                if (providers.Any())
-                {
-                    throw new Exception("El business name posee centro de costos, por lo que no puede ser un proveedor");
-                }
-            }
-            if (!input.Output)
-            {
-                // Si output es false, significa que es un documento de salida, por lo que la bodega asociada pasa a ser el origen 
-                // de la transacción, y el business name, el destino. Se debe validar que el business name que está como destino
-                // posea un centro de costos asociado. 
-                var temp = input.WHDestiny;
-                input.WHDestiny = input.CCSource;
-                input.CCSource = temp;
-                var providers = await Queries.GetBusinessNameIdFromCostCenter(input.CCSource);
-                if (!providers.Any())
-                {
-                    throw new Exception("El business name posee no posee centro de costos, por lo que no puede ser realizado el traspaso");
-                }
+                throw new CustomException("Tiene que haber al menos un producto");
             }
             else
             {
-                await base.Validate(input);
+               var isUnique = input.ProductDocuments.GroupBy(o => o.IdProduct).Max(g => g.Count()) == 1;
+               if (!isUnique)
+               {
+                    throw new CustomException("No se pueden ingresar productos repetidos");
+               }
             }
+
+            await base.Validate(input);
+
+            if (!Enum.IsDefined(typeof(DocumentType), input.DocumentType))
+                throw new ArgumentOutOfRangeException("input.DocumentType", "Enum fuera de rango");
+
+            if (!Enum.IsDefined(typeof(PaymentType), input.PaymentType))
+                throw new ArgumentOutOfRangeException("input.PaymentType", "Enum fuera de rango");
+
+            if (!Enum.IsDefined(typeof(DocumentState), input.DocumentState))
+                throw new ArgumentOutOfRangeException("input.DocumentState", "Enum fuera de rango");
+
+            if (!input.Output)
+            {
+                // Documento de entrada, por lo que se debe ingresar un origen desde donde vienen los productos, ese origen debe
+                // ser un proveedor, o sea, un business name que no posea centro de costos. El valor de destino es null, ya que 
+                // el id de bodega previamente ingresado tomará ese lugar.  
+                if (string.IsNullOrWhiteSpace(input.Source))
+                {
+                    throw new CustomException("Debe ingresar un origen");
+                }
+                input.Destiny = input.IdWarehouse;
+                var provider = await Queries.GetCostCenterFromBusinessName(input.Source);
+                if (provider.Any())
+                {
+                    throw new CustomException("El business name posee centro de costos, por lo que no puede ser un proveedor");
+                }
+            }
+            if (input.Output)
+            {
+                // Documento de salida, por lo que se debe ingresar un destino haia donde irán los productos, ese destino debe ser 
+                // un business name que si posea centro de costos, para poder realizar la transacción. En este caso, el valor de origen
+                // es null, ya que el id de bodega previamente ingresado tomará ese lugar.
+                if (string.IsNullOrWhiteSpace(input.Destiny))
+                {
+                    throw new CustomException("Debe ingresar un destino");
+                }
+                input.Source = input.IdWarehouse;
+                var noprovider = await Queries.GetCostCenterFromBusinessName(input.Destiny);
+                if (!noprovider.Any())
+                {
+                    throw new CustomException("El business name no posee centro de costos, por lo que es un proveedor");
+                }
         }
+    }
 
-        public override async Task<ExtPostContainer<string>> SaveInput(WarehouseDocumentInput warehouseDocumentInput)
+        public override async Task<ExtPostContainer<string>> SaveInput(WarehouseDocumentInput input)
         {
-            var id = !string.IsNullOrWhiteSpace(warehouseDocumentInput.Id) ? warehouseDocumentInput.Id : Guid.NewGuid().ToString("N");
+            var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
 
-            await Validate(warehouseDocumentInput);
+            await Validate(input);
 
             var warehouseDocument = new WarehouseDocument
             {
                 Id = id,
-                WHDestiny = warehouseDocumentInput.WHDestiny,
-                DocumentType = warehouseDocumentInput.DocumentType,
-                EmissionDate = warehouseDocumentInput.EmissionDate,
-                PaymentType = warehouseDocumentInput.PaymentType,
-                DocumentState = warehouseDocumentInput.DocumentState,
-                Output = warehouseDocumentInput.Output,
-                ProductDocuments = warehouseDocumentInput.ProductDocuments == null || !warehouseDocumentInput.ProductDocuments.Any() ? new List<ProductDocument>() : warehouseDocumentInput.ProductDocuments.Select(PD_Input => new ProductDocument
+                IdWarehouse = input.IdWarehouse,
+                DocumentType = input.DocumentType,
+                EmissionDate = input.EmissionDate,
+                PaymentType = input.PaymentType,
+                DocumentState = input.DocumentState,
+                Output = input.Output,
+                ProductDocuments = input.ProductDocuments == null || !input.ProductDocuments.Any() ? new List<ProductDocument>() : input.ProductDocuments.Select(PD_Input => new ProductDocument
                 {
                     IdProduct = PD_Input.IdProduct,
                     Quantity = PD_Input.Quantity,
                     Price = PD_Input.Price
                 }).ToList(),
-                CCSource = warehouseDocumentInput.CCSource
+                Destiny = input.Destiny,
+                Source = input.Source
             };
             await SaveDb(warehouseDocument);
             return await SaveSearch(warehouseDocument);

@@ -11,7 +11,7 @@ namespace trifenix.connect.agro.model
     /// Bodega encargada del almacenamiento de productos
     /// </summary>
     [SharedCosmosCollection("agro", "Warehouse")]
-    [ReferenceSearchHeader(EntityRelated.WAREHOUSE, PathName = "warehouse", Kind = EntityKind.CUSTOM_ENTITY)]
+    [ReferenceSearchHeader(EntityRelated.WAREHOUSE, PathName = "warehouse", Kind = EntityKind.ENTITY)]
     public class Warehouse : DocumentLocal
     {
         /// <summary>

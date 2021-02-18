@@ -3,7 +3,9 @@ using System.ComponentModel.DataAnnotations;
 using trifenix.connect.agro.index_model.enums;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
+using trifenix.connect.agro_model;
 using trifenix.connect.input;
+using trifenix.connect.mdm.validation_attributes;
 
 namespace trifenix.connect.agro_model_input
 {
@@ -13,11 +15,10 @@ namespace trifenix.connect.agro_model_input
     [ReferenceSearchHeader(EntityRelated.WAREHOUSEDOCUMENT)]
     public class WarehouseDocumentInput : InputBase {
 
-        /// <summary>
-        /// Centro de costos de destino en caso de ser una transaccion de salida
-        /// </summary>
-        [ReferenceSearch(EntityRelated.COSTCENTER)]
-        public string CCSource { get; set; }
+
+        [Required]
+        [ReferenceSearch(EntityRelated.WAREHOUSE)]
+        public string IdWarehouse { get; set; }
 
         /// <summary>
         /// Tipo de documento
@@ -60,8 +61,14 @@ namespace trifenix.connect.agro_model_input
         /// <summary>
         /// Búsqueda por referencia de la bodega asociada al documento
         /// </summary>
-        [Required]
-        [ReferenceSearch(EntityRelated.WAREHOUSE)]
-        public string WHDestiny { get; set; }
+        [ReferenceSearch(EntityRelated.WAREHOUSEDESTINY)]
+        public string Destiny { get; set; }
+
+
+        /// <summary>
+        /// Centro de costos de destino en caso de ser una transaccion de salida
+        /// </summary>
+        [ReferenceSearch(EntityRelated.COSTCENTER)]
+        public string Source { get; set; }
     }
 }
