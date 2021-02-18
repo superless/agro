@@ -419,7 +419,7 @@ namespace trifenix.agro.external.operations.tests.data
             NumberOfPlants = 444,
             IdVariety = ConstantGuids.Value[0],
             Name = "Barrack 1",
-            SeasonId = ConstantGuids.Value[0],
+            IdSeason = ConstantGuids.Value[0],
             IdRootstock = ConstantGuids.Value[0],
             PlantingYear = 1980,
 
@@ -434,7 +434,7 @@ namespace trifenix.agro.external.operations.tests.data
             NumberOfPlants = 444,
             IdVariety = ConstantGuids.Value[1],
             Name = "Barrack 2",
-            SeasonId = ConstantGuids.Value[0],
+            IdSeason = ConstantGuids.Value[0],
             IdRootstock = ConstantGuids.Value[1],
             PlantingYear = 1980,
         };

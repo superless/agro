@@ -57,7 +57,6 @@ namespace trifenix.connect.agro.queries
         /// <returns></returns>
         public async Task<IEnumerable<string>> GetActiveDosesIdsFromProductId(string idProduct) => await MultipleQuery<Dose, string>(Queries(DbQuery.ACTIVEDOSESIDS_FROM_PRODUCTID), idProduct);
 
-<<<<<<< Updated upstream
         /// <summary>
         /// Comprueba si el business name ingresado posee un cost center asociado
         /// </summary>
@@ -98,9 +97,6 @@ namespace trifenix.connect.agro.queries
         /// <param name="IdSeason"></param>
         /// <returns></returns>
         public async Task<string> GetSeasonStatus(string IdSeason) => await SingleQuery<Season, string>(Queries(DbQuery.SEASONSTATUS), IdSeason);
-=======
-        
->>>>>>> Stashed changes
 
     }
 

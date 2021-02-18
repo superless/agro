@@ -43,7 +43,7 @@ namespace trifenix.connect.agro.tests.mock
 
 
                 // obtiene un season id desde un barrack
-                mock.Setup(s => s.GetSeasonId(It.IsAny<string>())).ReturnsAsync((string id) => AgroData.Barracks.FirstOrDefault(s => s.Id.Equals(id))?.SeasonId);
+                mock.Setup(s => s.GetSeasonId(It.IsAny<string>())).ReturnsAsync((string id) => AgroData.Barracks.FirstOrDefault(s => s.Id.Equals(id))?.IdSeason);
 
 
                 //obtiene la dosis por defecto de un producto.
