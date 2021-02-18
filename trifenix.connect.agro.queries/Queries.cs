@@ -111,6 +111,43 @@ namespace trifenix.connect.agro.queries
                 /// </summary>
                 case DbQuery.NAME_BY_ID:
                     return QueryRes.NAME_BY_ID;
+
+                /// <summary>
+                /// Obtener el business name de un cost center, si es que existe
+                /// </summary>
+                case DbQuery.COSTCENTER_FROM_BUSINESSNAME:
+                    return QueryRes.COSTCENTER_FROM_BUSINESSNAME;
+
+                /// <summary>
+                /// Obtiene el ingrediente de la order folder desde el order folder de la pre orden
+                /// </summary>
+                case DbQuery.ORDERFOLDERINGREDIENT_FROM_PREORDER:
+                    return QueryRes.ORDERFOLDERINGREDIENT_FROM_PREORDER;
+
+                /// <summary>
+                /// Obtiene los ingredientes de todas las pre ordenes de una older folder
+                /// </summary>
+                case DbQuery.PREORDERINGREDIENT_FROM_ORDERFOLDER:
+                    return QueryRes.PREORDERINGREDIENT_FROM_ORDERFOLDER;
+
+                /// <summary>
+                /// Comprueba si existen order folders duplicadas
+                /// </summary>
+                case DbQuery.DUPLICATED_ORDERFOLDERS:
+                    return QueryRes.DUPLICATED_ORDERFOLDERS;
+
+                /// <summary>
+                /// Obtiene la temporada activa si es que existe
+                /// </summary>
+                case DbQuery.COSTCENTER_ACTIVESEASON:
+                    return QueryRes.COSTCENTER_ACTIVESEASON;
+
+                /// <summary>
+                /// Obtiene el estado de una temporada
+                /// </summary>
+                case DbQuery.SEASONSTATUS:
+                    return QueryRes.SEASONSTATUS;
+                
                 default:
                     return "";
             }

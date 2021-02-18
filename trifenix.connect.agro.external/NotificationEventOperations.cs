@@ -67,7 +67,7 @@ namespace trifenix.connect.agro.external
                         <p> Llego una notificacion </p>
                         <img src='{picturePath}' style='width:50%;height:auto;'>
                         <p> Atentamente,<br> -Aresa </br></p>
-                    </body>
+                   </body>
                 </html>");
 
             return await SaveSearch(notification);

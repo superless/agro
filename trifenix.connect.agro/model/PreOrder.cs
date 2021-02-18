@@ -31,13 +31,6 @@ namespace trifenix.connect.agro_model
         [SuggestSearch(StringRelated.GENERIC_NAME)]
         public string Name { get; set; }
 
-
-        /// <summary>
-        /// Identificador del ingrediente.
-        /// </summary>
-        [ReferenceSearch(EntityRelated.INGREDIENT)]
-        public string IdIngredient { get; set; }    //Este esta en la OrderFolder. Eliminar(?), esto puede aplicar cuando no sea una preorden fenologica, en cuyo caso, no existirá una Carpeta.
-
         /// <summary>
         /// Carpeta a la que pertenece, esto solo aplicará si la pre-orden es de tipo fenológica, 
         /// las que no son fenológica no tienen carpeta.
@@ -46,16 +39,22 @@ namespace trifenix.connect.agro_model
         public string OrderFolderId { get; set; }
 
         /// <summary>
+        /// Ingrediente específico de la pre orden
+        /// </summary>
+        [ReferenceSearch(EntityRelated.INGREDIENT)]
+        public string Ingredient { get; set; }
+
+        /// <summary>
         /// Tipo de pre-orden
         /// </summary>
         [EnumSearch(EnumRelated.PRE_ORDER_TYPE)]
         public PreOrderType PreOrderType { get; set; }
 
         /// <summary>
-        /// Identificador del cuartel.
+        /// Barracks asociados a la pre orden
         /// </summary>
         [ReferenceSearch(EntityRelated.BARRACK)]
-        public string[] BarracksId { get; set; }
+        public string[] BarrackIds { get; set; }
 
     }
 }

@@ -1,5 +1,7 @@
 ﻿using Cosmonaut;
 using System;
+using trifenix.connect.agro.model;
+using trifenix.connect.agro.model_input;
 using trifenix.connect.agro_model;
 using trifenix.connect.agro_model_input;
 using trifenix.connect.entities.cosmos;
@@ -10,9 +12,6 @@ namespace trifenix.connect.agro.interfaces.external
 
     public interface IAgroManager<T> {
 
-        
-        
-        
         IGenericOperation<UserActivity, UserActivityInput> UserActivity { get; }
         IGenericOperation<ApplicationOrder, ApplicationOrderInput> ApplicationOrder { get; }
         IGenericOperation<ApplicationTarget, ApplicationTargetInput> ApplicationTarget { get; }
@@ -22,6 +21,8 @@ namespace trifenix.connect.agro.interfaces.external
         IGenericOperation<Comment, CommentInput> Comments { get; }
         IGenericOperation<CostCenter, CostCenterInput> CostCenter { get; }
         IGenericOperation<Dose, DosesInput> Dose { get; }
+        IGenericOperation<Warehouse, WarehouseInput> Warehouse { get; }
+        IGenericOperation<WarehouseDocument, WarehouseDocumentInput> WarehouseDocument { get; }
         IGenericOperation<ExecutionOrder, ExecutionOrderInput> ExecutionOrder { get; }
         IGenericOperation<ExecutionOrderStatus, ExecutionOrderStatusInput> ExecutionOrderStatus { get; }
         IGenericOperation<Ingredient, IngredientInput> Ingredient { get; }

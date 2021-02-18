@@ -30,7 +30,9 @@ namespace trifenix.connect.agro.external
         public string UriService { get; private set; }
 
         public string ServiceKey { get; private set; }
+
         public string Index { get; private set; }
+
         public Dictionary<string, List<string>> Queried { get; set; } = new Dictionary<string, List<string>>();
 
 
@@ -200,8 +202,7 @@ namespace trifenix.connect.agro.external
             // añade a registro
             AddToQueried(nameof(AgroSearch<GeoPointType>.AddDocument), JsonConvert.SerializeObject(entitySearch));
 
-            
-
+ 
             // añade a base de datos.
             baseMainSearch.AddElements(entitySearch);
         }

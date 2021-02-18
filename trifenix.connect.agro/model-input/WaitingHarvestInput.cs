@@ -13,6 +13,13 @@ namespace trifenix.connect.agro_model_input
     public class WaitingHarvestInput {
 
         /// <summary>
+        /// Entidad certificadora (opcional), si es indicado en la etiqueta, probablemente no sea de una entidad certificadora.
+        /// </summary>
+        [ReferenceSearch(EntityRelated.CERTIFIED_ENTITY)]
+        [Reference(typeof(CertifiedEntity))]
+        public string IdCertifiedEntity { get; set; }
+
+        /// <summary>
         /// ???
         /// </summary>
         [DoubleSearch(DoubleRelated.PPM)]        
@@ -24,13 +31,5 @@ namespace trifenix.connect.agro_model_input
         [Num32Search(NumRelated.WAITING_DAYS)]
         public int WaitingDays { get; set; }
 
-        /// <summary>
-        /// Entidad certificadora (opcional), si es indicado en la etiqueta, probablemente no sea de una entidad certificadora.
-        /// </summary>
-        [ReferenceSearch(EntityRelated.CERTIFIED_ENTITY)]
-        [Reference(typeof(CertifiedEntity))]
-        public string IdCertifiedEntity { get; set; }
     }
-
-    
 }

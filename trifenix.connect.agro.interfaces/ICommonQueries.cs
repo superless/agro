@@ -9,9 +9,8 @@ namespace trifenix.connect.agro.interfaces
     public interface ICommonAgroQueries {
 
         
-
         /// <summary>
-        /// Obtiene los corroeos desde los roles.
+        /// Obtiene los correos desde los roles.
         /// </summary>
         /// <param name="idsRoles">identificador de roles</param>
         /// <returns></returns>
@@ -47,10 +46,51 @@ namespace trifenix.connect.agro.interfaces
         /// <returns>identificadores de las dosis activas</returns>
         Task<IEnumerable<string>> GetActiveDosesIdsFromProductId(string idProduct);
 
+        /// <summary>
+        /// Obtiene el business name asociado al idBusinessName de un cost center, si es que existe
+        /// </summary>
+        /// <param name="idBusinessName"></param>
+        /// <returns></returns>
+        Task<IEnumerable<string>> GetCostCenterFromBusinessName(string idBusinessName);
+
+        /// <summary>
+        /// Obtiene el ingrediente de la order folder desde el order folder de la pre orden
+        /// </summary>
+        /// <param name="OrderFolderId"></param>
+        /// <returns></returns>
+        Task<string> GetOrderFolderIngredientFromPreOrder(string OrderFolderId);
+
+        /// <summary>
+        /// Obtiene los ingredientes de todas las pre ordenes de una older folder
+        /// </summary>
+        /// <param name="OrderFolderId"></param>
+        /// <returns></returns>
+        Task<IEnumerable<string>> GetPreOrderIngredientFromOrderFolder(string OrderFolderId);
+
+        /// <summary>
+        /// Comprueb si existen order folders duplicadas
+        /// </summary>
+        /// <param name="ApplicationTargetId"></param>
+        /// <param name="IngredientId"></param>
+        /// <param name="PhenologicalEventId"></param>
+        /// <param name="SpecieId"></param>
+        /// <returns></returns>
+        Task<string> GetDuplicatedOrderFolders(string ApplicationTargetId, string IngredientId, string PhenologicalEventId, string SpecieId);
+
+        /// <summary>
+        /// Obtiene la temporada activa si es que existe
+        /// </summary>
+        /// <param name="IdCostCenter"></param>
+        /// <returns></returns>
+        Task<IEnumerable<string>> GetCostCenterActiveSeason(string IdCostCenter);
         
-
-
-
+        /// <summary>
+        /// Obtiene el estado de una temporada 
+        /// </summary>
+        /// <param name="idSeason"></param>
+        /// <returns></returns>
+        Task<string> GetSeasonStatus(string IdSeason);
+    
     }
 
 }

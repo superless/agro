@@ -10,6 +10,7 @@ using trifenix.connect.interfaces.db.cosmos;
 using trifenix.connect.interfaces.external;
 using trifenix.connect.mdm.containers;
 using trifenix.connect.mdm.enums;
+using trifenix.exception;
 
 namespace trifenix.connect.agro.external
 {
@@ -64,16 +65,15 @@ namespace trifenix.connect.agro.external
         /// <param name="idProduct">identificador del producto</param>
         /// <returns></returns>
         private async Task<string> CreateDefaultDoses(string idProduct) {
+
             var dosesInput = new DosesInput {
                 IdProduct = idProduct,
                 Active = true,
                 Default = true
             };
 
-
             // guarda en base de datos de operación.
             var result = await dosesOperation.SaveInput(dosesInput);
-
 
             return result.IdRelated;
         }
@@ -111,7 +111,7 @@ namespace trifenix.connect.agro.external
         {
             if (input.Doses.Any() && string.IsNullOrWhiteSpace(input.Id) && input.Doses.Any(s=>!string.IsNullOrWhiteSpace(s.IdProduct)))
             {
-                throw new Exception($"si el producto {input.Name} es nuevo, sus dosis no deben llevar id");
+                throw new CustomException($"si el producto {input.Name} es nuevo, sus dosis no deben llevar id");
             }
             await base.Validate(input);
         }
@@ -121,26 +121,26 @@ namespace trifenix.connect.agro.external
         /// <summary>
         /// Guarda un producto en una base de dato de busqueda y luego una de persistencia.
         /// </summary>
-        /// <param name="productInput">input de usuario</param>
+        /// <param name="input">input de usuario</param>
         /// <returns>Exito si logró realizar correctamente el guardado</returns>
-        public override async Task<ExtPostContainer<string>> SaveInput(ProductInput productInput) {
+        public override async Task<ExtPostContainer<string>> SaveInput(ProductInput input) {
             
             // valida product input
-            await Validate(productInput);
+            await Validate(input);
 
             // valida cada dosis
-            foreach (var item in productInput.Doses)
+            foreach (var item in input.Doses)
             {
                 await dosesOperation.Validate(item);
             }
 
 
             // asigna un nuevo id, si es un nuevo elemento.
-            var id = !string.IsNullOrWhiteSpace(productInput.Id) ? productInput.Id : Guid.NewGuid().ToString("N");
+            var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
 
 
             // las dosis no deben tener id.
-            if (productInput.Doses.Any(s=>!string.IsNullOrWhiteSpace(s.Id)))
+            if (input.Doses.Any(s=>!string.IsNullOrWhiteSpace(s.Id)))
             {
                 return new ExtPostContainer<string>()
                 {
@@ -153,11 +153,11 @@ namespace trifenix.connect.agro.external
             // creamos el producto
             var product = new Product {
                 Id = id,
-                IdBrand = productInput.IdBrand,
-                Name = productInput.Name,
-                IdActiveIngredient = productInput.IdActiveIngredient,
-                SagCode = productInput.SagCode,
-                MeasureType = productInput.MeasureType,
+                IdBrand = input.IdBrand,
+                Name = input.Name,
+                IdActiveIngredient = input.IdActiveIngredient,
+                SagCode = input.SagCode,
+                MeasureType = input.MeasureType,
                 
             };
 
@@ -173,13 +173,10 @@ namespace trifenix.connect.agro.external
             await RemoveDoses(product);
 
             // 3. asigna los id de producto a las dosis.
-            var doses = productInput.Doses.Select(dose => {
+            var doses = input.Doses.Select(dose => {
                 dose.IdProduct = id;
                 return dose;
             });
-
-            
-
 
             //4. guarda cada dosis
             foreach (var dose in doses) {

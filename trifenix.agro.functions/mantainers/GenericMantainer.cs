@@ -7,7 +7,6 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using trifenix.agro.functions.Helper;
-
 using trifenix.connect.agro.interfaces.external;
 using trifenix.connect.bus;
 using trifenix.connect.entities.cosmos;
@@ -70,13 +69,19 @@ namespace trifenix.agro.functions.mantainers
             {
                 throw new CustomException("Falta el CosmoDbUri aweonao");
             }
-            
+            if (string.IsNullOrWhiteSpace(SearchServiceName))
+            {
+                throw new CustomException("Falta el SearchServiceName aweonao");
+            }
         }
+
 
         public static async Task<ActionResultWithId> SendInternalHttp<DbElement, InputElement>(HttpRequest req, ILogger log, Func<IAgroManager<GeographyPoint>, IGenericOperation<DbElement, InputElement>> repo, string id = null) where DbElement : DocumentBase where InputElement : InputBase {
             ValidaEnvironmentVariables();
             //if (!ValidaEnvironmentVariables()) throw new Exception("existen variables de ambiente nulas, por favor revise las variables");
 
+            //if (!ValidaEnvironmentVariables()) throw new Exception("existen variables de ambiente nulas, por favor revise las variables");
+            
             //var claims = await Auth.Validate(req);
             //if (claims == null)
             //    return new ActionResultWithId {
@@ -91,12 +96,10 @@ namespace trifenix.agro.functions.mantainers
         public static async Task<ActionResultWithId> HttpProcessing<DbElement, InputElement>(HttpRequest req, ILogger log, string ObjectIdAAD, Func<IAgroManager<GeographyPoint>, IGenericOperation<DbElement, InputElement>> repo, string id = null) where DbElement : DocumentBase where InputElement : InputBase {
             var body = await new StreamReader(req.Body).ReadToEndAsync();
             var method = req.Method.ToLower();
-            
-
             var inputElement = ConvertToElement<InputElement>(body, id, method);
-            
-            return await HttpProcessing(req, log, ObjectIdAAD, repo, inputElement);
-        }
+                return await HttpProcessing(req, log, ObjectIdAAD, repo, inputElement);
+
+            }
 
         public static InputElement ConvertToElement<InputElement>(string body, string id, string method) where InputElement : InputBase {
             var requestBody = body;

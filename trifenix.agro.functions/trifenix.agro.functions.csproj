@@ -32,6 +32,7 @@
     <PackageReference Include="trifenix.connect.db.cosmos" Version="0.8.48" />
     <PackageReference Include="trifenix.connect.email" Version="0.8.46" />
     <PackageReference Include="trifenix.connect.storage.azure" Version="0.8.46" />
+    <PackageReference Include="trifenix.exception" Version="0.1.31" />
    
   </ItemGroup>
   <ItemGroup>

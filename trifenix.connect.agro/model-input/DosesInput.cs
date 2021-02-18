@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
-using trifenix.connect.agro.index_model.enums;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
 using trifenix.connect.agro_model;
@@ -115,7 +114,7 @@ namespace trifenix.connect.agro_model_input
         public bool Active { get; set; }
 
         /// <summary>
-        /// !!!
+        /// Id del cliente asociado con la compra
         /// </summary>
         public string ClientId { get; set; }
 

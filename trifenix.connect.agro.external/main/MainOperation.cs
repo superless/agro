@@ -15,6 +15,7 @@ using trifenix.connect.interfaces.external;
 using trifenix.connect.mdm.containers;
 using trifenix.connect.mdm.enums;
 using trifenix.connect.util;
+using trifenix.exception;
 
 namespace trifenix.connect.agro.external.main
 {
@@ -62,7 +63,6 @@ namespace trifenix.connect.agro.external.main
         /// <param name="validator">Validador de entidades input</param>
         public MainOperation(IMainGenericDb<T> repo, IAgroSearch<T_GEO> search, ICommonDbOperations<T> commonDb, IValidatorAttributes<T_INPUT> validator) {
             this.repo = repo;
-            
             this.search = search;
             this.commonDb = commonDb;
             this.valida = validator;
@@ -79,7 +79,7 @@ namespace trifenix.connect.agro.external.main
 
             if (!result.Valid)
             {
-                throw new Exception(string.Join(",", result.Messages));
+                throw new CustomException(string.Join(",", result.Messages));
             }
             
 

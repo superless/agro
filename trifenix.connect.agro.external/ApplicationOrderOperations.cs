@@ -31,24 +31,24 @@ namespace trifenix.connect.agro.external
 
         }
 
-        
-
-        public override async Task Validate(ApplicationOrderInput applicationOrderInput) {
-            await base.Validate(applicationOrderInput);
+        public override async Task Validate(ApplicationOrderInput input) {
+            await base.Validate(input);
 
             List<string> errors = new List<string>();
-            if (applicationOrderInput.OrderType == OrderType.PHENOLOGICAL && !applicationOrderInput.IdsPreOrder.Any())
+            if (input.OrderType == OrderType.PHENOLOGICAL && !input.IdsPreOrder.Any())
                     errors.Add("Si la orden es fenológica, deben existir preordenes fenologicas asociadas.");
 
+            if (!Enum.IsDefined(typeof(OrderType), input.OrderType))
+                throw new ArgumentOutOfRangeException("input","Enum fuera de rango");
 
-            foreach (var doses in applicationOrderInput.DosesOrder) {
+            foreach (var doses in input.DosesOrder) {
                 bool exists = await existElement.ExistsById<Dose>(doses.IdDoses);
                 if (!exists)
                     errors.Add($"No existe dosis con id '{doses.IdDoses}'.");
             }
 
 
-            foreach (var barrack in applicationOrderInput.Barracks) {
+            foreach (var barrack in input.Barracks) {
                 bool exists = await existElement.ExistsById<Barrack>(barrack.IdBarrack);
                 if (!exists)
                     errors.Add($"No existe cuartel con id '{barrack.IdBarrack}'.");
@@ -62,8 +62,9 @@ namespace trifenix.connect.agro.external
             }
 
 
-            if (applicationOrderInput.StartDate > applicationOrderInput.EndDate)
+            if (input.StartDate > input.EndDate)
                 errors.Add("La fecha inicial no puede ser mayor a la final.");
+
             if (errors.Count > 0)
                 throw new Validation_Exception { ErrorMessages = errors };
         }
