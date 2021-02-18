@@ -10,6 +10,7 @@ using trifenix.connect.agro_model_input;
 using trifenix.connect.interfaces.db.cosmos;
 using trifenix.connect.interfaces.external;
 using trifenix.connect.mdm.containers;
+using trifenix.exception;
 
 namespace trifenix.agro.external
 {
@@ -35,19 +36,19 @@ namespace trifenix.agro.external
                 var season = await Queries.GetCostCenterActiveSeason(input.IdCostCenter);
                 if (season.Any())
                 {
-                    throw new Exception("Ya existe una temporada activa en este centro de costos");
+                    throw new CustomException("Ya existe una temporada activa en este centro de costos");
                 }
             }
 
             if (input.StartDate >= input.EndDate)
             {
-                throw new Exception("Fecha invalida");
+                throw new CustomException("Fecha invalida");
             }
         
             // 6 meses de intervalo minimo
             if (input.StartDate.AddMonths(6) > input.EndDate)
             {
-                throw new Exception("Fecha invalida");
+                throw new CustomException("Fecha invalida");
             }
         
         }

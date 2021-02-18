@@ -12,6 +12,7 @@
     <PackageReference Include="trifenix.connect.mdm.search.model" Version="0.8.48" />
     <PackageReference Include="trifenix.connect.search" Version="0.8.47" />
     <PackageReference Include="trifenix.connect.translate" Version="0.8.51" />
+    <PackageReference Include="trifenix.exception" Version="0.1.31" />
   </ItemGroup>
 
   <ItemGroup>

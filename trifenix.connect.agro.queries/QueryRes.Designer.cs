@@ -70,7 +70,7 @@ namespace trifenix.connect.agro.queries {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SELECT value c.id FROM c where c.IdBusinessName = &apos;{0}&apos;.
+        ///   Looks up a localized string similar to .
         /// </summary>
         public static string BUSINESSNAME_FROM_COSTCENTER {
             get {
@@ -97,7 +97,7 @@ namespace trifenix.connect.agro.queries {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SELECT value count(c.id) FROM c where c.IdBusinessName = &apos;{0}&apos;.
+        ///   Looks up a localized string similar to SELECT value c.id FROM c where c.IdBusinessName = &apos;{0}&apos;.
         /// </summary>
         public static string COSTCENTER_FROM_BUSINESSNAME {
             get {

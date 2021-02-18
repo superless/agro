@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using trifenix.connect.agro.external.main;
 using trifenix.connect.agro.interfaces;
@@ -9,6 +10,7 @@ using trifenix.connect.agro_model_input;
 using trifenix.connect.interfaces.db.cosmos;
 using trifenix.connect.interfaces.external;
 using trifenix.connect.mdm.containers;
+using trifenix.exception;
 
 namespace trifenix.agro.external
 {
@@ -29,10 +31,9 @@ namespace trifenix.agro.external
         public async override Task Validate(CostCenterInput input)
         {
             var bn = await Queries.GetCostCenterFromBusinessName(input.IdBusinessName);
-            var activeBn = int.Parse(bn);
-            if (activeBn != 0)
+            if (bn.Any())
             {
-                throw new Exception("Ya existe un cost center asociado a este business name");
+                throw new CustomException("Ya existe un cost center asociado a este business name");
             }
         }
 

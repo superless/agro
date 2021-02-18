@@ -10,7 +10,7 @@ namespace trifenix.connect.agro.interfaces
 
         
         /// <summary>
-        /// Obtiene los corroeos desde los roles.
+        /// Obtiene los correos desde los roles.
         /// </summary>
         /// <param name="idsRoles">identificador de roles</param>
         /// <returns></returns>
@@ -51,7 +51,7 @@ namespace trifenix.connect.agro.interfaces
         /// </summary>
         /// <param name="idBusinessName"></param>
         /// <returns></returns>
-        Task<IEnumerable<string>> GetBusinessNameIdFromCostCenter(string idBusinessName);
+        Task<IEnumerable<string>> GetCostCenterFromBusinessName(string idBusinessName);
 
         /// <summary>
         /// Obtiene el ingrediente de la order folder desde el order folder de la pre orden
@@ -90,13 +90,6 @@ namespace trifenix.connect.agro.interfaces
         /// <param name="idSeason"></param>
         /// <returns></returns>
         Task<string> GetSeasonStatus(string IdSeason);
-
-        /// <summary>
-        /// Obtiene el cost center de un business name
-        /// </summary>
-        /// <param name="IdBusinessName"></param>
-        /// <returns></returns>
-        Task<string> GetCostCenterFromBusinessName(string IdBusinessName);
     
     }
 

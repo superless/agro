@@ -58,11 +58,11 @@ namespace trifenix.connect.agro.queries
         public async Task<IEnumerable<string>> GetActiveDosesIdsFromProductId(string idProduct) => await MultipleQuery<Dose, string>(Queries(DbQuery.ACTIVEDOSESIDS_FROM_PRODUCTID), idProduct);
 
         /// <summary>
-        /// Obtener business name asociado a un cost center, si es que existe
+        /// Comprueba si el business name ingresado posee un cost center asociado
         /// </summary>
         /// <param name="idBusinessName"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<string>> GetBusinessNameIdFromCostCenter(string idBusinessName) => await MultipleQuery<CostCenter, string>(Queries(DbQuery.BUSINESSNAME_FROM_COSTCENTER), idBusinessName);
+        public async Task<IEnumerable<string>> GetCostCenterFromBusinessName(string idBusinessName) => await MultipleQuery<CostCenter, string>(Queries(DbQuery.COSTCENTER_FROM_BUSINESSNAME), idBusinessName);
 
         /// <summary>
         /// Obtiene el ingrediente de la order folder desde el order folder de la pre orden
@@ -98,12 +98,6 @@ namespace trifenix.connect.agro.queries
         /// <returns></returns>
         public async Task<string> GetSeasonStatus(string IdSeason) => await SingleQuery<Season, string>(Queries(DbQuery.SEASONSTATUS), IdSeason);
 
-        /// <summary>
-        /// Obtiene el cost center de un business name
-        /// </summary>
-        /// <param name="IdBusinessName"></param>
-        /// <returns></returns>
-        public async Task<string> GetCostCenterFromBusinessName(string IdBusinessName) => await SingleQuery<CostCenter, string>(Queries(DbQuery.COSTCENTER_FROM_BUSINESSNAME), IdBusinessName);
     }
 
 }

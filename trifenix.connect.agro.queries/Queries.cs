@@ -115,8 +115,8 @@ namespace trifenix.connect.agro.queries
                 /// <summary>
                 /// Obtener el business name de un cost center, si es que existe
                 /// </summary>
-                case DbQuery.BUSINESSNAME_FROM_COSTCENTER:
-                    return QueryRes.BUSINESSNAME_FROM_COSTCENTER;
+                case DbQuery.COSTCENTER_FROM_BUSINESSNAME:
+                    return QueryRes.COSTCENTER_FROM_BUSINESSNAME;
 
                 /// <summary>
                 /// Obtiene el ingrediente de la order folder desde el order folder de la pre orden
@@ -147,12 +147,6 @@ namespace trifenix.connect.agro.queries
                 /// </summary>
                 case DbQuery.SEASONSTATUS:
                     return QueryRes.SEASONSTATUS;
-
-                /// <summary>
-                /// Comprueba si existe un cost center asociado al business name
-                /// </summary>
-                case DbQuery.COSTCENTER_FROM_BUSINESSNAME:
-                    return QueryRes.COSTCENTER_FROM_BUSINESSNAME;
                 
                 default:
                     return "";

@@ -121,7 +121,8 @@
     <value>SELECT DISTINCT value c.id from c where c.IdProduct='{0}' and c.Active=true and c.Default=false</value>
   </data>
   <data name="BUSINESSNAME_FROM_COSTCENTER" xml:space="preserve">
-    <value>SELECT value c.id FROM c where c.IdBusinessName = '{0}'</value>
+    <value />
+    <comment> </comment>
   </data>
   <data name="CORRELATIVE_FROM_DOSESID" xml:space="preserve">
     <value>SELECT value c.ClientId FROM c where c.id ='{0}'</value>
@@ -130,7 +131,7 @@
     <value>SELECT value c.id FROM c where c.Current = true and c.IdCostCenter = '{0}'</value>
   </data>
   <data name="COSTCENTER_FROM_BUSINESSNAME" xml:space="preserve">
-    <value>SELECT value count(c.id) FROM c where c.IdBusinessName = '{0}'</value>
+    <value>SELECT value c.id FROM c where c.IdBusinessName = '{0}'</value>
   </data>
   <data name="COUNT_BY_ID" xml:space="preserve">
     <value>SELECT value count(1) FROM c where c.id = '{0}'</value>

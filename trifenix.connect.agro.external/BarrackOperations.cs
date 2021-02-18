@@ -11,6 +11,7 @@ using trifenix.connect.agro_model_input;
 using trifenix.connect.interfaces.db.cosmos;
 using trifenix.connect.interfaces.external;
 using trifenix.connect.mdm.containers;
+using trifenix.exception;
 
 namespace trifenix.connect.agro.external
 {
@@ -34,7 +35,7 @@ namespace trifenix.connect.agro.external
             var seasonStatus = bool.Parse(season);
             if (!seasonStatus)
             {
-                throw new Exception("La temporada ingresada no se encuentra activa");
+                throw new CustomException("La temporada ingresada no se encuentra activa");
             }
         }
 

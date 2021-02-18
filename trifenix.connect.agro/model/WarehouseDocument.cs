@@ -28,6 +28,10 @@ namespace trifenix.connect.agro.model
         [AutoNumericSearch(StringRelated.GENERIC_CORRELATIVE)]
         public override string ClientId { get; set; }
 
+
+        [ReferenceSearch(EntityRelated.WAREHOUSE)]
+        public string IdWarehouse { get; set; }
+
         /// <summary>
         /// Tipo de documento
         /// </summary>
@@ -76,13 +80,13 @@ namespace trifenix.connect.agro.model
         /// <summary>
         /// Búsqueda por referencia de la bodega asociada
         /// </summary>
-        [ReferenceSearch(EntityRelated.WAREHOUSE)]
-        public string WHDestiny { get; set; }
+        [ReferenceSearch(EntityRelated.WAREHOUSEDESTINY)]
+        public string Destiny { get; set; }
 
         /// <summary>
         /// Búsqueda por referencia de la empresa asociada
         /// </summary>
-        [ReferenceSearch(EntityRelated.COSTCENTER)]
-        public string CCSource { get; set; }
+        [ReferenceSearch(EntityRelated.BUSINESSNAME)]
+        public string Source { get; set; }
     }
 }

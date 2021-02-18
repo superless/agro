@@ -12,6 +12,7 @@ using trifenix.connect.agro_model_input;
 using trifenix.connect.interfaces.db.cosmos;
 using trifenix.connect.interfaces.external;
 using trifenix.connect.mdm.containers;
+using trifenix.exception;
 
 namespace trifenix.agro.external
 {
@@ -31,6 +32,20 @@ namespace trifenix.agro.external
 
         public async override Task Validate(WarehouseDocumentInput input)
         {
+            if (!input.ProductDocuments.Any())
+            {
+                throw new CustomException("Tiene que haber al menos un producto");
+            }
+            else
+            {
+               var isUnique = input.ProductDocuments.GroupBy(o => o.IdProduct).Max(g => g.Count()) == 1;
+               if (!isUnique)
+               {
+                    throw new CustomException("No se pueden ingresar productos repetidos");
+               }
+            }
+
+            await base.Validate(input);
 
             if (!Enum.IsDefined(typeof(DocumentType), input.DocumentType))
                 throw new ArgumentOutOfRangeException("input.DocumentType", "Enum fuera de rango");
@@ -41,40 +56,39 @@ namespace trifenix.agro.external
             if (!Enum.IsDefined(typeof(DocumentState), input.DocumentState))
                 throw new ArgumentOutOfRangeException("input.DocumentState", "Enum fuera de rango");
 
-            if (string.IsNullOrWhiteSpace(input.WHDestiny) || string.IsNullOrWhiteSpace(input.CCSource))
-            {
-                throw new ArgumentNullException("input.WHDestiny", "input.CCSource");
-            }
-
-            if (input.Output)
-            {
-                // Si output es true, significa que es un documento de entrada, por lo que se debe validar que el proveedor
-                // no posea un cost center asociado.
-                var providers = await Queries.GetBusinessNameIdFromCostCenter(input.CCSource);
-                if (providers.Any())
-                {
-                    throw new Exception("El business name posee centro de costos, por lo que no puede ser un proveedor");
-                }
-            }
             if (!input.Output)
             {
-                // Si output es false, significa que es un documento de salida, por lo que la bodega asociada pasa a ser el origen 
-                // de la transacción, y el business name, el destino. Se debe validar que el business name que está como destino
-                // posea un centro de costos asociado. 
-                var temp = input.WHDestiny;
-                input.WHDestiny = input.CCSource;
-                input.CCSource = temp;
-                var providers = await Queries.GetBusinessNameIdFromCostCenter(input.CCSource);
-                if (!providers.Any())
+                // Documento de entrada, por lo que se debe ingresar un origen desde donde vienen los productos, ese origen debe
+                // ser un proveedor, o sea, un business name que no posea centro de costos. El valor de destino es null, ya que 
+                // el id de bodega previamente ingresado tomará ese lugar.  
+                if (string.IsNullOrWhiteSpace(input.Source))
                 {
-                    throw new Exception("El business name posee centro de costos, por lo que no puede relizar la transaccion al ser un proveedor");
+                    throw new CustomException("Debe ingresar un origen");
+                }
+                input.Destiny = input.IdWarehouse;
+                var provider = await Queries.GetCostCenterFromBusinessName(input.Source);
+                if (provider.Any())
+                {
+                    throw new CustomException("El business name posee centro de costos, por lo que no puede ser un proveedor");
                 }
             }
-            else
+            if (input.Output)
             {
-                await base.Validate(input);
-            }
+                // Documento de salida, por lo que se debe ingresar un destino haia donde irán los productos, ese destino debe ser 
+                // un business name que si posea centro de costos, para poder realizar la transacción. En este caso, el valor de origen
+                // es null, ya que el id de bodega previamente ingresado tomará ese lugar.
+                if (string.IsNullOrWhiteSpace(input.Destiny))
+                {
+                    throw new CustomException("Debe ingresar un destino");
+                }
+                input.Source = input.IdWarehouse;
+                var noprovider = await Queries.GetCostCenterFromBusinessName(input.Destiny);
+                if (!noprovider.Any())
+                {
+                    throw new CustomException("El business name no posee centro de costos, por lo que es un proveedor");
+                }
         }
+    }
 
         public override async Task<ExtPostContainer<string>> SaveInput(WarehouseDocumentInput input)
         {
@@ -85,7 +99,7 @@ namespace trifenix.agro.external
             var warehouseDocument = new WarehouseDocument
             {
                 Id = id,
-                WHDestiny = input.WHDestiny,
+                IdWarehouse = input.IdWarehouse,
                 DocumentType = input.DocumentType,
                 EmissionDate = input.EmissionDate,
                 PaymentType = input.PaymentType,
@@ -97,7 +111,8 @@ namespace trifenix.agro.external
                     Quantity = PD_Input.Quantity,
                     Price = PD_Input.Price
                 }).ToList(),
-                CCSource = input.CCSource
+                Destiny = input.Destiny,
+                Source = input.Source
             };
             await SaveDb(warehouseDocument);
             return await SaveSearch(warehouseDocument);

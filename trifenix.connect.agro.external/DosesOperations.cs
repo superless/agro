@@ -15,6 +15,7 @@ using trifenix.connect.mdm.containers;
 using trifenix.connect.mdm.enums;
 using trifenix.connect.mdm.search.model;
 using trifenix.connect.util;
+using trifenix.exception;
 
 namespace trifenix.agro.external.operations.entities.ext
 {
@@ -72,7 +73,7 @@ namespace trifenix.agro.external.operations.entities.ext
             {
                 if (string.IsNullOrWhiteSpace(input.IdProduct))
                 {
-                    throw new Exception("Se ha ingresado una dosis por defecto sin identificador de producto");
+                    throw new CustomException("Se ha ingresado una dosis por defecto sin identificador de producto");
                 }
             }
             else {

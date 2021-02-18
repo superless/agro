@@ -27,14 +27,14 @@ namespace trifenix.agro.external.operations.entities.orders
             this.commonQueries = commonQueries;
         }
 
-        public override async Task Validate(ExecutionOrderInput executionOrderInput) {
-            await base.Validate(executionOrderInput);
+        public override async Task Validate(ExecutionOrderInput input) {
+            await base.Validate(input);
             List<string> errors = new List<string>();
 
-            if (!executionOrderInput.DosesOrder.Any())
+            if (!input.DosesOrder.Any())
                 errors.Add("Debe existir al menos una dosis.");
 
-            if (executionOrderInput.StartDate > executionOrderInput.EndDate)
+            if (input.StartDate > input.EndDate)
                 errors.Add("La fecha inicial no puede ser mayor a la final.");
            
             if (errors.Count > 0)

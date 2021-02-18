@@ -11,6 +11,7 @@ using trifenix.connect.agro_model_input;
 using trifenix.connect.interfaces.db.cosmos;
 using trifenix.connect.interfaces.external;
 using trifenix.connect.mdm.containers;
+using trifenix.exception;
 
 namespace trifenix.connect.agro.external
 {
@@ -40,7 +41,7 @@ namespace trifenix.connect.agro.external
                 {
                     if (input.IngredientId == item)
                     {
-                        throw new Exception("El ingrediente de la carpeta de ordenes ya se encuentra en uso");
+                        throw new CustomException("El ingrediente de la carpeta de ordenes ya se encuentra en uso");
                     }
                 }
             }
@@ -50,12 +51,12 @@ namespace trifenix.connect.agro.external
             bool isUnique = input.BarrackIds.Distinct().Count() == input.BarrackIds.Count();
             if (!isUnique)
             {
-                throw new Exception("No se pueden ingresar barracks duplicados");
+                throw new CustomException("No se pueden ingresar barracks duplicados");
             }
 
             if (!input.BarrackIds.Any())
             {
-                throw new Exception("No se puede ingresar una pre orden sin un barrack asociado");
+                throw new CustomException("No se puede ingresar una pre orden sin un barrack asociado");
             }
 
             if (!Enum.IsDefined(typeof(PreOrderType), input.PreOrderType))
