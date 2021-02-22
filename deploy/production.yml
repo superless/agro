@@ -17,10 +17,10 @@ variables:
 steps:
 - task: SonarQubePrepare@4
   inputs:
-    SonarQube: 'AGROFENIX-a'
+    SonarQube: 'AGROFENIX-Ci'
     scannerMode: 'MSBuild'
-    projectKey: 'AGROFENIX-a'
-    projectName: 'AGROFENIX-a'
+    projectKey: 'AGROFENIX-Ci'
+    projectName: 'AGROFENIX-Ci'
 
 - task: NuGetToolInstaller@1
 
