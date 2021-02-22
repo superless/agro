@@ -15,6 +15,12 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
+- task: SonarQubePrepare@4
+  inputs:
+    SonarQube: 'AGROFENIX-a'
+    scannerMode: 'MSBuild'
+    projectKey: 'AGROFENIX-a'
+    projectName: 'AGROFENIX-a'
 
 - task: NuGetToolInstaller@1
 
@@ -50,7 +56,10 @@ steps:
     publishWebProjects: false
     projects: '**/*trifenix.agro.functions.csproj'    
     arguments: '--no-restore --configuration Release --output $(Build.ArtifactStagingDirectory)'
-
+- task: SonarQubeAnalyze@4
+- task: SonarQubePublish@4
+  inputs:
+    pollingTimeoutSec: '300'
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
