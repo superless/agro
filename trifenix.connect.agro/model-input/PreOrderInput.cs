@@ -35,13 +35,6 @@ namespace trifenix.connect.agro_model_input
         [Required]
         [EnumSearch(EnumRelated.PRE_ORDER_TYPE)]
         public PreOrderType PreOrderType { get; set; }
-
-        /// <summary>
-        /// Ingrediente especifico de la pre orden
-        /// </summary>
-        [Required, Reference(typeof(Ingredient))]
-        [ReferenceSearch(EntityRelated.INGREDIENT)]
-        public string IngredientId { get; set; }
         
         /// <summary>
         /// Búsqueda por referencia de cuartel asociado

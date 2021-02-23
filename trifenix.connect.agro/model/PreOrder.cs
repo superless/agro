@@ -39,12 +39,6 @@ namespace trifenix.connect.agro_model
         public string OrderFolderId { get; set; }
 
         /// <summary>
-        /// Ingrediente específico de la pre orden
-        /// </summary>
-        [ReferenceSearch(EntityRelated.INGREDIENT)]
-        public string Ingredient { get; set; }
-
-        /// <summary>
         /// Tipo de pre-orden
         /// </summary>
         [EnumSearch(EnumRelated.PRE_ORDER_TYPE)]

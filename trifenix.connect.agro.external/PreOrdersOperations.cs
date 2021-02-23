@@ -25,27 +25,6 @@ namespace trifenix.connect.agro.external
         public async override Task Validate(PreOrderInput input)
         {
             /// <summary>
-            /// Solo una pre orden puede tener el mismo ingrediente activo que el Order Folder indexado, por lo que se busca 
-            /// el ingrediente activo de esta y se compara con el ingrediente que se está ingresando
-            /// </summary>
-            var OFIngredient = await Queries.GetOrderFolderIngredientFromPreOrder(input.OrderFolderId);
-            
-            if (input.IngredientId == OFIngredient)
-            {
-                /// <summary>
-                /// Se obtienen todos los ingredientes que tengan la pre orden asociada para ver si ya existe una pre orden con
-                /// el ingrediente de la order folder
-                /// </summary>
-                var POIngredients = await Queries.GetPreOrderIngredientFromOrderFolder(input.OrderFolderId);
-                foreach (var item in POIngredients)
-                {
-                    if (input.IngredientId == item)
-                    {
-                        throw new CustomException("El ingrediente de la carpeta de ordenes ya se encuentra en uso");
-                    }
-                }
-            }
-            /// <summary>
             /// Barracks deben ser unicos al momento de ingresar
             /// </summary>
             bool isUnique = input.BarrackIds.Distinct().Count() == input.BarrackIds.Count();
@@ -78,7 +57,6 @@ namespace trifenix.connect.agro.external
                 Name = input.Name,
                 OrderFolderId = input.OrderFolderId,
                 PreOrderType = input.PreOrderType,
-                Ingredient = input.IngredientId,
                 BarrackIds = input.BarrackIds
             };
 

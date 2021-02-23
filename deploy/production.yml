@@ -15,6 +15,12 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
+- task: SonarQubePrepare@4
+  inputs:
+    SonarQube: 'AGROFENIX-Ci'
+    scannerMode: 'MSBuild'
+    projectKey: 'AGROFENIX-Ci'
+    projectName: 'AGROFENIX-Ci'
 
 - task: NuGetToolInstaller@1
 
@@ -50,16 +56,12 @@ steps:
     publishWebProjects: false
     projects: '**/*trifenix.agro.functions.csproj'    
     arguments: '--no-restore --configuration Release --output $(Build.ArtifactStagingDirectory)'
-
-  - task : DotNetCoreCLI@0
-    inputs:
-      command: 'publish'
-      publishWebProjects: false
-      projects: '**/*trifenix.agro.functions.csproj'    
-      arguments: '--no-restore --configuration Release --output $(Build.ArtifactStagingDirectory)'
-
-  - task: PublishBuildArtifacts@1
-    inputs:
-      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-      ArtifactName: 'artifactAgroDev'
-      publishLocation: 'Container'
+- task: SonarQubeAnalyze@4
+- task: SonarQubePublish@4
+  inputs:
+    pollingTimeoutSec: '300'
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'artifactAgroDev'
+    publishLocation: 'Container'
