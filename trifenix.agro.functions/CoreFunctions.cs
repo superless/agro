@@ -204,6 +204,24 @@ namespace trifenix.agro.functions
             return result.JsonResult;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="req"></param>
+        /// <param name="log"></param>
+        /// <returns></returns>
+        [FunctionName("sector_delete")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ExtGetContainer<string>))]
+        public static async Task<IActionResult> SectorDelete(
+           [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "sectors/{id}")]
+            [RequestBodyType(typeof(SectorInput), "Sector")]
+            HttpRequest req, string id, ILogger log)
+        {
+            var result = await GenericMantainer.SendInternalHttp(req, log, s => s.Sector, id);
+            return result.JsonResult;
+
+        }
+
 
         /// <summary>
         /// Creación de parcela

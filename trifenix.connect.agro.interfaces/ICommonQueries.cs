@@ -90,7 +90,50 @@ namespace trifenix.connect.agro.interfaces
         /// <param name="idSeason"></param>
         /// <returns></returns>
         Task<string> GetSeasonStatus(string IdSeason);
-    
+
+        /// <summary>
+        /// Obtiene todos los barracks asociados a la order folder
+        /// </summary>
+        /// <param name="IdOrderFolder"></param>
+        /// <returns></returns>
+        Task<IEnumerable<IEnumerable<string>>> GetBarracksFromOrderFolderId(string IdOrderFolder);
+
+        /// <summary>
+        /// Obtiene la variedad de un barrack
+        /// </summary>
+        /// <param name="IdBarrack"></param>
+        /// <returns></returns>
+        Task<string> GetBarrackVarietyFromBarrackId(string IdBarrack);
+
+        /// <summary>
+        /// Obtiene la especie de una variedad
+        /// </summary>
+        /// <param name="IdVariety"></param>
+        /// <returns></returns>
+        Task<string> GetSpecieFromVarietyId(string IdVariety);
+
+        /// <summary>
+        /// Obtiene la especie de la order folder
+        /// </summary>
+        /// <param name="IdOrderFolder"></param>
+        /// <returns></returns>
+        Task<string> GetOFSpecie(string IdOrderFolder);
+
+        /// <summary>
+        /// Obtiene los atributos de una order folder
+        /// </summary>
+        /// <param name="IdOrderFolder"></param>
+        /// <returns></returns>
+        Task<IEnumerable<Dictionary<string,string>>> GetOFAttributes(string IdOrderFolder);
+
+        /// <summary>
+        /// Obtiene las order folder que tengan el mismo evento fenológico, el mismo objetivo de aplicación y la misma especie
+        /// </summary>
+        /// <param name="IdPhenologicalEvent"></param>
+        /// <param name="IdApplicationTarget"></param>
+        /// <param name="IdSpecie"></param>
+        /// <returns></returns>
+        Task<IEnumerable<string>> GetSimilarOF(string IdPhenologicalEvent, string IdApplicationTarget, string IdSpecie);
     }
 
 }

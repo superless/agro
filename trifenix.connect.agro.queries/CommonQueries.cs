@@ -12,7 +12,8 @@ namespace trifenix.connect.agro.queries
     /// <summary>
     /// Consultas comunes a la base de datos
     /// </summary>
-    public class CommonQueries : BaseQueries, ICommonAgroQueries {
+    public class CommonQueries : BaseQueries, ICommonAgroQueries
+    {
 
         public CommonQueries(CosmosDbArguments dbArguments) : base(dbArguments) { }
 
@@ -24,8 +25,9 @@ namespace trifenix.connect.agro.queries
         /// </summary>
         /// <param name="idsRoles"></param>
         /// <returns></returns>
-        public async Task<List<string>> GetUsersMailsFromRoles(List<string> idsRoles) {
-            var result = await MultipleQuery<User, string>(Queries(DbQuery.MAILUSERS_FROM_ROLES),  string.Join(",", idsRoles.Select(idRole => $"'{idRole}'").ToArray()));
+        public async Task<List<string>> GetUsersMailsFromRoles(List<string> idsRoles)
+        {
+            var result = await MultipleQuery<User, string>(Queries(DbQuery.MAILUSERS_FROM_ROLES), string.Join(",", idsRoles.Select(idRole => $"'{idRole}'").ToArray()));
             List<string> emails = result.ToList();
             return emails;
         }
@@ -98,6 +100,48 @@ namespace trifenix.connect.agro.queries
         /// <returns></returns>
         public async Task<string> GetSeasonStatus(string IdSeason) => await SingleQuery<Season, string>(Queries(DbQuery.SEASONSTATUS), IdSeason);
 
-    }
+        /// <summary>
+        /// Obtiene todos los barracks asociados a una order folder
+        /// </summary>
+        /// <param name="IdOrderFolder"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<IEnumerable<string>>> GetBarracksFromOrderFolderId(string IdOrderFolder) => await MultipleQuery<PreOrder, IEnumerable<string>>(Queries(DbQuery.BARRACKS_FROM_ORDERFOLDER), IdOrderFolder);
 
+        /// <summary>
+        /// Obtiene la variedad de un barrack
+        /// </summary>
+        /// <param name="IdBarrack"></param>
+        /// <returns></returns>
+        public async Task<string> GetBarrackVarietyFromBarrackId(string IdBarrack) => await SingleQuery<Barrack, string>(Queries(DbQuery.VARIETYID_FROM_BARRACKID), IdBarrack);
+
+        /// <summary>
+        /// Obtiene la especie de una variedad
+        /// </summary>
+        /// <param name="IdVariety"></param>
+        /// <returns></returns>
+        public async Task<string> GetSpecieFromVarietyId(string IdVariety) => await SingleQuery<Variety, string>(Queries(DbQuery.SPECIEID_FROM_VARIETYID), IdVariety);
+
+        /// <summary>
+        /// Obtiene la especie de la order folder
+        /// </summary>
+        /// <param name="IdOrderFolder"></param>
+        /// <returns></returns>
+        public async Task<string> GetOFSpecie(string IdOrderFolder) => await SingleQuery<OrderFolder, string>(Queries(DbQuery.SPECIE_FROM_ORDERFOLDER), IdOrderFolder);
+
+        /// <summary>
+        /// Obtiene los atributos de una order folder
+        /// </summary>
+        /// <param name="IdOrderFolder"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<Dictionary<string, string>>> GetOFAttributes(string IdOrderFolder) => await MultipleQuery<OrderFolder, Dictionary<string, string>>(Queries(DbQuery.ORDERFOLDER_ATTRIBUTES), IdOrderFolder);
+
+        /// <summary>
+        /// Obtiene las order folder que tengan el mismo evento fenológico, el mismo objetivo de aplicación y la misma especie
+        /// </summary>
+        /// <param name="IdPhenologicalEvent"></param>
+        /// <param name="IdApplicationTarget"></param>
+        /// <param name="IdSpecie"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<string>> GetSimilarOF(string IdPhenologicalEvent, string IdApplicationTarget, string IdSpecie) => await MultipleQuery<OrderFolder, string>(Queries(DbQuery.SIMILAR_ORDERFOLDER), IdPhenologicalEvent, IdApplicationTarget, IdSpecie);
+    }
 }

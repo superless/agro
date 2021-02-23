@@ -120,9 +120,8 @@
   <data name="ACTIVEDOSESIDS_FROM_PRODUCTID" xml:space="preserve">
     <value>SELECT DISTINCT value c.id from c where c.IdProduct='{0}' and c.Active=true and c.Default=false</value>
   </data>
-  <data name="BUSINESSNAME_FROM_COSTCENTER" xml:space="preserve">
-    <value />
-    <comment> </comment>
+  <data name="BARRACKS_FROM_ORDERFOLDER" xml:space="preserve">
+    <value>SELECT value c.BarrackIds FROM c where c.OrderFolderId = '{0}'</value>
   </data>
   <data name="CORRELATIVE_FROM_DOSESID" xml:space="preserve">
     <value>SELECT value c.ClientId FROM c where c.id ='{0}'</value>
@@ -169,6 +168,9 @@
   <data name="ORDERFOLDERINGREDIENT_FROM_PREORDER" xml:space="preserve">
     <value>SELECT value c.IdIngredient FROM c where c.id = '{0}'</value>
   </data>
+  <data name="ORDERFOLDER_ATTRIBUTES" xml:space="preserve">
+    <value>SELECT c.IdPhenologicalEvent, c.IdApplicationTarget, c.IdSpecie FROM c where c.id = '{0}'</value>
+  </data>
   <data name="PREORDERINGREDIENT_FROM_ORDERFOLDER" xml:space="preserve">
     <value>SELECT value c.Ingredient FROM c where c.OrderFolderId = '{0}'</value>
   </data>
@@ -178,11 +180,17 @@
   <data name="SEASONSTATUS" xml:space="preserve">
     <value>SELECT value c.Current from c where c.id = '{0}'</value>
   </data>
+  <data name="SIMILAR_ORDERFOLDER" xml:space="preserve">
+    <value>SELECT value c.id FROM c where c.IdPhenologicalEvent = '{0}' and c.IdApplicationTarget = '{1}' and c.IdSpecie = '{2}'</value>
+  </data>
   <data name="SPECIEABBREVIATION_FROM_SPECIEID" xml:space="preserve">
     <value>SELECT value c.Abbreviation FROM c where  c.id = '{0}'</value>
   </data>
   <data name="SPECIEID_FROM_VARIETYID" xml:space="preserve">
-    <value>SELECT value c.IdSpecie FROM c where  c.id = '{0}'</value>
+    <value>SELECT value c.IdSpecie FROM c where c.id = '{0}'</value>
+  </data>
+  <data name="SPECIE_FROM_ORDERFOLDER" xml:space="preserve">
+    <value>SELECT value c.IdSpecie FROM c where c.id = '{0}'</value>
   </data>
   <data name="USERID_FROM_IDAAD" xml:space="preserve">
     <value>SELECT value c.id FROM c where c.ObjectIdAAD = '{0}'</value>
