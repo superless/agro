@@ -31,14 +31,14 @@ namespace trifenix.connect.agro.external
             var idAT = rs["IdApplicationTarget"];
             var idSP = rs["IdSpecie"];
             var similarOF = await Queries.GetSimilarOF(idPE, idAT, idSP);
-            for (int i = 0; i < similarOF.Count(); i++)
+            foreach(var item in similarOF)
             {
-                var aB = await Queries.GetBarracksFromOrderFolderId(similarOF.ElementAt(i));
+                var aB = await Queries.GetBarracksFromOrderFolderId(item);
                 var manyBarracks = aB.SelectMany(s => s).ToList();
                 var isRepeated = manyBarracks.Contains(BarrackId);
                 if (isRepeated)
                 {
-                    return true;
+                    throw new CustomException("El barrack ya existe en la order folder");
                 }
             }
             return false;
@@ -69,11 +69,7 @@ namespace trifenix.connect.agro.external
                 {
                     throw new CustomException($"La especie del barrack de id {input.BarrackIds[i]} no es la misma que la especie de la order folder a la que quiere ser ingresado");
                 }
-                var rptd = await IsRepeated(input.BarrackIds[i], input);
-                if (rptd)
-                {
-                    throw new CustomException("El barrack ya existe en la order folder");
-                }
+                await IsRepeated(input.BarrackIds[i], input);
             }
 
             if (!Enum.IsDefined(typeof(PreOrderType), input.PreOrderType))
