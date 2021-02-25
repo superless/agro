@@ -70,11 +70,11 @@ namespace trifenix.connect.agro.queries {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to SELECT value c.BarrackIds FROM c where c.OrderFolderId = &apos;{0}&apos;.
         /// </summary>
-        public static string BUSINESSNAME_FROM_COSTCENTER {
+        public static string BARRACKS_FROM_ORDERFOLDER {
             get {
-                return ResourceManager.GetString("BUSINESSNAME_FROM_COSTCENTER", resourceCulture);
+                return ResourceManager.GetString("BARRACKS_FROM_ORDERFOLDER", resourceCulture);
             }
         }
         
@@ -205,6 +205,15 @@ namespace trifenix.connect.agro.queries {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SELECT c.IdPhenologicalEvent, c.IdApplicationTarget, c.IdSpecie FROM c where c.id = &apos;{0}&apos;.
+        /// </summary>
+        public static string ORDERFOLDER_ATTRIBUTES {
+            get {
+                return ResourceManager.GetString("ORDERFOLDER_ATTRIBUTES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SELECT value c.IdIngredient FROM c where c.id = &apos;{0}&apos;.
         /// </summary>
         public static string ORDERFOLDERINGREDIENT_FROM_PREORDER {
@@ -241,6 +250,24 @@ namespace trifenix.connect.agro.queries {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SELECT value c.id FROM c where c.IdPhenologicalEvent = &apos;{0}&apos; and c.IdApplicationTarget = &apos;{1}&apos; and c.IdSpecie = &apos;{2}&apos;.
+        /// </summary>
+        public static string SIMILAR_ORDERFOLDER {
+            get {
+                return ResourceManager.GetString("SIMILAR_ORDERFOLDER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT value c.IdSpecie FROM c where c.id = &apos;{0}&apos;.
+        /// </summary>
+        public static string SPECIE_FROM_ORDERFOLDER {
+            get {
+                return ResourceManager.GetString("SPECIE_FROM_ORDERFOLDER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SELECT value c.Abbreviation FROM c where  c.id = &apos;{0}&apos;.
         /// </summary>
         public static string SPECIEABBREVIATION_FROM_SPECIEID {
@@ -250,7 +277,7 @@ namespace trifenix.connect.agro.queries {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SELECT value c.IdSpecie FROM c where  c.id = &apos;{0}&apos;.
+        ///   Looks up a localized string similar to SELECT value c.IdSpecie FROM c where c.id = &apos;{0}&apos;.
         /// </summary>
         public static string SPECIEID_FROM_VARIETYID {
             get {

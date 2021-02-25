@@ -147,7 +147,27 @@ namespace trifenix.connect.agro.queries
                 /// </summary>
                 case DbQuery.SEASONSTATUS:
                     return QueryRes.SEASONSTATUS;
-                
+
+                /// <summary>
+                /// Obtiene todos los barracks asociados a una order folder
+                /// </summary>
+                case DbQuery.BARRACKS_FROM_ORDERFOLDER:
+                    return QueryRes.BARRACKS_FROM_ORDERFOLDER;
+
+                /// <summary>
+                /// Obtiene la especie de una order folder
+                /// </summary>
+                case DbQuery.SPECIE_FROM_ORDERFOLDER:
+                    return QueryRes.SPECIE_FROM_ORDERFOLDER;
+
+                /// <summary>
+                /// Obtiene los atributos de una order folder
+                /// </summary>
+                case DbQuery.ORDERFOLDER_ATTRIBUTES:
+                    return QueryRes.ORDERFOLDER_ATTRIBUTES;
+
+                case DbQuery.SIMILAR_ORDERFOLDER:
+                    return QueryRes.SIMILAR_ORDERFOLDER;
                 default:
                     return "";
             }

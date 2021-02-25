@@ -8,6 +8,7 @@ using trifenix.connect.agro_model_input;
 using trifenix.connect.interfaces.db.cosmos;
 using trifenix.connect.interfaces.external;
 using trifenix.connect.mdm.containers;
+using trifenix.exception;
 
 namespace trifenix.connect.agro.external
 {
@@ -32,7 +33,7 @@ namespace trifenix.connect.agro.external
             var NumOrders = int.Parse(orders);
             if(NumOrders != 0)
             {
-                throw new ArgumentNullException(orders);
+                throw new CustomException("No se pueden ingresar ordenes repetidas");
             }
         }
 
