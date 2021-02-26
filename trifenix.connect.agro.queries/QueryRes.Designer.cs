@@ -205,6 +205,15 @@ namespace trifenix.connect.agro.queries {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SELECT value c.BarrackIds FROM c where c.id = &apos;{0}&apos;.
+        /// </summary>
+        public static string OFBARRACKS {
+            get {
+                return ResourceManager.GetString("OFBARRACKS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SELECT c.IdPhenologicalEvent, c.IdApplicationTarget, c.IdSpecie FROM c where c.id = &apos;{0}&apos;.
         /// </summary>
         public static string ORDERFOLDER_ATTRIBUTES {
