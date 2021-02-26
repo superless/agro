@@ -101,7 +101,6 @@ namespace trifenix.connect.agro.external.helper
 
                 // si es vacio no se valida
                 if (string.IsNullOrWhiteSpace(strElement)) break;
-
                 // ejecuta el método de busqueda por id, usando el valor de la propiedad.
                 var task = (Task<bool>)genericMtd.Invoke(existElement, new[] { item.ToString() });
 
