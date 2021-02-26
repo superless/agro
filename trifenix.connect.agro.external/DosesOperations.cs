@@ -84,6 +84,7 @@ namespace trifenix.agro.external.operations.entities.ext
         }
 
         public override async Task<ExtPostContainer<string>> SaveInput(DosesInput input) {
+            
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
 
             await Validate(input);

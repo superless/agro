@@ -143,5 +143,13 @@ namespace trifenix.connect.agro.queries
         /// <param name="IdSpecie"></param>
         /// <returns></returns>
         public async Task<IEnumerable<string>> GetSimilarOF(string IdPhenologicalEvent, string IdApplicationTarget, string IdSpecie) => await MultipleQuery<OrderFolder, string>(Queries(DbQuery.SIMILAR_ORDERFOLDER), IdPhenologicalEvent, IdApplicationTarget, IdSpecie);
+
+        /// <summary>
+        /// Obtiene los barracks de una misma order folder
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<IEnumerable<string>>> GetOFBarracks(string Id) => await MultipleQuery<PreOrder, IEnumerable<string>>(Queries(DbQuery.OFBARRACKS), Id);
+
     }
 }

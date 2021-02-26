@@ -165,9 +165,19 @@ namespace trifenix.connect.agro.queries
                 /// </summary>
                 case DbQuery.ORDERFOLDER_ATTRIBUTES:
                     return QueryRes.ORDERFOLDER_ATTRIBUTES;
-
+                
+                /// <summary>
+                /// Obtiene las order folder que compartan los mismos evento fenologico, objetivo de aplicacion y especie
+                /// </summary>
                 case DbQuery.SIMILAR_ORDERFOLDER:
                     return QueryRes.SIMILAR_ORDERFOLDER;
+
+                /// <summary>
+                /// Obtiene los barracks de una order folder
+                /// </summary>
+                case DbQuery.OFBARRACKS:
+                    return QueryRes.OFBARRACKS;
+
                 default:
                     return "";
             }

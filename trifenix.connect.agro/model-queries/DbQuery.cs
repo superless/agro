@@ -33,5 +33,6 @@ namespace trifenix.connect.agro.model_queries
         SPECIE_FROM_ORDERFOLDER = 25,
         ORDERFOLDER_ATTRIBUTES = 26,
         SIMILAR_ORDERFOLDER = 27,
+        OFBARRACKS= 28,
     }
 }
