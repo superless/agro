@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="trifenix.connect.agro" Version="0.0.4" />
+    <PackageReference Include="trifenix.connect.agro" Version="0.0.5" />
   </ItemGroup>
 
 </Project>

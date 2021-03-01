@@ -9,7 +9,6 @@ using trifenix.connect.agro.interfaces;
 using trifenix.connect.agro.interfaces.db;
 using trifenix.connect.agro.interfaces.external;
 using trifenix.connect.agro.model;
-using trifenix.connect.agro.model_input;
 using trifenix.connect.agro_model;
 using trifenix.connect.agro_model_input;
 using trifenix.connect.input;
@@ -192,7 +191,7 @@ namespace trifenix.agro.external
         /// <summary>
         /// Pre Orden
         /// </summary>
-        public IGenericOperation<PreOrder, PreOrderInput> PreOrder => new PreOrdersOperations<T>(dbConnect.GetDbExistsElements, GetMainDb < PreOrder>(), Search,  CommonQueries, GetValidators<PreOrderInput, PreOrder>());
+        public IGenericOperation<PreOrder, PreOrderInput> PreOrder => new PreOrdersOperations<T>(GetMainDb<PreOrder>(), Search, CommonQueries, GetValidators<PreOrderInput, PreOrder>());
 
         /// <summary>
         /// Orden de aplicacion

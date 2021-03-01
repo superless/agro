@@ -15,30 +15,27 @@ using trifenix.exception;
 
 namespace trifenix.connect.agro.external
 {
-    public class PreOrdersOperations<T> : MainOperation<PreOrder, PreOrderInput,T>, IGenericOperation<PreOrder, PreOrderInput> {
+    public class PreOrdersOperations<T> : MainOperation<PreOrder, PreOrderInput, T>, IGenericOperation<PreOrder, PreOrderInput>
+    {
         private readonly ICommonAgroQueries Queries;
 
-        public PreOrdersOperations(IDbExistsElements existsElement, IMainGenericDb<PreOrder> repo, IAgroSearch<T> search, ICommonAgroQueries queries, IValidatorAttributes<PreOrderInput> validator) : base(repo, search, validator) { 
+        public PreOrdersOperations(IMainGenericDb<PreOrder> repo, IAgroSearch<T> search, ICommonAgroQueries queries, IValidatorAttributes<PreOrderInput> validator) : base(repo, search, validator)
+        {
             Queries = queries;
         }
 
         private async Task<bool> IsRepeated(string BarrackId, PreOrderInput input)
         {
-            // obtiene los parámetros de filtro del order folder.
             var OFAtt = await Queries.GetOFAttributes(input.OrderFolderId);
-            
             var rs = OFAtt.FirstOrDefault();
             var idPE = rs["IdPhenologicalEvent"];
             var idAT = rs["IdApplicationTarget"];
             var idSP = rs["IdSpecie"];
 
-
             // obtiene los order folder que coinciden con los filtros
             var similarOF = await Queries.GetSimilarOF(idPE, idAT, idSP);
 
-
-
-            foreach(var item in similarOF)
+            foreach (var item in similarOF)
             {
                 var aB = await Queries.GetBarracksFromOrderFolderId(item);
                 var manyBarracks = aB.SelectMany(s => s).ToList();
@@ -53,9 +50,6 @@ namespace trifenix.connect.agro.external
 
         public async override Task Validate(PreOrderInput input)
         {
-            // si el id no tiene valor es un nuevo valor
-            // si el id tiene valor es edición
-
             await base.Validate(input);
 
             if (!input.BarrackIds.Any())
@@ -68,47 +62,45 @@ namespace trifenix.connect.agro.external
             {
                 throw new CustomException("No se pueden ingresar barracks duplicados");
             }
-            
 
+            var OFBarracks = await Queries.GetOFBarracks(input.Id);
+            var OFBarracksGroup = OFBarracks.SelectMany(s => s).ToList();
             // identificador de la especie de un order folder.
             var OFSpecie = await Queries.GetOFSpecie(input.OrderFolderId);
 
-
-            // recorre los ids de los barracks de un input.
-            for (int i = 0; i < input.BarrackIds.Length; i++)
+            List<string> newBarracks = new List<string>();
+            foreach (var item in input.BarrackIds)
             {
-                // obtienr el id de la variedad del barrack.
-                var variety = await Queries.GetBarrackVarietyFromBarrackId(input.BarrackIds[i]);
-
-                // obtiene la especie
+                if (!OFBarracksGroup.Contains(item))
+                {
+                    newBarracks.Add(item);
+                }
+            }
+            // recorre los ids de los barracks de un input.
+            foreach (var item in newBarracks)
+            {
+                var variety = await Queries.GetBarrackVarietyFromBarrackId(item);
                 var specie = await Queries.GetSpecieFromVarietyId(variety);
-
-                // si la especie no es igual a la de la orderfolder, lanza error. 
                 if (specie != OFSpecie)
                 {
                     throw new CustomException($"La especie del barrack de id {item} no es la misma que la especie de la order folder a la que quiere ser ingresado");
                 }
-
-                // valida si está repetido.
-                await IsRepeated(input.BarrackIds[i], input);
+                await IsRepeated(item, input);
             }
 
-
-
-
             if (!Enum.IsDefined(typeof(PreOrderType), input.PreOrderType))
-                throw new ArgumentOutOfRangeException("input","Enum fuera de rango");
-        
+                throw new ArgumentOutOfRangeException("input", "Enum fuera de rango");
+
         }
 
         public override async Task<ExtPostContainer<string>> SaveInput(PreOrderInput input)
         {
+
             /// Valida cada pre orden
-            await Validate(input);               
+            await Validate(input);
 
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
 
-            
 
             var preOrder = new PreOrder
             {
@@ -122,8 +114,8 @@ namespace trifenix.connect.agro.external
             await SaveDb(preOrder);
             var result = await SaveSearch(preOrder);
             return result;
-        }   
- 
+        }
+
     }
 
 }
