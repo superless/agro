@@ -5,8 +5,7 @@ using System.Threading.Tasks;
 using System.Linq.Expressions;
 using trifenix.connect.mdm.containers;
 using trifenix.connect.mdm.enums;
-using trifenix.connect.interfaces.db.cosmos;
-using trifenix.connect.entities.cosmos;
+using trifenix.model;
 
 namespace trifenix.agro.external.operations.helper
 {
@@ -66,120 +65,12 @@ namespace trifenix.agro.external.operations.helper
             };
         }
 
-        /// <summary>
-        /// Metodo estático que permite editar un elemento y enviar los mensajes que correspondan de acuerdo al resultado de la operación.
-        /// </summary>
-        /// <typeparam name="T">Tipo de entidad a editar</typeparam>
-        /// <param name="idElementToEdit">identificador del elemento a editar</param>
-        /// <param name="elementToEdit">elemento a editar, sin cambios</param>
-        /// <param name="transform">Operación que permitirá cambiar los campos</param>
-        /// <param name="actionEdit">acción que editará el elemento en la base de datos</param>
-        /// <param name="noExistsMessage">mensaje personalizado en caso de no existir el elemento</param>
-        /// <returns>Contenedor con el elemento a editar</returns>
-        public static async Task<ExtPostContainer<T>> EditElement<T>(ICommonDbOperations<T> dbOper, IQueryable<T> store, string idElementToEdit, T elementToEdit, Func<T, T> transform, Func<T, Task> actionEdit, string noExistsMessage, Expression<Func<T, bool>> alreadyExists, string messageAlreadyExists) where T : DocumentBase
-         {
-            try
-            {
-                string idAlreadyExist = await AlreadyExist(dbOper, store, alreadyExists);
-                if (idAlreadyExist != null)
-                {
-                    return new ExtPostErrorContainer<T>
-                    {
-                        Message = messageAlreadyExists,
-                        MessageResult = ExtMessageResult.ElementAlreadyExists,
-                        IdRelated = idAlreadyExist
-                    };
-                }
-
-                if (elementToEdit == null)
-                {
-                    return new ExtPostErrorContainer<T>
-                    {
-                        Message = noExistsMessage,
-                        MessageResult = ExtMessageResult.ElementToEditDoesNotExists,
-                        IdRelated = idElementToEdit
-                    };
-                }
-                var elementToSave = transform(elementToEdit);
-
-                await actionEdit(elementToSave);
-
-                return new ExtPostContainer<T>
-                {
-                    Result = elementToSave,
-                    IdRelated = idElementToEdit,
-                    MessageResult = ExtMessageResult.Ok
-                };
-            }
-            catch (Exception ex)
-            {
-                return new ExtPostErrorContainer<T>
-                {
-                    IdRelated = idElementToEdit,
-                    MessageResult = ExtMessageResult.Error,
-                    Message = ex.Message,
-                    InternalException = ex
-                };
-
-            }
-        }
-
-
-
         
         
 
-        //TODO: Deprecar
-        /// <summary>
-        /// Crea elemento en la base de datos y crea un contenedor con la respuesta de acuerdo al resultado de la operación.
-        /// </summary>
-        /// <typeparam name="T">Tipo del elemento a crear</typeparam>
-        /// <param name="store">Store de elementos a consultar</param>
-        /// <param name="elementToSave">función que guarda el elemento en la base de datos</param>
-        /// <param name="alreadyExists">función que comprueba si elemento ya existe</param>
-        /// <param name="messageAlreadyExists">mensaje si el elemento ya existe</param>
-        /// <returns>Contenedor con el id del elemento creado o el error del resultado</returns>
-        public static async Task<ExtPostContainer<string>> CreateElement<T>(ICommonDbOperations<T> dbOper, IQueryable<T> store,  Func<string, Task<string>> elementToSave, Expression<Func<T, bool>> alreadyExists, string messageAlreadyExists) where T:DocumentBase
-        {
-            try
-            {
-                string idAlreadyExist = await AlreadyExist(dbOper, store, alreadyExists);
-                if (idAlreadyExist != null)
-                {
-                    return new ExtPostErrorContainer<string>
-                    {
-                        Message = messageAlreadyExists,
-                        MessageResult = ExtMessageResult.ElementAlreadyExists,
-                        IdRelated = idAlreadyExist
-                    };
-                }
+        
 
-                string idResult = await elementToSave(Guid.NewGuid().ToString("N"));
-
-                return new ExtPostContainer<string>
-                {
-                    IdRelated = idResult,
-                    Result = idResult,
-                    MessageResult = ExtMessageResult.Ok
-                };
-
-            }
-            catch (Exception ex)
-            {
-                return new ExtPostErrorContainer<string>
-                {
-                    InternalException = ex,
-                    Message = ex.Message,
-                    MessageResult = ExtMessageResult.Error
-                };
-            }
-        }
-
-        public static async Task<string> AlreadyExist<T>(ICommonDbOperations<T> dbOper, IQueryable<T> store, Expression<Func<T, bool>> alreadyExists) where T : DocumentBase
-        {
-            var element = await dbOper.FirstOrDefaultAsync(store, alreadyExists);
-            return element?.Id;
-        }
+        
 
         /// <summary>
         /// Lanza excepción si el elemento no existe

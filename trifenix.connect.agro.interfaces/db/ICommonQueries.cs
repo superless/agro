@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace trifenix.connect.agro.interfaces
+namespace trifenix.connect.agro.interfaces.db
 {
     /// <summary>
     /// Consultas comunes a base de datos, para agroFenix
@@ -134,6 +134,13 @@ namespace trifenix.connect.agro.interfaces
         /// <param name="IdSpecie"></param>
         /// <returns></returns>
         Task<IEnumerable<string>> GetSimilarOF(string IdPhenologicalEvent, string IdApplicationTarget, string IdSpecie);
+
+        /// <summary>
+        /// Obtiene los barracks de una misma order folder
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        Task<IEnumerable<IEnumerable<string>>> GetOFBarracks(string Id);
     }
 
 }

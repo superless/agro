@@ -4,15 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using trifenix.connect.agro.external.main;
 using trifenix.connect.agro.index_model.props;
-using trifenix.connect.agro.interfaces;
-using trifenix.connect.agro.interfaces.cosmos;
+using trifenix.connect.agro.interfaces.db;
 using trifenix.connect.agro.interfaces.external;
 using trifenix.connect.agro_model;
 using trifenix.connect.agro_model_input;
-using trifenix.connect.interfaces.db.cosmos;
+using trifenix.connect.interfaces.db;
 using trifenix.connect.interfaces.external;
 using trifenix.connect.mdm.containers;
-using trifenix.connect.mdm.enums;
 using trifenix.connect.mdm.search.model;
 using trifenix.connect.util;
 using trifenix.exception;
@@ -30,7 +28,7 @@ namespace trifenix.agro.external.operations.entities.ext
         private readonly IDbExistsElements existsElement;
         private readonly ICommonAgroQueries Queries;
 
-        public DosesOperations(IDbExistsElements existsElement, IMainGenericDb<Dose> repo,  IAgroSearch<T> search, ICommonDbOperations<Dose> commonDb, ICommonAgroQueries queries, IValidatorAttributes<DosesInput> validator) : base(repo, search, commonDb, validator) {
+        public DosesOperations(IDbExistsElements existsElement, IMainGenericDb<Dose> repo,  IAgroSearch<T> search, ICommonAgroQueries queries, IValidatorAttributes<DosesInput> validator) : base(repo, search, validator) {
             this.existsElement = existsElement;
             Queries = queries;
         }
@@ -84,6 +82,7 @@ namespace trifenix.agro.external.operations.entities.ext
         }
 
         public override async Task<ExtPostContainer<string>> SaveInput(DosesInput input) {
+            
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
 
             await Validate(input);

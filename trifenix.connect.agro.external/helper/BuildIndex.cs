@@ -1,15 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using trifenix.connect.agro.interfaces.external;
-using trifenix.connect.agro.interfaces.external.util;
-using trifenix.connect.agro_model;
-using trifenix.connect.entities.cosmos;
-
-using trifenix.connect.interfaces.external;
-
-namespace trifenix.connect.agro.external.helper
+﻿namespace trifenix.connect.agro.external.helper
 {
     public class BuildIndex<GeoPointType> //: IBuildIndex<GeoPointType>
     {

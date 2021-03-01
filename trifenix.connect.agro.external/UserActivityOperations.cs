@@ -4,10 +4,9 @@ using trifenix.connect.agro.external.main;
 using trifenix.connect.agro.interfaces.external;
 using trifenix.connect.agro_model;
 using trifenix.connect.agro_model_input;
-using trifenix.connect.interfaces.db.cosmos;
+using trifenix.connect.interfaces.db;
 using trifenix.connect.interfaces.external;
 using trifenix.connect.mdm.containers;
-using trifenix.connect.mdm.enums;
 
 namespace trifenix.connect.agro.external
 {
@@ -19,7 +18,7 @@ namespace trifenix.connect.agro.external
 
         private readonly string UserId;
 
-        public UserActivityOperations(IMainGenericDb<UserActivity> repo, IAgroSearch<T> search, ICommonDbOperations<UserActivity> commonDb, string userId, IValidatorAttributes<UserActivityInput> validator) : base(repo, search, commonDb, validator) {
+        public UserActivityOperations(IMainGenericDb<UserActivity> repo, IAgroSearch<T> search, string userId, IValidatorAttributes<UserActivityInput> validator) : base(repo, search, validator) {
             UserId = userId;
         }
 

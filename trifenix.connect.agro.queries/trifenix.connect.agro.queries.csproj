@@ -6,14 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="trifenix.exception" Version="0.1.31" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\trifenix.connect.agro.interfaces.cosmos\trifenix.connect.agro.interfaces.cosmos.csproj" />
     <ProjectReference Include="..\trifenix.connect.agro.interfaces.external\trifenix.connect.agro.interfaces.external.csproj" />
-    <ProjectReference Include="..\trifenix.connect.agro.interfaces.search\trifenix.connect.agro.interfaces.search.csproj" />
-    <ProjectReference Include="..\trifenix.connect.agro\trifenix.connect.agro.csproj" />
   </ItemGroup>
 
   <ItemGroup>

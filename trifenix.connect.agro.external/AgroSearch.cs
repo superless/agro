@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using Azure.Search.Documents.Indexes.Models;
-using Microsoft.Spatial;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,13 +7,13 @@ using trifenix.connect.agro.interfaces.external;
 using trifenix.connect.agro.interfaces.search;
 using trifenix.connect.agro.model_queries;
 using trifenix.connect.agro.queries;
-using trifenix.connect.entities.cosmos;
 using trifenix.connect.interfaces.hash;
 using trifenix.connect.interfaces.search;
 using trifenix.connect.mdm.entity_model;
 using trifenix.connect.search;
 using trifenix.connect.search_mdl;
 using trifenix.connect.util;
+using trifenix.model;
 
 namespace trifenix.connect.agro.external
 {
@@ -194,7 +192,7 @@ namespace trifenix.connect.agro.external
         /// </summary>
         /// <typeparam name="T">tipo de dato tipo base de datos.</typeparam>
         /// <param name="document">entidad o documento de base de datos de persistencia</param>
-        public void AddDocument<T>(T document) where T : DocumentBase
+        public void AddDocument<T>(T document) where T : DocumentDb
         {
             // obtiene un entitySearch desde una entidad de base de datos de persistencia.
             var entitySearch = Mdm.GetEntitySearch(implements, document, hashOper).Cast<IEntitySearch<GeoPointType>>().ToList();
@@ -293,7 +291,7 @@ namespace trifenix.connect.agro.external
         /// <typeparam name="T2">modelo del objeto que se convertirá a entity Search</typeparam>
         /// <param name="model">objeto a convertir</param>
         /// <returns>Colección de entity Search</returns>
-        public IEntitySearch<GeoPointType>[] GetEntitySearch<T2>(T2 model) where T2 : DocumentBase
+        public IEntitySearch<GeoPointType>[] GetEntitySearch<T2>(T2 model) where T2 : DocumentDb
         {
             // crea un mapper para convertir un IEntitySearch a EntityBaseSearch<GeoPointType>
             var mapperLocal = mapper.CreateMapper();

@@ -2,12 +2,11 @@
 using System.Linq;
 using System.Threading.Tasks;
 using trifenix.connect.agro.external.main;
-using trifenix.connect.agro.interfaces;
-using trifenix.connect.agro.interfaces.cosmos;
+using trifenix.connect.agro.interfaces.db;
 using trifenix.connect.agro.interfaces.external;
 using trifenix.connect.agro_model;
 using trifenix.connect.agro_model_input;
-using trifenix.connect.interfaces.db.cosmos;
+using trifenix.connect.interfaces.db;
 using trifenix.connect.interfaces.external;
 using trifenix.connect.mdm.containers;
 using trifenix.exception;
@@ -23,7 +22,7 @@ namespace trifenix.agro.external
     {
         private readonly ICommonAgroQueries Queries;
 
-        public SeasonOperations(IDbExistsElements existsElement, IMainGenericDb<Season> repo, IAgroSearch<T> search, ICommonDbOperations<Season> commonDb, ICommonAgroQueries queries, IValidatorAttributes<SeasonInput> validator) : base(repo, search, commonDb, validator)
+        public SeasonOperations(IMainGenericDb<Season> repo, IAgroSearch<T> search, ICommonAgroQueries queries, IValidatorAttributes<SeasonInput> validator) : base(repo, search, validator)
         {
             Queries = queries;
         }

@@ -28,6 +28,8 @@ using trifenix.connect.interfaces.auth;
 using trifenix.connect.mdm.containers;
 using AzureFunctions.Extensions.Swashbuckle.Attribute;
 using trifenix.connect.agro.model_input;
+using trifenix.connect.agro.interfaces.external;
+using Microsoft.Spatial;
 
 namespace trifenix.agro.functions
 {
@@ -137,7 +139,17 @@ namespace trifenix.agro.functions
             var ObjectIdAAD = opInstance.Value<string>("ObjectIdAAD");
             var queries = new CommonQueries(ConfigManager.GetDbArguments);
             var EntityName = opInstance.Value<string>("EntityName");
-            var agro = await ContainerMethods.AgroManager(ObjectIdAAD);
+            IAgroManager<GeographyPoint> agro;
+            try
+            {
+                agro = await ContainerMethods.AgroManager(ObjectIdAAD);
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
+            
             var entityType = opInstance["EntityType"].ToObject<Type>();
             var repo = agro.GetOperationByInputType(entityType);
             dynamic element = opInstance["Element"].ToObject(entityType);

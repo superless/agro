@@ -165,6 +165,9 @@
   <data name="NAME_BY_ID" xml:space="preserve">
     <value>SELECT value c.Name FROM c where  c.id = '{0}'</value>
   </data>
+  <data name="OFBARRACKS" xml:space="preserve">
+    <value>SELECT value c.BarrackIds FROM c where c.id = '{0}'</value>
+  </data>
   <data name="ORDERFOLDERINGREDIENT_FROM_PREORDER" xml:space="preserve">
     <value>SELECT value c.IdIngredient FROM c where c.id = '{0}'</value>
   </data>

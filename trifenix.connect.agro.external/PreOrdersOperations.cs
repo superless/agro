@@ -4,12 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using trifenix.connect.agro.external.main;
 using trifenix.connect.agro.index_model.enums;
-using trifenix.connect.agro.interfaces;
-using trifenix.connect.agro.interfaces.cosmos;
+using trifenix.connect.agro.interfaces.db;
 using trifenix.connect.agro.interfaces.external;
 using trifenix.connect.agro_model;
 using trifenix.connect.agro_model_input;
-using trifenix.connect.interfaces.db.cosmos;
+using trifenix.connect.interfaces.db;
 using trifenix.connect.interfaces.external;
 using trifenix.connect.mdm.containers;
 using trifenix.exception;
@@ -19,7 +18,7 @@ namespace trifenix.connect.agro.external
     public class PreOrdersOperations<T> : MainOperation<PreOrder, PreOrderInput,T>, IGenericOperation<PreOrder, PreOrderInput> {
         private readonly ICommonAgroQueries Queries;
 
-        public PreOrdersOperations(IDbExistsElements existsElement, IMainGenericDb<PreOrder> repo, IAgroSearch<T> search, ICommonDbOperations<PreOrder> commonDb, ICommonAgroQueries queries, IValidatorAttributes<PreOrderInput> validator) : base(repo, search, commonDb, validator) { 
+        public PreOrdersOperations(IDbExistsElements existsElement, IMainGenericDb<PreOrder> repo, IAgroSearch<T> search, ICommonAgroQueries queries, IValidatorAttributes<PreOrderInput> validator) : base(repo, search, validator) { 
             Queries = queries;
         }
 
@@ -87,7 +86,7 @@ namespace trifenix.connect.agro.external
                 // si la especie no es igual a la de la orderfolder, lanza error. 
                 if (specie != OFSpecie)
                 {
-                    throw new CustomException($"La especie del barrack de id {input.BarrackIds[i]} no es la misma que la especie de la order folder a la que quiere ser ingresado");
+                    throw new CustomException($"La especie del barrack de id {item} no es la misma que la especie de la order folder a la que quiere ser ingresado");
                 }
 
                 // valida si está repetido.
@@ -99,14 +98,13 @@ namespace trifenix.connect.agro.external
 
             if (!Enum.IsDefined(typeof(PreOrderType), input.PreOrderType))
                 throw new ArgumentOutOfRangeException("input","Enum fuera de rango");
-
-            
+        
         }
 
         public override async Task<ExtPostContainer<string>> SaveInput(PreOrderInput input)
         {
             /// Valida cada pre orden
-            await Validate(input);
+            await Validate(input);               
 
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
 
