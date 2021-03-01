@@ -137,7 +137,7 @@ namespace trifenix.agro.functions.mantainers
                     };
                 default:
                     
-                    string EntityName = ((DocumentLocal)Activator.CreateInstance(typeof(DocumentLocal))).CosmosEntityName;
+                    string EntityName = ((DocumentLocal)Activator.CreateInstance(typeof(DbElement))).CosmosEntityName;
                     
                     var opInstance = new OperationInstance<InputElement>(element, element.Id, EntityName, method, ObjectIdAAD);
 
