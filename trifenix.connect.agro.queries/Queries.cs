@@ -1,4 +1,5 @@
-﻿using trifenix.connect.agro.interfaces.cosmos;
+﻿
+using trifenix.connect.agro.interfaces.db;
 using trifenix.connect.agro.model_queries;
 
 namespace trifenix.connect.agro.queries

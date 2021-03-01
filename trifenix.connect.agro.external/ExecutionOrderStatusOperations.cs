@@ -4,10 +4,9 @@ using trifenix.connect.agro.external.main;
 using trifenix.connect.agro.interfaces.external;
 using trifenix.connect.agro_model;
 using trifenix.connect.agro_model_input;
-using trifenix.connect.interfaces.db.cosmos;
+using trifenix.connect.interfaces.db;
 using trifenix.connect.interfaces.external;
 using trifenix.connect.mdm.containers;
-using trifenix.connect.mdm.enums;
 
 namespace trifenix.agro.external.operations.entities.orders
 {
@@ -17,7 +16,7 @@ namespace trifenix.agro.external.operations.entities.orders
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class ExecutionOrderStatusOperations<T> : MainOperation<ExecutionOrderStatus, ExecutionOrderStatusInput,T>, IGenericOperation<ExecutionOrderStatus, ExecutionOrderStatusInput> {
-        public ExecutionOrderStatusOperations(IMainGenericDb<ExecutionOrderStatus> repo, IAgroSearch<T> search, ICommonDbOperations<ExecutionOrderStatus> commonDb, IValidatorAttributes<ExecutionOrderStatusInput> validator) : base(repo, search, commonDb, validator) { }
+        public ExecutionOrderStatusOperations(IMainGenericDb<ExecutionOrderStatus> repo, IAgroSearch<T> search, IValidatorAttributes<ExecutionOrderStatusInput> validator) : base(repo, search, validator) { }
 
   
 

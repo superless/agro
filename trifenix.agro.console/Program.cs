@@ -10,10 +10,11 @@ using trifenix.connect.agro.model;
 using trifenix.connect.agro.queries;
 using trifenix.connect.agro_model;
 using trifenix.connect.arguments;
-using trifenix.connect.entities.cosmos;
 using trifenix.connect.mdm.search.model;
+using trifenix.model;
 
-namespace trifenix.agro.console {
+namespace trifenix.agro.console
+{
 
     class Program {
 
@@ -46,7 +47,7 @@ namespace trifenix.agro.console {
             return result;
         }
 
-        static async Task RegenerateIndexFromDB<EntityType>(CommonQueries queriesToDB, AgroSearch<GeographyPoint> searchServiceInstance) where EntityType : DocumentBase =>
+        static async Task RegenerateIndexFromDB<EntityType>(CommonQueries queriesToDB, AgroSearch<GeographyPoint> searchServiceInstance) where EntityType : DocumentDb =>
             (await queriesToDB.MultipleQuery<EntityType, EntityType>("SELECT * from c")).ToList().ForEach(Entity => searchServiceInstance.AddDocument(Entity));
 
         static async Task Main(string[] args) {

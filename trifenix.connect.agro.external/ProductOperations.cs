@@ -2,11 +2,11 @@
 using System.Linq;
 using System.Threading.Tasks;
 using trifenix.connect.agro.external.main;
-using trifenix.connect.agro.interfaces;
+using trifenix.connect.agro.interfaces.db;
 using trifenix.connect.agro.interfaces.external;
 using trifenix.connect.agro_model;
 using trifenix.connect.agro_model_input;
-using trifenix.connect.interfaces.db.cosmos;
+using trifenix.connect.interfaces.db;
 using trifenix.connect.interfaces.external;
 using trifenix.connect.mdm.containers;
 using trifenix.connect.mdm.enums;
@@ -41,7 +41,7 @@ namespace trifenix.connect.agro.external
         /// <param name="commonDb">convierte IQueryable en listas</param>
         /// <param name="queries">consultas a agro</param>
         /// <param name="validator">Validador de elementos</param>
-        public ProductOperations(IMainGenericDb<Product> repo, IAgroSearch<T> search, IGenericOperation<Dose, DosesInput> dosesOperation, ICommonDbOperations<Product> commonDb, ICommonAgroQueries queries, IValidatorAttributes<ProductInput> validator) : base(repo, search, commonDb, validator) {
+        public ProductOperations(IMainGenericDb<Product> repo, IAgroSearch<T> search, IGenericOperation<Dose, DosesInput> dosesOperation, ICommonAgroQueries queries, IValidatorAttributes<ProductInput> validator) : base(repo, search, validator) {
             this.dosesOperation = dosesOperation;
             this.queries = queries;
         }

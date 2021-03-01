@@ -8,14 +8,14 @@ using trifenix.agro.external.operations.helper;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.interfaces.external;
 using trifenix.connect.agro.mdm_attributes;
-using trifenix.connect.entities.cosmos;
 using trifenix.connect.input;
-using trifenix.connect.interfaces.db.cosmos;
+using trifenix.connect.interfaces.db;
 using trifenix.connect.interfaces.external;
 using trifenix.connect.mdm.containers;
 using trifenix.connect.mdm.enums;
 using trifenix.connect.util;
 using trifenix.exception;
+using trifenix.model;
 
 namespace trifenix.connect.agro.external.main
 {
@@ -31,7 +31,7 @@ namespace trifenix.connect.agro.external.main
     /// <typeparam name="T">Entidad de base de datos</typeparam>
     /// <typeparam name="T_INPUT">Entidad usada como entrada de base de datos</typeparam>
     /// <typeparam name="T_GEO">Tipo Geo de la base de datos de busqueda</typeparam>
-    public class MainOperation<T, T_INPUT,T_GEO> : IGenericOperation<T, T_INPUT> where T : DocumentBase where T_INPUT : InputBase {
+    public class MainOperation<T, T_INPUT,T_GEO> : IGenericOperation<T, T_INPUT> where T : DocumentDb where T_INPUT : InputBase {
         
         // modelo de base de datos
         protected readonly IMainGenericDb<T> repo;
@@ -43,7 +43,7 @@ namespace trifenix.connect.agro.external.main
         protected readonly IAgroSearch<T_GEO> search;
 
         // operaciones comunes de base de datos
-        protected readonly ICommonDbOperations<T> commonDb;
+        
         
         // operaciones de validación.
         protected readonly IValidatorAttributes<T_INPUT> valida;
@@ -61,10 +61,9 @@ namespace trifenix.connect.agro.external.main
         /// <param name="search">repositorio de base de datos de busqueda bajo el modelo de entitySearch</param>
         /// <param name="commonDb">operaciones de conversión de IQueriable a listas</param>
         /// <param name="validator">Validador de entidades input</param>
-        public MainOperation(IMainGenericDb<T> repo, IAgroSearch<T_GEO> search, ICommonDbOperations<T> commonDb, IValidatorAttributes<T_INPUT> validator) {
+        public MainOperation(IMainGenericDb<T> repo, IAgroSearch<T_GEO> search, IValidatorAttributes<T_INPUT> validator) {
             this.repo = repo;
             this.search = search;
-            this.commonDb = commonDb;
             this.valida = validator;
             this.existElement = validator.GetExistElement();
         }

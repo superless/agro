@@ -4,13 +4,13 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using trifenix.connect.entities.cosmos;
 using trifenix.connect.input;
-using trifenix.connect.interfaces.db.cosmos;
+using trifenix.connect.interfaces.db;
 using trifenix.connect.interfaces.external;
 using trifenix.connect.mdm.validation_attributes;
 using trifenix.connect.mdm_attributes;
 using trifenix.connect.util;
+using trifenix.model;
 
 namespace trifenix.connect.agro.external.helper
 {
@@ -22,7 +22,7 @@ namespace trifenix.connect.agro.external.helper
     /// </summary>
     /// <typeparam name="T">Elemento de la base de datos al que correspoende</typeparam>
     /// <typeparam name="T_INPUT"></typeparam>
-    public class MainValidator<T, T_INPUT> : IValidatorAttributes<T_INPUT> where T : DocumentBase where T_INPUT : InputBase
+    public class MainValidator<T, T_INPUT> : IValidatorAttributes<T_INPUT> where T : DocumentDb where T_INPUT : InputBase
     {
         private readonly IExistElement existElement;
 

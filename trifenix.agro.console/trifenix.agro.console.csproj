@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="trifenix.exception" Version="0.1.31" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\trifenix.connect.agro.external\trifenix.connect.agro.external.csproj" />
   </ItemGroup>
 

@@ -4,15 +4,15 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using trifenix.connect.agro.external.main;
 using trifenix.connect.agro.interfaces;
+using trifenix.connect.agro.interfaces.db;
 using trifenix.connect.agro.interfaces.external;
 using trifenix.connect.agro_model;
 using trifenix.connect.agro_model_input;
 using trifenix.connect.interfaces;
-using trifenix.connect.interfaces.db.cosmos;
+using trifenix.connect.interfaces.db;
 using trifenix.connect.interfaces.external;
 using trifenix.connect.interfaces.upload;
 using trifenix.connect.mdm.containers;
-using trifenix.connect.mdm.enums;
 
 namespace trifenix.connect.agro.external
 {
@@ -27,7 +27,7 @@ namespace trifenix.connect.agro.external
         private readonly IUploadImage uploadImage;
         private readonly IWeatherApi weather;
 
-        public NotificationEventOperations(IMainGenericDb<NotificationEvent> repo, IAgroSearch<T> search, ICommonAgroQueries commonQueries, IEmail email, IUploadImage uploadImage, IWeatherApi weather, ICommonDbOperations<NotificationEvent> commonDb, IValidatorAttributes<NotificationEventInput> validator) : base(repo, search, commonDb, validator) {
+        public NotificationEventOperations(IMainGenericDb<NotificationEvent> repo, IAgroSearch<T> search, ICommonAgroQueries commonQueries, IEmail email, IUploadImage uploadImage, IWeatherApi weather, IValidatorAttributes<NotificationEventInput> validator) : base(repo, search, validator) {
             this.commonQueries = commonQueries;
             this.email = email;
             this.uploadImage = uploadImage;

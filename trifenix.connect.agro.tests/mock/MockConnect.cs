@@ -1,27 +1,23 @@
-using Cosmonaut;
-using Microsoft.Graph;
 using Moq;
 using System;
 using System.Linq;
-using System.Runtime.InteropServices;
 using trifenix.connect.agro.external.helper;
 using trifenix.connect.agro.index_model.props;
-using trifenix.connect.agro.interfaces;
-using trifenix.connect.agro.interfaces.cosmos;
+using trifenix.connect.agro.interfaces.db;
 using trifenix.connect.agro.interfaces.external;
 using trifenix.connect.agro.tests.data;
 using trifenix.connect.agro_model;
-using trifenix.connect.entities.cosmos;
 using trifenix.connect.input;
-using trifenix.connect.interfaces.db.cosmos;
+using trifenix.connect.interfaces.db;
 using trifenix.connect.interfaces.external;
 using trifenix.connect.interfaces.graph;
 using trifenix.connect.util;
+using trifenix.model;
 
 namespace trifenix.connect.agro.tests.mock
 {
 
-   
+
     /// <summary>
     /// Mocking de base de datos 
     /// mocking de todas las operaciones de la base de datos,
@@ -81,30 +77,13 @@ namespace trifenix.connect.agro.tests.mock
         public IDbExistsElements GetDbExistsElements => MockHelper.GetExistElement();
 
 
-        
-
-        /// <summary>
-        /// Mock de conversiones de base de datos, cosmos usa un método estático para convertir un IQueriable a lista,
-        /// para testear se debe mockear.
-        /// </summary>
-        /// <typeparam name="T">Tipo de base de datos de persistencia</typeparam>
-        /// <returns></returns>
-        public ICommonDbOperations<T> GetCommonDbOp<T>() where T : DocumentBase
-        {
-            var mock = new Mock<ICommonDbOperations<T>>();
-            // definición de métodos.
-           
-
-            return mock.Object;
-        }
-
 
         /// <summary>
         /// Añade un elemento a una colección de AgroData, de acuerdo al tipo de elemento a insertar.
         /// </summary>
         /// <typeparam name="T">Tipo de elemento a insertar</typeparam>
         /// <param name="element">elemento a insertar en una de las colecciones</param>
-        private static void AddElement<T>(T element) where T : DocumentBase {
+        private static void AddElement<T>(T element) where T : DocumentDb {
 
             // obtiene el índice desde mdm, utiliza el atributo para identificar a que entitySearch pertenece.
             var index = Mdm.GetIndex(typeof(T));
@@ -417,7 +396,7 @@ namespace trifenix.connect.agro.tests.mock
         /// </summary>
         /// <typeparam name="T">Tipo de base de datos de persistencia</typeparam>
         /// <returns>MainGenericDb</returns>
-        public IMainGenericDb<T> GetMainDb<T>() where T : DocumentBase
+        public IMainGenericDb<T> GetMainDb<T>() where T : DocumentDb
         {
             var mock = new Mock<IMainGenericDb<T>>();
 
@@ -453,7 +432,7 @@ namespace trifenix.connect.agro.tests.mock
         /// <returns></returns>
         public IValidatorAttributes<T_INPUT> GetValidator<T_INPUT, T_DB>()
             where T_INPUT : InputBase
-            where T_DB : DocumentBase
+            where T_DB : DocumentDb
         {
             return new MainValidator<T_DB, T_INPUT>(GetDbExistsElements);
         }

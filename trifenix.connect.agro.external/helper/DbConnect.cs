@@ -1,17 +1,15 @@
-﻿using Cosmonaut;
-using trifenix.connect.agro.interfaces;
-using trifenix.connect.agro.interfaces.cosmos;
+﻿using trifenix.connect.agro.interfaces.db;
 using trifenix.connect.agro.interfaces.external;
 using trifenix.connect.agro.queries;
 using trifenix.connect.arguments;
-using trifenix.connect.db;
 using trifenix.connect.db.cosmos;
-using trifenix.connect.entities.cosmos;
 using trifenix.connect.graph;
 using trifenix.connect.input;
-using trifenix.connect.interfaces.db.cosmos;
+using trifenix.connect.interfaces.db;
 using trifenix.connect.interfaces.external;
 using trifenix.connect.interfaces.graph;
+using trifenix.connect.model;
+using trifenix.model;
 
 namespace trifenix.connect.agro.external.helper
 {
@@ -45,18 +43,18 @@ namespace trifenix.connect.agro.external.helper
 
 
         // Operaciones comunes en la base de datgos
-        public ICommonDbOperations<T> GetCommonDbOp<T>() where T : DocumentBase => new CommonDbOperations<T>();
+        
 
 
         // Operaciones comunes en la base de datos (CRUD).
-        public IMainGenericDb<T> GetMainDb<T>() where T : DocumentBase
+        public IMainGenericDb<T> GetMainDb<T>() where T : DocumentDb
         {
             return new MainGenericDb<T>(Arguments);
         }
 
         public IValidatorAttributes<T_INPUT> GetValidator<T_INPUT, T_DB>()
             where T_INPUT : InputBase
-            where T_DB : DocumentBase
+            where T_DB : DocumentDb
         {
             return new MainValidator<T_DB, T_INPUT>(GetDbExistsElements);
         }
@@ -64,7 +62,7 @@ namespace trifenix.connect.agro.external.helper
 
 
         // 
-        public IGraphApi GraphApi => new GraphApi(Arguments);
+        public IGraphApi GraphApi => new GraphApi();
 
         public IDbExistsElements GetDbExistsElements => new CosmosExistElement(Arguments);
     }

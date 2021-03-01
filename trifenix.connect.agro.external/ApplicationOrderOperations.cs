@@ -5,15 +5,14 @@ using System.Threading.Tasks;
 using trifenix.connect.agro.external.main;
 using trifenix.connect.agro.index_model.enums;
 using trifenix.connect.agro.index_model.props;
-using trifenix.connect.agro.interfaces;
+using trifenix.connect.agro.interfaces.db;
 using trifenix.connect.agro.interfaces.external;
 using trifenix.connect.agro_model;
 using trifenix.connect.agro_model_input;
 using trifenix.connect.db.cosmos.exceptions;
-using trifenix.connect.interfaces.db.cosmos;
+using trifenix.connect.interfaces.db;
 using trifenix.connect.interfaces.external;
 using trifenix.connect.mdm.containers;
-using trifenix.connect.mdm.enums;
 
 namespace trifenix.connect.agro.external
 {
@@ -27,7 +26,7 @@ namespace trifenix.connect.agro.external
 
         
 
-        public ApplicationOrderOperations(IMainGenericDb<ApplicationOrder> repo,  IAgroSearch<T> search, ICommonAgroQueries commonQueries, ICommonDbOperations<ApplicationOrder> commonDb, IValidatorAttributes<ApplicationOrderInput> validator) : base(repo,  search, commonDb, validator) {
+        public ApplicationOrderOperations(IMainGenericDb<ApplicationOrder> repo,  IAgroSearch<T> search, ICommonAgroQueries commonQueries, IValidatorAttributes<ApplicationOrderInput> validator) : base(repo,  search, validator) {
 
         }
 
