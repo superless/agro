@@ -26,6 +26,7 @@ namespace trifenix.connect.agro.external
  
         public async override Task Validate(OrderFolderInput input)
         {
+            await base.Validate(input);
             /// <summary>
             /// Comprueba si existen order folders duplicados
             /// </summary>

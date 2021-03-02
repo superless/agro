@@ -30,7 +30,7 @@ namespace trifenix.connect.agro.external
 
         public override async Task Validate(BarrackInput input)
         {
-
+            await base.Validate(input);
             var season = await Queries.GetSeasonStatus(input.IdSeason);
             var seasonStatus = bool.Parse(season);
             if (!seasonStatus)
