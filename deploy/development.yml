@@ -20,13 +20,16 @@ steps:
 
 - task: NuGetCommand@2
   inputs:
+    command: 'restore'
     restoreSolution: '$(solution)'
+    feedsToUse: 'select'
+    vstsFeed: '$(default-feed)'      
 
 - task: DotNetCoreCLI@2
   inputs:
     command: 'test'
     projects: '**/*.operations.tests.csproj'
-    testRunTitle: 'testing'
+    testRunTitle: 'testing'  
 
 - task: VSBuild@1
   inputs:

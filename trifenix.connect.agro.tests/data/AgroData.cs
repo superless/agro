@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using trifenix.agro.external.operations.tests.data;
 using trifenix.connect.agro.external.hash;
-using trifenix.connect.agro.index_model.enums;
 using trifenix.connect.agro_model;
-using trifenix.connect.entities.cosmos;
 using trifenix.connect.mdm.entity_model;
 using trifenix.connect.mdm.ts_model;
 using trifenix.connect.tests.mock;

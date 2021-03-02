@@ -1,5 +1,8 @@
 ﻿using Microsoft.Spatial;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using trifenix.connect.agro.external;
 using trifenix.connect.agro.external.hash;
@@ -8,52 +11,87 @@ using trifenix.connect.agro.queries;
 using trifenix.connect.agro_model;
 using trifenix.connect.arguments;
 using trifenix.connect.mdm.search.model;
+using trifenix.model;
 
-namespace trifenix.agro.console {
+namespace trifenix.agro.console
+{
 
     class Program {
 
-        static async Task RegenerateIndexFromDB(CommonQueries queriesToDB, AgroSearch<GeographyPoint> searchServiceInstance) {
-            var getAll_Query = "SELECT * from c";
-            (await queriesToDB.MultipleQuery<ApplicationOrder, ApplicationOrder>(getAll_Query)).ToList().ForEach(ApplicationOrder => searchServiceInstance.AddDocument(ApplicationOrder));
-            (await queriesToDB.MultipleQuery<ApplicationTarget, ApplicationTarget>(getAll_Query)).ToList().ForEach(ApplicationTarget => searchServiceInstance.AddDocument(ApplicationTarget));
-            (await queriesToDB.MultipleQuery<Barrack, Barrack>(getAll_Query)).ToList().ForEach(Barrack => searchServiceInstance.AddDocument(Barrack));
-            (await queriesToDB.MultipleQuery<Brand, Brand>(getAll_Query)).ToList().ForEach(Brand => searchServiceInstance.AddDocument(Brand));
-            (await queriesToDB.MultipleQuery<BusinessName, BusinessName>(getAll_Query)).ToList().ForEach(BusinessName => searchServiceInstance.AddDocument(BusinessName));
-            (await queriesToDB.MultipleQuery<CertifiedEntity, CertifiedEntity>(getAll_Query)).ToList().ForEach(CertifiedEntity => searchServiceInstance.AddDocument(CertifiedEntity));
-            (await queriesToDB.MultipleQuery<Comment, Comment>(getAll_Query)).ToList().ForEach(Comment => searchServiceInstance.AddDocument(Comment));
-            (await queriesToDB.MultipleQuery<CostCenter, CostCenter>(getAll_Query)).ToList().ForEach(CostCenter => searchServiceInstance.AddDocument(CostCenter));
-            (await queriesToDB.MultipleQuery<Dose, Dose>(getAll_Query)).ToList().ForEach(Dose => searchServiceInstance.AddDocument(Dose));
-            (await queriesToDB.MultipleQuery<ExecutionOrder, ExecutionOrder>(getAll_Query)).ToList().ForEach(ExecutionOrder => searchServiceInstance.AddDocument(ExecutionOrder));
-            (await queriesToDB.MultipleQuery<ExecutionOrderStatus, ExecutionOrderStatus>(getAll_Query)).ToList().ForEach(ExecutionOrderStatus => searchServiceInstance.AddDocument(ExecutionOrderStatus));
-            (await queriesToDB.MultipleQuery<Ingredient, Ingredient>(getAll_Query)).ToList().ForEach(Ingredient => searchServiceInstance.AddDocument(Ingredient));
-            (await queriesToDB.MultipleQuery<IngredientCategory, IngredientCategory>(getAll_Query)).ToList().ForEach(IngredientCategory => searchServiceInstance.AddDocument(IngredientCategory));
-            (await queriesToDB.MultipleQuery<Job, Job>(getAll_Query)).ToList().ForEach(Job => searchServiceInstance.AddDocument(Job));
-            (await queriesToDB.MultipleQuery<Nebulizer, Nebulizer>(getAll_Query)).ToList().ForEach(Nebulizer => searchServiceInstance.AddDocument(Nebulizer));
-            (await queriesToDB.MultipleQuery<NotificationEvent, NotificationEvent>(getAll_Query)).ToList().ForEach(NotificationEvent => searchServiceInstance.AddDocument(NotificationEvent));
-            (await queriesToDB.MultipleQuery<OrderFolder, OrderFolder>(getAll_Query)).ToList().ForEach(OrderFolder => searchServiceInstance.AddDocument(OrderFolder));
-            (await queriesToDB.MultipleQuery<PhenologicalEvent, PhenologicalEvent>(getAll_Query)).ToList().ForEach(PhenologicalEvent => searchServiceInstance.AddDocument(PhenologicalEvent));
-            (await queriesToDB.MultipleQuery<PlotLand, PlotLand>(getAll_Query)).ToList().ForEach(PlotLand => searchServiceInstance.AddDocument(PlotLand));
-            (await queriesToDB.MultipleQuery<PreOrder, PreOrder>(getAll_Query)).ToList().ForEach(PreOrder => searchServiceInstance.AddDocument(PreOrder));
-            (await queriesToDB.MultipleQuery<Product, Product>(getAll_Query)).ToList().ForEach(Product => searchServiceInstance.AddDocument(Product));
-            (await queriesToDB.MultipleQuery<OrderFolder, OrderFolder>(getAll_Query)).ToList().ForEach(OrderFolder => searchServiceInstance.AddDocument(OrderFolder));
-            (await queriesToDB.MultipleQuery<Role, Role>(getAll_Query)).ToList().ForEach(Role => searchServiceInstance.AddDocument(Role));
-            (await queriesToDB.MultipleQuery<Rootstock, Rootstock>(getAll_Query)).ToList().ForEach(Rootstock => searchServiceInstance.AddDocument(Rootstock));
-            (await queriesToDB.MultipleQuery<Season, Season>(getAll_Query)).ToList().ForEach(Season => searchServiceInstance.AddDocument(Season));
-            (await queriesToDB.MultipleQuery<Sector, Sector>(getAll_Query)).ToList().ForEach(Sector => searchServiceInstance.AddDocument(Sector));
-            (await queriesToDB.MultipleQuery<Specie, Specie>(getAll_Query)).ToList().ForEach(Specie => searchServiceInstance.AddDocument(Specie));
-            (await queriesToDB.MultipleQuery<Tractor, Tractor>(getAll_Query)).ToList().ForEach(Tractor => searchServiceInstance.AddDocument(Tractor));
-            (await queriesToDB.MultipleQuery<Rootstock, Rootstock>(getAll_Query)).ToList().ForEach(Rootstock => searchServiceInstance.AddDocument(Rootstock));
-            (await queriesToDB.MultipleQuery<UserApplicator, UserApplicator>(getAll_Query)).ToList().ForEach(UserApplicator => searchServiceInstance.AddDocument(UserApplicator));
-            (await queriesToDB.MultipleQuery<Variety, Variety>(getAll_Query)).ToList().ForEach(Variety => searchServiceInstance.AddDocument(Variety));
-            (await queriesToDB.MultipleQuery<Warehouse, Warehouse>(getAll_Query)).ToList().ForEach(Warehouse => searchServiceInstance.AddDocument(Warehouse));
-            (await queriesToDB.MultipleQuery<WarehouseDocument, WarehouseDocument>(getAll_Query)).ToList().ForEach(Warehouse => searchServiceInstance.AddDocument(Warehouse));
+        /// <summary>
+        /// Invoca método genérico dinámicamente(Los tipo de datos se determinan en tiempo de ejecución) y castea el resultado a <typeparamref name="CastType"/>.
+        /// </summary>
+        /// <typeparam name="CastType">Tipo al que se castea el retorno de InvokeGenericMethodDynamically.</typeparam>
+        /// <param name="ClassContainer">Clase que contiene el método genérico</param>
+        /// <param name="MethodName">Nombre del método genérico</param>
+        /// <param name="GenericType">Tipo de dato usado como genérico</param>
+        /// <param name="Obj">Objeto para métodos de instancia</param>
+        /// <param name="Parameters">Conjunto de parámetros utilizados por el método genérico</param>
+        public static CastType InvokeGenericMethodDynamically<CastType>(Type ClassContainer, string MethodName, Type GenericType, object Obj, object[] Parameters = null) {
+            var result = (CastType)InvokeGenericMethodDynamically(ClassContainer, MethodName, GenericType, Obj, Parameters);
+            return result;
         }
 
+        /// <summary>
+        /// Invoca método genérico dinámicamente(Los tipo de datos se determinan en tiempo de ejecución).
+        /// </summary>
+        /// <param name="ClassContainer">Clase que contiene el método genérico</param>
+        /// <param name="MethodName">Nombre del método genérico</param>
+        /// <param name="GenericType">Tipo de dato usado como genérico</param>
+        /// <param name="Obj">Objeto para métodos de instancia</param>
+        /// <param name="Parameters">Conjunto de parámetros utilizados por el método genérico</param>
+        public static object InvokeGenericMethodDynamically(Type ClassContainer, string MethodName, Type GenericType, object Obj, object[] Parameters = null) {
+            var method = ClassContainer.GetMethod(MethodName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+            var genericMethod = method.MakeGenericMethod(GenericType);
+            var result = genericMethod.Invoke(Obj, Parameters);
+            return result;
+        }
+
+        static async Task RegenerateIndexFromDB<EntityType>(CommonQueries queriesToDB, AgroSearch<GeographyPoint> searchServiceInstance) where EntityType : DocumentDb =>
+            (await queriesToDB.MultipleQuery<EntityType, EntityType>("SELECT * from c")).ToList().ForEach(Entity => searchServiceInstance.AddDocument(Entity));
+
         static async Task Main(string[] args) {
+
             var queriesToDB = new CommonQueries(new CosmosDbArguments { EndPointUrl = "https://agro-cosmodb.documents.azure.com:443/" , NameDb = "agro-cosmodb", PrimaryKey = "kaPYpzhFCcG1bk3aC69aX1T2amavVi8TfHmrIMNJuhpYXtIz67PMhwBKctunNzclFBcxypZvcjPUW846YZuvjA==" });
             var searchServiceInstance = new AgroSearch<GeographyPoint>("https://fenix-search.search.windows.net/", "EFF07EE3D5A0C74C2363EC4DDB9710D7", new ImplementsSearch(), new HashEntityAgroSearch());
-            await RegenerateIndexFromDB(queriesToDB, searchServiceInstance);
+
+            var entityTypes = new List<Type>{
+                typeof(ApplicationOrder),
+                typeof(ApplicationTarget),
+                typeof(Barrack),
+                typeof(Brand),
+                typeof(BusinessName),
+                typeof(CertifiedEntity),
+                typeof(Comment),
+                typeof(CostCenter),
+                typeof(Dose),
+                typeof(ExecutionOrder),
+                typeof(ExecutionOrderStatus),
+                typeof(Ingredient),
+                typeof(IngredientCategory),
+                typeof(Job),
+                typeof(Nebulizer),
+                typeof(NotificationEvent),
+                typeof(PhenologicalEvent),
+                typeof(PlotLand),
+                typeof(PreOrder),
+                typeof(Product),
+                typeof(OrderFolder),
+                typeof(Role),
+                typeof(Season),
+                typeof(Sector),
+                typeof(Specie),
+                typeof(Tractor),
+                typeof(Rootstock),
+                typeof(UserApplicator),
+                typeof(Variety),
+                typeof(Warehouse),
+                typeof(WarehouseDocument)
+            };
+
+            foreach (var entityType in entityTypes)
+                await InvokeGenericMethodDynamically<Task>(typeof(Program), "RegenerateIndexFromDB", entityType, null, new object[] { queriesToDB, searchServiceInstance });
+
         }
 
     }

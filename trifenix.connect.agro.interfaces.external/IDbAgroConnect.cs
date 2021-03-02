@@ -1,4 +1,4 @@
-﻿using trifenix.connect.agro.interfaces.cosmos;
+﻿using trifenix.connect.agro.interfaces.db;
 using trifenix.connect.interfaces.external;
 
 namespace trifenix.connect.agro.interfaces.external

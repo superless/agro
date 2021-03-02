@@ -1,6 +1,6 @@
 ﻿using trifenix.connect.agro.model_queries;
 
-namespace trifenix.connect.agro.interfaces.cosmos
+namespace trifenix.connect.agro.interfaces.db
 {
     public interface IQueries
     {

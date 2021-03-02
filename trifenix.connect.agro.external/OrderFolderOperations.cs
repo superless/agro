@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
 using trifenix.connect.agro.external.main;
-using trifenix.connect.agro.interfaces;
+using trifenix.connect.agro.interfaces.db;
 using trifenix.connect.agro.interfaces.external;
 using trifenix.connect.agro_model;
 using trifenix.connect.agro_model_input;
-using trifenix.connect.interfaces.db.cosmos;
+using trifenix.connect.interfaces.db;
 using trifenix.connect.interfaces.external;
 using trifenix.connect.mdm.containers;
 using trifenix.exception;
@@ -20,12 +20,13 @@ namespace trifenix.connect.agro.external
     public class OrderFolderOperations<T> : MainOperation<OrderFolder, OrderFolderInput,T>, IGenericOperation<OrderFolder, OrderFolderInput> {
         private readonly ICommonAgroQueries Queries;
 
-        public OrderFolderOperations(IMainGenericDb<OrderFolder> repo, IAgroSearch<T> search, ICommonAgroQueries Queries, ICommonDbOperations<OrderFolder> commonDb, IValidatorAttributes<OrderFolderInput> validator) : base(repo, search, commonDb, validator) {
+        public OrderFolderOperations(IMainGenericDb<OrderFolder> repo, IAgroSearch<T> search, ICommonAgroQueries Queries, IValidatorAttributes<OrderFolderInput> validator) : base(repo, search, validator) {
             this.Queries = Queries;
         }
  
         public async override Task Validate(OrderFolderInput input)
         {
+            await base.Validate(input);
             /// <summary>
             /// Comprueba si existen order folders duplicados
             /// </summary>

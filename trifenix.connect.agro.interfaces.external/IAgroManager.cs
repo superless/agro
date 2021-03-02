@@ -1,10 +1,8 @@
 ﻿using Cosmonaut;
 using System;
 using trifenix.connect.agro.model;
-using trifenix.connect.agro.model_input;
 using trifenix.connect.agro_model;
 using trifenix.connect.agro_model_input;
-using trifenix.connect.entities.cosmos;
 using trifenix.connect.interfaces.external;
 
 namespace trifenix.connect.agro.interfaces.external

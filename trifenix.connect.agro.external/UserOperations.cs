@@ -4,11 +4,10 @@ using trifenix.connect.agro.external.main;
 using trifenix.connect.agro.interfaces.external;
 using trifenix.connect.agro_model;
 using trifenix.connect.agro_model_input;
-using trifenix.connect.interfaces.db.cosmos;
+using trifenix.connect.interfaces.db;
 using trifenix.connect.interfaces.external;
 using trifenix.connect.interfaces.graph;
 using trifenix.connect.mdm.containers;
-using trifenix.connect.mdm.enums;
 
 namespace trifenix.connect.agro.external
 {
@@ -21,7 +20,7 @@ namespace trifenix.connect.agro.external
 
         private readonly IGraphApi graphApi;
 
-        public UserOperations(IMainGenericDb<UserApplicator> repo, IAgroSearch<T> search, IGraphApi graphApi, ICommonDbOperations<UserApplicator> commonDb, IValidatorAttributes<UserApplicatorInput> validator) : base(repo, search, commonDb, validator) {
+        public UserOperations(IMainGenericDb<UserApplicator> repo, IAgroSearch<T> search, IGraphApi graphApi, IValidatorAttributes<UserApplicatorInput> validator) : base(repo, search, validator) {
             this.graphApi = graphApi;
         }
 

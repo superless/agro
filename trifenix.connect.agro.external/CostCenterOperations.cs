@@ -2,12 +2,11 @@
 using System.Linq;
 using System.Threading.Tasks;
 using trifenix.connect.agro.external.main;
-using trifenix.connect.agro.interfaces;
-using trifenix.connect.agro.interfaces.cosmos;
+using trifenix.connect.agro.interfaces.db;
 using trifenix.connect.agro.interfaces.external;
 using trifenix.connect.agro_model;
 using trifenix.connect.agro_model_input;
-using trifenix.connect.interfaces.db.cosmos;
+using trifenix.connect.interfaces.db;
 using trifenix.connect.interfaces.external;
 using trifenix.connect.mdm.containers;
 using trifenix.exception;
@@ -23,13 +22,14 @@ namespace trifenix.agro.external
     {
         private readonly ICommonAgroQueries Queries;
 
-        public CostCenterOperations(IDbExistsElements existsElement, IMainGenericDb<CostCenter> repo, IAgroSearch<T> search, ICommonDbOperations<CostCenter> commonDb, ICommonAgroQueries queries, IValidatorAttributes<CostCenterInput> validator) : base(repo, search, commonDb, validator)
+        public CostCenterOperations(IMainGenericDb<CostCenter> repo, IAgroSearch<T> search, ICommonAgroQueries queries, IValidatorAttributes<CostCenterInput> validator) : base(repo, search, validator)
         {
             Queries = queries;
         }
 
         public async override Task Validate(CostCenterInput input)
         {
+            await base.Validate(input);
             var bn = await Queries.GetCostCenterFromBusinessName(input.IdBusinessName);
             if (bn.Any())
             {

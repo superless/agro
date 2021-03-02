@@ -4,11 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using trifenix.connect.agro.external.main;
 using trifenix.connect.agro.index_model.props;
-using trifenix.connect.agro.interfaces;
+using trifenix.connect.agro.interfaces.db;
 using trifenix.connect.agro.interfaces.external;
 using trifenix.connect.agro_model;
 using trifenix.connect.agro_model_input;
-using trifenix.connect.interfaces.db.cosmos;
+using trifenix.connect.interfaces.db;
 using trifenix.connect.interfaces.external;
 using trifenix.connect.mdm.containers;
 using trifenix.exception;
@@ -24,13 +24,13 @@ namespace trifenix.connect.agro.external
 
         private readonly ICommonAgroQueries Queries;
 
-        public BarrackOperations(IMainGenericDb<Barrack> repo,  IAgroSearch<T> search, ICommonAgroQueries Queries, ICommonDbOperations<Barrack> commonDb, IValidatorAttributes<BarrackInput> validator) : base(repo, search, commonDb, validator) {
+        public BarrackOperations(IMainGenericDb<Barrack> repo,  IAgroSearch<T> search, ICommonAgroQueries Queries, IValidatorAttributes<BarrackInput> validator) : base(repo, search, validator) {
             this.Queries = Queries;
         }
 
         public override async Task Validate(BarrackInput input)
         {
-
+            await base.Validate(input);
             var season = await Queries.GetSeasonStatus(input.IdSeason);
             var seasonStatus = bool.Parse(season);
             if (!seasonStatus)

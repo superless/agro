@@ -4,22 +4,23 @@ using System.Linq;
 using System.Threading.Tasks;
 using trifenix.connect.agro.external.main;
 using trifenix.connect.agro.index_model.enums;
-using trifenix.connect.agro.interfaces;
-using trifenix.connect.agro.interfaces.cosmos;
+using trifenix.connect.agro.interfaces.db;
 using trifenix.connect.agro.interfaces.external;
 using trifenix.connect.agro_model;
 using trifenix.connect.agro_model_input;
-using trifenix.connect.interfaces.db.cosmos;
+using trifenix.connect.interfaces.db;
 using trifenix.connect.interfaces.external;
 using trifenix.connect.mdm.containers;
 using trifenix.exception;
 
 namespace trifenix.connect.agro.external
 {
-    public class PreOrdersOperations<T> : MainOperation<PreOrder, PreOrderInput,T>, IGenericOperation<PreOrder, PreOrderInput> {
+    public class PreOrdersOperations<T> : MainOperation<PreOrder, PreOrderInput, T>, IGenericOperation<PreOrder, PreOrderInput>
+    {
         private readonly ICommonAgroQueries Queries;
 
-        public PreOrdersOperations(IDbExistsElements existsElement, IMainGenericDb<PreOrder> repo, IAgroSearch<T> search, ICommonDbOperations<PreOrder> commonDb, ICommonAgroQueries queries, IValidatorAttributes<PreOrderInput> validator) : base(repo, search, commonDb, validator) { 
+        public PreOrdersOperations(IMainGenericDb<PreOrder> repo, IAgroSearch<T> search, ICommonAgroQueries queries, IValidatorAttributes<PreOrderInput> validator) : base(repo, search, validator)
+        {
             Queries = queries;
         }
 
@@ -34,7 +35,7 @@ namespace trifenix.connect.agro.external
             // obtiene los order folder que coinciden con los filtros
             var similarOF = await Queries.GetSimilarOF(idPE, idAT, idSP);
 
-            foreach(var item in similarOF)
+            foreach (var item in similarOF)
             {
                 var aB = await Queries.GetBarracksFromOrderFolderId(item);
                 var manyBarracks = aB.SelectMany(s => s).ToList();
@@ -61,14 +62,14 @@ namespace trifenix.connect.agro.external
             {
                 throw new CustomException("No se pueden ingresar barracks duplicados");
             }
-            
+
             var OFBarracks = await Queries.GetOFBarracks(input.Id);
             var OFBarracksGroup = OFBarracks.SelectMany(s => s).ToList();
             // identificador de la especie de un order folder.
             var OFSpecie = await Queries.GetOFSpecie(input.OrderFolderId);
 
             List<string> newBarracks = new List<string>();
-            foreach(var item in input.BarrackIds)
+            foreach (var item in input.BarrackIds)
             {
                 if (!OFBarracksGroup.Contains(item))
                 {
@@ -88,15 +89,15 @@ namespace trifenix.connect.agro.external
             }
 
             if (!Enum.IsDefined(typeof(PreOrderType), input.PreOrderType))
-                throw new ArgumentOutOfRangeException("input","Enum fuera de rango");
-        
+                throw new ArgumentOutOfRangeException("input", "Enum fuera de rango");
+
         }
 
         public override async Task<ExtPostContainer<string>> SaveInput(PreOrderInput input)
         {
 
             /// Valida cada pre orden
-            await Validate(input);               
+            await Validate(input);
 
             var id = !string.IsNullOrWhiteSpace(input.Id) ? input.Id : Guid.NewGuid().ToString("N");
 
@@ -113,8 +114,8 @@ namespace trifenix.connect.agro.external
             await SaveDb(preOrder);
             var result = await SaveSearch(preOrder);
             return result;
-        }   
- 
+        }
+
     }
 
 }

@@ -1,8 +1,8 @@
 ﻿using System;
 using trifenix.connect.agro.index_model.props;
-using trifenix.connect.entities.cosmos;
 using trifenix.connect.interfaces.log;
 using trifenix.connect.mdm.entity_model;
+using trifenix.model;
 
 namespace trifenix.connect.agro.interfaces.search
 {
@@ -29,7 +29,7 @@ namespace trifenix.connect.agro.interfaces.search
         /// <typeparam name="T2">elemento de la base de datos</typeparam>
         /// <param name="model"></param>
         /// <returns>una colección de entitySearch que representa un elemento de la base de datos</returns>
-        IEntitySearch<T>[] GetEntitySearch<T2>(T2 model) where T2 : DocumentBase;
+        IEntitySearch<T>[] GetEntitySearch<T2>(T2 model) where T2 : DocumentDb;
 
         /// <summary>
         /// Añade un elemento de la base de datos de busqueda
@@ -37,7 +37,7 @@ namespace trifenix.connect.agro.interfaces.search
         /// </summary>
         /// <typeparam name="T2"></typeparam>
         /// <param name="document"></param>
-        void AddDocument<T2>(T2 document) where T2 : DocumentBase;
+        void AddDocument<T2>(T2 document) where T2 : DocumentDb;
     }
 
     

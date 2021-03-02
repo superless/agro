@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using trifenix.connect.agro.external.main;
-using trifenix.connect.agro.interfaces;
+using trifenix.connect.agro.interfaces.db;
 using trifenix.connect.agro.interfaces.external;
 using trifenix.connect.agro_model;
 using trifenix.connect.agro_model_input;
 using trifenix.connect.db.cosmos.exceptions;
-using trifenix.connect.interfaces.db.cosmos;
+using trifenix.connect.interfaces.db;
 using trifenix.connect.interfaces.external;
 using trifenix.connect.mdm.containers;
-using trifenix.connect.mdm.enums;
 
 namespace trifenix.agro.external.operations.entities.orders
 {
@@ -23,7 +22,7 @@ namespace trifenix.agro.external.operations.entities.orders
     public class ExecutionOrderOperations<T> : MainOperation<ExecutionOrder, ExecutionOrderInput,T>, IGenericOperation<ExecutionOrder, ExecutionOrderInput> {
         private readonly ICommonAgroQueries commonQueries;
 
-        public ExecutionOrderOperations(IMainGenericDb<ExecutionOrder> repo, IAgroSearch<T> search, ICommonAgroQueries commonQueries, ICommonDbOperations<ExecutionOrder> commonDb, IValidatorAttributes<ExecutionOrderInput> validator) : base(repo, search, commonDb, validator) {
+        public ExecutionOrderOperations(IMainGenericDb<ExecutionOrder> repo, IAgroSearch<T> search, ICommonAgroQueries commonQueries, IValidatorAttributes<ExecutionOrderInput> validator) : base(repo, search, validator) {
             this.commonQueries = commonQueries;
         }
 

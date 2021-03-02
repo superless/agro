@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace trifenix.connect.agro.interfaces
+namespace trifenix.connect.agro.interfaces.db
 {
     /// <summary>
     /// Consultas comunes a base de datos, para agroFenix

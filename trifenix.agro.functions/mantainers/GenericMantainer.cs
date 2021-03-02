@@ -8,12 +8,13 @@ using System.IO;
 using System.Threading.Tasks;
 using trifenix.agro.functions.Helper;
 using trifenix.connect.agro.interfaces.external;
+using trifenix.connect.agro_model;
 using trifenix.connect.bus;
-using trifenix.connect.entities.cosmos;
 using trifenix.connect.input;
 using trifenix.connect.interfaces.external;
 using trifenix.connect.mdm.containers;
 using trifenix.connect.mdm.enums;
+using trifenix.model;
 
 namespace trifenix.agro.functions.mantainers
 {
@@ -76,7 +77,7 @@ namespace trifenix.agro.functions.mantainers
         }
 
 
-        public static async Task<ActionResultWithId> SendInternalHttp<DbElement, InputElement>(HttpRequest req, ILogger log, Func<IAgroManager<GeographyPoint>, IGenericOperation<DbElement, InputElement>> repo, string id = null) where DbElement : DocumentBase where InputElement : InputBase {
+        public static async Task<ActionResultWithId> SendInternalHttp<DbElement, InputElement>(HttpRequest req, ILogger log, Func<IAgroManager<GeographyPoint>, IGenericOperation<DbElement, InputElement>> repo, string id = null) where DbElement : DocumentDb where InputElement : InputBase {
             ValidaEnvironmentVariables();
             //if (!ValidaEnvironmentVariables()) throw new Exception("existen variables de ambiente nulas, por favor revise las variables");
 
@@ -93,7 +94,7 @@ namespace trifenix.agro.functions.mantainers
             return await HttpProcessing(req, log, ObjectIdAAD, repo, id);
         }
 
-        public static async Task<ActionResultWithId> HttpProcessing<DbElement, InputElement>(HttpRequest req, ILogger log, string ObjectIdAAD, Func<IAgroManager<GeographyPoint>, IGenericOperation<DbElement, InputElement>> repo, string id = null) where DbElement : DocumentBase where InputElement : InputBase {
+        public static async Task<ActionResultWithId> HttpProcessing<DbElement, InputElement>(HttpRequest req, ILogger log, string ObjectIdAAD, Func<IAgroManager<GeographyPoint>, IGenericOperation<DbElement, InputElement>> repo, string id = null) where DbElement : DocumentDb where InputElement : InputBase {
             var body = await new StreamReader(req.Body).ReadToEndAsync();
             var method = req.Method.ToLower();
             var inputElement = ConvertToElement<InputElement>(body, id, method);
@@ -118,7 +119,7 @@ namespace trifenix.agro.functions.mantainers
             return element;
         }
 
-        public static async Task<ActionResultWithId> HttpProcessing<DbElement, InputElement>(HttpRequest req, ILogger log, string ObjectIdAAD, Func<IAgroManager<GeographyPoint>, IGenericOperation<DbElement, InputElement>> repo, InputElement element) where DbElement : DocumentBase where InputElement : InputBase {
+        public static async Task<ActionResultWithId> HttpProcessing<DbElement, InputElement>(HttpRequest req, ILogger log, string ObjectIdAAD, Func<IAgroManager<GeographyPoint>, IGenericOperation<DbElement, InputElement>> repo, InputElement element) where DbElement : DocumentDb where InputElement : InputBase {
             var method = req.Method.ToLower();
             switch (method) {
                 case "get":
@@ -136,7 +137,7 @@ namespace trifenix.agro.functions.mantainers
                     };
                 default:
                     
-                    string EntityName = ((DbElement)Activator.CreateInstance(typeof(DbElement))).CosmosEntityName;
+                    string EntityName = ((DocumentLocal)Activator.CreateInstance(typeof(DbElement))).CosmosEntityName;
                     
                     var opInstance = new OperationInstance<InputElement>(element, element.Id, EntityName, method, ObjectIdAAD);
 

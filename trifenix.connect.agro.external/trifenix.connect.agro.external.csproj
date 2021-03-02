@@ -7,12 +7,12 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
-    <PackageReference Include="Microsoft.Spatial" Version="7.8.1" />
-    <PackageReference Include="trifenix.connect" Version="0.8.75" />
-    <PackageReference Include="trifenix.connect.mdm.search.model" Version="0.8.48" />
-    <PackageReference Include="trifenix.connect.search" Version="0.8.47" />
-    <PackageReference Include="trifenix.connect.translate" Version="0.8.51" />
-    <PackageReference Include="trifenix.exception" Version="0.1.31" />
+    <PackageReference Include="Microsoft.Spatial" Version="7.8.2" />
+    <PackageReference Include="trifenix.connect" Version="0.8.106" />
+    <PackageReference Include="trifenix.connect.graph" Version="0.8.58" />
+    <PackageReference Include="trifenix.connect.mdm.search.model" Version="0.8.57" />
+    <PackageReference Include="trifenix.connect.search" Version="0.8.55" />
+    <PackageReference Include="trifenix.connect.translate" Version="0.8.60" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,7 +20,6 @@
     <ProjectReference Include="..\trifenix.connect.agro.interfaces.external\trifenix.connect.agro.interfaces.external.csproj" />
     <ProjectReference Include="..\trifenix.connect.agro.interfaces\trifenix.connect.agro.interfaces.csproj" />
     <ProjectReference Include="..\trifenix.connect.agro.queries\trifenix.connect.agro.queries.csproj" />
-    <ProjectReference Include="..\trifenix.connect.agro\trifenix.connect.agro.csproj" />
   </ItemGroup>
 
   <ItemGroup>

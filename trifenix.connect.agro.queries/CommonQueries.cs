@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using trifenix.connect.agro.interfaces;
+using trifenix.connect.agro.interfaces.db;
 using trifenix.connect.agro.model_queries;
 using trifenix.connect.agro_model;
 using trifenix.connect.arguments;
