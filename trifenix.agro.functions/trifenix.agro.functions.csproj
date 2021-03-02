@@ -26,6 +26,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.0.7" />
     <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.0.7" />
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.0.7" />
+    <PackageReference Include="trifenix.connect.aad.auth" Version="0.8.27" />
+    <PackageReference Include="trifenix.connect.bus" Version="0.8.53" />
+    <PackageReference Include="trifenix.connect.email" Version="0.8.56" />
+    <PackageReference Include="trifenix.connect.storage.azure" Version="0.8.52" />
 
     
    
