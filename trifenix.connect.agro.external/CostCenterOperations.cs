@@ -29,6 +29,7 @@ namespace trifenix.agro.external
 
         public async override Task Validate(CostCenterInput input)
         {
+            await base.Validate(input);
             var bn = await Queries.GetCostCenterFromBusinessName(input.IdBusinessName);
             if (bn.Any())
             {

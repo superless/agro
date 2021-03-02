@@ -5,11 +5,9 @@ VisualStudioVersion = 16.0.29123.88
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.functions", "trifenix.agro.functions\trifenix.agro.functions.csproj", "{8B825801-F6C3-4B65-AFDA-15149C09DBBE}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4. output", "4. output", "{85917EE6-3B67-4DEF-8521-9C4C946E5D1B}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.output", "1.output", "{85917EE6-3B67-4DEF-8521-9C4C946E5D1B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.agro.console", "trifenix.agro.console\trifenix.agro.console.csproj", "{65EE9EE8-E926-40A1-80AD-75A82E82ABA2}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "yo-fenix", "yo-fenix", "{297C0E5E-8B8E-4365-8E45-B795596FB57A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "agro-interfaces", "agro-interfaces", "{2913876B-E5CC-446D-B6BF-B8A5F0FBF6DF}"
 EndProject
@@ -21,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.connect.agro.exter
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.connect.agro.queries", "trifenix.connect.agro.queries\trifenix.connect.agro.queries.csproj", "{ED2B32BF-E8DA-44CD-BB9A-7434B807222B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "agro", "agro", "{D568A6B9-749D-447F-BDD2-C4CD25790C66}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.agro", "2.agro", "{D568A6B9-749D-447F-BDD2-C4CD25790C66}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.connect.agro.tests", "trifenix.connect.agro.tests\trifenix.connect.agro.tests.csproj", "{F7D67897-0BA1-47B6-800E-453C50655542}"
 EndProject
@@ -86,7 +84,6 @@ Global
 		{D6BD7BF3-DEA1-4A6E-A06F-C3D6687E1291} = {2913876B-E5CC-446D-B6BF-B8A5F0FBF6DF}
 		{D3518C13-6ED1-4B80-945D-D1573A31D12C} = {D568A6B9-749D-447F-BDD2-C4CD25790C66}
 		{ED2B32BF-E8DA-44CD-BB9A-7434B807222B} = {D568A6B9-749D-447F-BDD2-C4CD25790C66}
-		{D568A6B9-749D-447F-BDD2-C4CD25790C66} = {297C0E5E-8B8E-4365-8E45-B795596FB57A}
 		{F7D67897-0BA1-47B6-800E-453C50655542} = {D568A6B9-749D-447F-BDD2-C4CD25790C66}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
