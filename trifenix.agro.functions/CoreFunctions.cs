@@ -134,10 +134,22 @@ namespace trifenix.agro.functions
         [SignalR(HubName = "agro")] IAsyncCollector<SignalRMessage> signalRMessages,
         ILogger log)
         {
+
+            var initLogDate = DateTime.Now;
+            log.LogInformation($"[{initLogDate:s}] Se comenzó el uso de service bus a las ");
+
+
+
+
             var opInstance = ServiceBus.Deserialize(message.Body);
             var ObjectIdAAD = opInstance.Value<string>("ObjectIdAAD");
             var queries = new CommonQueries(ConfigManager.GetDbArguments);
             var EntityName = opInstance.Value<string>("EntityName");
+
+            var parseLogDate = DateTime.Now;
+
+            log.LogInformation($"[{parseLogDate:s}] Se ha deserializado el objeto del bus {EntityName}, demorando : {(parseLogDate - initLogDate).TotalSeconds} segundos");
+
             IAgroManager<GeographyPoint> agro;
             agro = await ContainerMethods.AgroManager(ObjectIdAAD, log);
             var entityType = opInstance["EntityType"].ToObject<Type>();
@@ -148,7 +160,13 @@ namespace trifenix.agro.functions
 
             try
             {
+                var datePushToBus = DateTime.Now;
+                log.LogInformation($"{datePushToBus:s}] Se pusheará {EntityName} en trifenix connect");
                 var saveReturn = await repo.SaveInput(element);
+
+                var datePushedToBus = DateTime.Now;
+                log.LogInformation($"[{datePushedToBus:s}] Se ha pusheado {EntityName} en trifenix connect, demorando {(datePushedToBus - datePushToBus).TotalSeconds} segundos");
+
                 if (!string.IsNullOrWhiteSpace(ObjectIdAAD))
                 {
                     userId = await queries.GetUserIdFromAAD(ObjectIdAAD);
@@ -161,7 +179,9 @@ namespace trifenix.agro.functions
                     });
                 }
 
+                
                 await signalRMessages.AddAsync(new SignalRMessage { Target = "Success", UserId = userId ?? "cloud-app", Arguments = new object[] { EntityName } });
+               
             }
             catch (Exception ex)
             {

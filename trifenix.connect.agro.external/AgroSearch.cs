@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using trifenix.connect.agro.index_model.props;
@@ -48,7 +50,7 @@ namespace trifenix.connect.agro.external
         /// /// <param name="implements">Implement de search, para la generación de entitySearch</param>
         /// <param name="entityId">Índice del search</param>}
         /// <param name="hashOper">Convertidor de hasg</param>
-        public AgroSearch(string SearchServiceName, string SearchServiceKey, Implements<GeoPointType> implements, IHashSearchHelper hashOper, string entityId = "entities-agro") 
+        public AgroSearch(string SearchServiceName, string SearchServiceKey, Implements<GeoPointType> implements, IHashSearchHelper hashOper, ILogger logger, string entityId = "entities-agro") 
             : this(
                   (IBaseEntitySearch<GeoPointType>)new MainSearch(SearchServiceName, SearchServiceKey, entityId),
                   new SearchQueries(),
@@ -56,7 +58,7 @@ namespace trifenix.connect.agro.external
                   hashOper
         )
         {
-           
+            this.logger = logger;
         }
 
 
@@ -134,6 +136,7 @@ namespace trifenix.connect.agro.external
 
         // operaciones hash para la cabecera y modelo de un entitySearch.
         readonly IHashSearchHelper hashOper;
+        private readonly ILogger logger;
 
 
 
@@ -194,15 +197,28 @@ namespace trifenix.connect.agro.external
         /// <param name="document">entidad o documento de base de datos de persistencia</param>
         public void AddDocument<T>(T document) where T : DocumentDb
         {
+
+            var dateCreateDocument = DateTime.Now;
+
+            logger.LogInformation($"[{dateCreateDocument:s}] creando elemento entitySearch de {document.DocumentPartition}");
             // obtiene un entitySearch desde una entidad de base de datos de persistencia.
             var entitySearch = Mdm.GetEntitySearch(implements, document, hashOper).Cast<IEntitySearch<GeoPointType>>().ToList();
 
+            var dateCreatedDocument = DateTime.Now;
+            logger.LogInformation($"[{dateCreatedDocument:s}] {document.DocumentPartition} es conviertido a entitySearch en {(dateCreatedDocument - dateCreateDocument).TotalSeconds} segundos");
             // añade a registro
             AddToQueried(nameof(AgroSearch<GeoPointType>.AddDocument), JsonConvert.SerializeObject(entitySearch));
 
- 
+
+            var dateCreateSearch = DateTime.Now;
+
+            logger.LogInformation($"[{dateCreateSearch:s}] Guardando entitySearch de  {document.DocumentPartition}");
             // añade a base de datos.
             baseMainSearch.AddElements(entitySearch);
+
+            var dateCreatedSearch = DateTime.Now;
+
+            logger.LogInformation($"[{dateCreatedSearch:s}] entitySearch de  {document.DocumentPartition} guardado en search en {(dateCreatedDocument - dateCreateDocument).TotalSeconds} segundps");
         }
 
 

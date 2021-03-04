@@ -77,13 +77,20 @@ namespace trifenix.connect.agro.external.main
         /// <param name="input">elemento de ingreso</param>
         /// <returns>Excepción si no es válido</returns>
         public virtual async Task Validate(T_INPUT input) {
+            var initValidate = DateTime.Now;
+
+            log?.LogInformation($"[{initValidate:s}] se valida {typeof(T_INPUT).Name}");
+
             var result = await valida.Valida(input);
 
             if (!result.Valid)
             {
                 throw new CustomException(string.Join(",", result.Messages));
             }
-            
+
+            var endValidate = DateTime.Now;
+            log?.LogInformation($"[{endValidate:s}] se ha validado {typeof(T_INPUT).Name} en {(endValidate - initValidate).TotalSeconds} segundos");
+            log?.LogInformation($"esto no considera validación adicional");
 
         }
 
@@ -113,9 +120,15 @@ namespace trifenix.connect.agro.external.main
         /// <returns></returns>
         public virtual async Task<ExtPostContainer<string>> SaveDb(T item)
         {
+
+            var initCreate = DateTime.Now;
+
+            log?.LogInformation($"[{initCreate:s}] Iniciando guardado de {item.DocumentPartition}");
             // crea o actualiza en la base de datos de persistencia
             await repo.CreateUpdate(item);
 
+            var endCreate = DateTime.Now;
+            log?.LogInformation($"[{endCreate:s}] se ha guardado {item.DocumentPartition} en {(endCreate - initCreate).TotalSeconds} segundos");
             // registra el elemento
             AddToQueried(nameof(MainOperation<T, T_INPUT, T_GEO>.SaveDb), JsonConvert.SerializeObject(item));
 
@@ -134,9 +147,16 @@ namespace trifenix.connect.agro.external.main
         /// <returns>Resultado</returns>
         public virtual async Task<ExtPostContainer<string>> SaveSearch(T entity)
         {
-            
+
             // añade una nueva entidad
+            var convertAndSaveStartDate = DateTime.Now;
+
+            log?.LogInformation($"[{convertAndSaveStartDate:s}] inicio de guardado en el search de {entity.DocumentPartition}");
             await Task.Run(() => search.AddDocument(entity));
+
+            var convertAndSaveEndDate = DateTime.Now;
+
+            log?.LogInformation($"[{convertAndSaveEndDate:s}] {entity.DocumentPartition} ha guardado en el search en {(convertAndSaveEndDate - convertAndSaveStartDate).TotalSeconds} segundos ");
 
             AddToQueried(nameof(MainOperation<T, T_INPUT, T_GEO>.SaveSearch), search.Queried["AddDocument"]);
 
