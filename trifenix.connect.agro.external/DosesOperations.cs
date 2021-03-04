@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,7 +29,8 @@ namespace trifenix.agro.external.operations.entities.ext
         private readonly IDbExistsElements existsElement;
         private readonly ICommonAgroQueries Queries;
 
-        public DosesOperations(IDbExistsElements existsElement, IMainGenericDb<Dose> repo,  IAgroSearch<T> search, ICommonAgroQueries queries, IValidatorAttributes<DosesInput> validator) : base(repo, search, validator) {
+        public DosesOperations(IDbExistsElements existsElement, IMainGenericDb<Dose> repo,  IAgroSearch<T> search, ICommonAgroQueries queries, IValidatorAttributes<DosesInput> validator, ILogger log) : base(repo, search, validator, log)
+        {
             this.existsElement = existsElement;
             Queries = queries;
         }

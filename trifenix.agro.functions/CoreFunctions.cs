@@ -139,7 +139,7 @@ namespace trifenix.agro.functions
             var queries = new CommonQueries(ConfigManager.GetDbArguments);
             var EntityName = opInstance.Value<string>("EntityName");
             IAgroManager<GeographyPoint> agro;
-            agro = await ContainerMethods.AgroManager(ObjectIdAAD);
+            agro = await ContainerMethods.AgroManager(ObjectIdAAD, log);
             var entityType = opInstance["EntityType"].ToObject<Type>();
             var repo = agro.GetOperationByInputType(entityType);
             dynamic element = opInstance["Element"].ToObject(entityType);

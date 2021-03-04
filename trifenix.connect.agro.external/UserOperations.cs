@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Threading.Tasks;
 using trifenix.connect.agro.external.main;
 using trifenix.connect.agro.interfaces.external;
@@ -20,7 +21,8 @@ namespace trifenix.connect.agro.external
 
         private readonly IGraphApi graphApi;
 
-        public UserOperations(IMainGenericDb<UserApplicator> repo, IAgroSearch<T> search, IGraphApi graphApi, IValidatorAttributes<UserApplicatorInput> validator) : base(repo, search, validator) {
+        public UserOperations(IMainGenericDb<UserApplicator> repo, IAgroSearch<T> search, IGraphApi graphApi, IValidatorAttributes<UserApplicatorInput> validator, ILogger log) : base(repo, search, validator, log)
+        {
             this.graphApi = graphApi;
         }
 

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -47,6 +48,7 @@ namespace trifenix.connect.agro.external.main
         
         // operaciones de validación.
         protected readonly IValidatorAttributes<T_INPUT> valida;
+        private readonly ILogger log;
 
         // mapper que permite convertir desde un input a un modelo de base de datos.
         // esto solo se logra en input que tienen los mismos campos que el de la base de datos.
@@ -61,10 +63,11 @@ namespace trifenix.connect.agro.external.main
         /// <param name="search">repositorio de base de datos de busqueda bajo el modelo de entitySearch</param>
         /// <param name="commonDb">operaciones de conversión de IQueriable a listas</param>
         /// <param name="validator">Validador de entidades input</param>
-        public MainOperation(IMainGenericDb<T> repo, IAgroSearch<T_GEO> search, IValidatorAttributes<T_INPUT> validator) {
+        public MainOperation(IMainGenericDb<T> repo, IAgroSearch<T_GEO> search, IValidatorAttributes<T_INPUT> validator, ILogger log) {
             this.repo = repo;
             this.search = search;
             this.valida = validator;
+            this.log = log;
             this.existElement = validator.GetExistElement();
         }
 

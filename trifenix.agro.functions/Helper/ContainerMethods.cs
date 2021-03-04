@@ -18,13 +18,14 @@ using trifenix.connect.mdm.search.model;
 namespace trifenix.agro.functions.Helper
 {
     public static class ContainerMethods {
-        public static async Task<IAgroManager<GeographyPoint>> AgroManager(string ObjectIdAAD){
+        public static async Task<IAgroManager<GeographyPoint>> AgroManager(string ObjectIdAAD, ILogger log)
+        {
             var dbConnect = new DbConnect(ConfigManager.GetDbArguments);
             var email = new Email("aresa.notificaciones@gmail.com", "Aresa2019");
             var uploadImage = new UploadImage(Environment.GetEnvironmentVariable("StorageConnectionStrings", EnvironmentVariableTarget.Process));
             var weatherApi = new WeatherApi(Environment.GetEnvironmentVariable("KeyWeatherApi", EnvironmentVariableTarget.Process));
             var searchServiceInstance = new AgroSearch<GeographyPoint>(Environment.GetEnvironmentVariable("SearchServiceName", EnvironmentVariableTarget.Process), Environment.GetEnvironmentVariable("SearchServiceKey", EnvironmentVariableTarget.Process), new ImplementsSearch(), new HashEntityAgroSearch());
-            return new AgroManager<GeographyPoint>(dbConnect, email, uploadImage, weatherApi, searchServiceInstance, ObjectIdAAD);
+            return new AgroManager<GeographyPoint>(dbConnect, email, uploadImage, weatherApi, searchServiceInstance, ObjectIdAAD, log);
         }
 
         public static JsonResult GetJsonPostContainer<T>(ExtPostContainer<T> containerResponse, ILogger log){

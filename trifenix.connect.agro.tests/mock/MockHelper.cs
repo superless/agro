@@ -49,7 +49,7 @@ namespace trifenix.connect.agro.tests.mock
         /// <summary>
         /// Retorna el agromanager por defecto para los tests.
         /// </summary>
-        public static AgroManager<GeoPointTs> AgroManager =>  new AgroManager<GeoPointTs>(Connect(), Email(), UploadImage(), WeatherApi(), AgroSearch(BaseSearch()), string.Empty);
+        public static AgroManager<GeoPointTs> AgroManager =>  new AgroManager<GeoPointTs>(Connect(), Email(), UploadImage(), WeatherApi(), AgroSearch(BaseSearch()), string.Empty, null);
 
 
 

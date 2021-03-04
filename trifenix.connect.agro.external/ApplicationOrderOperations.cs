@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,7 +27,7 @@ namespace trifenix.connect.agro.external
 
         
 
-        public ApplicationOrderOperations(IMainGenericDb<ApplicationOrder> repo,  IAgroSearch<T> search, ICommonAgroQueries commonQueries, IValidatorAttributes<ApplicationOrderInput> validator) : base(repo,  search, validator) {
+        public ApplicationOrderOperations(IMainGenericDb<ApplicationOrder> repo,  IAgroSearch<T> search, ICommonAgroQueries commonQueries, IValidatorAttributes<ApplicationOrderInput> validator, ILogger log) : base(repo, search, validator, log) { 
 
         }
 

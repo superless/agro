@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,7 +23,8 @@ namespace trifenix.agro.external.operations.entities.orders
     public class ExecutionOrderOperations<T> : MainOperation<ExecutionOrder, ExecutionOrderInput,T>, IGenericOperation<ExecutionOrder, ExecutionOrderInput> {
         private readonly ICommonAgroQueries commonQueries;
 
-        public ExecutionOrderOperations(IMainGenericDb<ExecutionOrder> repo, IAgroSearch<T> search, ICommonAgroQueries commonQueries, IValidatorAttributes<ExecutionOrderInput> validator) : base(repo, search, validator) {
+        public ExecutionOrderOperations(IMainGenericDb<ExecutionOrder> repo, IAgroSearch<T> search, ICommonAgroQueries commonQueries, IValidatorAttributes<ExecutionOrderInput> validator, ILogger log) : base(repo, search, validator, log)
+        {
             this.commonQueries = commonQueries;
         }
 

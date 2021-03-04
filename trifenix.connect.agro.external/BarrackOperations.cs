@@ -1,4 +1,5 @@
 ﻿using Microsoft.Azure.Documents.Spatial;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,7 +25,8 @@ namespace trifenix.connect.agro.external
 
         private readonly ICommonAgroQueries Queries;
 
-        public BarrackOperations(IMainGenericDb<Barrack> repo,  IAgroSearch<T> search, ICommonAgroQueries Queries, IValidatorAttributes<BarrackInput> validator) : base(repo, search, validator) {
+        public BarrackOperations(IMainGenericDb<Barrack> repo,  IAgroSearch<T> search, ICommonAgroQueries Queries, IValidatorAttributes<BarrackInput> validator, ILogger log) : base(repo, search, validator, log)
+        {
             this.Queries = Queries;
         }
 
