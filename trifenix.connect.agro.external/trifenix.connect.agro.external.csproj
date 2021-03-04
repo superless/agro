@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.12" />
     <PackageReference Include="Microsoft.Spatial" Version="7.8.2" />
     <PackageReference Include="trifenix.connect" Version="0.8.106" />
     <PackageReference Include="trifenix.connect.graph" Version="0.8.58" />
