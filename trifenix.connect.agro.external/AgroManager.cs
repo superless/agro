@@ -39,7 +39,10 @@ namespace trifenix.agro.external
 
 
         /// <summary>
-        /// Constructor de AgroManager con todos las interfaces para su composición
+        /// Constructor de AgroManager con todos las interfaces para su composición,
+        /// las operaciones que usan como clase MainOperation son automáticas, es decir guardan en la base de datos
+        /// de persistencia (CosmosDb) y convierten el elemento en un entitySearch para guardarlos en AzureSearch.
+        /// Los que no usan MainOperation es porque deben tener alguna operación personalizada.
         /// </summary>
         /// <param name="dbConnect">Interface con consultas a base de datos y validación de existencias</param>
         /// <param name="email">Interface con operaciones de correo</param>
