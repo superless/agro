@@ -22,6 +22,11 @@ using trifenix.connect.model;
 namespace trifenix.agro.external
 {
 
+    /// <summary>
+    /// Mantiene todas las composiciones para realizar las operaciones dentro de las bases de datos (bases de datos de Persistencia ( cosmos db)
+    /// y bases de datos de consulta (Azure Search)
+    /// </summary>
+    /// <typeparam name="T">Representa el tipo de dato que representa Geo, que depende del tipo de base de datos, este tipo de datos determina una ubicación geográfica</typeparam>
     public class AgroManager<T> : IAgroManager<T>
     {
 
@@ -32,6 +37,20 @@ namespace trifenix.agro.external
         private readonly ILogger log;
         private readonly string UserId;
 
+
+        /// <summary>
+        /// Constructor de AgroManager con todos las interfaces para su composición,
+        /// las operaciones que usan como clase MainOperation son automáticas, es decir guardan en la base de datos
+        /// de persistencia (CosmosDb) y convierten el elemento en un entitySearch para guardarlos en AzureSearch.
+        /// Los que no usan MainOperation es porque deben tener alguna operación personalizada.
+        /// </summary>
+        /// <param name="dbConnect">Interface con consultas a base de datos y validación de existencias</param>
+        /// <param name="email">Interface con operaciones de correo</param>
+        /// <param name="uploadImage">Interface para subir archivos</param>
+        /// <param name="weatherApi">Interface para determinar el clima</param>
+        /// <param name="searchServiceInstance">Interface para operaciones de bases de datos de busqueda</param>
+        /// <param name="ObjectIdAAD">Token de usuario</param>
+        /// <param name="log">log de operaciones</param>
         public AgroManager(IDbAgroConnect dbConnect, IEmail email, IUploadImage uploadImage, IWeatherApi weatherApi, IAgroSearch<T> searchServiceInstance, string ObjectIdAAD, ILogger log)
         {
             this.dbConnect = dbConnect;
@@ -46,14 +65,36 @@ namespace trifenix.agro.external
             }
         }
 
+        /// <summary>
+        /// Operaciones genéricas de base de datos
+        /// </summary>
+        /// <typeparam name="T2">elementos de tipo de base de datos</typeparam>
+        /// <returns>Modulo de Operaciones de base de datos</returns>
         private IMainGenericDb<T2> GetMainDb<T2>() where T2 : DocumentDb => dbConnect.GetMainDb<T2>();
 
         
 
+        /// <summary>
+        /// Validaciones
+        /// Los elementos que se guardan en una base de datos se componen de inputs (ingresos de usuario) los cuales son validados
+        /// y los elementos que se guardarán en la base de datos.
+        /// </summary>
+        /// <typeparam name="T_INPUT">Elemento de tipo input</typeparam>
+        /// <typeparam name="T_DB">Elemento de persistencia</typeparam>
+        /// <returns></returns>
         public IValidatorAttributes<T_INPUT> GetValidators<T_INPUT, T_DB>() where T_INPUT : InputBase where T_DB : DocumentDb => dbConnect.GetValidator<T_INPUT, T_DB>();
 
+
+        /// <summary>
+        /// Consultas a base de datos.
+        /// </summary>
         private ICommonAgroQueries CommonQueries => dbConnect.CommonQueries;
 
+
+        /// <summary>
+        /// Operaciones en bases de datos de busqueda, Connect guarda en una base de datos de acuerdo al modelo y usa entitySearch
+        /// para guardar en bases de datos de busqueda.
+        /// </summary>
         public IAgroSearch<T> Search { get; }
 
         /// <summary>

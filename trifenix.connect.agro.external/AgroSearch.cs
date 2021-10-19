@@ -21,8 +21,7 @@ namespace trifenix.connect.agro.external
 {
     /// <summary>
     /// Clase que interactua con azure search
-    /// importante! es muy probable que los comentarios sean eliminados 
-    /// refactorizar esta clase para soportar mejor el modelo.
+    /// Operaciones en Azure Search de acuerdo a la interfaz con las operaciones.
     /// </summary>
     public class AgroSearch<GeoPointType> : IAgroSearch<GeoPointType> 
     {

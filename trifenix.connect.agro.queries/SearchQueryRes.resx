@@ -119,9 +119,11 @@
   </resheader>
   <data name="ELEMENTS_WITHSTRINDEX_AND_IDS" xml:space="preserve">
     <value>str/any(element: element/index eq {0}) and (id eq '{1}')</value>
+    <comment>Obtiene elemento con un indice (Entidad) y su identificador</comment>
   </data>
   <data name="ENTITIES_BYINDEX" xml:space="preserve">
     <value>index eq {0}</value>
+    <comment>Obtiene todos los elementos con un indice en particular (Indice).</comment>
   </data>
   <data name="ENTITIES_WITH_ENTITYID" xml:space="preserve">
     <value>index eq {0}  and rel/any(elementId: elementId/index eq {1} and elementId/id eq '{2}')</value>
