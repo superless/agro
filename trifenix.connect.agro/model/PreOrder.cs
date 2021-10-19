@@ -1,8 +1,9 @@
-﻿using Cosmonaut.Attributes;
+﻿
 using trifenix.connect.agro.index_model.enums;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
 using trifenix.connect.mdm.enums;
+using trifenix.connect.model;
 
 namespace trifenix.connect.agro_model
 {
@@ -10,9 +11,9 @@ namespace trifenix.connect.agro_model
     /// <summary>
     /// Pre - Orden, una preorden es una orden estimada con menos datos que se asigna al iniciar el dato.
     /// </summary>
-    [SharedCosmosCollection("agro", "PreOrder")]
-    [ReferenceSearchHeader(EntityRelated.PREORDER, PathName = "pre-orders", Kind = EntityKind.PROCESS)]
-    public class PreOrder : DocumentLocal
+    
+    [ReferenceSearchHeader(EntityRelated.PREORDER, PathName = "pre-orders", Kind = EntityKind.PROCESS)]    
+    public class PreOrder : DocumentDb
     {
         /// <summary>
         /// Identificador

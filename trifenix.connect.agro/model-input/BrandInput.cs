@@ -2,8 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
-using trifenix.connect.input;
-using trifenix.connect.mdm_attributes;
+using trifenix.connect.mdm.validation_attributes;
 
 namespace trifenix.connect.agro_model_input
 {
@@ -11,7 +10,7 @@ namespace trifenix.connect.agro_model_input
     /// Ingreso de marcas
     /// </summary>
     [ReferenceSearchHeader(EntityRelated.BRAND)]
-    public class BrandInput : InputBase
+    public class BrandInput : LocalBase
     {
         /// <summary>
         /// Nombre de la marca

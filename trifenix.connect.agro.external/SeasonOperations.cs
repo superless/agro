@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using trifenix.connect.agro.external.main;
@@ -22,7 +23,7 @@ namespace trifenix.agro.external
     {
         private readonly ICommonAgroQueries Queries;
 
-        public SeasonOperations(IMainGenericDb<Season> repo, IAgroSearch<T> search, ICommonAgroQueries queries, IValidatorAttributes<SeasonInput> validator) : base(repo, search, validator)
+        public SeasonOperations(IMainGenericDb<Season> repo, IAgroSearch<T> search, ICommonAgroQueries queries, IValidatorAttributes<SeasonInput> validator,  ILogger log) : base(repo, search, validator, log)
         {
             Queries = queries;
         }

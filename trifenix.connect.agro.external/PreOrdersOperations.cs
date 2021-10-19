@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,7 +20,7 @@ namespace trifenix.connect.agro.external
     {
         private readonly ICommonAgroQueries Queries;
 
-        public PreOrdersOperations(IMainGenericDb<PreOrder> repo, IAgroSearch<T> search, ICommonAgroQueries queries, IValidatorAttributes<PreOrderInput> validator) : base(repo, search, validator)
+        public PreOrdersOperations(IMainGenericDb<PreOrder> repo, IAgroSearch<T> search, ICommonAgroQueries queries, IValidatorAttributes<PreOrderInput> validator, ILogger log) : base(repo, search, validator, log)
         {
             Queries = queries;
         }

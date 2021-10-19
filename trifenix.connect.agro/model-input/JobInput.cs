@@ -2,8 +2,7 @@
 
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
-using trifenix.connect.input;
-using trifenix.connect.mdm_attributes;
+using trifenix.connect.mdm.validation_attributes;
 
 namespace trifenix.connect.agro_model_input
 {
@@ -11,7 +10,8 @@ namespace trifenix.connect.agro_model_input
     /// Ingreso de trabajo
     /// </summary>
     [ReferenceSearchHeader(EntityRelated.JOB)]
-    public class JobInput : InputBase {
+    public class JobInput : LocalBase
+    {
 
         /// <summary>
         /// Nombre

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Threading.Tasks;
 using trifenix.connect.agro.external.main;
 using trifenix.connect.agro.interfaces.external;
@@ -18,7 +19,7 @@ namespace trifenix.connect.agro.external
 
         private readonly string UserId;
 
-        public UserActivityOperations(IMainGenericDb<UserActivity> repo, IAgroSearch<T> search, string userId, IValidatorAttributes<UserActivityInput> validator) : base(repo, search, validator) {
+        public UserActivityOperations(IMainGenericDb<UserActivity> repo, IAgroSearch<T> search, string userId, IValidatorAttributes<UserActivityInput> validator, ILogger log) : base(repo, search, validator, log) {
             UserId = userId;
         }
 

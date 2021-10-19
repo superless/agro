@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -13,9 +14,10 @@ using trifenix.connect.interfaces.db;
 using trifenix.connect.interfaces.external;
 using trifenix.connect.mdm.containers;
 using trifenix.connect.mdm.enums;
+using trifenix.connect.model;
 using trifenix.connect.util;
 using trifenix.exception;
-using trifenix.model;
+
 
 namespace trifenix.connect.agro.external.main
 {
@@ -47,6 +49,7 @@ namespace trifenix.connect.agro.external.main
         
         // operaciones de validación.
         protected readonly IValidatorAttributes<T_INPUT> valida;
+        private readonly ILogger log;
 
         // mapper que permite convertir desde un input a un modelo de base de datos.
         // esto solo se logra en input que tienen los mismos campos que el de la base de datos.
@@ -61,10 +64,11 @@ namespace trifenix.connect.agro.external.main
         /// <param name="search">repositorio de base de datos de busqueda bajo el modelo de entitySearch</param>
         /// <param name="commonDb">operaciones de conversión de IQueriable a listas</param>
         /// <param name="validator">Validador de entidades input</param>
-        public MainOperation(IMainGenericDb<T> repo, IAgroSearch<T_GEO> search, IValidatorAttributes<T_INPUT> validator) {
+        public MainOperation(IMainGenericDb<T> repo, IAgroSearch<T_GEO> search, IValidatorAttributes<T_INPUT> validator, ILogger log) {
             this.repo = repo;
             this.search = search;
             this.valida = validator;
+            this.log = log;
             this.existElement = validator.GetExistElement();
         }
 
@@ -74,13 +78,20 @@ namespace trifenix.connect.agro.external.main
         /// <param name="input">elemento de ingreso</param>
         /// <returns>Excepción si no es válido</returns>
         public virtual async Task Validate(T_INPUT input) {
+            var initValidate = DateTime.Now;
+
+            log?.LogInformation($"[{initValidate:s}] se valida {typeof(T_INPUT).Name}");
+
             var result = await valida.Valida(input);
 
             if (!result.Valid)
             {
                 throw new CustomException(string.Join(",", result.Messages));
             }
-            
+
+            var endValidate = DateTime.Now;
+            log?.LogInformation($"[{endValidate:s}] se ha validado {typeof(T_INPUT).Name} en {(endValidate - initValidate).TotalSeconds} segundos");
+            log?.LogInformation($"esto no considera validación adicional");
 
         }
 
@@ -110,9 +121,15 @@ namespace trifenix.connect.agro.external.main
         /// <returns></returns>
         public virtual async Task<ExtPostContainer<string>> SaveDb(T item)
         {
+
+            var initCreate = DateTime.Now;
+
+            log?.LogInformation($"[{initCreate:s}] Iniciando guardado de {item.DocumentPartition}");
             // crea o actualiza en la base de datos de persistencia
             await repo.CreateUpdate(item);
 
+            var endCreate = DateTime.Now;
+            log?.LogInformation($"[{endCreate:s}] se ha guardado {item.DocumentPartition} en {(endCreate - initCreate).TotalSeconds} segundos");
             // registra el elemento
             AddToQueried(nameof(MainOperation<T, T_INPUT, T_GEO>.SaveDb), JsonConvert.SerializeObject(item));
 
@@ -131,9 +148,16 @@ namespace trifenix.connect.agro.external.main
         /// <returns>Resultado</returns>
         public virtual async Task<ExtPostContainer<string>> SaveSearch(T entity)
         {
-            
+
             // añade una nueva entidad
+            var convertAndSaveStartDate = DateTime.Now;
+
+            log?.LogInformation($"[{convertAndSaveStartDate:s}] inicio de guardado en el search de {entity.DocumentPartition}");
             await Task.Run(() => search.AddDocument(entity));
+
+            var convertAndSaveEndDate = DateTime.Now;
+
+            log?.LogInformation($"[{convertAndSaveEndDate:s}] {entity.DocumentPartition} ha guardado en el search en {(convertAndSaveEndDate - convertAndSaveStartDate).TotalSeconds} segundos ");
 
             AddToQueried(nameof(MainOperation<T, T_INPUT, T_GEO>.SaveSearch), search.Queried["AddDocument"]);
 

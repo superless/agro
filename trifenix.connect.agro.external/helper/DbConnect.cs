@@ -9,7 +9,6 @@ using trifenix.connect.interfaces.db;
 using trifenix.connect.interfaces.external;
 using trifenix.connect.interfaces.graph;
 using trifenix.connect.model;
-using trifenix.model;
 
 namespace trifenix.connect.agro.external.helper
 {

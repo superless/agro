@@ -1,16 +1,17 @@
-﻿using Cosmonaut.Attributes;
-using trifenix.connect.agro.index_model.props;
+﻿using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
 using trifenix.connect.mdm.enums;
+using trifenix.connect.model;
 
 namespace trifenix.connect.agro_model
 {
     /// <summary>
     /// Carpeta de órdenes
     /// </summary>
-    [SharedCosmosCollection("agro", "OrderFolder")]
+    
     [ReferenceSearchHeader(EntityRelated.ORDER_FOLDER, PathName = "order_folders", Kind = EntityKind.ENTITY)]
-    public class OrderFolder : DocumentLocal
+    
+    public class OrderFolder : DocumentDb
     {
 
         /// <summary>

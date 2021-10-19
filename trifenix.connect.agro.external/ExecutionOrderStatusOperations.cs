@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Threading.Tasks;
 using trifenix.connect.agro.external.main;
 using trifenix.connect.agro.interfaces.external;
@@ -16,7 +17,7 @@ namespace trifenix.agro.external.operations.entities.orders
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class ExecutionOrderStatusOperations<T> : MainOperation<ExecutionOrderStatus, ExecutionOrderStatusInput,T>, IGenericOperation<ExecutionOrderStatus, ExecutionOrderStatusInput> {
-        public ExecutionOrderStatusOperations(IMainGenericDb<ExecutionOrderStatus> repo, IAgroSearch<T> search, IValidatorAttributes<ExecutionOrderStatusInput> validator) : base(repo, search, validator) { }
+        public ExecutionOrderStatusOperations(IMainGenericDb<ExecutionOrderStatus> repo, IAgroSearch<T> search, IValidatorAttributes<ExecutionOrderStatusInput> validator, ILogger log) : base(repo, search, validator, log) { }
 
   
 

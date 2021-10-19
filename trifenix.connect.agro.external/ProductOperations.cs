@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using trifenix.connect.agro.external.main;
@@ -41,7 +42,7 @@ namespace trifenix.connect.agro.external
         /// <param name="commonDb">convierte IQueryable en listas</param>
         /// <param name="queries">consultas a agro</param>
         /// <param name="validator">Validador de elementos</param>
-        public ProductOperations(IMainGenericDb<Product> repo, IAgroSearch<T> search, IGenericOperation<Dose, DosesInput> dosesOperation, ICommonAgroQueries queries, IValidatorAttributes<ProductInput> validator) : base(repo, search, validator) {
+        public ProductOperations(IMainGenericDb<Product> repo, IAgroSearch<T> search, IGenericOperation<Dose, DosesInput> dosesOperation, ICommonAgroQueries queries, IValidatorAttributes<ProductInput> validator, ILogger log) : base(repo, search, validator, log) {
             this.dosesOperation = dosesOperation;
             this.queries = queries;
         }

@@ -48,7 +48,8 @@ namespace trifenix.connect.agro.resources.helper
                 Columns = null,
                 Titles = typeof(entity_titles),
                 Descriptions = typeof(entity_descriptions),
-                ShortNames = typeof(entity_snames)
+                ShortNames = typeof(entity_snames),
+                PlaceHolders = typeof(entity_placeholders)
             };
         }
         public static ResourceModel GetResourceCollection(KindProperty related)
@@ -62,7 +63,8 @@ namespace trifenix.connect.agro.resources.helper
                         Columns = typeof(string_columns),
                         Titles = typeof(string_titles),
                         Descriptions = typeof(string_descriptions),
-                        ShortNames = typeof(string_snames)
+                        ShortNames = typeof(string_snames),
+                        PlaceHolders = typeof(string_placeholders),
                     };
                 case KindProperty.NUM32:
                 case KindProperty.NUM64:
@@ -71,7 +73,8 @@ namespace trifenix.connect.agro.resources.helper
                         Columns = typeof(num_columns),
                         Titles = typeof(num_titles),
                         Descriptions = typeof(num_descriptions),
-                        ShortNames = typeof(num_snames)
+                        ShortNames = typeof(num_snames),
+                        PlaceHolders = typeof(num_placeholders)
                     };
                 case KindProperty.DBL:
                     return new ResourceModel
@@ -79,7 +82,8 @@ namespace trifenix.connect.agro.resources.helper
                         Columns = typeof(double_columns),
                         Titles = typeof(double_titles),
                         Descriptions = typeof(double_descriptions),
-                        ShortNames = typeof(double_snames)
+                        ShortNames = typeof(double_snames),
+                        PlaceHolders = typeof(double_placeholders),
                     };
                 case KindProperty.BOOL:
                     return new ResourceModel
@@ -87,7 +91,8 @@ namespace trifenix.connect.agro.resources.helper
                         Columns = typeof(boolean_columns),
                         Titles = typeof(boolean_titles),
                         Descriptions = typeof(boolean_descriptions),
-                        ShortNames = typeof(boolean_snames)
+                        ShortNames = typeof(boolean_snames),
+                        PlaceHolders = typeof(boolean_placeholder)
                     };
 
                 case KindProperty.GEO:
@@ -96,7 +101,8 @@ namespace trifenix.connect.agro.resources.helper
                         Columns = typeof(geo_columns),
                         Titles = typeof(geo_titles),
                         Descriptions = typeof(geo_descriptions),
-                        ShortNames = typeof(geo_snames)
+                        ShortNames = typeof(geo_snames),
+                        PlaceHolders = typeof(geo_placeholders),
                     };
                 case KindProperty.ENUM:
                     return new ResourceModel
@@ -104,7 +110,8 @@ namespace trifenix.connect.agro.resources.helper
                         Columns = typeof(enum_columns),
                         Titles = typeof(enum_titles),
                         Descriptions = typeof(enum_descriptions),
-                        ShortNames = typeof(enum_snames)
+                        ShortNames = typeof(enum_snames),
+                        PlaceHolders = typeof(enum_placeholders),
                     };
 
                 default:
@@ -113,7 +120,8 @@ namespace trifenix.connect.agro.resources.helper
                         Columns = typeof(date_columns),
                         Titles = typeof(date_titles),
                         Descriptions = typeof(date_descriptions),
-                        ShortNames = typeof(date_snames)
+                        ShortNames = typeof(date_snames),
+                        PlaceHolders = typeof(date_placeholders),
                     };
             }
 

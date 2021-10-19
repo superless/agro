@@ -14,5 +14,7 @@ namespace trifenix.connect.agro.resources.mdl
 
         public Type Titles { get; set; }
 
+        public Type PlaceHolders { get; set; }
+
     }
 }

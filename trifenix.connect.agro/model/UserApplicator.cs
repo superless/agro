@@ -1,23 +1,16 @@
 ﻿using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
+using trifenix.connect.mdm.enums;
 
 namespace trifenix.connect.agro_model
 {
     /// <summary>
     /// Usuario aplicador, 
     /// a diferencia de un usuario este tiene asignado un tractor y una nebulizadora.
-    /// </summary>
+    /// </summary>    
     public class UserApplicator : User
     {
-        /// <summary>
-        /// Si el compilador no es "Connect" utilizara un entityname especifico
-        /// </summary>
-        public UserApplicator() : base()
-        {
-            #if !CONNECT
-               CosmosEntityName = "User"; 
-            #endif
-        }
+        
 
         /// <summary>
         /// Nebulizadora asignada

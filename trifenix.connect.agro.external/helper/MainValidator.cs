@@ -9,8 +9,8 @@ using trifenix.connect.interfaces.db;
 using trifenix.connect.interfaces.external;
 using trifenix.connect.mdm.validation_attributes;
 using trifenix.connect.mdm_attributes;
+using trifenix.connect.model;
 using trifenix.connect.util;
-using trifenix.model;
 
 namespace trifenix.connect.agro.external.helper
 {
@@ -56,7 +56,7 @@ namespace trifenix.connect.agro.external.helper
             }
 
             // se crea colección desde el objeto
-            var castedCollectionElement = Mdm.CreateDynamicList(elemento);
+            var castedCollectionElement = Mdm.Reflection.CreateDynamicList(elemento);
 
             // si es vacia, no valida, requerido valida.
             if (!castedCollectionElement.Any())
@@ -154,7 +154,7 @@ namespace trifenix.connect.agro.external.helper
             }
 
             // se crea colección desde el objeto, con el fin de validar colecciones
-            var castedCollectionElement = Mdm.CreateDynamicList(elemento);
+            var castedCollectionElement = Mdm.Reflection.CreateDynamicList(elemento);
 
             // si la colección esta vacia no validará.
             if (!castedCollectionElement.Any())
@@ -294,7 +294,7 @@ namespace trifenix.connect.agro.external.helper
             }
 
             // se crea colección desde el objeto
-            var castedCollectionElement = Mdm.CreateDynamicList(element);
+            var castedCollectionElement = Mdm.Reflection.CreateDynamicList(element);
 
             // si la lista es vacia, es inválido.
             if (!castedCollectionElement.Any())
@@ -399,7 +399,7 @@ namespace trifenix.connect.agro.external.helper
 
             
             // propiedades no primitivas
-            var nonPrimitiveProps = element.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public ).Where(s => !EnumerationExtension.IsPrimitiveAndCollection(s.PropertyType) && !s.PropertyType.IsEnum);
+            var nonPrimitiveProps = element.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public ).Where(s => !Mdm.Reflection.IsPrimitiveAndCollection(s.PropertyType) && !s.PropertyType.IsEnum);
 
             if (nonPrimitiveProps.Any() && recursive)
             {
@@ -407,7 +407,7 @@ namespace trifenix.connect.agro.external.helper
                 {
                     if (propinfo.GetValue(element) != null)
                     {
-                        var castedCollectionElement = Mdm.CreateDynamicList(propinfo.GetValue(element));
+                        var castedCollectionElement = Mdm.Reflection.CreateDynamicList(propinfo.GetValue(element));
                         foreach (var item in castedCollectionElement)
                         {
                             var res = await ValidaProperties<A>(item, extraValidation, true);

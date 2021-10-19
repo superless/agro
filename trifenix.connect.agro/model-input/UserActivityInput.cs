@@ -1,14 +1,14 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using trifenix.connect.agro.index_model.enums;
-using trifenix.connect.input;
 
 namespace trifenix.connect.agro_model_input
 {
     /// <summary>
     /// Ingreso de actividad de usuario
     /// </summary>
-    public class UserActivityInput : InputBase {
+    public class UserActivityInput : LocalBase
+    {
 
         /// <summary>
         /// Acción a realizar

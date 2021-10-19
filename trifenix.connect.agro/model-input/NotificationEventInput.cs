@@ -3,7 +3,6 @@ using trifenix.connect.agro.index_model.enums;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
 using trifenix.connect.agro_model;
-using trifenix.connect.input;
 
 namespace trifenix.connect.agro_model_input
 {
@@ -11,7 +10,8 @@ namespace trifenix.connect.agro_model_input
     /// Ingreso de evento de notificación
     /// </summary>
     [ReferenceSearchHeader(EntityRelated.NOTIFICATION_EVENT)]
-    public class NotificationEventInput : InputBase {
+    public class NotificationEventInput : LocalBase
+    {
         
         /// <summary>
         /// Cuartel asignado a la notificación

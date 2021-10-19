@@ -1,8 +1,8 @@
-﻿using Cosmonaut.Attributes;
-using System;
+﻿using System;
 using trifenix.connect.agro.index_model.enums;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
+using trifenix.connect.model;
 
 namespace trifenix.connect.agro_model
 {
@@ -11,8 +11,8 @@ namespace trifenix.connect.agro_model
     /// Log de acciones de usuario
     /// esta propiedad solo se guarda en cosmos.
     /// </summary>
-    [SharedCosmosCollection("agro", "UserActivity")]
-    public class UserActivity : DocumentLocal {
+    
+    public class UserActivity : DocumentDb {
 
         /// <summary>
         /// Identificador

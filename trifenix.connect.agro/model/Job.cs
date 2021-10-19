@@ -1,18 +1,18 @@
-﻿using Cosmonaut.Attributes;
+﻿
 using trifenix.connect.agro.index_model.enums;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
 using trifenix.connect.mdm.enums;
+using trifenix.connect.model;
 
 namespace trifenix.connect.agro_model
 {
     /// <summary>
     /// Entidad encargada de generar los cargos de los usuarios
     /// </summary>
-    [SharedCosmosCollection("agro", "Job")]
-    [ReferenceSearchHeader(EntityRelated.JOB, PathName = "jobs", Kind = EntityKind.ENTITY)]
-    [GroupMenu(MenuEntityRelated.MANTENEDORES, PhisicalDevice.ALL, SubMenuEntityRelated.USUARIOS)]
-    public class Job : DocumentLocal {
+    
+    [ReferenceSearchHeader(EntityRelated.JOB, PathName = "jobs", Kind = EntityKind.ENTITY)]    
+    public class Job : DocumentDb {
 
         /// <summary>
         /// Identificador visual de cargo

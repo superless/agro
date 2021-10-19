@@ -11,7 +11,7 @@ using trifenix.connect.agro.queries;
 using trifenix.connect.agro_model;
 using trifenix.connect.arguments;
 using trifenix.connect.mdm.search.model;
-using trifenix.model;
+using trifenix.connect.model;
 
 namespace trifenix.agro.console
 {
@@ -53,7 +53,7 @@ namespace trifenix.agro.console
         static async Task Main(string[] args) {
 
             var queriesToDB = new CommonQueries(new CosmosDbArguments { EndPointUrl = "https://agro-cosmodb.documents.azure.com:443/" , NameDb = "agro-cosmodb", PrimaryKey = "kaPYpzhFCcG1bk3aC69aX1T2amavVi8TfHmrIMNJuhpYXtIz67PMhwBKctunNzclFBcxypZvcjPUW846YZuvjA==" });
-            var searchServiceInstance = new AgroSearch<GeographyPoint>("https://fenix-search.search.windows.net/", "EFF07EE3D5A0C74C2363EC4DDB9710D7", new ImplementsSearch(), new HashEntityAgroSearch());
+            var searchServiceInstance = new AgroSearch<GeographyPoint>("https://fenix-search.search.windows.net/", "EFF07EE3D5A0C74C2363EC4DDB9710D7", new ImplementsSearch(), new HashEntityAgroSearch(), null);
 
             var entityTypes = new List<Type>{
                 typeof(ApplicationOrder),

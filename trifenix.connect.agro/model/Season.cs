@@ -1,8 +1,8 @@
-﻿using Cosmonaut.Attributes;
-using System;
+﻿using System;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
 using trifenix.connect.mdm.enums;
+using trifenix.connect.model;
 
 namespace trifenix.connect.agro_model
 {
@@ -10,9 +10,10 @@ namespace trifenix.connect.agro_model
     /// <summary>
     /// Identifica un año agricola.
     /// </summary>
-    [SharedCosmosCollection("agro", "Season")]
+    
     [ReferenceSearchHeader(EntityRelated.SEASON, PathName = "seasons", Kind = EntityKind.CUSTOM_ENTITY)]
-    public class Season : DocumentLocal {
+    [GroupMenu("Configuración", PhisicalDevice.ALL, "Temporada")]
+    public class Season : DocumentDb {
 
         /// <summary>
         /// Identificador.

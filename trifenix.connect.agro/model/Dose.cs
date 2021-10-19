@@ -1,18 +1,19 @@
-﻿using Cosmonaut.Attributes;
+﻿
 using System;
 using System.Collections.Generic;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
 using trifenix.connect.mdm.enums;
+using trifenix.connect.model;
 
 namespace trifenix.connect.agro_model
 {
     /// <summary>
     /// Entidad encargada de las dosis
     /// </summary>
-    [SharedCosmosCollection("agro", "Dose")]
+    
     [ReferenceSearchHeader(EntityRelated.DOSES, Kind = EntityKind.CUSTOM_ENTITY)]
-    public class Dose : DocumentLocal {
+    public class Dose : DocumentDb {
 
         /// <summary>
         /// Identificador de una dosis        

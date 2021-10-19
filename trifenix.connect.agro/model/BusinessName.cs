@@ -1,21 +1,21 @@
-﻿using Cosmonaut.Attributes;
+﻿
 using System.ComponentModel.DataAnnotations;
 using trifenix.connect.agro.index_model.enums;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
 using trifenix.connect.mdm.enums;
 using trifenix.connect.mdm_attributes;
+using trifenix.connect.model;
 
 namespace trifenix.connect.agro_model
 {
 
     /// <summary>
     /// Razón social de cada uno de los centro de costos.
-    /// </summary>
-    [SharedCosmosCollection("agro", "BusinessName")]
+    /// </summary>    
     [ReferenceSearchHeader(EntityRelated.BUSINESSNAME, PathName = "business_names", Kind =EntityKind.ENTITY)]
-    [GroupMenu(MenuEntityRelated.MANTENEDORES, PhisicalDevice.ALL, SubMenuEntityRelated.GESTION)]
-    public class BusinessName : DocumentLocal {
+    [GroupMenu("Configuración", PhisicalDevice.ALL, "Centro de Negocios")]
+    public class BusinessName : DocumentDb {
         
 
         /// <summary>
@@ -36,7 +36,6 @@ namespace trifenix.connect.agro_model
         /// Nombre de la razón social.
         /// </summary>
         [StringSearch(StringRelated.GENERIC_NAME)]
-        [Group(0,PhisicalDevice.WEB, 6)]
         [Required]
         public string Name { get; set; }
 
@@ -45,7 +44,6 @@ namespace trifenix.connect.agro_model
         /// Correo electrónico de la razón social.
         /// </summary>
         [StringSearch(StringRelated.GENERIC_EMAIL)]
-        [Group(0, PhisicalDevice.WEB, 6)]
         [Required]
         public string Email { get; set; }
 
@@ -54,7 +52,6 @@ namespace trifenix.connect.agro_model
         /// Rut de la razón social.
         /// </summary>
         [StringSearch(StringRelated.GENERIC_RUT)]
-        [Group(1, PhisicalDevice.WEB, 3)]
         [Required]
         public string Rut { get; set; }
 
@@ -62,7 +59,6 @@ namespace trifenix.connect.agro_model
         /// <summary>
         /// Página web de la razón social.
         /// </summary>
-        [Group(1, PhisicalDevice.WEB, 3)]
         [StringSearch(StringRelated.GENERIC_WEBPAGE)]
         public string WebPage { get; set; }
 
@@ -70,7 +66,6 @@ namespace trifenix.connect.agro_model
         /// <summary>
         /// Giro de la razón social.
         /// </summary>
-        [Group(1, PhisicalDevice.WEB, 3)]
         [StringSearch(StringRelated.GENERIC_GIRO)]
         public string Giro { get; set; }
 
@@ -78,7 +73,6 @@ namespace trifenix.connect.agro_model
         /// <summary>
         /// Teléfono
         /// </summary>
-        [Group(1, PhisicalDevice.WEB, 3)]
         [StringSearch(StringRelated.GENERIC_PHONE)]
         public string Phone { get; set; }
 

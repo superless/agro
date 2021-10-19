@@ -14,7 +14,7 @@ using trifenix.connect.input;
 using trifenix.connect.interfaces.external;
 using trifenix.connect.mdm.containers;
 using trifenix.connect.mdm.enums;
-using trifenix.model;
+using trifenix.connect.model;
 
 namespace trifenix.agro.functions.mantainers
 {
@@ -78,18 +78,7 @@ namespace trifenix.agro.functions.mantainers
 
 
         public static async Task<ActionResultWithId> SendInternalHttp<DbElement, InputElement>(HttpRequest req, ILogger log, Func<IAgroManager<GeographyPoint>, IGenericOperation<DbElement, InputElement>> repo, string id = null) where DbElement : DocumentDb where InputElement : InputBase {
-            ValidaEnvironmentVariables();
-            //if (!ValidaEnvironmentVariables()) throw new Exception("existen variables de ambiente nulas, por favor revise las variables");
-
-            //if (!ValidaEnvironmentVariables()) throw new Exception("existen variables de ambiente nulas, por favor revise las variables");
-            
-            //var claims = await Auth.Validate(req);
-            //if (claims == null)
-            //    return new ActionResultWithId {
-            //        Id = null,
-            //        JsonResult = new UnauthorizedResult()
-            //    };
-            //string ObjectIdAAD = claims.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
+            ValidaEnvironmentVariables();           
             string ObjectIdAAD = string.Empty;
             return await HttpProcessing(req, log, ObjectIdAAD, repo, id);
         }
@@ -124,7 +113,7 @@ namespace trifenix.agro.functions.mantainers
             switch (method) {
                 case "get":
                     if (!string.IsNullOrWhiteSpace(element.Id)) {
-                        var manager = await ContainerMethods.AgroManager(ObjectIdAAD);
+                        var manager = await ContainerMethods.AgroManager(ObjectIdAAD, log);
                         var elementDb = await repo(manager).Get(element.Id);
                         return new ActionResultWithId {
                             Id = element.Id,
@@ -137,7 +126,7 @@ namespace trifenix.agro.functions.mantainers
                     };
                 default:
                     
-                    string EntityName = ((DocumentLocal)Activator.CreateInstance(typeof(DbElement))).CosmosEntityName;
+                    string EntityName = ((DocumentDb)Activator.CreateInstance(typeof(DbElement))).DocumentPartition;
                     
                     var opInstance = new OperationInstance<InputElement>(element, element.Id, EntityName, method, ObjectIdAAD);
 

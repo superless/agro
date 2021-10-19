@@ -1,4 +1,5 @@
 ﻿using Microsoft.Azure.Documents.Spatial;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,7 +25,8 @@ namespace trifenix.connect.agro.external
 
         private readonly ICommonAgroQueries Queries;
 
-        public BarrackOperations(IMainGenericDb<Barrack> repo,  IAgroSearch<T> search, ICommonAgroQueries Queries, IValidatorAttributes<BarrackInput> validator) : base(repo, search, validator) {
+        public BarrackOperations(IMainGenericDb<Barrack> repo,  IAgroSearch<T> search, ICommonAgroQueries Queries, IValidatorAttributes<BarrackInput> validator, ILogger log) : base(repo, search, validator, log)
+        {
             this.Queries = Queries;
         }
 
@@ -56,11 +58,7 @@ namespace trifenix.connect.agro.external
                 PlantingYear = input.PlantingYear,
                 IdSeason = input.IdSeason
             };
-            //GeoBarracks, dependencia de geospacial
-            #if !CONNECT
-            if (input.GeographicalPoints != null && input.GeographicalPoints.Any())
-                barrack.GeographicalPoints = input.GeographicalPoints.Select(geoPoint => new Point(geoPoint.Lng, geoPoint.Lat)).ToArray();
-            #endif
+            
 
             search.DeleteElementsWithRelatedElement(EntityRelated.GEOPOINT, EntityRelated.BARRACK, barrack.Id);
 

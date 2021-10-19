@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Threading.Tasks;
 using trifenix.connect.agro.external.main;
 using trifenix.connect.agro.interfaces.db;
@@ -20,7 +21,8 @@ namespace trifenix.connect.agro.external
     public class OrderFolderOperations<T> : MainOperation<OrderFolder, OrderFolderInput,T>, IGenericOperation<OrderFolder, OrderFolderInput> {
         private readonly ICommonAgroQueries Queries;
 
-        public OrderFolderOperations(IMainGenericDb<OrderFolder> repo, IAgroSearch<T> search, ICommonAgroQueries Queries, IValidatorAttributes<OrderFolderInput> validator) : base(repo, search, validator) {
+        public OrderFolderOperations(IMainGenericDb<OrderFolder> repo, IAgroSearch<T> search, ICommonAgroQueries Queries, IValidatorAttributes<OrderFolderInput> validator, ILogger log) : base(repo, search, validator, log)
+        {
             this.Queries = Queries;
         }
  

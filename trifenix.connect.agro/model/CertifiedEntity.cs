@@ -1,17 +1,16 @@
-﻿using Cosmonaut.Attributes;
-using trifenix.connect.agro.index_model.props;
+﻿using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
 using trifenix.connect.mdm.enums;
+using trifenix.connect.model;
 
 namespace trifenix.connect.agro_model
 {
 
     /// <summary>
     /// Entidad certificadora, encargada de validar el proceso de exportación
-    /// </summary>
-    [SharedCosmosCollection("agro", "CertifiedEntity")]
+    /// </summary>    
     [ReferenceSearchHeader(EntityRelated.CERTIFIED_ENTITY, PathName ="certified_entities", Kind = EntityKind.ENTITY)]    
-    public class CertifiedEntity : DocumentLocal {
+    public class CertifiedEntity : DocumentDb {
 
         /// <summary>
         /// Identificador de la entidad

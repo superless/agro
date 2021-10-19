@@ -1,4 +1,5 @@
 ﻿using Microsoft.Azure.Documents.Spatial;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -27,7 +28,8 @@ namespace trifenix.connect.agro.external
         private readonly IUploadImage uploadImage;
         private readonly IWeatherApi weather;
 
-        public NotificationEventOperations(IMainGenericDb<NotificationEvent> repo, IAgroSearch<T> search, ICommonAgroQueries commonQueries, IEmail email, IUploadImage uploadImage, IWeatherApi weather, IValidatorAttributes<NotificationEventInput> validator) : base(repo, search, validator) {
+        public NotificationEventOperations(IMainGenericDb<NotificationEvent> repo, IAgroSearch<T> search, ICommonAgroQueries commonQueries, IEmail email, IUploadImage uploadImage, IWeatherApi weather, IValidatorAttributes<NotificationEventInput> validator, ILogger log) : base(repo, search, validator, log)
+        {
             this.commonQueries = commonQueries;
             this.email = email;
             this.uploadImage = uploadImage;
@@ -50,13 +52,8 @@ namespace trifenix.connect.agro.external
                 Description = input.Description,
                 
             };
-            //TODO: Cambiar tipo de dato a GeoSpacial
-            #if !CONNECT
-            if (input.Location != null) {
-                notification.Location = new Point(input.Location.Lng, input.Location.Lat);
-                notification.Weather = await weather.GetWeather((float)input.Location.Lat, (float)input.Location.Lng);
-            }
-            #endif
+            
+          
 
             await SaveDb(notification);
             var usersEmails = await commonQueries.GetUsersMailsFromRoles(new List<string> { "24beac75d4bb4f8d8fae8373426af780" });

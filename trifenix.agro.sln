@@ -23,6 +23,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.agro", "2.agro", "{D568A6
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.connect.agro.tests", "trifenix.connect.agro.tests\trifenix.connect.agro.tests.csproj", "{F7D67897-0BA1-47B6-800E-453C50655542}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "trifenix.connect.agro", "trifenix.connect.agro\trifenix.connect.agro.csproj", "{C3D386D7-89BA-4C23-BC9C-05A40B422CA4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CONNECT|Any CPU = CONNECT|Any CPU
@@ -72,6 +74,12 @@ Global
 		{F7D67897-0BA1-47B6-800E-453C50655542}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7D67897-0BA1-47B6-800E-453C50655542}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7D67897-0BA1-47B6-800E-453C50655542}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3D386D7-89BA-4C23-BC9C-05A40B422CA4}.CONNECT|Any CPU.ActiveCfg = CONNECT|Any CPU
+		{C3D386D7-89BA-4C23-BC9C-05A40B422CA4}.CONNECT|Any CPU.Build.0 = CONNECT|Any CPU
+		{C3D386D7-89BA-4C23-BC9C-05A40B422CA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3D386D7-89BA-4C23-BC9C-05A40B422CA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3D386D7-89BA-4C23-BC9C-05A40B422CA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3D386D7-89BA-4C23-BC9C-05A40B422CA4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -85,6 +93,7 @@ Global
 		{D3518C13-6ED1-4B80-945D-D1573A31D12C} = {D568A6B9-749D-447F-BDD2-C4CD25790C66}
 		{ED2B32BF-E8DA-44CD-BB9A-7434B807222B} = {D568A6B9-749D-447F-BDD2-C4CD25790C66}
 		{F7D67897-0BA1-47B6-800E-453C50655542} = {D568A6B9-749D-447F-BDD2-C4CD25790C66}
+		{C3D386D7-89BA-4C23-BC9C-05A40B422CA4} = {D568A6B9-749D-447F-BDD2-C4CD25790C66}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2C0C9D82-464E-4741-8541-CDC460278FEC}

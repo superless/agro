@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using System.Linq.Expressions;
 using trifenix.connect.mdm.containers;
 using trifenix.connect.mdm.enums;
-using trifenix.model;
 
 namespace trifenix.agro.external.operations.helper
 {
