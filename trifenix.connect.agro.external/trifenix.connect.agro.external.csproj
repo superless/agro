@@ -9,11 +9,11 @@
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.12" />
     <PackageReference Include="Microsoft.Spatial" Version="7.8.2" />
-    <PackageReference Include="trifenix.connect" Version="0.8.106" />
-    <PackageReference Include="trifenix.connect.graph" Version="0.8.58" />
-    <PackageReference Include="trifenix.connect.mdm.search.model" Version="0.8.57" />
-    <PackageReference Include="trifenix.connect.search" Version="0.8.55" />
-    <PackageReference Include="trifenix.connect.translate" Version="0.8.60" />
+    <PackageReference Include="trifenix.connect" Version="0.8.183" />
+    <PackageReference Include="trifenix.connect.graph" Version="0.8.127" />
+    <PackageReference Include="trifenix.connect.mdm.search.model" Version="0.8.128" />
+    <PackageReference Include="trifenix.connect.search" Version="0.8.160" />
+    <PackageReference Include="trifenix.connect.translate" Version="0.8.127" />
   </ItemGroup>
 
   <ItemGroup>

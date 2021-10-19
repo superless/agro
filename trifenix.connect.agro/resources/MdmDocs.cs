@@ -24,6 +24,7 @@ namespace trifenix.connect.agro.resources
                 Column = rm.Columns == null ? null : new ResourceManager(rm.Columns).GetString(indexName),
                 Description = new ResourceManager(rm.Descriptions).GetString(indexName),
                 ShortName = new ResourceManager(rm.ShortNames).GetString(indexName),
+                PlaceHolder = new ResourceManager(rm.PlaceHolders)?.GetString(indexName)??"",
             };
             if (info.Title == null && info.Column == null && info.Description == null || info.ShortName == null) return null;
 

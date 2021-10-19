@@ -6,7 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="trifenix.connect.agro" Version="0.0.5" />
+    <PackageReference Include="trifenix.connect.interfaces" Version="0.8.96" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\trifenix.connect.agro\trifenix.connect.agro.csproj" />
   </ItemGroup>
 
 </Project>

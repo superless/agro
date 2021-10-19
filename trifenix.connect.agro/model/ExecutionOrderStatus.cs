@@ -1,16 +1,17 @@
-﻿using Cosmonaut.Attributes;
+﻿
 using System;
 using trifenix.connect.agro.index_model.enums;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
 using trifenix.connect.mdm.enums;
+using trifenix.connect.model;
 
 namespace trifenix.connect.agro_model
 {
 
-    [SharedCosmosCollection("agro", "ExecutionOrderStatus")]
+    
     [ReferenceSearchHeader(EntityRelated.EXECUTION_ORDER_STATUS, Kind = EntityKind.CUSTOM_ENTITY)]
-    public class ExecutionOrderStatus : DocumentLocal {
+    public class ExecutionOrderStatus : DocumentDb {
 
 
         /// <summary>

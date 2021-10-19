@@ -25,7 +25,7 @@ namespace trifenix.connect.agro.external.hash
             var dictBool = Mdm.Reflection.Enumerations.GetDictionaryFromEnum<BoolRelated>();
 
             // obtiene los índices de la clase
-            var indexes = Mdm.PreLoadedDictionary(type);
+            var indexes = Mdm.Reflection.Entities.PreLoadedDictionary(type);
 
             if (indexes == null)
             {

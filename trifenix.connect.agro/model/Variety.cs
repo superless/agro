@@ -1,18 +1,18 @@
-﻿using Cosmonaut.Attributes;
+﻿
 using trifenix.connect.agro.index_model.enums;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
 using trifenix.connect.mdm.enums;
+using trifenix.connect.model;
 
 namespace trifenix.connect.agro_model
 {
     /// <summary>
     /// Entidad encargada de determinar las varintes de cada especie
-    /// </summary>
-    [SharedCosmosCollection("agro", "Variety")]    
+    /// </summary>    
     [ReferenceSearchHeader(EntityRelated.VARIETY, Kind = EntityKind.ENTITY, PathName = "varieties")]
-    [GroupMenu(MenuEntityRelated.MANTENEDORES, PhisicalDevice.ALL, SubMenuEntityRelated.ESPECIES)]
-    public class Variety : DocumentLocal
+    [GroupMenu("Principales", PhisicalDevice.ALL, "Especies")]
+    public class Variety : DocumentDb
     {
         /// <summary>
         /// Identificador

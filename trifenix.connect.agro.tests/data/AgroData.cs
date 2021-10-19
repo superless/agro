@@ -62,7 +62,7 @@ namespace trifenix.connect.agro.tests.data
         /// <summary>
         /// Snapshot con los entitySearch iniciales.
         /// </summary>
-        public static IEntitySearch<GeoPointTs>[] ProductSearchBase { get; set; } = ProductsBase.SelectMany(s => Mdm.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
+        public static IEntitySearch<GeoPointTs>[] ProductSearchBase { get; set; } = ProductsBase.SelectMany(s => Mdm.Reflection.Entities.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
 
 
         /// <summary>
@@ -225,7 +225,7 @@ namespace trifenix.connect.agro.tests.data
         /// <summary>
         /// Snapshot con los entitySearch iniciales.
         /// </summary>
-        public static IEntitySearch<GeoPointTs>[] DosesSearchBase { get; set; } = DosesBase.SelectMany(s => Mdm.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
+        public static IEntitySearch<GeoPointTs>[] DosesSearchBase { get; set; } = DosesBase.SelectMany(s => Mdm.Reflection.Entities.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
 
 
         /// <summary>
@@ -273,7 +273,7 @@ namespace trifenix.connect.agro.tests.data
         /// <summary>
         /// Snapshot con los entitySearch iniciales.
         /// </summary>
-        public static IEntitySearch<GeoPointTs>[] WaitingHarvestSearchBase { get; set; } = WaitingHarvest.SelectMany(s => Mdm.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
+        public static IEntitySearch<GeoPointTs>[] WaitingHarvestSearchBase { get; set; } = WaitingHarvest.SelectMany(s => Mdm.Reflection.Entities.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
 
         /// <summary>
         /// Colección en memoria de los entitySearch de waiting harvest.
@@ -298,7 +298,7 @@ namespace trifenix.connect.agro.tests.data
 
         public static Ingredient[] Ingredients { get; set; } = new Ingredient[] { Ingredient1, Ingredient2 };
 
-        public static IEntitySearch<GeoPointTs>[] IngredientsSearch { get; set; } = Ingredients.SelectMany(s => Mdm.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
+        public static IEntitySearch<GeoPointTs>[] IngredientsSearch { get; set; } = Ingredients.SelectMany(s => Mdm.Reflection.Entities.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
 
 
 
@@ -321,7 +321,7 @@ namespace trifenix.connect.agro.tests.data
 
         public static IngredientCategory[] IngredientCategories { get; set; } = new IngredientCategory[] { CategoryIngredient1, CategoryIngredient2 };
 
-        public static IEntitySearch<GeoPointTs>[] IngredientCategoriesSearch { get; set; } = IngredientCategories.SelectMany(s => Mdm.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
+        public static IEntitySearch<GeoPointTs>[] IngredientCategoriesSearch { get; set; } = IngredientCategories.SelectMany(s => Mdm.Reflection.Entities.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
 
 
         #endregion
@@ -343,7 +343,7 @@ namespace trifenix.connect.agro.tests.data
         public static Brand[] Brands { get; set; } = new Brand[] { Brand1, Brand2 };
 
 
-        public static IEntitySearch<GeoPointTs>[] BrandsSearch { get; set; } = Brands.SelectMany(s => Mdm.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
+        public static IEntitySearch<GeoPointTs>[] BrandsSearch { get; set; } = Brands.SelectMany(s => Mdm.Reflection.Entities.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
 
 
         #endregion
@@ -367,7 +367,7 @@ namespace trifenix.connect.agro.tests.data
         public static Specie[] Species { get; set; } = new Specie[] { Specie1, Specie2 };
 
 
-        public static IEntitySearch<GeoPointTs>[] SpeciesSearch { get; set; } = Species.SelectMany(s => Mdm.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
+        public static IEntitySearch<GeoPointTs>[] SpeciesSearch { get; set; } = Species.SelectMany(s => Mdm.Reflection.Entities.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
 
 
 
@@ -410,7 +410,7 @@ namespace trifenix.connect.agro.tests.data
         public static Variety[] Varieties { get; set; } = new Variety[] { Variety1, Variety2, Variety3, Variety4 };
 
 
-        public static IEntitySearch<GeoPointTs>[] VarietiesSearch { get; set; } = Varieties.SelectMany(s => Mdm.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
+        public static IEntitySearch<GeoPointTs>[] VarietiesSearch { get; set; } = Varieties.SelectMany(s => Mdm.Reflection.Entities.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
 
         #endregion
 
@@ -433,7 +433,7 @@ namespace trifenix.connect.agro.tests.data
         public static ApplicationTarget[] ApplicationTargets { get; set; } = new ApplicationTarget[] { ApplicationTarget1, ApplicationTarget2 };
 
 
-        public static IEntitySearch<GeoPointTs>[] ApplicationTargetsSearch { get; set; } = ApplicationTargets.SelectMany(s => Mdm.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
+        public static IEntitySearch<GeoPointTs>[] ApplicationTargetsSearch { get; set; } = ApplicationTargets.SelectMany(s => Mdm.Reflection.Entities.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
 
 
 
@@ -456,7 +456,7 @@ namespace trifenix.connect.agro.tests.data
 
         public static CertifiedEntity[] CertifiedEntities { get; set; } = new CertifiedEntity[] { CertifiedEntity1, CertifiedEntity2 };
 
-        public static IEntitySearch<GeoPointTs>[] CertifiedEntitiesSearch { get; set; } = CertifiedEntities.SelectMany(s => Mdm.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
+        public static IEntitySearch<GeoPointTs>[] CertifiedEntitiesSearch { get; set; } = CertifiedEntities.SelectMany(s => Mdm.Reflection.Entities.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
         #endregion
 
 
@@ -493,7 +493,7 @@ namespace trifenix.connect.agro.tests.data
 
         public static Barrack[] Barracks { get; set; } = new Barrack[] { Barrack1, Barrack2 };
 
-        public static IEntitySearch<GeoPointTs>[] BarracksSearch { get; set; } = Barracks.SelectMany(s => Mdm.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
+        public static IEntitySearch<GeoPointTs>[] BarracksSearch { get; set; } = Barracks.SelectMany(s => Mdm.Reflection.Entities.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
 
         #endregion
 
@@ -532,7 +532,7 @@ namespace trifenix.connect.agro.tests.data
 
         public static PlotLand[] PlotLands { get; set; } = new PlotLand[] { Plotland1, Plotland2, Plotland3, Plotland4 };
 
-        public static IEntitySearch<GeoPointTs>[] PlotLandsSearch { get; set; } = PlotLands.SelectMany(s => Mdm.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
+        public static IEntitySearch<GeoPointTs>[] PlotLandsSearch { get; set; } = PlotLands.SelectMany(s => Mdm.Reflection.Entities.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
         #endregion
 
         #region Sector
@@ -551,7 +551,7 @@ namespace trifenix.connect.agro.tests.data
         public static Sector[] Sectors { get; set; } = new Sector[] { Sector1, Sector2 };
 
 
-        public static IEntitySearch<GeoPointTs>[] SectorsSearch { get; set; } = Sectors.SelectMany(s => Mdm.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
+        public static IEntitySearch<GeoPointTs>[] SectorsSearch { get; set; } = Sectors.SelectMany(s => Mdm.Reflection.Entities.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
 
 
 
@@ -580,7 +580,7 @@ namespace trifenix.connect.agro.tests.data
         public static Season[] Seasons { get; set; } = new Season[] { Season1, Season2 };
 
 
-        public static IEntitySearch<GeoPointTs>[] SeasonsSearch { get; set; } = Seasons.SelectMany(s => Mdm.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
+        public static IEntitySearch<GeoPointTs>[] SeasonsSearch { get; set; } = Seasons.SelectMany(s => Mdm.Reflection.Entities.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
 
 
         #endregion
@@ -605,7 +605,7 @@ namespace trifenix.connect.agro.tests.data
           Rootstock2
         };
 
-        public static IEntitySearch<GeoPointTs>[] RootstocksSearch { get; set; } = Rootstocks.SelectMany(s => Mdm.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
+        public static IEntitySearch<GeoPointTs>[] RootstocksSearch { get; set; } = Rootstocks.SelectMany(s => Mdm.Reflection.Entities.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
 
         #endregion
 
@@ -630,7 +630,7 @@ namespace trifenix.connect.agro.tests.data
             CostCenter2
         };
 
-        public static IEntitySearch<GeoPointTs>[] CostCentersSearch { get; set; } = CostCenters.SelectMany(s => Mdm.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
+        public static IEntitySearch<GeoPointTs>[] CostCentersSearch { get; set; } = CostCenters.SelectMany(s => Mdm.Reflection.Entities.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
         #endregion
 
 
@@ -659,7 +659,7 @@ namespace trifenix.connect.agro.tests.data
 
         public static BusinessName[] BusinessNames { get; set; } = new BusinessName[] { BusinessNameInput1, BusinessNameInput2 };
 
-        public static IEntitySearch<GeoPointTs>[] BusinessNamesSearch { get; set; } = BusinessNames.SelectMany(s => Mdm.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
+        public static IEntitySearch<GeoPointTs>[] BusinessNamesSearch { get; set; } = BusinessNames.SelectMany(s => Mdm.Reflection.Entities.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
 
         #endregion
 
@@ -678,7 +678,7 @@ namespace trifenix.connect.agro.tests.data
 
         public static Job[] Jobs { get; set; } = new Job[] { JobInput1, JobInput2 };
 
-        public static IEntitySearch<GeoPointTs>[] JobsSearch { get; set; } = Jobs.SelectMany(s => Mdm.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
+        public static IEntitySearch<GeoPointTs>[] JobsSearch { get; set; } = Jobs.SelectMany(s => Mdm.Reflection.Entities.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
         #endregion
 
         #region Nebulizer
@@ -698,7 +698,7 @@ namespace trifenix.connect.agro.tests.data
 
         public static Nebulizer[] Nebulizers { get; set; } = new Nebulizer[] { NebulizerInput1, NebulizerInput2};
 
-        public static IEntitySearch<GeoPointTs>[] NebulizersSearch { get; set; } = Nebulizers.SelectMany(s => Mdm.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
+        public static IEntitySearch<GeoPointTs>[] NebulizersSearch { get; set; } = Nebulizers.SelectMany(s => Mdm.Reflection.Entities.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
         #endregion
 
         #region PhenologicalEvent
@@ -720,7 +720,7 @@ namespace trifenix.connect.agro.tests.data
 
         public static PhenologicalEvent[] PhenologicalEvents { get; set; } = new PhenologicalEvent[] { PhenologicalEventInput1, PhenologicalEventInput2 };
 
-        public static IEntitySearch<GeoPointTs>[] PhenologicalEventsSearch { get; set; } = PhenologicalEvents.SelectMany(s => Mdm.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
+        public static IEntitySearch<GeoPointTs>[] PhenologicalEventsSearch { get; set; } = PhenologicalEvents.SelectMany(s => Mdm.Reflection.Entities.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
         #endregion
 
         #region Role
@@ -740,7 +740,7 @@ namespace trifenix.connect.agro.tests.data
 
         public static Role[] Roles { get; set; } = new Role[] { RoleInput1, RoleInput2 };
 
-        public static IEntitySearch<GeoPointTs>[] RolesSearch { get; set; } = Roles.SelectMany(s => Mdm.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
+        public static IEntitySearch<GeoPointTs>[] RolesSearch { get; set; } = Roles.SelectMany(s => Mdm.Reflection.Entities.GetEntitySearch(new ImplementMock(), s, new HashEntityAgroSearch())).ToArray();
         #endregion
     }
 }

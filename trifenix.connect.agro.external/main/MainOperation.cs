@@ -14,9 +14,10 @@ using trifenix.connect.interfaces.db;
 using trifenix.connect.interfaces.external;
 using trifenix.connect.mdm.containers;
 using trifenix.connect.mdm.enums;
+using trifenix.connect.model;
 using trifenix.connect.util;
 using trifenix.exception;
-using trifenix.model;
+
 
 namespace trifenix.connect.agro.external.main
 {

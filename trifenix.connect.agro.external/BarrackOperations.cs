@@ -58,11 +58,7 @@ namespace trifenix.connect.agro.external
                 PlantingYear = input.PlantingYear,
                 IdSeason = input.IdSeason
             };
-            //GeoBarracks, dependencia de geospacial
-            #if !CONNECT
-            if (input.GeographicalPoints != null && input.GeographicalPoints.Any())
-                barrack.GeographicalPoints = input.GeographicalPoints.Select(geoPoint => new Point(geoPoint.Lng, geoPoint.Lat)).ToArray();
-            #endif
+            
 
             search.DeleteElementsWithRelatedElement(EntityRelated.GEOPOINT, EntityRelated.BARRACK, barrack.Id);
 

@@ -6,6 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="trifenix.connect.db.cosmos" Version="0.8.125" />
+    <PackageReference Include="trifenix.connect.mdm" Version="0.8.201" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\trifenix.connect.agro.interfaces.external\trifenix.connect.agro.interfaces.external.csproj" />
   </ItemGroup>
 

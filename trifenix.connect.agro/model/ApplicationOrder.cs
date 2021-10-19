@@ -1,18 +1,20 @@
-﻿using Cosmonaut.Attributes;
+﻿
 using System;
 using trifenix.connect.agro.index_model.enums;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
 using trifenix.connect.mdm.enums;
+using trifenix.connect.model;
 
 namespace trifenix.connect.agro_model
 {
     /// <summary>
     /// Entidad encargada de la orden de aplicación
     /// </summary>
-    [SharedCosmosCollection("agro", "ApplicationOrder")]
+    
     [ReferenceSearchHeader(EntityRelated.ORDER, Kind = EntityKind.PROCESS, PathName = "orders")]
-    public class ApplicationOrder : DocumentLocal {
+    [GroupMenu("Principal", PhisicalDevice.ALL, "Procesos")]
+    public class ApplicationOrder : DocumentDb {
         /// <summary>
         /// Identificador de la entidad
         /// </summary>

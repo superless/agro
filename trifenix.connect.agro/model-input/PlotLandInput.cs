@@ -2,7 +2,6 @@
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
 using trifenix.connect.agro_model;
-using trifenix.connect.input;
 using trifenix.connect.mdm.validation_attributes;
 using trifenix.connect.mdm_attributes;
 
@@ -12,7 +11,8 @@ namespace trifenix.connect.agro_model_input
     /// Ingreso de parcelas
     /// </summary>
     [ReferenceSearchHeader(EntityRelated.PLOTLAND)]
-    public class PlotLandInput : InputBase {
+    public class PlotLandInput : LocalBase
+    {
 
         /// <summary>
         /// Búsqueda por referencia del sector asociado

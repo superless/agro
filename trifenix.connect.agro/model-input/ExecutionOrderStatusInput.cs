@@ -3,7 +3,6 @@ using trifenix.connect.agro.index_model.enums;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
 using trifenix.connect.agro_model;
-using trifenix.connect.input;
 using trifenix.connect.mdm.validation_attributes;
 
 namespace trifenix.connect.agro_model_input
@@ -12,7 +11,8 @@ namespace trifenix.connect.agro_model_input
     /// Estado de la orden de ejecución
     /// </summary>
     [ReferenceSearchHeader(EntityRelated.EXECUTION_ORDER_STATUS)]
-    public class ExecutionOrderStatusInput : InputBase {
+    public class ExecutionOrderStatusInput : LocalBase
+    {
         
         /// <summary>
         /// Estado de la ejecución

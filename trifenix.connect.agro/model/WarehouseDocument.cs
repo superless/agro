@@ -1,20 +1,19 @@
-﻿using Cosmonaut.Attributes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using trifenix.connect.agro.index_model.enums;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
 using trifenix.connect.agro_model;
 using trifenix.connect.mdm.enums;
+using trifenix.connect.model;
 
 namespace trifenix.connect.agro.model
 {
     /// <summary>
     /// Documento de movimiento de productos desde y hacia bodega
     /// </summary>
-    [SharedCosmosCollection("agro", "WarehouseDocument")]
-    [ReferenceSearchHeader(EntityRelated.WAREHOUSEDOCUMENT, PathName = "WarehouseDocument", Kind = EntityKind.CUSTOM_ENTITY)]
-    public class WarehouseDocument : DocumentLocal
+    [ReferenceSearchHeader(EntityRelated.WAREHOUSEDOCUMENT, PathName = "WarehouseDocument", Kind = EntityKind.CUSTOM_ENTITY)]    
+    public class WarehouseDocument : DocumentDb
     {
 
         /// <summary>
@@ -67,15 +66,8 @@ namespace trifenix.connect.agro.model
         /// Dias para cosechar por entidad certificadora
         /// </summary>
         [ReferenceSearch(EntityRelated.PRODUCTDOCUMENT, true)]
-        public List<ProductDocument> ProductDocuments
-        {
-            get
-            {
-                _productsDocument = _productsDocument ?? new List<ProductDocument>();
-                return _productsDocument;
-            }
-            set { _productsDocument = value; }
-        }
+        public List<ProductDocument> ProductDocuments { get; set; } = new List<ProductDocument>();
+        
 
         /// <summary>
         /// Búsqueda por referencia de la bodega asociada

@@ -1,5 +1,4 @@
-﻿using Cosmonaut.Attributes;
-using System;
+﻿using System;
 using trifenix.connect.agro.index_model.enums;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
@@ -11,8 +10,7 @@ namespace trifenix.connect.agro_model
     /// <summary>
     /// Entidad correspondiente a los mensajes enviados por los dispositivos móviles, en caso de ocurrir un
     /// evento fenológico.
-    /// </summary>
-    [SharedCosmosCollection("agro", "NotificationEvent")]
+    /// </summary>    
     [ReferenceSearchHeader(EntityRelated.NOTIFICATION_EVENT, PathName = "notification_events", Kind = EntityKind.CUSTOM_ENTITY)]
     public class NotificationEvent : ItemSinglesLocation
     {

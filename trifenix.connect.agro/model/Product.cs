@@ -1,8 +1,9 @@
-﻿using Cosmonaut.Attributes;
+﻿
 using trifenix.connect.agro.index_model.enums;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
 using trifenix.connect.mdm.enums;
+using trifenix.connect.model;
 
 namespace trifenix.connect.agro_model
 {
@@ -10,9 +11,10 @@ namespace trifenix.connect.agro_model
     /// <summary>
     /// Producto usado por las órdenes
     /// </summary>
-    [SharedCosmosCollection("agro", "Product")]
+    
     [ReferenceSearchHeader(EntityRelated.PRODUCT, Kind = EntityKind.CUSTOM_ENTITY, PathName = "products")]
-    public class Product : DocumentLocal
+    [GroupMenu("Complementarios", PhisicalDevice.ALL, "Productos")]
+    public class Product : DocumentDb
     {
 
         /// <summary>

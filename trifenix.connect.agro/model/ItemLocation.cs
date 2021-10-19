@@ -1,6 +1,6 @@
-﻿using Microsoft.Azure.Documents.Spatial;
-using trifenix.connect.agro.index_model.props;
+﻿using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
+using trifenix.connect.model;
 
 namespace trifenix.connect.agro_model
 {
@@ -8,18 +8,12 @@ namespace trifenix.connect.agro_model
     /// Condicional que determina el metodo de geograficar
     /// del cuartel
     /// </summary>
-    public abstract class ItemLocation : DocumentLocal {
+    public abstract class ItemLocation : DocumentDb {
 
-#if CONNECT
-        /// <summary>
-        /// ubicación geográfica del cuartel
-        /// </summary>
-        [GeoSearch(GeoRelated.LOCATION_BARRACK, Visible = false)]
-        public  GeoItem[] GeographicalPoints { get; set; }
-#else
-        [GeoSearch(GeoRelated.LOCATION_BARRACK, Visible = false)]
-        public Point[] GeographicalPoints { get; set; } 
-#endif
+
+    [GeoSearch(GeoRelated.LOCATION_BARRACK, Visible = false)]
+    public GeoItem[] GeographicalPoints { get; set; }
+
 
 
 

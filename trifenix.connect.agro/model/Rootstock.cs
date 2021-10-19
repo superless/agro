@@ -1,17 +1,17 @@
-﻿using Cosmonaut.Attributes;
-using trifenix.connect.agro.index_model.props;
+﻿using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
 using trifenix.connect.mdm.enums;
+using trifenix.connect.model;
 
 namespace trifenix.connect.agro_model
 {
 
     /// <summary>
     /// Raíz de una planta.
-    /// </summary>
-    [SharedCosmosCollection("agro", "Rootstock")]
+    /// </summary>    
     [ReferenceSearchHeader(EntityRelated.ROOTSTOCK, PathName = "rootstock", Kind = EntityKind.ENTITY)]
-    public class Rootstock : DocumentLocal {
+    [GroupMenu("Principales", PhisicalDevice.ALL, "Especies")]
+    public class Rootstock : DocumentDb {
 
 
         /// <summary>

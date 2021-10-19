@@ -12,10 +12,10 @@ using trifenix.connect.agro.queries;
 using trifenix.connect.interfaces.hash;
 using trifenix.connect.interfaces.search;
 using trifenix.connect.mdm.entity_model;
+using trifenix.connect.model;
 using trifenix.connect.search;
 using trifenix.connect.search_mdl;
 using trifenix.connect.util;
-using trifenix.model;
 
 namespace trifenix.connect.agro.external
 {
@@ -200,25 +200,25 @@ namespace trifenix.connect.agro.external
 
             var dateCreateDocument = DateTime.Now;
 
-            logger.LogInformation($"[{dateCreateDocument:s}] creando elemento entitySearch de {document.DocumentPartition}");
+            logger?.LogInformation($"[{dateCreateDocument:s}] creando elemento entitySearch de {document.DocumentPartition}");
             // obtiene un entitySearch desde una entidad de base de datos de persistencia.
-            var entitySearch = Mdm.GetEntitySearch(implements, document, hashOper).Cast<IEntitySearch<GeoPointType>>().ToList();
+            var entitySearch = Mdm.Reflection.Entities.GetEntitySearch(implements, document, hashOper).Cast<IEntitySearch<GeoPointType>>().ToList();
 
             var dateCreatedDocument = DateTime.Now;
-            logger.LogInformation($"[{dateCreatedDocument:s}] {document.DocumentPartition} es conviertido a entitySearch en {(dateCreatedDocument - dateCreateDocument).TotalSeconds} segundos");
+            logger?.LogInformation($"[{dateCreatedDocument:s}] {document.DocumentPartition} es conviertido a entitySearch en {(dateCreatedDocument - dateCreateDocument).TotalSeconds} segundos");
             // añade a registro
             AddToQueried(nameof(AgroSearch<GeoPointType>.AddDocument), JsonConvert.SerializeObject(entitySearch));
 
 
             var dateCreateSearch = DateTime.Now;
 
-            logger.LogInformation($"[{dateCreateSearch:s}] Guardando entitySearch de  {document.DocumentPartition}");
+            logger?.LogInformation($"[{dateCreateSearch:s}] Guardando entitySearch de  {document.DocumentPartition}");
             // añade a base de datos.
             baseMainSearch.AddElements(entitySearch);
 
             var dateCreatedSearch = DateTime.Now;
 
-            logger.LogInformation($"[{dateCreatedSearch:s}] entitySearch de  {document.DocumentPartition} guardado en search en {(dateCreatedDocument - dateCreateDocument).TotalSeconds} segundps");
+            logger?.LogInformation($"[{dateCreatedSearch:s}] entitySearch de  {document.DocumentPartition} guardado en search en {(dateCreatedDocument - dateCreateDocument).TotalSeconds} segundps");
         }
 
 
@@ -313,7 +313,7 @@ namespace trifenix.connect.agro.external
             var mapperLocal = mapper.CreateMapper();
 
             // convierte un elemento de persistencia a un entitySearch<GeoPointType>
-            var document = Mdm.GetEntitySearch(
+            var document = Mdm.Reflection.Entities.GetEntitySearch(
                                 implements, // asignación de tipos para cada interface de un entitySearch
                                 model // documento a convertir                                
                                 , hashOper)

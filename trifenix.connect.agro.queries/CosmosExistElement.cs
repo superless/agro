@@ -4,7 +4,7 @@ using trifenix.connect.agro.model_queries;
 using trifenix.connect.agro_model;
 using trifenix.connect.arguments;
 using trifenix.connect.db.cosmos;
-using trifenix.model;
+using trifenix.connect.model;
 
 namespace trifenix.connect.agro.queries
 {

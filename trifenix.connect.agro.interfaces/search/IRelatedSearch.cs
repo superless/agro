@@ -2,7 +2,7 @@
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.interfaces.log;
 using trifenix.connect.mdm.entity_model;
-using trifenix.model;
+using trifenix.connect.model;
 
 namespace trifenix.connect.agro.interfaces.search
 {

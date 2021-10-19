@@ -11,8 +11,8 @@ using trifenix.connect.input;
 using trifenix.connect.interfaces.db;
 using trifenix.connect.interfaces.external;
 using trifenix.connect.interfaces.graph;
+using trifenix.connect.model;
 using trifenix.connect.util;
-using trifenix.model;
 
 namespace trifenix.connect.agro.tests.mock
 {
@@ -86,7 +86,7 @@ namespace trifenix.connect.agro.tests.mock
         private static void AddElement<T>(T element) where T : DocumentDb {
 
             // obtiene el índice desde mdm, utiliza el atributo para identificar a que entitySearch pertenece.
-            var index = Mdm.GetIndex(typeof(T));
+            var index = Mdm.Reflection.Entities.GetIndex(typeof(T));
 
             // si no tiene el atributo, lanzará error.
             if (!index.HasValue) throw new System.Exception("el objeto debe tener el atributo ReferenceHeader");
@@ -201,7 +201,7 @@ namespace trifenix.connect.agro.tests.mock
         {
 
             // índice de la clase, de acuerdo al modelo mdm.
-            var index = Mdm.GetIndex(typeof(T));
+            var index = Mdm.Reflection.Entities.GetIndex(typeof(T));
 
             // excepción si no tiene el atributo.
             if (!index.HasValue) throw new System.Exception("el objeto debe tener el atributo ReferenceHeader");
@@ -294,7 +294,7 @@ namespace trifenix.connect.agro.tests.mock
         private static void RemoveElementFromDb<T>(string id) {
 
             // índice del tipo en el modelo mdm.
-            var index = Mdm.GetIndex(typeof(T));
+            var index = Mdm.Reflection.Entities.GetIndex(typeof(T));
 
             // si no tiene atributo
             if (!index.HasValue) throw new System.Exception("el objeto debe tener el atributo ReferenceHeader");

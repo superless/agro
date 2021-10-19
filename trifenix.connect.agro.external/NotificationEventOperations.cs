@@ -52,13 +52,8 @@ namespace trifenix.connect.agro.external
                 Description = input.Description,
                 
             };
-            //TODO: Cambiar tipo de dato a GeoSpacial
-            #if !CONNECT
-            if (input.Location != null) {
-                notification.Location = new Point(input.Location.Lng, input.Location.Lat);
-                notification.Weather = await weather.GetWeather((float)input.Location.Lat, (float)input.Location.Lng);
-            }
-            #endif
+            
+          
 
             await SaveDb(notification);
             var usersEmails = await commonQueries.GetUsersMailsFromRoles(new List<string> { "24beac75d4bb4f8d8fae8373426af780" });

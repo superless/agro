@@ -11,7 +11,7 @@ using trifenix.connect.agro.queries;
 using trifenix.connect.agro_model;
 using trifenix.connect.arguments;
 using trifenix.connect.mdm.search.model;
-using trifenix.model;
+using trifenix.connect.model;
 
 namespace trifenix.agro.console
 {

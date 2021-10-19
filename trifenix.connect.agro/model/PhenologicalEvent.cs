@@ -1,11 +1,9 @@
-﻿using Cosmonaut;
-using Cosmonaut.Attributes;
-using System;
+﻿using System;
 using trifenix.connect.agro.index_model.enums;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
-using trifenix.connect.entities.cosmos;
 using trifenix.connect.mdm.enums;
+using trifenix.connect.model;
 
 namespace trifenix.connect.agro_model
 {
@@ -13,10 +11,10 @@ namespace trifenix.connect.agro_model
     /// <summary>
     /// El evento fenológico se debería crear una vez al año o copiarse del año anterior.
     /// </summary>
-    [SharedCosmosCollection("agro", "PhenologicalEvent")]
+    
     [ReferenceSearchHeader(EntityRelated.PHENOLOGICAL_EVENT, Kind = EntityKind.ENTITY, PathName = "phenological_events")]
-    [GroupMenu(MenuEntityRelated.MANTENEDORES, PhisicalDevice.ALL, SubMenuEntityRelated.ORDEN_APLICACION)]
-    public class PhenologicalEvent : DocumentLocal {
+    
+    public class PhenologicalEvent : DocumentDb {
 
         public override string Id { get; set; }
 
@@ -44,6 +42,6 @@ namespace trifenix.connect.agro_model
         /// </summary>
         [DateSearch(DateRelated.END_DATE_PHENOLOGICAL_EVENT)]
         public DateTime EndDate { get; set; }
-
+        
     }
 }

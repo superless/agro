@@ -61,7 +61,7 @@ namespace trifenix.connect.agro.resources.dictionary.entities {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cuartel.
+        ///   Looks up a localized string similar to Unidad geográfica que determina la plantación..
         /// </summary>
         public static string BARRACK {
             get {

@@ -1,7 +1,6 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
 using trifenix.connect.agro_model;
-using trifenix.connect.input;
 using trifenix.connect.mdm.validation_attributes;
 
 namespace trifenix.connect.agro_model_input
@@ -9,7 +8,7 @@ namespace trifenix.connect.agro_model_input
     /// <summary>
     /// Ingreso de comentarios
     /// </summary>
-    public class CommentInput : InputBase {
+    public class CommentInput : LocalBase {
 
         /// <summary>
         /// Comentario

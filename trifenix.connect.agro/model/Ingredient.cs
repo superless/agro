@@ -1,18 +1,18 @@
-﻿using Cosmonaut.Attributes;
+﻿
 using trifenix.connect.agro.index_model.enums;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
 using trifenix.connect.mdm.enums;
+using trifenix.connect.model;
 
 namespace trifenix.connect.agro_model
 {
     /// <summary>
     /// Entidad encargadas de los ingredientes
     /// </summary>
-    [SharedCosmosCollection("agro", "Ingredient")]
-    [ReferenceSearchHeader(EntityRelated.INGREDIENT, Kind = EntityKind.ENTITY, PathName = "ingredients")]
-    [GroupMenu(MenuEntityRelated.MANTENEDORES, PhisicalDevice.ALL, SubMenuEntityRelated.PRODUCTO)]
-    public class Ingredient : DocumentLocal {
+    
+    [ReferenceSearchHeader(EntityRelated.INGREDIENT, Kind = EntityKind.ENTITY, PathName = "ingredients")]    
+    public class Ingredient : DocumentDb {
 
 
         /// <summary>

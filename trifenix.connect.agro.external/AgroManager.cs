@@ -17,7 +17,7 @@ using trifenix.connect.interfaces;
 using trifenix.connect.interfaces.db;
 using trifenix.connect.interfaces.external;
 using trifenix.connect.interfaces.upload;
-using trifenix.model;
+using trifenix.connect.model;
 
 namespace trifenix.agro.external
 {

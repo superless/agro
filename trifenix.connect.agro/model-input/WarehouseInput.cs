@@ -3,17 +3,16 @@ using System.ComponentModel.DataAnnotations;
 using trifenix.connect.agro.index_model.props;
 using trifenix.connect.agro.mdm_attributes;
 using trifenix.connect.agro_model;
-using trifenix.connect.input;
 using trifenix.connect.mdm.validation_attributes;
 using trifenix.connect.mdm_attributes;
 
-namespace trifenix.connect.agro.model_input
+namespace trifenix.connect.agro_model_input
 {
     /// <summary>
     /// Ingreso de bodega
     /// </summary>
     [ReferenceSearchHeader(EntityRelated.WAREHOUSE)]
-    public class WarehouseInput : InputBase
+    public class WarehouseInput : LocalBase
     {
         /// <summary>
         /// Capacidad de la bodega
